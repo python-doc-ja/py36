@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>11. ファイルとディレクトリへのアクセス &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="Python 標準ライブラリ" href="index.html" />
+    <link rel="next" title="11.1. pathlib — オブジェクト指向のファイルシステムパス" href="pathlib.html" />
+    <link rel="prev" title="10.3. operator — 関数形式の標準演算子" href="operator.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/filesys.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/filesys.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="pathlib.html" title="11.1. pathlib — オブジェクト指向のファイルシステムパス"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="operator.html" title="10.3. operator — 関数形式の標準演算子"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python 標準ライブラリ</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="file-and-directory-access">
+<span id="filesys"></span><h1>11. ファイルとディレクトリへのアクセス<a class="headerlink" href="#file-and-directory-access" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>この章で説明されるモジュールはディスクのファイルやディレクトリを扱います。たとえば、ファイルの属性を読むためのモジュール、ファイルパスを移植可能な方式で操作する、テンポラリファイルを作成するためのモジュールです。この章の完全な一覧は:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pathlib.html">11.1. <code class="docutils literal"><span class="pre">pathlib</span></code> &#8212; オブジェクト指向のファイルシステムパス</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pathlib.html#basic-use">11.1.1. 基本的な使い方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pathlib.html#pure-paths">11.1.2. 純粋パス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pathlib.html#general-properties">11.1.2.1. 全般的な性質</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pathlib.html#operators">11.1.2.2. 演算子</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pathlib.html#accessing-individual-parts">11.1.2.3. 個別の構成要素へのアクセス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pathlib.html#methods-and-properties">11.1.2.4. メソッドとプロパティ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pathlib.html#concrete-paths">11.1.3. 具象パス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pathlib.html#methods">11.1.3.1. メソッド</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="os.path.html">11.2. <code class="docutils literal"><span class="pre">os.path</span></code> &#8212; 共通のパス名操作</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileinput.html">11.3. <code class="docutils literal"><span class="pre">fileinput</span></code> &#8212; 複数の入力ストリームをまたいだ行の繰り返し処理をサポートする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="stat.html">11.4. <code class="docutils literal"><span class="pre">stat</span></code> &#8212; <code class="docutils literal"><span class="pre">stat()</span></code> の結果を解釈する</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filecmp.html">11.5. <code class="docutils literal"><span class="pre">filecmp</span></code> &#8212; ファイルおよびディレクトリの比較</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="filecmp.html#the-dircmp-class">11.5.1. <code class="docutils literal"><span class="pre">dircmp</span></code> クラス</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tempfile.html">11.6. <code class="docutils literal"><span class="pre">tempfile</span></code> &#8212; 一時ファイルやディレクトリの作成</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tempfile.html#examples">11.6.1. 使用例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tempfile.html#deprecated-functions-and-variables">11.6.2. 非推奨の関数と変数</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glob.html">11.7. <code class="docutils literal"><span class="pre">glob</span></code> &#8212; Unix 形式のパス名のパターン展開</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fnmatch.html">11.8. <code class="docutils literal"><span class="pre">fnmatch</span></code> &#8212; Unix ファイル名のパターンマッチ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linecache.html">11.9. <code class="docutils literal"><span class="pre">linecache</span></code> &#8212; テキストラインにランダムアクセスする</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shutil.html">11.10. <code class="docutils literal"><span class="pre">shutil</span></code> &#8212; 高水準のファイル操作</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="shutil.html#directory-and-files-operations">11.10.1. ディレクトリとファイルの操作</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shutil.html#copytree-example">11.10.1.1. copytree の例</a></li>
+<li class="toctree-l3"><a class="reference internal" href="shutil.html#rmtree-example">11.10.1.2. rmtree の例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shutil.html#archiving-operations">11.10.2. アーカイブ化操作</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="shutil.html#archiving-example">11.10.2.1. アーカイブ化の例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="shutil.html#querying-the-size-of-the-output-terminal">11.10.3. 出力ターミナルのサイズの取得</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="macpath.html">11.11. <code class="docutils literal"><span class="pre">macpath</span></code> &#8212; Mac OS 9 のパス操作関数</a></li>
+</ul>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a> モジュール</dt>
+<dd><p class="first last">オペレーティングシステムのインタフェース、Python の <a class="reference internal" href="../glossary.html#term-file-object"><span class="xref std std-term">ファイルオブジェクト</span></a> より低レベルでのファイル操作を含みます。</p>
+</dd>
+<dt><a class="reference internal" href="io.html#module-io" title="io: Core tools for working with streams."><code class="xref py py-mod docutils literal"><span class="pre">io</span></code></a> モジュール</dt>
+<dd><p class="first last">Python 組み込みの I/O ライブラリで、抽象クラスとファイル I/O のようないくつかの具象クラスを含みます。</p>
+</dd>
+<dt><a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> 組込み関数</dt>
+<dd><p class="first last">Python で読み書きのためにファイルを開く標準的な方法です。</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="operator.html"
+                        title="前の章へ">10.3. <code class="docutils literal"><span class="pre">operator</span></code> &#8212; 関数形式の標準演算子</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="pathlib.html"
+                        title="次の章へ">11.1. <code class="docutils literal"><span class="pre">pathlib</span></code> &#8212; オブジェクト指向のファイルシステムパス</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/filesys.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="pathlib.html" title="11.1. pathlib — オブジェクト指向のファイルシステムパス"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="operator.html" title="10.3. operator — 関数形式の標準演算子"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

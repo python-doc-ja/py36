@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>32.9. pyclbr — Python クラスブラウザサポート &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="32. Python言語サービス" href="language.html" />
+    <link rel="next" title="32.10. py_compile — Python ソースファイルのコンパイル" href="py_compile.html" />
+    <link rel="prev" title="32.8. tabnanny — あいまいなインデントの検出" href="tabnanny.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/pyclbr.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/pyclbr.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="py_compile.html" title="32.10. py_compile — Python ソースファイルのコンパイル"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="tabnanny.html" title="32.8. tabnanny — あいまいなインデントの検出"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="language.html" accesskey="U">32. Python言語サービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyclbr">
+<span id="pyclbr-python-class-browser-support"></span><h1>32.9. <a class="reference internal" href="#module-pyclbr" title="pyclbr: Supports information extraction for a Python class browser."><code class="xref py py-mod docutils literal"><span class="pre">pyclbr</span></code></a> &#8212; Python クラスブラウザサポート<a class="headerlink" href="#module-pyclbr" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/pyclbr.py">Lib/pyclbr.py</a></p>
+<hr class="docutils" />
+<p>この <a class="reference internal" href="#module-pyclbr" title="pyclbr: Supports information extraction for a Python class browser."><code class="xref py py-mod docutils literal"><span class="pre">pyclbr</span></code></a> モジュールはモジュールで定義されたクラス、メソッド、およびトップレベルの関数について、限られた量の情報を取得するのに使われます。伝統的な 3 ペイン形式のクラスブラウザを実装するのに十分な情報を提供します。情報は、モジュールのインポートによらず、ソースコードから抽出します。このため、このモジュールは信用できないソースコードに対して利用しても安全です。この制限から、多くの標準モジュールやオプションの拡張モジュールを含む、 Python で実装されていないモジュールに対して利用することはできません。</p>
+<dl class="function">
+<dt id="pyclbr.readmodule">
+<code class="descclassname">pyclbr.</code><code class="descname">readmodule</code><span class="sig-paren">(</span><em>module</em>, <em>path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyclbr.readmodule" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>モジュールを読み込み、クラス名からクラス記述オブジェクトにマップする辞書を返します。パラメタ <em>module</em> はモジュール名を表す文字列でなくてはなりません; パッケージ内のモジュール名でもかまいません。<em>path</em> パラメタはシーケンス型でなくてはならず、モジュールのソースコードがある場所を特定する際に <code class="docutils literal"><span class="pre">sys.path</span></code> の値に加えて使われます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyclbr.readmodule_ex">
+<code class="descclassname">pyclbr.</code><code class="descname">readmodule_ex</code><span class="sig-paren">(</span><em>module</em>, <em>path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyclbr.readmodule_ex" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#pyclbr.readmodule" title="pyclbr.readmodule"><code class="xref py py-func docutils literal"><span class="pre">readmodule()</span></code></a> に似ていますが、返される辞書は、クラス名からクラス記述オブジェクトへの対応付けに加えて、トップレベル関数から関数記述オブジェクトへの対応付けも行っています。さらに、読み出し対象のモジュールがパッケージである場合、返される辞書はキー <code class="docutils literal"><span class="pre">'__path__'</span></code> を持ち、その値はパッケージの検索パスが入ったリストになります。</p>
+</dd></dl>
+
+<div class="section" id="class-objects">
+<span id="pyclbr-class-objects"></span><h2>32.9.1. クラスオブジェクト<a class="headerlink" href="#class-objects" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><code class="xref py py-class docutils literal"><span class="pre">Class</span></code> オブジェクトは、 <a class="reference internal" href="#pyclbr.readmodule" title="pyclbr.readmodule"><code class="xref py py-func docutils literal"><span class="pre">readmodule()</span></code></a> や <a class="reference internal" href="#pyclbr.readmodule_ex" title="pyclbr.readmodule_ex"><code class="xref py py-func docutils literal"><span class="pre">readmodule_ex()</span></code></a> が返す辞書の値として使われており、以下のデータ属性を提供しています:</p>
+<dl class="attribute">
+<dt id="pyclbr.Class.module">
+<code class="descclassname">Class.</code><code class="descname">module</code><a class="headerlink" href="#pyclbr.Class.module" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>クラス記述オブジェクトが記述している対象のクラスを定義しているモジュールの名前です。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyclbr.Class.name">
+<code class="descclassname">Class.</code><code class="descname">name</code><a class="headerlink" href="#pyclbr.Class.name" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>クラスの名前です。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyclbr.Class.super">
+<code class="descclassname">Class.</code><code class="descname">super</code><a class="headerlink" href="#pyclbr.Class.super" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>記述しようとしている対象クラスの、直接の基底クラス群について記述している <code class="xref py py-class docutils literal"><span class="pre">Class</span></code> オブジェクトのリストです。スーパクラスとして挙げられているが <a class="reference internal" href="#pyclbr.readmodule" title="pyclbr.readmodule"><code class="xref py py-func docutils literal"><span class="pre">readmodule()</span></code></a> が見つけられなかったクラスは、 <code class="xref py py-class docutils literal"><span class="pre">Class</span></code> オブジェクトではなくクラス名の文字列としてリストに挙げられます。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyclbr.Class.methods">
+<code class="descclassname">Class.</code><code class="descname">methods</code><a class="headerlink" href="#pyclbr.Class.methods" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>メソッド名を行番号に対応付ける辞書です。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyclbr.Class.file">
+<code class="descclassname">Class.</code><code class="descname">file</code><a class="headerlink" href="#pyclbr.Class.file" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>クラスを定義している <code class="docutils literal"><span class="pre">class</span></code> 文が入っているファイルの名前です。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyclbr.Class.lineno">
+<code class="descclassname">Class.</code><code class="descname">lineno</code><a class="headerlink" href="#pyclbr.Class.lineno" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#pyclbr.Class.file" title="pyclbr.Class.file"><code class="xref py py-attr docutils literal"><span class="pre">file</span></code></a> で指定されたファイルにおける <code class="docutils literal"><span class="pre">class</span></code> 文の行番号です。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="function-objects">
+<span id="pyclbr-function-objects"></span><h2>32.9.2. Function オブジェクト<a class="headerlink" href="#function-objects" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><code class="xref py py-class docutils literal"><span class="pre">Function</span></code> オブジェクトは、 <a class="reference internal" href="#pyclbr.readmodule_ex" title="pyclbr.readmodule_ex"><code class="xref py py-func docutils literal"><span class="pre">readmodule_ex()</span></code></a> が返す辞書内でキーに対応する値として使われており、以下のデータ属性を提供しています:</p>
+<dl class="attribute">
+<dt id="pyclbr.Function.module">
+<code class="descclassname">Function.</code><code class="descname">module</code><a class="headerlink" href="#pyclbr.Function.module" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>関数記述オブジェクトが記述している対象の関数を定義しているモジュールの名前です。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyclbr.Function.name">
+<code class="descclassname">Function.</code><code class="descname">name</code><a class="headerlink" href="#pyclbr.Function.name" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>関数の名前です。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyclbr.Function.file">
+<code class="descclassname">Function.</code><code class="descname">file</code><a class="headerlink" href="#pyclbr.Function.file" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>関数を定義してる <code class="docutils literal"><span class="pre">def</span></code> 文が入っているファイルの名前です。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyclbr.Function.lineno">
+<code class="descclassname">Function.</code><code class="descname">lineno</code><a class="headerlink" href="#pyclbr.Function.lineno" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#pyclbr.Function.file" title="pyclbr.Function.file"><code class="xref py py-attr docutils literal"><span class="pre">file</span></code></a> で指定されたファイルにおける <code class="docutils literal"><span class="pre">def</span></code> 文の行番号です。</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">32.9. <code class="docutils literal"><span class="pre">pyclbr</span></code> &#8212; Python クラスブラウザサポート</a><ul>
+<li><a class="reference internal" href="#class-objects">32.9.1. クラスオブジェクト</a></li>
+<li><a class="reference internal" href="#function-objects">32.9.2. Function オブジェクト</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="tabnanny.html"
+                        title="前の章へ">32.8. <code class="docutils literal"><span class="pre">tabnanny</span></code> &#8212; あいまいなインデントの検出</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="py_compile.html"
+                        title="次の章へ">32.10. <code class="docutils literal"><span class="pre">py_compile</span></code> &#8212; Python ソースファイルのコンパイル</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/pyclbr.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="py_compile.html" title="32.10. py_compile — Python ソースファイルのコンパイル"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="tabnanny.html" title="32.8. tabnanny — あいまいなインデントの検出"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="language.html" >32. Python言語サービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

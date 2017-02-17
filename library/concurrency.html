@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>17. 並行実行 &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="Python 標準ライブラリ" href="index.html" />
+    <link rel="next" title="17.1. threading — スレッドベースの並列処理" href="threading.html" />
+    <link rel="prev" title="16.16. ctypes — Pythonのための外部関数ライブラリ" href="ctypes.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/concurrency.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/concurrency.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="threading.html" title="17.1. threading — スレッドベースの並列処理"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="ctypes.html" title="16.16. ctypes — Pythonのための外部関数ライブラリ"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python 標準ライブラリ</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="concurrent-execution">
+<span id="concurrency"></span><h1>17. 並行実行<a class="headerlink" href="#concurrent-execution" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>この章で記述されているモジュールは、コードの並行実行のサポートを提供します。ツールの適切な選択は、実行されるタスク(IO bound vs CPU bound) や推奨される開発スタイル (イベントドリブンな協調的マルチタスク vs プリエンプティブマルチタスク) に依存します。ここに概観を示します:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="threading.html">17.1. <code class="docutils literal"><span class="pre">threading</span></code> &#8212; スレッドベースの並列処理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#thread-local-data">17.1.1. スレッドローカルデータ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#thread-objects">17.1.2. Thread オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#lock-objects">17.1.3. Lock オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#rlock-objects">17.1.4. RLock オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#condition-objects">17.1.5. Condition オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#semaphore-objects">17.1.6. Semaphore オブジェクト</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="threading.html#semaphore-example">17.1.6.1. <code class="docutils literal"><span class="pre">Semaphore</span></code> の例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#event-objects">17.1.7. Event オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#timer-objects">17.1.8. Timer オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#barrier-objects">17.1.9. バリアオブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html#using-locks-conditions-and-semaphores-in-the-with-statement">17.1.10. <code class="docutils literal"><span class="pre">with</span></code> 文でのロック・条件変数・セマフォの使い方</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="multiprocessing.html">17.2. <code class="docutils literal"><span class="pre">multiprocessing</span></code> &#8212; プロセスベースの並列処理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="multiprocessing.html#introduction">17.2.1. はじめに</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#the-process-class">17.2.1.1. <code class="docutils literal"><span class="pre">Process</span></code> クラス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#contexts-and-start-methods">17.2.1.2. コンテキストと開始方式</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#exchanging-objects-between-processes">17.2.1.3. プロセス間でのオブジェクト交換</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#synchronization-between-processes">17.2.1.4. プロセス間の同期</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#sharing-state-between-processes">17.2.1.5. プロセス間での状態の共有</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#using-a-pool-of-workers">17.2.1.6. ワーカープロセスのプールを使用</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="multiprocessing.html#reference">17.2.2. リファレンス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#process-and-exceptions">17.2.2.1. <code class="docutils literal"><span class="pre">Process</span></code> クラスと例外</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#pipes-and-queues">17.2.2.2. パイプ (Pipe) とキュー (Queue)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#miscellaneous">17.2.2.3. その他</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#connection-objects">17.2.2.4. Connection オブジェクト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#synchronization-primitives">17.2.2.5. 同期プリミティブ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#shared-ctypes-objects">17.2.2.6. 共有 <code class="docutils literal"><span class="pre">ctypes</span></code> オブジェクト</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="multiprocessing.html#module-multiprocessing.sharedctypes">17.2.2.6.1. <code class="docutils literal"><span class="pre">multiprocessing.sharedctypes</span></code> モジュール</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#managers">17.2.2.7. マネージャー</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="multiprocessing.html#customized-managers">17.2.2.7.1. カスタマイズされたマネージャー</a></li>
+<li class="toctree-l4"><a class="reference internal" href="multiprocessing.html#using-a-remote-manager">17.2.2.7.2. リモートマネージャーを使用する</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#proxy-objects">17.2.2.8. Proxy オブジェクト</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="multiprocessing.html#cleanup">17.2.2.8.1. クリーンアップ</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#module-multiprocessing.pool">17.2.2.9. プロセスプール</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#module-multiprocessing.connection">17.2.2.10. リスナーとクライアント</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="multiprocessing.html#address-formats">17.2.2.10.1. アドレスフォーマット</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#authentication-keys">17.2.2.11. 認証キー</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#logging">17.2.2.12. ログ記録</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#module-multiprocessing.dummy">17.2.2.13. <code class="docutils literal"><span class="pre">multiprocessing.dummy</span></code> モジュール</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="multiprocessing.html#programming-guidelines">17.2.3. プログラミングガイドライン</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#all-start-methods">17.2.3.1. すべての開始方式について</a></li>
+<li class="toctree-l3"><a class="reference internal" href="multiprocessing.html#the-spawn-and-forkserver-start-methods">17.2.3.2. 開始方式が <em>spawn</em> および <em>forkserver</em> の場合</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="multiprocessing.html#examples">17.2.4. 使用例</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="concurrent.html">17.3. <code class="docutils literal"><span class="pre">concurrent</span></code> パッケージ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concurrent.futures.html">17.4. <code class="docutils literal"><span class="pre">concurrent.futures</span></code> &#8211; 並列タスク実行</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="concurrent.futures.html#executor-objects">17.4.1. Executor オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrent.futures.html#threadpoolexecutor">17.4.2. ThreadPoolExecutor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="concurrent.futures.html#threadpoolexecutor-example">17.4.2.1. ThreadPoolExecutor の例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="concurrent.futures.html#processpoolexecutor">17.4.3. ProcessPoolExecutor</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="concurrent.futures.html#processpoolexecutor-example">17.4.3.1. ProcessPoolExecutor の例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="concurrent.futures.html#future-objects">17.4.4. Future オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrent.futures.html#module-functions">17.4.5. モジュール関数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrent.futures.html#exception-classes">17.4.6. 例外クラス</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="subprocess.html">17.5. <code class="docutils literal"><span class="pre">subprocess</span></code> &#8212; サブプロセス管理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="subprocess.html#using-the-subprocess-module">17.5.1. <code class="docutils literal"><span class="pre">subprocess</span></code> モジュールを使う</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="subprocess.html#frequently-used-arguments">17.5.1.1. よく使われる引数</a></li>
+<li class="toctree-l3"><a class="reference internal" href="subprocess.html#popen-constructor">17.5.1.2. Popen コンストラクター</a></li>
+<li class="toctree-l3"><a class="reference internal" href="subprocess.html#exceptions">17.5.1.3. 例外</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="subprocess.html#security-considerations">17.5.2. セキュリティで考慮すべき点</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subprocess.html#popen-objects">17.5.3. Popen オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subprocess.html#windows-popen-helpers">17.5.4. Windows Popen ヘルパー</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="subprocess.html#constants">17.5.4.1. 定数</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="subprocess.html#older-high-level-api">17.5.5. 古い高水準 API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subprocess.html#replacing-older-functions-with-the-subprocess-module">17.5.6. 古い関数を <code class="docutils literal"><span class="pre">subprocess</span></code> モジュールで置き換える</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="subprocess.html#replacing-bin-sh-shell-backquote">17.5.6.1. /bin/sh シェルのバッククォートを置き換える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="subprocess.html#replacing-shell-pipeline">17.5.6.2. シェルのパイプラインを置き換える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="subprocess.html#replacing-os-system">17.5.6.3. <code class="docutils literal"><span class="pre">os.system()</span></code> を置き換える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="subprocess.html#replacing-the-os-spawn-family">17.5.6.4. <code class="docutils literal"><span class="pre">os.spawn</span></code> 関数群を置き換える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="subprocess.html#replacing-os-popen-os-popen2-os-popen3">17.5.6.5. <code class="docutils literal"><span class="pre">os.popen()</span></code>, <code class="docutils literal"><span class="pre">os.popen2()</span></code>, <code class="docutils literal"><span class="pre">os.popen3()</span></code> を置き換える</a></li>
+<li class="toctree-l3"><a class="reference internal" href="subprocess.html#replacing-functions-from-the-popen2-module">17.5.6.6. <code class="docutils literal"><span class="pre">popen2</span></code> モジュールの関数群を置き換える</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="subprocess.html#legacy-shell-invocation-functions">17.5.7. レガシーなシェル呼び出し関数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subprocess.html#notes">17.5.8. 注釈</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="subprocess.html#converting-an-argument-sequence-to-a-string-on-windows">17.5.8.1. Windows における引数シーケンスから文字列への変換</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sched.html">17.6. <code class="docutils literal"><span class="pre">sched</span></code> &#8212; イベントスケジューラ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sched.html#scheduler-objects">17.6.1. スケジューラオブジェクト</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="queue.html">17.7. <code class="docutils literal"><span class="pre">queue</span></code> &#8212; 同期キュークラス</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="queue.html#queue-objects">17.7.1. キューオブジェクト</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>以下のモジュールは上記のサービスの一部で使われるサポートモジュールです:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dummy_threading.html">17.8. <code class="docutils literal"><span class="pre">dummy_threading</span></code> &#8212; <code class="docutils literal"><span class="pre">threading</span></code> の代替モジュール</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_thread.html">17.9. <code class="docutils literal"><span class="pre">_thread</span></code> &#8212; 低水準の スレッド API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_dummy_thread.html">17.10. <code class="docutils literal"><span class="pre">_dummy_thread</span></code> &#8212; <code class="docutils literal"><span class="pre">_thread</span></code> の代替モジュール</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="ctypes.html"
+                        title="前の章へ">16.16. <code class="docutils literal"><span class="pre">ctypes</span></code> &#8212; Pythonのための外部関数ライブラリ</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="threading.html"
+                        title="次の章へ">17.1. <code class="docutils literal"><span class="pre">threading</span></code> &#8212; スレッドベースの並列処理</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/concurrency.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="threading.html" title="17.1. threading — スレッドベースの並列処理"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="ctypes.html" title="16.16. ctypes — Pythonのための外部関数ライブラリ"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

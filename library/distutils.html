@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>28.1. distutils — Python モジュールの構築とインストール &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="28. ソフトウェア・パッケージと配布" href="distribution.html" />
+    <link rel="next" title="28.2. ensurepip — pip インストーラのブートストラップ" href="ensurepip.html" />
+    <link rel="prev" title="28. ソフトウェア・パッケージと配布" href="distribution.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/distutils.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/distutils.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="ensurepip.html" title="28.2. ensurepip — pip インストーラのブートストラップ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="distribution.html" title="28. ソフトウェア・パッケージと配布"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="distribution.html" accesskey="U">28. ソフトウェア・パッケージと配布</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-distutils">
+<span id="distutils-building-and-installing-python-modules"></span><h1>28.1. <a class="reference internal" href="#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> &#8212; Python モジュールの構築とインストール<a class="headerlink" href="#module-distutils" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<hr class="docutils" />
+<p><a class="reference internal" href="#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> パッケージは、現在インストールされている Python に追加するためのモジュール構築、および実際のインストールを支援します。新規のモジュールは 100%-pure Python でも、C で書かれた拡張モジュールでも、あるいは Python と C 両方のコードが入っているモジュールからなる Python パッケージでもかまいません。</p>
+<p>Python ユーザの大半はこのパッケージを直接使い <em>たくはない</em> でしょうが、代わりに Python Packaging Authority が保守しているクロスバージョンツールを使うでしょう。特に、<a class="reference external" href="https://setuptools.readthedocs.io/en/latest/">setuptools</a> は <a class="reference internal" href="#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> の改良された代替品で、以下を提供しています:</p>
+<ul class="simple">
+<li><p class="first">プロジェクトの依存性の宣言のサポート</p>
+</li>
+<li><p class="first">ソースのリリースの際どのファイルを含めるか指定する追加の機構 (バージョン管理システムとの統合のためのプラグインも含む)</p>
+</li>
+<li><p class="first">プロジェクトの &#8220;エントリーポイント&#8221; を宣言する機能、アプリケーションプラグインシステムとして使うことができます</p>
+</li>
+<li><p class="first">インストール時に事前にビルドすることなく、Windows コマンドライン実行ファイルを自動的に生成する機能</p>
+</li>
+<li><p class="first">サポートしている Python の全バージョンで一貫性のある挙動</p>
+</li>
+</ul>
+<p>たとえスクリプト自身が <code class="docutils literal"><span class="pre">distutils</span></code> のみをインポートしていても、推奨される <a class="reference external" href="https://pip.pypa.io/">pip</a> インストーラは <code class="docutils literal"><span class="pre">setuptools</span></code> で全 <code class="docutils literal"><span class="pre">setup.py</span></code> スクリプトを実行します。詳細は <a class="reference external" href="https://packaging.python.org">Python Packaging User Guide</a> を参照してください。</p>
+<p>現在のパッケージと配布システムへの理解を深めようとしている著者やユーザのために、レガシーな <a class="reference internal" href="#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> に基づくユーザドキュメントと API のリファレンスは利用可能なままになっています。</p>
+<ul class="simple">
+<li><a class="reference internal" href="../install/index.html#install-index"><span class="std std-ref">Python モジュールのインストール (旧版)</span></a></li>
+<li><a class="reference internal" href="../distutils/index.html#distutils-index"><span class="std std-ref">Python モジュールの配布 (レガシーバージョン)</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="distribution.html"
+                        title="前の章へ">28. ソフトウェア・パッケージと配布</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="ensurepip.html"
+                        title="次の章へ">28.2. <code class="docutils literal"><span class="pre">ensurepip</span></code> &#8212;  <code class="docutils literal"><span class="pre">pip</span></code> インストーラのブートストラップ</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/distutils.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="ensurepip.html" title="28.2. ensurepip — pip インストーラのブートストラップ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="distribution.html" title="28. ソフトウェア・パッケージと配布"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="distribution.html" >28. ソフトウェア・パッケージと配布</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

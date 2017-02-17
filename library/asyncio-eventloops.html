@@ -1,0 +1,371 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18.5.2. イベントループ &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="18.5. asyncio — 非同期 I/O、イベントループ、コルーチンおよびタスク" href="asyncio.html" />
+    <link rel="next" title="18.5.3. タスクとコルーチン" href="asyncio-task.html" />
+    <link rel="prev" title="18.5.1. 基底イベントループ" href="asyncio-eventloop.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/asyncio-eventloops.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/asyncio-eventloops.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-task.html" title="18.5.3. タスクとコルーチン"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="asyncio-eventloop.html" title="18.5.1. 基底イベントループ"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" accesskey="U">18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="event-loops">
+<h1>18.5.2. イベントループ<a class="headerlink" href="#event-loops" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="event-loop-functions">
+<h2>18.5.2.1. イベントループ関数<a class="headerlink" href="#event-loop-functions" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>以下の関数は、グローバルポリシーのメソッドにアクセスするための便利なショートカットです。これらはデフォルトポリシーへのアクセス手段を提供するものであり、プロセスの実行前に <a class="reference internal" href="#asyncio.set_event_loop_policy" title="asyncio.set_event_loop_policy"><code class="xref py py-func docutils literal"><span class="pre">set_event_loop_policy()</span></code></a> を呼び出して設定された代替ポリシーには適用できないことに注意してください。</p>
+<dl class="function">
+<dt id="asyncio.get_event_loop">
+<code class="descclassname">asyncio.</code><code class="descname">get_event_loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.get_event_loop" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">get_event_loop_policy().get_event_loop()</span></code> の呼び出しと等価です。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="asyncio.set_event_loop">
+<code class="descclassname">asyncio.</code><code class="descname">set_event_loop</code><span class="sig-paren">(</span><em>loop</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.set_event_loop" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">get_event_loop_policy().set_event_loop(loop)</span></code> の呼び出しと等価です。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="asyncio.new_event_loop">
+<code class="descclassname">asyncio.</code><code class="descname">new_event_loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.new_event_loop" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">get_event_loop_policy().new_event_loop()</span></code> の呼び出しと等価です。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="available-event-loops">
+<span id="asyncio-event-loops"></span><h2>18.5.2.2. 利用可能なイベントループ<a class="headerlink" href="#available-event-loops" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>asyncio は現在 2 種類の実装のイベントループ、<a class="reference internal" href="#asyncio.SelectorEventLoop" title="asyncio.SelectorEventLoop"><code class="xref py py-class docutils literal"><span class="pre">SelectorEventLoop</span></code></a> と <a class="reference internal" href="#asyncio.ProactorEventLoop" title="asyncio.ProactorEventLoop"><code class="xref py py-class docutils literal"><span class="pre">ProactorEventLoop</span></code></a> を提供しています。</p>
+<dl class="class">
+<dt id="asyncio.SelectorEventLoop">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">SelectorEventLoop</code><a class="headerlink" href="#asyncio.SelectorEventLoop" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="selectors.html#module-selectors" title="selectors: High-level I/O multiplexing."><code class="xref py py-mod docutils literal"><span class="pre">selectors</span></code></a> モジュールベースのイベントループで、<a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop" title="asyncio.AbstractEventLoop"><code class="xref py py-class docutils literal"><span class="pre">AbstractEventLoop</span></code></a> のサブクラスです。</p>
+<p>プラットフォームで利用できる最も効率的なセレクターを使用します。</p>
+<p>Windows ではソケットのみサポートされています (例えばパイプは未サポート): <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms740141%28v=vs.85%29.aspx">MSDN の select のドキュメント</a> を参照してください。</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="asyncio.ProactorEventLoop">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">ProactorEventLoop</code><a class="headerlink" href="#asyncio.ProactorEventLoop" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>&#8220;I/O Completion Ports&#8221; (IOCP) を使用した Windows 用のプロアクターイベントループで、<a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop" title="asyncio.AbstractEventLoop"><code class="xref py py-class docutils literal"><span class="pre">AbstractEventLoop</span></code></a> のサブクラスです。</p>
+<p>利用できる環境 : Windows.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa365198%28v=vs.85%29.aspx">MSDN の I/O Completion Ports のドキュメント</a>。</p>
+</div>
+</dd></dl>
+
+<p>Windows で <a class="reference internal" href="#asyncio.ProactorEventLoop" title="asyncio.ProactorEventLoop"><code class="xref py py-class docutils literal"><span class="pre">ProactorEventLoop</span></code></a> を使用した例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span><span class="o">,</span> <span class="nn">sys</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;win32&#39;</span><span class="p">:</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">ProactorEventLoop</span><span class="p">()</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="platform-support">
+<span id="asyncio-platform-support"></span><h2>18.5.2.3. プラットフォームでのサポート<a class="headerlink" href="#platform-support" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> モジュールは移植性を考慮して設計されていますが、プラットフォームごとにわずかな違いがあり、<a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> の全機能をサポートしているわけではありません。</p>
+<div class="section" id="windows">
+<h3>18.5.2.3.1. Windows<a class="headerlink" href="#windows" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Windows のイベントループでの共通の制限:</p>
+<ul class="simple">
+<li><p class="first"><a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_unix_connection" title="asyncio.AbstractEventLoop.create_unix_connection"><code class="xref py py-meth docutils literal"><span class="pre">create_unix_connection()</span></code></a> および <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_unix_server" title="asyncio.AbstractEventLoop.create_unix_server"><code class="xref py py-meth docutils literal"><span class="pre">create_unix_server()</span></code></a> はサポートされていません: ソケットファミリー <a class="reference internal" href="socket.html#socket.AF_UNIX" title="socket.AF_UNIX"><code class="xref py py-data docutils literal"><span class="pre">socket.AF_UNIX</span></code></a> は UNIX 固有です</p>
+</li>
+<li><p class="first"><a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.add_signal_handler" title="asyncio.AbstractEventLoop.add_signal_handler"><code class="xref py py-meth docutils literal"><span class="pre">add_signal_handler()</span></code></a> と <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.remove_signal_handler" title="asyncio.AbstractEventLoop.remove_signal_handler"><code class="xref py py-meth docutils literal"><span class="pre">remove_signal_handler()</span></code></a> はサポートされていません</p>
+</li>
+<li><p class="first"><code class="xref py py-meth docutils literal"><span class="pre">EventLoopPolicy.set_child_watcher()</span></code> は未サポート: <a class="reference internal" href="#asyncio.ProactorEventLoop" title="asyncio.ProactorEventLoop"><code class="xref py py-class docutils literal"><span class="pre">ProactorEventLoop</span></code></a> はサブプロセスをサポートします。これは子プロセスを監視できる唯一の実装で、構成設定を必要としません。</p>
+</li>
+</ul>
+<p><a class="reference internal" href="#asyncio.SelectorEventLoop" title="asyncio.SelectorEventLoop"><code class="xref py py-class docutils literal"><span class="pre">SelectorEventLoop</span></code></a> 固有の制限:</p>
+<ul class="simple">
+<li><p class="first"><a class="reference internal" href="selectors.html#selectors.SelectSelector" title="selectors.SelectSelector"><code class="xref py py-class docutils literal"><span class="pre">SelectSelector</span></code></a> が使用されるがサポートしているのはソケットのみで 512 ソケットに制限される</p>
+</li>
+<li><p class="first"><a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.add_reader" title="asyncio.AbstractEventLoop.add_reader"><code class="xref py py-meth docutils literal"><span class="pre">add_reader()</span></code></a> および <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.add_writer" title="asyncio.AbstractEventLoop.add_writer"><code class="xref py py-meth docutils literal"><span class="pre">add_writer()</span></code></a> はソケットのファイル記述子受け取るだけです</p>
+</li>
+<li><p class="first">パイプは未サポート (例: <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.connect_read_pipe" title="asyncio.AbstractEventLoop.connect_read_pipe"><code class="xref py py-meth docutils literal"><span class="pre">connect_read_pipe()</span></code></a>, <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.connect_write_pipe" title="asyncio.AbstractEventLoop.connect_write_pipe"><code class="xref py py-meth docutils literal"><span class="pre">connect_write_pipe()</span></code></a>)</p>
+</li>
+<li><p class="first"><a class="reference internal" href="asyncio-subprocess.html#asyncio-subprocess"><span class="std std-ref">サブプロセス</span></a> は未サポート (例: <a class="reference internal" href="asyncio-subprocess.html#asyncio.AbstractEventLoop.subprocess_exec" title="asyncio.AbstractEventLoop.subprocess_exec"><code class="xref py py-meth docutils literal"><span class="pre">subprocess_exec()</span></code></a>, <a class="reference internal" href="asyncio-subprocess.html#asyncio.AbstractEventLoop.subprocess_shell" title="asyncio.AbstractEventLoop.subprocess_shell"><code class="xref py py-meth docutils literal"><span class="pre">subprocess_shell()</span></code></a>)</p>
+</li>
+</ul>
+<p><a class="reference internal" href="#asyncio.ProactorEventLoop" title="asyncio.ProactorEventLoop"><code class="xref py py-class docutils literal"><span class="pre">ProactorEventLoop</span></code></a> 固有の制限:</p>
+<ul class="simple">
+<li><p class="first"><a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_datagram_endpoint" title="asyncio.AbstractEventLoop.create_datagram_endpoint"><code class="xref py py-meth docutils literal"><span class="pre">create_datagram_endpoint()</span></code></a> (UDP) は未サポート</p>
+</li>
+<li><p class="first"><a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.add_reader" title="asyncio.AbstractEventLoop.add_reader"><code class="xref py py-meth docutils literal"><span class="pre">add_reader()</span></code></a> および <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.add_writer" title="asyncio.AbstractEventLoop.add_writer"><code class="xref py py-meth docutils literal"><span class="pre">add_writer()</span></code></a> は未サポート</p>
+</li>
+</ul>
+<p>Windows のモノトニック時計の時間分解能は、通常約 15.6 秒です。
+最高分解能は 0.5 秒です。
+分解能はハードウェア (<a class="reference external" href="https://ja.wikipedia.org/wiki/High_Precision_Event_Timer">HPET</a> の可否) および Windows の設定に依存します。
+<a class="reference internal" href="asyncio-eventloop.html#asyncio-delayed-calls"><span class="std std-ref">asyncio 遅延呼び出し</span></a> を参照してください。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span><a class="reference internal" href="#asyncio.ProactorEventLoop" title="asyncio.ProactorEventLoop"><code class="xref py py-class docutils literal"><span class="pre">ProactorEventLoop</span></code></a> は SSL をサポートしました。</p>
+</div>
+</div>
+<div class="section" id="mac-os-x">
+<h3>18.5.2.3.2. Mac OS X<a class="headerlink" href="#mac-os-x" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>PTY のようなキャラクターデバイスは Mavericks (Mac OS 10.9) 以降でのみ十分サポートされています。Mac OS 10.5 以前ではサポートされていません。</p>
+<p>Mac OS 10.6、10.7 および 10.8 では、デフォルトのイベントループは <a class="reference internal" href="#asyncio.SelectorEventLoop" title="asyncio.SelectorEventLoop"><code class="xref py py-class docutils literal"><span class="pre">SelectorEventLoop</span></code></a> で、<a class="reference internal" href="selectors.html#selectors.KqueueSelector" title="selectors.KqueueSelector"><code class="xref py py-class docutils literal"><span class="pre">selectors.KqueueSelector</span></code></a> を使用します。<a class="reference internal" href="selectors.html#selectors.KqueueSelector" title="selectors.KqueueSelector"><code class="xref py py-class docutils literal"><span class="pre">selectors.KqueueSelector</span></code></a> はこれらのバージョンではキャラクターデバイスをサポートしていません。これらのバージョンでキャラクターデバイスをサポートするには <a class="reference internal" href="#asyncio.SelectorEventLoop" title="asyncio.SelectorEventLoop"><code class="xref py py-class docutils literal"><span class="pre">SelectorEventLoop</span></code></a> で <a class="reference internal" href="selectors.html#selectors.SelectSelector" title="selectors.SelectSelector"><code class="xref py py-class docutils literal"><span class="pre">SelectSelector</span></code></a> または <a class="reference internal" href="selectors.html#selectors.PollSelector" title="selectors.PollSelector"><code class="xref py py-class docutils literal"><span class="pre">PollSelector</span></code></a> を使用します。例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">selectors</span>
+
+<span class="n">selector</span> <span class="o">=</span> <span class="n">selectors</span><span class="o">.</span><span class="n">SelectSelector</span><span class="p">()</span>
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">SelectorEventLoop</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+<span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="event-loop-policies-and-the-default-policy">
+<h2>18.5.2.4. イベントループのポリシーとデフォルトポリシー<a class="headerlink" href="#event-loop-policies-and-the-default-policy" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>イベントループの管理は、カスタムプラットフォームやフレームワークのために最大限の柔軟性を提供するため <em>ポリシー</em> パターンによって抽象化されます。プロセスの実行中、単一のポリシーオブジェクトが、コンテキスト呼び出しベースのプロセスから利用可能なイベントループを管理します。一つのポリシーは一つの <a class="reference internal" href="#asyncio.AbstractEventLoopPolicy" title="asyncio.AbstractEventLoopPolicy"><code class="xref py py-class docutils literal"><span class="pre">AbstractEventLoopPolicy</span></code></a> インターフェースを実装するオブジェクトです。</p>
+<p>ほとんどの <a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> 利用者にとってデフォルトのグローバルポリシーで十分であるため、ポリシーを明示的に追加する必要はありません。</p>
+<p>デフォルトポリシーは現在のスレッドをコンテキストとして定義し、<a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> と情報のやり取りを行うスレッドごとにイベントループを管理します。モジュールレベル関数 <a class="reference internal" href="#asyncio.get_event_loop" title="asyncio.get_event_loop"><code class="xref py py-func docutils literal"><span class="pre">get_event_loop()</span></code></a> および <a class="reference internal" href="#asyncio.set_event_loop" title="asyncio.set_event_loop"><code class="xref py py-func docutils literal"><span class="pre">set_event_loop()</span></code></a> は、デフォルトポリシーによって管理されるイベントループへの便利なアクセス手段を提供します。</p>
+</div>
+<div class="section" id="event-loop-policy-interface">
+<h2>18.5.2.5. イベントループポリシーインターフェース<a class="headerlink" href="#event-loop-policy-interface" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>イベントループのポリシーは以下のインターフェースを実装しなければなりません:</p>
+<dl class="class">
+<dt id="asyncio.AbstractEventLoopPolicy">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">AbstractEventLoopPolicy</code><a class="headerlink" href="#asyncio.AbstractEventLoopPolicy" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>イベントループポリシーです。</p>
+<dl class="method">
+<dt id="asyncio.AbstractEventLoopPolicy.get_event_loop">
+<code class="descname">get_event_loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.AbstractEventLoopPolicy.get_event_loop" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在のコンテクストのイベントループを取得します。</p>
+<p><a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop" title="asyncio.AbstractEventLoop"><code class="xref py py-class docutils literal"><span class="pre">AbstractEventLoop</span></code></a> インターフェイスを実装したイベントループオブジェクトを返します。</p>
+<p>現在のコンテキストに設定されているイベントループが存在しない場合やイベントループを作成するためのポリシーが指定されていない場合には例外を送出します。
+<code class="docutils literal"><span class="pre">None</span></code> を返すことがあってはなりません。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.AbstractEventLoopPolicy.set_event_loop">
+<code class="descname">set_event_loop</code><span class="sig-paren">(</span><em>loop</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.AbstractEventLoopPolicy.set_event_loop" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在のコンテキストにイベントループ <em>loop</em> を設定します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.AbstractEventLoopPolicy.new_event_loop">
+<code class="descname">new_event_loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.AbstractEventLoopPolicy.new_event_loop" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このポリシーのルールに従った新しいイベントループを作成して返します。</p>
+<p>このループを現在のコンテキストのイベントループとして設定する必要がある場合は、<a class="reference internal" href="#asyncio.set_event_loop" title="asyncio.set_event_loop"><code class="xref py py-meth docutils literal"><span class="pre">set_event_loop()</span></code></a> が明示的に呼び出されなくてはなりません。</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="access-to-the-global-loop-policy">
+<h2>18.5.2.6. グローバルループポリシーへのアクセス<a class="headerlink" href="#access-to-the-global-loop-policy" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="function">
+<dt id="asyncio.get_event_loop_policy">
+<code class="descclassname">asyncio.</code><code class="descname">get_event_loop_policy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.get_event_loop_policy" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在のイベントループポリシーを取得します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="asyncio.set_event_loop_policy">
+<code class="descclassname">asyncio.</code><code class="descname">set_event_loop_policy</code><span class="sig-paren">(</span><em>policy</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.set_event_loop_policy" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在のイベントループポリシーを設定します。<em>policy</em> が <code class="docutils literal"><span class="pre">None</span></code> の場合、デフォルトポリシーが復元されます。</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.5.2. イベントループ</a><ul>
+<li><a class="reference internal" href="#event-loop-functions">18.5.2.1. イベントループ関数</a></li>
+<li><a class="reference internal" href="#available-event-loops">18.5.2.2. 利用可能なイベントループ</a></li>
+<li><a class="reference internal" href="#platform-support">18.5.2.3. プラットフォームでのサポート</a><ul>
+<li><a class="reference internal" href="#windows">18.5.2.3.1. Windows</a></li>
+<li><a class="reference internal" href="#mac-os-x">18.5.2.3.2. Mac OS X</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#event-loop-policies-and-the-default-policy">18.5.2.4. イベントループのポリシーとデフォルトポリシー</a></li>
+<li><a class="reference internal" href="#event-loop-policy-interface">18.5.2.5. イベントループポリシーインターフェース</a></li>
+<li><a class="reference internal" href="#access-to-the-global-loop-policy">18.5.2.6. グローバルループポリシーへのアクセス</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="asyncio-eventloop.html"
+                        title="前の章へ">18.5.1. 基底イベントループ</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="asyncio-task.html"
+                        title="次の章へ">18.5.3. タスクとコルーチン</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio-eventloops.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-task.html" title="18.5.3. タスクとコルーチン"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="asyncio-eventloop.html" title="18.5.1. 基底イベントループ"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" >18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

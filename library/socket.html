@@ -1,0 +1,1614 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18.1. socket — 低水準ネットワークインターフェース &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="18. プロセス間通信とネットワーク" href="ipc.html" />
+    <link rel="next" title="18.2. ssl — ソケットオブジェクトに対する TLS/SSL ラッパー" href="ssl.html" />
+    <link rel="prev" title="18. プロセス間通信とネットワーク" href="ipc.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/socket.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/socket.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="ssl.html" title="18.2. ssl — ソケットオブジェクトに対する TLS/SSL ラッパー"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="ipc.html" title="18. プロセス間通信とネットワーク"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" accesskey="U">18. プロセス間通信とネットワーク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-socket">
+<span id="socket-low-level-networking-interface"></span><h1>18.1. <a class="reference internal" href="#module-socket" title="socket: Low-level networking interface."><code class="xref py py-mod docutils literal"><span class="pre">socket</span></code></a> &#8212; 低水準ネットワークインターフェース<a class="headerlink" href="#module-socket" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/socket.py">Lib/socket.py</a></p>
+<hr class="docutils" />
+<p>このモジュールはBSDの <em>ソケット(socket)</em> インターフェースへのアクセスを提供します。これは、近代的なUnixシステム、Windows、MacOS、その他多くのプラットフォームで動作します。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">いくつかの挙動はプラットフォームに依存します。オペレーティングシステムのソケットAPIを呼び出しているためです。</p>
+</div>
+<p id="index-0">Pythonインターフェースは、Unixのソケット用システムコールとライブラリインターフェースを、そのままPythonのオブジェクト指向スタイルに変換したものです。各種ソケット関連のシステムコールは、 <a class="reference internal" href="#socket.socket" title="socket.socket"><code class="xref py py-func docutils literal"><span class="pre">socket()</span></code></a> 関数で生成される <em class="dfn">socket オブジェクト</em> のメソッドとして実装されています。 メソッドの引数は C のインターフェースよりも多少高水準で、例えばファイルに対する <code class="xref py py-meth docutils literal"><span class="pre">read()</span></code> や <code class="xref py py-meth docutils literal"><span class="pre">write()</span></code> メソッドと同様に、 受信時のバッファ確保は自動的に処理され、送信時のバッファ長は暗黙的に決まります。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<dl class="last docutils">
+<dt>Module <a class="reference internal" href="socketserver.html#module-socketserver" title="socketserver: A framework for network servers."><code class="xref py py-mod docutils literal"><span class="pre">socketserver</span></code></a></dt>
+<dd><p class="first last">ネットワークサーバの開発を省力化するためのクラス群。</p>
+</dd>
+<dt>Module <a class="reference internal" href="ssl.html#module-ssl" title="ssl: TLS/SSL wrapper for socket objects"><code class="xref py py-mod docutils literal"><span class="pre">ssl</span></code></a></dt>
+<dd><p class="first last">ソケットオブジェクトに対する TLS/SSL ラッパー.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="socket-families">
+<h2>18.1.1. ソケットファミリー<a class="headerlink" href="#socket-families" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>どのシステムで実行するかとビルドオプションに依存しますが、このモジュールによって多様なソケットファミリーをサポートします。</p>
+<p>特定のソケットオブジェクトによって必要とされるアドレスフォーマットは、ソケットオブジェクトが生成されたときに指定されたアドレスファミリーを元に自動的に選択されます。ソケットアドレスは次の通りです。</p>
+<ul>
+<li><p class="first">ファイルシステム上のノードに束縛された <a class="reference internal" href="#socket.AF_UNIX" title="socket.AF_UNIX"><code class="xref py py-const docutils literal"><span class="pre">AF_UNIX</span></code></a> ソケットのアドレスは、ファイルシステムエンコーディングと <code class="docutils literal"><span class="pre">'surrogateescape'</span></code> エラーハンドラ (<span class="target" id="index-28"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0383"><strong>PEP 383</strong></a> を参照) を使って文字列として表現されます。 Linux の抽象名前空間のアドレスは、先頭が null バイトとなる <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> として返されます。この名前空間のソケットは通常のファイルシステム上のソケットと通信できるので、 Linux 上で動作することを意図したプログラムは両方のアドレスを扱う必要がある可能性があります。文字列と bytes-like オブジェクトはどちらのタイプのアドレスにも引数として渡すことができます。</p>
+<blockquote>
+<div><div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>これまでは <a class="reference internal" href="#socket.AF_UNIX" title="socket.AF_UNIX"><code class="xref py py-const docutils literal"><span class="pre">AF_UNIX</span></code></a> ソケットパスは UTF-8 エンコーディングを使用するものとされていました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>書き込み可能な <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> を使用できるようになりました。</p>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<ul id="host-port">
+<li><p class="first"><a class="reference internal" href="#socket.AF_INET" title="socket.AF_INET"><code class="xref py py-const docutils literal"><span class="pre">AF_INET</span></code></a> アドレスファミリーには、 <code class="docutils literal"><span class="pre">(host,</span> <span class="pre">port)</span></code> ペアがアドレスとして利用されます。 <em>host</em> はホスト名か <code class="docutils literal"><span class="pre">'daring.cwi.nl'</span></code> のようなインターネットドメインか、 <code class="docutils literal"><span class="pre">'100.50.200.5'</span></code> のような IPv4 アドレスで、 <em>port</em> は整数です。</p>
+</li>
+<li><p class="first"><a class="reference internal" href="#socket.AF_INET6" title="socket.AF_INET6"><code class="xref py py-const docutils literal"><span class="pre">AF_INET6</span></code></a> アドレスファミリーでは、 <code class="docutils literal"><span class="pre">(host,</span> <span class="pre">port,</span> <span class="pre">flowinfo,</span> <span class="pre">scopeid)</span></code> の4タプルが利用されます。 <em>flowinfo</em> と <em>scopeid</em> はそれぞれC言語の <code class="xref py py-const docutils literal"><span class="pre">struct</span> <span class="pre">sockaddr_in6</span></code> の <code class="docutils literal"><span class="pre">sin6_flowinfo</span></code> と <code class="docutils literal"><span class="pre">sin6_scope_id</span></code> メンバーを表します。 <a class="reference internal" href="#module-socket" title="socket: Low-level networking interface."><code class="xref py py-mod docutils literal"><span class="pre">socket</span></code></a> モジュールのメソッドでは、後方互換性のために <em>flowinfo</em> と <em>scopeid</em> の省略を許しています。しかし、 <em>scopeid</em> を省略すると scope された IPv6 アドレスを操作するときに問題が起こる場合があることに注意してください。</p>
+</li>
+<li><p class="first"><code class="xref py py-const docutils literal"><span class="pre">AF_NETLINK</span></code> ソケットのアドレスは <code class="docutils literal"><span class="pre">(pid,</span> <span class="pre">groups)</span></code> のペアで表されます。</p>
+</li>
+<li><p class="first">Linux 限定で、 <code class="xref py py-const docutils literal"><span class="pre">AF_TIPC</span></code> アドレスファミリーを用いて TIPC がサポートされます。 TIPC は、クラスタコンピューティング環境のために設計された、IP ベースではないオープンなネットワークプロトコルです。アドレスはタプルで表現され、フィールドはアドレスタイプに依存します。一般的なタプルの形式は <code class="docutils literal"><span class="pre">(addr_type,</span> <span class="pre">v1,</span> <span class="pre">v2,</span> <span class="pre">v3</span> <span class="pre">[,</span> <span class="pre">scope])</span></code> で、それぞれは次の通りです:</p>
+<ul>
+<li><p class="first"><em>addr_type</em> は <code class="xref py py-const docutils literal"><span class="pre">TIPC_ADDR_NAMESEQ</span></code>, <code class="xref py py-const docutils literal"><span class="pre">TIPC_ADDR_NAME</span></code>, <code class="xref py py-const docutils literal"><span class="pre">TIPC_ADDR_ID</span></code> の1つ。</p>
+</li>
+<li><p class="first"><em>scope</em> は <code class="xref py py-const docutils literal"><span class="pre">TIPC_ZONE_SCOPE</span></code>, <code class="xref py py-const docutils literal"><span class="pre">TIPC_CLUSTER_SCOPE</span></code>, <code class="xref py py-const docutils literal"><span class="pre">TIPC_NODE_SCOPE</span></code> の1つ。</p>
+</li>
+<li><p class="first"><em>addr_type</em> が <code class="xref py py-const docutils literal"><span class="pre">TIPC_ADDR_NAME</span></code> の場合、 <em>v1</em> はサーバータイプ、 <em>v2</em> はポートID (the port identifier)、そして <em>v3</em> は 0 であるべきです。</p>
+<p><em>addr_type</em> が <code class="xref py py-const docutils literal"><span class="pre">TIPC_ADDR_NAMESEQ</span></code> の場合、 <em>v1</em> はサーバータイプ、 <em>v2</em> はポート番号下位(lower port number)、 <em>v3</em> はポート番号上位(upper port number) です。</p>
+<p><em>addr_type</em> が <code class="xref py py-const docutils literal"><span class="pre">TIPC_ADDR_ID</span></code> の場合、 <em>v1</em> はノード、 <em>v2</em> は参照、 <em>v3</em> は0であるべきです。</p>
+</li>
+</ul>
+</li>
+<li><p class="first"><a class="reference internal" href="#socket.AF_CAN" title="socket.AF_CAN"><code class="xref py py-const docutils literal"><span class="pre">AF_CAN</span></code></a> アドレスファミリーには <code class="docutils literal"><span class="pre">(interface,)</span></code> というタプルを利用します。 <em>interface</em> は <code class="docutils literal"><span class="pre">'can0'</span></code> のようなネットワークインタフェース名を表す文字列です。このファミリーの全てのネットワークインタフェースからパケットを受信するために、ネットワークインタフェース名 <code class="docutils literal"><span class="pre">''</span></code> を利用できます。</p>
+</li>
+<li><p class="first">文字列またはタプル <code class="docutils literal"><span class="pre">(id,</span> <span class="pre">unit)</span></code> は <code class="xref py py-const docutils literal"><span class="pre">PF_SYSTEM</span></code> ファミリーの <code class="xref py py-const docutils literal"><span class="pre">SYSPROTO_CONTROL</span></code> プロトコルのために使用されます。この文字列は、動的に割り当てられたIDによるカーネルコントロールの名前です。このタプルは、カーネルコントロールのIDとユニット番号が既知の場合、または登録済みIDが使用中の場合に使用することができます。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</li>
+<li><p class="first"><code class="xref py py-const docutils literal"><span class="pre">AF_BLUETOOTH</span></code> は以下のプロトコルとアドレスフォーマットをサポートしています。</p>
+<ul>
+<li><p class="first"><code class="xref py py-const docutils literal"><span class="pre">BTPROTO_L2CAP</span></code> は <code class="docutils literal"><span class="pre">(bdaddr,</span> <span class="pre">psm)</span></code> を受け取ります。
+<code class="docutils literal"><span class="pre">bdaddr</span></code> は Bluetooth アドレスを表す文字列で、 <code class="docutils literal"><span class="pre">psm</span></code> は整数です。</p>
+</li>
+<li><p class="first"><code class="xref py py-const docutils literal"><span class="pre">BTPROTO_RFCOMM</span></code> は <code class="docutils literal"><span class="pre">(bdaddr,</span> <span class="pre">channel)</span></code> を受け取ります。
+<code class="docutils literal"><span class="pre">bdaddr</span></code> は Bluetooth アドレスを表す文字列で、 <code class="docutils literal"><span class="pre">channel</span></code> は整数です。</p>
+</li>
+<li><p class="first"><code class="xref py py-const docutils literal"><span class="pre">BTPROTO_HCI</span></code> accepts <code class="docutils literal"><span class="pre">(device_id,)</span></code> where <code class="docutils literal"><span class="pre">device_id</span></code> is
+either an integer or a string with the Bluetooth address of the
+interface. (This depends on your OS; NetBSD and DragonFlyBSD expect
+a Bluetooth address while everything else expects an integer.)</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>NetBSD と DragonFlyBSD のサポートが追加されました。</p>
+</div>
+</li>
+<li><p class="first"><code class="xref py py-const docutils literal"><span class="pre">BTPROTO_SCO</span></code> accepts <code class="docutils literal"><span class="pre">bdaddr</span></code> where <code class="docutils literal"><span class="pre">bdaddr</span></code> is a
+<a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> object containing the Bluetooth address in a
+string format. (ex. <code class="docutils literal"><span class="pre">b'12:23:34:45:56:67'</span></code>) This protocol is not
+supported under FreeBSD.</p>
+</li>
+</ul>
+</li>
+<li><p class="first"><a class="reference internal" href="#socket.AF_ALG" title="socket.AF_ALG"><code class="xref py py-const docutils literal"><span class="pre">AF_ALG</span></code></a> is a Linux-only socket based interface to Kernel
+cryptography. An algorithm socket is configured with a tuple of two to four
+elements <code class="docutils literal"><span class="pre">(type,</span> <span class="pre">name</span> <span class="pre">[,</span> <span class="pre">feat</span> <span class="pre">[,</span> <span class="pre">mask]])</span></code>, where:</p>
+<ul class="simple">
+<li><em>type</em> is the algorithm type as string, e.g. <code class="docutils literal"><span class="pre">aead</span></code>, <code class="docutils literal"><span class="pre">hash</span></code>,
+<code class="docutils literal"><span class="pre">skcipher</span></code> or <code class="docutils literal"><span class="pre">rng</span></code>.</li>
+<li><em>name</em> is the algorithm name and operation mode as string, e.g.
+<code class="docutils literal"><span class="pre">sha256</span></code>, <code class="docutils literal"><span class="pre">hmac(sha256)</span></code>, <code class="docutils literal"><span class="pre">cbc(aes)</span></code> or <code class="docutils literal"><span class="pre">drbg_nopr_ctr_aes256</span></code>.</li>
+<li><em>feat</em> and <em>mask</em> are unsigned 32bit integers.</li>
+</ul>
+<p>Availability Linux 2.6.38, some algorithm types require more recent Kernels.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
+</div>
+</li>
+<li><p class="first">その他の特定のアドレスファミリー (<code class="xref py py-const docutils literal"><span class="pre">AF_PACKET</span></code>, <a class="reference internal" href="#socket.AF_CAN" title="socket.AF_CAN"><code class="xref py py-const docutils literal"><span class="pre">AF_CAN</span></code></a>) は、それぞれ固有の形式をサポートしています。</p>
+</li>
+</ul>
+<p>IPv4 アドレスでは、ホストアドレスの代わりに2つの特殊な形式を利用できます。 IPv4アドレスのホストアドレスが空文字列の場合、 <code class="xref py py-const docutils literal"><span class="pre">INADDR_ANY</span></code> として処理されます。また、 <code class="docutils literal"><span class="pre">'&lt;broadcast&gt;'</span></code> の場合は <code class="xref py py-const docutils literal"><span class="pre">INADDR_BROADCAST</span></code> として処理されます。 IPv6では後方互換性のためこの機能は用意されていませんので、IPv6をサポートするPythonプログラムでは利用しないで下さい。</p>
+<p>IPv4/v6ソケットの <em>host</em> 部にホスト名を指定すると、処理結果が一定ではない場合があります。これはPythonはDNSから取得したアドレスのうち最初のアドレスを使用するので、 DNSの処理やホストの設定によって異なるIPv4/6アドレスを取得する場合があるためです。常に同じ結果が必要であれば、 <em>host</em> に数値のアドレスを指定してください。</p>
+<p>全てのエラーは例外を発生させます。引数型のエラーやメモリ不足の場合には通常の例外が発生し、ソケットやアドレス関連のエラーは Python 3.3 からは <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> かそのサブクラスを発生させます (Python 3.3 以前は <a class="reference internal" href="#socket.error" title="socket.error"><code class="xref py py-exc docutils literal"><span class="pre">socket.error</span></code></a> を発生させていました)。</p>
+<p><a class="reference internal" href="#socket.socket.setblocking" title="socket.socket.setblocking"><code class="xref py py-meth docutils literal"><span class="pre">setblocking()</span></code></a> メソッドで、非ブロッキングモードを使用することができます。また、より汎用的に <a class="reference internal" href="#socket.socket.settimeout" title="socket.socket.settimeout"><code class="xref py py-meth docutils literal"><span class="pre">settimeout()</span></code></a> メソッドでタイムアウトを指定する事ができます。</p>
+</div>
+<div class="section" id="module-contents">
+<h2>18.1.2. モジュールの内容<a class="headerlink" href="#module-contents" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference internal" href="#module-socket" title="socket: Low-level networking interface."><code class="xref py py-mod docutils literal"><span class="pre">socket</span></code></a> モジュールは以下の要素を公開しています。</p>
+<div class="section" id="exceptions">
+<h3>18.1.2.1. 例外<a class="headerlink" href="#exceptions" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="exception">
+<dt id="socket.error">
+<em class="property">exception </em><code class="descclassname">socket.</code><code class="descname">error</code><a class="headerlink" href="#socket.error" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> の非推奨のエイリアスです。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span><span class="target" id="index-29"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3151"><strong>PEP 3151</strong></a> に基づき、このクラスは <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> のエイリアスになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="socket.herror">
+<em class="property">exception </em><code class="descclassname">socket.</code><code class="descname">herror</code><a class="headerlink" href="#socket.herror" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> のサブクラス。この例外はアドレス関連のエラー、つまり <a class="reference internal" href="#socket.gethostbyname_ex" title="socket.gethostbyname_ex"><code class="xref py py-func docutils literal"><span class="pre">gethostbyname_ex()</span></code></a> と <a class="reference internal" href="#socket.gethostbyaddr" title="socket.gethostbyaddr"><code class="xref py py-func docutils literal"><span class="pre">gethostbyaddr()</span></code></a> などの、 POSIX C API の <em>h_errno</em> を利用する関数のために利用されます。例外に付随する <code class="docutils literal"><span class="pre">(h_errno,</span> <span class="pre">string)</span></code> ペアはライブラリの呼び出しによって返されたエラーを表します。 <em>h_errno</em> は数値で、 <em>string</em> は、 <code class="xref c c-func docutils literal"><span class="pre">hstrerror()</span></code> C関数によって返される <em>h_errno</em> を説明する文字列です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>このクラスは <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> のサブクラスになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="socket.gaierror">
+<em class="property">exception </em><code class="descclassname">socket.</code><code class="descname">gaierror</code><a class="headerlink" href="#socket.gaierror" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> のサブクラスです。この例外は <a class="reference internal" href="#socket.getaddrinfo" title="socket.getaddrinfo"><code class="xref py py-func docutils literal"><span class="pre">getaddrinfo()</span></code></a> と <a class="reference internal" href="#socket.getnameinfo" title="socket.getnameinfo"><code class="xref py py-func docutils literal"><span class="pre">getnameinfo()</span></code></a> でアドレス関連のエラーが発生した場合に送出されます。例外の値は <code class="docutils literal"><span class="pre">(error,</span> <span class="pre">string)</span></code> のペアで、ライブラリの呼び出し結果を返します。 <em>string</em> はC関数 <code class="xref c c-func docutils literal"><span class="pre">gai_strerror()</span></code> で取得した、 <em>error</em> の意味を示す文字列です。 <em>error</em> の値は、このモジュールで定義される <code class="xref py py-const docutils literal"><span class="pre">EAI_*</span></code> 定数のどれかとなります。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>このクラスは <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> のサブクラスになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="socket.timeout">
+<em class="property">exception </em><code class="descclassname">socket.</code><code class="descname">timeout</code><a class="headerlink" href="#socket.timeout" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> のサブクラスです。この例外は、あらかじめ <a class="reference internal" href="#socket.socket.settimeout" title="socket.socket.settimeout"><code class="xref py py-meth docutils literal"><span class="pre">settimeout()</span></code></a> を呼び出して (あるいは <a class="reference internal" href="#socket.setdefaulttimeout" title="socket.setdefaulttimeout"><code class="xref py py-func docutils literal"><span class="pre">setdefaulttimeout()</span></code></a> を利用して暗黙に) タイムアウトを有効にしてあるソケットでタイムアウトが生じた際に送出されます。 例外に付属する値は文字列で、その内容は現状では常に &#8220;timed out&#8221; となります。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>このクラスは <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> のサブクラスになりました。</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="constants">
+<h3>18.1.2.2. 定数<a class="headerlink" href="#constants" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<blockquote>
+<div><p>AF_* 定数と SOCK_* 定数は、 <code class="xref py py-class docutils literal"><span class="pre">AddressFamily</span></code> と <code class="xref py py-class docutils literal"><span class="pre">SocketKind</span></code> <a class="reference internal" href="enum.html#enum.IntEnum" title="enum.IntEnum"><code class="xref py py-class docutils literal"><span class="pre">IntEnum</span></code></a> collection になりました。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</div></blockquote>
+<dl class="data">
+<dt id="socket.AF_UNIX">
+<code class="descclassname">socket.</code><code class="descname">AF_UNIX</code><a class="headerlink" href="#socket.AF_UNIX" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.AF_INET">
+<code class="descclassname">socket.</code><code class="descname">AF_INET</code><a class="headerlink" href="#socket.AF_INET" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.AF_INET6">
+<code class="descclassname">socket.</code><code class="descname">AF_INET6</code><a class="headerlink" href="#socket.AF_INET6" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>アドレス (およびプロトコル) ファミリーを示す定数で、 <a class="reference internal" href="#socket.socket" title="socket.socket"><code class="xref py py-func docutils literal"><span class="pre">socket()</span></code></a> の 最初の引数に指定することができます。 <a class="reference internal" href="#socket.AF_UNIX" title="socket.AF_UNIX"><code class="xref py py-const docutils literal"><span class="pre">AF_UNIX</span></code></a> ファミリーをサポート しないプラットフォームでは、 <a class="reference internal" href="#socket.AF_UNIX" title="socket.AF_UNIX"><code class="xref py py-const docutils literal"><span class="pre">AF_UNIX</span></code></a> は未定義となります。システムによってはこれら以外の定数が定義されているかもしれません。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="socket.SOCK_STREAM">
+<code class="descclassname">socket.</code><code class="descname">SOCK_STREAM</code><a class="headerlink" href="#socket.SOCK_STREAM" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.SOCK_DGRAM">
+<code class="descclassname">socket.</code><code class="descname">SOCK_DGRAM</code><a class="headerlink" href="#socket.SOCK_DGRAM" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.SOCK_RAW">
+<code class="descclassname">socket.</code><code class="descname">SOCK_RAW</code><a class="headerlink" href="#socket.SOCK_RAW" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.SOCK_RDM">
+<code class="descclassname">socket.</code><code class="descname">SOCK_RDM</code><a class="headerlink" href="#socket.SOCK_RDM" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.SOCK_SEQPACKET">
+<code class="descclassname">socket.</code><code class="descname">SOCK_SEQPACKET</code><a class="headerlink" href="#socket.SOCK_SEQPACKET" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットタイプを示す定数で、 <a class="reference internal" href="#socket.socket" title="socket.socket"><code class="xref py py-func docutils literal"><span class="pre">socket()</span></code></a> の2番目の引数に指定することができます。システムによってはこれら以外の定数が定義されているかもしれません。 (ほとんどの場合、 <a class="reference internal" href="#socket.SOCK_STREAM" title="socket.SOCK_STREAM"><code class="xref py py-const docutils literal"><span class="pre">SOCK_STREAM</span></code></a> と <a class="reference internal" href="#socket.SOCK_DGRAM" title="socket.SOCK_DGRAM"><code class="xref py py-const docutils literal"><span class="pre">SOCK_DGRAM</span></code></a> 以外は必要ありません。)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="socket.SOCK_CLOEXEC">
+<code class="descclassname">socket.</code><code class="descname">SOCK_CLOEXEC</code><a class="headerlink" href="#socket.SOCK_CLOEXEC" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.SOCK_NONBLOCK">
+<code class="descclassname">socket.</code><code class="descname">SOCK_NONBLOCK</code><a class="headerlink" href="#socket.SOCK_NONBLOCK" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この2つの定数が定義されていた場合、ソケットタイプと組み合わせていくつかの flags をアトミックに設定することができます (別の呼び出しを不要にして競合状態を避ける事ができます)。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last">より完全な説明は <a class="reference external" href="http://udrepper.livejournal.com/20407.html">Secure File Descriptor Handling</a> を参照してください。</p>
+</div>
+<p>利用できる環境: Linux 2.6.27 以降。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<code class="descname">SO_*</code></dt>
+<dt id="socket.SOMAXCONN">
+<code class="descclassname">socket.</code><code class="descname">SOMAXCONN</code><a class="headerlink" href="#socket.SOMAXCONN" title="この定義へのパーマリンク">¶</a></dt>
+<dt>
+<code class="descname">MSG_*</code></dt>
+<dt>
+<code class="descname">SOL_*</code></dt>
+<dt>
+<code class="descname">SCM_*</code></dt>
+<dt>
+<code class="descname">IPPROTO_*</code></dt>
+<dt>
+<code class="descname">IPPORT_*</code></dt>
+<dt>
+<code class="descname">INADDR_*</code></dt>
+<dt>
+<code class="descname">IP_*</code></dt>
+<dt>
+<code class="descname">IPV6_*</code></dt>
+<dt>
+<code class="descname">EAI_*</code></dt>
+<dt>
+<code class="descname">AI_*</code></dt>
+<dt>
+<code class="descname">NI_*</code></dt>
+<dt>
+<code class="descname">TCP_*</code></dt>
+<dd><p>Unixのソケット・IPプロトコルのドキュメントで定義されている各種定数。ソケットオブジェクトの <code class="xref py py-meth docutils literal"><span class="pre">setsockopt()</span></code> や <code class="xref py py-meth docutils literal"><span class="pre">getsockopt()</span></code> で使用します。ほとんどのシンボルはUnixのヘッダファイルに従っています。一部のシンボルには、デフォルト値を定義してあります。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span><code class="docutils literal"><span class="pre">SO_DOMAIN</span></code>, <code class="docutils literal"><span class="pre">SO_PROTOCOL</span></code>, <code class="docutils literal"><span class="pre">SO_PEERSEC</span></code>, <code class="docutils literal"><span class="pre">SO_PASSSEC</span></code>,
+<code class="docutils literal"><span class="pre">TCP_USER_TIMEOUT</span></code>, <code class="docutils literal"><span class="pre">TCP_CONGESTION</span></code> were added.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="socket.AF_CAN">
+<code class="descclassname">socket.</code><code class="descname">AF_CAN</code><a class="headerlink" href="#socket.AF_CAN" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.PF_CAN">
+<code class="descclassname">socket.</code><code class="descname">PF_CAN</code><a class="headerlink" href="#socket.PF_CAN" title="この定義へのパーマリンク">¶</a></dt>
+<dt>
+<code class="descname">SOL_CAN_*</code></dt>
+<dt>
+<code class="descname">CAN_*</code></dt>
+<dd><p>Linux ドキュメントにあるこの形式の定数は socket モジュールでも定義されています。</p>
+<p>利用できる環境: Linux 2.6.25 以降。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="socket.CAN_BCM">
+<code class="descclassname">socket.</code><code class="descname">CAN_BCM</code><a class="headerlink" href="#socket.CAN_BCM" title="この定義へのパーマリンク">¶</a></dt>
+<dt>
+<code class="descname">CAN_BCM_*</code></dt>
+<dd><p>CANプロトコルファミリーのCAN_BCMは、ブロードキャストマネージャー(BCM)プロトコルです。Linuxドキュメントにあるこの形式の定数は、socketモジュールでも定義されています。</p>
+<p>利用できる環境: Linux 2.6.25 以降。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="socket.CAN_RAW_FD_FRAMES">
+<code class="descclassname">socket.</code><code class="descname">CAN_RAW_FD_FRAMES</code><a class="headerlink" href="#socket.CAN_RAW_FD_FRAMES" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Enables CAN FD support in a CAN_RAW socket. This is disabled by default.
+This allows your application to send both CAN and CAN FD frames; however,
+you one must accept both CAN and CAN FD frames when reading from the socket.</p>
+<p>この定数は、 Linux のドキュメンテーションで説明されています。</p>
+<p>利用できる環境: Linux 3.6 以降。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="socket.AF_RDS">
+<code class="descclassname">socket.</code><code class="descname">AF_RDS</code><a class="headerlink" href="#socket.AF_RDS" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.PF_RDS">
+<code class="descclassname">socket.</code><code class="descname">PF_RDS</code><a class="headerlink" href="#socket.PF_RDS" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.SOL_RDS">
+<code class="descclassname">socket.</code><code class="descname">SOL_RDS</code><a class="headerlink" href="#socket.SOL_RDS" title="この定義へのパーマリンク">¶</a></dt>
+<dt>
+<code class="descname">RDS_*</code></dt>
+<dd><p>Linux ドキュメントにあるこの形式の定数は socket モジュールでも定義されています。</p>
+<p>利用できる環境: Linux 2.6.30 以降。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="socket.SIO_RCVALL">
+<code class="descclassname">socket.</code><code class="descname">SIO_RCVALL</code><a class="headerlink" href="#socket.SIO_RCVALL" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.SIO_KEEPALIVE_VALS">
+<code class="descclassname">socket.</code><code class="descname">SIO_KEEPALIVE_VALS</code><a class="headerlink" href="#socket.SIO_KEEPALIVE_VALS" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.SIO_LOOPBACK_FAST_PATH">
+<code class="descclassname">socket.</code><code class="descname">SIO_LOOPBACK_FAST_PATH</code><a class="headerlink" href="#socket.SIO_LOOPBACK_FAST_PATH" title="この定義へのパーマリンク">¶</a></dt>
+<dt>
+<code class="descname">RCVALL_*</code></dt>
+<dd><p>Windows の WSAIoctl() のための定数です。この定数はソケットオブジェクトの <a class="reference internal" href="#socket.socket.ioctl" title="socket.socket.ioctl"><code class="xref py py-meth docutils literal"><span class="pre">ioctl()</span></code></a> メソッドに引数として渡されます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span><code class="docutils literal"><span class="pre">SIO_LOOPBACK_FAST_PATH</span></code> was added.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<code class="descname">TIPC_*</code></dt>
+<dd><p>TIPC 関連の定数で、C のソケットAPIが公開しているものにマッチします。詳しい情報は TIPC のドキュメントを参照してください。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="socket.AF_ALG">
+<code class="descclassname">socket.</code><code class="descname">AF_ALG</code><a class="headerlink" href="#socket.AF_ALG" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.SOL_ALG">
+<code class="descclassname">socket.</code><code class="descname">SOL_ALG</code><a class="headerlink" href="#socket.SOL_ALG" title="この定義へのパーマリンク">¶</a></dt>
+<dt>
+<code class="descname">ALG_*</code></dt>
+<dd><p>Constants for Linux Kernel cryptography.</p>
+<p>Availability: Linux &gt;= 2.6.38.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="socket.AF_LINK">
+<code class="descclassname">socket.</code><code class="descname">AF_LINK</code><a class="headerlink" href="#socket.AF_LINK" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>利用可能: BSD, OSX.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="socket.has_ipv6">
+<code class="descclassname">socket.</code><code class="descname">has_ipv6</code><a class="headerlink" href="#socket.has_ipv6" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在のプラットフォームでIPv6がサポートされているか否かを示す真偽値。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="socket.BDADDR_ANY">
+<code class="descclassname">socket.</code><code class="descname">BDADDR_ANY</code><a class="headerlink" href="#socket.BDADDR_ANY" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.BDADDR_LOCAL">
+<code class="descclassname">socket.</code><code class="descname">BDADDR_LOCAL</code><a class="headerlink" href="#socket.BDADDR_LOCAL" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>These are string constants containing Bluetooth addresses with special
+meanings. For example, <a class="reference internal" href="#socket.BDADDR_ANY" title="socket.BDADDR_ANY"><code class="xref py py-const docutils literal"><span class="pre">BDADDR_ANY</span></code></a> can be used to indicate
+any address when specifying the binding socket with
+<code class="xref py py-const docutils literal"><span class="pre">BTPROTO_RFCOMM</span></code>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="socket.HCI_FILTER">
+<code class="descclassname">socket.</code><code class="descname">HCI_FILTER</code><a class="headerlink" href="#socket.HCI_FILTER" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.HCI_TIME_STAMP">
+<code class="descclassname">socket.</code><code class="descname">HCI_TIME_STAMP</code><a class="headerlink" href="#socket.HCI_TIME_STAMP" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="socket.HCI_DATA_DIR">
+<code class="descclassname">socket.</code><code class="descname">HCI_DATA_DIR</code><a class="headerlink" href="#socket.HCI_DATA_DIR" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>For use with <code class="xref py py-const docutils literal"><span class="pre">BTPROTO_HCI</span></code>. <a class="reference internal" href="#socket.HCI_FILTER" title="socket.HCI_FILTER"><code class="xref py py-const docutils literal"><span class="pre">HCI_FILTER</span></code></a> is not
+available for NetBSD or DragonFlyBSD. <a class="reference internal" href="#socket.HCI_TIME_STAMP" title="socket.HCI_TIME_STAMP"><code class="xref py py-const docutils literal"><span class="pre">HCI_TIME_STAMP</span></code></a> and
+<a class="reference internal" href="#socket.HCI_DATA_DIR" title="socket.HCI_DATA_DIR"><code class="xref py py-const docutils literal"><span class="pre">HCI_DATA_DIR</span></code></a> are not available for FreeBSD, NetBSD, or
+DragonFlyBSD.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="functions">
+<h3>18.1.2.3. 関数<a class="headerlink" href="#functions" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="creating-sockets">
+<h4>18.1.2.3.1. ソケットの作成<a class="headerlink" href="#creating-sockets" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p>以下の関数は全て <a class="reference internal" href="#socket-objects"><span class="std std-ref">socket object</span></a> を生成します。</p>
+<dl class="function">
+<dt id="socket.socket">
+<code class="descclassname">socket.</code><code class="descname">socket</code><span class="sig-paren">(</span><em>family=AF_INET</em>, <em>type=SOCK_STREAM</em>, <em>proto=0</em>, <em>fileno=None</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>アドレスファミリー、ソケットタイプ、プロトコル番号を指定して新しいソケットを作成します。アドレスファミリーには <a class="reference internal" href="#socket.AF_INET" title="socket.AF_INET"><code class="xref py py-const docutils literal"><span class="pre">AF_INET</span></code></a> (デフォルト値)、 <a class="reference internal" href="#socket.AF_INET6" title="socket.AF_INET6"><code class="xref py py-const docutils literal"><span class="pre">AF_INET6</span></code></a>  、 <a class="reference internal" href="#socket.AF_UNIX" title="socket.AF_UNIX"><code class="xref py py-const docutils literal"><span class="pre">AF_UNIX</span></code></a>  、 <a class="reference internal" href="#socket.AF_CAN" title="socket.AF_CAN"><code class="xref py py-const docutils literal"><span class="pre">AF_CAN</span></code></a>  、または <a class="reference internal" href="#socket.AF_RDS" title="socket.AF_RDS"><code class="xref py py-const docutils literal"><span class="pre">AF_RDS</span></code></a> を指定します。ソケットタイプには <a class="reference internal" href="#socket.SOCK_STREAM" title="socket.SOCK_STREAM"><code class="xref py py-const docutils literal"><span class="pre">SOCK_STREAM</span></code></a> (デフォルト値)、 <a class="reference internal" href="#socket.SOCK_DGRAM" title="socket.SOCK_DGRAM"><code class="xref py py-const docutils literal"><span class="pre">SOCK_DGRAM</span></code></a> 、 <a class="reference internal" href="#socket.SOCK_RAW" title="socket.SOCK_RAW"><code class="xref py py-const docutils literal"><span class="pre">SOCK_RAW</span></code></a> 、または他の <code class="docutils literal"><span class="pre">SOCK_</span></code> 定数を指定します。プロトコル番号は通常省略するか、または0を指定しますが、アドレスファミリーに <a class="reference internal" href="#socket.AF_CAN" title="socket.AF_CAN"><code class="xref py py-const docutils literal"><span class="pre">AF_CAN</span></code></a> を指定した場合は、プロトコル番号には <code class="xref py py-const docutils literal"><span class="pre">CAN_RAW</span></code> か <a class="reference internal" href="#socket.CAN_BCM" title="socket.CAN_BCM"><code class="xref py py-const docutils literal"><span class="pre">CAN_BCM</span></code></a> のいずれかを指定すべきです。<em>fileno</em> を指定した場合、別の引数が無視されるため、指定されたファイル記述子のソケットが返ります。<em>fileno</em> は、<a class="reference internal" href="#socket.fromfd" title="socket.fromfd"><code class="xref py py-func docutils literal"><span class="pre">socket.fromfd()</span></code></a> とは異なり、ソケットの複製ではなく、同一のソケットを返します。このことは、切り離されたソケットを <a class="reference internal" href="#socket.socket.close" title="socket.socket.close"><code class="xref py py-meth docutils literal"><span class="pre">socket.close()</span></code></a> で閉じるのに役立つ場合があります。</p>
+<p>新たに作成されたソケットは <a class="reference internal" href="os.html#fd-inheritance"><span class="std std-ref">継承不可</span></a>  です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>AF_CAN, AF_RDS ファミリーが追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span>CAN_BCMプロトコルが追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span>返されるソケットは継承不可になりました。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.socketpair">
+<code class="descclassname">socket.</code><code class="descname">socketpair</code><span class="sig-paren">(</span><span class="optional">[</span><em>family</em><span class="optional">[</span>, <em>type</em><span class="optional">[</span>, <em>proto</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socketpair" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>指定されたアドレスファミリー、ソケットタイプ、プロトコル番号から、接続されたソケットオブジェクトのペアを作成します。アドレスファミリー、ソケットタイプ、プロトコル番号は <a class="reference internal" href="#socket.socket" title="socket.socket"><code class="xref py py-func docutils literal"><span class="pre">socket()</span></code></a> 関数と同様に指定します。デフォルトのアドレスファミリは、プラットフォームで定義されている場合 <a class="reference internal" href="#socket.AF_UNIX" title="socket.AF_UNIX"><code class="xref py py-const docutils literal"><span class="pre">AF_UNIX</span></code></a> 、そうでなければ <a class="reference internal" href="#socket.AF_INET" title="socket.AF_INET"><code class="xref py py-const docutils literal"><span class="pre">AF_INET</span></code></a> が使われます。</p>
+<p>新たに作成されたソケットは <a class="reference internal" href="os.html#fd-inheritance"><span class="std std-ref">継承不可</span></a> です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>返されるソケットオブジェクトが、サブセットではなく完全なソケットAPIを提供するようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span>返されるソケットの組は、どちらも継承不可になりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>Windows のサポートが追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.create_connection">
+<code class="descclassname">socket.</code><code class="descname">create_connection</code><span class="sig-paren">(</span><em>address</em><span class="optional">[</span>, <em>timeout</em><span class="optional">[</span>, <em>source_address</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.create_connection" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>address</em> (<code class="docutils literal"><span class="pre">(host,</span> <span class="pre">port)</span></code> ペア) で listen しているTCPサービスに接続し、ソケットオブジェクトを返します。これは <a class="reference internal" href="#socket.socket.connect" title="socket.socket.connect"><code class="xref py py-meth docutils literal"><span class="pre">socket.connect()</span></code></a> を高級にした関数です。 <em>host</em> が数値でないホスト名の場合、 <a class="reference internal" href="#socket.AF_INET" title="socket.AF_INET"><code class="xref py py-data docutils literal"><span class="pre">AF_INET</span></code></a> と <a class="reference internal" href="#socket.AF_INET6" title="socket.AF_INET6"><code class="xref py py-data docutils literal"><span class="pre">AF_INET6</span></code></a> の両方で名前解決を試み、得られた全てのアドレスに対して成功するまで接続を試みます。この関数を使って IPv4 と IPv6 に両対応したクライアントを簡単に書くことができます。</p>
+<p>オプションの <em>timeout</em> 引数を指定すると、接続を試みる前にソケットオブジェクトのタイムアウトを設定します。 <em>timeout</em> が指定されない場合、 <a class="reference internal" href="#socket.getdefaulttimeout" title="socket.getdefaulttimeout"><code class="xref py py-func docutils literal"><span class="pre">getdefaulttimeout()</span></code></a> が返すデフォルトのタイムアウト設定値を利用します。</p>
+<p><em>source_address</em> は接続する前にバインドするソースアドレスを指定するオプション引数で、指定する場合は <code class="docutils literal"><span class="pre">(host,</span> <span class="pre">port)</span></code> の2要素タプルでなければなりません。 host や port が &#8216;&#8217; か 0 だった場合は、OSのデフォルトの動作になります。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span><em>source_address</em> が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.fromfd">
+<code class="descclassname">socket.</code><code class="descname">fromfd</code><span class="sig-paren">(</span><em>fd</em>, <em>family</em>, <em>type</em>, <em>proto=0</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.fromfd" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ファイル記述子 (ファイルオブジェクトの <code class="xref py py-meth docutils literal"><span class="pre">fileno()</span></code> メソッドが返す整数) <em>fd</em> を複製して、ソケットオブジェクトを構築します。アドレスファミリとプロトコル番号は <a class="reference internal" href="#socket.socket" title="socket.socket"><code class="xref py py-func docutils literal"><span class="pre">socket()</span></code></a> と同様に指定します。ファイル記述子 はソケットを指していなければなりませんが、実際にソケットであるかどうかのチェックは行っていません。このため、ソケット以外のファイル記述子 を指定するとその後の処理が失敗する場合があります。この関数が必要な事はあまりありませんが、 (Unixのinetデーモンに起動されるプログラムのように) ソケットを標準入力や標準出力として使用するプログラムでソケットオプションの取得や設定を行うために使われます。この関数で使用するソケットは、ブロッキングモードと想定しています。</p>
+<p>新たに作成されたソケットは <a class="reference internal" href="os.html#fd-inheritance"><span class="std std-ref">継承不可</span></a>  です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span>返されるソケットは継承不可になりました。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.fromshare">
+<code class="descclassname">socket.</code><code class="descname">fromshare</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.fromshare" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#socket.socket.share" title="socket.socket.share"><code class="xref py py-meth docutils literal"><span class="pre">socket.share()</span></code></a> メソッドから取得した data からソケットオブジェクトを生成します。ソケットはブロッキングモードだと仮定されます。</p>
+<p>利用できる環境 : Windows.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="socket.SocketType">
+<code class="descclassname">socket.</code><code class="descname">SocketType</code><a class="headerlink" href="#socket.SocketType" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットオブジェクトの型を示す型オブジェクト。 <code class="docutils literal"><span class="pre">type(socket(...))</span></code> と同じです。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="other-functions">
+<h4>18.1.2.3.2. その他の関数<a class="headerlink" href="#other-functions" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p><a class="reference internal" href="#module-socket" title="socket: Low-level networking interface."><code class="xref py py-mod docutils literal"><span class="pre">socket</span></code></a> モジュールはネットワーク関連のサービスを提供しています:</p>
+<dl class="function">
+<dt id="socket.getaddrinfo">
+<code class="descclassname">socket.</code><code class="descname">getaddrinfo</code><span class="sig-paren">(</span><em>host</em>, <em>port</em>, <em>family=0</em>, <em>type=0</em>, <em>proto=0</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.getaddrinfo" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>host</em> / <em>port</em> 引数の指すアドレス情報を、そのサービスに接続されたソケットを作成するために必要な全ての引数が入った 5 要素のタプルに変換します。 <em>host</em> はドメイン名、IPv4/v6アドレスの文字列、または <code class="docutils literal"><span class="pre">None</span></code> です。 <em>port</em> は <code class="docutils literal"><span class="pre">'http'</span></code> のようなサービス名文字列、ポート番号を表す数値、または <code class="docutils literal"><span class="pre">None</span></code> です。 <em>host</em> と <em>port</em> に <code class="docutils literal"><span class="pre">None</span></code> を指定すると C APIに <code class="docutils literal"><span class="pre">NULL</span></code> を渡せます。</p>
+<p>オプションの <em>family</em>, <em>type</em>, <em>proto</em> 引数を指定すると、返されるアドレスのリストを絞り込むことができます。これらの引数の値として 0 を渡すと絞り込まない結果を返します。 <em>flags</em> 引数には <code class="docutils literal"><span class="pre">AI_*</span></code> 定数のうち 1 つ以上が指定でき、結果の取り方を変えることができます。例えば、 <code class="xref py py-const docutils literal"><span class="pre">AI_NUMERICHOST</span></code> を指定するとドメイン名解決を行わないようにし、 <em>host</em> がドメイン名だった場合には例外を送出します。</p>
+<p>この関数は以下の構造をとる 5 要素のタプルのリストを返します:</p>
+<p><code class="docutils literal"><span class="pre">(family,</span> <span class="pre">type,</span> <span class="pre">proto,</span> <span class="pre">canonname,</span> <span class="pre">sockaddr)</span></code></p>
+<p>このタプルにある <em>family</em>, <em>type</em>, <em>proto</em> は、 <a class="reference internal" href="#socket.socket" title="socket.socket"><code class="xref py py-func docutils literal"><span class="pre">socket()</span></code></a> 関数を呼び出す際に指定する値と同じ整数です。 <code class="xref py py-const docutils literal"><span class="pre">AI_CANONNAME</span></code> を含んだ <em>flags</em> を指定した場合、 <em>canonname</em> は <em>host</em> の canonical name を示す文字列です。そうでない場合は <em>canonname</em> は空文字列です。 <em>sockaddr</em> は、ソケットアドレスを <em>family</em> に依存した形式で表すタプルで、 (<a class="reference internal" href="#socket.AF_INET" title="socket.AF_INET"><code class="xref py py-const docutils literal"><span class="pre">AF_INET</span></code></a> の場合は 2 要素のタプル <code class="docutils literal"><span class="pre">(address,</span> <span class="pre">port)</span></code> 、 <a class="reference internal" href="#socket.AF_INET6" title="socket.AF_INET6"><code class="xref py py-const docutils literal"><span class="pre">AF_INET6</span></code></a> の場合は 4 要素のタプル <code class="docutils literal"><span class="pre">(address,</span> <span class="pre">port,</span> <span class="pre">flow</span> <span class="pre">info,</span> <span class="pre">scope</span> <span class="pre">id)</span></code>) <a class="reference internal" href="#socket.socket.connect" title="socket.socket.connect"><code class="xref py py-meth docutils literal"><span class="pre">socket.connect()</span></code></a> メソッドに渡すためのものです。</p>
+<p>次の例では <code class="docutils literal"><span class="pre">example.org</span></code> の 80 番ポートポートへの TCP 接続を得るためのアドレス情報を取得しようとしています。 (結果は IPv6 をサポートしているかどうかで変わります):</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">socket</span><span class="o">.</span><span class="n">getaddrinfo</span><span class="p">(</span><span class="s2">&quot;example.org&quot;</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="n">proto</span><span class="o">=</span><span class="n">socket</span><span class="o">.</span><span class="n">IPPROTO_TCP</span><span class="p">)</span>
+<span class="go">[(&lt;AddressFamily.AF_INET6: 10&gt;, &lt;SocketType.SOCK_STREAM: 1&gt;,</span>
+<span class="go"> 6, &#39;&#39;, (&#39;2606:2800:220:1:248:1893:25c8:1946&#39;, 80, 0, 0)),</span>
+<span class="go"> (&lt;AddressFamily.AF_INET: 2&gt;, &lt;SocketType.SOCK_STREAM: 1&gt;,</span>
+<span class="go"> 6, &#39;&#39;, (&#39;93.184.216.34&#39;, 80))]</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>パラメータをキーワード引数で渡すことができるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.getfqdn">
+<code class="descclassname">socket.</code><code class="descname">getfqdn</code><span class="sig-paren">(</span><span class="optional">[</span><em>name</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.getfqdn" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>name</em> の完全修飾ドメイン名を返します。 <em>name</em> が空または省略された場合、ローカルホストを指定したとみなします。完全修飾ドメイン名の取得にはまず <a class="reference internal" href="#socket.gethostbyaddr" title="socket.gethostbyaddr"><code class="xref py py-func docutils literal"><span class="pre">gethostbyaddr()</span></code></a> でチェックし、次に可能であればエイリアスを調べ、名前にピリオドを含む最初の名前を値として返します。完全修飾ドメイン名を取得できない場合、 <a class="reference internal" href="#socket.gethostname" title="socket.gethostname"><code class="xref py py-func docutils literal"><span class="pre">gethostname()</span></code></a> で返されるホスト名を返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.gethostbyname">
+<code class="descclassname">socket.</code><code class="descname">gethostbyname</code><span class="sig-paren">(</span><em>hostname</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.gethostbyname" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ホスト名を <code class="docutils literal"><span class="pre">'100.50.200.5'</span></code> のようなIPv4形式のアドレスに変換します。ホスト名としてIPv4アドレスを指定した場合、その値は変換せずにそのまま返ります。 <a class="reference internal" href="#socket.gethostbyname" title="socket.gethostbyname"><code class="xref py py-func docutils literal"><span class="pre">gethostbyname()</span></code></a> APIへのより完全なインターフェースが必要であれば、 <a class="reference internal" href="#socket.gethostbyname_ex" title="socket.gethostbyname_ex"><code class="xref py py-func docutils literal"><span class="pre">gethostbyname_ex()</span></code></a> を参照してください。 <a class="reference internal" href="#socket.gethostbyname" title="socket.gethostbyname"><code class="xref py py-func docutils literal"><span class="pre">gethostbyname()</span></code></a> は、IPv6名前解決をサポートしていません。IPv4/ v6のデュアルスタックをサポートする場合は <a class="reference internal" href="#socket.getaddrinfo" title="socket.getaddrinfo"><code class="xref py py-func docutils literal"><span class="pre">getaddrinfo()</span></code></a> を使用します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.gethostbyname_ex">
+<code class="descclassname">socket.</code><code class="descname">gethostbyname_ex</code><span class="sig-paren">(</span><em>hostname</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.gethostbyname_ex" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ホスト名から、IPv4形式の各種アドレス情報を取得します。戻り値は <code class="docutils literal"><span class="pre">(hostname,</span> <span class="pre">aliaslist,</span> <span class="pre">ipaddrlist)</span></code> のタプルで、 <em>hostname</em> は <em>ip_address</em> で指定したホストの正式名、 <em>aliaslist</em> は同じアドレスの別名のリスト(空の場合もある)、 <em>ipaddrlist</em> は同じホスト上の同一インターフェースのIPv4アドレスのリスト(ほとんどの場合は単一のアドレスのみ) を示します。 <a class="reference internal" href="#socket.gethostbyname_ex" title="socket.gethostbyname_ex"><code class="xref py py-func docutils literal"><span class="pre">gethostbyname_ex()</span></code></a> は、IPv6名前解決をサポートしていません。IPv4/v6のデュアルスタックをサポートする場合は <a class="reference internal" href="#socket.getaddrinfo" title="socket.getaddrinfo"><code class="xref py py-func docutils literal"><span class="pre">getaddrinfo()</span></code></a> を使用します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.gethostname">
+<code class="descclassname">socket.</code><code class="descname">gethostname</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.gethostname" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Pythonインタープリタを現在実行しているマシンのホスト名を含む文字列を返します。</p>
+<p>注意: <a class="reference internal" href="#socket.gethostname" title="socket.gethostname"><code class="xref py py-func docutils literal"><span class="pre">gethostname()</span></code></a> は完全修飾ドメイン名を返すとは限りません。完全修飾ドメイン名が必要であれば、<a class="reference internal" href="#socket.getfqdn" title="socket.getfqdn"><code class="xref py py-func docutils literal"><span class="pre">getfqdn()</span></code></a> を使用してください。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.gethostbyaddr">
+<code class="descclassname">socket.</code><code class="descname">gethostbyaddr</code><span class="sig-paren">(</span><em>ip_address</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.gethostbyaddr" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">(hostname,</span> <span class="pre">aliaslist,</span> <span class="pre">ipaddrlist)</span></code> のタプルを返し、 <em>hostname</em> は <em>ip_address</em> で指定したホストの正式名、 <em>aliaslist</em> は同じアドレスの別名のリスト(空の場合もある)、 <em>ipaddrlist</em> は同じホスト上の同一インターフェースのIPv4アドレスのリスト(ほとんどの場合は単一のアドレスのみ)を示します。完全修飾ドメイン名が必要であれば、 <a class="reference internal" href="#socket.getfqdn" title="socket.getfqdn"><code class="xref py py-func docutils literal"><span class="pre">getfqdn()</span></code></a> を使用してください。 <a class="reference internal" href="#socket.gethostbyaddr" title="socket.gethostbyaddr"><code class="xref py py-func docutils literal"><span class="pre">gethostbyaddr()</span></code></a> は、IPv4/IPv6の両方をサポートしています。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.getnameinfo">
+<code class="descclassname">socket.</code><code class="descname">getnameinfo</code><span class="sig-paren">(</span><em>sockaddr</em>, <em>flags</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.getnameinfo" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットアドレス <em>sockaddr</em> から、 <code class="docutils literal"><span class="pre">(host,</span> <span class="pre">port)</span></code> のタプルを取得します。 <em>flags</em> の設定に従い、 <em>host</em> は完全修飾ドメイン名または数値形式アドレスとなります。同様に、 <em>port</em> は文字列のポート名または数値のポート番号となります。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.getprotobyname">
+<code class="descclassname">socket.</code><code class="descname">getprotobyname</code><span class="sig-paren">(</span><em>protocolname</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.getprotobyname" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>(<code class="docutils literal"><span class="pre">'icmp'</span></code> のような) インターネットプロトコル名を、 <a class="reference internal" href="#socket.socket" title="socket.socket"><code class="xref py py-func docutils literal"><span class="pre">socket()</span></code></a> の 第三引数として指定する事ができる定数に変換します。これは主にソケットを &#8220;raw&#8221; モード(<a class="reference internal" href="#socket.SOCK_RAW" title="socket.SOCK_RAW"><code class="xref py py-const docutils literal"><span class="pre">SOCK_RAW</span></code></a>)でオープンする場合には必要ですが、通常の ソケットモードでは第三引数に0を指定するか省略すれば正しいプロトコルが自動的に選択されます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.getservbyname">
+<code class="descclassname">socket.</code><code class="descname">getservbyname</code><span class="sig-paren">(</span><em>servicename</em><span class="optional">[</span>, <em>protocolname</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.getservbyname" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インターネットサービス名とプロトコルから、そのサービスのポート番号を取得します。省略可能なプロトコル名として、 <code class="docutils literal"><span class="pre">'tcp'</span></code> か <code class="docutils literal"><span class="pre">'udp'</span></code> のどちらかを指定することができます。指定がなければどちらのプロトコルにもマッチします。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.getservbyport">
+<code class="descclassname">socket.</code><code class="descname">getservbyport</code><span class="sig-paren">(</span><em>port</em><span class="optional">[</span>, <em>protocolname</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.getservbyport" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インターネットポート番号とプロトコル名から、サービス名を取得します。省略可能なプロトコル名として、 <code class="docutils literal"><span class="pre">'tcp'</span></code> か <code class="docutils literal"><span class="pre">'udp'</span></code> のどちらかを指定することができます。指定がなければどちらのプロトコルにもマッチします。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.ntohl">
+<code class="descclassname">socket.</code><code class="descname">ntohl</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.ntohl" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>32ビットの正の整数のバイトオーダを、ネットワークバイトオーダからホストバイトオーダに変換します。ホストバイトオーダとネットワークバイトオーダが一致するマシンでは、この関数は何もしません。それ以外の場合は4バイトのスワップを行います。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.ntohs">
+<code class="descclassname">socket.</code><code class="descname">ntohs</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.ntohs" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>16ビットの正の整数のバイトオーダを、ネットワークバイトオーダからホストバイトオーダに変換します。ホストバイトオーダとネットワークバイトオーダが一致するマシンでは、この関数は何もしません。それ以外の場合は2バイトのスワップを行います。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.htonl">
+<code class="descclassname">socket.</code><code class="descname">htonl</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.htonl" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>32ビットの正の整数のバイトオーダを、ホストバイトオーダからネットワークバイトオーダに変換します。ホストバイトオーダとネットワークバイトオーダが一致するマシンでは、この関数は何もしません。それ以外の場合は4バイトのスワップを行います。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.htons">
+<code class="descclassname">socket.</code><code class="descname">htons</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.htons" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>16ビットの正の整数のバイトオーダを、ホストバイトオーダからネットワークバイトオーダに変換します。ホストバイトオーダとネットワークバイトオーダが一致するマシンでは、この関数は何もしません。それ以外の場合は2バイトのスワップを行います。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.inet_aton">
+<code class="descclassname">socket.</code><code class="descname">inet_aton</code><span class="sig-paren">(</span><em>ip_string</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.inet_aton" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ドット記法によるIPv4アドレス(<code class="docutils literal"><span class="pre">'123.45.67.89'</span></code> など)を32ビットにパックしたバイナリ形式に変換し、長さ4のバイト列オブジェクトとして返します。この関数が返す値は、標準Cライブラリの <code class="xref c c-type docutils literal"><span class="pre">struct</span> <span class="pre">in_addr</span></code> 型を使用する関数に渡す事ができます。</p>
+<p><a class="reference internal" href="#socket.inet_aton" title="socket.inet_aton"><code class="xref py py-func docutils literal"><span class="pre">inet_aton()</span></code></a> はドットが 3 個以下の文字列も受け取ります; 詳細については Unix のマニュアル <em class="manpage">inet(3)</em> を参照してください。</p>
+<p>IPv4アドレス文字列が不正であれば、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> が発生します。このチェックは、この関数で使用しているCの実装 <code class="xref c c-func docutils literal"><span class="pre">inet_aton()</span></code> で行われます。</p>
+<p><a class="reference internal" href="#socket.inet_aton" title="socket.inet_aton"><code class="xref py py-func docutils literal"><span class="pre">inet_aton()</span></code></a> は、IPv6をサポートしません。IPv4/v6のデュアルスタックをサポートする場合は <a class="reference internal" href="#socket.inet_pton" title="socket.inet_pton"><code class="xref py py-func docutils literal"><span class="pre">inet_pton()</span></code></a> を使用します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.inet_ntoa">
+<code class="descclassname">socket.</code><code class="descname">inet_ntoa</code><span class="sig-paren">(</span><em>packed_ip</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.inet_ntoa" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>32 ビットにパックされた IPv4 アドレス (長さ 4 バイトの <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a>) を、標準的なドット記法による 4 桁の文字列 (<code class="docutils literal"><span class="pre">'123.45.67.89'</span></code> など) に変換します。この関数は、<code class="xref c c-type docutils literal"><span class="pre">struct</span> <span class="pre">in_addr</span></code> 型を使用する標準 C ライブラリのプログラムとやりとりする場合に便利です。<code class="xref c c-type docutils literal"><span class="pre">struct</span> <span class="pre">in_addr</span></code> 型は、この関数が引数として受け取る 32 ビットにパックされたバイナリデータに対する C の型です。</p>
+<p>この関数に渡すバイトシーケンスの長さが4バイト以外であれば、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> が発生します。 <a class="reference internal" href="#socket.inet_ntoa" title="socket.inet_ntoa"><code class="xref py py-func docutils literal"><span class="pre">inet_ntoa()</span></code></a> は、IPv6をサポートしません。IPv4/v6のデュアルスタックをサポートする場合は <a class="reference internal" href="#socket.inet_ntop" title="socket.inet_ntop"><code class="xref py py-func docutils literal"><span class="pre">inet_ntop()</span></code></a> を使用します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>書き込み可能な <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> を使用できるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.inet_pton">
+<code class="descclassname">socket.</code><code class="descname">inet_pton</code><span class="sig-paren">(</span><em>address_family</em>, <em>ip_string</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.inet_pton" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>IPアドレスを、アドレスファミリ固有の文字列からパックしたバイナリ形式に変換します。 <a class="reference internal" href="#socket.inet_pton" title="socket.inet_pton"><code class="xref py py-func docutils literal"><span class="pre">inet_pton()</span></code></a> は、 <code class="xref c c-type docutils literal"><span class="pre">struct</span> <span class="pre">in_addr</span></code> 型 (<a class="reference internal" href="#socket.inet_aton" title="socket.inet_aton"><code class="xref py py-func docutils literal"><span class="pre">inet_aton()</span></code></a> と同様)や <code class="xref c c-type docutils literal"><span class="pre">struct</span> <span class="pre">in6_addr</span></code> を使用するライブラリやネットワークプロトコルを呼び出す際に使用することができます。</p>
+<p>現在サポートされている <em>address_family</em> は、 <a class="reference internal" href="#socket.AF_INET" title="socket.AF_INET"><code class="xref py py-const docutils literal"><span class="pre">AF_INET</span></code></a> と <a class="reference internal" href="#socket.AF_INET6" title="socket.AF_INET6"><code class="xref py py-const docutils literal"><span class="pre">AF_INET6</span></code></a> です。 <em>ip_string</em> に不正なIPアドレス文字列を指定すると、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> が発生します。有効な <em>ip_string</em> は、 <em>address_family</em> と <code class="xref c c-func docutils literal"><span class="pre">inet_pton()</span></code> の実装によって異なります。</p>
+<p>利用可能: Unix (一部のプラットフォームを除く)、Windows。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span>Windowsで利用可能になりました</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.inet_ntop">
+<code class="descclassname">socket.</code><code class="descname">inet_ntop</code><span class="sig-paren">(</span><em>address_family</em>, <em>packed_ip</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.inet_ntop" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>パックしたIPアドレス (数バイトからなる <span class="xref std std-term">bytes-like オブジェクト</span> ) を、 <code class="docutils literal"><span class="pre">'7.10.0.5'</span></code> や <code class="docutils literal"><span class="pre">'5aef:2b::8'</span></code> などの標準的な、アドレスファミリ固有の文字列形式に変換します。 <a class="reference internal" href="#socket.inet_ntop" title="socket.inet_ntop"><code class="xref py py-func docutils literal"><span class="pre">inet_ntop()</span></code></a> は (<a class="reference internal" href="#socket.inet_ntoa" title="socket.inet_ntoa"><code class="xref py py-func docutils literal"><span class="pre">inet_ntoa()</span></code></a> と同様に)、 <code class="xref c c-type docutils literal"><span class="pre">struct</span> <span class="pre">in_addr</span></code> 型や <code class="xref c c-type docutils literal"><span class="pre">struct</span> <span class="pre">in6_addr</span></code> 型のオブジェクトを返すライブラリやネットワークプロトコル等で使用することができます。</p>
+<p>現在サポートされている <em>address_family</em> の値は、 <a class="reference internal" href="#socket.AF_INET" title="socket.AF_INET"><code class="xref py py-const docutils literal"><span class="pre">AF_INET</span></code></a> と <a class="reference internal" href="#socket.AF_INET6" title="socket.AF_INET6"><code class="xref py py-const docutils literal"><span class="pre">AF_INET6</span></code></a> です。バイトオブジェクトの <em>packed_ip</em> の長さが、指定したアドレスファミリで適切な長さでない場合、 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> が発生します。 <a class="reference internal" href="#socket.inet_ntop" title="socket.inet_ntop"><code class="xref py py-func docutils literal"><span class="pre">inet_ntop()</span></code></a> の呼び出しでエラーが起こると、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> が発生します。</p>
+<p>利用可能: Unix (一部のプラットフォームを除く)、Windows。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span>Windowsで利用可能になりました</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>書き込み可能な <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> を使用できるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.CMSG_LEN">
+<code class="descclassname">socket.</code><code class="descname">CMSG_LEN</code><span class="sig-paren">(</span><em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.CMSG_LEN" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>指定された <em>length</em> にある制御メッセージ（CMSG）から、末尾のパディングを除いた全体の長さを返します。この値は多くの場合、 <a class="reference internal" href="#socket.socket.recvmsg" title="socket.socket.recvmsg"><code class="xref py py-meth docutils literal"><span class="pre">recvmsg()</span></code></a> が制御メッセージの一連の要素を受信するためのバッファサイズとして使用できますが、バッファの末尾が要素である場合であってもパディングは含まれるので、バッファサイズを取得するには <span class="target" id="index-30"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc3542.html"><strong>RFC 3542</strong></a> で求められているように、 <a class="reference internal" href="#socket.CMSG_SPACE" title="socket.CMSG_SPACE"><code class="xref py py-func docutils literal"><span class="pre">CMSG_SPACE()</span></code></a> を使用した移植可能なアプリケーションが必要です。通常 <em>length</em> は定数であり、許容範囲外の値が指定された場合は <a class="reference internal" href="exceptions.html#OverflowError" title="OverflowError"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> 例外が送出されます。</p>
+<p>利用できる環境: 主な Unix で利用できます。他のプラットフォームでも、利用できる場合があります。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.CMSG_SPACE">
+<code class="descclassname">socket.</code><code class="descname">CMSG_SPACE</code><span class="sig-paren">(</span><em>length</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.CMSG_SPACE" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>指定された <em>length</em> の制御メッセージ（CMSG）の要素を <a class="reference internal" href="#socket.socket.recvmsg" title="socket.socket.recvmsg"><code class="xref py py-meth docutils literal"><span class="pre">recvmsg()</span></code></a> が受信するために必要な、パディングを含めたバッファサイズを返します。複数の項目を受信するために必要なバッファスペースは、 <a class="reference internal" href="#socket.CMSG_SPACE" title="socket.CMSG_SPACE"><code class="xref py py-func docutils literal"><span class="pre">CMSG_SPACE()</span></code></a> が返すそれぞれの要素の長さの合計です。通常 <em>length</em> は定数であり、許容範囲外の値が指定された場合は <a class="reference internal" href="exceptions.html#OverflowError" title="OverflowError"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> 例外が送出されます。</p>
+<p>一部のシステムではこの関数を提供せずに制御メッセージをサポートする可能性があることに注意してください。また、この関数の返り値を使用して設定するバッファサイズは、受信する制御メッセージの量を正確に規定しないことがあり、その後に受信するデータがパディング領域に合う場合があることに注意してください。</p>
+<p>利用できる環境: 主な Unix で利用できます。他のプラットフォームでも、利用できる場合があります。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.getdefaulttimeout">
+<code class="descclassname">socket.</code><code class="descname">getdefaulttimeout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.getdefaulttimeout" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>新規に生成されたソケットオブジェクトの、デフォルトのタイムアウト値を浮動小数点形式の秒数で返します。タイムアウトを使用しない場合には <code class="docutils literal"><span class="pre">None</span></code> を返します。最初に socket モジュールがインポートされた時の初期値は <code class="docutils literal"><span class="pre">None</span></code> です。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.setdefaulttimeout">
+<code class="descclassname">socket.</code><code class="descname">setdefaulttimeout</code><span class="sig-paren">(</span><em>timeout</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.setdefaulttimeout" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>新規に生成されるソケットオブジェクトの、デフォルトのタイムアウト値を秒数 (float 型) で設定します。最初に socket モジュールがインポートされた時の初期値は <code class="docutils literal"><span class="pre">None</span></code> です。指定可能な値とその意味については <a class="reference internal" href="#socket.socket.settimeout" title="socket.socket.settimeout"><code class="xref py py-meth docutils literal"><span class="pre">settimeout()</span></code></a> メソッドを参照してください。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.sethostname">
+<code class="descclassname">socket.</code><code class="descname">sethostname</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.sethostname" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>マシンのホスト名を <em>name</em> に設定します。必要な権限がない場合は <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> を送出します。</p>
+<p>利用できる環境 : Unix 。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.if_nameindex">
+<code class="descclassname">socket.</code><code class="descname">if_nameindex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.if_nameindex" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ネットワークインターフェース情報 (index int, name string)のタプルを返します。システムコールが失敗した場合、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> 例外を送出します。</p>
+<p>利用できる環境 : Unix 。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.if_nametoindex">
+<code class="descclassname">socket.</code><code class="descname">if_nametoindex</code><span class="sig-paren">(</span><em>if_name</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.if_nametoindex" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インターフェース名 <em>if_name</em> に対応するネットワークインターフェースのインデックス番号を返します。対応するインターフェースが存在しない場合は <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> 例外を送出します。</p>
+<p>利用できる環境 : Unix 。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="socket.if_indextoname">
+<code class="descclassname">socket.</code><code class="descname">if_indextoname</code><span class="sig-paren">(</span><em>if_index</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.if_indextoname" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インターフェースインデックス番号 <em>if_index</em> に対応するネットワークインターフェース名を返します。対応するインターフェースが存在しない場合は <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> 例外を送出します。</p>
+<p>利用できる環境 : Unix 。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+</div>
+</div>
+</div>
+<div class="section" id="socket-objects">
+<span id="id1"></span><h2>18.1.3. socket オブジェクト<a class="headerlink" href="#socket-objects" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ソケットオブジェクトは以下のメソッドを持ちます。 <a class="reference internal" href="#socket.socket.makefile" title="socket.socket.makefile"><code class="xref py py-meth docutils literal"><span class="pre">makefile()</span></code></a> 以外のメソッドは、Unixのソケット用システムコールに対応しています。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>Support for the <a class="reference internal" href="../glossary.html#term-context-manager"><span class="xref std std-term">context manager</span></a> protocol was added.  Exiting the
+context manager is equivalent to calling <a class="reference internal" href="#socket.socket.close" title="socket.socket.close"><code class="xref py py-meth docutils literal"><span class="pre">close()</span></code></a>.</p>
+</div>
+<dl class="method">
+<dt id="socket.socket.accept">
+<code class="descclassname">socket.</code><code class="descname">accept</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.accept" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>接続を受け付けます。ソケットはアドレスにbind済みで、listen中である必要があります。戻り値は <code class="docutils literal"><span class="pre">(conn,</span> <span class="pre">address)</span></code> のペアで、 <em>conn</em> は接続を通じてデータの送受信を行うための <em>新しい</em> ソケットオブジェクト、 <em>address</em> は接続先でソケットにbindしているアドレスを示します。</p>
+<p>新たに作成されたソケットは <a class="reference internal" href="os.html#fd-inheritance"><span class="std std-ref">継承不可</span></a>  です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span>ソケットが <a class="reference internal" href="os.html#fd-inheritance"><span class="std std-ref">継承不可</span></a> になりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>システムコールが中断されシグナルハンドラが例外を送出しなかった場合、このメソッドは <a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> 例外を送出する代わりにシステムコールを再試行するようになりました (論拠については <span class="target" id="index-31"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> を参照してください)。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.bind">
+<code class="descclassname">socket.</code><code class="descname">bind</code><span class="sig-paren">(</span><em>address</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.bind" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットを <em>address</em> にbindします。bind済みのソケットを再バインドする事はできません。(<em>address</em> のフォーマットはアドレスファミリによって異なります &#8211; 前述。)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.close">
+<code class="descclassname">socket.</code><code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.close" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットを閉じられたものとしてマークします。 <a class="reference internal" href="#socket.socket.makefile" title="socket.socket.makefile"><code class="xref py py-meth docutils literal"><span class="pre">makefile()</span></code></a> が返したファイルオブジェクトを閉じる時、対応する下層のシステムリソース（例：ファイル記述子）もすべて閉じます。一度この操作をすると、その後、このソケットオブジェクトに対するすべての操作が失敗します。キューに溜まったデータがフラッシュされた後は、リモート側の端点ではそれ以上のデータを受信しません。</p>
+<p>ソケットはガベージコレクション時に自動的にクローズされます。しかし、明示的に <a class="reference internal" href="#socket.socket.close" title="socket.socket.close"><code class="xref py py-meth docutils literal"><span class="pre">close()</span></code></a> するか、 <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文の中でソケットを使うことを推奨します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span><a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> is now raised if an error occurs when the underlying
+<code class="xref c c-func docutils literal"><span class="pre">close()</span></code> call is made.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last"><a class="reference internal" href="#socket.socket.close" title="socket.socket.close"><code class="xref py py-meth docutils literal"><span class="pre">close()</span></code></a> は接続に関連付けられたリソースを解放しますが、接続をすぐに切断するとは限りません。接続を即座に切断したい場合は、 <a class="reference internal" href="#socket.socket.close" title="socket.socket.close"><code class="xref py py-meth docutils literal"><span class="pre">close()</span></code></a> の前に <a class="reference internal" href="#socket.socket.shutdown" title="socket.socket.shutdown"><code class="xref py py-meth docutils literal"><span class="pre">shutdown()</span></code></a> を呼び出してください。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.connect">
+<code class="descclassname">socket.</code><code class="descname">connect</code><span class="sig-paren">(</span><em>address</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.connect" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>address</em> で示されるリモートソケットに接続します。(<em>address</em> のフォーマットはアドレスファミリによって異なります &#8212; 前述。)</p>
+<p>If the connection is interrupted by a signal, the method waits until the
+connection completes, or raise a <a class="reference internal" href="#socket.timeout" title="socket.timeout"><code class="xref py py-exc docutils literal"><span class="pre">socket.timeout</span></code></a> on timeout, if the
+signal handler doesn&#8217;t raise an exception and the socket is blocking or has
+a timeout. For non-blocking sockets, the method raises an
+<a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> exception if the connection is interrupted by a
+signal (or the exception raised by the signal handler).</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>The method now waits until the connection completes instead of raising an
+<a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> exception if the connection is interrupted by a
+signal, the signal handler doesn&#8217;t raise an exception and the socket is
+blocking or has a timeout (see the <span class="target" id="index-5"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> for the rationale).</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.connect_ex">
+<code class="descclassname">socket.</code><code class="descname">connect_ex</code><span class="sig-paren">(</span><em>address</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.connect_ex" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">connect(address)</span></code> と同様ですが、C言語の <code class="xref c c-func docutils literal"><span class="pre">connect()</span></code> 関数の呼び出しでエラーが発生した場合には例外を送出せずにエラーを戻り値として返します。(これ以外の、&#8221;host not found,&#8221;等のエラーの場合には例外が発生します。)処理が正常に終了した場合には <code class="docutils literal"><span class="pre">0</span></code> を返し、エラー時には <code class="xref c c-data docutils literal"><span class="pre">errno</span></code> の値を返します。この関数は、非同期接続をサポートする場合などに使用することができます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.detach">
+<code class="descclassname">socket.</code><code class="descname">detach</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.detach" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>実際にファイル記述子を閉じることなく、ソケットオブジェクトを閉じた状態にします。ファイル記述子は返却され、他の目的に再利用することができます。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.dup">
+<code class="descclassname">socket.</code><code class="descname">dup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.dup" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットを複製します。</p>
+<p>新たに作成されたソケットは <a class="reference internal" href="os.html#fd-inheritance"><span class="std std-ref">継承不可</span></a>  です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span>ソケットが <a class="reference internal" href="os.html#fd-inheritance"><span class="std std-ref">継承不可</span></a> になりました。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.fileno">
+<code class="descclassname">socket.</code><code class="descname">fileno</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.fileno" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットのファイル記述子を短い整数型で返します。失敗時には、-1 を返します。ファイル記述子は、 <a class="reference internal" href="select.html#select.select" title="select.select"><code class="xref py py-func docutils literal"><span class="pre">select.select()</span></code></a> などで使用します。</p>
+<p>Windowsではこのメソッドで返された小整数をファイル記述子を扱う箇所 (<a class="reference internal" href="os.html#os.fdopen" title="os.fdopen"><code class="xref py py-func docutils literal"><span class="pre">os.fdopen()</span></code></a> など) で利用できません。 Unix にはこの制限はありません。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.get_inheritable">
+<code class="descclassname">socket.</code><code class="descname">get_inheritable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.get_inheritable" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットのファイル記述子またはソケットのハンドルの <a class="reference internal" href="os.html#fd-inheritance"><span class="std std-ref">継承可能フラグ</span></a> を取得します。ソケットが子プロセスへ継承可能なら <code class="docutils literal"><span class="pre">True</span></code> 、継承不可なら <code class="docutils literal"><span class="pre">False</span></code> を返します。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.getpeername">
+<code class="descclassname">socket.</code><code class="descname">getpeername</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.getpeername" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットが接続しているリモートアドレスを返します。この関数は、リモート IPv4/v6ソケットのポート番号を調べる場合などに使用します。 <em>address</em> のフォーマットはアドレスファミリによって異なります(前述)。この関数をサポートしていないシステムも存在します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.getsockname">
+<code class="descclassname">socket.</code><code class="descname">getsockname</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.getsockname" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケット自身のアドレスを返します。この関数は、IPv4/v6ソケットのポート番号を調べる場合などに使用します。(<em>address</em> のフォーマットはアドレスファミリによって異なります &#8212; 前述。)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.getsockopt">
+<code class="descclassname">socket.</code><code class="descname">getsockopt</code><span class="sig-paren">(</span><em>level</em>, <em>optname</em><span class="optional">[</span>, <em>buflen</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.getsockopt" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットに指定されたオプションを返します(Unixのマニュアルページ <em class="manpage">getsockopt(2)</em> を参照)。 <code class="xref py py-const docutils literal"><span class="pre">SO_*</span></code> 等のシンボルは、このモジュールで定義しています。 <em>buflen</em> を省略した場合、取得するオブションは整数とみなし、整数型の値を戻り値とします。 <em>buflen</em> を指定した場合、長さ <em>buflen</em> のバッファでオプションを受け取り、このバッファをバイト列オブジェクトとして返します。このバッファは、呼び出し元プログラムで <a class="reference internal" href="struct.html#module-struct" title="struct: Interpret bytes as packed binary data."><code class="xref py py-mod docutils literal"><span class="pre">struct</span></code></a> モジュール等を利用して内容を読み取ることができます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.gettimeout">
+<code class="descclassname">socket.</code><code class="descname">gettimeout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.gettimeout" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットに指定されたタイムアウト値を取得します。タイムアウト値が設定されている場合には浮動小数点型で秒数が、設定されていなければ <code class="docutils literal"><span class="pre">None</span></code> が返ります。この値は、最後に呼び出された <a class="reference internal" href="#socket.socket.setblocking" title="socket.socket.setblocking"><code class="xref py py-meth docutils literal"><span class="pre">setblocking()</span></code></a> または <a class="reference internal" href="#socket.socket.settimeout" title="socket.socket.settimeout"><code class="xref py py-meth docutils literal"><span class="pre">settimeout()</span></code></a> によって設定されます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.ioctl">
+<code class="descclassname">socket.</code><code class="descname">ioctl</code><span class="sig-paren">(</span><em>control</em>, <em>option</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.ioctl" title="この定義へのパーマリンク">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Platform:</th><td class="field-body">Windows</td>
+</tr>
+</tbody>
+</table>
+<p><a class="reference internal" href="#socket.socket.ioctl" title="socket.socket.ioctl"><code class="xref py py-meth docutils literal"><span class="pre">ioctl()</span></code></a> メソッドは WSAIoctl システムインタフェースへの制限されたインタフェースです。詳しい情報については、 <a class="reference external" href="https://msdn.microsoft.com/en-us/library/ms741621%28VS.85%29.aspx">Win32 documentation</a> を参照してください。</p>
+<p>他のプラットフォームでは一般的な <a class="reference internal" href="fcntl.html#fcntl.fcntl" title="fcntl.fcntl"><code class="xref py py-func docutils literal"><span class="pre">fcntl.fcntl()</span></code></a> と <a class="reference internal" href="fcntl.html#fcntl.ioctl" title="fcntl.ioctl"><code class="xref py py-func docutils literal"><span class="pre">fcntl.ioctl()</span></code></a> が使われるでしょう; これらの関数は第 1 引数としてソケットオブジェクトを取ります。</p>
+<p>Currently only the following control codes are supported:
+<code class="docutils literal"><span class="pre">SIO_RCVALL</span></code>, <code class="docutils literal"><span class="pre">SIO_KEEPALIVE_VALS</span></code>, and <code class="docutils literal"><span class="pre">SIO_LOOPBACK_FAST_PATH</span></code>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span><code class="docutils literal"><span class="pre">SIO_LOOPBACK_FAST_PATH</span></code> was added.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.listen">
+<code class="descclassname">socket.</code><code class="descname">listen</code><span class="sig-paren">(</span><span class="optional">[</span><em>backlog</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.listen" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Enable a server to accept connections.  If <em>backlog</em> is specified, it must
+be at least 0 (if it is lower, it is set to 0); it specifies the number of
+unaccepted connections that the system will allow before refusing new
+connections. If not specified, a default reasonable value is chosen.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span><em>backlog</em> 引数が任意になりました。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.makefile">
+<code class="descclassname">socket.</code><code class="descname">makefile</code><span class="sig-paren">(</span><em>mode='r'</em>, <em>buffering=None</em>, <em>*</em>, <em>encoding=None</em>, <em>errors=None</em>, <em>newline=None</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.makefile" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-6">ソケットに関連付けられた <span class="xref std std-term">ファイルオブジェクト</span> を返します。戻り値の正確な型は、 <a class="reference internal" href="#socket.socket.makefile" title="socket.socket.makefile"><code class="xref py py-meth docutils literal"><span class="pre">makefile()</span></code></a> に指定した引数によります。これらの引数は、組み込み関数 <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> の引数と同様に解釈されます。ただし、<em>mode</em> の値は  <code class="docutils literal"><span class="pre">'r'</span></code> (デフォルト), <code class="docutils literal"><span class="pre">'w'</span></code>, <code class="docutils literal"><span class="pre">'b'</span></code> のみがサポートされています。</p>
+<p>ソケットはブロッキングモードでなければなりません。タイムアウトを設定することはできますが、タイムアウトが発生すると、ファイルオブジェクトの内部バッファが矛盾した状態になることがあります。</p>
+<p><a class="reference internal" href="#socket.socket.makefile" title="socket.socket.makefile"><code class="xref py py-meth docutils literal"><span class="pre">makefile()</span></code></a> でファイルオブジェクトにソケットを関連づけた場合、ソケットを閉じるには、関連づけられたすべてのファイルオブジェクトを閉じたあとで、元のソケットの <a class="reference internal" href="#socket.socket.close" title="socket.socket.close"><code class="xref py py-meth docutils literal"><span class="pre">socket.close()</span></code></a> を呼び出さなければなりません。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">Windows では、 <a class="reference internal" href="#socket.socket.makefile" title="socket.socket.makefile"><code class="xref py py-meth docutils literal"><span class="pre">makefile()</span></code></a> によって作成される file-like オブジェクトは、 <a class="reference internal" href="subprocess.html#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-meth docutils literal"><span class="pre">subprocess.Popen()</span></code></a> などのファイル記述子のある file オブジェクトを期待している場所で利用することはできません。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.recv">
+<code class="descclassname">socket.</code><code class="descname">recv</code><span class="sig-paren">(</span><em>bufsize</em><span class="optional">[</span>, <em>flags</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.recv" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットからデータを受信し、結果を bytes オブジェクトで返します。一度に受信するデータは、最大でも <em>bufsize</em> で指定した量です。オプション引数 <em>flags</em> に指定するフラグの意味については、 Unix のマニュアルページ <em class="manpage">recv(2)</em> を参照してください。 <em>flags</em> のデフォルトは 0 です。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">ハードウェアおよびネットワークの現実に最大限マッチするように、 <em>bufsize</em> の値は比較的小さい2の累乗、たとえば 4096、にすべきです。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>システムコールが中断されシグナルハンドラが例外を送出しなかった場合、このメソッドは <a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> 例外を送出する代わりにシステムコールを再試行するようになりました (論拠については <span class="target" id="index-32"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> を参照してください)。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.recvfrom">
+<code class="descclassname">socket.</code><code class="descname">recvfrom</code><span class="sig-paren">(</span><em>bufsize</em><span class="optional">[</span>, <em>flags</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.recvfrom" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットからデータを受信し、結果をタプル <code class="docutils literal"><span class="pre">(bytes,</span> <span class="pre">address)</span></code> として返します。 <em>bytes</em> は受信データの bytes オブジェクトで、 <em>address</em> は送信元のアドレスを示します。オプション引数 <em>flags</em> については、 Unix のマニュアルページ <em class="manpage">recv(2)</em> を参照してください。デフォルトは0です。 (<em>address</em> のフォーマットはアドレスファミリによって異なります(前述))</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>システムコールが中断されシグナルハンドラが例外を送出しなかった場合、このメソッドは <a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> 例外を送出する代わりにシステムコールを再試行するようになりました (論拠については <span class="target" id="index-33"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> を参照してください)。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.recvmsg">
+<code class="descclassname">socket.</code><code class="descname">recvmsg</code><span class="sig-paren">(</span><em>bufsize</em><span class="optional">[</span>, <em>ancbufsize</em><span class="optional">[</span>, <em>flags</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.recvmsg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Receive normal data (up to <em>bufsize</em> bytes) and ancillary data from
+the socket.  The <em>ancbufsize</em> argument sets the size in bytes of
+the internal buffer used to receive the ancillary data; it defaults
+to 0, meaning that no ancillary data will be received.  Appropriate
+buffer sizes for ancillary data can be calculated using
+<a class="reference internal" href="#socket.CMSG_SPACE" title="socket.CMSG_SPACE"><code class="xref py py-func docutils literal"><span class="pre">CMSG_SPACE()</span></code></a> or <a class="reference internal" href="#socket.CMSG_LEN" title="socket.CMSG_LEN"><code class="xref py py-func docutils literal"><span class="pre">CMSG_LEN()</span></code></a>, and items which do not fit
+into the buffer might be truncated or discarded.  The <em>flags</em>
+argument defaults to 0 and has the same meaning as for
+<a class="reference internal" href="#socket.socket.recv" title="socket.socket.recv"><code class="xref py py-meth docutils literal"><span class="pre">recv()</span></code></a>.</p>
+<p>The return value is a 4-tuple: <code class="docutils literal"><span class="pre">(data,</span> <span class="pre">ancdata,</span> <span class="pre">msg_flags,</span>
+<span class="pre">address)</span></code>.  The <em>data</em> item is a <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> object holding the
+non-ancillary data received.  The <em>ancdata</em> item is a list of zero
+or more tuples <code class="docutils literal"><span class="pre">(cmsg_level,</span> <span class="pre">cmsg_type,</span> <span class="pre">cmsg_data)</span></code> representing
+the ancillary data (control messages) received: <em>cmsg_level</em> and
+<em>cmsg_type</em> are integers specifying the protocol level and
+protocol-specific type respectively, and <em>cmsg_data</em> is a
+<a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> object holding the associated data.  The <em>msg_flags</em>
+item is the bitwise OR of various flags indicating conditions on
+the received message; see your system documentation for details.
+If the receiving socket is unconnected, <em>address</em> is the address of
+the sending socket, if available; otherwise, its value is
+unspecified.</p>
+<p>On some systems, <a class="reference internal" href="#socket.socket.sendmsg" title="socket.socket.sendmsg"><code class="xref py py-meth docutils literal"><span class="pre">sendmsg()</span></code></a> and <a class="reference internal" href="#socket.socket.recvmsg" title="socket.socket.recvmsg"><code class="xref py py-meth docutils literal"><span class="pre">recvmsg()</span></code></a> can be used to
+pass file descriptors between processes over an <a class="reference internal" href="#socket.AF_UNIX" title="socket.AF_UNIX"><code class="xref py py-const docutils literal"><span class="pre">AF_UNIX</span></code></a>
+socket.  When this facility is used (it is often restricted to
+<a class="reference internal" href="#socket.SOCK_STREAM" title="socket.SOCK_STREAM"><code class="xref py py-const docutils literal"><span class="pre">SOCK_STREAM</span></code></a> sockets), <a class="reference internal" href="#socket.socket.recvmsg" title="socket.socket.recvmsg"><code class="xref py py-meth docutils literal"><span class="pre">recvmsg()</span></code></a> will return, in its
+ancillary data, items of the form <code class="docutils literal"><span class="pre">(socket.SOL_SOCKET,</span>
+<span class="pre">socket.SCM_RIGHTS,</span> <span class="pre">fds)</span></code>, where <em>fds</em> is a <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> object
+representing the new file descriptors as a binary array of the
+native C <code class="xref c c-type docutils literal"><span class="pre">int</span></code> type.  If <a class="reference internal" href="#socket.socket.recvmsg" title="socket.socket.recvmsg"><code class="xref py py-meth docutils literal"><span class="pre">recvmsg()</span></code></a> raises an
+exception after the system call returns, it will first attempt to
+close any file descriptors received via this mechanism.</p>
+<p>Some systems do not indicate the truncated length of ancillary data
+items which have been only partially received.  If an item appears
+to extend beyond the end of the buffer, <a class="reference internal" href="#socket.socket.recvmsg" title="socket.socket.recvmsg"><code class="xref py py-meth docutils literal"><span class="pre">recvmsg()</span></code></a> will issue
+a <a class="reference internal" href="exceptions.html#RuntimeWarning" title="RuntimeWarning"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeWarning</span></code></a>, and will return the part of it which is
+inside the buffer provided it has not been truncated before the
+start of its associated data.</p>
+<p>On systems which support the <code class="xref py py-const docutils literal"><span class="pre">SCM_RIGHTS</span></code> mechanism, the
+following function will receive up to <em>maxfds</em> file descriptors,
+returning the message data and a list containing the descriptors
+(while ignoring unexpected conditions such as unrelated control
+messages being received).  See also <a class="reference internal" href="#socket.socket.sendmsg" title="socket.socket.sendmsg"><code class="xref py py-meth docutils literal"><span class="pre">sendmsg()</span></code></a>.</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">socket</span><span class="o">,</span> <span class="nn">array</span>
+
+<span class="k">def</span> <span class="nf">recv_fds</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">msglen</span><span class="p">,</span> <span class="n">maxfds</span><span class="p">):</span>
+    <span class="n">fds</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s2">&quot;i&quot;</span><span class="p">)</span>   <span class="c1"># Array of ints</span>
+    <span class="n">msg</span><span class="p">,</span> <span class="n">ancdata</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">recvmsg</span><span class="p">(</span><span class="n">msglen</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">CMSG_LEN</span><span class="p">(</span><span class="n">maxfds</span> <span class="o">*</span> <span class="n">fds</span><span class="o">.</span><span class="n">itemsize</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">cmsg_level</span><span class="p">,</span> <span class="n">cmsg_type</span><span class="p">,</span> <span class="n">cmsg_data</span> <span class="ow">in</span> <span class="n">ancdata</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cmsg_level</span> <span class="o">==</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span> <span class="ow">and</span> <span class="n">cmsg_type</span> <span class="o">==</span> <span class="n">socket</span><span class="o">.</span><span class="n">SCM_RIGHTS</span><span class="p">):</span>
+            <span class="c1"># Append data, ignoring any truncated integers at the end.</span>
+            <span class="n">fds</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">cmsg_data</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">cmsg_data</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cmsg_data</span><span class="p">)</span> <span class="o">%</span> <span class="n">fds</span><span class="o">.</span><span class="n">itemsize</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">msg</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">fds</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>利用できる環境: 主な Unix で利用できます。他のプラットフォームでも、利用できる場合があります。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>システムコールが中断されシグナルハンドラが例外を送出しなかった場合、このメソッドは <a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> 例外を送出する代わりにシステムコールを再試行するようになりました (論拠については <span class="target" id="index-34"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> を参照してください)。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.recvmsg_into">
+<code class="descclassname">socket.</code><code class="descname">recvmsg_into</code><span class="sig-paren">(</span><em>buffers</em><span class="optional">[</span>, <em>ancbufsize</em><span class="optional">[</span>, <em>flags</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.recvmsg_into" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Receive normal data and ancillary data from the socket, behaving as
+<a class="reference internal" href="#socket.socket.recvmsg" title="socket.socket.recvmsg"><code class="xref py py-meth docutils literal"><span class="pre">recvmsg()</span></code></a> would, but scatter the non-ancillary data into a
+series of buffers instead of returning a new bytes object.  The
+<em>buffers</em> argument must be an iterable of objects that export
+writable buffers (e.g. <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> objects); these will be
+filled with successive chunks of the non-ancillary data until it
+has all been written or there are no more buffers.  The operating
+system may set a limit (<a class="reference internal" href="os.html#os.sysconf" title="os.sysconf"><code class="xref py py-func docutils literal"><span class="pre">sysconf()</span></code></a> value <code class="docutils literal"><span class="pre">SC_IOV_MAX</span></code>)
+on the number of buffers that can be used.  The <em>ancbufsize</em> and
+<em>flags</em> arguments have the same meaning as for <a class="reference internal" href="#socket.socket.recvmsg" title="socket.socket.recvmsg"><code class="xref py py-meth docutils literal"><span class="pre">recvmsg()</span></code></a>.</p>
+<p>The return value is a 4-tuple: <code class="docutils literal"><span class="pre">(nbytes,</span> <span class="pre">ancdata,</span> <span class="pre">msg_flags,</span>
+<span class="pre">address)</span></code>, where <em>nbytes</em> is the total number of bytes of
+non-ancillary data written into the buffers, and <em>ancdata</em>,
+<em>msg_flags</em> and <em>address</em> are the same as for <a class="reference internal" href="#socket.socket.recvmsg" title="socket.socket.recvmsg"><code class="xref py py-meth docutils literal"><span class="pre">recvmsg()</span></code></a>.</p>
+<p>以下はプログラム例です:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">socket</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socketpair</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b1</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;----&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b2</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;0123456789&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b3</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;--------------&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;Mary had a little lamb&#39;</span><span class="p">)</span>
+<span class="go">22</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s2</span><span class="o">.</span><span class="n">recvmsg_into</span><span class="p">([</span><span class="n">b1</span><span class="p">,</span> <span class="nb">memoryview</span><span class="p">(</span><span class="n">b2</span><span class="p">)[</span><span class="mi">2</span><span class="p">:</span><span class="mi">9</span><span class="p">],</span> <span class="n">b3</span><span class="p">])</span>
+<span class="go">(22, [], 0, None)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b3</span><span class="p">]</span>
+<span class="go">[bytearray(b&#39;Mary&#39;), bytearray(b&#39;01 had a 9&#39;), bytearray(b&#39;little lamb---&#39;)]</span>
+</pre></div>
+</div>
+<p>利用できる環境: 主な Unix で利用できます。他のプラットフォームでも、利用できる場合があります。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.recvfrom_into">
+<code class="descclassname">socket.</code><code class="descname">recvfrom_into</code><span class="sig-paren">(</span><em>buffer</em><span class="optional">[</span>, <em>nbytes</em><span class="optional">[</span>, <em>flags</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.recvfrom_into" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットからデータを受信し、そのデータを新しいバイト文字列として返す代わりに <em>buffer</em> に書きます。戻り値は <code class="docutils literal"><span class="pre">(nbytes,</span> <span class="pre">address)</span></code> のペアで、 <em>nbytes</em> は受信したデータのバイト数を、 <em>address</em> はデータを送信したソケットのアドレスです。オプション引数 <em>flags</em> (デフォルト:0) の意味については、 Unix マニュアルページ <em class="manpage">recv(2)</em> を参照してください。(<em>address</em> のフォーマットは前述のとおりアドレスファミリーに依存します。)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.recv_into">
+<code class="descclassname">socket.</code><code class="descname">recv_into</code><span class="sig-paren">(</span><em>buffer</em><span class="optional">[</span>, <em>nbytes</em><span class="optional">[</span>, <em>flags</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.recv_into" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>nbytes</em> バイトまでのデータをソケットから受信して、そのデータを新しいバイト文字列にするのではなく <em>buffer</em> に保存します。 <em>nbytes</em> が指定されない(あるいは0が指定された)場合、 <em>buffer</em> の利用可能なサイズまで受信します。受信したバイト数を返り値として返します。オプション引数 <em>flags</em> (デフォルト:0) の意味については、 Unix マニュアルページ <em class="manpage">recv(2)</em> を参照してください。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.send">
+<code class="descclassname">socket.</code><code class="descname">send</code><span class="sig-paren">(</span><em>bytes</em><span class="optional">[</span>, <em>flags</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.send" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットにデータを送信します。ソケットはリモートソケットに接続済みでなければなりません。オプション引数 <em>flags</em> の意味は、上記 <a class="reference internal" href="#socket.socket.recv" title="socket.socket.recv"><code class="xref py py-meth docutils literal"><span class="pre">recv()</span></code></a> と同じです。戻り値として、送信したバイト数を返します。アプリケーションでは、必ず戻り値をチェックし、全てのデータが送られた事を確認する必要があります。データの一部だけが送信された場合、アプリケーションで残りのデータを再送信してください。 <a class="reference internal" href="../howto/sockets.html#socket-howto"><span class="std std-ref">ソケットプログラミング HOWTO</span></a> に、さらに詳しい情報があります。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>システムコールが中断されシグナルハンドラが例外を送出しなかった場合、このメソッドは <a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> 例外を送出する代わりにシステムコールを再試行するようになりました (論拠については <span class="target" id="index-35"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> を参照してください)。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.sendall">
+<code class="descclassname">socket.</code><code class="descname">sendall</code><span class="sig-paren">(</span><em>bytes</em><span class="optional">[</span>, <em>flags</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.sendall" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットにデータを送信します。ソケットはリモートソケットに接続済みでなければなりません。オプション引数 <em>flags</em> の意味は、上記 <a class="reference internal" href="#socket.socket.recv" title="socket.socket.recv"><code class="xref py py-meth docutils literal"><span class="pre">recv()</span></code></a> と同じです。 <a class="reference internal" href="#socket.socket.send" title="socket.socket.send"><code class="xref py py-meth docutils literal"><span class="pre">send()</span></code></a> と異なり、このメソッドは <em>bytes</em> の全データを送信するか、エラーが発生するまで処理を継続します。正常終了の場合は <code class="docutils literal"><span class="pre">None</span></code> を返し、エラー発生時には例外が発生します。エラー発生時、送信されたバイト数を調べる事はできません。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>The socket timeout is no more reset each time data is sent successfully.
+The socket timeout is now the maximum total duration to send all data.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>システムコールが中断されシグナルハンドラが例外を送出しなかった場合、このメソッドは <a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> 例外を送出する代わりにシステムコールを再試行するようになりました (論拠については <span class="target" id="index-36"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> を参照してください)。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.sendto">
+<code class="descclassname">socket.</code><code class="descname">sendto</code><span class="sig-paren">(</span><em>bytes</em>, <em>address</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.sendto" title="この定義へのパーマリンク">¶</a></dt>
+<dt>
+<code class="descclassname">socket.</code><code class="descname">sendto</code><span class="sig-paren">(</span><em>bytes</em>, <em>flags</em>, <em>address</em><span class="sig-paren">)</span></dt>
+<dd><p>ソケットにデータを送信します。このメソッドでは接続先を <em>address</em> で指定するので、接続済みではいけません。オプション引数 <em>flags</em> の意味は、上記 <a class="reference internal" href="#socket.socket.recv" title="socket.socket.recv"><code class="xref py py-meth docutils literal"><span class="pre">recv()</span></code></a> と同じです。戻り値として、送信したバイト数を返します。(<em>address</em> のフォーマットはアドレスファミリによって異なります &#8212; 前述。)</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>システムコールが中断されシグナルハンドラが例外を送出しなかった場合、このメソッドは <a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> 例外を送出する代わりにシステムコールを再試行するようになりました (論拠については <span class="target" id="index-37"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> を参照してください)。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.sendmsg">
+<code class="descclassname">socket.</code><code class="descname">sendmsg</code><span class="sig-paren">(</span><em>buffers</em><span class="optional">[</span>, <em>ancdata</em><span class="optional">[</span>, <em>flags</em><span class="optional">[</span>, <em>address</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.sendmsg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Send normal and ancillary data to the socket, gathering the
+non-ancillary data from a series of buffers and concatenating it
+into a single message.  The <em>buffers</em> argument specifies the
+non-ancillary data as an iterable of
+<a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like objects</span></a>
+(e.g. <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> objects); the operating system may set a limit
+(<a class="reference internal" href="os.html#os.sysconf" title="os.sysconf"><code class="xref py py-func docutils literal"><span class="pre">sysconf()</span></code></a> value <code class="docutils literal"><span class="pre">SC_IOV_MAX</span></code>) on the number of buffers
+that can be used.  The <em>ancdata</em> argument specifies the ancillary
+data (control messages) as an iterable of zero or more tuples
+<code class="docutils literal"><span class="pre">(cmsg_level,</span> <span class="pre">cmsg_type,</span> <span class="pre">cmsg_data)</span></code>, where <em>cmsg_level</em> and
+<em>cmsg_type</em> are integers specifying the protocol level and
+protocol-specific type respectively, and <em>cmsg_data</em> is a
+bytes-like object holding the associated data.  Note that
+some systems (in particular, systems without <a class="reference internal" href="#socket.CMSG_SPACE" title="socket.CMSG_SPACE"><code class="xref py py-func docutils literal"><span class="pre">CMSG_SPACE()</span></code></a>)
+might support sending only one control message per call.  The
+<em>flags</em> argument defaults to 0 and has the same meaning as for
+<a class="reference internal" href="#socket.socket.send" title="socket.socket.send"><code class="xref py py-meth docutils literal"><span class="pre">send()</span></code></a>.  If <em>address</em> is supplied and not <code class="docutils literal"><span class="pre">None</span></code>, it sets a
+destination address for the message.  The return value is the
+number of bytes of non-ancillary data sent.</p>
+<p>The following function sends the list of file descriptors <em>fds</em>
+over an <a class="reference internal" href="#socket.AF_UNIX" title="socket.AF_UNIX"><code class="xref py py-const docutils literal"><span class="pre">AF_UNIX</span></code></a> socket, on systems which support the
+<code class="xref py py-const docutils literal"><span class="pre">SCM_RIGHTS</span></code> mechanism.  See also <a class="reference internal" href="#socket.socket.recvmsg" title="socket.socket.recvmsg"><code class="xref py py-meth docutils literal"><span class="pre">recvmsg()</span></code></a>.</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">socket</span><span class="o">,</span> <span class="nn">array</span>
+
+<span class="k">def</span> <span class="nf">send_fds</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">fds</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">sock</span><span class="o">.</span><span class="n">sendmsg</span><span class="p">([</span><span class="n">msg</span><span class="p">],</span> <span class="p">[(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SCM_RIGHTS</span><span class="p">,</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="n">fds</span><span class="p">))])</span>
+</pre></div>
+</div>
+<p>利用できる環境: 主な Unix で利用できます。他のプラットフォームでも、利用できる場合があります。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>システムコールが中断されシグナルハンドラが例外を送出しなかった場合、このメソッドは <a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> 例外を送出する代わりにシステムコールを再試行するようになりました (論拠については <span class="target" id="index-38"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> を参照してください)。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.sendmsg_afalg">
+<code class="descclassname">socket.</code><code class="descname">sendmsg_afalg</code><span class="sig-paren">(</span><span class="optional">[</span><em>msg</em>, <span class="optional">]</span><em>*</em>, <em>op</em><span class="optional">[</span>, <em>iv</em><span class="optional">[</span>, <em>assoclen</em><span class="optional">[</span>, <em>flags</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.sendmsg_afalg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Specialized version of <a class="reference internal" href="#socket.socket.sendmsg" title="socket.socket.sendmsg"><code class="xref py py-meth docutils literal"><span class="pre">sendmsg()</span></code></a> for <a class="reference internal" href="#socket.AF_ALG" title="socket.AF_ALG"><code class="xref py py-const docutils literal"><span class="pre">AF_ALG</span></code></a> socket.
+Set mode, IV, AEAD associated data length and flags for <a class="reference internal" href="#socket.AF_ALG" title="socket.AF_ALG"><code class="xref py py-const docutils literal"><span class="pre">AF_ALG</span></code></a> socket.</p>
+<p>Availability: Linux &gt;= 2.6.38</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.sendfile">
+<code class="descclassname">socket.</code><code class="descname">sendfile</code><span class="sig-paren">(</span><em>file</em>, <em>offset=0</em>, <em>count=None</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.sendfile" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Send a file until EOF is reached by using high-performance
+<a class="reference internal" href="os.html#os.sendfile" title="os.sendfile"><code class="xref py py-mod docutils literal"><span class="pre">os.sendfile</span></code></a> and return the total number of bytes which were sent.
+<em>file</em> must be a regular file object opened in binary mode. If
+<a class="reference internal" href="os.html#os.sendfile" title="os.sendfile"><code class="xref py py-mod docutils literal"><span class="pre">os.sendfile</span></code></a> is not available (e.g. Windows) or <em>file</em> is not a
+regular file <a class="reference internal" href="#socket.socket.send" title="socket.socket.send"><code class="xref py py-meth docutils literal"><span class="pre">send()</span></code></a> will be used instead. <em>offset</em> tells from where to
+start reading the file. If specified, <em>count</em> is the total number of bytes
+to transmit as opposed to sending the file until EOF is reached. File
+position is updated on return or also in case of error in which case
+<a class="reference internal" href="io.html#io.IOBase.tell" title="io.IOBase.tell"><code class="xref py py-meth docutils literal"><span class="pre">file.tell()</span></code></a> can be used to figure out the number of
+bytes which were sent. The socket must be of <a class="reference internal" href="#socket.SOCK_STREAM" title="socket.SOCK_STREAM"><code class="xref py py-const docutils literal"><span class="pre">SOCK_STREAM</span></code></a> type.
+Non-blocking sockets are not supported.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.set_inheritable">
+<code class="descclassname">socket.</code><code class="descname">set_inheritable</code><span class="sig-paren">(</span><em>inheritable</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.set_inheritable" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットのファイル記述子、またはソケットのハンドルの、 <a class="reference internal" href="os.html#fd-inheritance"><span class="std std-ref">継承可能フラグ</span></a> を立てます。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.setblocking">
+<code class="descclassname">socket.</code><code class="descname">setblocking</code><span class="sig-paren">(</span><em>flag</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.setblocking" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットをブロッキングモード、または非ブロッキングモードに設定します。<em>flag</em> が False ならばソケットは非ブロッキングモードになり、さもなくばブロッキングモードになります。</p>
+<p>このメソッドは、次の <a class="reference internal" href="#socket.socket.settimeout" title="socket.socket.settimeout"><code class="xref py py-meth docutils literal"><span class="pre">settimeout()</span></code></a> 呼び出しの省略表記です:</p>
+<ul class="simple">
+<li><p class="first"><code class="docutils literal"><span class="pre">sock.setblocking(True)</span></code> は <code class="docutils literal"><span class="pre">sock.settimeout(None)</span></code> と等価です</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">sock.setblocking(False)</span></code> は <code class="docutils literal"><span class="pre">sock.settimeout(0.0)</span></code> と等価です</p>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.settimeout">
+<code class="descclassname">socket.</code><code class="descname">settimeout</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.settimeout" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットのブロッキング処理のタイムアウト値を指定します。 <em>value</em> には float 型で秒数を指定するか、 <code class="docutils literal"><span class="pre">None</span></code> を指定します。float を指定したならば、ソケットの操作が完了する前に <em>value</em> で指定した秒数が経過すれば <a class="reference internal" href="#socket.timeout" title="socket.timeout"><code class="xref py py-exc docutils literal"><span class="pre">timeout</span></code></a> 例外を送出します。 <code class="docutils literal"><span class="pre">None</span></code> を指定すると、ソケットのタイムアウトを無効にします。</p>
+<p>詳しくは <span class="xref std std-ref">ソケットタイムアウトの注意事項</span> を参照してください。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.setsockopt">
+<code class="descclassname">socket.</code><code class="descname">setsockopt</code><span class="sig-paren">(</span><em>level</em>, <em>optname</em>, <em>value: int</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.setsockopt" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descclassname">socket.</code><code class="descname">setsockopt</code><span class="sig-paren">(</span><em>level</em>, <em>optname</em>, <em>value: buffer</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt>
+<code class="descclassname">socket.</code><code class="descname">setsockopt</code><span class="sig-paren">(</span><em>level</em>, <em>optname</em>, <em>None</em>, <em>optlen: int</em><span class="sig-paren">)</span></dt>
+<dd><p id="index-14">Set the value of the given socket option (see the Unix manual page
+<em class="manpage">setsockopt(2)</em>).  The needed symbolic constants are defined in the
+<a class="reference internal" href="#module-socket" title="socket: Low-level networking interface."><code class="xref py py-mod docutils literal"><span class="pre">socket</span></code></a> module (<code class="xref py py-const docutils literal"><span class="pre">SO_*</span></code> etc.).  The value can be an integer,
+<code class="docutils literal"><span class="pre">None</span></code> or a <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> representing a buffer. In the later
+case it is up to the caller to ensure that the bytestring contains the
+proper bits (see the optional built-in module <a class="reference internal" href="struct.html#module-struct" title="struct: Interpret bytes as packed binary data."><code class="xref py py-mod docutils literal"><span class="pre">struct</span></code></a> for a way to
+encode C structures as bytestrings). When value is set to <code class="docutils literal"><span class="pre">None</span></code>,
+optlen argument is required. It&#8217;s equivalent to call setsockopt C
+function with optval=NULL and optlen=optlen.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>書き込み可能な <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> を使用できるようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>setsockopt(level, optname, None, optlen: int) form added.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.shutdown">
+<code class="descclassname">socket.</code><code class="descname">shutdown</code><span class="sig-paren">(</span><em>how</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.shutdown" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>接続の片方向、または両方向を切断します。 <em>how</em> が <code class="xref py py-const docutils literal"><span class="pre">SHUT_RD</span></code> の場合、以降は受信を行えません。 <em>how</em> が <code class="xref py py-const docutils literal"><span class="pre">SHUT_WR</span></code> の場合、以降は送信を行えません。 <em>how</em> が <code class="xref py py-const docutils literal"><span class="pre">SHUT_RDWR</span></code> の場合、以降は送受信を行えません。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="socket.socket.share">
+<code class="descclassname">socket.</code><code class="descname">share</code><span class="sig-paren">(</span><em>process_id</em><span class="sig-paren">)</span><a class="headerlink" href="#socket.socket.share" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットを複製し、対象のプロセスと共有するための bytes オブジェクトを返します。対象のプロセスを <em>process_id</em> で指定しなければなりません。戻り値の bytes オブジェクトは、何らかのプロセス間通信を使って対象のプロセスに伝えます。対象のプロセス側では、 <a class="reference internal" href="#socket.fromshare" title="socket.fromshare"><code class="xref py py-func docutils literal"><span class="pre">fromshare()</span></code></a> を使って複製されたソケットをとらえます。オペレーティング・システムは対象のプロセスに対してソケットを複製するため、このメソッドを呼び出した後であれば、元のソケットをクローズしても、対象のプロセスに渡ったソケットには影響がありません。</p>
+<p>利用できる環境 : Windows.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<p><code class="xref py py-meth docutils literal"><span class="pre">read()</span></code> メソッドと <code class="xref py py-meth docutils literal"><span class="pre">write()</span></code> メソッドは存在しませんので注意してください。代わりに <em>flags</em> を省略した <a class="reference internal" href="#socket.socket.recv" title="socket.socket.recv"><code class="xref py py-meth docutils literal"><span class="pre">recv()</span></code></a> と <a class="reference internal" href="#socket.socket.send" title="socket.socket.send"><code class="xref py py-meth docutils literal"><span class="pre">send()</span></code></a> を使うことができます。</p>
+<p>Socket objects also have these (read-only) attributes that correspond to the
+values given to the <a class="reference internal" href="#socket.socket" title="socket.socket"><code class="xref py py-class docutils literal"><span class="pre">socket</span></code></a> constructor.</p>
+<dl class="attribute">
+<dt id="socket.socket.family">
+<code class="descclassname">socket.</code><code class="descname">family</code><a class="headerlink" href="#socket.socket.family" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットファミリー。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="socket.socket.type">
+<code class="descclassname">socket.</code><code class="descname">type</code><a class="headerlink" href="#socket.socket.type" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットタイプ。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="socket.socket.proto">
+<code class="descclassname">socket.</code><code class="descname">proto</code><a class="headerlink" href="#socket.socket.proto" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソケットプロトコル。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="notes-on-socket-timeouts">
+<span id="socket-timeouts"></span><h2>18.1.4. ソケットタイムアウトの注意事項<a class="headerlink" href="#notes-on-socket-timeouts" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ソケットオブジェクトは、ブロッキングモード、非ブロッキングモード、タイムアウトモードのうち、いずれか1つのモードをとります。デフォルトでは、ソケットは常にブロッキングモードで作成されますが、 <a class="reference internal" href="#socket.setdefaulttimeout" title="socket.setdefaulttimeout"><code class="xref py py-func docutils literal"><span class="pre">setdefaulttimeout()</span></code></a> で標準のモードを変更することができます。</p>
+<ul class="simple">
+<li><p class="first"><em>ブロッキングモード</em> での操作は、完了するか、または（接続がタイムアウトするなどして）システムがエラーを返すまで、ブロックされます。</p>
+</li>
+<li><p class="first"><em>非ブロッキングモード</em> での操作は、ただちに完了できない場合、例外を送出して失敗します。この場合の例外の種類は、システムに依存するため、ここに記すことができません。 <a class="reference internal" href="select.html#module-select" title="select: Wait for I/O completion on multiple streams."><code class="xref py py-mod docutils literal"><span class="pre">select</span></code></a> モジュールの関数を使って、ソケットの読み書きが利用可能かどうか、可能な場合はいつ利用できるかを調べることができます。</p>
+</li>
+<li><p class="first"><em>タイムアウトモード</em> での操作は、指定されたタイムアウトの時間内に完了しなければ、 <a class="reference internal" href="#socket.timeout" title="socket.timeout"><code class="xref py py-exc docutils literal"><span class="pre">timeout</span></code></a> 例外を送出します。タイムアウトの時間内にシステムがエラーを返した場合は、そのエラーを返します。</p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">オペレーティング・システムのレベルでは、 <em>タイムアウトモード</em> のソケットには、内部的に非ブロッキングモードが設定されています。またブロッキングモードとタイムアウトモードの指定は、ファイル記述子と、「そのファイル記述子と同じネットワーク端点を参照するソケットオブジェクト」との間で共有されます。このことは、例えばソケットの <a class="reference internal" href="#socket.socket.fileno" title="socket.socket.fileno"><code class="xref py py-meth docutils literal"><span class="pre">fileno()</span></code></a> を使うことにした場合に、明らかな影響を与えます。</p>
+</div>
+<div class="section" id="timeouts-and-the-connect-method">
+<h3>18.1.4.1. タイムアウトと <code class="docutils literal"><span class="pre">connect</span></code> メソッド<a class="headerlink" href="#timeouts-and-the-connect-method" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><a class="reference internal" href="#socket.socket.connect" title="socket.socket.connect"><code class="xref py py-meth docutils literal"><span class="pre">connect()</span></code></a> もタイムアウト設定に従います。一般的に、 <a class="reference internal" href="#socket.socket.settimeout" title="socket.socket.settimeout"><code class="xref py py-meth docutils literal"><span class="pre">settimeout()</span></code></a> を <a class="reference internal" href="#socket.socket.connect" title="socket.socket.connect"><code class="xref py py-meth docutils literal"><span class="pre">connect()</span></code></a> の前に呼ぶか、 <a class="reference internal" href="#socket.create_connection" title="socket.create_connection"><code class="xref py py-meth docutils literal"><span class="pre">create_connection()</span></code></a> にタイムアウト引数を渡すことが推奨されます。ただし、システムのネットワークスタックが Python のソケットタイムアウトの設定を無視して、自身の接続タイムアウトエラーを返すこともあります。</p>
+</div>
+<div class="section" id="timeouts-and-the-accept-method">
+<h3>18.1.4.2. タイムアウトと <code class="docutils literal"><span class="pre">accept</span></code> メソッド<a class="headerlink" href="#timeouts-and-the-accept-method" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>If <a class="reference internal" href="#socket.getdefaulttimeout" title="socket.getdefaulttimeout"><code class="xref py py-func docutils literal"><span class="pre">getdefaulttimeout()</span></code></a> is not <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a>, sockets returned by
+the <a class="reference internal" href="#socket.socket.accept" title="socket.socket.accept"><code class="xref py py-meth docutils literal"><span class="pre">accept()</span></code></a> method inherit that timeout.  Otherwise, the
+behaviour depends on settings of the listening socket:</p>
+<ul class="simple">
+<li>if the listening socket is in <em>blocking mode</em> or in <em>timeout mode</em>,
+the socket returned by <a class="reference internal" href="#socket.socket.accept" title="socket.socket.accept"><code class="xref py py-meth docutils literal"><span class="pre">accept()</span></code></a> is in <em>blocking mode</em>;</li>
+<li>if the listening socket is in <em>non-blocking mode</em>, whether the socket
+returned by <a class="reference internal" href="#socket.socket.accept" title="socket.socket.accept"><code class="xref py py-meth docutils literal"><span class="pre">accept()</span></code></a> is in blocking or non-blocking mode
+is operating system-dependent.  If you want to ensure cross-platform
+behaviour, it is recommended you manually override this setting.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="example">
+<span id="socket-example"></span><h2>18.1.5. 使用例<a class="headerlink" href="#example" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>以下は TCP/IP プロトコルの簡単なサンプルとして、受信したデータをクライアントにそのまま返送するサーバ (接続可能なクライアントは一件のみ) と、サーバに接続するクライアントの例を示します。サーバでは、 <a class="reference internal" href="#socket.socket" title="socket.socket"><code class="xref py py-func docutils literal"><span class="pre">socket()</span></code></a> ・ <a class="reference internal" href="#socket.socket.bind" title="socket.socket.bind"><code class="xref py py-meth docutils literal"><span class="pre">bind()</span></code></a> ・ <a class="reference internal" href="#socket.socket.listen" title="socket.socket.listen"><code class="xref py py-meth docutils literal"><span class="pre">listen()</span></code></a> ・ <a class="reference internal" href="#socket.socket.accept" title="socket.socket.accept"><code class="xref py py-meth docutils literal"><span class="pre">accept()</span></code></a> を実行し (複数のクライアントからの接続を受け付ける場合、 <a class="reference internal" href="#socket.socket.accept" title="socket.socket.accept"><code class="xref py py-meth docutils literal"><span class="pre">accept()</span></code></a> を複数回呼び出します)、クライアントでは <a class="reference internal" href="#socket.socket" title="socket.socket"><code class="xref py py-func docutils literal"><span class="pre">socket()</span></code></a> と <a class="reference internal" href="#socket.socket.connect" title="socket.socket.connect"><code class="xref py py-meth docutils literal"><span class="pre">connect()</span></code></a> だけを呼び出しています。サーバでは <a class="reference internal" href="#socket.socket.sendall" title="socket.socket.sendall"><code class="xref py py-meth docutils literal"><span class="pre">sendall()</span></code></a> / <a class="reference internal" href="#socket.socket.recv" title="socket.socket.recv"><code class="xref py py-meth docutils literal"><span class="pre">recv()</span></code></a> メソッドは listen 中のソケットで実行するのではなく、 <a class="reference internal" href="#socket.socket.accept" title="socket.socket.accept"><code class="xref py py-meth docutils literal"><span class="pre">accept()</span></code></a> で取得したソケットに対して実行している点にも注意してください。</p>
+<p>次のクライアントとサーバは、IPv4 のみをサポートしています。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Echo server program</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+
+<span class="n">HOST</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>                 <span class="c1"># Symbolic name meaning all available interfaces</span>
+<span class="n">PORT</span> <span class="o">=</span> <span class="mi">50007</span>              <span class="c1"># Arbitrary non-privileged port</span>
+<span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">))</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">conn</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">conn</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Connected by&#39;</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span> <span class="k">break</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Echo client program</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+
+<span class="n">HOST</span> <span class="o">=</span> <span class="s1">&#39;daring.cwi.nl&#39;</span>    <span class="c1"># The remote host</span>
+<span class="n">PORT</span> <span class="o">=</span> <span class="mi">50007</span>              <span class="c1"># The same port as used by the server</span>
+<span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">))</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;Hello, world&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Received&#39;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>次のサンプルは上記のサンプルとほとんど同じですが、IPv4 と IPv6 の両方をサポートしています。サーバでは、IPv4/v6 の両方ではなく、利用可能な最初のアドレスファミリだけを listen しています。ほとんどの IPv6 対応システムでは IPv6 が先に現れるため、サーバは IPv4 には応答しません。クライアントでは名前解決の結果として取得したアドレスに順次接続を試み、最初に接続に成功したソケットにデータを送信しています。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Echo server program</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">HOST</span> <span class="o">=</span> <span class="kc">None</span>               <span class="c1"># Symbolic name meaning all available interfaces</span>
+<span class="n">PORT</span> <span class="o">=</span> <span class="mi">50007</span>              <span class="c1"># Arbitrary non-privileged port</span>
+<span class="n">s</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">socket</span><span class="o">.</span><span class="n">getaddrinfo</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">AF_UNSPEC</span><span class="p">,</span>
+                              <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">AI_PASSIVE</span><span class="p">):</span>
+    <span class="n">af</span><span class="p">,</span> <span class="n">socktype</span><span class="p">,</span> <span class="n">proto</span><span class="p">,</span> <span class="n">canonname</span><span class="p">,</span> <span class="n">sa</span> <span class="o">=</span> <span class="n">res</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">af</span><span class="p">,</span> <span class="n">socktype</span><span class="p">,</span> <span class="n">proto</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">msg</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">continue</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">sa</span><span class="p">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">msg</span><span class="p">:</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">continue</span>
+    <span class="k">break</span>
+<span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;could not open socket&#39;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">conn</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+<span class="k">with</span> <span class="n">conn</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Connected by&#39;</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span> <span class="k">break</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Echo client program</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">HOST</span> <span class="o">=</span> <span class="s1">&#39;daring.cwi.nl&#39;</span>    <span class="c1"># The remote host</span>
+<span class="n">PORT</span> <span class="o">=</span> <span class="mi">50007</span>              <span class="c1"># The same port as used by the server</span>
+<span class="n">s</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">socket</span><span class="o">.</span><span class="n">getaddrinfo</span><span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">AF_UNSPEC</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">):</span>
+    <span class="n">af</span><span class="p">,</span> <span class="n">socktype</span><span class="p">,</span> <span class="n">proto</span><span class="p">,</span> <span class="n">canonname</span><span class="p">,</span> <span class="n">sa</span> <span class="o">=</span> <span class="n">res</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">af</span><span class="p">,</span> <span class="n">socktype</span><span class="p">,</span> <span class="n">proto</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">msg</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">continue</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">sa</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">msg</span><span class="p">:</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">continue</span>
+    <span class="k">break</span>
+<span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;could not open socket&#39;</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">s</span><span class="p">:</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;Hello, world&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Received&#39;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>次の例は、Windowsで raw socket を利用して非常にシンプルなネットワークスニファーを書きます。このサンプルを実行するには、インタフェースを操作するための管理者権限が必要です:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">socket</span>
+
+<span class="c1"># the public network interface</span>
+<span class="n">HOST</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">())</span>
+
+<span class="c1"># create a raw socket and bind it to the public interface</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_RAW</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">IPPROTO_IP</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">HOST</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="c1"># Include IP headers</span>
+<span class="n">s</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">IPPROTO_IP</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">IP_HDRINCL</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># receive all packages</span>
+<span class="n">s</span><span class="o">.</span><span class="n">ioctl</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SIO_RCVALL</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">RCVALL_ON</span><span class="p">)</span>
+
+<span class="c1"># receive a package</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">recvfrom</span><span class="p">(</span><span class="mi">65565</span><span class="p">))</span>
+
+<span class="c1"># disabled promiscuous mode</span>
+<span class="n">s</span><span class="o">.</span><span class="n">ioctl</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SIO_RCVALL</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">RCVALL_OFF</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The last example shows how to use the socket interface to communicate to a CAN
+network using the raw socket protocol. To use CAN with the broadcast
+manager protocol instead, open a socket with:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_CAN</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_DGRAM</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">CAN_BCM</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After binding (<code class="xref py py-const docutils literal"><span class="pre">CAN_RAW</span></code>) or connecting (<a class="reference internal" href="#socket.CAN_BCM" title="socket.CAN_BCM"><code class="xref py py-const docutils literal"><span class="pre">CAN_BCM</span></code></a>) the socket, you
+can use the <a class="reference internal" href="#socket.socket.send" title="socket.socket.send"><code class="xref py py-meth docutils literal"><span class="pre">socket.send()</span></code></a>, and the <a class="reference internal" href="#socket.socket.recv" title="socket.socket.recv"><code class="xref py py-meth docutils literal"><span class="pre">socket.recv()</span></code></a> operations (and
+their counterparts) on the socket object as usual.</p>
+<p>次の例では、特権が必要になるかもしれません:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+
+
+<span class="c1"># CAN frame packing/unpacking (see &#39;struct can_frame&#39; in &lt;linux/can.h&gt;)</span>
+
+<span class="n">can_frame_fmt</span> <span class="o">=</span> <span class="s2">&quot;=IB3x8s&quot;</span>
+<span class="n">can_frame_size</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">calcsize</span><span class="p">(</span><span class="n">can_frame_fmt</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">build_can_frame</span><span class="p">(</span><span class="n">can_id</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="n">can_dlc</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">can_frame_fmt</span><span class="p">,</span> <span class="n">can_id</span><span class="p">,</span> <span class="n">can_dlc</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">dissect_can_frame</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
+    <span class="n">can_id</span><span class="p">,</span> <span class="n">can_dlc</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">can_frame_fmt</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">can_id</span><span class="p">,</span> <span class="n">can_dlc</span><span class="p">,</span> <span class="n">data</span><span class="p">[:</span><span class="n">can_dlc</span><span class="p">])</span>
+
+
+<span class="c1"># create a raw socket and bind it to the &#39;vcan0&#39; interface</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_CAN</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_RAW</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">CAN_RAW</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s1">&#39;vcan0&#39;</span><span class="p">,))</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">cf</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">recvfrom</span><span class="p">(</span><span class="n">can_frame_size</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Received: can_id=</span><span class="si">%x</span><span class="s1">, can_dlc=</span><span class="si">%x</span><span class="s1">, data=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">dissect_can_frame</span><span class="p">(</span><span class="n">cf</span><span class="p">))</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">cf</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error sending CAN frame&#39;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">build_can_frame</span><span class="p">(</span><span class="mh">0x01</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x01\x02\x03</span><span class="s1">&#39;</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error sending CAN frame&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>この例の実行を、ほとんど間を空けずに何度も実行すると、以下のエラーが起こるかもしれません:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="ne">OSError</span><span class="p">:</span> <span class="p">[</span><span class="n">Errno</span> <span class="mi">98</span><span class="p">]</span> <span class="n">Address</span> <span class="n">already</span> <span class="ow">in</span> <span class="n">use</span>
+</pre></div>
+</div>
+<p>これは以前の実行がソケットを <code class="docutils literal"><span class="pre">TIME_WAIT</span></code> 状態のままにし、すぐには再利用出来ないことで起こります。</p>
+<p>これを防ぐのに、 <a class="reference internal" href="#module-socket" title="socket: Low-level networking interface."><code class="xref py py-mod docutils literal"><span class="pre">socket</span></code></a> フラグの <code class="xref py py-data docutils literal"><span class="pre">socket.SO_REUSEADDR</span></code> があります:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_REUSEADDR</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><code class="xref py py-data docutils literal"><span class="pre">SO_REUSEADDR</span></code> フラグは、 <code class="docutils literal"><span class="pre">TIME_WAIT</span></code> 状態にあるローカルソケットをそのタイムアウト期限が自然に切れるのを待つことなく再利用することをカーネルに伝えます。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p>C 言語によるソケットプログラミングの基礎については、以下の資料を参照してください。</p>
+<ul class="simple">
+<li><em>An Introductory 4.3BSD Interprocess Communication Tutorial</em>, by Stuart Sechrest</li>
+<li><em>An Advanced 4.3BSD Interprocess Communication Tutorial</em>, by Samuel J.  Leffler et
+al,</li>
+</ul>
+<p class="last">両書とも UNIX Programmer&#8217;s Manual, Supplementary Documents 1 (PS1:7章 PS1:8章)。ソケットの詳細については、各プラットフォームのソケット関連システムコールに関するドキュメントも参照してください。Unix ではマニュアルページ、WindowsではWinSock (または WinSock2) 仕様書をご覧ください。IPv6 対応の API については、 <span class="target" id="index-39"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc3493.html"><strong>RFC 3493</strong></a> &#8220;Basic Socket Interface Extensions for IPv6&#8221; を参照してください。</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.1. <code class="docutils literal"><span class="pre">socket</span></code> &#8212; 低水準ネットワークインターフェース</a><ul>
+<li><a class="reference internal" href="#socket-families">18.1.1. ソケットファミリー</a></li>
+<li><a class="reference internal" href="#module-contents">18.1.2. モジュールの内容</a><ul>
+<li><a class="reference internal" href="#exceptions">18.1.2.1. 例外</a></li>
+<li><a class="reference internal" href="#constants">18.1.2.2. 定数</a></li>
+<li><a class="reference internal" href="#functions">18.1.2.3. 関数</a><ul>
+<li><a class="reference internal" href="#creating-sockets">18.1.2.3.1. ソケットの作成</a></li>
+<li><a class="reference internal" href="#other-functions">18.1.2.3.2. その他の関数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#socket-objects">18.1.3. socket オブジェクト</a></li>
+<li><a class="reference internal" href="#notes-on-socket-timeouts">18.1.4. ソケットタイムアウトの注意事項</a><ul>
+<li><a class="reference internal" href="#timeouts-and-the-connect-method">18.1.4.1. タイムアウトと <code class="docutils literal"><span class="pre">connect</span></code> メソッド</a></li>
+<li><a class="reference internal" href="#timeouts-and-the-accept-method">18.1.4.2. タイムアウトと <code class="docutils literal"><span class="pre">accept</span></code> メソッド</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example">18.1.5. 使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="ipc.html"
+                        title="前の章へ">18. プロセス間通信とネットワーク</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="ssl.html"
+                        title="次の章へ">18.2. <code class="docutils literal"><span class="pre">ssl</span></code> &#8212; ソケットオブジェクトに対する TLS/SSL ラッパー</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/socket.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="ssl.html" title="18.2. ssl — ソケットオブジェクトに対する TLS/SSL ラッパー"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="ipc.html" title="18. プロセス間通信とネットワーク"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

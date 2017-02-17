@@ -1,0 +1,1437 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>29.1. sys — システムパラメータと関数 &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="29. Python ランタイムサービス" href="python.html" />
+    <link rel="next" title="29.2. sysconfig — Python の構成情報にアクセスする" href="sysconfig.html" />
+    <link rel="prev" title="29. Python ランタイムサービス" href="python.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/sys.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/sys.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="sysconfig.html" title="29.2. sysconfig — Python の構成情報にアクセスする"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="python.html" title="29. Python ランタイムサービス"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" accesskey="U">29. Python ランタイムサービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-sys">
+<span id="sys-system-specific-parameters-and-functions"></span><h1>29.1. <a class="reference internal" href="#module-sys" title="sys: Access system-specific parameters and functions."><code class="xref py py-mod docutils literal"><span class="pre">sys</span></code></a> &#8212; システムパラメータと関数<a class="headerlink" href="#module-sys" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<hr class="docutils" />
+<p>このモジュールでは、インタプリタで使用・管理している変数や、インタプリタの動作に深く関連する関数を定義しています。このモジュールは常に利用可能です。</p>
+<dl class="data">
+<dt id="sys.abiflags">
+<code class="descclassname">sys.</code><code class="descname">abiflags</code><a class="headerlink" href="#sys.abiflags" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python が標準的な <code class="docutils literal"><span class="pre">configure</span></code> でビルトされた POSIX システムにおいて、<span class="target" id="index-37"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3149"><strong>PEP 3149</strong></a> に記述された ABI フラグを含みます。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.argv">
+<code class="descclassname">sys.</code><code class="descname">argv</code><a class="headerlink" href="#sys.argv" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Pythonスクリプトに渡されたコマンドライン引数のリスト。 <code class="docutils literal"><span class="pre">argv[0]</span></code> はスクリプトの名前となりますが、フルパス名かどうかは、OSによって異なります。コマンドライン引数に <a class="reference internal" href="../using/cmdline.html#cmdoption-c"><code class="xref std std-option docutils literal"><span class="pre">-c</span></code></a> を付けて Pythonを起動した場合、 <code class="docutils literal"><span class="pre">argv[0]</span></code> は文字列 <code class="docutils literal"><span class="pre">'-c'</span></code> となります。スクリプト名なしでPythonを起動した場合、 <code class="docutils literal"><span class="pre">argv[0]</span></code> は空文字列になります。</p>
+<p>標準入力もしくはコマンドライン引数で指定されたファイルのリストに渡ってループするには、 <a class="reference internal" href="fileinput.html#module-fileinput" title="fileinput: Loop over standard input or a list of files."><code class="xref py py-mod docutils literal"><span class="pre">fileinput</span></code></a> モジュールを参照してください。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.base_exec_prefix">
+<code class="descclassname">sys.</code><code class="descname">base_exec_prefix</code><a class="headerlink" href="#sys.base_exec_prefix" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python の起動中、<code class="docutils literal"><span class="pre">site.py</span></code> が実行される前、<a class="reference internal" href="#sys.exec_prefix" title="sys.exec_prefix"><code class="xref py py-data docutils literal"><span class="pre">exec_prefix</span></code></a> と同じ値が設定されます。<a class="reference internal" href="venv.html#venv-def"><span class="std std-ref">仮想環境</span></a> で実行されたのでなければ、この値は変化しません; <code class="docutils literal"><span class="pre">site.py</span></code> が仮想環境で使用されていると判断した場合、<a class="reference internal" href="#sys.prefix" title="sys.prefix"><code class="xref py py-data docutils literal"><span class="pre">prefix</span></code></a> および <a class="reference internal" href="#sys.exec_prefix" title="sys.exec_prefix"><code class="xref py py-data docutils literal"><span class="pre">exec_prefix</span></code></a> は仮想環境を示すよう変更され、<a class="reference internal" href="#sys.base_prefix" title="sys.base_prefix"><code class="xref py py-data docutils literal"><span class="pre">base_prefix</span></code></a> および <a class="reference internal" href="#sys.base_exec_prefix" title="sys.base_exec_prefix"><code class="xref py py-data docutils literal"><span class="pre">base_exec_prefix</span></code></a> は引き続き (仮想環境が作成された) ベースの Python インストール先を示します。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.base_prefix">
+<code class="descclassname">sys.</code><code class="descname">base_prefix</code><a class="headerlink" href="#sys.base_prefix" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python の起動中、<code class="docutils literal"><span class="pre">site.py</span></code> が実行される前、<a class="reference internal" href="#sys.prefix" title="sys.prefix"><code class="xref py py-data docutils literal"><span class="pre">prefix</span></code></a> と同じ値が設定されます。<a class="reference internal" href="venv.html#venv-def"><span class="std std-ref">仮想環境</span></a> で実行されたのでなければ、この値は変化しません; <code class="docutils literal"><span class="pre">site.py</span></code> が仮想環境で使用されていると検出した場合、<a class="reference internal" href="#sys.prefix" title="sys.prefix"><code class="xref py py-data docutils literal"><span class="pre">prefix</span></code></a> および <a class="reference internal" href="#sys.exec_prefix" title="sys.exec_prefix"><code class="xref py py-data docutils literal"><span class="pre">exec_prefix</span></code></a> は仮想環境を示すよう変更され、<a class="reference internal" href="#sys.base_prefix" title="sys.base_prefix"><code class="xref py py-data docutils literal"><span class="pre">base_prefix</span></code></a> および <a class="reference internal" href="#sys.base_exec_prefix" title="sys.base_exec_prefix"><code class="xref py py-data docutils literal"><span class="pre">base_exec_prefix</span></code></a> は引き続き (仮想環境が作成された) ベースの Python インストール先を示します。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.byteorder">
+<code class="descclassname">sys.</code><code class="descname">byteorder</code><a class="headerlink" href="#sys.byteorder" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プラットフォームのバイト順を示します。ビッグエンディアン (最上位バイトが先頭) のプラットフォームでは <code class="docutils literal"><span class="pre">'big'</span></code>, リトルエンディアン (最下位バイトが先頭) では <code class="docutils literal"><span class="pre">'little'</span></code> となります。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.builtin_module_names">
+<code class="descclassname">sys.</code><code class="descname">builtin_module_names</code><a class="headerlink" href="#sys.builtin_module_names" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>コンパイル時にPythonインタプリタに組み込まれた、全てのモジュール名のタプル(この情報は、他の手段では取得することができません。 <code class="docutils literal"><span class="pre">modules.keys()</span></code> は、インポートされたモジュールのみのリストを返します。)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.call_tracing">
+<code class="descclassname">sys.</code><code class="descname">call_tracing</code><span class="sig-paren">(</span><em>func</em>, <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.call_tracing" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トレーシングが有効な間、 <code class="docutils literal"><span class="pre">func(*args)</span></code> を呼び出します。トレーシングの状態は保存され、後で復元されます。これは、別のコードをチェックポイントから再帰的にデバッグするために、デバッガから呼び出されることを意図しています。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.copyright">
+<code class="descclassname">sys.</code><code class="descname">copyright</code><a class="headerlink" href="#sys.copyright" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python インタプリタの著作権を表示する文字列です。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys._clear_type_cache">
+<code class="descclassname">sys.</code><code class="descname">_clear_type_cache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys._clear_type_cache" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>内部の型キャッシュをクリアします。型キャッシュは属性とメソッドの検索を高速化するために利用されます。この関数は、参照リークをデバッグするときに不要な参照を削除するため <strong>だけ</strong> に利用してください。</p>
+<p>この関数は、内部的かつ特殊な目的にのみ利用されるべきです。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys._current_frames">
+<code class="descclassname">sys.</code><code class="descname">_current_frames</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys._current_frames" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>各スレッドの識別子を関数が呼ばれた時点のそのスレッドでアクティブになっている一番上のスタックフレームに結びつける辞書を返します。モジュール <a class="reference internal" href="traceback.html#module-traceback" title="traceback: Print or retrieve a stack traceback."><code class="xref py py-mod docutils literal"><span class="pre">traceback</span></code></a> の関数を使えばそのように与えられたフレームのコールスタックを構築できます。</p>
+<p>この関数はデッドロックをデバッグするのに非常に有効です。デッドロック状態のスレッドの協調動作を必要としませんし、そういったスレッドのコールスタックはデッドロックである限りフリーズしたままです。デッドロックにないスレッドのフレームについては、そのフレームを調べるコードを呼んだ時にはそのスレッドの現在の実行状況とは関係ないところを指し示しているかもしれません。</p>
+<p>この関数は、内部的かつ特殊な目的にのみ利用されるべきです。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys._debugmallocstats">
+<code class="descclassname">sys.</code><code class="descname">_debugmallocstats</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys._debugmallocstats" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>CPython のメモリアロケータの状態に関する低レベルの情報を標準エラー出力に出力します。</p>
+<p>Python が <strong class="program">configure</strong> 時に &#8211;with-pydebug オプションを指定してビルドされている場合、負荷のかかる一貫性チェックも行います。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+<div class="impl-detail compound">
+<p><strong>CPython 実装の詳細:</strong> この関数は CPython 固有です。正確な出力形式は定義されていませんし、変更されるかもしれません。</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.dllhandle">
+<code class="descclassname">sys.</code><code class="descname">dllhandle</code><a class="headerlink" href="#sys.dllhandle" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python DLLのハンドルを示す整数です。利用できる環境: Windows。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.displayhook">
+<code class="descclassname">sys.</code><code class="descname">displayhook</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.displayhook" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>value</em> が <code class="docutils literal"><span class="pre">None</span></code> 以外の時、<code class="docutils literal"><span class="pre">repr(value)</span></code> を <code class="docutils literal"><span class="pre">sys.stdout</span></code> に出力し、<code class="docutils literal"><span class="pre">builtins._</span></code> に保存します。<code class="docutils literal"><span class="pre">repr(value)</span></code> がエラーハンドラを <code class="docutils literal"><span class="pre">sys.stdout.errors</span></code> (おそらく <code class="docutils literal"><span class="pre">'strict'</span></code>) として <code class="docutils literal"><span class="pre">sys.stdout.encoding</span></code> にエンコードできない場合、エラーハンドラを <code class="docutils literal"><span class="pre">'backslashreplace'</span></code> として <code class="docutils literal"><span class="pre">sys.stdout.encoding</span></code> にエンコードします。</p>
+<p><code class="docutils literal"><span class="pre">sys.displayhook</span></code> は、Pythonの対話セッションで入力された式(<a class="reference internal" href="../glossary.html#term-expression"><span class="xref std std-term">expression</span></a>)が評価されたときに呼び出されます。対話セッションの出力をカスタマイズする場合、 <code class="docutils literal"><span class="pre">sys.displayhook</span></code> に引数の数が一つの関数を指定します。</p>
+<p>擬似コード:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">displayhook</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="c1"># Set &#39;_&#39; to None to avoid recursion</span>
+    <span class="n">builtins</span><span class="o">.</span><span class="n">_</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">UnicodeEncodeError</span><span class="p">:</span>
+        <span class="nb">bytes</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">encoding</span><span class="p">,</span> <span class="s1">&#39;backslashreplace&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="s1">&#39;buffer&#39;</span><span class="p">):</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">encoding</span><span class="p">,</span> <span class="s1">&#39;strict&#39;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">builtins</span><span class="o">.</span><span class="n">_</span> <span class="o">=</span> <span class="n">value</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span><a class="reference internal" href="exceptions.html#UnicodeEncodeError" title="UnicodeEncodeError"><code class="xref py py-exc docutils literal"><span class="pre">UnicodeEncodeError</span></code></a> には <code class="docutils literal"><span class="pre">'backslashreplace'</span></code> エラーハンドラを指定してください。</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.dont_write_bytecode">
+<code class="descclassname">sys.</code><code class="descname">dont_write_bytecode</code><a class="headerlink" href="#sys.dont_write_bytecode" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>If this is true, Python won&#8217;t try to write <code class="docutils literal"><span class="pre">.pyc</span></code> files on the
+import of source modules.  This value is initially set to <code class="docutils literal"><span class="pre">True</span></code> or
+<code class="docutils literal"><span class="pre">False</span></code> depending on the <a class="reference internal" href="../using/cmdline.html#cmdoption-B"><code class="xref std std-option docutils literal"><span class="pre">-B</span></code></a> command line option and the
+<span class="target" id="index-1"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONDONTWRITEBYTECODE"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONDONTWRITEBYTECODE</span></code></a> environment variable, but you can set it
+yourself to control bytecode file generation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.excepthook">
+<code class="descclassname">sys.</code><code class="descname">excepthook</code><span class="sig-paren">(</span><em>type</em>, <em>value</em>, <em>traceback</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.excepthook" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>指定したトレースバックと例外を <code class="docutils literal"><span class="pre">sys.stderr</span></code> に出力します。</p>
+<p>例外が発生し、その例外が捕捉されない場合、インタプリタは例外クラス・例外インスタンス・トレースバックオブジェクトを引数として <code class="docutils literal"><span class="pre">sys.excepthook</span></code> を呼び出します。対話セッション中に発生した場合はプロンプトに戻る直前に呼び出され、Pythonプログラムの実行中に発生した場合はプログラムの終了直前に呼び出されます。このトップレベルでの例外情報出力処理をカスタマイズする場合、 <code class="docutils literal"><span class="pre">sys.excepthook</span></code> に引数の数が三つの関数を指定します。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.__displayhook__">
+<code class="descclassname">sys.</code><code class="descname">__displayhook__</code><a class="headerlink" href="#sys.__displayhook__" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="sys.__excepthook__">
+<code class="descclassname">sys.</code><code class="descname">__excepthook__</code><a class="headerlink" href="#sys.__excepthook__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>それぞれ、起動時の <code class="docutils literal"><span class="pre">displayhook</span></code> と <code class="docutils literal"><span class="pre">excepthook</span></code> の値を保存しています。この値は、 <code class="docutils literal"><span class="pre">displayhook</span></code> と <code class="docutils literal"><span class="pre">excepthook</span></code> に不正なオブジェクトが指定された場合に、元の値に復旧するために使用します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.exc_info">
+<code class="descclassname">sys.</code><code class="descname">exc_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.exc_info" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在処理中の例外を示す 3 個の値のタプルを返します。この値は、現在のスレッドおよび現在のスタックフレームのものです。現在のスタックフレームが例外処理中でない場合、例外処理中のスタックフレームが見つかるまでその呼び出したスタックフレームや呼び出し元などを調べます。ここで、&#8221;例外処理中&#8221; とは &#8220;except 節を実行中である&#8221; フレームを指します。どのスタックフレームでも、最後に処理した例外の情報のみを参照できます。</p>
+<p id="index-2">スタック上で例外が発生していない場合、3 個の <code class="docutils literal"><span class="pre">None</span></code> 値のタプルを返します。例外が発生している場合、<code class="docutils literal"><span class="pre">(type,</span> <span class="pre">value,</span> <span class="pre">traceback)</span></code> を返します。<em>type</em> は処理中の例外の型 (<a class="reference internal" href="exceptions.html#BaseException" title="BaseException"><code class="xref py py-exc docutils literal"><span class="pre">BaseException</span></code></a> のサブクラス)を示します。<em>value</em> は例外インスタンス (例外の型のインスタンス) を、<em>traceback</em> は最初に例外が発生したポイントのコールスタックをカプセル化したトレースバックオブジェクト (リファレンスマニュアルを参照) を示します。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.exec_prefix">
+<code class="descclassname">sys.</code><code class="descname">exec_prefix</code><a class="headerlink" href="#sys.exec_prefix" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python のプラットフォーム依存なファイルがインストールされているディレクトリ名を示す文字列です。この値はサイト固有であり、デフォルトは <code class="docutils literal"><span class="pre">'/usr/local'</span></code> ですが、ビルド時に <strong class="program">configure</strong> の <code class="docutils literal"><span class="pre">--exec-prefix</span></code> 引数で指定することができます。すべての設定ファイル (<code class="file docutils literal"><span class="pre">pyconfig.h</span></code> など) は <code class="file docutils literal"><em><span class="pre">exec_prefix</span></em><span class="pre">/lib/python</span><em><span class="pre">X.Y</span></em><span class="pre">/config</span></code> に、共有ライブラリは <code class="file docutils literal"><em><span class="pre">exec_prefix</span></em><span class="pre">/lib/python</span><em><span class="pre">X.Y</span></em><span class="pre">/lib-dynload</span></code> にインストールされます (<em>X.Y</em> は <code class="docutils literal"><span class="pre">3.2</span></code> のような Python のバージョン番号)。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last"><a class="reference internal" href="venv.html#venv-def"><span class="std std-ref">仮想環境</span></a> で起動されている場合、この値は <code class="docutils literal"><span class="pre">site.py</span></code> によって仮想環境を示すよう変更されます。実際の Python のインストール先は <a class="reference internal" href="#sys.base_exec_prefix" title="sys.base_exec_prefix"><code class="xref py py-data docutils literal"><span class="pre">base_exec_prefix</span></code></a> から取得できます。</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.executable">
+<code class="descclassname">sys.</code><code class="descname">executable</code><a class="headerlink" href="#sys.executable" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python インタプリタの実行ファイルの絶対パスを示す文字列です。このような名前が意味を持つシステムで利用可能です。Python が自身の実行ファイルの実際のパスを取得できない場合、<a class="reference internal" href="#sys.executable" title="sys.executable"><code class="xref py py-data docutils literal"><span class="pre">sys.executable</span></code></a> は空の文字列または <code class="docutils literal"><span class="pre">None</span></code> になります。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.exit">
+<code class="descclassname">sys.</code><code class="descname">exit</code><span class="sig-paren">(</span><span class="optional">[</span><em>arg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.exit" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python を終了します。 <a class="reference internal" href="constants.html#exit" title="exit"><code class="xref py py-func docutils literal"><span class="pre">exit()</span></code></a> は <a class="reference internal" href="exceptions.html#SystemExit" title="SystemExit"><code class="xref py py-exc docutils literal"><span class="pre">SystemExit</span></code></a> を送出するので、 <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a> ステートメントの <a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal"><span class="pre">finally</span></code></a> 節に終了処理を記述したり、上位レベルで例外を捕捉して exit 処理を中断したりすることができます。</p>
+<p>The optional argument <em>arg</em> can be an integer giving the exit status
+(defaulting to zero), or another type of object.  If it is an integer, zero
+is considered &#8220;successful termination&#8221; and any nonzero value is considered
+&#8220;abnormal termination&#8221; by shells and the like.  Most systems require it to be
+in the range 0&#8211;127, and produce undefined results otherwise.  Some systems
+have a convention for assigning specific meanings to specific exit codes, but
+these are generally underdeveloped; Unix programs generally use 2 for command
+line syntax errors and 1 for all other kind of errors.  If another type of
+object is passed, <code class="docutils literal"><span class="pre">None</span></code> is equivalent to passing zero, and any other
+object is printed to <a class="reference internal" href="#sys.stderr" title="sys.stderr"><code class="xref py py-data docutils literal"><span class="pre">stderr</span></code></a> and results in an exit code of 1.  In
+particular, <code class="docutils literal"><span class="pre">sys.exit(&quot;some</span> <span class="pre">error</span> <span class="pre">message&quot;)</span></code> is a quick way to exit a
+program when an error occurs.</p>
+<p>究極には、 <a class="reference internal" href="constants.html#exit" title="exit"><code class="xref py py-func docutils literal"><span class="pre">exit()</span></code></a> は例外を送出する &#8220;だけ&#8221; なので、これがメインスレッドから呼び出されたときは、プロセスを終了するだけで、例外は遮断されません。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>If an error occurs in the cleanup after the Python interpreter
+has caught <a class="reference internal" href="exceptions.html#SystemExit" title="SystemExit"><code class="xref py py-exc docutils literal"><span class="pre">SystemExit</span></code></a> (such as an error flushing buffered data
+in the standard streams), the exit status is changed to 120.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.flags">
+<code class="descclassname">sys.</code><code class="descname">flags</code><a class="headerlink" href="#sys.flags" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>コマンドラインフラグの状態を表す <a class="reference internal" href="../glossary.html#term-struct-sequence"><span class="xref std std-term">構造体シーケンス</span></a> です。各属性は読み込み専用になっています。</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">属性</p>
+</th>
+<th class="head"><p class="first last">フラグ</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">debug</span></code></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-d"><code class="xref std std-option docutils literal"><span class="pre">-d</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="inspect.html#module-inspect" title="inspect: Extract information and source code from live objects."><code class="xref py py-const docutils literal"><span class="pre">inspect</span></code></a></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-i"><code class="xref std std-option docutils literal"><span class="pre">-i</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">interactive</span></code></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-i"><code class="xref std std-option docutils literal"><span class="pre">-i</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">optimize</span></code></td>
+<td><p class="first last"><a class="reference internal" href="../using/cmdline.html#cmdoption-O"><code class="xref std std-option docutils literal"><span class="pre">-O</span></code></a> または <a class="reference internal" href="../using/cmdline.html#cmdoption-OO"><code class="xref std std-option docutils literal"><span class="pre">-OO</span></code></a></p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sys.dont_write_bytecode" title="sys.dont_write_bytecode"><code class="xref py py-const docutils literal"><span class="pre">dont_write_bytecode</span></code></a></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-B"><code class="xref std std-option docutils literal"><span class="pre">-B</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">no_user_site</span></code></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-s"><code class="xref std std-option docutils literal"><span class="pre">-s</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">no_site</span></code></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-S"><code class="xref std std-option docutils literal"><span class="pre">-S</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">ignore_environment</span></code></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-E"><code class="xref std std-option docutils literal"><span class="pre">-E</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">verbose</span></code></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-v"><code class="xref std std-option docutils literal"><span class="pre">-v</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">bytes_warning</span></code></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-b"><code class="xref std std-option docutils literal"><span class="pre">-b</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">quiet</span></code></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-q"><code class="xref std std-option docutils literal"><span class="pre">-q</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">hash_randomization</span></code></td>
+<td><a class="reference internal" href="../using/cmdline.html#cmdoption-R"><code class="xref std std-option docutils literal"><span class="pre">-R</span></code></a></td>
+</tr>
+</tbody>
+</table>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>新しい <a class="reference internal" href="../using/cmdline.html#cmdoption-q"><code class="xref std std-option docutils literal"><span class="pre">-q</span></code></a> 向けに <code class="docutils literal"><span class="pre">quiet</span></code> 属性が追加されました。</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2.3 で追加: </span><code class="docutils literal"><span class="pre">hash_randomization</span></code> 属性が追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>廃止済みの <code class="docutils literal"><span class="pre">division_warning</span></code> 属性を削除しました。</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.float_info">
+<code class="descclassname">sys.</code><code class="descname">float_info</code><a class="headerlink" href="#sys.float_info" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>float 型に関する情報を保持している <a class="reference internal" href="../glossary.html#term-struct-sequence"><span class="xref std std-term">構造体シーケンス</span></a> です。精度と内部表現に関する低レベル情報を含んでいます。これらの値は &#8216;C&#8217; 言語の標準ヘッダファイル <code class="file docutils literal"><span class="pre">float.h</span></code> で定義されている様々な浮動小数点定数に対応しています。詳細は 1999 ISO/IEC C standard <a class="reference internal" href="#c99" id="id1">[C99]</a> の 5.2.4.2.2 節 &#8216;Characteristics of floating types&#8217; を参照してください。</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="18%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">属性</p>
+</th>
+<th class="head"><p class="first last">float.h のマクロ</p>
+</th>
+<th class="head"><p class="first last">説明</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">epsilon</span></code></td>
+<td>DBL_EPSILON</td>
+<td><p class="first last">1と、その次の表現可能なfloat値の差</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">dig</span></code></td>
+<td>DBL_DIG</td>
+<td><p class="first last">浮動小数点数で正確に表示できる最大の10進数桁; 以下参照</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">mant_dig</span></code></td>
+<td>DBL_MANT_DIG</td>
+<td><p class="first last">浮動小数点精度: 浮動小数点数の主要部の桁 base-<code class="docutils literal"><span class="pre">radix</span></code></p>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="functions.html#max" title="max"><code class="xref py py-const docutils literal"><span class="pre">max</span></code></a></td>
+<td>DBL_MAX</td>
+<td><p class="first last">floatが表せる最大の(infiniteではない)値</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">max_exp</span></code></td>
+<td>DBL_MAX_EXP</td>
+<td><p class="first last">floatが <code class="docutils literal"><span class="pre">radix**(e-1)</span></code> で表現可能な、最大の整数 e</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">max_10_exp</span></code></td>
+<td>DBL_MAX_10_EXP</td>
+<td><p class="first last">float が <code class="docutils literal"><span class="pre">10**e</span></code> で表現可能な、最大の整数 e</p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="functions.html#min" title="min"><code class="xref py py-const docutils literal"><span class="pre">min</span></code></a></td>
+<td>DBL_MIN</td>
+<td><p class="first last">float が表現可能な最小の正の値</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">min_exp</span></code></td>
+<td>DBL_MIN_EXP</td>
+<td><p class="first last"><code class="docutils literal"><span class="pre">radix**(e-1)</span></code> が正規化floatであるような最小の整数 e</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">min_10_exp</span></code></td>
+<td>DBL_MIN_10_EXP</td>
+<td><p class="first last"><code class="docutils literal"><span class="pre">10**e</span></code> が正規化floatであるような最小の整数 e</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">radix</span></code></td>
+<td>FLT_RADIX</td>
+<td><p class="first last">指数部の基数</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">rounds</span></code></td>
+<td>FLT_ROUNDS</td>
+<td><p class="first last">算術演算で利用される丸めモードを表す整数定数。これはインタプリタ起動時のシステムの FLT_ROUNDS マクロの値を示します。取りうる値とその意味については、C99 標準の 5.2.4.2.2 節を参照してください。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><code class="xref py py-attr docutils literal"><span class="pre">sys.float_info.dig</span></code> に対してはさらに説明が必要です。もし、文字列 <code class="docutils literal"><span class="pre">s</span></code> が表す 10 進数の有効桁数が多くても <code class="xref py py-attr docutils literal"><span class="pre">sys.float_info.dig</span></code> の時には、 <code class="docutils literal"><span class="pre">s</span></code> を浮動小数点数に変換して戻すと同じ 10 進数を表す文字列に復元されます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">dig</span>
+<span class="go">15</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;3.14159265358979&#39;</span>    <span class="c1"># decimal string with 15 significant digits</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="s1">&#39;.15g&#39;</span><span class="p">)</span>  <span class="c1"># convert to float and back -&gt; same value</span>
+<span class="go">&#39;3.14159265358979&#39;</span>
+</pre></div>
+</div>
+<p>ただし、文字列が有効桁数 <code class="xref py py-attr docutils literal"><span class="pre">sys.float_info.dig</span></code> より大きい場合には、常に復元されるとは限りません:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;9876543211234567&#39;</span>    <span class="c1"># 16 significant digits is too many!</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="s1">&#39;.16g&#39;</span><span class="p">)</span>  <span class="c1"># conversion changes value</span>
+<span class="go">&#39;9876543211234568&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.float_repr_style">
+<code class="descclassname">sys.</code><code class="descname">float_repr_style</code><a class="headerlink" href="#sys.float_repr_style" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> 関数が浮動小数点数に対してどう振る舞うかを示す文字列です。この文字列が値 <code class="docutils literal"><span class="pre">'short'</span></code> を持てば、有限の浮動小数点数 <code class="docutils literal"><span class="pre">x</span></code> に対して、<code class="docutils literal"><span class="pre">repr(x)</span></code> は <code class="docutils literal"><span class="pre">float(repr(x))</span> <span class="pre">==</span> <span class="pre">x</span></code> を満たす短い文字列を返そうとします。これは、Python 3.1 以降での標準の振る舞いです。それ以外の場合、<code class="docutils literal"><span class="pre">float_repr_style</span></code> は値 <code class="docutils literal"><span class="pre">'legacy'</span></code> を持ち、<code class="docutils literal"><span class="pre">repr(x)</span></code> は 3.1 以前のバージョンの Python と同じように振る舞います。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.1 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getallocatedblocks">
+<code class="descclassname">sys.</code><code class="descname">getallocatedblocks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.getallocatedblocks" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return the number of memory blocks currently allocated by the interpreter,
+regardless of their size.  This function is mainly useful for tracking
+and debugging memory leaks.  Because of the interpreter&#8217;s internal
+caches, the result can vary from call to call; you may have to call
+<a class="reference internal" href="#sys._clear_type_cache" title="sys._clear_type_cache"><code class="xref py py-func docutils literal"><span class="pre">_clear_type_cache()</span></code></a> and <a class="reference internal" href="gc.html#gc.collect" title="gc.collect"><code class="xref py py-func docutils literal"><span class="pre">gc.collect()</span></code></a> to get more
+predictable results.</p>
+<p>If a Python build or implementation cannot reasonably compute this
+information, <a class="reference internal" href="#sys.getallocatedblocks" title="sys.getallocatedblocks"><code class="xref py py-func docutils literal"><span class="pre">getallocatedblocks()</span></code></a> is allowed to return 0 instead.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getcheckinterval">
+<code class="descclassname">sys.</code><code class="descname">getcheckinterval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.getcheckinterval" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インタプリタの &#8220;チェックインターバル (check interval)&#8221; を返します; <a class="reference internal" href="#sys.setcheckinterval" title="sys.setcheckinterval"><code class="xref py py-func docutils literal"><span class="pre">setcheckinterval()</span></code></a> を参照してください。</p>
+<div class="deprecated">
+<p><span class="versionmodified">バージョン 3.2 で撤廃: </span>代わりに <a class="reference internal" href="#sys.getswitchinterval" title="sys.getswitchinterval"><code class="xref py py-func docutils literal"><span class="pre">getswitchinterval()</span></code></a> を使ってください。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getdefaultencoding">
+<code class="descclassname">sys.</code><code class="descname">getdefaultencoding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.getdefaultencoding" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Unicode 実装で使用される現在のデフォルトエンコーディング名を返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getdlopenflags">
+<code class="descclassname">sys.</code><code class="descname">getdlopenflags</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.getdlopenflags" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return the current value of the flags that are used for
+<code class="xref c c-func docutils literal"><span class="pre">dlopen()</span></code> calls.  Symbolic names for the flag values can be
+found in the <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a> module (<code class="docutils literal"><span class="pre">RTLD_xxx</span></code> constants, e.g.
+<a class="reference internal" href="os.html#os.RTLD_LAZY" title="os.RTLD_LAZY"><code class="xref py py-data docutils literal"><span class="pre">os.RTLD_LAZY</span></code></a>).  Availability: Unix.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getfilesystemencoding">
+<code class="descclassname">sys.</code><code class="descname">getfilesystemencoding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.getfilesystemencoding" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return the name of the encoding used to convert between Unicode
+filenames and bytes filenames. For best compatibility, str should be
+used for filenames in all cases, although representing filenames as bytes
+is also supported. Functions accepting or returning filenames should support
+either str or bytes and internally convert to the system&#8217;s preferred
+representation.</p>
+<p>This encoding is always ASCII-compatible.</p>
+<p><a class="reference internal" href="os.html#os.fsencode" title="os.fsencode"><code class="xref py py-func docutils literal"><span class="pre">os.fsencode()</span></code></a> and <a class="reference internal" href="os.html#os.fsdecode" title="os.fsdecode"><code class="xref py py-func docutils literal"><span class="pre">os.fsdecode()</span></code></a> should be used to ensure that
+the correct encoding and errors mode are used.</p>
+<ul class="simple">
+<li><p class="first">Mac OS X では、エンコーディングは <code class="docutils literal"><span class="pre">'utf-8'</span></code> となります。</p>
+</li>
+<li>On Unix, the encoding is the locale encoding.</li>
+<li>On Windows, the encoding may be <code class="docutils literal"><span class="pre">'utf-8'</span></code> or <code class="docutils literal"><span class="pre">'mbcs'</span></code>, depending
+on user configuration.</li>
+</ul>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span><a class="reference internal" href="#sys.getfilesystemencoding" title="sys.getfilesystemencoding"><code class="xref py py-func docutils literal"><span class="pre">getfilesystemencoding()</span></code></a> の結果が <code class="docutils literal"><span class="pre">None</span></code> になることはなくなりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>Windows is no longer guaranteed to return <code class="docutils literal"><span class="pre">'mbcs'</span></code>. See <span class="target" id="index-3"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0529"><strong>PEP 529</strong></a>
+and <a class="reference internal" href="#sys._enablelegacywindowsfsencoding" title="sys._enablelegacywindowsfsencoding"><code class="xref py py-func docutils literal"><span class="pre">_enablelegacywindowsfsencoding()</span></code></a> for more information.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getfilesystemencodeerrors">
+<code class="descclassname">sys.</code><code class="descname">getfilesystemencodeerrors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.getfilesystemencodeerrors" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return the name of the error mode used to convert between Unicode filenames
+and bytes filenames. The encoding name is returned from
+<a class="reference internal" href="#sys.getfilesystemencoding" title="sys.getfilesystemencoding"><code class="xref py py-func docutils literal"><span class="pre">getfilesystemencoding()</span></code></a>.</p>
+<p><a class="reference internal" href="os.html#os.fsencode" title="os.fsencode"><code class="xref py py-func docutils literal"><span class="pre">os.fsencode()</span></code></a> and <a class="reference internal" href="os.html#os.fsdecode" title="os.fsdecode"><code class="xref py py-func docutils literal"><span class="pre">os.fsdecode()</span></code></a> should be used to ensure that
+the correct encoding and errors mode are used.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getrefcount">
+<code class="descclassname">sys.</code><code class="descname">getrefcount</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.getrefcount" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>object</em> の参照数を返します。 <em>object</em> は (一時的に) <a class="reference internal" href="#sys.getrefcount" title="sys.getrefcount"><code class="xref py py-func docutils literal"><span class="pre">getrefcount()</span></code></a> からも参照されるため、参照数は予想される数よりも 1 多くなります。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getrecursionlimit">
+<code class="descclassname">sys.</code><code class="descname">getrecursionlimit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.getrecursionlimit" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在の最大再帰数を返します。最大再帰数は、Python インタプリタスタックの最大の深さです。この制限は Python プログラムが無限に再帰し、C スタックがオーバーフローしてクラッシュすることを防止するために設けられています。この値は <a class="reference internal" href="#sys.setrecursionlimit" title="sys.setrecursionlimit"><code class="xref py py-func docutils literal"><span class="pre">setrecursionlimit()</span></code></a> で指定することができます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getsizeof">
+<code class="descclassname">sys.</code><code class="descname">getsizeof</code><span class="sig-paren">(</span><em>object</em><span class="optional">[</span>, <em>default</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.getsizeof" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>object</em> のサイズをバイト数で返します。<em>object</em> は任意の型のオブジェクトです。すべての組み込みオブジェクトは正しい値を返します。サードパーティー製の型については実装依存になります。</p>
+<p>オブジェクトに直接起因するメモリ消費のみを表し、参照するオブジェクトは含みません。</p>
+<p>オブジェクトがサイズを取得する手段を提供していない時は <em>default</em> が返されます。<em>default</em> が指定されていない場合は <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> が送出されます。</p>
+<p><a class="reference internal" href="#sys.getsizeof" title="sys.getsizeof"><code class="xref py py-func docutils literal"><span class="pre">getsizeof()</span></code></a> は <em>object</em> の <code class="docutils literal"><span class="pre">__sizeof__</span></code> メソッドを呼び出し、そのオブジェクトがガベージコレクタに管理されていた場合はガベージコレクタのオーバーヘッドを増やします。</p>
+<p>See <a class="reference external" href="https://code.activestate.com/recipes/577504">recursive sizeof recipe</a>
+for an example of using <a class="reference internal" href="#sys.getsizeof" title="sys.getsizeof"><code class="xref py py-func docutils literal"><span class="pre">getsizeof()</span></code></a> recursively to find the size of
+containers and all their contents.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getswitchinterval">
+<code class="descclassname">sys.</code><code class="descname">getswitchinterval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.getswitchinterval" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インタプリタの &#8220;スレッド切り替え間隔&#8221; を返します。<a class="reference internal" href="#sys.setswitchinterval" title="sys.setswitchinterval"><code class="xref py py-func docutils literal"><span class="pre">setswitchinterval()</span></code></a> を参照してください。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys._getframe">
+<code class="descclassname">sys.</code><code class="descname">_getframe</code><span class="sig-paren">(</span><span class="optional">[</span><em>depth</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#sys._getframe" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>コールスタックからフレームオブジェクトを返します。オプション引数 <em>depth</em> を指定すると、スタックのトップから <em>depth</em> だけ下のフレームオブジェクトを取得します。 <em>depth</em> がコールスタックよりも深ければ、 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> が発生します。 <em>depth</em> のデフォルト値は 0 で、この場合はコールスタックのトップのフレームを返します。</p>
+<div class="impl-detail compound">
+<p><strong>CPython 実装の詳細:</strong> この関数は、内部的かつ特殊な目的にのみ利用されるべきです。全ての Python 実装で存在することが保証されているわけではありません。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getprofile">
+<code class="descclassname">sys.</code><code class="descname">getprofile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.getprofile" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-4"><a class="reference internal" href="#sys.setprofile" title="sys.setprofile"><code class="xref py py-func docutils literal"><span class="pre">setprofile()</span></code></a> 関数で設定したプロファイラ関数を取得します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.gettrace">
+<code class="descclassname">sys.</code><code class="descname">gettrace</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.gettrace" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-5"><a class="reference internal" href="#sys.settrace" title="sys.settrace"><code class="xref py py-func docutils literal"><span class="pre">settrace()</span></code></a> 関数で設定したトレース関数を取得します。</p>
+<div class="impl-detail compound">
+<p><strong>CPython 実装の詳細:</strong> <a class="reference internal" href="#sys.gettrace" title="sys.gettrace"><code class="xref py py-func docutils literal"><span class="pre">gettrace()</span></code></a> 関数は、デバッガ、プロファイラ、カバレッジツールなどの実装に使うことのみを想定しています。この関数の振る舞いは言語定義ではなく実装プラットフォームの一部です。そのため、他の Python 実装では利用できないかもしれません。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.getwindowsversion">
+<code class="descclassname">sys.</code><code class="descname">getwindowsversion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.getwindowsversion" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return a named tuple describing the Windows version
+currently running.  The named elements are <em>major</em>, <em>minor</em>,
+<em>build</em>, <em>platform</em>, <em>service_pack</em>, <em>service_pack_minor</em>,
+<em>service_pack_major</em>, <em>suite_mask</em>, <em>product_type</em> and
+<em>platform_version</em>. <em>service_pack</em> contains a string,
+<em>platform_version</em> a 3-tuple and all other values are
+integers. The components can also be accessed by name, so
+<code class="docutils literal"><span class="pre">sys.getwindowsversion()[0]</span></code> is equivalent to
+<code class="docutils literal"><span class="pre">sys.getwindowsversion().major</span></code>. For compatibility with prior
+versions, only the first 5 elements are retrievable by indexing.</p>
+<p><em>platform</em> will be <code class="xref py py-const docutils literal"><span class="pre">2</span> <span class="pre">(VER_PLATFORM_WIN32_NT)</span></code>.</p>
+<p><em>product_type</em> は、以下の値のいずれかになります。:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="54%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">定数</p>
+</th>
+<th class="head"><p class="first last">意味</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">1</span> <span class="pre">(VER_NT_WORKSTATION)</span></code></td>
+<td><p class="first last">システムはワークステーションです。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">2</span> <span class="pre">(VER_NT_DOMAIN_CONTROLLER)</span></code></td>
+<td><p class="first last">システムはドメインコントローラです。</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">3</span> <span class="pre">(VER_NT_SERVER)</span></code></td>
+<td><p class="first last">システムはサーバですが、ドメインコントローラではありません。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>この関数は、Win32 <code class="xref c c-func docutils literal"><span class="pre">GetVersionEx()</span></code> 関数を呼び出します。これらのフィールドに関する詳細は <code class="xref c c-func docutils literal"><span class="pre">OSVERSIONINFOEX()</span></code> についてのマイクロソフトのドキュメントを参照してください。</p>
+<p><em>platform_version</em> returns the accurate major version, minor version and
+build number of the current operating system, rather than the version that
+is being emulated for the process. It is intended for use in logging rather
+than for feature detection.</p>
+<p>利用できる環境 : Windows.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>名前付きタプルに変更され、 <em>service_pack_minor</em>, <em>service_pack_major</em>, <em>suite_mask</em>, および <em>product_type</em> が追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>Added <em>platform_version</em></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.get_asyncgen_hooks">
+<code class="descclassname">sys.</code><code class="descname">get_asyncgen_hooks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.get_asyncgen_hooks" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Returns an <em>asyncgen_hooks</em> object, which is similar to a
+<a class="reference internal" href="collections.html#collections.namedtuple" title="collections.namedtuple"><code class="xref py py-class docutils literal"><span class="pre">namedtuple</span></code></a> of the form <cite>(firstiter, finalizer)</cite>,
+where <em>firstiter</em> and <em>finalizer</em> are expected to be either <code class="docutils literal"><span class="pre">None</span></code> or
+functions which take an <a class="reference internal" href="../glossary.html#term-asynchronous-generator-iterator"><span class="xref std std-term">asynchronous generator iterator</span></a> as an
+argument, and are used to schedule finalization of an asychronous
+generator by an event loop.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加: </span>See <span class="target" id="index-6"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0525"><strong>PEP 525</strong></a> for more details.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">This function has been added on a provisional basis (see <span class="target" id="index-7"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0411"><strong>PEP 411</strong></a>
+for details.)</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.get_coroutine_wrapper">
+<code class="descclassname">sys.</code><code class="descname">get_coroutine_wrapper</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.get_coroutine_wrapper" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Returns <code class="docutils literal"><span class="pre">None</span></code>, or a wrapper set by <a class="reference internal" href="#sys.set_coroutine_wrapper" title="sys.set_coroutine_wrapper"><code class="xref py py-func docutils literal"><span class="pre">set_coroutine_wrapper()</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加: </span>See <span class="target" id="index-8"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0492"><strong>PEP 492</strong></a> for more details.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">This function has been added on a provisional basis (see <span class="target" id="index-9"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0411"><strong>PEP 411</strong></a>
+for details.)  Use it only for debugging purposes.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.hash_info">
+<code class="descclassname">sys.</code><code class="descname">hash_info</code><a class="headerlink" href="#sys.hash_info" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>数値のハッシュ実装のパラメータを与える <a class="reference internal" href="../glossary.html#term-struct-sequence"><span class="xref std std-term">構造体シーケンス</span></a> です。数値型のハッシュ化についての詳細は <a class="reference internal" href="stdtypes.html#numeric-hash"><span class="std std-ref">数値型のハッシュ化</span></a> を参照してください。</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">属性</p>
+</th>
+<th class="head"><p class="first last">説明</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">width</span></code></td>
+<td><p class="first last">ハッシュ値に利用されるビット幅</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">modulus</span></code></td>
+<td><p class="first last">数値ハッシュ計算に利用される素数の法</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">inf</span></code></td>
+<td><p class="first last">正の無限大に対して返されるハッシュ値</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">nan</span></code></td>
+<td><p class="first last">nan に対して返されるハッシュ値</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">imag</span></code></td>
+<td><p class="first last">複素数の虚部を表すための乗数</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">algorithm</span></code></td>
+<td><p class="first last"><a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>、<a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a>、<a class="reference internal" href="stdtypes.html#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> オブジェクトのハッシュアルゴリズムの名前</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">hash_bits</span></code></td>
+<td><p class="first last">ハッシュアルゴリズムの内部出力サイズ</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">seed_bits</span></code></td>
+<td><p class="first last">ハッシュアルゴリズムのシードキーのサイズ</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span><em>algorithm</em>、<em>hash_bits</em>、<em>seed_bits</em> を追加</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.hexversion">
+<code class="descclassname">sys.</code><code class="descname">hexversion</code><a class="headerlink" href="#sys.hexversion" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>単精度整数にエンコードされたバージョン番号。この値は新バージョン(正規リリース以外であっても)ごとにかならず増加します。例えば、Python 1.5.2 以降でのみ動作するプログラムでは、以下のようなチェックを行います。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">hexversion</span> <span class="o">&gt;=</span> <span class="mh">0x010502F0</span><span class="p">:</span>
+    <span class="c1"># use some advanced feature</span>
+    <span class="o">...</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># use an alternative implementation or warn the user</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">hexversion</span></code> は <a class="reference internal" href="functions.html#hex" title="hex"><code class="xref py py-func docutils literal"><span class="pre">hex()</span></code></a> 関数を使って 16 進数に変換しなければ値の意味を持ちません。より読みやすいバージョン番号が必要な場合には <a class="reference internal" href="../glossary.html#term-struct-sequence"><span class="xref std std-term">構造体シーケンス</span></a> <a class="reference internal" href="#sys.version_info" title="sys.version_info"><code class="xref py py-data docutils literal"><span class="pre">sys.version_info</span></code></a> を使用してください。</p>
+<p>More details of <code class="docutils literal"><span class="pre">hexversion</span></code> can be found at <a class="reference internal" href="../c-api/apiabiversion.html#apiabiversion"><span class="std std-ref">API と ABI のバージョニング</span></a>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.implementation">
+<code class="descclassname">sys.</code><code class="descname">implementation</code><a class="headerlink" href="#sys.implementation" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在起動している Python インタプリタに関する情報が格納されたオブジェクトです。すべての Python 実装において、以下の属性が存在することが要求されています。</p>
+<p><em>name</em> は実装の識別子です (例: <code class="docutils literal"><span class="pre">'cpython'</span></code>)。実際の文字列は Python 実装によって定義されますが、小文字であることが保証されています。</p>
+<p><em>version</em> は <a class="reference internal" href="#sys.version_info" title="sys.version_info"><code class="xref py py-data docutils literal"><span class="pre">sys.version_info</span></code></a> と同じ形式の、Python <em>実装</em> のバージョンを表す名前付きタプルです。これは現在起動しているインタプリタ固有のバージョンを意味します。<code class="docutils literal"><span class="pre">sys.version_info</span></code> は Python <a href="#id1"><span class="problematic" id="id2">*</span></a>言語*のバージョンであり、これはそのバージョンに準拠した*実装*のバージョンです。例えば、PyPy 1.8 の <code class="docutils literal"><span class="pre">sys.implementation.version</span></code> は <code class="docutils literal"><span class="pre">sys.version_info(1,</span> <span class="pre">8,</span> <span class="pre">0,</span> <span class="pre">'final',</span> <span class="pre">0)</span></code> になるのに対し、<code class="docutils literal"><span class="pre">sys.version_info</span></code> は <code class="docutils literal"><span class="pre">sys.version_info(2,</span> <span class="pre">7,</span> <span class="pre">2,</span> <span class="pre">'final',</span> <span class="pre">0)</span></code> になります。CPython は、それがリファレンス実装であるため、両者は同じ値になります。</p>
+<p><em>hexversion</em> は <a class="reference internal" href="#sys.hexversion" title="sys.hexversion"><code class="xref py py-data docutils literal"><span class="pre">sys.hexversion</span></code></a> と同形式の、16 進数での実装のバージョンです。</p>
+<p><em>cache_tag</em> は、キャッシュされたモジュールのファイル名に使用されるタグです。慣例により、これは実装名とバージョンを組み合わせた文字列になります (例: <code class="docutils literal"><span class="pre">'cpython-33'</span></code>) が、Python 実装はその他の適切な値を使う場合があります。<code class="docutils literal"><span class="pre">cache_tag</span></code> に <code class="docutils literal"><span class="pre">None</span></code> が設定された場合、モジュールのキャッシングが無効になっていることを示します。</p>
+<p><a class="reference internal" href="#sys.implementation" title="sys.implementation"><code class="xref py py-data docutils literal"><span class="pre">sys.implementation</span></code></a> may contain additional attributes specific to
+the Python implementation.  These non-standard attributes must start with
+an underscore, and are not described here.  Regardless of its contents,
+<a class="reference internal" href="#sys.implementation" title="sys.implementation"><code class="xref py py-data docutils literal"><span class="pre">sys.implementation</span></code></a> will not change during a run of the interpreter,
+nor between implementation versions.  (It may change between Python
+language versions, however.)  See <span class="target" id="index-10"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0421"><strong>PEP 421</strong></a> for more information.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.int_info">
+<code class="descclassname">sys.</code><code class="descname">int_info</code><a class="headerlink" href="#sys.int_info" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python における整数の内部表現に関する情報を保持する、<a class="reference internal" href="../glossary.html#term-struct-sequence"><span class="xref std std-term">構造体シーケンス</span></a> です。この属性は読み込み専用です。</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">属性</p>
+</th>
+<th class="head"><p class="first last">説明</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">bits_per_digit</span></code></td>
+<td><p class="first last">各桁に保持されるビットの数です。Python の整数は、内部的に <code class="docutils literal"><span class="pre">2**int_info.bits_per_digit</span></code> を基数として保存されます</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">sizeof_digit</span></code></td>
+<td><p class="first last">桁を表すために使われる、C 型の大きさ (バイト) です</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.1 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.__interactivehook__">
+<code class="descclassname">sys.</code><code class="descname">__interactivehook__</code><a class="headerlink" href="#sys.__interactivehook__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この属性が存在する場合、インタープリタが <a class="reference internal" href="../tutorial/interpreter.html#tut-interactive"><span class="std std-ref">対話モード</span></a> で起動したときに値は (引数なしで) 自動的に呼ばれます。これは <span class="target" id="index-38"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONSTARTUP"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONSTARTUP</span></code></a> ファイルの読み込み後に行われるため、それにこのフックを設定することが出来ます。<a class="reference internal" href="site.html#module-site" title="site: Module responsible for site-specific configuration."><code class="xref py py-mod docutils literal"><span class="pre">site</span></code></a> モジュールで <a class="reference internal" href="site.html#rlcompleter-config"><span class="std std-ref">設定します</span></a>。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.intern">
+<code class="descclassname">sys.</code><code class="descname">intern</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.intern" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>string</em> を &#8220;隔離&#8221; された文字列のテーブルに入力し、隔離された文字列を返します &#8211; この文字列は <em>string</em> 自体かコピーです。隔離された文字列は辞書検索のパフォーマンスを少しだけ向上させるのに有効です &#8211; 辞書中のキーが隔離されており、検索するキーが隔離されている場合、(ハッシュ化後の) キーの比較は文字列の比較ではなくポインタの比較で行うことができるからです。通常、Python プログラム内で利用されている名前は自動的に隔離され、モジュール、クラス、またはインスタンス属性を保持するための辞書は隔離されたキーを持っています。</p>
+<p>隔離された文字列はイモータルではありません。その恩恵を受けるためには <a class="reference internal" href="#sys.intern" title="sys.intern"><code class="xref py py-func docutils literal"><span class="pre">intern()</span></code></a> の返り値への参照を維持しなくてはなりません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.is_finalizing">
+<code class="descclassname">sys.</code><code class="descname">is_finalizing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys.is_finalizing" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-const docutils literal"><span class="pre">True</span></code></a> if the Python interpreter is
+<a class="reference internal" href="../glossary.html#term-interpreter-shutdown"><span class="xref std std-term">shutting down</span></a>, <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal"><span class="pre">False</span></code></a> otherwise.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.last_type">
+<code class="descclassname">sys.</code><code class="descname">last_type</code><a class="headerlink" href="#sys.last_type" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="sys.last_value">
+<code class="descclassname">sys.</code><code class="descname">last_value</code><a class="headerlink" href="#sys.last_value" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="sys.last_traceback">
+<code class="descclassname">sys.</code><code class="descname">last_traceback</code><a class="headerlink" href="#sys.last_traceback" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>通常は定義されておらず、捕捉されない例外が発生してインタプリタがエラーメッセージとトレースバックを出力した場合にのみ設定されます。この値は、対話セッション中にエラーが発生した時、デバッグモジュールをロード (例: <code class="docutils literal"><span class="pre">import</span> <span class="pre">pdb;</span> <span class="pre">pdb.pm()</span></code> など。詳細は <a class="reference internal" href="pdb.html#module-pdb" title="pdb: The Python debugger for interactive interpreters."><code class="xref py py-mod docutils literal"><span class="pre">pdb</span></code></a> モジュールを参照) して発生したエラーを調査する場合に利用します。デバッガをロードすると、プログラムを再実行せずに情報を取得することができます</p>
+<p>変数の意味は、上記 <a class="reference internal" href="#sys.exc_info" title="sys.exc_info"><code class="xref py py-func docutils literal"><span class="pre">exc_info()</span></code></a> の返り値と同じです。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.maxsize">
+<code class="descclassname">sys.</code><code class="descname">maxsize</code><a class="headerlink" href="#sys.maxsize" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref c c-type docutils literal"><span class="pre">Py_ssize_t</span></code> 型の変数が取りうる最大値を示す整数です。通常、32 ビットプラットフォームでは <code class="docutils literal"><span class="pre">2**31</span> <span class="pre">-</span> <span class="pre">1</span></code>、64 ビットプラットフォームでは <code class="docutils literal"><span class="pre">2**63</span> <span class="pre">-</span> <span class="pre">1</span></code> になります。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.maxunicode">
+<code class="descclassname">sys.</code><code class="descname">maxunicode</code><a class="headerlink" href="#sys.maxunicode" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Unicode コードポイントの最大値を示す整数、すなわち <code class="docutils literal"><span class="pre">1114111</span></code> (16 進数で <code class="docutils literal"><span class="pre">0x10FFFF</span></code>) です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span><span class="target" id="index-39"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0393"><strong>PEP 393</strong></a> 以前は、オプション設定にUnicode文字の保存形式がUCS-2とUCS-4のどちらを指定したかによって、 <code class="docutils literal"><span class="pre">sys.maxunicode</span></code> の値は <code class="docutils literal"><span class="pre">0xFFFF</span></code> が <code class="docutils literal"><span class="pre">0x10FFFF</span></code> になっていました。</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.meta_path">
+<code class="descclassname">sys.</code><code class="descname">meta_path</code><a class="headerlink" href="#sys.meta_path" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>A list of <a class="reference internal" href="../glossary.html#term-meta-path-finder"><span class="xref std std-term">meta path finder</span></a> objects that have their
+<a class="reference internal" href="importlib.html#importlib.abc.MetaPathFinder.find_spec" title="importlib.abc.MetaPathFinder.find_spec"><code class="xref py py-meth docutils literal"><span class="pre">find_spec()</span></code></a> methods called to see if one
+of the objects can find the module to be imported. The
+<a class="reference internal" href="importlib.html#importlib.abc.MetaPathFinder.find_spec" title="importlib.abc.MetaPathFinder.find_spec"><code class="xref py py-meth docutils literal"><span class="pre">find_spec()</span></code></a> method is called with at
+least the absolute name of the module being imported. If the module to be
+imported is contained in a package, then the parent package&#8217;s <a class="reference internal" href="../reference/import.html#__path__" title="__path__"><code class="xref py py-attr docutils literal"><span class="pre">__path__</span></code></a>
+attribute is passed in as a second argument. The method returns a
+<a class="reference internal" href="../glossary.html#term-module-spec"><span class="xref std std-term">module spec</span></a>, or <code class="docutils literal"><span class="pre">None</span></code> if the module cannot be found.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="importlib.html#importlib.abc.MetaPathFinder" title="importlib.abc.MetaPathFinder"><code class="xref py py-class docutils literal"><span class="pre">importlib.abc.MetaPathFinder</span></code></a></dt>
+<dd>The abstract base class defining the interface of finder objects on
+<a class="reference internal" href="#sys.meta_path" title="sys.meta_path"><code class="xref py py-data docutils literal"><span class="pre">meta_path</span></code></a>.</dd>
+<dt><a class="reference internal" href="importlib.html#importlib.machinery.ModuleSpec" title="importlib.machinery.ModuleSpec"><code class="xref py py-class docutils literal"><span class="pre">importlib.machinery.ModuleSpec</span></code></a></dt>
+<dd>The concrete class which
+<a class="reference internal" href="importlib.html#importlib.abc.MetaPathFinder.find_spec" title="importlib.abc.MetaPathFinder.find_spec"><code class="xref py py-meth docutils literal"><span class="pre">find_spec()</span></code></a> should return
+instances of.</dd>
+</dl>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span><a class="reference internal" href="../glossary.html#term-module-spec"><span class="xref std std-term">Module specs</span></a> were introduced in Python 3.4, by
+<span class="target" id="index-13"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0451"><strong>PEP 451</strong></a>. Earlier versions of Python looked for a method called
+<a class="reference internal" href="importlib.html#importlib.abc.MetaPathFinder.find_module" title="importlib.abc.MetaPathFinder.find_module"><code class="xref py py-meth docutils literal"><span class="pre">find_module()</span></code></a>.
+This is still called as a fallback if a <a class="reference internal" href="#sys.meta_path" title="sys.meta_path"><code class="xref py py-data docutils literal"><span class="pre">meta_path</span></code></a> entry doesn&#8217;t
+have a <a class="reference internal" href="importlib.html#importlib.abc.MetaPathFinder.find_spec" title="importlib.abc.MetaPathFinder.find_spec"><code class="xref py py-meth docutils literal"><span class="pre">find_spec()</span></code></a> method.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.modules">
+<code class="descclassname">sys.</code><code class="descname">modules</code><a class="headerlink" href="#sys.modules" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>既に読み込まれているモジュールとモジュール名がマップされている辞書です。これを使用してモジュールの強制再読み込みやその他のトリック操作が行えます。ただし、この辞書の置き換えは想定された操作ではなく、必要不可欠なアイテムを削除することで Python が異常終了してしまうかもしれません。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.path">
+<code class="descclassname">sys.</code><code class="descname">path</code><a class="headerlink" href="#sys.path" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-14">モジュールを検索するパスを示す文字列のリスト。 <span class="target" id="index-40"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONPATH"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></code></a> 環境変数と、インストール時に指定したデフォルトパスで初期化されます。</p>
+<p>起動時に初期化された後、リストの先頭 (<code class="docutils literal"><span class="pre">path[0]</span></code>) には Python インタプリタを起動したスクリプトのあるディレクトリが挿入されます。スクリプトのディレクトリがない (インタプリタが対話セッションで起動された時や、スクリプトを標準入力から読み込んだ場合など) 場合、 <code class="docutils literal"><span class="pre">path[0]</span></code> は空文字列となり、Python はカレントディレクトリからモジュールの検索を開始します。スクリプトディレクトリは、 <span class="target" id="index-41"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONPATH"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></code></a> で指定したディレクトリの <em>前</em> に挿入されますので注意が必要です。</p>
+<p>プログラムはその目的のために、このリストを自由に修正できます。文字列とバイト列だけが <a class="reference internal" href="#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> に追加でき、 ほかの全てのデータ型はインポート中に無視されます。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><a class="reference internal" href="site.html#module-site" title="site: Module responsible for site-specific configuration."><code class="xref py py-mod docutils literal"><span class="pre">site</span></code></a> モジュールのドキュメントで、 .pth ファイルを使って <a class="reference internal" href="#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> を拡張する方法を解説しています。</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.path_hooks">
+<code class="descclassname">sys.</code><code class="descname">path_hooks</code><a class="headerlink" href="#sys.path_hooks" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>path を引数にとって、その path に対する <a class="reference internal" href="../glossary.html#term-finder"><span class="xref std std-term">finder</span></a> の作成を試みる呼び出し可能オブジェクトのリスト。 finder の作成に成功したら、その呼出可能オブジェクトのは finder を返します。失敗した場合は、 <a class="reference internal" href="exceptions.html#ImportError" title="ImportError"><code class="xref py py-exc docutils literal"><span class="pre">ImportError</span></code></a> を発生させます。</p>
+<p>オリジナルの仕様は <span class="target" id="index-42"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0302"><strong>PEP 302</strong></a> を参照してください。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.path_importer_cache">
+<code class="descclassname">sys.</code><code class="descname">path_importer_cache</code><a class="headerlink" href="#sys.path_importer_cache" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="../glossary.html#term-finder"><span class="xref std std-term">finder</span></a> オブジェクトのキャッシュ機能を果たす辞書です。キーは <a class="reference internal" href="#sys.path_hooks" title="sys.path_hooks"><code class="xref py py-data docutils literal"><span class="pre">sys.path_hooks</span></code></a> に渡されているパスで、値は見つかった finder になります。パスが正常なファイルシステムパスであり、finder が <a class="reference internal" href="#sys.path_hooks" title="sys.path_hooks"><code class="xref py py-data docutils literal"><span class="pre">sys.path_hooks</span></code></a> 上に見つからない場合は <code class="docutils literal"><span class="pre">None</span></code> が格納されます。</p>
+<p>オリジナルの仕様は <span class="target" id="index-43"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0302"><strong>PEP 302</strong></a> を参照してください。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>finder が見つからない時、<a class="reference internal" href="imp.html#imp.NullImporter" title="imp.NullImporter"><code class="xref py py-class docutils literal"><span class="pre">imp.NullImporter</span></code></a> ではなく <code class="docutils literal"><span class="pre">None</span></code> が格納されるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.platform">
+<code class="descclassname">sys.</code><code class="descname">platform</code><a class="headerlink" href="#sys.platform" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プラットフォームを識別する文字列で、<a class="reference internal" href="#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> にプラットフォーム固有のサブディレクトリを追加する場合などに利用します。</p>
+<p>Linux を除く Unix システムでは、<code class="docutils literal"><span class="pre">uname</span> <span class="pre">-s</span></code> が返す小文字の OS 名に <code class="docutils literal"><span class="pre">uname</span> <span class="pre">-r</span></code> が返すバージョン名の先頭を追加したものになります (例: <code class="docutils literal"><span class="pre">'sunos5'</span></code>、<code class="docutils literal"><span class="pre">'freebsd8'</span></code>)。この値は <em>Python がビルドされた時点のもの</em> です。システム固有のバージョンをテストする場合を除き、以下のような用法で使うことを推奨します:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;freebsd&#39;</span><span class="p">):</span>
+    <span class="c1"># FreeBSD-specific code here...</span>
+<span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;linux&#39;</span><span class="p">):</span>
+    <span class="c1"># Linux-specific code here...</span>
+</pre></div>
+</div>
+<p>その他のシステムでは以下の値になります:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="63%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">システム</p>
+</th>
+<th class="head"><p class="first last"><code class="docutils literal"><span class="pre">platform</span></code> の値</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Linux</td>
+<td><code class="docutils literal"><span class="pre">'linux'</span></code></td>
+</tr>
+<tr class="row-odd"><td>Windows</td>
+<td><code class="docutils literal"><span class="pre">'win32'</span></code></td>
+</tr>
+<tr class="row-even"><td>Windows/Cygwin</td>
+<td><code class="docutils literal"><span class="pre">'cygwin'</span></code></td>
+</tr>
+<tr class="row-odd"><td>Mac OS X</td>
+<td><code class="docutils literal"><span class="pre">'darwin'</span></code></td>
+</tr>
+</tbody>
+</table>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>Linuxでは、 <a class="reference internal" href="#sys.platform" title="sys.platform"><code class="xref py py-attr docutils literal"><span class="pre">sys.platform</span></code></a> はもはやメジャーバージョン番号を含みません。 <code class="docutils literal"><span class="pre">'linux2'</span></code> や <code class="docutils literal"><span class="pre">'linux3'</span></code> の代わりに <code class="docutils literal"><span class="pre">'linux'</span></code> が格納されます。 古いPythonではこの変数はバージョン番号を含むため、前述した <code class="docutils literal"><span class="pre">startswith</span></code> イディオムを使用することをお勧めします。</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p><a class="reference internal" href="os.html#os.name" title="os.name"><code class="xref py py-attr docutils literal"><span class="pre">os.name</span></code></a> が持つ情報はおおざっぱな括りであり、<a class="reference internal" href="os.html#os.uname" title="os.uname"><code class="xref py py-func docutils literal"><span class="pre">os.uname()</span></code></a> はシステムに依存したバージョン情報になります。</p>
+<p class="last"><a class="reference internal" href="platform.html#module-platform" title="platform: Retrieves as much platform identifying data as possible."><code class="xref py py-mod docutils literal"><span class="pre">platform</span></code></a> モジュールはシステムの詳細な識別情報をチェックする機能を提供しています。</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.prefix">
+<code class="descclassname">sys.</code><code class="descname">prefix</code><a class="headerlink" href="#sys.prefix" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python のプラットフォーム非依存なファイルがインストールされているディレクトリの接頭辞を示す文字列です。この値はサイト固有であり、デフォルトでは <code class="docutils literal"><span class="pre">'/usr/local'</span></code> ですが、ビルド時に <strong class="program">configure</strong> スクリプトの <code class="docutils literal"><span class="pre">--prefix</span></code> 引数で指定する事ができます。Python ライブラリの主要部分は <code class="file docutils literal"><em><span class="pre">prefix</span></em><span class="pre">/lib/python</span><em><span class="pre">X.Y</span></em></code> にインストールされ、プラットフォーム非依存なヘッダファイル (<code class="file docutils literal"><span class="pre">pyconfig.h</span></code> 以外すべて) は <code class="file docutils literal"><em><span class="pre">prefix</span></em><span class="pre">/include/python</span><em><span class="pre">X.Y</span></em></code> に格納されます (<em>X.Y</em> は <code class="docutils literal"><span class="pre">3.2</span></code> のような Python のバージョン番号)。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last"><a class="reference internal" href="venv.html#venv-def"><span class="std std-ref">仮想環境</span></a> で起動されている場合、この値は <code class="docutils literal"><span class="pre">site.py</span></code> によって仮想環境を示すよう変更されます。実際の Python のインストール先は <a class="reference internal" href="#sys.base_prefix" title="sys.base_prefix"><code class="xref py py-data docutils literal"><span class="pre">base_prefix</span></code></a> から取得できます。</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.ps1">
+<code class="descclassname">sys.</code><code class="descname">ps1</code><a class="headerlink" href="#sys.ps1" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="sys.ps2">
+<code class="descclassname">sys.</code><code class="descname">ps2</code><a class="headerlink" href="#sys.ps2" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-19">インタプリタの一次プロンプト、二次プロンプトを指定する文字列。対話モードで実行中のみ定義され、初期値は <code class="docutils literal"><span class="pre">'&gt;&gt;&gt;</span> <span class="pre">'</span></code> と <code class="docutils literal"><span class="pre">'...</span> <span class="pre">'</span></code> です。文字列以外のオブジェクトを指定した場合、インタプリタが対話コマンドを読み込むごとにオブジェクトの <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> を評価します。この機能は、動的に変化するプロンプトを実装する場合に利用します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.setcheckinterval">
+<code class="descclassname">sys.</code><code class="descname">setcheckinterval</code><span class="sig-paren">(</span><em>interval</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.setcheckinterval" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インタプリタの &#8220;チェック間隔&#8221; を示す整数値を指定します。この値はスレッドスイッチやシグナルハンドラのチェックを行う周期を決定します。デフォルト値は <code class="docutils literal"><span class="pre">100</span></code> で、この場合 100 の Python 仮想命令を実行するとチェックを行います。この値を大きくすればスレッドを利用するプログラムのパフォーマンスが向上します。この値が 0 <code class="docutils literal"><span class="pre">以下</span></code> の場合、各仮想命令を実行するたびにチェックを行い、レスポンス速度が最大になりますがオーバヘッドもまた最大となります。</p>
+<div class="deprecated">
+<p><span class="versionmodified">バージョン 3.2 で撤廃: </span>スレッドスイッチングと非同期タスクの内部ロジックが変更されたため、この関数はもはや効果がありません 。代わりに <a class="reference internal" href="#sys.setswitchinterval" title="sys.setswitchinterval"><code class="xref py py-func docutils literal"><span class="pre">setswitchinterval()</span></code></a> を使用してください。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.setdlopenflags">
+<code class="descclassname">sys.</code><code class="descname">setdlopenflags</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.setdlopenflags" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Set the flags used by the interpreter for <code class="xref c c-func docutils literal"><span class="pre">dlopen()</span></code> calls, such as when
+the interpreter loads extension modules.  Among other things, this will enable a
+lazy resolving of symbols when importing a module, if called as
+<code class="docutils literal"><span class="pre">sys.setdlopenflags(0)</span></code>.  To share symbols across extension modules, call as
+<code class="docutils literal"><span class="pre">sys.setdlopenflags(os.RTLD_GLOBAL)</span></code>.  Symbolic names for the flag values
+can be found in the <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a> module (<code class="docutils literal"><span class="pre">RTLD_xxx</span></code> constants, e.g.
+<a class="reference internal" href="os.html#os.RTLD_LAZY" title="os.RTLD_LAZY"><code class="xref py py-data docutils literal"><span class="pre">os.RTLD_LAZY</span></code></a>).</p>
+<p>利用できる環境 : Unix 。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.setprofile">
+<code class="descclassname">sys.</code><code class="descname">setprofile</code><span class="sig-paren">(</span><em>profilefunc</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.setprofile" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-20">システムのプロファイル関数を登録します。プロファイル関数は、 Python のソースコードプロファイルを行う関数で、 Python で記述することができます。詳細は <a class="reference internal" href="profile.html#profile"><span class="std std-ref">Python プロファイラ</span></a> を参照してください。プロファイル関数はトレース関数(<a class="reference internal" href="#sys.settrace" title="sys.settrace"><code class="xref py py-func docutils literal"><span class="pre">settrace()</span></code></a> 参照)と似ていますが、ソース行が実行されるごとに呼び出されるのではなく、関数の呼出しと復帰時のみ呼び出されます(例外が発生している場合でも、復帰時のイベントは発生します)。プロファイル関数はスレッド毎に設定することができますが、プロファイラはスレッド間のコンテキスト切り替えを検出することはできません。従って、マルチスレッド環境でのプロファイルはあまり意味がありません。 <a class="reference internal" href="#sys.setprofile" title="sys.setprofile"><code class="xref py py-func docutils literal"><span class="pre">setprofile()</span></code></a> は常に <code class="docutils literal"><span class="pre">None</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.setrecursionlimit">
+<code class="descclassname">sys.</code><code class="descname">setrecursionlimit</code><span class="sig-paren">(</span><em>limit</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.setrecursionlimit" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python インタプリタの、スタックの最大の深さを <em>limit</em> に設定します。この制限は Python プログラムが無限に再帰し、 C スタックがオーバーフローしてクラッシュすることを防止するために設けられています。</p>
+<p><em>limit</em> の最大値はプラットフォームによって異なります。深い再帰処理が必要な場合にはプラットフォームがサポートしている範囲内でより大きな値を指定することができますが、この値が大きすぎればクラッシュするので注意が必要です。</p>
+<p>If the new limit is too low at the current recursion depth, a
+<a class="reference internal" href="exceptions.html#RecursionError" title="RecursionError"><code class="xref py py-exc docutils literal"><span class="pre">RecursionError</span></code></a> exception is raised.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5.1 で変更: </span>A <a class="reference internal" href="exceptions.html#RecursionError" title="RecursionError"><code class="xref py py-exc docutils literal"><span class="pre">RecursionError</span></code></a> exception is now raised if the new limit is too
+low at the current recursion depth.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.setswitchinterval">
+<code class="descclassname">sys.</code><code class="descname">setswitchinterval</code><span class="sig-paren">(</span><em>interval</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.setswitchinterval" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インタプリタのスレッド切り替え間隔を秒で指定します。この浮動小数点値が、並列に動作しているPythonスレッドに割り当てられたタイムスライスの理想的な処理時間です。実際の値はより高くなることがあり、特に長時間実行される内部関数やメソッドが使われた時や、他にスレッドが、その間隔の終了をオペレーティングシステムが決定するようスケジュールされた場合などが該当します。インタプリタは自身のスケジューラを持ちません。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.settrace">
+<code class="descclassname">sys.</code><code class="descname">settrace</code><span class="sig-paren">(</span><em>tracefunc</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.settrace" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-21">システムのトレース関数を登録します。トレース関数は Python のソースデバッガを実装するために使用できます。トレース関数はスレッド毎に設定することができるので、デバッグを行うすべてのスレッドで <a class="reference internal" href="#sys.settrace" title="sys.settrace"><code class="xref py py-func docutils literal"><span class="pre">settrace()</span></code></a> を呼び出し、トレース関数を登録してください。</p>
+<p>Trace関数は 3 個の引数、 <em>frame</em> 、 <em>event</em> 、および <em>arg</em> を受け取る必要があります。 <em>frame</em> は現在のスタックフレームです。 <em>event</em> は文字列で、 <code class="docutils literal"><span class="pre">'call'</span></code> 、 <code class="docutils literal"><span class="pre">'line'</span></code> 、 <code class="docutils literal"><span class="pre">'return'</span></code> 、 <code class="docutils literal"><span class="pre">'exception'</span></code> 、 <code class="docutils literal"><span class="pre">'c_call'</span></code> 、 <code class="docutils literal"><span class="pre">'c_return'</span></code> 、あるいは <code class="docutils literal"><span class="pre">'c_exception'</span></code> のどれかが渡されます。 <em>arg</em> はイベントの種類によって異なります。</p>
+<p>trace 関数は (<em>event</em> に <code class="docutils literal"><span class="pre">'call'</span></code> を渡された状態で) 新しいローカルスコープに入るたびに呼ばれます。この場合、そのスコープで利用するローカルの trace 関数への参照か、そのスコープを trace しないのであれば <code class="docutils literal"><span class="pre">None</span></code> を返します。</p>
+<p>ローカル trace 関数は自身への参照 (もしくはそのスコープの以降の trace を行う別の関数) を返すべきです。もしくは、そのスコープの trace を止めるために <code class="docutils literal"><span class="pre">None</span></code> を返します。</p>
+<p><em>event</em> には以下の意味があります。</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">'call'</span></code></dt>
+<dd><p class="first last">関数が呼び出された(もしくは、何かのコードブロックに入った)。グローバルの trace 関数が呼ばれる。 <em>arg</em> は <code class="docutils literal"><span class="pre">None</span></code> が渡される。戻り値はローカルの trace 関数。</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">'line'</span></code></dt>
+<dd><p class="first last">インタプリタがコードの新しい行を実行しようとしている、または、ループの条件で再実行しようとしている。ローカルの trace 関数が呼ばれる。<em>arg</em> は <code class="docutils literal"><span class="pre">None</span></code> 。返り値は新しいローカルの trace 関数。これがどのように動作するかの詳細な説明は、 <code class="file docutils literal"><span class="pre">Objects/lnotab_notes.txt</span></code> を参照のこと。</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">'return'</span></code></dt>
+<dd><p class="first last">関数(あるいは別のコードブロック)から戻ろうとしている。ローカルの trace 関数が呼ばれる。 <em>arg</em> は返されようとしている値、または、このイベントが例外が送出されることによって起こったなら <code class="docutils literal"><span class="pre">None</span></code> 。 trace 関数の戻り値は無視される。</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">'exception'</span></code></dt>
+<dd><p class="first last">例外が発生した。ローカルの trace 関数が呼ばれる。 <em>arg</em> は <code class="docutils literal"><span class="pre">(exception,</span> <span class="pre">value,</span> <span class="pre">traceback)</span></code> のタプル。戻り値は新しいローカルの trace 関数。</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">'c_call'</span></code></dt>
+<dd><p class="first last">C 関数(拡張関数かビルトイン関数)が呼ばれようとしている。 <em>arg</em> は C 関数オブジェクト。</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">'c_return'</span></code></dt>
+<dd><p class="first last">C 関数から戻った。 <em>arg</em> は C の関数オブジェクト。</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">'c_exception'</span></code></dt>
+<dd><p class="first last">C 関数が例外を発生させた。 <em>arg</em> は C の関数オブジェクト。</p>
+</dd>
+</dl>
+<p>例外が呼び出しチェインを辿って伝播していくことに注意してください。 <code class="docutils literal"><span class="pre">'exception'</span></code> イベントは各レベルで発生します。</p>
+<p>code と frame オブジェクトについては、 <a class="reference internal" href="../reference/datamodel.html#types"><span class="std std-ref">標準型の階層</span></a> を参照してください。</p>
+<div class="impl-detail compound">
+<p><strong>CPython 実装の詳細:</strong> <a class="reference internal" href="#sys.settrace" title="sys.settrace"><code class="xref py py-func docutils literal"><span class="pre">settrace()</span></code></a> 関数は、デバッガ、プロファイラ、カバレッジツール等で使うためだけのものです。この関数の挙動は言語定義よりも実装プラットフォームの分野の問題で、全ての Python 実装で利用できるとは限りません。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.set_asyncgen_hooks">
+<code class="descclassname">sys.</code><code class="descname">set_asyncgen_hooks</code><span class="sig-paren">(</span><em>firstiter</em>, <em>finalizer</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.set_asyncgen_hooks" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Accepts two optional keyword arguments which are callables that accept an
+<a class="reference internal" href="../glossary.html#term-asynchronous-generator-iterator"><span class="xref std std-term">asynchronous generator iterator</span></a> as an argument. The <em>firstiter</em>
+callable will be called when an asynchronous generator is iterated for the
+first time. The <em>finalizer</em> will be called when an asynchronous generator
+is about to be garbage collected.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加: </span>See <span class="target" id="index-22"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0525"><strong>PEP 525</strong></a> for more details, and for a reference example of a
+<em>finalizer</em> method see the implementation of
+<code class="docutils literal"><span class="pre">asyncio.Loop.shutdown_asyncgens</span></code> in
+<a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/asyncio/base_events.py">Lib/asyncio/base_events.py</a></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">This function has been added on a provisional basis (see <span class="target" id="index-23"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0411"><strong>PEP 411</strong></a>
+for details.)</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys.set_coroutine_wrapper">
+<code class="descclassname">sys.</code><code class="descname">set_coroutine_wrapper</code><span class="sig-paren">(</span><em>wrapper</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.set_coroutine_wrapper" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Allows intercepting creation of <a class="reference internal" href="../glossary.html#term-coroutine"><span class="xref std std-term">coroutine</span></a> objects (only ones that
+are created by an <a class="reference internal" href="../reference/compound_stmts.html#async-def"><code class="xref std std-keyword docutils literal"><span class="pre">async</span> <span class="pre">def</span></code></a> function; generators decorated with
+<a class="reference internal" href="types.html#types.coroutine" title="types.coroutine"><code class="xref py py-func docutils literal"><span class="pre">types.coroutine()</span></code></a> or <a class="reference internal" href="asyncio-task.html#asyncio.coroutine" title="asyncio.coroutine"><code class="xref py py-func docutils literal"><span class="pre">asyncio.coroutine()</span></code></a> will not be
+intercepted).</p>
+<p>The <em>wrapper</em> argument must be either:</p>
+<ul class="simple">
+<li>a callable that accepts one argument (a coroutine object);</li>
+<li><code class="docutils literal"><span class="pre">None</span></code>, to reset the wrapper.</li>
+</ul>
+<p>If called twice, the new wrapper replaces the previous one.  The function
+is thread-specific.</p>
+<p>The <em>wrapper</em> callable cannot define new coroutines directly or indirectly:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="n">coro</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">coro</span><span class="p">):</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">coro</span>
+    <span class="k">return</span> <span class="n">wrap</span><span class="p">(</span><span class="n">coro</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">set_coroutine_wrapper</span><span class="p">(</span><span class="n">wrapper</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+<span class="c1"># The following line will fail with a RuntimeError, because</span>
+<span class="c1"># ``wrapper`` creates a ``wrap(coro)`` coroutine:</span>
+<span class="n">foo</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>See also <a class="reference internal" href="#sys.get_coroutine_wrapper" title="sys.get_coroutine_wrapper"><code class="xref py py-func docutils literal"><span class="pre">get_coroutine_wrapper()</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加: </span>See <span class="target" id="index-24"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0492"><strong>PEP 492</strong></a> for more details.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">This function has been added on a provisional basis (see <span class="target" id="index-25"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0411"><strong>PEP 411</strong></a>
+for details.)  Use it only for debugging purposes.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="sys._enablelegacywindowsfsencoding">
+<code class="descclassname">sys.</code><code class="descname">_enablelegacywindowsfsencoding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sys._enablelegacywindowsfsencoding" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Changes the default filesystem encoding and errors mode to &#8216;mbcs&#8217; and
+&#8216;replace&#8217; respectively, for consistency with versions of Python prior to 3.6.</p>
+<p>This is equivalent to defining the <span class="target" id="index-26"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONLEGACYWINDOWSFSENCODING"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONLEGACYWINDOWSFSENCODING</span></code></a>
+environment variable before launching Python.</p>
+<p>Availability: Windows</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加: </span>See <span class="target" id="index-27"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0529"><strong>PEP 529</strong></a> for more details.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.stdin">
+<code class="descclassname">sys.</code><code class="descname">stdin</code><a class="headerlink" href="#sys.stdin" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="sys.stdout">
+<code class="descclassname">sys.</code><code class="descname">stdout</code><a class="headerlink" href="#sys.stdout" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="sys.stderr">
+<code class="descclassname">sys.</code><code class="descname">stderr</code><a class="headerlink" href="#sys.stderr" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インタプリタが使用する、それぞれ標準入力、標準出力、および標準エラー出力の <a class="reference internal" href="../glossary.html#term-file-object"><span class="xref std std-term">ファイルオブジェクト</span></a> です:</p>
+<ul class="simple">
+<li><p class="first"><code class="docutils literal"><span class="pre">stdin</span></code> は (<a class="reference internal" href="functions.html#input" title="input"><code class="xref py py-func docutils literal"><span class="pre">input()</span></code></a> の呼び出しも含む) すべての対話型入力に使われます。</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">stdout</span></code> は <a class="reference internal" href="functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> および <a class="reference internal" href="../glossary.html#term-expression"><span class="xref std std-term">expression</span></a> 文の出力と、<a class="reference internal" href="functions.html#input" title="input"><code class="xref py py-func docutils literal"><span class="pre">input()</span></code></a> のプロンプトに使用されます。</p>
+</li>
+<li><p class="first">インタプリタ自身のプロンプトおよびエラーメッセージは <code class="docutils literal"><span class="pre">stderr</span></code> に出力されます。</p>
+</li>
+</ul>
+<p>これらのストリームは <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> が返すような通常の <a class="reference internal" href="../glossary.html#term-text-file"><span class="xref std std-term">テキストファイル</span></a> です。引数は以下のように選択されます:</p>
+<ul>
+<li><p class="first">文字エンコーディングはプラットフォーム依存です。Windows では、ストリームが対話型 (<code class="xref py py-meth docutils literal"><span class="pre">isatty()</span></code> メソッドが <code class="docutils literal"><span class="pre">True</span></code> を返す場合) であれば、コンソールのコードページが、それ以外では ANSI コードページが使用されます。その他のプラットフォームでは、ロケールのエンコーディングが使用されます (<a class="reference internal" href="locale.html#locale.getpreferredencoding" title="locale.getpreferredencoding"><code class="xref py py-meth docutils literal"><span class="pre">locale.getpreferredencoding()</span></code></a> を参照)。</p>
+<p>しかしながら、どのプラットフォームでも Python を起動する前に環境変数 <span class="target" id="index-44"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONIOENCODING"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONIOENCODING</span></code></a> を設定することでこの値を上書きすることが出来ます。</p>
+</li>
+<li><p class="first">対話型の場合、標準ストリームはラインバッファになります。それ以外の場合は、一般のテキストファイルと同様にブロックバッファになります。この設定はコマンドラインオプション <a class="reference internal" href="../using/cmdline.html#cmdoption-u"><code class="xref std std-option docutils literal"><span class="pre">-u</span></code></a> で上書きできます。</p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p>標準ストリームにバイナリーデータの読み書きを行うには下位のバイナリー <a class="reference internal" href="io.html#io.TextIOBase.buffer" title="io.TextIOBase.buffer"><code class="xref py py-data docutils literal"><span class="pre">buffer</span></code></a> オブジェクトを使用してください。例えば <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> を <a class="reference internal" href="#sys.stdout" title="sys.stdout"><code class="xref py py-data docutils literal"><span class="pre">stdout</span></code></a> に書き出す場合は <code class="docutils literal"><span class="pre">sys.stdout.buffer.write(b'abc')</span></code> を使用してください。</p>
+<p class="last">However, if you are writing a library (and do not control in which
+context its code will be executed), be aware that the standard streams
+may be replaced with file-like objects like <a class="reference internal" href="io.html#io.StringIO" title="io.StringIO"><code class="xref py py-class docutils literal"><span class="pre">io.StringIO</span></code></a> which
+do not support the <code class="xref py py-attr docutils literal"><span class="pre">buffer</span></code> attribute.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.__stdin__">
+<code class="descclassname">sys.</code><code class="descname">__stdin__</code><a class="headerlink" href="#sys.__stdin__" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="sys.__stdout__">
+<code class="descclassname">sys.</code><code class="descname">__stdout__</code><a class="headerlink" href="#sys.__stdout__" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="sys.__stderr__">
+<code class="descclassname">sys.</code><code class="descname">__stderr__</code><a class="headerlink" href="#sys.__stderr__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>それぞれ起動時の <code class="docutils literal"><span class="pre">stdin</span></code>, <code class="docutils literal"><span class="pre">stderr</span></code>, <code class="docutils literal"><span class="pre">stdout</span></code> の値を保存しています。終了処理時に利用されます。また、 <code class="docutils literal"><span class="pre">sys.std*</span></code> オブジェクトが(訳注:別のファイルライクオブジェクトに)リダイレクトされている場合でも、実際の標準ストリームへの出力に利用できます。</p>
+<p>また、標準ストリームが壊れたオブジェクトに置き換えられた場合に、動作する実際のファイルを復元するために利用することもできます。しかし、明示的に置き換え前のストリームを保存しておき、そのオブジェクトを復元る事を推奨します。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">Under some conditions <code class="docutils literal"><span class="pre">stdin</span></code>, <code class="docutils literal"><span class="pre">stdout</span></code> and <code class="docutils literal"><span class="pre">stderr</span></code> as well as the
+original values <code class="docutils literal"><span class="pre">__stdin__</span></code>, <code class="docutils literal"><span class="pre">__stdout__</span></code> and <code class="docutils literal"><span class="pre">__stderr__</span></code> can be
+<code class="docutils literal"><span class="pre">None</span></code>. It is usually the case for Windows GUI apps that aren&#8217;t connected
+to a console and Python apps started with <strong class="program">pythonw</strong>.</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.thread_info">
+<code class="descclassname">sys.</code><code class="descname">thread_info</code><a class="headerlink" href="#sys.thread_info" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>スレッドの実装に関する情報が格納された <a class="reference internal" href="../glossary.html#term-struct-sequence"><span class="xref std std-term">構造体シーケンス</span></a> です。</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">属性</p>
+</th>
+<th class="head"><p class="first last">説明</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">name</span></code></td>
+<td><p class="first">スレッド実装の名前:</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li><p class="first"><code class="docutils literal"><span class="pre">'nt'</span></code>: Windows スレッド</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">'pthread'</span></code>: POSIX スレッド</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">'solaris'</span></code>: Solaris スレッド</p>
+</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">lock</span></code></td>
+<td><p class="first">ロック実装の名前:</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li><p class="first"><code class="docutils literal"><span class="pre">'semaphore'</span></code>: セマフォを使用するロック</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">'mutex+cond'</span></code>: mutex と条件変数を使用するロック</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">None</span></code> この情報が不明の場合</p>
+</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#sys.version" title="sys.version"><code class="xref py py-const docutils literal"><span class="pre">version</span></code></a></td>
+<td><p class="first last">スレッドライブラリの名前とバージョン。文字列、あるいは不明の場合は <code class="docutils literal"><span class="pre">None</span></code>。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.tracebacklimit">
+<code class="descclassname">sys.</code><code class="descname">tracebacklimit</code><a class="headerlink" href="#sys.tracebacklimit" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>捕捉されない例外が発生した時、出力されるトレースバック情報の最大レベル数を指定する整数値(デフォルト値は <code class="docutils literal"><span class="pre">1000</span></code>)。 <code class="docutils literal"><span class="pre">0</span></code> 以下の値が設定された場合、トレースバック情報は出力されず例外型と例外値のみが出力されます。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.version">
+<code class="descclassname">sys.</code><code class="descname">version</code><a class="headerlink" href="#sys.version" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python インタプリタのバージョン番号の他、ビルド番号や使用コンパイラなどの情報を示す文字列です。この文字列は Python 対話型インタプリタが起動した時に表示されます。バージョン情報はここから抜き出さずに、 <a class="reference internal" href="#sys.version_info" title="sys.version_info"><code class="xref py py-data docutils literal"><span class="pre">version_info</span></code></a> および <a class="reference internal" href="platform.html#module-platform" title="platform: Retrieves as much platform identifying data as possible."><code class="xref py py-mod docutils literal"><span class="pre">platform</span></code></a> が提供する関数を使って下さい。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.api_version">
+<code class="descclassname">sys.</code><code class="descname">api_version</code><a class="headerlink" href="#sys.api_version" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>使用中のインタプリタの C API バージョン。 Python と拡張モジュール間の不整合をデバッグする場合などに利用できます。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.version_info">
+<code class="descclassname">sys.</code><code class="descname">version_info</code><a class="headerlink" href="#sys.version_info" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>バージョン番号を示す 5 要素タプル:<em>major</em>, <em>minor</em>, <em>micro</em>, <em>releaselevel</em>, <em>serial</em> 。 <em>releaselevel</em> 以外は全て整数です。 <em>releaselevel</em> の値は、 <code class="docutils literal"><span class="pre">'alpha'</span></code>, <code class="docutils literal"><span class="pre">'beta'</span></code>, <code class="docutils literal"><span class="pre">'candidate'</span></code>, <code class="docutils literal"><span class="pre">'final'</span></code> の何れかです。 Python 2.0 の <code class="docutils literal"><span class="pre">version_info</span></code> は、 <code class="docutils literal"><span class="pre">(2,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">'final',</span> <span class="pre">0)</span></code> となります。構成要素には名前でもアクセスできるので、 <code class="docutils literal"><span class="pre">sys.version_info[0]</span></code> は <code class="docutils literal"><span class="pre">sys.version_info.major</span></code> と等価、などになります。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.1 で変更: </span>名前を使った要素アクセスがサポートされました。</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.warnoptions">
+<code class="descclassname">sys.</code><code class="descname">warnoptions</code><a class="headerlink" href="#sys.warnoptions" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この値は、warnings フレームワーク内部のみ使用され、変更することはできません。詳細は <a class="reference internal" href="warnings.html#module-warnings" title="warnings: Issue warning messages and control their disposition."><code class="xref py py-mod docutils literal"><span class="pre">warnings</span></code></a> を参照してください。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys.winver">
+<code class="descclassname">sys.</code><code class="descname">winver</code><a class="headerlink" href="#sys.winver" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Windows プラットフォームで、レジストリのキーとなるバージョン番号。 Python DLL の文字列リソース 1000 に設定されています。通常、この値は <a class="reference internal" href="#sys.version" title="sys.version"><code class="xref py py-const docutils literal"><span class="pre">version</span></code></a> の先頭三文字となります。この値は参照専用で、別の値を設定しても Python が使用するレジストリキーを変更することはできません。利用できる環境: Windows。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="sys._xoptions">
+<code class="descclassname">sys.</code><code class="descname">_xoptions</code><a class="headerlink" href="#sys._xoptions" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>A dictionary of the various implementation-specific flags passed through
+the <a class="reference internal" href="../using/cmdline.html#cmdoption-X"><code class="xref std std-option docutils literal"><span class="pre">-X</span></code></a> command-line option.  Option names are either mapped to
+their values, if given explicitly, or to <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-const docutils literal"><span class="pre">True</span></code></a>.  Example:</p>
+<div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> ./python -Xa<span class="o">=</span>b -Xc
+<span class="go">Python 3.2a3+ (py3k, Oct 16 2010, 20:14:50)</span>
+<span class="go">[GCC 4.4.3] on linux2</span>
+<span class="go">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
+<span class="gp">&gt;</span>&gt;&gt; import sys
+<span class="gp">&gt;</span>&gt;&gt; sys._xoptions
+<span class="go">{&#39;a&#39;: &#39;b&#39;, &#39;c&#39;: True}</span>
+</pre></div>
+</div>
+<div class="impl-detail compound">
+<p><strong>CPython 実装の詳細:</strong> この <a class="reference internal" href="../using/cmdline.html#cmdoption-X"><code class="xref std std-option docutils literal"><span class="pre">-X</span></code></a> によって渡されたオプションにアクセスする方法は CPython 固有です。他の実装ではそれらは他の意味でエクスポートされるか、あるいは何もしません。</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
+</div>
+</dd></dl>
+
+<p class="rubric">出典</p>
+<table class="docutils citation" frame="void" id="c99" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[C99]</a></td><td><p class="first last">ISO/IEC 9899:1999.  &#8220;Programming languages &#8211; C.&#8221;  この標準のパブリックドラフトが参照できます: <a class="reference external" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf">http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1256.pdf</a>。</p>
+</td></tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="python.html"
+                        title="前の章へ">29. Python ランタイムサービス</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="sysconfig.html"
+                        title="次の章へ">29.2. <code class="docutils literal"><span class="pre">sysconfig</span></code> &#8212; Python の構成情報にアクセスする</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/sys.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="sysconfig.html" title="29.2. sysconfig — Python の構成情報にアクセスする"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="python.html" title="29. Python ランタイムサービス"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" >29. Python ランタイムサービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

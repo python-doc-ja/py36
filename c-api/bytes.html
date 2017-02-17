@@ -1,0 +1,389 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>バイトオブジェクト &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="具象オブジェクト (concrete object) レイヤ" href="concrete.html" />
+    <link rel="next" title="bytearray オブジェクト" href="bytearray.html" />
+    <link rel="prev" title="複素数オブジェクト (complex number object)" href="complex.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/c-api/bytes.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/c-api/bytes.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="bytearray.html" title="bytearray オブジェクト"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="complex.html" title="複素数オブジェクト (complex number object)"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API リファレンスマニュアル</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" accesskey="U">具象オブジェクト (concrete object) レイヤ</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="bytes-objects">
+<span id="bytesobjects"></span><h1>バイトオブジェクト<a class="headerlink" href="#bytes-objects" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>下記の関数は、バイトオブジェクトを期待している引数にバイトオブジェクトでないパラメタを指定して呼び出されると、 <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> を送出します。</p>
+<span class="target" id="index-0"></span><dl class="type">
+<dt id="c.PyBytesObject">
+<code class="descname">PyBytesObject</code><a class="headerlink" href="#c.PyBytesObject" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject</span></code></a> のサブタイプは、Python バイトオブジェクトを表します。</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.PyBytes_Type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject">PyTypeObject</a> <code class="descname">PyBytes_Type</code><a class="headerlink" href="#c.PyBytes_Type" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></code></a> のインスタンスは、Python バイト型を表します; Pythonレイヤの <a class="reference internal" href="../library/functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> と同じオブジェクトです。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBytes_Check">
+int <code class="descname">PyBytes_Check</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBytes_Check" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オブジェクト <em>o</em> がバイトオブジェクトか、またはbytes型のサブタイプのインスタンスである場合に真を返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBytes_CheckExact">
+int <code class="descname">PyBytes_CheckExact</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBytes_CheckExact" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オブジェクト <em>o</em> がバイトオブジェクトであり、かつbytes型のサブタイプのインスタンスでない場合に真を返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBytes_FromString">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyBytes_FromString</code><span class="sig-paren">(</span>const char<em>&nbsp;*v</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBytes_FromString" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>成功時に、文字列 <em>v</em> のコピーを値とする新しいバイトオブジェクトを返し、失敗時に <em>NULL</em> を返します引数 <em>v</em> は <em>NULL</em> であってはなりません; そのチェックは行われません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBytes_FromStringAndSize">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyBytes_FromStringAndSize</code><span class="sig-paren">(</span>const char<em>&nbsp;*v</em>, Py_ssize_t<em>&nbsp;len</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBytes_FromStringAndSize" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>成功時に、文字列 <em>v</em> のコピーを値とする長さ <em>len</em> の新しいバイトオブジェクトを返し、失敗時に <em>NULL</em> を返します。引数 <em>v</em> が <em>NULL</em> の場合、バイトオブジェクトの中身は初期化されていません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBytes_FromFormat">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyBytes_FromFormat</code><span class="sig-paren">(</span>const char<em>&nbsp;*format</em>, ...<span class="sig-paren">)</span><a class="headerlink" href="#c.PyBytes_FromFormat" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>C 関数の <code class="xref c c-func docutils literal"><span class="pre">printf()</span></code> スタイルの <em>format</em> 文字列と可変長の引数を取り、結果のPython バイトオブジェクトのサイズを計算し、値を指定した書式にしたがって変換したバイトオブジェクトを返します。可変長の引数は C のデータ型でなければならず、 <em>format</em> 文字列中のフォーマット文字と厳密に関連付けられていなければなりません。下記のフォーマット文字が使用できます:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="29%" />
+<col width="23%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">書式指定文字</p>
+</th>
+<th class="head"><p class="first last">型</p>
+</th>
+<th class="head"><p class="first last">備考</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-attr docutils literal"><span class="pre">%%</span></code></td>
+<td><em>n/a</em></td>
+<td><p class="first last">リテラルの % 文字</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-attr docutils literal"><span class="pre">%c</span></code></td>
+<td>int</td>
+<td><p class="first last">C の整数型で表現される単一のバイト。</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-attr docutils literal"><span class="pre">%d</span></code></td>
+<td>int</td>
+<td><p class="first last">C の <code class="docutils literal"><span class="pre">printf(&quot;%d&quot;)</span></code> と厳密に同じ。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-attr docutils literal"><span class="pre">%u</span></code></td>
+<td>unsigned int</td>
+<td><p class="first last">C の <code class="docutils literal"><span class="pre">printf(&quot;%u&quot;)</span></code> と厳密に同じ。</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-attr docutils literal"><span class="pre">%ld</span></code></td>
+<td>long</td>
+<td><p class="first last">C の <code class="docutils literal"><span class="pre">printf(&quot;%ld&quot;)</span></code> と厳密に同じ。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-attr docutils literal"><span class="pre">%lu</span></code></td>
+<td>unsigned long</td>
+<td><p class="first last">C の <code class="docutils literal"><span class="pre">printf(&quot;%lu&quot;)</span></code> と厳密に同じ。</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-attr docutils literal"><span class="pre">%zd</span></code></td>
+<td>Py_ssize_t</td>
+<td><p class="first last">C の <code class="docutils literal"><span class="pre">printf(&quot;%zd&quot;)</span></code> と厳密に同じ。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-attr docutils literal"><span class="pre">%zu</span></code></td>
+<td>size_t</td>
+<td><p class="first last">C の <code class="docutils literal"><span class="pre">printf(&quot;%zu&quot;)</span></code> と厳密に同じ。</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-attr docutils literal"><span class="pre">%i</span></code></td>
+<td>int</td>
+<td><p class="first last">C の <code class="docutils literal"><span class="pre">printf(&quot;%i&quot;)</span></code> と厳密に同じ。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-attr docutils literal"><span class="pre">%x</span></code></td>
+<td>int</td>
+<td><p class="first last">C の <code class="docutils literal"><span class="pre">printf(&quot;%x&quot;)</span></code> と厳密に同じ。</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-attr docutils literal"><span class="pre">%s</span></code></td>
+<td>char*</td>
+<td><p class="first last">null で終端された C の文字列。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-attr docutils literal"><span class="pre">%p</span></code></td>
+<td>void*</td>
+<td><p class="first last">C ポインタの 16 進表記。<code class="docutils literal"><span class="pre">printf(&quot;%p&quot;)</span></code> とほとんど同じですが、プラットフォームにおける <code class="docutils literal"><span class="pre">printf</span></code> の定義に関わりなく先頭にリテラル <code class="docutils literal"><span class="pre">0x</span></code> が付きます。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>識別できない書式指定文字があった場合、残りの書式文字列はそのまま結果のオブジェクトにコピーされ、残りの引数は無視されます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBytes_FromFormatV">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyBytes_FromFormatV</code><span class="sig-paren">(</span>const char<em>&nbsp;*format</em>, va_list<em>&nbsp;vargs</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBytes_FromFormatV" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ちょうど２つの引数を取ることを除いて、 <a class="reference internal" href="#c.PyBytes_FromFormat" title="PyBytes_FromFormat"><code class="xref c c-func docutils literal"><span class="pre">PyBytes_FromFormat()</span></code></a> と同じです。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBytes_FromObject">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyBytes_FromObject</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBytes_FromObject" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>バッファプロトコルを実装するオブジェクト <em>o</em> のバイト表現を返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBytes_Size">
+Py_ssize_t <code class="descname">PyBytes_Size</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBytes_Size" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>バイトオブジェクト <em>o</em> のバイト単位の長さを返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBytes_GET_SIZE">
+Py_ssize_t <code class="descname">PyBytes_GET_SIZE</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBytes_GET_SIZE" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#c.PyBytes_Size" title="PyBytes_Size"><code class="xref c c-func docutils literal"><span class="pre">PyBytes_Size()</span></code></a> をマクロで実装したもので、エラーチェックをを行いません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBytes_AsString">
+char* <code class="descname">PyBytes_AsString</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBytes_AsString" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>o</em> の中身へのポインタを返します。ポインタは <em>o</em> のコピーではなく、<code class="docutils literal"><span class="pre">len(o)</span> <span class="pre">+</span> <span class="pre">1</span></code> からなる内部バッファを参照します。 他に null のバイトがあるかどうかにかかわらず、バッファの最後のバイトは必ず null になります。<code class="docutils literal"><span class="pre">PyBytes_FromStringAndSize(NULL,</span> <span class="pre">size)</span></code> で生成された場合を除いて、データを修正してはなりません。またポインタを解放（deallocated）してはなりません。もし、 <em>o</em> が bytes オブジェクトでなければ、 <a class="reference internal" href="#c.PyBytes_AsString" title="PyBytes_AsString"><code class="xref c c-func docutils literal"><span class="pre">PyBytes_AsString()</span></code></a> は <em>NULL</em> を返し <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> を送出します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBytes_AS_STRING">
+char* <code class="descname">PyBytes_AS_STRING</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*string</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBytes_AS_STRING" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#c.PyBytes_AsString" title="PyBytes_AsString"><code class="xref c c-func docutils literal"><span class="pre">PyBytes_AsString()</span></code></a> をマクロで実装したもので、エラーチェックを行いません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBytes_AsStringAndSize">
+int <code class="descname">PyBytes_AsStringAndSize</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*obj</em>, char<em>&nbsp;**buffer</em>, Py_ssize_t<em>&nbsp;*length</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBytes_AsStringAndSize" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>obj</em> のnull 終端された中身を、出力用の変数 <em>buffer</em> と <em>length</em> を介して返します。</p>
+<p><em>length</em> の値が <em>NULL</em> の場合、バイトオブジェクトが  null バイトを含まない可能性があります; その場合、関数は <code class="docutils literal"><span class="pre">-1</span></code> を返し、 <a class="reference internal" href="../library/exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> を送出します。</p>
+<p>buffer は <em>obj</em> の内部バッファを参照していて、これには末尾の null バイトも含んでいます (これは <em>length</em> には数えられません)。
+オブジェクトが <code class="docutils literal"><span class="pre">PyBytes_FromStringAndSize(NULL,</span> <span class="pre">size)</span></code> で生成された場合を除いて、何があってもデータを改変してはいけません。
+オブジェクトを解放 (deallocate) してもいけません。
+<em>obj</em> が bytes オブジェクトでなかった場合は、 <a class="reference internal" href="#c.PyBytes_AsStringAndSize" title="PyBytes_AsStringAndSize"><code class="xref c c-func docutils literal"><span class="pre">PyBytes_AsStringAndSize()</span></code></a> は <code class="docutils literal"><span class="pre">-1</span></code> を返し <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> を送出します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>以前は bytes オブジェクトにヌルバイトが埋め込まれていたときに <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> を送出していました。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBytes_Concat">
+void <code class="descname">PyBytes_Concat</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;**bytes</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*newpart</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBytes_Concat" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>newpart</em> の内容を <em>bytes</em> の後ろに連結した新しいバイトオブジェクトを <em>*bytes</em> に生成します; 呼び出し側は新しい参照を所有します。
+<em>bytes</em> の古い値の参照は盗まれます。
+もし新しいオブジェクトが生成できない場合、古い <em>bytes</em> の参照は放棄され、 <em>*bytes</em> の値は <em>NULL</em> に設定されます; 適切な例外が設定されます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyBytes_ConcatAndDel">
+void <code class="descname">PyBytes_ConcatAndDel</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;**bytes</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*newpart</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyBytes_ConcatAndDel" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>newpart</em> の内容を <em>bytes</em> の後ろに連結した新しいバイトオブジェクトを <em>*bytes</em> に生成します; この関数は、 <em>newpart</em> の参照カウントをデクリメントします。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c._PyBytes_Resize">
+int <code class="descname">_PyBytes_Resize</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;**bytes</em>, Py_ssize_t<em>&nbsp;newsize</em><span class="sig-paren">)</span><a class="headerlink" href="#c._PyBytes_Resize" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>本来 &#8220;変更不可能 (immutable)&#8221; なバイトオブジェクトをリサイズする方法です。
+作成されたばかりのバイトオブジェクトにのみこれをしようしてください; 他のコードですでに使用されている可能性のあるバイトオブジェクトに使用してはいけません。
+入力されたバイトオブジェクトの参照カウントが 1 でない場合、この関数はエラーになります。
+左辺値として存在する (つまり書き込み可能な) バイトオブジェクトのアドレスを受け取り、新しいサイズを要求します。
+成功時には、<em>*bytes</em> はリサイズされたバイトオブジェクトを保持し、<code class="docutils literal"><span class="pre">0</span></code> が返されます; <em>*bytes</em> のアドレスは入力された際のアドレスと異なるかもしれません。
+再割り当て (reallocation) が失敗した場合、 <em>*bytes</em> が元々指してしたバイトオブジェクトを解放し、<em>*bytes</em> を <em>NULL</em> に設定し、 <a class="reference internal" href="../library/exceptions.html#MemoryError" title="MemoryError"><code class="xref py py-exc docutils literal"><span class="pre">MemoryError</span></code></a> を設定し、そして <code class="docutils literal"><span class="pre">-1</span></code> が返されます。</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="complex.html"
+                        title="前の章へ">複素数オブジェクト (complex number object)</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="bytearray.html"
+                        title="次の章へ">bytearray オブジェクト</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/bytes.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="bytearray.html" title="bytearray オブジェクト"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="complex.html" title="複素数オブジェクト (complex number object)"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API リファレンスマニュアル</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" >具象オブジェクト (concrete object) レイヤ</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

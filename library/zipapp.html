@@ -1,0 +1,424 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>28.4. zipapp — 実行可能な python zip 書庫を管理する &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="28. ソフトウェア・パッケージと配布" href="distribution.html" />
+    <link rel="next" title="29. Python ランタイムサービス" href="python.html" />
+    <link rel="prev" title="28.3. venv — 仮想環境の作成" href="venv.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/zipapp.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/zipapp.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="python.html" title="29. Python ランタイムサービス"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="venv.html" title="28.3. venv — 仮想環境の作成"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="distribution.html" accesskey="U">28. ソフトウェア・パッケージと配布</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-zipapp">
+<span id="zipapp-manage-executable-python-zip-archives"></span><h1>28.4. <a class="reference internal" href="#module-zipapp" title="zipapp: Manage executable python zip archives"><code class="xref py py-mod docutils literal"><span class="pre">zipapp</span></code></a> &#8212; 実行可能な python zip 書庫を管理する<a class="headerlink" href="#module-zipapp" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
+</div>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/zipapp.py">Lib/zipapp.py</a></p>
+<hr class="docutils" id="index-0" />
+<p>このモジュールは Python コードを含む zip ファイルの作成を行うツールを提供します。
+zip ファイルは <a class="reference internal" href="../using/cmdline.html#using-on-interface-options"><span class="std std-ref">Python インタープリタで直接実行することが出来ます</span></a>。
+このモジュールは <a class="reference internal" href="#zipapp-command-line-interface"><span class="std std-ref">コマンドラインインターフェイス</span></a> と <a class="reference internal" href="#zipapp-python-api"><span class="std std-ref">Python API</span></a> の両方を提供します。</p>
+<div class="section" id="basic-example">
+<h2>28.4.1. 基本的な例<a class="headerlink" href="#basic-example" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>The following example shows how the <a class="reference internal" href="#zipapp-command-line-interface"><span class="std std-ref">コマンドラインインターフェイス</span></a>
+can be used to create an executable archive from a directory containing
+Python code.  When run, the archive will execute the <code class="docutils literal"><span class="pre">main</span></code> function from
+the module <code class="docutils literal"><span class="pre">myapp</span></code> in the archive.</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>$ python -m zipapp myapp -m <span class="s2">&quot;myapp:main&quot;</span>
+$ python myapp.pyz
+&lt;output from myapp&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="command-line-interface">
+<span id="zipapp-command-line-interface"></span><h2>28.4.2. コマンドラインインターフェイス<a class="headerlink" href="#command-line-interface" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>コマンドラインからプログラムとして呼び出す場合は、次の形式を使用います:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>$ python -m zipapp <span class="nb">source</span> <span class="o">[</span>options<span class="o">]</span>
+</pre></div>
+</div>
+<p><em>source</em> がディレクトリである場合、 <em>source</em> ディレクトリの内容からアーカイブを作成します。
+<em>source</em> がファイルである場合、 <em>source</em> ファイル自身をアーカイブ化し、保存先アーカイブへコピーします。(または &#8211;info オプションが指定されている場合はファイルのシェバン行が表示されます。)</p>
+<p>以下のオプションが解釈されます:</p>
+<dl class="cmdoption">
+<dt id="cmdoption-zipapp-o">
+<span id="cmdoption-zipapp--output"></span><code class="descname">-o</code><code class="descclassname"> &lt;output&gt;</code><code class="descclassname">, </code><code class="descname">--output</code><code class="descclassname">=&lt;output&gt;</code><a class="headerlink" href="#cmdoption-zipapp-o" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>出力を <em>output</em> に指定した名前のファイルへ書込みます。このオプションが指定されていない場合、出力先ファイル名は入力元 <em>source</em> と同じになり、 <code class="docutils literal"><span class="pre">.pyz</span></code> 拡張子が付与されます。
+ファイル名が明示的に指定されている場合は、指定されたファイル名を使用します。(必要であれば <code class="docutils literal"><span class="pre">.pyz</span></code> 拡張子が含まれます。)</p>
+<p><em>source</em> がアーカイブである場合は、出力先ファイル名を必ず指定しなければなりません。
+(<em>source</em> がアーカイブである場合は <em>output</em> を必ず <em>source</em> とは別の名前にしてください。)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-zipapp-p">
+<span id="cmdoption-zipapp--python"></span><code class="descname">-p</code><code class="descclassname"> &lt;interpreter&gt;</code><code class="descclassname">, </code><code class="descname">--python</code><code class="descclassname">=&lt;interpreter&gt;</code><a class="headerlink" href="#cmdoption-zipapp-p" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>実行コマンドとしての <em>interpreter</em> を指定する <code class="docutils literal"><span class="pre">#!</span></code> 行を書庫に追加します。
+また、POSIX では書庫を実行可能にします。
+デフォルトでは <code class="docutils literal"><span class="pre">#!</span></code> 行を書かず、ファイルを実行可能にはしません。</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-zipapp-m">
+<span id="cmdoption-zipapp--main"></span><code class="descname">-m</code><code class="descclassname"> &lt;mainfn&gt;</code><code class="descclassname">, </code><code class="descname">--main</code><code class="descclassname">=&lt;mainfn&gt;</code><a class="headerlink" href="#cmdoption-zipapp-m" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>mainfn</em> を実行するアーカイブへ <code class="docutils literal"><span class="pre">__main__.py</span></code> ファイルを書込んでください。
+<em>mainfn</em> 引数は &#8220;pkg.mod:fn&#8221; の形式で指定します。
+&#8220;pkg.mod&#8221; の場所はアーカイブ内の package/module です。
+&#8220;fn&#8221; は指定した module から呼出すことのできる関数です。
+<code class="docutils literal"><span class="pre">__main__.py</span></code> ファイルが module から呼出すことのできる関数を実行します。</p>
+<p>書庫をコピーする際、 <a class="reference internal" href="#cmdoption-zipapp--main"><code class="xref std std-option docutils literal"><span class="pre">--main</span></code></a> を指定することは出来ません。</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-zipapp--info">
+<code class="descname">--info</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-zipapp--info" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>診断するために書庫に埋め込まれたインタープリタを表示します。
+この場合、他の全てのオプションは無視され、SOURCE はディレクトリではなく書庫でなければなりません。</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-zipapp-h">
+<span id="cmdoption-zipapp--help"></span><code class="descname">-h</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--help</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-zipapp-h" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>簡単な使用法を表示して終了します。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="python-api">
+<span id="zipapp-python-api"></span><h2>28.4.3. Python API<a class="headerlink" href="#python-api" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>このモジュールは 2 つの簡便関数を定義しています:</p>
+<dl class="function">
+<dt id="zipapp.create_archive">
+<code class="descclassname">zipapp.</code><code class="descname">create_archive</code><span class="sig-paren">(</span><em>source</em>, <em>target=None</em>, <em>interpreter=None</em>, <em>main=None</em><span class="sig-paren">)</span><a class="headerlink" href="#zipapp.create_archive" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>source</em> からアプリケーション書庫を作成します。
+ソースは以下のいずれかです:</p>
+<ul class="simple">
+<li><p class="first">ディレクトリ名、または
+新しいアプリケーションアーカイブがディレクトリのコンテンツから作成される場合に
+<a class="reference internal" href="pathlib.html#pathlib.Path" title="pathlib.Path"><code class="xref py py-class docutils literal"><span class="pre">pathlib.Path</span></code></a> オブジェクトが参照するディレクトリ。</p>
+</li>
+<li><p class="first">既存のアプリケーションアーカイブファイルの名前、
+または(<em>interpreter</em> 引数に指定した値を反映し、修正する)アーカイブへ
+ファイルがコピーされる場合に <a class="reference internal" href="pathlib.html#pathlib.Path" title="pathlib.Path"><code class="xref py py-class docutils literal"><span class="pre">pathlib.Path</span></code></a> オブジェクトが参照するファイル。</p>
+</li>
+<li><p class="first">バイトモードの読込みで開くファイルオブジェクト。
+ファイルの内容がアプリケーションアーカイブとなり、
+ファイルオブジェクトがアーカイブの起点となります。</p>
+</li>
+</ul>
+<p><em>target</em> 引数は作成される書庫が書き込まれる場所を決めます:</p>
+<ul class="simple">
+<li><p class="first">ファイル名、または <code class="xref py py-class docutils literal"><span class="pre">pathlb.Path</span></code> オブジェクトを指定した場合、アーカイブは指定したファイルへ書込まれます。</p>
+</li>
+<li><p class="first">開いているファイルオブジェクトを指定した場合、
+アーカイブはそのファイルオブジェクトへ書込みを行ないます。
+ファイルオブジェクトは必ずバイトモードの書込みで開いてください。</p>
+</li>
+<li>If the target is omitted (or <code class="docutils literal"><span class="pre">None</span></code>), the source must be a directory
+and the target will be a file with the same name as the source, with
+a <code class="docutils literal"><span class="pre">.pyz</span></code> extension added.</li>
+</ul>
+<p><em>interpreter</em> 引数はアーカイブが実行時に使用する Python インタープリタの名前を指定します。
+インタープリタ名は &#8220;シェバン&#8221; 行としてアーカイブの起点に書込まれます。
+POSIX では OS によってシェバンが解釈され、
+Windows では Python ランチャーによって扱われます。
+シェバン行が書込まれていない場合は <em>interpreter</em> の結果を無視します。
+interpreter が指定されており、 target がファイル名である場合、
+target ファイルの実行可能ビットが設定されます。</p>
+<p><em>main</em> 引数はアーカイブのメインプログラムとして使用する callable の名前を指定します。
+<em>main</em> 引数は source がディレクトリであり、 source が既に <code class="docutils literal"><span class="pre">__main__.py</span></code> ファイルを保持していない場合に限り、指定することができます。
+<em>main</em> 引数は &#8220;pkg.module:callable&#8221; の形式を取り、
+アーカイブは &#8220;pkg.module&#8221; をインポートして実行され、
+指定した callable を引数なしで実行します。
+source がディレクトリであり、 <code class="docutils literal"><span class="pre">__main__.py</span></code> が含まれていない場合、
+<em>main</em> は無視すべきエラーとなり、
+作成されたアーカイブには実行可能ビットが設定されません。</p>
+<p><em>source</em> または <em>target</em> へファイルオブジェクトを指定した場合、
+caller が create_archive の呼出し後にオブジェクトを閉じます。</p>
+<p>既存のアーカイブをコピーする際、ファイルオブジェクトは <code class="docutils literal"><span class="pre">read</span></code> , <code class="docutils literal"><span class="pre">readline</span></code> , <code class="docutils literal"><span class="pre">write</span></code> メソッドのみを提供します。
+アーカイブをディレクトリから作成する際、 target がファイルオブジェクトである場合は、
+<code class="docutils literal"><span class="pre">zipfile.ZipFile</span></code> クラスへ渡されます。必ずクラスが必要とするメソッドを提供してください。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="zipapp.get_interpreter">
+<code class="descclassname">zipapp.</code><code class="descname">get_interpreter</code><span class="sig-paren">(</span><em>archive</em><span class="sig-paren">)</span><a class="headerlink" href="#zipapp.get_interpreter" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>アーカイブの最初の行の <code class="docutils literal"><span class="pre">#!</span></code> に指定されたインタープリタを返します。
+<code class="docutils literal"><span class="pre">#!</span></code> が無い場合は <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> を返します。
+<em>archive</em> 引数は、ファイル名またはバイトモードの読込みで開いた
+ファイルに準じるオブジェクトを指定することができ、アーカイブの起点で決定されます。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="examples">
+<span id="zipapp-examples"></span><h2>28.4.4. 使用例<a class="headerlink" href="#examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ディレクトリを書庫に圧縮し、実行します。</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>$ python -m zipapp myapp
+$ python myapp.pyz
+&lt;output from myapp&gt;
+</pre></div>
+</div>
+<p>同じことを <a class="reference internal" href="#zipapp.create_archive" title="zipapp.create_archive"><code class="xref py py-func docutils literal"><span class="pre">create_archive()</span></code></a> 関数を使用して行うことが出来ます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">zipapp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zipapp</span><span class="o">.</span><span class="n">create_archive</span><span class="p">(</span><span class="s1">&#39;myapp.pyz&#39;</span><span class="p">,</span> <span class="s1">&#39;myapp&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>POSIX でアプリケーションを直接実行可能にするには使用するインタープリタを指定します。</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>$ python -m zipapp myapp -p <span class="s2">&quot;/usr/bin/env python&quot;</span>
+$ ./myapp.pyz
+&lt;output from myapp&gt;
+</pre></div>
+</div>
+<p>シバン行を既存の書庫で置換するには、 <a class="reference internal" href="#zipapp.create_archive" title="zipapp.create_archive"><code class="xref py py-func docutils literal"><span class="pre">create_archive()</span></code></a> function: を使用して変更された書庫を作成します:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">zipapp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zipapp</span><span class="o">.</span><span class="n">create_archive</span><span class="p">(</span><span class="s1">&#39;old_archive.pyz&#39;</span><span class="p">,</span> <span class="s1">&#39;new_archive.pyz&#39;</span><span class="p">,</span> <span class="s1">&#39;/usr/bin/python3&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>アーカイブ内のファイルを更新するには <code class="xref py py-class docutils literal"><span class="pre">BytesIO</span></code> オブジェクトを使用してメモリーへ格納し、
+元のファイルを上書きして置換してください。
+ファイルを上書きする際にエラーが発生し、元のファイルが失われる危険性があることに注意してください。
+このコードは上記のようなエラーからファイルを保護しませんが、プロダクションコードは保護するべきです。
+この方法はアーカイブがメモリーに収まる場合にのみ動作します:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">zipapp</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">io</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">temp</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">zipapp</span><span class="o">.</span><span class="n">create_archive</span><span class="p">(</span><span class="s1">&#39;myapp.pyz&#39;</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="s1">&#39;/usr/bin/python2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;myapp.pyz&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">temp</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Note that if you specify an interpreter and then distribute your application
+archive, you need to ensure that the interpreter used is portable.  The Python
+launcher for Windows supports most common forms of POSIX <code class="docutils literal"><span class="pre">#!</span></code> line, but there
+are other issues to consider:</p>
+<ul class="simple">
+<li>If you use &#8220;/usr/bin/env python&#8221; (or other forms of the &#8220;python&#8221; command,
+such as &#8220;/usr/bin/python&#8221;), you need to consider that your users may have
+either Python 2 or Python 3 as their default, and write your code to work
+under both versions.</li>
+<li>If you use an explicit version, for example &#8220;/usr/bin/env python3&#8221; your
+application will not work for users who do not have that version.  (This
+may be what you want if you have not made your code Python 2 compatible).</li>
+<li>There is no way to say &#8220;python X.Y or later&#8221;, so be careful of using an
+exact version like &#8220;/usr/bin/env python3.4&#8221; as you will need to change your
+shebang line for users of Python 3.5, for example.</li>
+</ul>
+</div>
+<div class="section" id="the-python-zip-application-archive-format">
+<h2>28.4.5. The Python Zip Application Archive Format<a class="headerlink" href="#the-python-zip-application-archive-format" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Python has been able to execute zip files which contain a <code class="docutils literal"><span class="pre">__main__.py</span></code> file
+since version 2.6.  In order to be executed by Python, an application archive
+simply has to be a standard zip file containing a <code class="docutils literal"><span class="pre">__main__.py</span></code> file which
+will be run as the entry point for the application.  As usual for any Python
+script, the parent of the script (in this case the zip file) will be placed on
+<a class="reference internal" href="sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> and thus further modules can be imported from the zip file.</p>
+<p>The zip file format allows arbitrary data to be prepended to a zip file.  The
+zip application format uses this ability to prepend a standard POSIX &#8220;shebang&#8221;
+line to the file (<code class="docutils literal"><span class="pre">#!/path/to/interpreter</span></code>).</p>
+<p>Formally, the Python zip application format is therefore:</p>
+<ol class="arabic simple">
+<li>An optional shebang line, containing the characters <code class="docutils literal"><span class="pre">b'#!'</span></code> followed by an
+interpreter name, and then a newline (<code class="docutils literal"><span class="pre">b'\n'</span></code>) character.  The interpreter
+name can be anything acceptable to the OS &#8220;shebang&#8221; processing, or the Python
+launcher on Windows.  The interpreter should be encoded in UTF-8 on Windows,
+and in <a class="reference internal" href="sys.html#sys.getfilesystemencoding" title="sys.getfilesystemencoding"><code class="xref py py-func docutils literal"><span class="pre">sys.getfilesystemencoding()</span></code></a> on POSIX.</li>
+<li>Standard zipfile data, as generated by the <a class="reference internal" href="zipfile.html#module-zipfile" title="zipfile: Read and write ZIP-format archive files."><code class="xref py py-mod docutils literal"><span class="pre">zipfile</span></code></a> module.  The
+zipfile content <em>must</em> include a file called <code class="docutils literal"><span class="pre">__main__.py</span></code> (which must be
+in the &#8220;root&#8221; of the zipfile - i.e., it cannot be in a subdirectory).  The
+zipfile data can be compressed or uncompressed.</li>
+</ol>
+<p>If an application archive has a shebang line, it may have the executable bit set
+on POSIX systems, to allow it to be executed directly.</p>
+<p>There is no requirement that the tools in this module are used to create
+application archives - the module is a convenience, but archives in the above
+format created by any means are acceptable to Python.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">28.4. <code class="docutils literal"><span class="pre">zipapp</span></code> &#8212; 実行可能な python zip 書庫を管理する</a><ul>
+<li><a class="reference internal" href="#basic-example">28.4.1. 基本的な例</a></li>
+<li><a class="reference internal" href="#command-line-interface">28.4.2. コマンドラインインターフェイス</a></li>
+<li><a class="reference internal" href="#python-api">28.4.3. Python API</a></li>
+<li><a class="reference internal" href="#examples">28.4.4. 使用例</a></li>
+<li><a class="reference internal" href="#the-python-zip-application-archive-format">28.4.5. The Python Zip Application Archive Format</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="venv.html"
+                        title="前の章へ">28.3. <code class="docutils literal"><span class="pre">venv</span></code> &#8212; 仮想環境の作成</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="python.html"
+                        title="次の章へ">29. Python ランタイムサービス</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/zipapp.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="python.html" title="29. Python ランタイムサービス"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="venv.html" title="28.3. venv — 仮想環境の作成"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="distribution.html" >28. ソフトウェア・パッケージと配布</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

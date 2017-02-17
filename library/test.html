@@ -1,0 +1,736 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>26.8. test — Python 用回帰テストパッケージ &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="26. 開発ツール" href="development.html" />
+    <link rel="next" title="27. デバッグとプロファイル" href="debug.html" />
+    <link rel="prev" title="26.7. 2to3 - Python 2 から 3 への自動コード変換" href="2to3.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/test.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/test.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="debug.html" title="27. デバッグとプロファイル"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="2to3.html" title="26.7. 2to3 - Python 2 から 3 への自動コード変換"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="development.html" accesskey="U">26. 開発ツール</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-test">
+<span id="test-regression-tests-package-for-python"></span><h1>26.8. <a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-mod docutils literal"><span class="pre">test</span></code></a> &#8212; Python 用回帰テストパッケージ<a class="headerlink" href="#module-test" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last"><a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-mod docutils literal"><span class="pre">test</span></code></a> パッケージは Python の内部利用専用です。
+ドキュメント化されているのは Python の中心開発者のためです。
+ここで述べられているコードは Python のリリースで予告なく変更されたり、削除される可能性があるため、Python 標準ライブラリー外でこのパッケージを使用することは推奨されません。</p>
+</div>
+<hr class="docutils" />
+<p><a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-mod docutils literal"><span class="pre">test</span></code></a> パッケージには、Python 用の全ての回帰テストの他に、 <a class="reference internal" href="#module-test.support" title="test.support: Support for Python's regression test suite."><code class="xref py py-mod docutils literal"><span class="pre">test.support</span></code></a> モジュールと <code class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></code> モジュールが入っています。 <a class="reference internal" href="#module-test.support" title="test.support: Support for Python's regression test suite."><code class="xref py py-mod docutils literal"><span class="pre">test.support</span></code></a> はテストを充実させるために使い、 <code class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></code> はテストスイートを実行するのに使います。</p>
+<p><a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-mod docutils literal"><span class="pre">test</span></code></a> パッケージ内のモジュールのうち、名前が <code class="docutils literal"><span class="pre">test_</span></code> で始まるものは、特定のモジュールや機能に対するテストスイートです。新しいテストはすべて <a class="reference internal" href="unittest.html#module-unittest" title="unittest: Unit testing framework for Python."><code class="xref py py-mod docutils literal"><span class="pre">unittest</span></code></a> か <a class="reference internal" href="doctest.html#module-doctest" title="doctest: Test pieces of code within docstrings."><code class="xref py py-mod docutils literal"><span class="pre">doctest</span></code></a> モジュールを使って書くようにしてください。古いテストのいくつかは、 <code class="docutils literal"><span class="pre">sys.stdout</span></code> への出力を比較する「従来の」テスト形式になっていますが、この形式のテストは廃止予定です。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="unittest.html#module-unittest" title="unittest: Unit testing framework for Python."><code class="xref py py-mod docutils literal"><span class="pre">unittest</span></code></a> モジュール</dt>
+<dd><p class="first last">PyUnit 回帰テストを書く。</p>
+</dd>
+<dt><a class="reference internal" href="doctest.html#module-doctest" title="doctest: Test pieces of code within docstrings."><code class="xref py py-mod docutils literal"><span class="pre">doctest</span></code></a> モジュール</dt>
+<dd><p class="first last">ドキュメンテーション文字列に埋め込まれたテスト。</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="writing-unit-tests-for-the-test-package">
+<span id="writing-tests"></span><h2>26.8.1. <a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-mod docutils literal"><span class="pre">test</span></code></a> パッケージのためのユニットテストを書く<a class="headerlink" href="#writing-unit-tests-for-the-test-package" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference internal" href="unittest.html#module-unittest" title="unittest: Unit testing framework for Python."><code class="xref py py-mod docutils literal"><span class="pre">unittest</span></code></a> モジュールを使ってテストを書く場合、幾つかのガイドラインに従うことが推奨されます。 1つは、テストモジュールの名前を、 <code class="docutils literal"><span class="pre">test_</span></code> で始め、テスト対象となるモジュール名で終えることです。テストモジュール中のテストメソッドは名前を <code class="docutils literal"><span class="pre">test_</span></code> で始めて、そのメソッドが何をテストしているかという説明で終えます。これはテスト実行プログラムが、そのメソッドをテストメソッドとして認識するために必要です。また、テストメソッドにはドキュメンテーション文字列を入れるべきではありません。コメント（例えば <code class="docutils literal"><span class="pre">#</span> <span class="pre">True</span> <span class="pre">あるいは</span> <span class="pre">False</span> <span class="pre">だけを返すテスト関数</span></code> ）を使用して、テストメソッドのドキュメントを記述してください。これは、ドキュメンテーション文字列が存在する場合はその内容が出力されてしまうため、どのテストを実行しているのかをいちいち表示したくないからです。</p>
+<p>以下のような決まり文句を使います:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">test</span> <span class="k">import</span> <span class="n">support</span>
+
+<span class="k">class</span> <span class="nc">MyTestCase1</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="c1"># Only use setUp() and tearDown() if necessary</span>
+
+    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span> <span class="n">code</span> <span class="n">to</span> <span class="n">execute</span> <span class="ow">in</span> <span class="n">preparation</span> <span class="k">for</span> <span class="n">tests</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span> <span class="n">code</span> <span class="n">to</span> <span class="n">execute</span> <span class="n">to</span> <span class="n">clean</span> <span class="n">up</span> <span class="n">after</span> <span class="n">tests</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">test_feature_one</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Test feature one.</span>
+        <span class="o">...</span> <span class="n">testing</span> <span class="n">code</span> <span class="o">...</span>
+
+    <span class="k">def</span> <span class="nf">test_feature_two</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Test feature two.</span>
+        <span class="o">...</span> <span class="n">testing</span> <span class="n">code</span> <span class="o">...</span>
+
+    <span class="o">...</span> <span class="n">more</span> <span class="n">test</span> <span class="n">methods</span> <span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">MyTestCase2</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="o">...</span> <span class="n">same</span> <span class="n">structure</span> <span class="k">as</span> <span class="n">MyTestCase1</span> <span class="o">...</span>
+
+<span class="o">...</span> <span class="n">more</span> <span class="n">test</span> <span class="n">classes</span> <span class="o">...</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>このコードのパターンを使うと <code class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></code> からテストスイートを実行でき、 <a class="reference internal" href="unittest.html#module-unittest" title="unittest: Unit testing framework for Python."><code class="xref py py-mod docutils literal"><span class="pre">unittest</span></code></a> のコマンドラインインターフェースをサポートしているスクリプトとして自分自身を起動したり、 <code class="docutils literal"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">unittest</span></code> というコマンドラインインターフェースを通して起動したりできます。</p>
+<p>回帰テストの目的はコードを解き明かすことです。そのためには以下のいくつかのガイドラインに従ってください:</p>
+<ul>
+<li><p class="first">テストスイートから、すべてのクラス、関数および定数を実行するべきです。これには外部に公開される外部APIだけでなく「プライベートな」コードも含みます。</p>
+</li>
+<li><p class="first">ホワイトボックス・テスト（対象のコードの詳細を元にテストを書くこと）を推奨します。ブラックボックス・テスト（公開されるインタフェース仕様だけをテストすること）は、すべての境界条件を確実にテストするには完全ではありません。</p>
+</li>
+<li><p class="first">すべての取りうる値を、無効値も含めてテストするようにしてください。そのようなテストを書くことで、全ての有効値が通るだけでなく、不適切な値が正しく処理されることも確認できます。</p>
+</li>
+<li><p class="first">コード内のできる限り多くのパスを網羅してください。分岐するように入力を調整したテストを書くことで、コードの多くのパスをたどることができます。</p>
+</li>
+<li><p class="first">テスト対象のコードにバグが発見された場合は、明示的にテスト追加するようにしてください。そのようなテストを追加することで、将来コードを変更した際にエラーが再発することを防止できます。</p>
+</li>
+<li><p class="first">テストの後始末 (例えば一時ファイルをすべて閉じたり削除したりすること) を必ず行ってください。</p>
+</li>
+<li><p class="first">テストがオペレーティングシステムの特定の状況に依存する場合、テスト開始時に条件を満たしているかを検証してください。</p>
+</li>
+<li><p class="first">インポートするモジュールをできるかぎり少なくし、可能な限り早期にインポートを行ってください。そうすることで、テストの外部依存性を最小限にし、モジュールのインポートによる副作用から生じる変則的な動作を最小限にできます。</p>
+</li>
+<li><p class="first">できる限りテストコードを再利用するようにしましょう。時として、入力の違いだけを記述すれば良くなるくらい、テストコードを小さくすることができます。例えば以下のように、サブクラスで入力を指定することで、コードの重複を最小化することができます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TestFuncAcceptsSequencesMixin</span><span class="p">:</span>
+
+    <span class="n">func</span> <span class="o">=</span> <span class="n">mySuperWhammyFunction</span>
+
+    <span class="k">def</span> <span class="nf">test_func</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">AcceptLists</span><span class="p">(</span><span class="n">TestFuncAcceptsSequencesMixin</span><span class="p">,</span> <span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="n">arg</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">AcceptStrings</span><span class="p">(</span><span class="n">TestFuncAcceptsSequencesMixin</span><span class="p">,</span> <span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="n">arg</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span>
+
+<span class="k">class</span> <span class="nc">AcceptTuples</span><span class="p">(</span><span class="n">TestFuncAcceptsSequencesMixin</span><span class="p">,</span> <span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="n">arg</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>このパターンを使うときには、 <a class="reference internal" href="unittest.html#unittest.TestCase" title="unittest.TestCase"><code class="xref py py-class docutils literal"><span class="pre">unittest.TestCase</span></code></a>  を継承した全てのクラスがテストとして実行されることを忘れないでください。
+上の例の <code class="xref py py-class docutils literal"><span class="pre">Mixin</span></code> クラスはテストデータを持っておらず、それ自身は実行できないので、 <a class="reference internal" href="unittest.html#unittest.TestCase" title="unittest.TestCase"><code class="xref py py-class docutils literal"><span class="pre">unittest.TestCase</span></code></a> を継承していません。</p>
+</li>
+</ul>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<dl class="last docutils">
+<dt>Test Driven Development</dt>
+<dd><p class="first last">コードより前にテストを書く方法論に関する Kent Beck の著書。</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="running-tests-using-the-command-line-interface">
+<span id="regrtest"></span><h2>26.8.2. コマンドラインインタフェースを利用してテストを実行する<a class="headerlink" href="#running-tests-using-the-command-line-interface" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-mod docutils literal"><span class="pre">test</span></code></a> パッケージはスクリプトとして Python の回帰テストスイートを実行できます。
+<a class="reference internal" href="../using/cmdline.html#cmdoption-m"><code class="xref std std-option docutils literal"><span class="pre">-m</span></code></a> オプションを利用して、 <strong class="program">python -m test.regrtest</strong> として実行します。
+この仕組みの内部では <code class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></code>; を使っています; 古いバージョンの Python で使われている <strong class="program">python -m test.regrtest</strong> という呼び出しは今でも上手く動きます。
+スクリプトを実行すると、自動的に <a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-mod docutils literal"><span class="pre">test</span></code></a> パッケージ内のすべての回帰テストを実行し始めます。
+パッケージ内の名前が <code class="docutils literal"><span class="pre">test_</span></code> で始まる全モジュールを見つけ、それをインポートし、もしあるなら関数 <code class="xref py py-func docutils literal"><span class="pre">test_main()</span></code> を実行し、 <code class="docutils literal"><span class="pre">test_main</span></code> が無い場合は unittest.TestLoader.loadTestsFromModule からテストをロードしてテストを実行します。
+実行するテストの名前もスクリプトに渡される可能性があります。
+単一の回帰テストを指定 (<strong class="program">python -m test test_spam</strong>) すると、出力を最小限にし、テストが成功したかあるいは失敗したかだけを出力します。</p>
+<p>直接 <a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-mod docutils literal"><span class="pre">test</span></code></a> を実行すると、テストに利用するリソースを設定できます。これを行うには、 <code class="docutils literal"><span class="pre">-u</span></code> コマンドラインオプションを使います。 <code class="docutils literal"><span class="pre">-u</span></code> のオプションに <code class="docutils literal"><span class="pre">all</span></code> を指定すると、すべてのリソースを有効にします: <strong class="program">python -m test -uall</strong> 。(よくある場合ですが) 何か一つを除く全てが必要な場合、カンマで区切った不要なリソースのリストを <code class="docutils literal"><span class="pre">all</span></code> の後に並べます。コマンド <strong class="program">python -m test -uall,-audio,-largefile</strong> とすると、 <code class="docutils literal"><span class="pre">audio</span></code> と <code class="docutils literal"><span class="pre">largefile</span></code> リソースを除く全てのリソースを使って <a class="reference internal" href="#module-test" title="test: Regression tests package containing the testing suite for Python."><code class="xref py py-mod docutils literal"><span class="pre">test</span></code></a> を実行します。すべてのリソースのリストと追加のコマンドラインオプションを出力するには、 <strong class="program">python -m test -h</strong> を実行してください。</p>
+<p>テストを実行しようとするプラットフォームによっては、回帰テストを実行する別の方法があります。 Unix では、Python をビルドしたトップレベルディレクトリで <strong class="program">make test</strong> を実行できます。 Windows上では、 <code class="file docutils literal"><span class="pre">PCBuild</span></code> ディレクトリから <strong class="program">rt.bat</strong> を実行すると、すべての回帰テストを実行します。</p>
+</div>
+</div>
+<div class="section" id="module-test.support">
+<span id="test-support-utilities-for-the-python-test-suite"></span><h1>26.9. <a class="reference internal" href="#module-test.support" title="test.support: Support for Python's regression test suite."><code class="xref py py-mod docutils literal"><span class="pre">test.support</span></code></a> &#8212; テストのためのユーティリティ関数<a class="headerlink" href="#module-test.support" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><a class="reference internal" href="#module-test.support" title="test.support: Support for Python's regression test suite."><code class="xref py py-mod docutils literal"><span class="pre">test.support</span></code></a> モジュールでは、 Python の回帰テストに対するサポートを提供しています。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last"><a class="reference internal" href="#module-test.support" title="test.support: Support for Python's regression test suite."><code class="xref py py-mod docutils literal"><span class="pre">test.support</span></code></a> はパブリックなモジュールではありません。
+ここでドキュメント化されているのは Python 開発者がテストを書くのを助けるためです。
+このモジュールの API はリリース間で後方非互換な変更がなされる可能性があります。</p>
+</div>
+<p>このモジュールは次の例外を定義しています:</p>
+<dl class="exception">
+<dt id="test.support.TestFailed">
+<em class="property">exception </em><code class="descclassname">test.support.</code><code class="descname">TestFailed</code><a class="headerlink" href="#test.support.TestFailed" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>テストが失敗したとき送出される例外です。これは、 <a class="reference internal" href="unittest.html#module-unittest" title="unittest: Unit testing framework for Python."><code class="xref py py-mod docutils literal"><span class="pre">unittest</span></code></a> ベースのテストでは廃止予定で、 <a class="reference internal" href="unittest.html#unittest.TestCase" title="unittest.TestCase"><code class="xref py py-class docutils literal"><span class="pre">unittest.TestCase</span></code></a> の assertXXX メソッドが推奨されます。</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="test.support.ResourceDenied">
+<em class="property">exception </em><code class="descclassname">test.support.</code><code class="descname">ResourceDenied</code><a class="headerlink" href="#test.support.ResourceDenied" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="unittest.html#unittest.SkipTest" title="unittest.SkipTest"><code class="xref py py-exc docutils literal"><span class="pre">unittest.SkipTest</span></code></a> のサブクラスです。 (ネットワーク接続のような) リソースが利用できないとき送出されます。 <a class="reference internal" href="#test.support.requires" title="test.support.requires"><code class="xref py py-func docutils literal"><span class="pre">requires()</span></code></a> 関数によって送出されます。</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#module-test.support" title="test.support: Support for Python's regression test suite."><code class="xref py py-mod docutils literal"><span class="pre">test.support</span></code></a> モジュールでは、以下の定数を定義しています:</p>
+<dl class="data">
+<dt id="test.support.verbose">
+<code class="descclassname">test.support.</code><code class="descname">verbose</code><a class="headerlink" href="#test.support.verbose" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>冗長な出力が有効な場合は <code class="docutils literal"><span class="pre">True</span></code> です。実行中のテストについてのより詳細な情報が欲しいときにチェックします。 <em>verbose</em> は <code class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></code> によって設定されます。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="test.support.is_jython">
+<code class="descclassname">test.support.</code><code class="descname">is_jython</code><a class="headerlink" href="#test.support.is_jython" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>実行中のインタプリタが Jython ならば <code class="docutils literal"><span class="pre">True</span></code> になります。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="test.support.TESTFN">
+<code class="descclassname">test.support.</code><code class="descname">TESTFN</code><a class="headerlink" href="#test.support.TESTFN" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>テンポラリファイルの名前として安全に利用できる名前に設定されます。作成した一時ファイルは全て閉じ、unlink (削除) しなければなりません。</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#module-test.support" title="test.support: Support for Python's regression test suite."><code class="xref py py-mod docutils literal"><span class="pre">test.support</span></code></a> モジュールでは、以下の関数を定義しています:</p>
+<dl class="function">
+<dt id="test.support.forget">
+<code class="descclassname">test.support.</code><code class="descname">forget</code><span class="sig-paren">(</span><em>module_name</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.forget" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>モジュール名 <em>module_name</em> を <code class="docutils literal"><span class="pre">sys.modules</span></code> から取り除き、モジュールのバイトコンパイル済みファイルを全て削除します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.is_resource_enabled">
+<code class="descclassname">test.support.</code><code class="descname">is_resource_enabled</code><span class="sig-paren">(</span><em>resource</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.is_resource_enabled" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>resource</em> が有効で利用可能ならば <code class="docutils literal"><span class="pre">True</span></code> を返します。利用可能なリソースのリストは、 <code class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></code> がテストを実行している間のみ設定されます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.requires">
+<code class="descclassname">test.support.</code><code class="descname">requires</code><span class="sig-paren">(</span><em>resource</em>, <em>msg=None</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.requires" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>resource</em> が利用できなければ、 <a class="reference internal" href="#test.support.ResourceDenied" title="test.support.ResourceDenied"><code class="xref py py-exc docutils literal"><span class="pre">ResourceDenied</span></code></a> を送出します。その場合、 <em>msg</em> は <a class="reference internal" href="#test.support.ResourceDenied" title="test.support.ResourceDenied"><code class="xref py py-exc docutils literal"><span class="pre">ResourceDenied</span></code></a> の引数になります。 <code class="docutils literal"><span class="pre">__name__</span></code> が <code class="docutils literal"><span class="pre">'__main__'</span></code> である関数にから呼び出された場合には常に <code class="docutils literal"><span class="pre">True</span></code> を返します。テストを <code class="xref py py-mod docutils literal"><span class="pre">test.regrtest</span></code> から実行するときに使われます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.findfile">
+<code class="descclassname">test.support.</code><code class="descname">findfile</code><span class="sig-paren">(</span><em>filename</em>, <em>subdir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.findfile" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>filename</em> という名前のファイルへのパスを返します。一致するものが見つからなければ、 <em>filename</em> 自体を返します。 <em>filename</em> 自体もファイルへのパスでありえるので、 <em>filename</em> が返っても失敗ではありません。</p>
+<blockquote>
+<div><p><em>subdir</em> を設定することで、パスのディレクトリを直接見に行くのではなく、相対パスを使って見付けにいくように指示できます。</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.run_unittest">
+<code class="descclassname">test.support.</code><code class="descname">run_unittest</code><span class="sig-paren">(</span><em>*classes</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.run_unittest" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>渡された <a class="reference internal" href="unittest.html#unittest.TestCase" title="unittest.TestCase"><code class="xref py py-class docutils literal"><span class="pre">unittest.TestCase</span></code></a> サブクラスを実行します。この関数は名前が <code class="docutils literal"><span class="pre">test_</span></code> で始まるメソッドを探して、テストを個別に実行します。</p>
+<p>引数に文字列を渡すことも許可されています。その場合、文字列は <code class="docutils literal"><span class="pre">sys.module</span></code> のキーでなければなりません。指定された各モジュールは、 <code class="docutils literal"><span class="pre">unittest.TestLoader.loadTestsFromModule()</span></code> でスキャンされます。この関数は、よく次のような <code class="xref py py-func docutils literal"><span class="pre">test_main()</span></code> 関数の形で利用されます。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_main</span><span class="p">():</span>
+    <span class="n">support</span><span class="o">.</span><span class="n">run_unittest</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>この関数は、名前で指定されたモジュールの中の全ての定義されたテストを実行します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.run_doctest">
+<code class="descclassname">test.support.</code><code class="descname">run_doctest</code><span class="sig-paren">(</span><em>module</em>, <em>verbosity=None</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.run_doctest" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>与えられた <em>module</em> の <a class="reference internal" href="doctest.html#doctest.testmod" title="doctest.testmod"><code class="xref py py-func docutils literal"><span class="pre">doctest.testmod()</span></code></a> を実行します。<code class="docutils literal"><span class="pre">(failure_count,</span> <span class="pre">test_count)</span></code> を返します。</p>
+<p><em>verbosity</em> が <code class="docutils literal"><span class="pre">None</span></code> の場合、 <a class="reference internal" href="doctest.html#doctest.testmod" title="doctest.testmod"><code class="xref py py-func docutils literal"><span class="pre">doctest.testmod()</span></code></a> は冗長性 (verbosity) に <a class="reference internal" href="#test.support.verbose" title="test.support.verbose"><code class="xref py py-data docutils literal"><span class="pre">verbose</span></code></a> を設定して実行されます。
+そうでない場合は、冗長性に <code class="docutils literal"><span class="pre">None</span></code> を設定して実行されます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.check_warnings">
+<code class="descclassname">test.support.</code><code class="descname">check_warnings</code><span class="sig-paren">(</span><em>*filters</em>, <em>quiet=True</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.check_warnings" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>warning が正しく発行されているかどうかチェックする、 <a class="reference internal" href="warnings.html#warnings.catch_warnings" title="warnings.catch_warnings"><code class="xref py py-func docutils literal"><span class="pre">warnings.catch_warnings()</span></code></a> を使いやすくするラッパーです。これは、 <a class="reference internal" href="warnings.html#warnings.simplefilter" title="warnings.simplefilter"><code class="xref py py-meth docutils literal"><span class="pre">warnings.simplefilter()</span></code></a> を <code class="docutils literal"><span class="pre">always</span></code> に設定して、記録された結果を自動的に検証するオプションと共に <code class="docutils literal"><span class="pre">warnings.catch_warnings(record=True)</span></code> を呼ぶのとほぼ同じです。</p>
+<p><code class="docutils literal"><span class="pre">check_warnings</span></code> は <code class="docutils literal"><span class="pre">(&quot;message</span> <span class="pre">regexp&quot;,</span> <span class="pre">WarningCategory)</span></code> の形をした 2要素タプルをポジション引数として受け取ります。1つ以上の <em>filters</em> が与えられた場合や、オプションのキーワード引数 <em>quiet</em> が <code class="docutils literal"><span class="pre">False</span></code> の場合、警告が期待通りであるかどうかをチェックします。指定された各 filter は最低でも1回は囲われたコード内で発生した警告とマッチしなければテストが失敗しますし、指定されたどの filter ともマッチしない警告が発生してもテストが失敗します。前者のチェックを無効にするには、<em>quiet</em> を <code class="docutils literal"><span class="pre">True</span></code> にします。</p>
+<p>引数が1つもない場合、デフォルトでは次のようになります:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">check_warnings</span><span class="p">((</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ne">Warning</span><span class="p">),</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>この場合、全ての警告は補足され、エラーは発生しません。</p>
+<p>コンテキストマネージャーに入る時、 <code class="xref py py-class docutils literal"><span class="pre">WarningRecorder</span></code> インスタンスが返されます。このレコーダーオブジェクトの <a class="reference internal" href="warnings.html#module-warnings" title="warnings: Issue warning messages and control their disposition."><code class="xref py py-attr docutils literal"><span class="pre">warnings</span></code></a> 属性から、 <a class="reference internal" href="warnings.html#warnings.catch_warnings" title="warnings.catch_warnings"><code class="xref py py-func docutils literal"><span class="pre">catch_warnings()</span></code></a> から得られる警告のリストを取得することができます。便利さのために、レコーダーオブジェクトから直接、一番最近に発生した警告を表すオブジェクトの属性にアクセスできます(以下にある例を参照してください)。警告が1つも発生しなかった場合、それらの全ての属性は <code class="docutils literal"><span class="pre">None</span></code> を返します。</p>
+<p>レコーダーオブジェクトの <code class="xref py py-meth docutils literal"><span class="pre">reset()</span></code> メソッドは警告リストをクリアします。</p>
+<p>コンテキストマネージャーは次のようにして使います:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">check_warnings</span><span class="p">((</span><span class="s2">&quot;assertion is always true&quot;</span><span class="p">,</span> <span class="ne">SyntaxWarning</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)):</span>
+    <span class="n">exec</span><span class="p">(</span><span class="s1">&#39;assert(False, &quot;Hey!&quot;)&#39;</span><span class="p">)</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">(</span><span class="s2">&quot;Hide me!&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>この場合、どちらの警告も発生しなかった場合や、それ以外の警告が発生した場合は、 <a class="reference internal" href="#test.support.check_warnings" title="test.support.check_warnings"><code class="xref py py-func docutils literal"><span class="pre">check_warnings()</span></code></a> はエラーを発生させます。</p>
+<p>警告が発生したかどうかだけでなく、もっと詳しいチェックが必要な場合は、次のようなコードになります:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">check_warnings</span><span class="p">(</span><span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">w</span><span class="p">:</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="s2">&quot;foo&quot;</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="s2">&quot;bar&quot;</span>
+    <span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">warnings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="s2">&quot;foo&quot;</span>
+    <span class="k">assert</span> <span class="nb">str</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">warnings</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="s2">&quot;bar&quot;</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">warnings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>全ての警告をキャプチャし、テストコードがその警告を直接テストします。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>新しいオプション引数 <em>filters</em> と <em>quiet</em></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.captured_stdin">
+<code class="descclassname">test.support.</code><code class="descname">captured_stdin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test.support.captured_stdin" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="test.support.captured_stdout">
+<code class="descclassname">test.support.</code><code class="descname">captured_stdout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test.support.captured_stdout" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="test.support.captured_stderr">
+<code class="descclassname">test.support.</code><code class="descname">captured_stderr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test.support.captured_stderr" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>名前付きストリ－ムを <a class="reference internal" href="io.html#io.StringIO" title="io.StringIO"><code class="xref py py-class docutils literal"><span class="pre">io.StringIO</span></code></a> オブジェクトで一時的に置き換えるコンテクストマネージャです。</p>
+<p>出力ストリームの使用例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">captured_stdout</span><span class="p">()</span> <span class="k">as</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">captured_stderr</span><span class="p">()</span> <span class="k">as</span> <span class="n">stderr</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">stdout</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;hello</span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="k">assert</span> <span class="n">stderr</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;error</span><span class="se">\n</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>入力ストリ－ムの使用例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">captured_stdin</span><span class="p">()</span> <span class="k">as</span> <span class="n">stdin</span><span class="p">:</span>
+    <span class="n">stdin</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;hello</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">stdin</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="c1"># call test code that consumes from sys.stdin</span>
+    <span class="n">captured</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">captured</span><span class="p">,</span> <span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.temp_dir">
+<code class="descclassname">test.support.</code><code class="descname">temp_dir</code><span class="sig-paren">(</span><em>path=None</em>, <em>quiet=False</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.temp_dir" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>path</em> に一時ディレクトリを作成し与えるコンテキストマネージャです。</p>
+<p>If <em>path</em> is <code class="docutils literal"><span class="pre">None</span></code>, the temporary directory is created using
+<a class="reference internal" href="tempfile.html#tempfile.mkdtemp" title="tempfile.mkdtemp"><code class="xref py py-func docutils literal"><span class="pre">tempfile.mkdtemp()</span></code></a>.  If <em>quiet</em> is <code class="docutils literal"><span class="pre">False</span></code>, the context manager
+raises an exception on error.  Otherwise, if <em>path</em> is specified and
+cannot be created, only a warning is issued.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.change_cwd">
+<code class="descclassname">test.support.</code><code class="descname">change_cwd</code><span class="sig-paren">(</span><em>path</em>, <em>quiet=False</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.change_cwd" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>カレントディレクトリを一時的に <em>path</em> に変更し与えるコンテキストマネージャです。</p>
+<p><em>quiet</em> が <code class="docutils literal"><span class="pre">False</span></code> の場合、コンテキストマネージャはエラーが起きると例外を送出します。
+それ以外の場合には、警告を出すだけでカレントディレクトリは同じままにしておきます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.temp_cwd">
+<code class="descclassname">test.support.</code><code class="descname">temp_cwd</code><span class="sig-paren">(</span><em>name='tempcwd'</em>, <em>quiet=False</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.temp_cwd" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>一時的に新しいディレクトリを作成し、カレントディレクトリ (current working directory, CWD) を変更するコンテキストマネージャです。</p>
+<p>The context manager creates a temporary directory in the current
+directory with name <em>name</em> before temporarily changing the current
+working directory.  If <em>name</em> is <code class="docutils literal"><span class="pre">None</span></code>, the temporary directory is
+created using <a class="reference internal" href="tempfile.html#tempfile.mkdtemp" title="tempfile.mkdtemp"><code class="xref py py-func docutils literal"><span class="pre">tempfile.mkdtemp()</span></code></a>.</p>
+<p><em>quiet</em> が <code class="docutils literal"><span class="pre">False</span></code> でカレントディレクトリの作成や変更ができない場合、例外を送出します。
+それ以外の場合には、警告を出すだけで元のカレントディレクトリが使われます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.temp_umask">
+<code class="descclassname">test.support.</code><code class="descname">temp_umask</code><span class="sig-paren">(</span><em>umask</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.temp_umask" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>一時的にプロセスの umask を設定するコンテキストマネージャ。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.can_symlink">
+<code class="descclassname">test.support.</code><code class="descname">can_symlink</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test.support.can_symlink" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>OS がシンボリックリンクをサポートする場合 <code class="docutils literal"><span class="pre">True</span></code> を返し、その他の場合は <code class="docutils literal"><span class="pre">False</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.skip_unless_symlink">
+<code class="descclassname">&#64;</code><code class="descclassname">test.support.</code><code class="descname">skip_unless_symlink</code><a class="headerlink" href="#test.support.skip_unless_symlink" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>シンボリックリンクのサポートが必要なテストを実行することを表すデコレータ。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.anticipate_failure">
+<code class="descclassname">&#64;</code><code class="descclassname">test.support.</code><code class="descname">anticipate_failure</code><span class="sig-paren">(</span><em>condition</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.anticipate_failure" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ある条件で <a class="reference internal" href="unittest.html#unittest.expectedFailure" title="unittest.expectedFailure"><code class="xref py py-func docutils literal"><span class="pre">unittest.expectedFailure()</span></code></a> の印をテストに付けるデコレータ。
+このデコレータを使うときはいつも、関連する問題を指し示すコメントを付けておくべきです。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.run_with_locale">
+<code class="descclassname">&#64;</code><code class="descclassname">test.support.</code><code class="descname">run_with_locale</code><span class="sig-paren">(</span><em>catstr</em>, <em>*locales</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.run_with_locale" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>別のロケールで関数を実行し、完了したら適切に元の状態に戻すためのデコレータ。
+<em>catstr</em> は (例えば <code class="docutils literal"><span class="pre">&quot;LC_ALL&quot;</span></code> のような) ロケールカテゴリを文字列で表したものです。
+渡された <em>locales</em> が順々に試され、一番最初に出てきた妥当なロケールが使われます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.make_bad_fd">
+<code class="descclassname">test.support.</code><code class="descname">make_bad_fd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#test.support.make_bad_fd" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>一時ファイルを開いた後に閉じ、そのファイル記述子を返すことで無効な記述子を作成します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.import_module">
+<code class="descclassname">test.support.</code><code class="descname">import_module</code><span class="sig-paren">(</span><em>name</em>, <em>deprecated=False</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.import_module" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は <em>name</em> で指定されたモジュールをインポートして返します。通常のインポートと異なり、この関数はモジュールをインポートできなかった場合に <a class="reference internal" href="unittest.html#unittest.SkipTest" title="unittest.SkipTest"><code class="xref py py-exc docutils literal"><span class="pre">unittest.SkipTest</span></code></a> 例外を発生させます。</p>
+<p><em>deprecated</em> が <code class="docutils literal"><span class="pre">True</span></code> の場合、インポート中はモジュールとパッケージの廃止メッセージが抑制されます。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.1 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.import_fresh_module">
+<code class="descclassname">test.support.</code><code class="descname">import_fresh_module</code><span class="sig-paren">(</span><em>name</em>, <em>fresh=()</em>, <em>blocked=()</em>, <em>deprecated=False</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.import_fresh_module" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は、 <em>name</em> で指定された Python モジュールを、インポート前に <code class="docutils literal"><span class="pre">sys.modules</span></code> から削除することで新規にインポートしてそのコピーを返します。 <code class="xref py py-func docutils literal"><span class="pre">reload()</span></code> 関数と違い、もとのモジュールはこの操作によって影響をうけません。</p>
+<p><em>fresh</em> は、同じようにインポート前に <code class="docutils literal"><span class="pre">sys.modules</span></code> から削除されるモジュール名の iterable です。</p>
+<p><em>blocked</em> もモジュール名のイテラブルで、インポート中にモジュールキャッシュ内でその名前を <code class="docutils literal"><span class="pre">None</span></code> に置き換えることで、そのモジュールをインポートしようとすると <a class="reference internal" href="exceptions.html#ImportError" title="ImportError"><code class="xref py py-exc docutils literal"><span class="pre">ImportError</span></code></a> を発生させます。</p>
+<p>指定されたモジュールと <em>fresh</em> や <em>blocked</em> 引数内のモジュール名はインポート前に保存され、フレッシュなインポートが完了したら <code class="docutils literal"><span class="pre">sys.modules</span></code> に戻されます。</p>
+<p><em>deprecated</em> が <code class="docutils literal"><span class="pre">True</span></code> の場合、インポート中はモジュールとパッケージの廃止メッセージが抑制されます。</p>
+<p>指定したモジュールがインポートできなかった場合に、この関数は <a class="reference internal" href="exceptions.html#ImportError" title="ImportError"><code class="xref py py-exc docutils literal"><span class="pre">ImportError</span></code></a> を送出します。</p>
+<p>使用例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Get copies of the warnings module for testing without affecting the</span>
+<span class="c1"># version being used by the rest of the test suite. One copy uses the</span>
+<span class="c1"># C implementation, the other is forced to use the pure Python fallback</span>
+<span class="c1"># implementation</span>
+<span class="n">py_warnings</span> <span class="o">=</span> <span class="n">import_fresh_module</span><span class="p">(</span><span class="s1">&#39;warnings&#39;</span><span class="p">,</span> <span class="n">blocked</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_warnings&#39;</span><span class="p">])</span>
+<span class="n">c_warnings</span> <span class="o">=</span> <span class="n">import_fresh_module</span><span class="p">(</span><span class="s1">&#39;warnings&#39;</span><span class="p">,</span> <span class="n">fresh</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;_warnings&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.1 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.bind_port">
+<code class="descclassname">test.support.</code><code class="descname">bind_port</code><span class="sig-paren">(</span><em>sock</em>, <em>host=HOST</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.bind_port" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Bind the socket to a free port and return the port number.  Relies on
+ephemeral ports in order to ensure we are using an unbound port.  This is
+important as many tests may be running simultaneously, especially in a
+buildbot environment.  This method raises an exception if the
+<code class="docutils literal"><span class="pre">sock.family</span></code> is <a class="reference internal" href="socket.html#socket.AF_INET" title="socket.AF_INET"><code class="xref py py-const docutils literal"><span class="pre">AF_INET</span></code></a> and <code class="docutils literal"><span class="pre">sock.type</span></code> is
+<a class="reference internal" href="socket.html#socket.SOCK_STREAM" title="socket.SOCK_STREAM"><code class="xref py py-const docutils literal"><span class="pre">SOCK_STREAM</span></code></a>, and the socket has
+<code class="xref py py-const docutils literal"><span class="pre">SO_REUSEADDR</span></code> or <code class="xref py py-const docutils literal"><span class="pre">SO_REUSEPORT</span></code> set on it.
+Tests should never set these socket options for TCP/IP sockets.
+The only case for setting these options is testing multicasting via
+multiple UDP sockets.</p>
+<p>Additionally, if the <code class="xref py py-const docutils literal"><span class="pre">SO_EXCLUSIVEADDRUSE</span></code> socket option is
+available (i.e. on Windows), it will be set on the socket.  This will
+prevent anyone else from binding to our host/port for the duration of the
+test.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.find_unused_port">
+<code class="descclassname">test.support.</code><code class="descname">find_unused_port</code><span class="sig-paren">(</span><em>family=socket.AF_INET</em>, <em>socktype=socket.SOCK_STREAM</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.find_unused_port" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Returns an unused port that should be suitable for binding.  This is
+achieved by creating a temporary socket with the same family and type as
+the <code class="docutils literal"><span class="pre">sock</span></code> parameter (default is <a class="reference internal" href="socket.html#socket.AF_INET" title="socket.AF_INET"><code class="xref py py-const docutils literal"><span class="pre">AF_INET</span></code></a>,
+<a class="reference internal" href="socket.html#socket.SOCK_STREAM" title="socket.SOCK_STREAM"><code class="xref py py-const docutils literal"><span class="pre">SOCK_STREAM</span></code></a>),
+and binding it to the specified host address (defaults to <code class="docutils literal"><span class="pre">0.0.0.0</span></code>)
+with the port set to 0, eliciting an unused ephemeral port from the OS.
+The temporary socket is then closed and deleted, and the ephemeral port is
+returned.</p>
+<p>Either this method or <a class="reference internal" href="#test.support.bind_port" title="test.support.bind_port"><code class="xref py py-func docutils literal"><span class="pre">bind_port()</span></code></a> should be used for any tests
+where a server socket needs to be bound to a particular port for the
+duration of the test.
+Which one to use depends on whether the calling code is creating a python
+socket, or if an unused port needs to be provided in a constructor
+or passed to an external program (i.e. the <code class="docutils literal"><span class="pre">-accept</span></code> argument to
+openssl&#8217;s s_server mode).  Always prefer <a class="reference internal" href="#test.support.bind_port" title="test.support.bind_port"><code class="xref py py-func docutils literal"><span class="pre">bind_port()</span></code></a> over
+<a class="reference internal" href="#test.support.find_unused_port" title="test.support.find_unused_port"><code class="xref py py-func docutils literal"><span class="pre">find_unused_port()</span></code></a> where possible.  Using a hard coded port is
+discouraged since it can make multiple instances of the test impossible to
+run simultaneously, which is a problem for buildbots.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.load_package_tests">
+<code class="descclassname">test.support.</code><code class="descname">load_package_tests</code><span class="sig-paren">(</span><em>pkg_dir</em>, <em>loader</em>, <em>standard_tests</em>, <em>pattern</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.load_package_tests" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Generic implementation of the <a class="reference internal" href="unittest.html#module-unittest" title="unittest: Unit testing framework for Python."><code class="xref py py-mod docutils literal"><span class="pre">unittest</span></code></a> <code class="docutils literal"><span class="pre">load_tests</span></code> protocol for
+use in test packages.  <em>pkg_dir</em> is the root directory of the package;
+<em>loader</em>, <em>standard_tests</em>, and <em>pattern</em> are the arguments expected by
+<code class="docutils literal"><span class="pre">load_tests</span></code>.  In simple cases, the test package&#8217;s <code class="docutils literal"><span class="pre">__init__.py</span></code>
+can be the following:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">test.support</span> <span class="k">import</span> <span class="n">load_package_tests</span>
+
+<span class="k">def</span> <span class="nf">load_tests</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">load_package_tests</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descname">detect_api_mismatch(ref_api, other_api, *, ignore=()):</code></dt>
+<dd><p>Returns the set of attributes, functions or methods of <em>ref_api</em> not
+found on <em>other_api</em>, except for a defined list of items to be
+ignored in this check specified in <em>ignore</em>.</p>
+<p>By default this skips private attributes beginning with &#8216;_&#8217; but
+includes all magic methods, i.e. those starting and ending in &#8216;__&#8217;.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="test.support.check__all__">
+<code class="descclassname">test.support.</code><code class="descname">check__all__</code><span class="sig-paren">(</span><em>test_case</em>, <em>module</em>, <em>name_of_module=None</em>, <em>extra=()</em>, <em>blacklist=()</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.check__all__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Assert that the <code class="docutils literal"><span class="pre">__all__</span></code> variable of <em>module</em> contains all public names.</p>
+<p>The module&#8217;s public names (its API) are detected automatically
+based on whether they match the public name convention and were defined in
+<em>module</em>.</p>
+<p>The <em>name_of_module</em> argument can specify (as a string or tuple thereof) what
+module(s) an API could be defined in in order to be detected as a public
+API. One case for this is when <em>module</em> imports part of its public API from
+other modules, possibly a C backend (like <code class="docutils literal"><span class="pre">csv</span></code> and its <code class="docutils literal"><span class="pre">_csv</span></code>).</p>
+<p>The <em>extra</em> argument can be a set of names that wouldn&#8217;t otherwise be automatically
+detected as &#8220;public&#8221;, like objects without a proper <code class="docutils literal"><span class="pre">__module__</span></code>
+attribute. If provided, it will be added to the automatically detected ones.</p>
+<p>The <em>blacklist</em> argument can be a set of names that must not be treated as part of
+the public API even though their names indicate otherwise.</p>
+<p>使用例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">bar</span>
+<span class="kn">import</span> <span class="nn">foo</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">test</span> <span class="k">import</span> <span class="n">support</span>
+
+<span class="k">class</span> <span class="nc">MiscTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test__all__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">support</span><span class="o">.</span><span class="n">check__all__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">OtherTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test__all__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;BAR_CONST&#39;</span><span class="p">,</span> <span class="s1">&#39;FOO_CONST&#39;</span><span class="p">}</span>
+        <span class="n">blacklist</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;baz&#39;</span><span class="p">}</span>  <span class="c1"># Undocumented name.</span>
+        <span class="c1"># bar imports part of its API from _bar.</span>
+        <span class="n">support</span><span class="o">.</span><span class="n">check__all__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bar</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;_bar&#39;</span><span class="p">),</span>
+                             <span class="n">extra</span><span class="o">=</span><span class="n">extra</span><span class="p">,</span> <span class="n">blacklist</span><span class="o">=</span><span class="n">blacklist</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
+</div>
+</dd></dl>
+
+<p><a class="reference internal" href="#module-test.support" title="test.support: Support for Python's regression test suite."><code class="xref py py-mod docutils literal"><span class="pre">test.support</span></code></a> モジュールでは、以下のクラスを定義しています:</p>
+<dl class="class">
+<dt id="test.support.TransientResource">
+<em class="property">class </em><code class="descclassname">test.support.</code><code class="descname">TransientResource</code><span class="sig-paren">(</span><em>exc</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.TransientResource" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このクラスのインスタンスはコンテキストマネージャーで、指定された型の例外が発生した場合に <a class="reference internal" href="#test.support.ResourceDenied" title="test.support.ResourceDenied"><code class="xref py py-exc docutils literal"><span class="pre">ResourceDenied</span></code></a> 例外を発生させます。キーワード引数は全て、 <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文の中で発生した全ての例外の属性名/属性値と比較されます。全てのキーワード引数が例外の属性に一致した場合に、 <a class="reference internal" href="#test.support.ResourceDenied" title="test.support.ResourceDenied"><code class="xref py py-exc docutils literal"><span class="pre">ResourceDenied</span></code></a> 例外が発生します。</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="test.support.EnvironmentVarGuard">
+<em class="property">class </em><code class="descclassname">test.support.</code><code class="descname">EnvironmentVarGuard</code><a class="headerlink" href="#test.support.EnvironmentVarGuard" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>一時的に環境変数をセット・アンセットするためのクラスです。このクラスのインスタンスはコンテキストマネージャーとして利用されます。また、 <code class="docutils literal"><span class="pre">os.environ</span></code> に対する参照・更新を行う完全な辞書のインタフェースを持ちます。コンテキストマネージャーが終了した時、このインスタンス経由で環境変数へ行った全ての変更はロールバックされます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.1 で変更: </span>辞書のインタフェースを追加しました。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.support.EnvironmentVarGuard.set">
+<code class="descclassname">EnvironmentVarGuard.</code><code class="descname">set</code><span class="sig-paren">(</span><em>envvar</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.EnvironmentVarGuard.set" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>一時的に、 <code class="docutils literal"><span class="pre">envvar</span></code> を <code class="docutils literal"><span class="pre">value</span></code> にセットします。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="test.support.EnvironmentVarGuard.unset">
+<code class="descclassname">EnvironmentVarGuard.</code><code class="descname">unset</code><span class="sig-paren">(</span><em>envvar</em><span class="sig-paren">)</span><a class="headerlink" href="#test.support.EnvironmentVarGuard.unset" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>一時的に <code class="docutils literal"><span class="pre">envvar</span></code> をアンセットします。</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="test.support.SuppressCrashReport">
+<em class="property">class </em><code class="descclassname">test.support.</code><code class="descname">SuppressCrashReport</code><a class="headerlink" href="#test.support.SuppressCrashReport" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>A context manager used to try to prevent crash dialog popups on tests that
+are expected to crash a subprocess.</p>
+<p>On Windows, it disables Windows Error Reporting dialogs using
+<a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms680621.aspx">SetErrorMode</a>.</p>
+<p>On UNIX, <a class="reference internal" href="resource.html#resource.setrlimit" title="resource.setrlimit"><code class="xref py py-func docutils literal"><span class="pre">resource.setrlimit()</span></code></a> is used to set
+<a class="reference internal" href="resource.html#resource.RLIMIT_CORE" title="resource.RLIMIT_CORE"><code class="xref py py-attr docutils literal"><span class="pre">resource.RLIMIT_CORE</span></code></a>&#8216;s soft limit to 0 to prevent coredump file
+creation.</p>
+<p>On both platforms, the old value is restored by <a class="reference internal" href="../reference/datamodel.html#object.__exit__" title="object.__exit__"><code class="xref py py-meth docutils literal"><span class="pre">__exit__()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="test.support.WarningsRecorder">
+<em class="property">class </em><code class="descclassname">test.support.</code><code class="descname">WarningsRecorder</code><a class="headerlink" href="#test.support.WarningsRecorder" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ユニットテスト時に warning を記録するためのクラスです。上の、 <a class="reference internal" href="#test.support.check_warnings" title="test.support.check_warnings"><code class="xref py py-func docutils literal"><span class="pre">check_warnings()</span></code></a> のドキュメントを参照してください。</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">26.8. <code class="docutils literal"><span class="pre">test</span></code> &#8212; Python 用回帰テストパッケージ</a><ul>
+<li><a class="reference internal" href="#writing-unit-tests-for-the-test-package">26.8.1. <code class="docutils literal"><span class="pre">test</span></code> パッケージのためのユニットテストを書く</a></li>
+<li><a class="reference internal" href="#running-tests-using-the-command-line-interface">26.8.2. コマンドラインインタフェースを利用してテストを実行する</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-test.support">26.9. <code class="docutils literal"><span class="pre">test.support</span></code> &#8212; テストのためのユーティリティ関数</a></li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="2to3.html"
+                        title="前の章へ">26.7. 2to3 - Python 2 から 3 への自動コード変換</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="debug.html"
+                        title="次の章へ">27. デバッグとプロファイル</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/test.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="debug.html" title="27. デバッグとプロファイル"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="2to3.html" title="26.7. 2to3 - Python 2 から 3 への自動コード変換"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="development.html" >26. 開発ツール</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

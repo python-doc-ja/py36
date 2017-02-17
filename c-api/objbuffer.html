@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>古いバッファプロトコル &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="抽象オブジェクトレイヤ (abstract objects layer)" href="abstract.html" />
+    <link rel="next" title="具象オブジェクト (concrete object) レイヤ" href="concrete.html" />
+    <link rel="prev" title="バッファプロトコル (buffer Protocol)" href="buffer.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/c-api/objbuffer.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/c-api/objbuffer.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="concrete.html" title="具象オブジェクト (concrete object) レイヤ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="buffer.html" title="バッファプロトコル (buffer Protocol)"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API リファレンスマニュアル</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="abstract.html" accesskey="U">抽象オブジェクトレイヤ (abstract objects layer)</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="old-buffer-protocol">
+<h1>古いバッファプロトコル<a class="headerlink" href="#old-buffer-protocol" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="deprecated">
+<p><span class="versionmodified">バージョン 3.0 で撤廃.</span></p>
+</div>
+<p>これらの関数は、 Python 2 の「古いバッファプロトコル」 API の一部です。 Python 3 では、もうこのプロトコルは存在しませんが、 2.x のコードを移植しやすいように関数は公開されています。 <a class="reference internal" href="buffer.html#bufferobjects"><span class="std std-ref">新しいバッファプロトコル</span></a> と互換性のあるラッパー関数のように振る舞いますが、バッファがエクスポートされるときに取得されるリソースの生存期間を管理することはできません。</p>
+<p>従って、あるオブジェクトのバッファビューを取得するために、 <a class="reference internal" href="buffer.html#c.PyObject_GetBuffer" title="PyObject_GetBuffer"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GetBuffer()</span></code></a> (もしくは <code class="docutils literal"><span class="pre">y*</span></code> および <code class="docutils literal"><span class="pre">w*</span></code>  <a class="reference internal" href="arg.html#arg-parsing"><span class="std std-ref">フォーマットコード</span></a> で <a class="reference internal" href="arg.html#c.PyArg_ParseTuple" title="PyArg_ParseTuple"><code class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></code></a> やその仲間) を呼び出し、バッファビューを解放するときには <a class="reference internal" href="buffer.html#c.PyBuffer_Release" title="PyBuffer_Release"><code class="xref c c-func docutils literal"><span class="pre">PyBuffer_Release()</span></code></a> を呼び出します。</p>
+<dl class="function">
+<dt id="c.PyObject_AsCharBuffer">
+int <code class="descname">PyObject_AsCharBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*obj</em>, const char<em>&nbsp;**buffer</em>, Py_ssize_t<em>&nbsp;*buffer_len</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyObject_AsCharBuffer" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>文字ベースの入力として使える読み出し専用メモリ上の位置へのポインタを返します。 <em>obj</em> 引数は単一セグメントからなる文字バッファインタフェースをサポートしていなければなりません。成功すると <code class="docutils literal"><span class="pre">0</span></code> を返し、 <em>buffer</em> をメモリの位置に、  <em>buffer_len</em> をバッファの長さに設定します。エラーの際には  <code class="docutils literal"><span class="pre">-1</span></code> を返し、 <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> をセットします。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyObject_AsReadBuffer">
+int <code class="descname">PyObject_AsReadBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*obj</em>, const void<em>&nbsp;**buffer</em>, Py_ssize_t<em>&nbsp;*buffer_len</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyObject_AsReadBuffer" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>任意のデータを収めた読み出し専用のメモリ上の位置へのポインタを返します。 <em>obj</em> 引数は単一セグメントからなる読み出し可能バッファインタフェースをサポートしていなければなりません。成功すると <code class="docutils literal"><span class="pre">0</span></code> を返し、 <em>buffer</em> をメモリの位置に、  <em>buffer_len</em> をバッファの長さに設定します。エラーの際には  <code class="docutils literal"><span class="pre">-1</span></code> を返し、 <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> をセットします。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyObject_CheckReadBuffer">
+int <code class="descname">PyObject_CheckReadBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyObject_CheckReadBuffer" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>o</em> が単一セグメントからなる読み出し可能バッファインタフェースをサポートしている場合に <code class="docutils literal"><span class="pre">1</span></code> を返します。それ以外の場合には <code class="docutils literal"><span class="pre">0</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyObject_AsWriteBuffer">
+int <code class="descname">PyObject_AsWriteBuffer</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*obj</em>, void<em>&nbsp;**buffer</em>, Py_ssize_t<em>&nbsp;*buffer_len</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyObject_AsWriteBuffer" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>書き込み可能なメモリ上の位置へのポインタを返します。 <em>obj</em>  引数は単一セグメントからなる文字バッファインタフェースをサポートしていなければなりません。成功すると <code class="docutils literal"><span class="pre">0</span></code> を返し、 <em>buffer</em> をメモリの位置に、 <em>buffer_len</em> をバッファの長さに設定します。エラーの際には <code class="docutils literal"><span class="pre">-1</span></code> を返し、 <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> をセットします。</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="buffer.html"
+                        title="前の章へ">バッファプロトコル (buffer Protocol)</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="concrete.html"
+                        title="次の章へ">具象オブジェクト (concrete object) レイヤ</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/objbuffer.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="concrete.html" title="具象オブジェクト (concrete object) レイヤ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="buffer.html" title="バッファプロトコル (buffer Protocol)"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API リファレンスマニュアル</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="abstract.html" >抽象オブジェクトレイヤ (abstract objects layer)</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

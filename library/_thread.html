@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>17.9. _thread — 低水準の スレッド API &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="17. 並行実行" href="concurrency.html" />
+    <link rel="next" title="17.10. _dummy_thread — _thread の代替モジュール" href="_dummy_thread.html" />
+    <link rel="prev" title="17.8. dummy_threading — threading の代替モジュール" href="dummy_threading.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/_thread.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/_thread.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="_dummy_thread.html" title="17.10. _dummy_thread — _thread の代替モジュール"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="dummy_threading.html" title="17.8. dummy_threading — threading の代替モジュール"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concurrency.html" accesskey="U">17. 並行実行</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-_thread">
+<span id="thread-low-level-threading-api"></span><h1>17.9. <a class="reference internal" href="#module-_thread" title="_thread: Low-level threading API."><code class="xref py py-mod docutils literal"><span class="pre">_thread</span></code></a> &#8212; 低水準の スレッド API<a class="headerlink" href="#module-_thread" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<hr class="docutils" id="index-0" />
+<p>このモジュールはマルチスレッド (別名 <em class="dfn">軽量プロセス</em> (<em class="dfn">light-weight processes</em>)または <em class="dfn">タスク</em> (<em class="dfn">tasks</em>)) に用いられる低水準プリミティブを提供します &#8212; グローバルデータ空間を共有するマルチスレッドを制御します。同期のための単純なロック (別名 <em class="dfn">mutexes</em> またはバイナリセマフォ (<em class="dfn">binary semaphores</em>))が提供されています。 <a class="reference internal" href="threading.html#module-threading" title="threading: Thread-based parallelism."><code class="xref py py-mod docutils literal"><span class="pre">threading</span></code></a> モジュールは、このモジュール上で、より使い易く高級なスレッディングの API を提供します。</p>
+<p id="index-1">このモジュールはオプションです。 Windows、Linux、SGI IRIX、Solaris 2.x、そして POSIX スレッド (別名 &#8220;pthread&#8221;) を実装するシステム上でサポートされます。 <a class="reference internal" href="#module-_thread" title="_thread: Low-level threading API."><code class="xref py py-mod docutils literal"><span class="pre">_thread</span></code></a> を使用することのできないシステムでは、 <a class="reference internal" href="_dummy_thread.html#module-_dummy_thread" title="_dummy_thread: Drop-in replacement for the _thread module."><code class="xref py py-mod docutils literal"><span class="pre">_dummy_thread</span></code></a> が用意されています。 <code class="xref py py-mod docutils literal"><span class="pre">dummy_thread</span></code> はこのモジュールと同じインターフェースを持ち、置き換えて使用することができます。</p>
+<p>定数と関数は以下のように定義されています:</p>
+<dl class="exception">
+<dt id="_thread.error">
+<em class="property">exception </em><code class="descclassname">_thread.</code><code class="descname">error</code><a class="headerlink" href="#_thread.error" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>スレッド固有の例外です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>現在は組み込みの <a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code></a> の別名です。</p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="_thread.LockType">
+<code class="descclassname">_thread.</code><code class="descname">LockType</code><a class="headerlink" href="#_thread.LockType" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>これはロックオブジェクトのタイプです。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_thread.start_new_thread">
+<code class="descclassname">_thread.</code><code class="descname">start_new_thread</code><span class="sig-paren">(</span><em>function</em>, <em>args</em><span class="optional">[</span>, <em>kwargs</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#_thread.start_new_thread" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>新しいスレッドを開始して、そのIDを返します。スレッドは引数リスト <em>args</em> (タプルでなければなりません)の関数 <em>function</em> を実行します。オプション引数 <em>kwargs</em> はキーワード引数の辞書を指定します。関数が戻るとき、スレッドは静かに終了します。関数が未定義の例外でターミネートしたとき、スタックトレースが表示され、そしてスレッドが終了します (しかし他のスレッドは走り続けます)。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_thread.interrupt_main">
+<code class="descclassname">_thread.</code><code class="descname">interrupt_main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_thread.interrupt_main" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>メインスレッドで <a class="reference internal" href="exceptions.html#KeyboardInterrupt" title="KeyboardInterrupt"><code class="xref py py-exc docutils literal"><span class="pre">KeyboardInterrupt</span></code></a> を送出します。サブスレッドはこの関数を使ってメインスレッドに割り込みをかけることができます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_thread.exit">
+<code class="descclassname">_thread.</code><code class="descname">exit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_thread.exit" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="exceptions.html#SystemExit" title="SystemExit"><code class="xref py py-exc docutils literal"><span class="pre">SystemExit</span></code></a> を送出します。それが捕えられないときは、静かにスレッドを終了させます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_thread.allocate_lock">
+<code class="descclassname">_thread.</code><code class="descname">allocate_lock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_thread.allocate_lock" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>新しいロックオブジェクトを返します。ロックのメソッドはこの後に記述されます。ロックは初期状態としてアンロック状態です。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_thread.get_ident">
+<code class="descclassname">_thread.</code><code class="descname">get_ident</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_thread.get_ident" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在のスレッドの &#8216;スレッドID&#8217; を返します。非ゼロの整数です。この値は直接の意味を持っていません; 例えばスレッド特有のデータの辞書に索引をつけるためのような、マジッククッキーとして意図されています。スレッドが終了し、他のスレッドが作られたとき、スレッド ID は再利用されるかもしれません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_thread.stack_size">
+<code class="descclassname">_thread.</code><code class="descname">stack_size</code><span class="sig-paren">(</span><span class="optional">[</span><em>size</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#_thread.stack_size" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>新しいスレッドを作るときのスレッドスタックサイズを返します。オプションの <em>size</em> 引数にはこれ以降に作成するスレッドのスタックサイズを指定し、0 (プラットフォームのデフォルト値または設定されたデフォルト値) か、 32,768 (32 KiB) 以上の正の整数でなければなりません。<em>size</em> が指定されない場合 0 が使われます。スレッドのスタックサイズの変更がサポートされていない場合、 <a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code></a> を送出します。不正なスタックサイズが指定された場合、 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> を送出して、スタックサイズは変更されません。32 KiB は現在のインタープリタ自身のために十分であると保証された最小のスタックサイズです。いくつかのプラットフォームではスタックサイズに対して制限があることに注意してください。例えば最小のスタックサイズが 32 KiB より大きかったり、システムのメモリページサイズ の整数倍の必要があるなどです。この制限についてはプラットフォームのドキュメントを参照してください (一般的なページサイズは 4 KiB なので、プラットフォームに関する情報がない場合は 4096 の整数倍のスタックサイズを選ぶといいかもしれません)。利用可能な環境: Windows、POSIX スレッドに対応したシステム。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="_thread.TIMEOUT_MAX">
+<code class="descclassname">_thread.</code><code class="descname">TIMEOUT_MAX</code><a class="headerlink" href="#_thread.TIMEOUT_MAX" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-meth docutils literal"><span class="pre">Lock.acquire()</span></code> の <em>timeout</em> 引数に許される最大値です。これ以上の値を timeout に指定すると <a class="reference internal" href="exceptions.html#OverflowError" title="OverflowError"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> を発生させます。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
+</div>
+</dd></dl>
+
+<p>ロックオブジェクトは次のようなメソッドを持っています:</p>
+<dl class="method">
+<dt id="_thread.lock.acquire">
+<code class="descclassname">lock.</code><code class="descname">acquire</code><span class="sig-paren">(</span><em>waitflag=1</em>, <em>timeout=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#_thread.lock.acquire" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションの引数なしで使用すると、このメソッドは他のスレッドがロックしているかどうかにかかわらずロックを獲得します。ただし、他のスレッドがすでにロックしている場合には解除されるまで待ってからロックを獲得します (同時にロックを獲得できるスレッドはひとつだけであり、これこそがロックの存在理由です)。</p>
+<p>整数の引数 <em>waitflag</em> を指定すると、その値によって動作が変わります。引数が <code class="docutils literal"><span class="pre">0</span></code> のときは、待たずにすぐ獲得できる場合にだけロックを獲得します。<code class="docutils literal"><span class="pre">0</span></code> 以外の値を与えると、先の例と同様、ロックの状態にかかわらず獲得をおこないます。</p>
+<p><em>timeout</em> 引数に正の float 値が指定された場合、返る前に待つ最大の時間を秒数で指定します。負の <em>timeout</em> 引数は無制限に待つことを指定します。<em>waitflag</em> が 0 の時は <em>timeout</em> を指定することはできません。</p>
+<p>なお、ロックを獲得できた場合は <code class="docutils literal"><span class="pre">True</span></code>、できなかった場合は <code class="docutils literal"><span class="pre">False</span></code> を返します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>新しい <em>timeout</em> 引数。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>POSIX ではロックの取得がシグナルに割り込まれるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="_thread.lock.release">
+<code class="descclassname">lock.</code><code class="descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_thread.lock.release" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ロックを解放します。そのロックは既に獲得されたものでなければなりませんが、しかし同じスレッドによって獲得されたものである必要はありません。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="_thread.lock.locked">
+<code class="descclassname">lock.</code><code class="descname">locked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_thread.lock.locked" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ロックの状態を返します: 同じスレッドによって獲得されたものなら <code class="docutils literal"><span class="pre">True</span></code> 、違うのなら <code class="docutils literal"><span class="pre">False</span></code> を返します。</p>
+</dd></dl>
+
+<p>これらのメソッドに加えて、ロックオブジェクトは <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文を通じて以下の例のように使うこともできます。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">_thread</span>
+
+<span class="n">a_lock</span> <span class="o">=</span> <span class="n">_thread</span><span class="o">.</span><span class="n">allocate_lock</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">a_lock</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;a_lock is locked while this executes&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>警告:</strong></p>
+<blockquote>
+<div></div></blockquote>
+<ul class="simple" id="index-2">
+<li><p class="first">スレッドは割り込みと奇妙な相互作用をします: <a class="reference internal" href="exceptions.html#KeyboardInterrupt" title="KeyboardInterrupt"><code class="xref py py-exc docutils literal"><span class="pre">KeyboardInterrupt</span></code></a> 例外は任意のスレッドによって受け取られます。 (<a class="reference internal" href="signal.html#module-signal" title="signal: Set handlers for asynchronous events."><code class="xref py py-mod docutils literal"><span class="pre">signal</span></code></a> モジュールが利用可能なとき、割り込みは常にメインスレッドへ行きます。)</p>
+</li>
+<li><p class="first"><a class="reference internal" href="sys.html#sys.exit" title="sys.exit"><code class="xref py py-func docutils literal"><span class="pre">sys.exit()</span></code></a> を呼び出す、あるいは <a class="reference internal" href="exceptions.html#SystemExit" title="SystemExit"><code class="xref py py-exc docutils literal"><span class="pre">SystemExit</span></code></a> 例外を送出することは、 <a class="reference internal" href="#_thread.exit" title="_thread.exit"><code class="xref py py-func docutils literal"><span class="pre">_thread.exit()</span></code></a> を呼び出すことと同じです。</p>
+</li>
+<li><p class="first">ロックの <code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code> メソッドに割り込むことはできません &#8212; <a class="reference internal" href="exceptions.html#KeyboardInterrupt" title="KeyboardInterrupt"><code class="xref py py-exc docutils literal"><span class="pre">KeyboardInterrupt</span></code></a> 例外は、ロックが獲得された後に発生します。</p>
+</li>
+<li><p class="first">メインスレッドが終了したとき、他のスレッドが生き残るかどうかは、システムに依存します。多くのシステムでは、 <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a> ... <a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal"><span class="pre">finally</span></code></a> 節や、オブジェクトデストラクタを実行せずに終了されます。</p>
+</li>
+<li><p class="first">メインスレッドが終了したとき、それの通常のクリーンアップは行なわれず、 (<a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a> ... <a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal"><span class="pre">finally</span></code></a> 節が尊重されることは除きます)、標準 I/O ファイルはフラッシュされません。</p>
+</li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="dummy_threading.html"
+                        title="前の章へ">17.8. <code class="docutils literal"><span class="pre">dummy_threading</span></code> &#8212; <code class="docutils literal"><span class="pre">threading</span></code> の代替モジュール</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="_dummy_thread.html"
+                        title="次の章へ">17.10. <code class="docutils literal"><span class="pre">_dummy_thread</span></code> &#8212; <code class="docutils literal"><span class="pre">_thread</span></code> の代替モジュール</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/_thread.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="_dummy_thread.html" title="17.10. _dummy_thread — _thread の代替モジュール"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="dummy_threading.html" title="17.8. dummy_threading — threading の代替モジュール"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concurrency.html" >17. 並行実行</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

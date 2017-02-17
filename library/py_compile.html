@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>32.10. py_compile — Python ソースファイルのコンパイル &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="32. Python言語サービス" href="language.html" />
+    <link rel="next" title="32.11. compileall — Python ライブラリをバイトコンパイル" href="compileall.html" />
+    <link rel="prev" title="32.9. pyclbr — Python クラスブラウザサポート" href="pyclbr.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/py_compile.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/py_compile.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="compileall.html" title="32.11. compileall — Python ライブラリをバイトコンパイル"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="pyclbr.html" title="32.9. pyclbr — Python クラスブラウザサポート"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="language.html" accesskey="U">32. Python言語サービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-py_compile">
+<span id="py-compile-compile-python-source-files"></span><h1>32.10. <a class="reference internal" href="#module-py_compile" title="py_compile: Generate byte-code files from Python source files."><code class="xref py py-mod docutils literal"><span class="pre">py_compile</span></code></a> &#8212; Python ソースファイルのコンパイル<a class="headerlink" href="#module-py_compile" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/py_compile.py">Lib/py_compile.py</a></p>
+<hr class="docutils" id="index-0" />
+<p><a class="reference internal" href="#module-py_compile" title="py_compile: Generate byte-code files from Python source files."><code class="xref py py-mod docutils literal"><span class="pre">py_compile</span></code></a> モジュールには、ソースファイルからバイトコードファイルを作る関数と、モジュールのソースファイルがスクリプトとして呼び出される時に使用される関数が定義されています。</p>
+<p>頻繁に必要となるわけではありませんが、共有ライブラリとしてモジュールをインストールする場合や、特にソースコードのあるディレクトリにバイトコードのキャッシュファイルを書き込む権限がないユーザがいるときには、この関数は役に立ちます。</p>
+<dl class="exception">
+<dt id="py_compile.PyCompileError">
+<em class="property">exception </em><code class="descclassname">py_compile.</code><code class="descname">PyCompileError</code><a class="headerlink" href="#py_compile.PyCompileError" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ファイルをコンパイル中にエラーが発生すると送出される例外。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="py_compile.compile">
+<code class="descclassname">py_compile.</code><code class="descname">compile</code><span class="sig-paren">(</span><em>file</em>, <em>cfile=None</em>, <em>dfile=None</em>, <em>doraise=False</em>, <em>optimize=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#py_compile.compile" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ソースファイルをバイトコードにコンパイルして、バイトコードのキャッシュファイルに書き出します。ソースコードはファイル名 <em>file</em> で渡します。バイトコードは <em>cfile</em> に書き込まれ、デフォルトでは <span class="target" id="index-7"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3147"><strong>PEP 3147</strong></a> や <span class="target" id="index-8"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0488"><strong>PEP 488</strong></a> にある <code class="docutils literal"><span class="pre">.pyc</span></code> で終わるパスです。例えば、 <em>file</em> が <code class="docutils literal"><span class="pre">/foo/bar/baz.py</span></code> だった場合、 <em>cfile</em> は Python 3.2 ではデフォルトで <code class="docutils literal"><span class="pre">/foo/bar/__pycache__/baz.cpython-32.pyc</span></code> になります。もし <em>dfile</em> が指定されたら、 <em>file</em> の代わりにソースファイルの名前としてエラーメッセージの中で使われます。 <em>doraise</em> が真の場合、コンパイル中にエラーが発生すると <a class="reference internal" href="#py_compile.PyCompileError" title="py_compile.PyCompileError"><code class="xref py py-exc docutils literal"><span class="pre">PyCompileError</span></code></a> を送出します。 <em>doraise</em> が (デフォルトである) 偽の場合はエラーメッセージは <code class="docutils literal"><span class="pre">sys.stderr</span></code> に出力されますが、例外は送出しません。この関数はバイトコンパイルされたファイルへのパス、つまり実際に使われた <em>cfile</em> の値を返します。</p>
+<p>(明示的に指定されたか計算された結果の) <em>cfile</em> のパスがシンボリックリンクだったり通常のファイルでなかったりした場合は、 <a class="reference internal" href="exceptions.html#FileExistsError" title="FileExistsError"><code class="xref py py-exc docutils literal"><span class="pre">FileExistsError</span></code></a> が送出されます。この動作は、それらのパスにバイトコンパイルされたファイルを書き込む権限がある場合、インポートのときにそのパスを通常のファイルに変えてしまうことを警告するためのものです。これはリネームを使ってバイトコンパイルされたファイルを配置するインポートで、同時にファイル書き込みをしてしまう問題を避けるための副作用です。</p>
+<p><em>optimize</em> は最適化レベルを制御するもので、組み込みの <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> 関数に渡されます。デフォルトは現在のインタープリタの最適化レベルを選ぶ <code class="docutils literal"><span class="pre">-1</span></code> です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span><span class="target" id="index-9"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3147"><strong>PEP 3147</strong></a> に準拠し <em>cfile</em> のデフォルト値を変更しました。以前のデフォルトは <em>file</em> + <code class="docutils literal"><span class="pre">'c'</span></code> (最適化が有効な場合は <code class="docutils literal"><span class="pre">'o'</span></code>) でした。同時に <em>optimize</em> パラメータも追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span>バイトコードをキャッシュするファイルへの書き込みに <a class="reference internal" href="importlib.html#module-importlib" title="importlib: The implementation of the import machinery."><code class="xref py py-mod docutils literal"><span class="pre">importlib</span></code></a> を使うようにコードを変更しました。これにより、例えば権限や write-and-move セマンティクスなどの、ファイルの作成や書き込みの動作が <a class="reference internal" href="importlib.html#module-importlib" title="importlib: The implementation of the import machinery."><code class="xref py py-mod docutils literal"><span class="pre">importlib</span></code></a> と一致するようになりました。 <em>cfile</em> がシンボリックリンクであるか通常のファイルでない場合、 <a class="reference internal" href="exceptions.html#FileExistsError" title="FileExistsError"><code class="xref py py-exc docutils literal"><span class="pre">FileExistsError</span></code></a> を送出するという注意書きも追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="py_compile.main">
+<code class="descclassname">py_compile.</code><code class="descname">main</code><span class="sig-paren">(</span><em>args=None</em><span class="sig-paren">)</span><a class="headerlink" href="#py_compile.main" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>いくつか複数のソースファイルをコンパイルします。 <em>args</em> で (あるいは <em>args</em> が <code class="docutils literal"><span class="pre">None</span></code> であればコマンドラインで) 指定されたファイルをコンパイルし、できたバイトコードを通常の方法で保存します。この関数はソースファイルの存在するディレクトリを検索しません; 指定されたファイルをコンパイルするだけです。 args が <code class="docutils literal"><span class="pre">'-'</span></code> 1つだけだった場合、ファイルのリストは標準入力から取られます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span><code class="docutils literal"><span class="pre">'-'</span></code> のサポートが追加されました。</p>
+</div>
+</dd></dl>
+
+<p>このモジュールがスクリプトとして実行されると、 <a class="reference internal" href="#py_compile.main" title="py_compile.main"><code class="xref py py-func docutils literal"><span class="pre">main()</span></code></a> がコマンドラインで指定されたファイルを全てコンパイルします。一つでもコンパイルできないファイルがあると終了ステータスが 0 でない値になります。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="compileall.html#module-compileall" title="compileall: Tools for byte-compiling all Python source files in a directory tree."><code class="xref py py-mod docutils literal"><span class="pre">compileall</span></code></a> モジュール</dt>
+<dd><p class="first last">ディレクトリツリー内の Python ソースファイルを全てコンパイルするライブラリ。</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="pyclbr.html"
+                        title="前の章へ">32.9. <code class="docutils literal"><span class="pre">pyclbr</span></code> &#8212; Python クラスブラウザサポート</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="compileall.html"
+                        title="次の章へ">32.11. <code class="docutils literal"><span class="pre">compileall</span></code> &#8212; Python ライブラリをバイトコンパイル</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/py_compile.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="compileall.html" title="32.11. compileall — Python ライブラリをバイトコンパイル"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="pyclbr.html" title="32.9. pyclbr — Python クラスブラウザサポート"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="language.html" >32. Python言語サービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

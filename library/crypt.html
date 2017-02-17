@@ -1,0 +1,309 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>35.5. crypt — Unix パスワードをチェックするための関数 &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="35. Unix 固有のサービス" href="unix.html" />
+    <link rel="next" title="35.6. termios — POSIX スタイルの端末制御" href="termios.html" />
+    <link rel="prev" title="35.4. grp — グループデータベースへのアクセス" href="grp.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/crypt.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/crypt.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="termios.html" title="35.6. termios — POSIX スタイルの端末制御"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="grp.html" title="35.4. grp — グループデータベースへのアクセス"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" accesskey="U">35. Unix 固有のサービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-crypt">
+<span id="crypt-function-to-check-unix-passwords"></span><h1>35.5. <a class="reference internal" href="#module-crypt" title="crypt: The crypt() function used to check Unix passwords. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">crypt</span></code></a> &#8212; Unix パスワードをチェックするための関数<a class="headerlink" href="#module-crypt" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/crypt.py">Lib/crypt.py</a></p>
+<hr class="docutils" id="index-0" />
+<p>このモジュールは修正 DES アルゴリズムに基づいた一方向ハッシュ関数である <em class="manpage">crypt(3)</em>  ルーチンを実装しています。詳細については Unix マニュアルページを参照してください。このモジュールは、実際に入力されたパスワードを記録することなくチェック出来るようにするためのハッシュ化パスワードを記録したり、Unix パスワードに (脆弱性検査のための) 辞書攻撃を試みるのに使えます。</p>
+<p id="index-1">このモジュールは実行環境の <em class="manpage">crypt(3)</em> の実装に依存しています。そのため、現在の実装で利用可能な拡張を、このモジュールでもそのまま利用できます。</p>
+<div class="section" id="hashing-methods">
+<h2>35.5.1. ハッシュ化方式<a class="headerlink" href="#hashing-methods" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+<p><a class="reference internal" href="#module-crypt" title="crypt: The crypt() function used to check Unix passwords. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">crypt</span></code></a> モジュールはハッシュ化方式の一覧を定義しています (すべての方式がすべてのプラットフォームで使えるわけではありません):</p>
+<dl class="data">
+<dt id="crypt.METHOD_SHA512">
+<code class="descclassname">crypt.</code><code class="descname">METHOD_SHA512</code><a class="headerlink" href="#crypt.METHOD_SHA512" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>16文字のソルトと86文字のハッシュ値を持つモジュラー暗号形式です。これが最も強い方式です。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="crypt.METHOD_SHA256">
+<code class="descclassname">crypt.</code><code class="descname">METHOD_SHA256</code><a class="headerlink" href="#crypt.METHOD_SHA256" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>16文字のソルトと43文字のハッシュ値を持つモジュラー暗号形式です。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="crypt.METHOD_MD5">
+<code class="descclassname">crypt.</code><code class="descname">METHOD_MD5</code><a class="headerlink" href="#crypt.METHOD_MD5" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>8文字のソルトと22文字のハッシュ値を持つモジュラー暗号形式です。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="crypt.METHOD_CRYPT">
+<code class="descclassname">crypt.</code><code class="descname">METHOD_CRYPT</code><a class="headerlink" href="#crypt.METHOD_CRYPT" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>2文字のソルトと13文字のハッシュ値を持つモジュラー暗号形式です。これが最も弱い方式です。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-attributes">
+<h2>35.5.2. モジュール属性<a class="headerlink" href="#module-attributes" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+<dl class="attribute">
+<dt id="crypt.methods">
+<code class="descclassname">crypt.</code><code class="descname">methods</code><a class="headerlink" href="#crypt.methods" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>A list of available password hashing algorithms, as
+<code class="docutils literal"><span class="pre">crypt.METHOD_*</span></code> objects.  This list is sorted from strongest to
+weakest.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-functions">
+<h2>35.5.3. モジュール関数<a class="headerlink" href="#module-functions" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference internal" href="#module-crypt" title="crypt: The crypt() function used to check Unix passwords. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">crypt</span></code></a> モジュールは以下の関数を定義しています:</p>
+<dl class="function">
+<dt id="crypt.crypt">
+<code class="descclassname">crypt.</code><code class="descname">crypt</code><span class="sig-paren">(</span><em>word</em>, <em>salt=None</em><span class="sig-paren">)</span><a class="headerlink" href="#crypt.crypt" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>通常 <em>word</em> はプロンプトか画面から入力されたユーザのパスワードです。オプションの <em>salt</em> は、 <a class="reference internal" href="#crypt.mksalt" title="crypt.mksalt"><code class="xref py py-func docutils literal"><span class="pre">mksalt()</span></code></a> が返す文字列か、(すべての方式がすべてのプラットフォームで使えるわけではありませんが) <code class="docutils literal"><span class="pre">crypt.METHOD_*</span></code> 値のどれか1つか、この関数から返されたソルトを含む暗号化されたパスワード全体です。 <em>salt</em> が与えられない場合は、(<a class="reference internal" href="#crypt.methods" title="crypt.methods"><code class="xref py py-func docutils literal"><span class="pre">methods()</span></code></a> で返されるもののうち) 最も強い方式が使われます。</p>
+<p>通常は、生の文字列のパスワードを <em>word</em> として渡し、前回の <a class="reference internal" href="#module-crypt" title="crypt: The crypt() function used to check Unix passwords. (Unix)"><code class="xref py py-func docutils literal"><span class="pre">crypt()</span></code></a> を呼び出した結果と今回の呼び出しの結果が同じになることで、パスワードの確認を行います。</p>
+<p><em>salt</em> (2文字から16文字のランダムな文字列で、方式を示す <code class="docutils literal"><span class="pre">$digit$</span></code> が先頭に付いているかもしれません) は、暗号化アルゴリズムにぶれを生じさせるために使われます。 <em>salt</em> に含まれる文字は、モジュラー暗号形式の先頭にある <code class="docutils literal"><span class="pre">$digit$</span></code> を除いて、集合 <code class="docutils literal"><span class="pre">[./a-zA-Z0-9]</span></code> に含まれていなければいけません。</p>
+<p>ハッシュ化されたパスワードを文字列として返します。それは salt と同じアルファベット文字から構成されます。</p>
+<p id="index-2">いくつかの拡張された <em class="manpage">crypt(3)</em> は異なる値と <em>salt</em> の長さを許しているので、パスワードをチェックする際には crypt されたパスワード文字列全体を <em>salt</em> として渡すよう勧めます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>文字列に加え、 <em>salt</em> が <code class="docutils literal"><span class="pre">crypt.METHOD_*</span></code> 値も受け取るようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="crypt.mksalt">
+<code class="descclassname">crypt.</code><code class="descname">mksalt</code><span class="sig-paren">(</span><em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#crypt.mksalt" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>指定された方式のランダムに生成されたソルトを返します。 <em>method</em> が与えられなかった場合は、 <a class="reference internal" href="#crypt.methods" title="crypt.methods"><code class="xref py py-func docutils literal"><span class="pre">methods()</span></code></a> で返される方式のうち最も強いものが使われます。</p>
+<p>返り値は、 <code class="docutils literal"><span class="pre">crypt.METHOD_CRYPT</span></code> のための長さ2の文字列か、 <code class="docutils literal"><span class="pre">$digit$</span></code> の後に集合 <code class="docutils literal"><span class="pre">[./a-zA-Z0-9]</span></code> にあるランダムな16文字が続く長さ19の文字列で、 <a class="reference internal" href="#module-crypt" title="crypt: The crypt() function used to check Unix passwords. (Unix)"><code class="xref py py-func docutils literal"><span class="pre">crypt()</span></code></a> に <em>salt</em> 引数として渡せるものです。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="examples">
+<h2>35.5.4. 使用例<a class="headerlink" href="#examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>典型的な使い方を簡単な例で示します (タイミング攻撃に晒されないように、一定時間の比較演算子を使う必要があり、 <a class="reference internal" href="hmac.html#hmac.compare_digest" title="hmac.compare_digest"><code class="xref py py-func docutils literal"><span class="pre">hmac.compare_digest()</span></code></a> がこの目的にちょうど良いです):</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pwd</span>
+<span class="kn">import</span> <span class="nn">crypt</span>
+<span class="kn">import</span> <span class="nn">getpass</span>
+<span class="kn">from</span> <span class="nn">hmac</span> <span class="k">import</span> <span class="n">compare_digest</span> <span class="k">as</span> <span class="n">compare_hash</span>
+
+<span class="k">def</span> <span class="nf">login</span><span class="p">():</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Python login: &#39;</span><span class="p">)</span>
+    <span class="n">cryptedpasswd</span> <span class="o">=</span> <span class="n">pwd</span><span class="o">.</span><span class="n">getpwnam</span><span class="p">(</span><span class="n">username</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">cryptedpasswd</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cryptedpasswd</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span> <span class="ow">or</span> <span class="n">cryptedpasswd</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;no support for shadow passwords&#39;</span><span class="p">)</span>
+        <span class="n">cleartext</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">compare_hash</span><span class="p">(</span><span class="n">crypt</span><span class="o">.</span><span class="n">crypt</span><span class="p">(</span><span class="n">cleartext</span><span class="p">,</span> <span class="n">cryptedpasswd</span><span class="p">),</span> <span class="n">cryptedpasswd</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>利用可能な方式のうち最も強い方式を使いパスワードのハッシュ値を生成し、元のパスワードと比較してチェックします:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">crypt</span>
+<span class="kn">from</span> <span class="nn">hmac</span> <span class="k">import</span> <span class="n">compare_digest</span> <span class="k">as</span> <span class="n">compare_hash</span>
+
+<span class="n">hashed</span> <span class="o">=</span> <span class="n">crypt</span><span class="o">.</span><span class="n">crypt</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">compare_hash</span><span class="p">(</span><span class="n">hashed</span><span class="p">,</span> <span class="n">crypt</span><span class="o">.</span><span class="n">crypt</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">hashed</span><span class="p">)):</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;hashed version doesn&#39;t validate against original&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">35.5. <code class="docutils literal"><span class="pre">crypt</span></code> &#8212; Unix パスワードをチェックするための関数</a><ul>
+<li><a class="reference internal" href="#hashing-methods">35.5.1. ハッシュ化方式</a></li>
+<li><a class="reference internal" href="#module-attributes">35.5.2. モジュール属性</a></li>
+<li><a class="reference internal" href="#module-functions">35.5.3. モジュール関数</a></li>
+<li><a class="reference internal" href="#examples">35.5.4. 使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="grp.html"
+                        title="前の章へ">35.4. <code class="docutils literal"><span class="pre">grp</span></code> &#8212; グループデータベースへのアクセス</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="termios.html"
+                        title="次の章へ">35.6. <code class="docutils literal"><span class="pre">termios</span></code> &#8212; POSIX スタイルの端末制御</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/crypt.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="termios.html" title="35.6. termios — POSIX スタイルの端末制御"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="grp.html" title="35.4. grp — グループデータベースへのアクセス"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" >35. Unix 固有のサービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

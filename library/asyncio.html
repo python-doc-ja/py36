@@ -1,0 +1,381 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18.5. asyncio — 非同期 I/O、イベントループ、コルーチンおよびタスク &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="18. プロセス間通信とネットワーク" href="ipc.html" />
+    <link rel="next" title="18.5.1. 基底イベントループ" href="asyncio-eventloop.html" />
+    <link rel="prev" title="18.4. selectors — 高水準の I/O 多重化" href="selectors.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/asyncio.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/asyncio.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-eventloop.html" title="18.5.1. 基底イベントループ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="selectors.html" title="18.4. selectors — 高水準の I/O 多重化"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" accesskey="U">18. プロセス間通信とネットワーク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-asyncio">
+<span id="asyncio-asynchronous-i-o-event-loop-coroutines-and-tasks"></span><h1>18.5. <a class="reference internal" href="#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク<a class="headerlink" href="#module-asyncio" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/asyncio/">Lib/asyncio/</a></p>
+<hr class="docutils" />
+<p>このモジュールは、コルーチン、ソケットあるいはその他リソースを使用した多重 I/O、ネットワーククライアントあるいはサーバーの実行、およびその他関連するプリミティブを使用した、シングルスレッド処理を並行で実行するコードを作成するためのインフラストラクチャを提供します。ここではパッケージ内容の詳細ページの一覧を示しています:</p>
+<ul class="simple">
+<li><p class="first">さまざまなシステム固有の実装とプラグ可能な <a class="reference internal" href="asyncio-eventloop.html#asyncio-event-loop"><span class="std std-ref">イベントループ</span></a>;</p>
+</li>
+<li><p class="first"><a class="reference internal" href="asyncio-protocol.html#asyncio-transport"><span class="std std-ref">トランスポート</span></a> および <a class="reference internal" href="asyncio-protocol.html#asyncio-protocol"><span class="std std-ref">プロトコル</span></a> の抽象化 (<a class="reference external" href="https://twistedmatrix.com/trac/">Twisted</a> でのそれらに類似);</p>
+</li>
+<li><p class="first">TCP、UDP、SSL、サブプロセス、遅延呼び出しなどの実体サポート (一部はシステム依存);</p>
+</li>
+<li><p class="first"><a class="reference internal" href="concurrent.futures.html#module-concurrent.futures" title="concurrent.futures: Execute computations concurrently using threads or processes."><code class="xref py py-mod docutils literal"><span class="pre">concurrent.futures</span></code></a> モジュールの一つに類似するが、イベントループでの使用に適応した <a class="reference internal" href="asyncio-task.html#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">Future</span></code></a> クラス;</p>
+</li>
+<li><p class="first">逐次処理の並行コードの作成を支援する、<code class="docutils literal"><span class="pre">yield</span> <span class="pre">from</span></code> (<span class="target" id="index-6"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0380"><strong>PEP 380</strong></a>) に基づいたコルーチンおよびタスク;</p>
+</li>
+<li><p class="first"><a class="reference internal" href="asyncio-task.html#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">Future</span></code></a> およびコルーチンのキャンセルのサポート;</p>
+</li>
+<li><p class="first"><a class="reference internal" href="threading.html#module-threading" title="threading: Thread-based parallelism."><code class="xref py py-mod docutils literal"><span class="pre">threading</span></code></a> モジュール内のそれに類似した、シングルスレッド内のコルーチン間で使用する <a class="reference internal" href="asyncio-sync.html#asyncio-sync"><span class="std std-ref">同期化プリミティブ</span></a>;</p>
+</li>
+<li><p class="first">ブロッキング I/O 呼び出しを行うライブラリを絶対的かつ積極的に使う必要がある時に、スレッドプールに仕事を投げるためのインタフェース</p>
+</li>
+</ul>
+<p>非同期プログラミングは古典的な &#8220;逐次&#8221; プログラミングと比べるとより複雑です。非同期プログラミングで陥りやすい落とし穴の一覧とその回避方法について説明している <a class="reference internal" href="asyncio-dev.html#asyncio-dev"><span class="std std-ref">Develop with asyncio</span></a> を参照してください。開発の間は、よくある問題を検出するために <a class="reference internal" href="asyncio-dev.html#asyncio-debug-mode"><span class="std std-ref">デバッグモードを有効にしてください</span></a> 。</p>
+<p>目次:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="asyncio-eventloop.html">18.5.1. 基底イベントループ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#run-an-event-loop">18.5.1.1. イベントループの実行</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#calls">18.5.1.2. 呼び出し (call)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#delayed-calls">18.5.1.3. 遅延呼び出し</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#futures">18.5.1.4. Futures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#tasks">18.5.1.5. タスク</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#creating-connections">18.5.1.6. コネクションの作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#creating-listening-connections">18.5.1.7. 待ち受けコネクションの作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#watch-file-descriptors">18.5.1.8. ファイル記述子の監視</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#low-level-socket-operations">18.5.1.9. 低水準のソケット操作</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#resolve-host-name">18.5.1.10. ホスト名の解決</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#connect-pipes">18.5.1.11. パイプの接続</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#unix-signals">18.5.1.12. UNIX シグナル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#executor">18.5.1.13. 実行者</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#error-handling-api">18.5.1.14. エラーハンドリング API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#debug-mode">18.5.1.15. デバッグモード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#server">18.5.1.16. サーバー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#handle">18.5.1.17. ハンドル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloop.html#event-loop-examples">18.5.1.18. イベントループの例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-eventloop.html#hello-world-with-call-soon">18.5.1.18.1. call_soon() を使った Hello World</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-eventloop.html#display-the-current-date-with-call-later">18.5.1.18.2. call_later() で現在の日時を表示する</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-eventloop.html#watch-a-file-descriptor-for-read-events">18.5.1.18.3. 読み込みイベント用ファイル記述子の監視</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-eventloop.html#set-signal-handlers-for-sigint-and-sigterm">18.5.1.18.4. SIGINT および SIGTERM 用のシグナルハンドラーの設定</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="asyncio-eventloops.html">18.5.2. イベントループ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloops.html#event-loop-functions">18.5.2.1. イベントループ関数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloops.html#available-event-loops">18.5.2.2. 利用可能なイベントループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloops.html#platform-support">18.5.2.3. プラットフォームでのサポート</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-eventloops.html#windows">18.5.2.3.1. Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-eventloops.html#mac-os-x">18.5.2.3.2. Mac OS X</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloops.html#event-loop-policies-and-the-default-policy">18.5.2.4. イベントループのポリシーとデフォルトポリシー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloops.html#event-loop-policy-interface">18.5.2.5. イベントループポリシーインターフェース</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-eventloops.html#access-to-the-global-loop-policy">18.5.2.6. グローバルループポリシーへのアクセス</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="asyncio-task.html">18.5.3. タスクとコルーチン</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-task.html#coroutines">18.5.3.1. コルーチン</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-task.html#example-hello-world-coroutine">18.5.3.1.1. 例: Hello World コルーチン</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-task.html#example-coroutine-displaying-the-current-date">18.5.3.1.2. 例: 現在の日時を表示するコルーチン</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-task.html#example-chain-coroutines">18.5.3.1.3. 例: コルーチンのチェーン</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-task.html#invalidstateerror">18.5.3.2. InvalidStateError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-task.html#timeouterror">18.5.3.3. TimeoutError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-task.html#future">18.5.3.4. フューチャー</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-task.html#example-future-with-run-until-complete">18.5.3.4.1. 例: run_until_complete() を使ったフューチャ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-task.html#example-future-with-run-forever">18.5.3.4.2. 例: run_forever() を使ったフューチャ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-task.html#task">18.5.3.5. タスク</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-task.html#example-parallel-execution-of-tasks">18.5.3.5.1. 例: タスクの並列実行</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-task.html#task-functions">18.5.3.6. タスク関数</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="asyncio-protocol.html">18.5.4. トランスポートとプロトコル (コールバックベースの API)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-protocol.html#transports">18.5.4.1. トランスポート</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#basetransport">18.5.4.1.1. BaseTransport</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#readtransport">18.5.4.1.2. ReadTransport</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#writetransport">18.5.4.1.3. WriteTransport</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#datagramtransport">18.5.4.1.4. DatagramTransport</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#basesubprocesstransport">18.5.4.1.5. BaseSubprocessTransport</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-protocol.html#protocols">18.5.4.2. プロトコル</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#protocol-classes">18.5.4.2.1. プロトコルクラス群</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#connection-callbacks">18.5.4.2.2. コネクションコールバック</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#streaming-protocols">18.5.4.2.3. ストリーミングプロトコル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#datagram-protocols">18.5.4.2.4. データグラムプロトコル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#flow-control-callbacks">18.5.4.2.5. フロー制御コールバック</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#coroutines-and-protocols">18.5.4.2.6. コルーチンとプロトコル</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-protocol.html#protocol-examples">18.5.4.3. プロトコルの例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#tcp-echo-client-protocol">18.5.4.3.1. TCP Echo クライアントプロトコル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#tcp-echo-server-protocol">18.5.4.3.2. TCP Echo サーバープロトコル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#udp-echo-client-protocol">18.5.4.3.3. UDP Echo クライアントプロトコル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#udp-echo-server-protocol">18.5.4.3.4. UDP Echo サーバープロトコル</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-protocol.html#register-an-open-socket-to-wait-for-data-using-a-protocol">18.5.4.3.5. プロトコルを使ってデータを待つオープンソケットの登録</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="asyncio-stream.html">18.5.5. ストリーム (コルーチンベースの API)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-stream.html#stream-functions">18.5.5.1. ストリーム関数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-stream.html#streamreader">18.5.5.2. StreamReader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-stream.html#streamwriter">18.5.5.3. StreamWriter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-stream.html#streamreaderprotocol">18.5.5.4. StreamReaderProtocol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-stream.html#incompletereaderror">18.5.5.5. IncompleteReadError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-stream.html#limitoverrunerror">18.5.5.6. LimitOverrunError</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-stream.html#stream-examples">18.5.5.7. ストリームの例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-stream.html#tcp-echo-client-using-streams">18.5.5.7.1. ストリームを使った TCP Echo クライアント</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-stream.html#tcp-echo-server-using-streams">18.5.5.7.2. ストリームを使った TCP Echo サーバー</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-stream.html#get-http-headers">18.5.5.7.3. HTTP ヘッダーの取得</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-stream.html#register-an-open-socket-to-wait-for-data-using-streams">18.5.5.7.4. ストリームを使ってデータを待つオープンソケットの登録</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="asyncio-subprocess.html">18.5.6. サブプロセス</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-subprocess.html#windows-event-loop">18.5.6.1. Windows でのイベントループ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-subprocess.html#create-a-subprocess-high-level-api-using-process">18.5.6.2. サブプロセスの作成: Process を使用した高水準 API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-subprocess.html#create-a-subprocess-low-level-api-using-subprocess-popen">18.5.6.3. サブプロセスの作成: subprocess.Popen を使用した低水準 API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-subprocess.html#constants">18.5.6.4. 定数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-subprocess.html#process">18.5.6.5. Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-subprocess.html#subprocess-and-threads">18.5.6.6. サブプロセスとスレッド</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-subprocess.html#subprocess-examples">18.5.6.7. サブプロセスの例</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-subprocess.html#subprocess-using-transport-and-protocol">18.5.6.7.1. トランスポートおよびプロトコルを使用したサブプロセス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-subprocess.html#subprocess-using-streams">18.5.6.7.2. ストリームを使用したサブプロセス</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="asyncio-sync.html">18.5.7. 同期プリミティブ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-sync.html#locks">18.5.7.1. ロック</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-sync.html#lock">18.5.7.1.1. Lock</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-sync.html#event">18.5.7.1.2. Event</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-sync.html#condition">18.5.7.1.3. Condition</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-sync.html#semaphores">18.5.7.2. セマフォ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-sync.html#semaphore">18.5.7.2.1. Semaphore</a></li>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-sync.html#boundedsemaphore">18.5.7.2.2. BoundedSemaphore</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="asyncio-queue.html">18.5.8. キュー</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-queue.html#queue">18.5.8.1. Queue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-queue.html#priorityqueue">18.5.8.2. PriorityQueue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-queue.html#lifoqueue">18.5.8.3. LifoQueue</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="asyncio-queue.html#exceptions">18.5.8.3.1. 例外</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="asyncio-dev.html">18.5.9. asyncio での開発</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-dev.html#debug-mode-of-asyncio">18.5.9.1. asyncio のデバッグモード</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-dev.html#cancellation">18.5.9.2. 取り消し</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-dev.html#concurrency-and-multithreading">18.5.9.3. 並行処理とマルチスレッド処理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-dev.html#handle-blocking-functions-correctly">18.5.9.4. ブロック関数を正しく扱う</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-dev.html#logging">18.5.9.5. ログ記録</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-dev.html#detect-coroutine-objects-never-scheduled">18.5.9.6. スケジュールされなかったコルーチンオブジェクトの検出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-dev.html#detect-exceptions-never-consumed">18.5.9.7. 未処理の例外の検出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-dev.html#chain-coroutines-correctly">18.5.9.8. コルーチンを正しくチェーンする</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-dev.html#pending-task-destroyed">18.5.9.9. 未完のタスクの破棄</a></li>
+<li class="toctree-l2"><a class="reference internal" href="asyncio-dev.html#close-transports-and-event-loops">18.5.9.10. トランスポートとイベントループを閉じる</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><a class="reference internal" href="#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> モジュールは <span class="target" id="index-7"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3156"><strong>PEP 3156</strong></a> において設計されました。トランスポートとプロトコルの動機付けとなる入門書は <span class="target" id="index-8"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3153"><strong>PEP 3153</strong></a> を参照してください。</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="selectors.html"
+                        title="前の章へ">18.4. <code class="docutils literal"><span class="pre">selectors</span></code> &#8212; 高水準の I/O 多重化</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="asyncio-eventloop.html"
+                        title="次の章へ">18.5.1. 基底イベントループ</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-eventloop.html" title="18.5.1. 基底イベントループ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="selectors.html" title="18.4. selectors — 高水準の I/O 多重化"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

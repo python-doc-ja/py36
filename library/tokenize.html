@@ -1,0 +1,427 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>32.7. tokenize — Pythonソースのためのトークナイザ &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="32. Python言語サービス" href="language.html" />
+    <link rel="next" title="32.8. tabnanny — あいまいなインデントの検出" href="tabnanny.html" />
+    <link rel="prev" title="32.6. keyword — Python キーワードチェック" href="keyword.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/tokenize.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/tokenize.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="tabnanny.html" title="32.8. tabnanny — あいまいなインデントの検出"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="keyword.html" title="32.6. keyword — Python キーワードチェック"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="language.html" accesskey="U">32. Python言語サービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-tokenize">
+<span id="tokenize-tokenizer-for-python-source"></span><h1>32.7. <a class="reference internal" href="#module-tokenize" title="tokenize: Lexical scanner for Python source code."><code class="xref py py-mod docutils literal"><span class="pre">tokenize</span></code></a> &#8212; Pythonソースのためのトークナイザ<a class="headerlink" href="#module-tokenize" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/tokenize.py">Lib/tokenize.py</a></p>
+<hr class="docutils" />
+<p><a class="reference internal" href="#module-tokenize" title="tokenize: Lexical scanner for Python source code."><code class="xref py py-mod docutils literal"><span class="pre">tokenize</span></code></a> モジュールでは、Python で実装された Python ソースコードの字句解析器を提供します。さらに、このモジュールの字句解析器はコメントもトークンとして返します。このため、このモジュールはスクリーン上で表示する際の色付け機能 (colorizers) を含む &#8220;清書出力器 (pretty-printer)&#8221; を実装する上で便利です。</p>
+<p>トークン・ストリームの扱いをシンプルにするために、全ての <a class="reference internal" href="../reference/lexical_analysis.html#operators"><span class="std std-ref">演算子</span></a> と <a class="reference internal" href="../reference/lexical_analysis.html#delimiters"><span class="std std-ref">デリミタ (delimiter)</span></a> トークンはジェネリックな <a class="reference internal" href="token.html#token.OP" title="token.OP"><code class="xref py py-data docutils literal"><span class="pre">token.OP</span></code></a> トークンタイプとして返されます。正確な型は <a class="reference internal" href="#tokenize.tokenize" title="tokenize.tokenize"><code class="xref py py-func docutils literal"><span class="pre">tokenize.tokenize()</span></code></a> が返す <a class="reference internal" href="../glossary.html#term-named-tuple"><span class="xref std std-term">named tuple</span></a> の <code class="docutils literal"><span class="pre">exact_type</span></code> プロパティをチェックすれば解ります。</p>
+<div class="section" id="tokenizing-input">
+<h2>32.7.1. 入力のトークナイズ<a class="headerlink" href="#tokenizing-input" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>第一のエントリポイントはジェネレータ(<a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">generator</span></a>)です:</p>
+<dl class="function">
+<dt id="tokenize.tokenize">
+<code class="descclassname">tokenize.</code><code class="descname">tokenize</code><span class="sig-paren">(</span><em>readline</em><span class="sig-paren">)</span><a class="headerlink" href="#tokenize.tokenize" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#tokenize.tokenize" title="tokenize.tokenize"><code class="xref py py-func docutils literal"><span class="pre">tokenize()</span></code></a> generator requires one argument, <em>readline</em>, which
+must be a callable object which provides the same interface as the
+<a class="reference internal" href="io.html#io.IOBase.readline" title="io.IOBase.readline"><code class="xref py py-meth docutils literal"><span class="pre">io.IOBase.readline()</span></code></a> method of file objects.  Each call to the
+function should return one line of input as bytes.</p>
+<p>このジェネレータは次の5要素のタプルを返します; トークンタイプ; トークン文字列; ソース内でそのトークンがどの行、列で開始するかを示す int の <code class="docutils literal"><span class="pre">(srow,</span> <span class="pre">scol)</span></code> タプル; どの行、列で終了するかを示す int の <code class="docutils literal"><span class="pre">(erow,</span> <span class="pre">ecol)</span></code> タプル; トークンが見つかった行。 (タプルの最後の要素にある) 行は <em>論理</em> 行で、継続行が含まれます。この5要素のタプルは <a class="reference internal" href="../glossary.html#term-named-tuple"><span class="xref std std-term">named tuple</span></a> として返され、フィールド名は <code class="docutils literal"><span class="pre">type</span> <span class="pre">string</span> <span class="pre">start</span> <span class="pre">end</span> <span class="pre">line</span></code> になります。</p>
+<p>The returned <a class="reference internal" href="../glossary.html#term-named-tuple"><span class="xref std std-term">named tuple</span></a> has an additional property named
+<code class="docutils literal"><span class="pre">exact_type</span></code> that contains the exact operator type for
+<a class="reference internal" href="token.html#token.OP" title="token.OP"><code class="xref py py-data docutils literal"><span class="pre">token.OP</span></code></a> tokens.  For all other token types <code class="docutils literal"><span class="pre">exact_type</span></code>
+equals the named tuple <code class="docutils literal"><span class="pre">type</span></code> field.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.1 で変更: </span>named tuple のサポートを追加。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span><code class="docutils literal"><span class="pre">exact_type</span></code> のサポートを追加。</p>
+</div>
+<p><a class="reference internal" href="#tokenize.tokenize" title="tokenize.tokenize"><code class="xref py py-func docutils literal"><span class="pre">tokenize()</span></code></a> determines the source encoding of the file by looking for a
+UTF-8 BOM or encoding cookie, according to <span class="target" id="index-0"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0263"><strong>PEP 263</strong></a>.</p>
+</dd></dl>
+
+<p><a class="reference internal" href="token.html#module-token" title="token: Constants representing terminal nodes of the parse tree."><code class="xref py py-mod docutils literal"><span class="pre">token</span></code></a> モジュールの全ての定数は <a class="reference internal" href="#module-tokenize" title="tokenize: Lexical scanner for Python source code."><code class="xref py py-mod docutils literal"><span class="pre">tokenize</span></code></a> モジュールからも公開されており、加えて次の3つトークンタイプが公開されています:</p>
+<dl class="data">
+<dt id="tokenize.COMMENT">
+<code class="descclassname">tokenize.</code><code class="descname">COMMENT</code><a class="headerlink" href="#tokenize.COMMENT" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>コメントであることを表すために使われるトークン値です。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="tokenize.NL">
+<code class="descclassname">tokenize.</code><code class="descname">NL</code><a class="headerlink" href="#tokenize.NL" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>終わりではない改行を表すために使われるトークン値。NEWLINE トークンは Pythonコードの論理行の終わりを表します。NLトークンはコードの論理行が複数の物理行にわたって続いているときに作られます。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="tokenize.ENCODING">
+<code class="descclassname">tokenize.</code><code class="descname">ENCODING</code><a class="headerlink" href="#tokenize.ENCODING" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Token value that indicates the encoding used to decode the source bytes
+into text. The first token returned by <a class="reference internal" href="#tokenize.tokenize" title="tokenize.tokenize"><code class="xref py py-func docutils literal"><span class="pre">tokenize()</span></code></a> will always be an
+ENCODING token.</p>
+</dd></dl>
+
+<p>もう一つの関数がトークン化プロセスを逆転するために提供されています。これは、スクリプトを字句解析し、トークンのストリームに変更を加え、変更されたスクリプトを書き戻すようなツールを作成する際に便利です。</p>
+<dl class="function">
+<dt id="tokenize.untokenize">
+<code class="descclassname">tokenize.</code><code class="descname">untokenize</code><span class="sig-paren">(</span><em>iterable</em><span class="sig-paren">)</span><a class="headerlink" href="#tokenize.untokenize" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トークンの列を Python ソースコードに変換します。 <em>iterable</em> は少なくとも二つの要素、トークンタイプおよびトークン文字列、からなるシーケンスを返さなければいけません。 その他のシーケンスの要素は無視されます。</p>
+<p>再構築されたスクリプトは一つの文字列として返されます。得られる結果はもう一度字句解析すると入力と一致することが保証されるので、変換がロスレスでありラウンドトリップできることは間違いありません。この保証はトークン型およびトークン文字列に対してのものでトークン間のスペース (コラム位置)のようなものは変わることがあり得ます。</p>
+<p>It returns bytes, encoded using the ENCODING token, which is the first
+token sequence output by <a class="reference internal" href="#tokenize.tokenize" title="tokenize.tokenize"><code class="xref py py-func docutils literal"><span class="pre">tokenize()</span></code></a>.</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#tokenize.tokenize" title="tokenize.tokenize"><code class="xref py py-func docutils literal"><span class="pre">tokenize()</span></code></a> needs to detect the encoding of source files it tokenizes. The
+function it uses to do this is available:</p>
+<dl class="function">
+<dt id="tokenize.detect_encoding">
+<code class="descclassname">tokenize.</code><code class="descname">detect_encoding</code><span class="sig-paren">(</span><em>readline</em><span class="sig-paren">)</span><a class="headerlink" href="#tokenize.detect_encoding" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#tokenize.detect_encoding" title="tokenize.detect_encoding"><code class="xref py py-func docutils literal"><span class="pre">detect_encoding()</span></code></a> function is used to detect the encoding that
+should be used to decode a Python source file. It requires one argument,
+readline, in the same way as the <a class="reference internal" href="#tokenize.tokenize" title="tokenize.tokenize"><code class="xref py py-func docutils literal"><span class="pre">tokenize()</span></code></a> generator.</p>
+<p>readline を最大2回呼び出し、利用するエンコーディング (文字列として) と、読み込んだ行を (bytes からデコードされないままの状態で) 返します。</p>
+<p>UTF-8 BOM か <span class="target" id="index-3"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0263"><strong>PEP 263</strong></a> で定義されている encoding cookie からエンコーディングを検出します。BOMと cookie の両方が存在し、一致していない場合、 SyntaxError 例外を発生させます。 BOM が見つかった場合はエンコーディングとして <code class="docutils literal"><span class="pre">'utf-8-sig'</span></code> が返されます。</p>
+<p>エンコーディングが指定されていない場合、デフォルトの <code class="docutils literal"><span class="pre">'utf-8'</span></code> が返されます。</p>
+<p>Use <a class="reference internal" href="#tokenize.open" title="tokenize.open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> to open Python source files: it uses
+<a class="reference internal" href="#tokenize.detect_encoding" title="tokenize.detect_encoding"><code class="xref py py-func docutils literal"><span class="pre">detect_encoding()</span></code></a> to detect the file encoding.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tokenize.open">
+<code class="descclassname">tokenize.</code><code class="descname">open</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#tokenize.open" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#tokenize.detect_encoding" title="tokenize.detect_encoding"><code class="xref py py-func docutils literal"><span class="pre">detect_encoding()</span></code></a> を使って検出したエンコーディングを利用して、ファイルを読み込み専用モードで開きます。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="exception">
+<dt id="tokenize.TokenError">
+<em class="property">exception </em><code class="descclassname">tokenize.</code><code class="descname">TokenError</code><a class="headerlink" href="#tokenize.TokenError" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>docstring や複数行にわたることが許される式がファイル内のどこかで終わっていない場合に送出されます。例えば:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="s2">&quot;&quot;&quot;Beginning of</span>
+<span class="s2">docstring</span>
+</pre></div>
+</div>
+<p>もしくは:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">1</span><span class="p">,</span>
+ <span class="mi">2</span><span class="p">,</span>
+ <span class="mi">3</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>閉じていないシングルクォート文字列は送出されるべきエラーの原因とならないことに注意してください。それらは <code class="docutils literal"><span class="pre">ERRORTOKEN</span></code> とトークン化され、続いてその内容がトークン化されます。</p>
+</div>
+<div class="section" id="command-line-usage">
+<span id="tokenize-cli"></span><h2>32.7.2. コマンドラインからの使用<a class="headerlink" href="#command-line-usage" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+<p><a class="reference internal" href="#module-tokenize" title="tokenize: Lexical scanner for Python source code."><code class="xref py py-mod docutils literal"><span class="pre">tokenize</span></code></a> モジュールはコマンドラインからスクリプトとして実行することができます。次のようにシンプルに利用できます:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>python -m tokenize <span class="o">[</span>-e<span class="o">]</span> <span class="o">[</span>filename.py<span class="o">]</span>
+</pre></div>
+</div>
+<p>以下のオプションが使用できます:</p>
+<dl class="cmdoption">
+<dt id="cmdoption-tokenize-h">
+<span id="cmdoption-tokenize--help"></span><code class="descname">-h</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--help</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-tokenize-h" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このヘルプメッセージを出力して終了します</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-tokenize-e">
+<span id="cmdoption-tokenize--exact"></span><code class="descname">-e</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--exact</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-tokenize-e" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>exact type を使ってトークン名を表示します</p>
+</dd></dl>
+
+<p><code class="file docutils literal"><span class="pre">filename.py</span></code> が指定された場合、その内容がトークナイズされ stdout に出力されます。指定されなかった場合は stdin からトークナイズします。</p>
+</div>
+<div class="section" id="examples">
+<h2>32.7.3. 使用例<a class="headerlink" href="#examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>スクリプト書き換えの例で、浮動小数点数リテラルを Decimal オブジェクトに変換します:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tokenize</span> <span class="k">import</span> <span class="n">tokenize</span><span class="p">,</span> <span class="n">untokenize</span><span class="p">,</span> <span class="n">NUMBER</span><span class="p">,</span> <span class="n">STRING</span><span class="p">,</span> <span class="n">NAME</span><span class="p">,</span> <span class="n">OP</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">BytesIO</span>
+
+<span class="k">def</span> <span class="nf">decistmt</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Substitute Decimals for floats in a string of statements.</span>
+
+<span class="sd">    &gt;&gt;&gt; from decimal import Decimal</span>
+<span class="sd">    &gt;&gt;&gt; s = &#39;print(+21.3e-5*-.1234/81.7)&#39;</span>
+<span class="sd">    &gt;&gt;&gt; decistmt(s)</span>
+<span class="sd">    &quot;print (+Decimal (&#39;21.3e-5&#39;)*-Decimal (&#39;.1234&#39;)/Decimal (&#39;81.7&#39;))&quot;</span>
+
+<span class="sd">    The format of the exponent is inherited from the platform C library.</span>
+<span class="sd">    Known cases are &quot;e-007&quot; (Windows) and &quot;e-07&quot; (not Windows).  Since</span>
+<span class="sd">    we&#39;re only showing 12 digits, and the 13th isn&#39;t close to 5, the</span>
+<span class="sd">    rest of the output should be platform-independent.</span>
+
+<span class="sd">    &gt;&gt;&gt; exec(s)  #doctest: +ELLIPSIS</span>
+<span class="sd">    -3.21716034272e-0...7</span>
+
+<span class="sd">    Output from calculations with Decimal should be identical across all</span>
+<span class="sd">    platforms.</span>
+
+<span class="sd">    &gt;&gt;&gt; exec(decistmt(s))</span>
+<span class="sd">    -3.217160342717258261933904529E-7</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">tokenize</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">readline</span><span class="p">)</span>  <span class="c1"># tokenize the string</span>
+    <span class="k">for</span> <span class="n">toknum</span><span class="p">,</span> <span class="n">tokval</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">g</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">toknum</span> <span class="o">==</span> <span class="n">NUMBER</span> <span class="ow">and</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">tokval</span><span class="p">:</span>  <span class="c1"># replace NUMBER tokens</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span>
+                <span class="p">(</span><span class="n">NAME</span><span class="p">,</span> <span class="s1">&#39;Decimal&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">OP</span><span class="p">,</span> <span class="s1">&#39;(&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">STRING</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">tokval</span><span class="p">)),</span>
+                <span class="p">(</span><span class="n">OP</span><span class="p">,</span> <span class="s1">&#39;)&#39;</span><span class="p">)</span>
+            <span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">toknum</span><span class="p">,</span> <span class="n">tokval</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">untokenize</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>コマンドラインからトークナイズする例。次のスクリプトが:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">say_hello</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello, World!&quot;</span><span class="p">)</span>
+
+<span class="n">say_hello</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>トークナイズされて次のような出力になります。最初のカラムはトークンが現れた行／カラム、次のカラムはトークンの名前、最後のカラムは (あれば) トークンの値です</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>$ python -m tokenize hello.py
+<span class="m">0</span>,0-0,0:            ENCODING       <span class="s1">&#39;utf-8&#39;</span>
+<span class="m">1</span>,0-1,3:            NAME           <span class="s1">&#39;def&#39;</span>
+<span class="m">1</span>,4-1,13:           NAME           <span class="s1">&#39;say_hello&#39;</span>
+<span class="m">1</span>,13-1,14:          OP             <span class="s1">&#39;(&#39;</span>
+<span class="m">1</span>,14-1,15:          OP             <span class="s1">&#39;)&#39;</span>
+<span class="m">1</span>,15-1,16:          OP             <span class="s1">&#39;:&#39;</span>
+<span class="m">1</span>,16-1,17:          NEWLINE        <span class="s1">&#39;\n&#39;</span>
+<span class="m">2</span>,0-2,4:            INDENT         <span class="s1">&#39;    &#39;</span>
+<span class="m">2</span>,4-2,9:            NAME           <span class="s1">&#39;print&#39;</span>
+<span class="m">2</span>,9-2,10:           OP             <span class="s1">&#39;(&#39;</span>
+<span class="m">2</span>,10-2,25:          STRING         <span class="s1">&#39;&quot;Hello, World!&quot;&#39;</span>
+<span class="m">2</span>,25-2,26:          OP             <span class="s1">&#39;)&#39;</span>
+<span class="m">2</span>,26-2,27:          NEWLINE        <span class="s1">&#39;\n&#39;</span>
+<span class="m">3</span>,0-3,1:            NL             <span class="s1">&#39;\n&#39;</span>
+<span class="m">4</span>,0-4,0:            DEDENT         <span class="s1">&#39;&#39;</span>
+<span class="m">4</span>,0-4,9:            NAME           <span class="s1">&#39;say_hello&#39;</span>
+<span class="m">4</span>,9-4,10:           OP             <span class="s1">&#39;(&#39;</span>
+<span class="m">4</span>,10-4,11:          OP             <span class="s1">&#39;)&#39;</span>
+<span class="m">4</span>,11-4,12:          NEWLINE        <span class="s1">&#39;\n&#39;</span>
+<span class="m">5</span>,0-5,0:            ENDMARKER      <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>トークンの exact_type 名は <code class="docutils literal"><span class="pre">-e</span></code> オプションで表示できます:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>$ python -m tokenize -e hello.py
+<span class="m">0</span>,0-0,0:            ENCODING       <span class="s1">&#39;utf-8&#39;</span>
+<span class="m">1</span>,0-1,3:            NAME           <span class="s1">&#39;def&#39;</span>
+<span class="m">1</span>,4-1,13:           NAME           <span class="s1">&#39;say_hello&#39;</span>
+<span class="m">1</span>,13-1,14:          LPAR           <span class="s1">&#39;(&#39;</span>
+<span class="m">1</span>,14-1,15:          RPAR           <span class="s1">&#39;)&#39;</span>
+<span class="m">1</span>,15-1,16:          COLON          <span class="s1">&#39;:&#39;</span>
+<span class="m">1</span>,16-1,17:          NEWLINE        <span class="s1">&#39;\n&#39;</span>
+<span class="m">2</span>,0-2,4:            INDENT         <span class="s1">&#39;    &#39;</span>
+<span class="m">2</span>,4-2,9:            NAME           <span class="s1">&#39;print&#39;</span>
+<span class="m">2</span>,9-2,10:           LPAR           <span class="s1">&#39;(&#39;</span>
+<span class="m">2</span>,10-2,25:          STRING         <span class="s1">&#39;&quot;Hello, World!&quot;&#39;</span>
+<span class="m">2</span>,25-2,26:          RPAR           <span class="s1">&#39;)&#39;</span>
+<span class="m">2</span>,26-2,27:          NEWLINE        <span class="s1">&#39;\n&#39;</span>
+<span class="m">3</span>,0-3,1:            NL             <span class="s1">&#39;\n&#39;</span>
+<span class="m">4</span>,0-4,0:            DEDENT         <span class="s1">&#39;&#39;</span>
+<span class="m">4</span>,0-4,9:            NAME           <span class="s1">&#39;say_hello&#39;</span>
+<span class="m">4</span>,9-4,10:           LPAR           <span class="s1">&#39;(&#39;</span>
+<span class="m">4</span>,10-4,11:          RPAR           <span class="s1">&#39;)&#39;</span>
+<span class="m">4</span>,11-4,12:          NEWLINE        <span class="s1">&#39;\n&#39;</span>
+<span class="m">5</span>,0-5,0:            ENDMARKER      <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">32.7. <code class="docutils literal"><span class="pre">tokenize</span></code> &#8212; Pythonソースのためのトークナイザ</a><ul>
+<li><a class="reference internal" href="#tokenizing-input">32.7.1. 入力のトークナイズ</a></li>
+<li><a class="reference internal" href="#command-line-usage">32.7.2. コマンドラインからの使用</a></li>
+<li><a class="reference internal" href="#examples">32.7.3. 使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="keyword.html"
+                        title="前の章へ">32.6. <code class="docutils literal"><span class="pre">keyword</span></code> &#8212; Python キーワードチェック</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="tabnanny.html"
+                        title="次の章へ">32.8. <code class="docutils literal"><span class="pre">tabnanny</span></code> &#8212; あいまいなインデントの検出</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/tokenize.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="tabnanny.html" title="32.8. tabnanny — あいまいなインデントの検出"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="keyword.html" title="32.6. keyword — Python キーワードチェック"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="language.html" >32. Python言語サービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,971 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>初期化 (initialization)、終了処理 (finalization)、スレッド &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="Python/C API リファレンスマニュアル" href="index.html" />
+    <link rel="next" title="メモリ管理" href="memory.html" />
+    <link rel="prev" title="DateTime オブジェクト" href="datetime.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/c-api/init.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/c-api/init.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="memory.html" title="メモリ管理"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="datetime.html" title="DateTime オブジェクト"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python/C API リファレンスマニュアル</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="initialization-finalization-and-threads">
+<span id="initialization"></span><h1>初期化 (initialization)、終了処理 (finalization)、スレッド<a class="headerlink" href="#initialization-finalization-and-threads" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="initializing-and-finalizing-the-interpreter">
+<h2>インタプリタの初期化と終了処理<a class="headerlink" href="#initializing-and-finalizing-the-interpreter" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="function">
+<dt id="c.Py_Initialize">
+void <code class="descname">Py_Initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_Initialize" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-0">Initialize the Python interpreter.  In an application embedding  Python, this
+should be called before using any other Python/C API functions; with the
+exception of <a class="reference internal" href="#c.Py_SetProgramName" title="Py_SetProgramName"><code class="xref c c-func docutils literal"><span class="pre">Py_SetProgramName()</span></code></a>, <a class="reference internal" href="#c.Py_SetPythonHome" title="Py_SetPythonHome"><code class="xref c c-func docutils literal"><span class="pre">Py_SetPythonHome()</span></code></a> and <a class="reference internal" href="#c.Py_SetPath" title="Py_SetPath"><code class="xref c c-func docutils literal"><span class="pre">Py_SetPath()</span></code></a>.  This initializes
+the table of loaded modules (<code class="docutils literal"><span class="pre">sys.modules</span></code>), and creates the fundamental
+modules <a class="reference internal" href="../library/builtins.html#module-builtins" title="builtins: The module that provides the built-in namespace."><code class="xref py py-mod docutils literal"><span class="pre">builtins</span></code></a>, <a class="reference internal" href="../library/__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><code class="xref py py-mod docutils literal"><span class="pre">__main__</span></code></a> and <a class="reference internal" href="../library/sys.html#module-sys" title="sys: Access system-specific parameters and functions."><code class="xref py py-mod docutils literal"><span class="pre">sys</span></code></a>.  It also initializes
+the module search path (<code class="docutils literal"><span class="pre">sys.path</span></code>). It does not set <code class="docutils literal"><span class="pre">sys.argv</span></code>; use
+<a class="reference internal" href="#c.PySys_SetArgvEx" title="PySys_SetArgvEx"><code class="xref c c-func docutils literal"><span class="pre">PySys_SetArgvEx()</span></code></a> for that.  This is a no-op when called for a second time
+(without calling <a class="reference internal" href="#c.Py_FinalizeEx" title="Py_FinalizeEx"><code class="xref c c-func docutils literal"><span class="pre">Py_FinalizeEx()</span></code></a> first).  There is no return value; it is a
+fatal error if the initialization fails.</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">Windows では <code class="docutils literal"><span class="pre">O_TEXT</span></code> から <code class="docutils literal"><span class="pre">O_BINARY</span></code> へコンソールモードが変更されますが、これはその C ランタイムを使っているコンソールでの Python 以外の使い勝手にも影響を及ぼします。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_InitializeEx">
+void <code class="descname">Py_InitializeEx</code><span class="sig-paren">(</span>int<em>&nbsp;initsigs</em><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_InitializeEx" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>initsigs</em> に <code class="docutils literal"><span class="pre">1</span></code> を指定した場合、この関数は <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> と同じように動作します。
+<em>initsigs</em> に <code class="docutils literal"><span class="pre">0</span></code> を指定した場合、初期化時のシグナルハンドラの登録をスキップすることができ、これは Python の埋め込みで便利でしょう。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_IsInitialized">
+int <code class="descname">Py_IsInitialized</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_IsInitialized" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return true (nonzero) when the Python interpreter has been initialized, false
+(zero) if not.  After <a class="reference internal" href="#c.Py_FinalizeEx" title="Py_FinalizeEx"><code class="xref c c-func docutils literal"><span class="pre">Py_FinalizeEx()</span></code></a> is called, this returns false until
+<a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> is called again.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_FinalizeEx">
+int <code class="descname">Py_FinalizeEx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_FinalizeEx" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Undo all initializations made by <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> and subsequent use of
+Python/C API functions, and destroy all sub-interpreters (see
+<a class="reference internal" href="#c.Py_NewInterpreter" title="Py_NewInterpreter"><code class="xref c c-func docutils literal"><span class="pre">Py_NewInterpreter()</span></code></a> below) that were created and not yet destroyed since
+the last call to <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a>.  Ideally, this frees all memory
+allocated by the Python interpreter.  This is a no-op when called for a second
+time (without calling <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> again first).  Normally the
+return value is 0.  If there were errors during finalization
+(flushing buffered data), -1 is returned.</p>
+<p>この関数が提供されている理由はいくつかあります。Python の埋め込みを行っているアプリケーションでは、アプリケーションを再起動することなく Python を再起動したいことがあります。また、動的ロード可能イブラリ (あるいは DLL) から Python インタプリタをロードするアプリケーションでは、DLL をアンロードする前に Python が確保したメモリを全て解放したいと考えるかもしれません。アプリケーション内で起きているメモリリークを追跡する際に、開発者は Python が確保したメモリをアプリケーションの終了前に解放させたいと思う場合もあります。</p>
+<p><strong>Bugs and caveats:</strong> The destruction of modules and objects in modules is done
+in random order; this may cause destructors (<a class="reference internal" href="../reference/datamodel.html#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> methods) to fail
+when they depend on other objects (even functions) or modules.  Dynamically
+loaded extension modules loaded by Python are not unloaded.  Small amounts of
+memory allocated by the Python interpreter may not be freed (if you find a leak,
+please report it).  Memory tied up in circular references between objects is not
+freed.  Some memory allocated by extension modules may not be freed.  Some
+extensions may not work properly if their initialization routine is called more
+than once; this can happen if an application calls <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> and
+<a class="reference internal" href="#c.Py_FinalizeEx" title="Py_FinalizeEx"><code class="xref c c-func docutils literal"><span class="pre">Py_FinalizeEx()</span></code></a> more than once.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_Finalize">
+void <code class="descname">Py_Finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_Finalize" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>This is a backwards-compatible version of <a class="reference internal" href="#c.Py_FinalizeEx" title="Py_FinalizeEx"><code class="xref c c-func docutils literal"><span class="pre">Py_FinalizeEx()</span></code></a> that
+disregards the return value.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="process-wide-parameters">
+<h2>プロセスワイドのパラメータ<a class="headerlink" href="#process-wide-parameters" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="function">
+<dt id="c.Py_SetStandardStreamEncoding">
+int <code class="descname">Py_SetStandardStreamEncoding</code><span class="sig-paren">(</span>const char<em>&nbsp;*encoding</em>, const char<em>&nbsp;*errors</em><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_SetStandardStreamEncoding" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-1">もし <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> が呼ばれるなら、この関数はその前に呼ばなければなりません。標準の IO において、どのエンコーディングおよびどんなエラー処理を使うかを、 <a class="reference internal" href="../library/stdtypes.html#str.encode" title="str.encode"><code class="xref py py-func docutils literal"><span class="pre">str.encode()</span></code></a> と同様の意味で指定します。</p>
+<p>これは、環境変数が働かない時に <span class="target" id="index-33"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONIOENCODING"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONIOENCODING</span></code></a> の値を上書きし、埋め込みコードが IO エンコーディングをコントロールできるようにします。</p>
+<p><code class="docutils literal"><span class="pre">encoding</span></code> と <code class="docutils literal"><span class="pre">errors</span></code> のどちらかまたは両方を NULL にすることで、 <span class="target" id="index-34"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONIOENCODING"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONIOENCODING</span></code></a> とデフォルト値のどちらかまたは両方を使うことができます (他の設定に依存します)。</p>
+<p>この設定 (あるいは他の設定) に関わらず、 <a class="reference internal" href="../library/sys.html#sys.stderr" title="sys.stderr"><code class="xref py py-data docutils literal"><span class="pre">sys.stderr</span></code></a> は常に &#8220;backslashreplace&#8221; エラーハンドラを使うことに注意してください。</p>
+<p>If <a class="reference internal" href="#c.Py_FinalizeEx" title="Py_FinalizeEx"><code class="xref c c-func docutils literal"><span class="pre">Py_FinalizeEx()</span></code></a> is called, this function will need to be called
+again in order to affect subsequent calls to <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a>.</p>
+<p>成功したら <code class="docutils literal"><span class="pre">0</span></code> を、エラーの場合は <code class="docutils literal"><span class="pre">0</span></code> でない値を返します (例えば、インタプリタが初期化された後に、この関数が呼び出された場合)。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_SetProgramName">
+void <code class="descname">Py_SetProgramName</code><span class="sig-paren">(</span>wchar_t<em>&nbsp;*name</em><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_SetProgramName" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-4">この関数を呼び出すなら、最初に <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> を呼び出すよりも前に呼び出さなければなりません。この関数はインタプリタにプログラムの <code class="xref c c-func docutils literal"><span class="pre">main()</span></code> 関数に指定した <code class="docutils literal"><span class="pre">argv[0]</span></code> 引数の値を教えます (ワイドキャラクタに変換されます)。この引数値は、 <a class="reference internal" href="#c.Py_GetPath" title="Py_GetPath"><code class="xref c c-func docutils literal"><span class="pre">Py_GetPath()</span></code></a> や、以下に示すその他の関数が、インタプリタの実行可能形式から Python ランタイムライブラリへの相対パスを取得するために使われます。デフォルトの値は <code class="docutils literal"><span class="pre">'python'</span></code> です。引数はゼロ終端されたワイドキャラクタ文字列で、静的な記憶領域に入っていなければならず、その内容はプログラムの実行中に変更してはなりません。 Python インタプリタ内のコードで、この記憶領域の内容を変更するものは一切ありません。</p>
+<p>バイト文字列を <code class="xref c c-type docutils literal"><span class="pre">wchar_*</span></code> 文字列にデコードするには <a class="reference internal" href="sys.html#c.Py_DecodeLocale" title="Py_DecodeLocale"><code class="xref c c-func docutils literal"><span class="pre">Py_DecodeLocale()</span></code></a> を使ってください。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_GetProgramName">
+wchar* <code class="descname">Py_GetProgramName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_GetProgramName" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-5"><a class="reference internal" href="#c.Py_SetProgramName" title="Py_SetProgramName"><code class="xref c c-func docutils literal"><span class="pre">Py_SetProgramName()</span></code></a> で設定されたプログラム名か、デフォルトのプログラム名を返します。関数が返す文字列ポインタは静的な記憶領域を返します。関数の呼び出し側はこの値を変更できません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_GetPrefix">
+wchar_t* <code class="descname">Py_GetPrefix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_GetPrefix" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プラットフォーム非依存のファイル群がインストールされている場所である <em>prefix</em> を返します。この値は <a class="reference internal" href="#c.Py_SetProgramName" title="Py_SetProgramName"><code class="xref c c-func docutils literal"><span class="pre">Py_SetProgramName()</span></code></a> でセットされたプログラム名やいくつかの環境変数をもとに、数々の複雑な規則から導出されます。例えば、プログラム名が <code class="docutils literal"><span class="pre">'/usr/local/bin/python'</span></code> の場合、prefix は <code class="docutils literal"><span class="pre">'/usr/local'</span></code> になります。関数が返す文字列ポインタは静的な記憶領域を返します; 関数の呼び出し側はこの値を変更できません。この値はトップレベルの <code class="file docutils literal"><span class="pre">Makefile</span></code> に指定されている変数 <strong class="makevar">prefix</strong> や、ビルド値に <strong class="program">configure</strong> スクリプトに指定した <code class="docutils literal"><span class="pre">--prefix</span></code> 引数に対応しています。この値は Python コードからは <code class="docutils literal"><span class="pre">sys.prefix</span></code> として利用できます。これはUnixでのみ有用です。次に説明する関数も参照してください。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_GetExecPrefix">
+wchar_t* <code class="descname">Py_GetExecPrefix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_GetExecPrefix" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プラットフォーム <em>依存</em> のファイルがインストールされている場所である <em>exec-prefix</em> を返します。この値は <a class="reference internal" href="#c.Py_SetProgramName" title="Py_SetProgramName"><code class="xref c c-func docutils literal"><span class="pre">Py_SetProgramName()</span></code></a> でセットされたプログラム名やいくつかの環境変数をもとに、数々の複雑な規則から導出されます。例えば、プログラム名が <code class="docutils literal"><span class="pre">'/usr/local/bin/python'</span></code> の場合、exec-prefix は <code class="docutils literal"><span class="pre">'/usr/local'</span></code> になります。関数が返す文字列ポインタは静的な記憶領域を返します; 関数の呼び出し側はこの値を変更できません。この値はトップレベルの <code class="file docutils literal"><span class="pre">Makefile</span></code> に指定されている変数 <strong class="makevar">exec_prefix</strong> や、ビルド値に <strong class="program">configure</strong> スクリプトに指定した <code class="docutils literal"><span class="pre">--exec-prefix</span></code> 引数に対応しています。この値は Python コードからは <code class="docutils literal"><span class="pre">sys.exec_prefix</span></code> として利用できます。 Unixのみで有用です。</p>
+<p>背景: プラットフォーム依存のファイル (実行形式や共有ライブラリ) が別のディレクトリツリー内にインストールされている場合、 exec-prefix は prefix と異なります。典型的なインストール形態では、プラットフォーム非依存のファイルが <code class="file docutils literal"><span class="pre">/usr/local</span></code> に収められる一方、プラットフォーム依存のファイルは <code class="file docutils literal"><span class="pre">/usr/local/plat</span></code> サブツリーに収められます。</p>
+<p>一般的に、プラットフォームとは、ハードウェアとソフトウェアファミリの組み合わせを指します。例えば、Solaris 2.x を動作させている Sparc マシンは全て同じプラットフォームであるとみなしますが、Solaris 2.x を動作させている Intel マシンは違うプラットフォームになりますし、同じ Intel マシンでも Linux を動作させているならまた別のプラットフォームです。一般的には、同じオペレーティングシステムでも、メジャーリビジョンの違うものは異なるプラットフォームです。非 Unix のオペレーティングシステムの場合は話はまた別です; 非 Unix のシステムでは、インストール方法はとても異なっていて、prefix や exec-prefix には意味がなく、空文字列が設定されています。コンパイル済みの Python バイトコードはプラットフォームに依存しないので注意してください (ただし、どのバージョンの Python でコンパイルされたかには依存します!)。</p>
+<p>システム管理者は、 <strong class="program">mount</strong> や <strong class="program">automount</strong> プログラムを使って、各プラットフォーム用の <code class="file docutils literal"><span class="pre">/usr/local/plat</span></code> を異なったファイルシステムに置き、プラットフォーム間で <code class="file docutils literal"><span class="pre">/usr/local</span></code> を共有するための設定方法を知っているでしょう。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_GetProgramFullPath">
+wchar_t* <code class="descname">Py_GetProgramFullPath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_GetProgramFullPath" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-6">Python 実行可能形式の完全なプログラム名を返します; この値はデフォルトのモジュール検索パスを (前述の <a class="reference internal" href="#c.Py_SetProgramName" title="Py_SetProgramName"><code class="xref c c-func docutils literal"><span class="pre">Py_SetProgramName()</span></code></a>  で設定された) プログラム名から導出する際に副作用的に計算されます。関数が返す文字列ポインタは静的な記憶領域を返します; 関数の呼び出し側はこの値を変更できません。この値は Python コードからは <code class="docutils literal"><span class="pre">sys.executable</span></code> として利用できます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_GetPath">
+wchar_t* <code class="descname">Py_GetPath</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_GetPath" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-7">デフォルトのモジュール検索パスを返します; パスは (上の <a class="reference internal" href="#c.Py_SetProgramName" title="Py_SetProgramName"><code class="xref c c-func docutils literal"><span class="pre">Py_SetProgramName()</span></code></a> で設定された) プログラム名と、いくつかの環境変数から計算されます。戻り値となる文字列は、プラットフォーム依存のパス区切り文字で分割された一連のディレクトリ名からなります。区切り文字は Unix と Mac OS X では <code class="docutils literal"><span class="pre">':'</span></code>, Windows では <code class="docutils literal"><span class="pre">';'</span></code> です。関数が返す文字列ポインタは静的な記憶領域を返します; 関数の呼び出し側はこの値を変更できません。 <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> はインタプリタによってこの値で初期化され、その後にモジュールをロードする際の検索パスを変更するために修正することが可能で、たいていそうされます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_SetPath">
+void <code class="descname">Py_SetPath</code><span class="sig-paren">(</span>const wchar_t<em>&nbsp;*</em><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_SetPath" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-8">デフォルトのモジュール検索パスを設定します。この関数が <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> より前に呼び出された場合、 <a class="reference internal" href="#c.Py_GetPath" title="Py_GetPath"><code class="xref c c-func docutils literal"><span class="pre">Py_GetPath()</span></code></a> はデフォルトの検索パスを計算しようとせず、代わりにこの関数が与えた検索パスを返します。これは、 Python がアプリケーションに組み込まれていて、そのアプリケーションが全てのモジュールの場所を完全に把握しているときに便利です。パスはプラットフォーム依存の区切り文字で分割されている必要があります。区切り文字は Unix と Mac OS X では <code class="docutils literal"><span class="pre">':'</span></code> 、Windows では <code class="docutils literal"><span class="pre">';'</span></code> です。</p>
+<p>また、この関数は <a class="reference internal" href="../library/sys.html#sys.executable" title="sys.executable"><code class="xref py py-data docutils literal"><span class="pre">sys.executable</span></code></a> に特に加工されていないプログラム名 (<a class="reference internal" href="#c.Py_SetProgramName" title="Py_SetProgramName"><code class="xref c c-func docutils literal"><span class="pre">Py_SetProgramName()</span></code></a> を参照) をセットし、 <a class="reference internal" href="../library/sys.html#sys.prefix" title="sys.prefix"><code class="xref py py-data docutils literal"><span class="pre">sys.prefix</span></code></a> と <a class="reference internal" href="../library/sys.html#sys.exec_prefix" title="sys.exec_prefix"><code class="xref py py-data docutils literal"><span class="pre">sys.exec_prefix</span></code></a> に空文字列をセットします。 <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> が呼び出された後で、これらの値を変更する必要がある場合は、呼び出し側の責任で行います。</p>
+<p>バイト文字列を <code class="xref c c-type docutils literal"><span class="pre">wchar_*</span></code> 文字列にデコードするには <a class="reference internal" href="sys.html#c.Py_DecodeLocale" title="Py_DecodeLocale"><code class="xref c c-func docutils literal"><span class="pre">Py_DecodeLocale()</span></code></a> を使ってください。</p>
+<p>パス引数は内部でコピーされます。したがって、呼び出し完了後に呼び出し元は引数を解放できます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_GetVersion">
+const char* <code class="descname">Py_GetVersion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_GetVersion" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python インタプリタのバージョンを返します。バージョンは、次のような形式の文字列です</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="s">&quot;3.0a5+ (py3k:63103M, May 12 2008, 00:53:55) </span><span class="se">\n</span><span class="s">[GCC 4.2.3]&quot;</span>
+</pre></div>
+</div>
+<p id="index-9">第一ワード (最初のスペース文字まで) は、現在の Python のバージョンです; 最初の三文字は、ピリオドで区切られたメジャーバージョンとマイナーバージョンです。関数が返す文字列ポインタは静的な記憶領域を返します; 関数の呼び出し側はこの値を変更できません。この値は Python コードからは <a class="reference internal" href="../library/sys.html#sys.version" title="sys.version"><code class="xref py py-data docutils literal"><span class="pre">sys.version</span></code></a> として利用できます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_GetPlatform">
+const char* <code class="descname">Py_GetPlatform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_GetPlatform" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-10">現在のプラットフォームのプラットフォーム識別文字列を返します。Unixでは、オペレーティングシステムの &#8220;公式の&#8221; 名前を小文字に変換し、後ろにメジャーリビジョン番号を付けた構成になっています。例えば Solaris 2.x は、SunOS 5.x, としても知られていますが、<code class="docutils literal"><span class="pre">'sunos5'</span></code> になります。Mac OS X では <code class="docutils literal"><span class="pre">'darwin'</span></code> です。Windows では <code class="docutils literal"><span class="pre">'win'</span></code> です。関数が返す文字列ポインタは静的な記憶領域を返します; 関数の呼び出し側はこの値を変更できません。この値は Python コードからは <code class="docutils literal"><span class="pre">sys.platform</span></code> として利用できます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_GetCopyright">
+const char* <code class="descname">Py_GetCopyright</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_GetCopyright" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在の Python バージョンに対する公式の著作権表示文字列を返します。例えば</p>
+<p><code class="docutils literal"><span class="pre">'Copyright</span> <span class="pre">1991-1995</span> <span class="pre">Stichting</span> <span class="pre">Mathematisch</span> <span class="pre">Centrum,</span> <span class="pre">Amsterdam'</span></code></p>
+<p id="index-11">関数が返す文字列ポインタは静的な記憶領域を返します; 関数の呼び出し側はこの値を変更できません。この値は Python コードからは <code class="docutils literal"><span class="pre">sys.copyright</span></code> として利用できます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_GetCompiler">
+const char* <code class="descname">Py_GetCompiler</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_GetCompiler" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在使っているバージョンの Python をビルドする際に用いたコンパイラを示す文字列を、角括弧で囲った文字列を返します。例えば:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="s">&quot;[GCC 2.7.2.2]&quot;</span>
+</pre></div>
+</div>
+<p id="index-12">関数が返す文字列ポインタは静的な記憶領域を返します; 関数の呼び出し側はこの値を変更できません。この値は Python コードからは <code class="docutils literal"><span class="pre">sys.version</span></code> の一部として取り出せます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_GetBuildInfo">
+const char* <code class="descname">Py_GetBuildInfo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_GetBuildInfo" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在使っている Python インタプリタインスタンスの、シーケンス番号とビルド日時に関する情報を返します。例えば</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="s">&quot;#67, Aug  1 1997, 22:34:28&quot;</span>
+</pre></div>
+</div>
+<p id="index-13">関数が返す文字列ポインタは静的な記憶領域を返します; 関数の呼び出し側はこの値を変更できません。この値は Python コードからは <code class="docutils literal"><span class="pre">sys.version</span></code> の一部として取り出せます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PySys_SetArgvEx">
+void <code class="descname">PySys_SetArgvEx</code><span class="sig-paren">(</span>int<em>&nbsp;argc</em>, wchar_t<em>&nbsp;**argv</em>, int<em>&nbsp;updatepath</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PySys_SetArgvEx" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-14"><em>argc</em> および <em>argv</em> に基づいて <a class="reference internal" href="../library/sys.html#sys.argv" title="sys.argv"><code class="xref py py-data docutils literal"><span class="pre">sys.argv</span></code></a> を設定します。これらの引数はプログラムの <code class="xref c c-func docutils literal"><span class="pre">main()</span></code> に渡した引数に似ていますが、最初の要素が Python インタプリタの宿主となっている実行形式の名前ではなく、実行されるスクリプト名を参照しなければならない点が違います。実行するスクリプトがない場合、 <em>argv</em> の最初の要素は空文字列にしてもかまいません。この関数が <a class="reference internal" href="../library/sys.html#sys.argv" title="sys.argv"><code class="xref py py-data docutils literal"><span class="pre">sys.argv</span></code></a> の初期化に失敗した場合、致命的エラーを <a class="reference internal" href="sys.html#c.Py_FatalError" title="Py_FatalError"><code class="xref c c-func docutils literal"><span class="pre">Py_FatalError()</span></code></a> で知らせます。</p>
+<p><em>updatepath</em> が 0 の場合、ここまでの動作がこの関数がすることの全てです。 <em>updatepath</em> が 0 でない場合、この関数は <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> を以下のアルゴリズムに基づいて修正します:</p>
+<ul class="simple">
+<li><p class="first">存在するスクリプトの名前が <code class="docutils literal"><span class="pre">argv[0]</span></code> に渡された場合、そのスクリプトがある場所の絶対パスを <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> の先頭に追加します。</p>
+</li>
+<li><p class="first">それ以外の場合 (<em>argc</em> が <code class="docutils literal"><span class="pre">0</span></code> だったり、 <code class="docutils literal"><span class="pre">argv[0]</span></code> が存在するファイル名を指していない場合)、 <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> の先頭に空の文字列を追加します。
+これは現在の作業ディレクトリ (<code class="docutils literal"><span class="pre">&quot;.&quot;</span></code>) を先頭に追加するのと同じです。</p>
+</li>
+</ul>
+<p>バイト文字列を <code class="xref c c-type docutils literal"><span class="pre">wchar_*</span></code> 文字列にデコードするには <a class="reference internal" href="sys.html#c.Py_DecodeLocale" title="Py_DecodeLocale"><code class="xref c c-func docutils literal"><span class="pre">Py_DecodeLocale()</span></code></a> を使ってください。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p>単一のスクリプトを実行する以外の目的でPython インタプリタを埋め込んでいるアプリケーションでは、 <em>updatepath</em> に <code class="docutils literal"><span class="pre">0</span></code> を渡して、必要な場合は自分で <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> を更新することをおすすめします。
+<a class="reference external" href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-5983">CVE-2008-5983</a> を参照してください。</p>
+<p>3.1.3 より前のバージョンでは、 <a class="reference internal" href="#c.PySys_SetArgv" title="PySys_SetArgv"><code class="xref c c-func docutils literal"><span class="pre">PySys_SetArgv()</span></code></a> の呼び出しが完了した後に <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> の先頭の要素を取り出すことで、同じ効果が得られます。例えばこのように使います:</p>
+<div class="last highlight-c"><div class="highlight"><pre><span></span><span class="n">PyRun_SimpleString</span><span class="p">(</span><span class="s">&quot;import sys; sys.path.pop(0)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.1.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PySys_SetArgv">
+void <code class="descname">PySys_SetArgv</code><span class="sig-paren">(</span>int<em>&nbsp;argc</em>, wchar_t<em>&nbsp;**argv</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PySys_SetArgv" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は、 <strong class="program">python</strong> インタプリタが <a class="reference internal" href="../using/cmdline.html#cmdoption-I"><code class="xref std std-option docutils literal"><span class="pre">-I</span></code></a> オプション付きで実行されている場合を除き <a class="reference internal" href="#c.PySys_SetArgvEx" title="PySys_SetArgvEx"><code class="xref c c-func docutils literal"><span class="pre">PySys_SetArgvEx()</span></code></a> の <em>updatepath</em> に <code class="docutils literal"><span class="pre">1</span></code> を設定したのと同じように動作します。</p>
+<p>バイト文字列を <code class="xref c c-type docutils literal"><span class="pre">wchar_*</span></code> 文字列にデコードするには <a class="reference internal" href="sys.html#c.Py_DecodeLocale" title="Py_DecodeLocale"><code class="xref c c-func docutils literal"><span class="pre">Py_DecodeLocale()</span></code></a> を使ってください。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span><em>updatepath</em> の値は <a class="reference internal" href="../using/cmdline.html#cmdoption-I"><code class="xref std std-option docutils literal"><span class="pre">-I</span></code></a> オプションに依存します。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_SetPythonHome">
+void <code class="descname">Py_SetPythonHome</code><span class="sig-paren">(</span>wchar_t<em>&nbsp;*home</em><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_SetPythonHome" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python の標準ライブラリがある、デフォルトの &#8220;home&#8221; ディレクトリを設定します。引数の文字列の意味については <span class="target" id="index-35"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONHOME"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONHOME</span></code></a> を参照してください。</p>
+<p>引数は静的なストレージに置かれてプログラム実行中に書き換えられないようなゼロ終端の文字列であるべきです。Python インタプリタはこのストレージの内容を変更しません。</p>
+<p>バイト文字列を <code class="xref c c-type docutils literal"><span class="pre">wchar_*</span></code> 文字列にデコードするには <a class="reference internal" href="sys.html#c.Py_DecodeLocale" title="Py_DecodeLocale"><code class="xref c c-func docutils literal"><span class="pre">Py_DecodeLocale()</span></code></a> を使ってください。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.Py_GetPythonHome">
+w_char* <code class="descname">Py_GetPythonHome</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_GetPythonHome" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>前回の <a class="reference internal" href="#c.Py_SetPythonHome" title="Py_SetPythonHome"><code class="xref c c-func docutils literal"><span class="pre">Py_SetPythonHome()</span></code></a> 呼び出しで設定されたデフォルトの &#8220;home&#8221; か、 <span class="target" id="index-36"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONHOME"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONHOME</span></code></a> 環境変数が設定されていればその値を返します。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="thread-state-and-the-global-interpreter-lock">
+<span id="threads"></span><h2>スレッド状態 (thread state) とグローバルインタプリタロック (global interpreter lock)<a class="headerlink" href="#thread-state-and-the-global-interpreter-lock" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p id="index-17">Python インタプリタは完全にはスレッドセーフではありません。マルチスレッドの Python プログラムをサポートするために、グローバルインタプリタロック(<a class="reference internal" href="../glossary.html#term-global-interpreter-lock"><span class="xref std std-term">global interpreter lock</span></a>, <a class="reference internal" href="../glossary.html#term-gil"><span class="xref std std-term">GIL</span></a>) と呼ばれるグローバルなロックが存在していて、現在のスレッドが Python オブジェクトに安全にアクセスする前に必ずロックを獲得しなければならなくなっています。ロック機構がなければ、単純な操作でさえ、マルチスレッドプログラムの実行に問題を引き起こす可能性があります。たとえば、二つのスレッドが同じオブジェクトの参照カウントを同時にインクリメントすると、結果的に参照カウントは二回でなく一回だけしかインクリメントされないかもしれません。</p>
+<p id="index-18">このため、 <a class="reference internal" href="../glossary.html#term-gil"><span class="xref std std-term">GIL</span></a> を獲得したスレッドだけが Python オブジェクトを操作したり、 Python/C API 関数を呼び出したりできるというルールがあります。並行処理をエミュレートするために、インタプリタは定期的にロックを解放したり獲得したりします。 (<a class="reference internal" href="../library/sys.html#sys.setswitchinterval" title="sys.setswitchinterval"><code class="xref py py-func docutils literal"><span class="pre">sys.setswitchinterval()</span></code></a> を参照) このロックはブロックが起こりうる I/O 操作の付近でも解放・獲得され、 I/O を要求するスレッドが I/O 操作の完了を待つ間、他のスレッドが動作できるようにしています。</p>
+<p id="index-19">Python インタプリタはスレッドごとに必要な情報を <a class="reference internal" href="#c.PyThreadState" title="PyThreadState"><code class="xref c c-type docutils literal"><span class="pre">PyThreadState</span></code></a> と呼ばれるデータ構造の中に保存します。そしてグローバル変数として現在の <a class="reference internal" href="#c.PyThreadState" title="PyThreadState"><code class="xref c c-type docutils literal"><span class="pre">PyThreadState</span></code></a> を指すポインタを1つ持ちます。このグローバル変数は <a class="reference internal" href="#c.PyThreadState_Get" title="PyThreadState_Get"><code class="xref c c-func docutils literal"><span class="pre">PyThreadState_Get()</span></code></a> を使って取得できます。</p>
+<div class="section" id="releasing-the-gil-from-extension-code">
+<h3>拡張コード内で GIL を解放する<a class="headerlink" href="#releasing-the-gil-from-extension-code" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><a class="reference internal" href="../glossary.html#term-gil"><span class="xref std std-term">GIL</span></a> を操作するほとんどのコードは、次のような単純な構造になります:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">Save</span> <span class="n">the</span> <span class="kr">thread</span> <span class="n">state</span> <span class="n">in</span> <span class="n">a</span> <span class="n">local</span> <span class="n">variable</span><span class="p">.</span>
+<span class="n">Release</span> <span class="n">the</span> <span class="n">global</span> <span class="n">interpreter</span> <span class="n">lock</span><span class="p">.</span>
+<span class="p">...</span> <span class="n">Do</span> <span class="n">some</span> <span class="n">blocking</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">operation</span> <span class="p">...</span>
+<span class="n">Reacquire</span> <span class="n">the</span> <span class="n">global</span> <span class="n">interpreter</span> <span class="n">lock</span><span class="p">.</span>
+<span class="n">Restore</span> <span class="n">the</span> <span class="kr">thread</span> <span class="n">state</span> <span class="n">from</span> <span class="n">the</span> <span class="n">local</span> <span class="n">variable</span><span class="p">.</span>
+</pre></div>
+</div>
+<p>この構造は非常に一般的なので、作業を単純にするために2つのマクロが用意されています:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">Py_BEGIN_ALLOW_THREADS</span>
+<span class="p">...</span> <span class="n">Do</span> <span class="n">some</span> <span class="n">blocking</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">operation</span> <span class="p">...</span>
+<span class="n">Py_END_ALLOW_THREADS</span>
+</pre></div>
+</div>
+<p id="index-20"><a class="reference internal" href="#c.Py_BEGIN_ALLOW_THREADS" title="Py_BEGIN_ALLOW_THREADS"><code class="xref c c-macro docutils literal"><span class="pre">Py_BEGIN_ALLOW_THREADS</span></code></a> マクロは新たなブロックを開始し、隠しローカル変数を宣言します; <a class="reference internal" href="#c.Py_END_ALLOW_THREADS" title="Py_END_ALLOW_THREADS"><code class="xref c c-macro docutils literal"><span class="pre">Py_END_ALLOW_THREADS</span></code></a> はブロックを閉じます。 Python をスレッドサポートなしでコンパイルしたときでもこの2つのマクロは利用可能です (単に、空行に展開されます)。</p>
+<p>スレッドサポートが有効になっている場合、上記のブロックは以下のようなコードに展開されます:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">PyThreadState</span> <span class="o">*</span><span class="n">_save</span><span class="p">;</span>
+
+<span class="n">_save</span> <span class="o">=</span> <span class="n">PyEval_SaveThread</span><span class="p">();</span>
+<span class="p">...</span><span class="n">Do</span> <span class="n">some</span> <span class="n">blocking</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">operation</span><span class="p">...</span>
+<span class="n">PyEval_RestoreThread</span><span class="p">(</span><span class="n">_save</span><span class="p">);</span>
+</pre></div>
+</div>
+<p id="index-21">これらの関数の動作を説明します。GIL は現在のスレッド状態を指すポインタを保護するために使われます。ロックを解放してスレッド状態を退避する際、ロックを解放する前に現在のスレッド状態ポインタを取得しておかなければなりません (他のスレッドがすぐさまロックを獲得して、自らのスレッド状態をグローバル変数に保存してしまうかもしれないからです)。逆に、ロックを獲得してスレッド状態を復帰する際には、グローバル変数にスレッド状態ポインタを保存する前にロックを獲得しておかなければなりません。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">GIL を解放するのはほとんどがシステムのI/O関数を呼び出す時ですが、メモリバッファに対する圧縮や暗号化のように、 Python のオブジェクトにアクセスしない長時間かかる計算処理を呼び出すときも GIL を解放することは有益です。例えば、 <a class="reference internal" href="../library/zlib.html#module-zlib" title="zlib: Low-level interface to compression and decompression routines compatible with gzip."><code class="xref py py-mod docutils literal"><span class="pre">zlib</span></code></a> や <a class="reference internal" href="../library/hashlib.html#module-hashlib" title="hashlib: Secure hash and message digest algorithms."><code class="xref py py-mod docutils literal"><span class="pre">hashlib</span></code></a> モジュールは圧縮やハッシュ計算の前に GIL を解放します。</p>
+</div>
+</div>
+<div class="section" id="non-python-created-threads">
+<span id="gilstate"></span><h3>Python 以外で作られたスレッド<a class="headerlink" href="#non-python-created-threads" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Python API を通して作られたスレッド (<a class="reference internal" href="../library/threading.html#module-threading" title="threading: Thread-based parallelism."><code class="xref py py-mod docutils literal"><span class="pre">threading</span></code></a> モジュールなど) では自動的にスレッド状態が割り当てられて、上記のコードは正しく動きます。しかし、(自前でスレッド管理を行う外部のライブラリなどにより)C言語でスレッドを生成した場合、そのスレッドには GIL がなく、スレッド状態データ構造体もないことに注意する必要があります。</p>
+<p>このようなスレッドから Python コードを呼び出す必要がある場合 (外部のライブラリからコールバックするAPIなどがよくある例です)、Python/C API を呼び出す前に、スレッド状態データ構造体を生成し、GIL を獲得し、スレッド状態ポインタを保存することで、スレッドをインタプリタに登録しなければなりません。スレッドが作業を終えたら、スレッド状態ポインタをリセットして、ロックを解放し、最後にスレッド状態データ構造体のメモリを解放しなければなりません。</p>
+<p><a class="reference internal" href="#c.PyGILState_Ensure" title="PyGILState_Ensure"><code class="xref c c-func docutils literal"><span class="pre">PyGILState_Ensure()</span></code></a> と <a class="reference internal" href="#c.PyGILState_Release" title="PyGILState_Release"><code class="xref c c-func docutils literal"><span class="pre">PyGILState_Release()</span></code></a> はこの処理を自動的に行います。 Cのスレッドから Python を呼び出す典型的な方法は以下のとおりです:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">PyGILState_STATE</span> <span class="n">gstate</span><span class="p">;</span>
+<span class="n">gstate</span> <span class="o">=</span> <span class="n">PyGILState_Ensure</span><span class="p">();</span>
+
+<span class="cm">/* Perform Python actions here. */</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">CallSomeFunction</span><span class="p">();</span>
+<span class="cm">/* evaluate result or handle exception */</span>
+
+<span class="cm">/* Release the thread. No Python API allowed beyond this point. */</span>
+<span class="n">PyGILState_Release</span><span class="p">(</span><span class="n">gstate</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><code class="xref c c-func docutils literal"><span class="pre">PyGILState_*()</span></code> 関数は、(<a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> によって自動的に作られる) グローバルインタプリタ1つだけが存在すると仮定する事に気をつけて下さい。 Python は (<a class="reference internal" href="#c.Py_NewInterpreter" title="Py_NewInterpreter"><code class="xref c c-func docutils literal"><span class="pre">Py_NewInterpreter()</span></code></a> を使って) 追加のインタプリタを作成できることに変わりはありませんが、複数インタプリタと <code class="xref c c-func docutils literal"><span class="pre">PyGILState_*()</span></code> API を混ぜて使うことはサポートされていません。</p>
+<p>注意しないといけないもう一つの重要な点は、 C の <code class="xref c c-func docutils literal"><span class="pre">fork()</span></code> を呼び出した時の動作です。ほとんどの <code class="xref c c-func docutils literal"><span class="pre">fork()</span></code> を持っているシステムでは、fork されたプロセスには fork を実行したスレッドしか存在しません。これは、別のスレッドに取得されたロックがずっと解放されないことを意味します。 Python は fork する前にロックを取得し、その後に fork を解放することでこの問題を解決しています。加えて、子プロセスではすべての <a class="reference internal" href="../library/threading.html#lock-objects"><span class="std std-ref">Lock オブジェクト</span></a> をリセットします。 Python を拡張したり埋め込んだりしている場合、 Python に fork 前に取得したり fork 後に解放しなければならない追加の (Python 以外の) ロックを Python に教える手段がありません。 Python と同じことを実現するには、 <code class="xref c c-func docutils literal"><span class="pre">pthread_atfork()</span></code> のようなOSの機能を使う必要があります。加えて、Python を拡張したり埋め込んだりしているときに、 <a class="reference internal" href="../library/os.html#os.fork" title="os.fork"><code class="xref py py-func docutils literal"><span class="pre">os.fork()</span></code></a> を通してではなく直接 <code class="xref c c-func docutils literal"><span class="pre">fork()</span></code> を呼び出すと、fork後に失われるスレッドに取得されていた Python の内部ロックのためにデッドロックが発生するかもしれません。 <a class="reference internal" href="sys.html#c.PyOS_AfterFork" title="PyOS_AfterFork"><code class="xref c c-func docutils literal"><span class="pre">PyOS_AfterFork()</span></code></a> は必要なロックのリセットを試みますが、いつでもそれが可能とは限りません。</p>
+</div>
+<div class="section" id="high-level-api">
+<h3>高レベルAPI<a class="headerlink" href="#high-level-api" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>C拡張を書いたりPythonインタプリタを埋め込むときに最も一般的に使われる型や関数は次のとおりです:</p>
+<dl class="type">
+<dt id="c.PyInterpreterState">
+<code class="descname">PyInterpreterState</code><a class="headerlink" href="#c.PyInterpreterState" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このデータ構造体は、協調動作する多数のスレッド間で共有されている状態を表現します。同じインタプリタに属するスレッドはモジュール管理情報やその他いくつかの内部的な情報を共有しています。この構造体には公開 (public) のメンバはありません。</p>
+<p>異なるインタプリタに属するスレッド間では、利用可能なメモリ、開かれているファイルデスクリプタなどといったプロセス状態を除いて、初期状態では何も共有されていません。GILもまた、スレッドがどのインタプリタに属しているかに関わらずすべてのスレッドで共有されています。</p>
+</dd></dl>
+
+<dl class="type">
+<dt id="c.PyThreadState">
+<code class="descname">PyThreadState</code><a class="headerlink" href="#c.PyThreadState" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>単一のスレッドの状態を表現する表現するデータ構造体です。スレッドのインタプリタ状態を指すポインタ <a class="reference internal" href="#c.PyInterpreterState" title="PyInterpreterState"><code class="xref c c-type docutils literal"><span class="pre">PyInterpreterState</span> <span class="pre">*</span></code></a> <code class="xref py py-attr docutils literal"><span class="pre">interp</span></code> だけが公開されているデータメンバです。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyEval_InitThreads">
+void <code class="descname">PyEval_InitThreads</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyEval_InitThreads" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-22">GIL を初期化し、獲得します。この関数は、主スレッドが第二のスレッドを生成する以前や、 <code class="docutils literal"><span class="pre">PyEval_ReleaseThread(tstate)</span></code> といった他のスレッド操作に入るよりも前に呼び出されるようにしておかなければなりません。 <a class="reference internal" href="#c.PyEval_SaveThread" title="PyEval_SaveThread"><code class="xref c c-func docutils literal"><span class="pre">PyEval_SaveThread()</span></code></a>, <a class="reference internal" href="#c.PyEval_RestoreThread" title="PyEval_RestoreThread"><code class="xref c c-func docutils literal"><span class="pre">PyEval_RestoreThread()</span></code></a> の前に呼び出す必要はありません。</p>
+<p>二度目に呼び出すと何も行いません。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>この関数は <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> より前に呼び出すことができなくなりました。</p>
+</div>
+<div class="admonition note" id="index-23">
+<p class="first admonition-title">注釈</p>
+<p>メインスレッドだけが存在しているとき、 GIL 操作は必要ありません。 (ほとんどの Python プログラムはスレッドを使わないので) これはよくある状況であり、ロック操作はインタプリタの動作を少しだけ遅くします。なので、ロックは最初には作成されません。これはロックを獲得しているのと同じ状態になります: スレッドが 1 つしかないとき、オブジェクトへの全てのアクセスは安全です。またこれらのことから、この関数がグローバルインタプリタロックを初期化するときは、その取得も行います。 Python の <a class="reference internal" href="../library/_thread.html#module-_thread" title="_thread: Low-level threading API."><code class="xref py py-mod docutils literal"><span class="pre">_thread</span></code></a> モジュールは新しいスレッドを作成する前に、ロックが既にあるのかロックはまだ作成されていないのか知るために、  <a class="reference internal" href="#c.PyEval_InitThreads" title="PyEval_InitThreads"><code class="xref c c-func docutils literal"><span class="pre">PyEval_InitThreads()</span></code></a> を呼び出します。呼び出しが返ってきたとき、ロックが作成されており、 <a class="reference internal" href="#c.PyEval_InitThreads" title="PyEval_InitThreads"><code class="xref c c-func docutils literal"><span class="pre">PyEval_InitThreads()</span></code></a> を呼び出したスレッドがそれを獲得したことが保証されます。</p>
+<p>(どんなスレッドであれ) どのスレッドが現在グローバルインタプリタロックを持っているか分からないときに、この関数を呼び出すのは安全では <strong>ありません</strong>。</p>
+<p class="last">この関数は、コンパイル時にスレッドサポートが無効にされているときは利用できません。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyEval_ThreadsInitialized">
+int <code class="descname">PyEval_ThreadsInitialized</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyEval_ThreadsInitialized" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#c.PyEval_InitThreads" title="PyEval_InitThreads"><code class="xref c c-func docutils literal"><span class="pre">PyEval_InitThreads()</span></code></a> をすでに呼び出している場合は真 (非ゼロ) を返します。この関数は、GILを獲得せずに呼び出すことができますので、シングルスレッドで実行している場合にはロック関連のAPI呼び出しを避けるために使うことができます。この関数はコンパイル時にスレッドサポートを無効化すると利用できません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyEval_SaveThread">
+<a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a>* <code class="descname">PyEval_SaveThread</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyEval_SaveThread" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>(GIL が生成されていて、スレッドサポートが有効の場合) GILを解放して、スレッド状態を <em>NULL</em> にし、以前のスレッド状態 (<em>NULL</em> にはなりません) を返します。ロックがすでに生成されている場合、現在のスレッドがロックを獲得していなければなりません。(この関数はコンパイル時にスレッドサポートが無効にされていても利用できます。)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyEval_RestoreThread">
+void <code class="descname">PyEval_RestoreThread</code><span class="sig-paren">(</span><a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyEval_RestoreThread" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>(GIL が生成されていて、スレッドサポートが有効の場合) GIL を獲得して、現在のスレッド状態を <em>tstate</em> に設定します。<em>tstate</em> は <em>NULL</em> であってはなりません。GIL が生成されていて、この関数を呼び出したスレッドがすでにロックを獲得している場合、デッドロックに陥ります。(この関数はコンパイル時にスレッドサポートが無効にされていても利用できます。)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyThreadState_Get">
+<a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a>* <code class="descname">PyThreadState_Get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyThreadState_Get" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在のスレッド状態を返します。GIL を保持していなければなりません。現在のスレッド状態が <em>NULL</em> なら、(呼び出し側が <em>NULL</em> チェックをしなくてすむように) この関数は致命的エラーを起こすようになっています。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyThreadState_Swap">
+<a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a>* <code class="descname">PyThreadState_Swap</code><span class="sig-paren">(</span><a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyThreadState_Swap" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在のスレッド状態を <em>tstate</em> に指定したスレッド状態と入れ変えます。<em>tstate</em> は <em>NULL</em> の場合があります。GIL を保持していなければならず、解放しません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyEval_ReInitThreads">
+void <code class="descname">PyEval_ReInitThreads</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyEval_ReInitThreads" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は <a class="reference internal" href="sys.html#c.PyOS_AfterFork" title="PyOS_AfterFork"><code class="xref c c-func docutils literal"><span class="pre">PyOS_AfterFork()</span></code></a> から呼び出され、新しい子プロセスが、子プロセス内で実行していないスレッドが持っているロックを持たないようにします。</p>
+</dd></dl>
+
+<p>以下の関数はスレッドローカルストレージを利用していて、サブインタプリタとの互換性がありません:</p>
+<dl class="function">
+<dt id="c.PyGILState_Ensure">
+PyGILState_STATE <code class="descname">PyGILState_Ensure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyGILState_Ensure" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Pythonの状態やGILに関わらず、実行中スレッドでPython C APIの呼び出しが可能となるようにします。この関数はスレッド内で何度でも呼び出すことができますが、必ず全ての呼び出しに対応して <a class="reference internal" href="#c.PyGILState_Release" title="PyGILState_Release"><code class="xref c c-func docutils literal"><span class="pre">PyGILState_Release()</span></code></a> を呼び出す必要があります。通常、 <a class="reference internal" href="#c.PyGILState_Ensure" title="PyGILState_Ensure"><code class="xref c c-func docutils literal"><span class="pre">PyGILState_Ensure()</span></code></a> 呼び出しと <a class="reference internal" href="#c.PyGILState_Release" title="PyGILState_Release"><code class="xref c c-func docutils literal"><span class="pre">PyGILState_Release()</span></code></a> 呼び出しの間でこれ以外のスレッド関連API を使用することができますが、Release()の前にスレッド状態は復元されていなければなりません。例えば、通常の <a class="reference internal" href="#c.Py_BEGIN_ALLOW_THREADS" title="Py_BEGIN_ALLOW_THREADS"><code class="xref c c-macro docutils literal"><span class="pre">Py_BEGIN_ALLOW_THREADS</span></code></a> マクロと <a class="reference internal" href="#c.Py_END_ALLOW_THREADS" title="Py_END_ALLOW_THREADS"><code class="xref c c-macro docutils literal"><span class="pre">Py_END_ALLOW_THREADS</span></code></a> は使用することができます。</p>
+<p>戻り値は <a class="reference internal" href="#c.PyGILState_Ensure" title="PyGILState_Ensure"><code class="xref c c-func docutils literal"><span class="pre">PyGILState_Ensure()</span></code></a> 呼び出し時のスレッド状態を隠蔽した&#8221;ハンドル&#8221;で、 <a class="reference internal" href="#c.PyGILState_Release" title="PyGILState_Release"><code class="xref c c-func docutils literal"><span class="pre">PyGILState_Release()</span></code></a> に渡してPythonを同じ状態に保たなければなりません。再起呼び出しも可能ですが、ハンドルを共有することは <em>できません</em> - それぞれの <a class="reference internal" href="#c.PyGILState_Ensure" title="PyGILState_Ensure"><code class="xref c c-func docutils literal"><span class="pre">PyGILState_Ensure()</span></code></a> 呼び出しでハンドルを保存し、対応する <a class="reference internal" href="#c.PyGILState_Release" title="PyGILState_Release"><code class="xref c c-func docutils literal"><span class="pre">PyGILState_Release()</span></code></a> 呼び出しで渡してください。</p>
+<p>関数から復帰したとき、実行中のスレッドはGILを所有していて、任意の Python コードを実行できます。処理の失敗は致命的なエラーです。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyGILState_Release">
+void <code class="descname">PyGILState_Release</code><span class="sig-paren">(</span>PyGILState_STATE<span class="sig-paren">)</span><a class="headerlink" href="#c.PyGILState_Release" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>獲得したすべてのリソースを解放します。この関数を呼び出すと、Pythonの状態は対応する <a class="reference internal" href="#c.PyGILState_Ensure" title="PyGILState_Ensure"><code class="xref c c-func docutils literal"><span class="pre">PyGILState_Ensure()</span></code></a> を呼び出す前と同じとなります (通常、この状態は呼び出し元でははわかりませんので、GILState APIを利用するようにしてください)。</p>
+<p><a class="reference internal" href="#c.PyGILState_Ensure" title="PyGILState_Ensure"><code class="xref c c-func docutils literal"><span class="pre">PyGILState_Ensure()</span></code></a> を呼び出す場合は、必ず同一スレッド内で対応する <a class="reference internal" href="#c.PyGILState_Release" title="PyGILState_Release"><code class="xref c c-func docutils literal"><span class="pre">PyGILState_Release()</span></code></a> を呼び出してください。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyGILState_GetThisThreadState">
+<a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a>* <code class="descname">PyGILState_GetThisThreadState</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyGILState_GetThisThreadState" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このスレッドの現在のスレッドの状態を取得します。これまで現在のスレッドで GILState API を使ったことが無い場合は、<code class="docutils literal"><span class="pre">NULL</span></code> が返ります。メインスレッドで自身のスレッド状態に関する呼び出しを全くしないとしても、メインスレッドは常にスレッド状態の情報を持っていることに注意してください。こうなっている目的は主にヘルパ機能もしくは診断機能のためです。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyGILState_Check">
+int <code class="descname">PyGILState_Check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyGILState_Check" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在のスレッドが GILを保持しているならば <code class="docutils literal"><span class="pre">1</span></code> を、そうでなければ <code class="docutils literal"><span class="pre">0</span></code> を返します。この関数はいつでもどのスレッドからでも呼び出すことができます。 Python スレッドの状態が初期化されており、現在 GIL を保持している場合にのみ <code class="docutils literal"><span class="pre">1</span></code> を返します。これは主にヘルパー/診断用の関数です。この関数は、例えばコールバックのコンテキストやメモリ割り当て機能で有益でしょう。なぜなら、 GIL がロックされていると知っていれば、呼び出し元は sensitive な行動を実行することができ、そうでなければ異なるやりかたで振る舞うことができるからです。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<p>以下のマクロは、通常末尾にセミコロンを付けずに使います; Python ソース配布物内の使用例を見てください。</p>
+<dl class="macro">
+<dt id="c.Py_BEGIN_ALLOW_THREADS">
+<code class="descname">Py_BEGIN_ALLOW_THREADS</code><a class="headerlink" href="#c.Py_BEGIN_ALLOW_THREADS" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このマクロを展開すると <code class="docutils literal"><span class="pre">{</span> <span class="pre">PyThreadState</span> <span class="pre">*_save;</span> <span class="pre">_save</span> <span class="pre">=</span> <span class="pre">PyEval_SaveThread();</span></code> になります。マクロに開き波括弧が入っていることに注意してください; この波括弧は後で <a class="reference internal" href="#c.Py_END_ALLOW_THREADS" title="Py_END_ALLOW_THREADS"><code class="xref c c-macro docutils literal"><span class="pre">Py_END_ALLOW_THREADS</span></code></a> マクロと対応させなければなりません。マクロについての詳しい議論は上記を参照してください。コンパイル時にスレッドサポートが無効化されていると何も行いません。</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.Py_END_ALLOW_THREADS">
+<code class="descname">Py_END_ALLOW_THREADS</code><a class="headerlink" href="#c.Py_END_ALLOW_THREADS" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このマクロを展開すると <code class="docutils literal"><span class="pre">PyEval_RestoreThread(_save);</span> <span class="pre">}</span></code> になります。マクロに開き波括弧が入っていることに注意してください; この波括弧は事前の <a class="reference internal" href="#c.Py_BEGIN_ALLOW_THREADS" title="Py_BEGIN_ALLOW_THREADS"><code class="xref c c-macro docutils literal"><span class="pre">Py_BEGIN_ALLOW_THREADS</span></code></a> マクロと対応していなければなりません。マクロについての詳しい議論は上記を参照してください。コンパイル時にスレッドサポートが無効化されていると何も行いません。</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.Py_BLOCK_THREADS">
+<code class="descname">Py_BLOCK_THREADS</code><a class="headerlink" href="#c.Py_BLOCK_THREADS" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このマクロを展開すると <code class="docutils literal"><span class="pre">PyEval_RestoreThread(_save);</span></code> になります: 閉じ波括弧のない <a class="reference internal" href="#c.Py_END_ALLOW_THREADS" title="Py_END_ALLOW_THREADS"><code class="xref c c-macro docutils literal"><span class="pre">Py_END_ALLOW_THREADS</span></code></a> と同じです。コンパイル時にスレッドサポートが無効化されていると何も行いません。</p>
+</dd></dl>
+
+<dl class="macro">
+<dt id="c.Py_UNBLOCK_THREADS">
+<code class="descname">Py_UNBLOCK_THREADS</code><a class="headerlink" href="#c.Py_UNBLOCK_THREADS" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このマクロを展開すると <code class="docutils literal"><span class="pre">_save</span> <span class="pre">=</span> <span class="pre">PyEval_SaveThread();</span></code> になります: 開き波括弧のない <a class="reference internal" href="#c.Py_BEGIN_ALLOW_THREADS" title="Py_BEGIN_ALLOW_THREADS"><code class="xref c c-macro docutils literal"><span class="pre">Py_BEGIN_ALLOW_THREADS</span></code></a> と同じです。コンパイル時にスレッドサポートが無効化されていると何も行いません。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="low-level-api">
+<h3>低レベルAPI<a class="headerlink" href="#low-level-api" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>以下の全ての関数はコンパイル時にスレッドサポートが有効になっている時だけ利用でき、呼び出すのはGILがすでに作成されている場合だけにしなくてはなりません。</p>
+<dl class="function">
+<dt id="c.PyInterpreterState_New">
+<a class="reference internal" href="#c.PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a>* <code class="descname">PyInterpreterState_New</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInterpreterState_New" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>新しいインタプリタ状態オブジェクトを生成します。GIL を保持しておく必要はありませんが、この関数を次々に呼び出す必要がある場合には保持しておいたほうがよいでしょう。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInterpreterState_Clear">
+void <code class="descname">PyInterpreterState_Clear</code><span class="sig-paren">(</span><a class="reference internal" href="#c.PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a><em>&nbsp;*interp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInterpreterState_Clear" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インタプリタ状態オブジェクト内の全ての情報をリセットします。GIL を保持していなければなりません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInterpreterState_Delete">
+void <code class="descname">PyInterpreterState_Delete</code><span class="sig-paren">(</span><a class="reference internal" href="#c.PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a><em>&nbsp;*interp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInterpreterState_Delete" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インタプリタ状態オブジェクトを破壊します。GIL を保持しておく必要はありません。インタプリタ状態は <a class="reference internal" href="#c.PyInterpreterState_Clear" title="PyInterpreterState_Clear"><code class="xref c c-func docutils literal"><span class="pre">PyInterpreterState_Clear()</span></code></a> であらかじめリセットしておかなければなりません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyThreadState_New">
+<a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a>* <code class="descname">PyThreadState_New</code><span class="sig-paren">(</span><a class="reference internal" href="#c.PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a><em>&nbsp;*interp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyThreadState_New" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>指定したインタプリタオブジェクトに属する新たなスレッド状態オブジェクトを生成します。GIL を保持しておく必要はありませんが、この関数を次々に呼び出す必要がある場合には保持しておいたほうがよいでしょう。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyThreadState_Clear">
+void <code class="descname">PyThreadState_Clear</code><span class="sig-paren">(</span><a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyThreadState_Clear" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>スレッド状態オブジェクト内の全ての情報をリセットします。GIL を保持していなければなりません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyThreadState_Delete">
+void <code class="descname">PyThreadState_Delete</code><span class="sig-paren">(</span><a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyThreadState_Delete" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>スレッド状態オブジェクトを破壊します。GIL を保持する必要はありません。スレッド状態は <a class="reference internal" href="#c.PyThreadState_Clear" title="PyThreadState_Clear"><code class="xref c c-func docutils literal"><span class="pre">PyThreadState_Clear()</span></code></a> であらかじめリセットしておかなければなりません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyThreadState_GetDict">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyThreadState_GetDict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyThreadState_GetDict" title="この定義へのパーマリンク">¶</a></dt>
+<dd><em class="refcount">Return value: Borrowed reference.</em><p>拡張モジュールがスレッド固有の状態情報を保存できるような辞書を返します。各々の拡張モジュールが辞書に状態情報を保存するためには唯一のキーを使わなければなりません。現在のスレッド状態がない時にこの関数を呼び出してもかまいません。この関数が <em>NULL</em> を返す場合、例外はまったく送出されず、呼び出し側は現在のスレッド状態が利用できないと考えなければなりません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyThreadState_SetAsyncExc">
+int <code class="descname">PyThreadState_SetAsyncExc</code><span class="sig-paren">(</span>long<em>&nbsp;id</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*exc</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyThreadState_SetAsyncExc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>スレッド内で非同期的に例外を送出します。 <em>id</em> 引数はターゲットとなるスレッドのスレッド id です; <em>exc</em> は送出する例外オブジェクトです。この関数は <em>exc</em> に対する参照を一切盗み取りません。素朴な間違いを防ぐため、この関数を呼び出すには独自に C 拡張モジュールを書かなければなりません。 GIL を保持した状態で呼び出さなければなりません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyEval_AcquireThread">
+void <code class="descname">PyEval_AcquireThread</code><span class="sig-paren">(</span><a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyEval_AcquireThread" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>GIL を獲得し、現在のスレッド状態を <em>tstate</em> に設定します。 <em>tstate</em> は <em>NULL</em> であってはなりません。ロックはあらかじめ作成されていなければなりません。この関数を呼び出したスレッドがすでにロックを獲得している場合、デッドロックに陥ります。</p>
+<p><a class="reference internal" href="#c.PyEval_RestoreThread" title="PyEval_RestoreThread"><code class="xref c c-func docutils literal"><span class="pre">PyEval_RestoreThread()</span></code></a> はいつでも (スレッドサポートが有効でないときやスレッドが初期化されたいないときでさえ) 利用可能な高レベル関数です。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyEval_ReleaseThread">
+void <code class="descname">PyEval_ReleaseThread</code><span class="sig-paren">(</span><a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyEval_ReleaseThread" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#c.PyEval_RestoreThread" title="PyEval_RestoreThread"><code class="xref c c-func docutils literal"><span class="pre">PyEval_RestoreThread()</span></code></a> はより高レベルな関数で常に(スレッドサポートが無効な場合やスレッドが初期化されていない場合でも)利用できます。現在のスレッド状態をリセットして <em>NULL</em> にし、GIL を解放します。ロックはあらかじめ作成されていなければならず、かつ現在のスレッドが保持していなければなりません。<em>tstate</em> は <em>NULL</em> であってはなりませんが、その値が現在のスレッド状態を表現しているかどうかを調べるためにだけ使われます &#8212; もしそうでなければ、致命的エラーが報告されます。</p>
+<p><a class="reference internal" href="#c.PyEval_SaveThread" title="PyEval_SaveThread"><code class="xref c c-func docutils literal"><span class="pre">PyEval_SaveThread()</span></code></a> はより高レベルな関数で常に(スレッドサポートが無効な場合やスレッドが初期化されていない場合でも)利用できます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyEval_AcquireLock">
+void <code class="descname">PyEval_AcquireLock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyEval_AcquireLock" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>GILを獲得します。ロックは前もって作成されていなければなりません。この関数を呼び出したスレッドがすでにロックを獲得している場合、デッドロックに陥ります。</p>
+<div class="deprecated">
+<p><span class="versionmodified">バージョン 3.2 で撤廃: </span>この関数は現在のスレッドの状態を更新しません。代わりに <a class="reference internal" href="#c.PyEval_RestoreThread" title="PyEval_RestoreThread"><code class="xref c c-func docutils literal"><span class="pre">PyEval_RestoreThread()</span></code></a> もしくは <a class="reference internal" href="#c.PyEval_AcquireThread" title="PyEval_AcquireThread"><code class="xref c c-func docutils literal"><span class="pre">PyEval_AcquireThread()</span></code></a> を使用してください。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyEval_ReleaseLock">
+void <code class="descname">PyEval_ReleaseLock</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyEval_ReleaseLock" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>GILを解放します。ロックは前もって作成されていなければなりません。</p>
+<div class="deprecated">
+<p><span class="versionmodified">バージョン 3.2 で撤廃: </span>この関数は現在のスレッドの状態を更新しません。代わりに <a class="reference internal" href="#c.PyEval_SaveThread" title="PyEval_SaveThread"><code class="xref c c-func docutils literal"><span class="pre">PyEval_SaveThread()</span></code></a> もしくは <a class="reference internal" href="#c.PyEval_ReleaseThread" title="PyEval_ReleaseThread"><code class="xref c c-func docutils literal"><span class="pre">PyEval_ReleaseThread()</span></code></a> を使用してください。</p>
+</div>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="sub-interpreter-support">
+<span id="id1"></span><h2>サブインタプリタサポート<a class="headerlink" href="#sub-interpreter-support" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ほとんどの場合は埋め込む Python インタプリタは1つだけですが、いくつかの場合に同一プロセス内、あるいは同一スレッド内で、複数の独立したインタプリタを作成する必要があります。サブインタプリタはこれを可能にします。 <a class="reference internal" href="#c.PyThreadState_Swap" title="PyThreadState_Swap"><code class="xref c c-func docutils literal"><span class="pre">PyThreadState_Swap()</span></code></a> 関数を使ってサブインタプリタを切り替えることができます。以下の関数を使ってサブインタプリタの作成と削除を行えます:</p>
+<dl class="function">
+<dt id="c.Py_NewInterpreter">
+<a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a>* <code class="descname">Py_NewInterpreter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_NewInterpreter" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-24">新しいサブインタプリタ (sub-interpreter) を生成します。サブインタプリタとは、(ほぼ完全に) 個別に分割された Python コードの実行環境です。特に、新しいサブインタプリタは、 import されるモジュール全てについて個別のバージョンを持ち、これには基盤となるモジュール <a class="reference internal" href="../library/builtins.html#module-builtins" title="builtins: The module that provides the built-in namespace."><code class="xref py py-mod docutils literal"><span class="pre">builtins</span></code></a>, <a class="reference internal" href="../library/__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><code class="xref py py-mod docutils literal"><span class="pre">__main__</span></code></a> および <a class="reference internal" href="../library/sys.html#module-sys" title="sys: Access system-specific parameters and functions."><code class="xref py py-mod docutils literal"><span class="pre">sys</span></code></a> も含まれます。ロード済みのモジュールからなるテーブル (<code class="docutils literal"><span class="pre">sys.modules</span></code>)  およびモジュール検索パス (<code class="docutils literal"><span class="pre">sys.path</span></code>) もサブインタプリタ毎に別個のものになります。新たなサブインタプリタ環境には <code class="docutils literal"><span class="pre">sys.argv</span></code> 変数がありません。また、サブインタプリタは新たな標準 I/O ストリーム <code class="docutils literal"><span class="pre">sys.stdin</span></code>, <code class="docutils literal"><span class="pre">sys.stdout</span></code>, <code class="docutils literal"><span class="pre">sys.stderr</span></code> を持ちます (とはいえ、これらのストリームは根底にある C ライブラリの同じ <code class="xref c c-type docutils literal"><span class="pre">FILE</span></code> 構造体を参照しています)。</p>
+<p>戻り値は、新たなサブインタプリタが生成したスレッド状態 (thread state) オブジェクトのうち、最初のものを指しています。このスレッド状態が現在のスレッド状態 (current thread state) になります。実際のスレッドが生成されるわけではないので注意してください; 下記のスレッド状態に関する議論を参照してください。新たなインタプリタの生成に失敗すると、<em>NULL</em> を返します; 例外状態はセットされませんが、これは例外状態が現在のスレッド状態に保存されることになっていて、現在のスレッド状態なるものが存在しないことがあるからです。(他の Python/C API 関数のように、この関数を呼び出す前にはGILが保持されていなければならず、関数が処理を戻した際にも保持されたままになります; しかし、他の Python/C API 関数とは違い、関数から戻ったときの現在のスレッド状態が関数に入るときと同じとは限らないので注意してください。)</p>
+<p id="index-25">Extension modules are shared between (sub-)interpreters as follows: the first
+time a particular extension is imported, it is initialized normally, and a
+(shallow) copy of its module&#8217;s dictionary is squirreled away.  When the same
+extension is imported by another (sub-)interpreter, a new module is initialized
+and filled with the contents of this copy; the extension&#8217;s <code class="docutils literal"><span class="pre">init</span></code> function is
+not called.  Note that this is different from what happens when an extension is
+imported after the interpreter has been completely re-initialized by calling
+<a class="reference internal" href="#c.Py_FinalizeEx" title="Py_FinalizeEx"><code class="xref c c-func docutils literal"><span class="pre">Py_FinalizeEx()</span></code></a> and <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a>; in that case, the extension&#8217;s
+<code class="docutils literal"><span class="pre">initmodule</span></code> function <em>is</em> called again.</p>
+<span class="target" id="index-26"></span></dd></dl>
+
+<dl class="function">
+<dt id="c.Py_EndInterpreter">
+void <code class="descname">Py_EndInterpreter</code><span class="sig-paren">(</span><a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_EndInterpreter" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-27">Destroy the (sub-)interpreter represented by the given thread state. The given
+thread state must be the current thread state.  See the discussion of thread
+states below.  When the call returns, the current thread state is <em>NULL</em>.  All
+thread states associated with this interpreter are destroyed.  (The global
+interpreter lock must be held before calling this function and is still held
+when it returns.)  <a class="reference internal" href="#c.Py_FinalizeEx" title="Py_FinalizeEx"><code class="xref c c-func docutils literal"><span class="pre">Py_FinalizeEx()</span></code></a> will destroy all sub-interpreters that
+haven&#8217;t been explicitly destroyed at that point.</p>
+</dd></dl>
+
+<div class="section" id="bugs-and-caveats">
+<h3>バグと注意事項<a class="headerlink" href="#bugs-and-caveats" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>サブインタプリタ (とメインインタプリタ) は同じプロセスの一部分なので、インタプリタ間の隔離は完璧ではありません &#8212; 例えば、 <a class="reference internal" href="../library/os.html#os.close" title="os.close"><code class="xref py py-func docutils literal"><span class="pre">os.close()</span></code></a> のような低レベルのファイル操作を使うと、 (偶然なり故意なりに) 互いのインタプリタ下にある開かれたファイルに影響を及ぼせてしまいます。拡張モジュールを (サブ) インタプリタ間で共有する方法のせいで、拡張モジュールによっては正しく動作しないかもしれません; 拡張モジュールが (静的な) グローバル変数を利用している場合や、拡張モジュールが初期化後に自身のモジュール辞書を操作する場合には特にそうです。一つのサブインタプリタで生成されたオブジェクトは他のサブインタプリタの名前空間への挿入が可能です; ユーザ定義関数、メソッド、インスタンスおよびクラスをサブインタプリタをサブインタプリタ間で共有しないように十分注意してください。というのは、これらの共有オブジェクトが実行した import 文は間違った (サブ) インタプリタのロード済みモジュール辞書に影響を及ぼす場合があるからです。</p>
+<p>サブインタプリタを <code class="xref c c-func docutils literal"><span class="pre">PyGILState_*()</span></code> API と組み合わせるのが難しいことにも注意してください。これらのAPIはPythonのスレッド状態とOSレベルスレッドが1対1で対応していることを前提にしていて、サブインタプリタが存在するとその前提が崩れるからです。対応する <a class="reference internal" href="#c.PyGILState_Ensure" title="PyGILState_Ensure"><code class="xref c c-func docutils literal"><span class="pre">PyGILState_Ensure()</span></code></a> と <a class="reference internal" href="#c.PyGILState_Release" title="PyGILState_Release"><code class="xref c c-func docutils literal"><span class="pre">PyGILState_Release()</span></code></a> の呼び出しのペアの間では、サブインタプリタの切り替えを行わないことを強く推奨します。さらに、(<a class="reference internal" href="../library/ctypes.html#module-ctypes" title="ctypes: A foreign function library for Python."><code class="xref py py-mod docutils literal"><span class="pre">ctypes</span></code></a> のような)これらのAPIを使ってPythonの外で作られたスレッドから Pythonコードを実行している拡張モジュールはサブインタプリタを使うと壊れる可能性があります。</p>
+</div>
+</div>
+<div class="section" id="asynchronous-notifications">
+<h2>非同期通知<a class="headerlink" href="#asynchronous-notifications" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>インタプリタのメインスレッドに非同期な通知を行うために提供されている仕組みです。これらの通知は関数ポインタと void ポインタ引数という形態を取ります。</p>
+<dl class="function">
+<dt id="c.Py_AddPendingCall">
+int <code class="descname">Py_AddPendingCall</code><span class="sig-paren">(</span>int (<em>*func</em>)(void *), void<em>&nbsp;*arg</em><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_AddPendingCall" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-28">インタプリタのメインスレッドから関数が呼び出される予定を組みます。成功すると <code class="docutils literal"><span class="pre">0</span></code> が返り、<em>func</em> はメインスレッドの呼び出しキューに詰められます。失敗すると、例外をセットせずに <code class="docutils literal"><span class="pre">-1</span></code> が返ります。</p>
+<p>無事にキューに詰められると、<em>func</em> は <em>いつかは必ず</em> インタプリタのメインスレッドから、<em>arg</em> を引数として呼び出されます。この関数は、通常の実行中の Python コードに対して非同期に呼び出されますが、次の両方の条件に合致したときに呼び出されます:</p>
+<ul class="simple">
+<li><p class="first"><a class="reference internal" href="../glossary.html#term-bytecode"><span class="xref std std-term">bytecode</span></a> 境界上にいるとき、</p>
+</li>
+<li><p class="first">メインスレッドが <a class="reference internal" href="../glossary.html#term-global-interpreter-lock"><span class="xref std std-term">global interpreter lock</span></a> を保持している (すなわち <em>func</em> が全ての C API を呼び出せる) とき。</p>
+</li>
+</ul>
+<p>成功したら <em>func</em> は <code class="docutils literal"><span class="pre">0</span></code> を返さねばならず、失敗したら <code class="docutils literal"><span class="pre">-1</span></code> を返し例外をセットしなければいけません。<em>func</em> は、他の非同期通知を行うために、さらに割り込まれることはありませんが、グローバルインタプリタロックが解放された場合は、スレッドの切り替えによって割り込まれる可能性が残っています。</p>
+<p>この関数は実行するのに現在のスレッド状態を必要とせず、グローバルインタプリタロックも必要としません。</p>
+<div class="admonition warning">
+<p class="first admonition-title">警告</p>
+<p class="last">これは、非常に特別な場合にのみ役立つ、低レベルな関数です。 <em>func</em> が可能な限り早く呼び出される保証はありません。メインスレッドがシステムコールを実行するのに忙しい場合は、 <em>func</em> はシステムコールが返ってくるまで呼び出されないでしょう。この関数は一般的には、任意の C スレッドから Python コードを呼び出すのには <strong>向きません</strong> 。これの代わりに、 <a class="reference internal" href="#gilstate"><span class="std std-ref">PyGILState API</span></a> を使用してください。</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.1 で追加.</span></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="profiling-and-tracing">
+<span id="profiling"></span><h2>プロファイルとトレース (profiling and tracing)<a class="headerlink" href="#profiling-and-tracing" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Python インタプリタは、プロファイル: 分析 (profile) や実行のトレース: 追跡 (trace) といった機能を組み込むために低水準のサポートを提供しています。このサポートは、プロファイルやデバッグ、適用範囲分析 (coverage analysis) ツールなどに使われます。</p>
+<p>この C インタフェースは、プロファイルやトレース作業時に、Python レベルの呼び出し可能オブジェクトが呼び出されることによるオーバヘッドを避け、直接 C 関数呼び出しが行えるようにしています。プロファイルやトレース機能の本質的な特性は変わっていません; インタフェースではトレース関数をスレッドごとにインストールでき、トレース関数に報告される基本イベント (basic event) は以前のバージョンにおいて Python レベルのトレース関数で報告されていたものと同じです。</p>
+<dl class="type">
+<dt id="c.Py_tracefunc">
+int <code class="descname">(*Py_tracefunc)</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*obj</em>, <a class="reference internal" href="veryhigh.html#c.PyFrameObject" title="PyFrameObject">PyFrameObject</a><em>&nbsp;*frame</em>, int<em>&nbsp;what</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*arg</em><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_tracefunc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#c.PyEval_SetProfile" title="PyEval_SetProfile"><code class="xref c c-func docutils literal"><span class="pre">PyEval_SetProfile()</span></code></a> および <a class="reference internal" href="#c.PyEval_SetTrace" title="PyEval_SetTrace"><code class="xref c c-func docutils literal"><span class="pre">PyEval_SetTrace()</span></code></a> を使って登録できるトレース関数の形式です。最初のパラメタはオブジェクトで、登録関数に <em>obj</em> として渡されます。 <em>frame</em> はイベントが属している実行フレームオブジェクトで、 <em>what</em> は定数 <code class="xref py py-const docutils literal"><span class="pre">PyTrace_CALL</span></code>, <code class="xref py py-const docutils literal"><span class="pre">PyTrace_EXCEPTION</span></code>, <code class="xref py py-const docutils literal"><span class="pre">PyTrace_LINE</span></code>, <code class="xref py py-const docutils literal"><span class="pre">PyTrace_RETURN</span></code>, <code class="xref py py-const docutils literal"><span class="pre">PyTrace_C_CALL</span></code>, <code class="xref py py-const docutils literal"><span class="pre">PyTrace_C_EXCEPTION</span></code>, あるいは <code class="xref py py-const docutils literal"><span class="pre">PyTrace_C_RETURN</span></code> のいずれかで、 <em>arg</em> は <em>what</em> の値によって以下のように異なります:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="44%" />
+<col width="56%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last"><em>what</em> の値</p>
+</th>
+<th class="head"><p class="first last"><em>arg</em> の意味</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">PyTrace_CALL</span></code></td>
+<td><p class="first last">常に <em>NULL</em> です。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">PyTrace_EXCEPTION</span></code></td>
+<td><p class="first last"><a class="reference internal" href="../library/sys.html#sys.exc_info" title="sys.exc_info"><code class="xref py py-func docutils literal"><span class="pre">sys.exc_info()</span></code></a> の返す例外情報です。</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">PyTrace_LINE</span></code></td>
+<td><p class="first last">常に <em>NULL</em> です。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">PyTrace_RETURN</span></code></td>
+<td><p class="first last">呼び出し側に返される予定の値か、例外によって関数を抜ける場合は <em>NULL</em> です。</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">PyTrace_C_CALL</span></code></td>
+<td><p class="first last">呼び出される関数オブジェクト。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">PyTrace_C_EXCEPTION</span></code></td>
+<td><p class="first last">呼び出される関数オブジェクト。</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">PyTrace_C_RETURN</span></code></td>
+<td><p class="first last">呼び出される関数オブジェクト。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.PyTrace_CALL">
+int <code class="descname">PyTrace_CALL</code><a class="headerlink" href="#c.PyTrace_CALL" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>関数やメソッドが新たに呼び出されたり、ジェネレータが新たなエントリの処理に入ったことを報告する際の、 <a class="reference internal" href="#c.Py_tracefunc" title="Py_tracefunc"><code class="xref c c-type docutils literal"><span class="pre">Py_tracefunc</span></code></a> の <em>what</em> の値です。イテレータやジェネレータ関数の生成は、対応するフレーム内の Python バイトコードに制御の委譲 (control transfer) が起こらないため報告されないので注意してください。</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.PyTrace_EXCEPTION">
+int <code class="descname">PyTrace_EXCEPTION</code><a class="headerlink" href="#c.PyTrace_EXCEPTION" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>例外が送出された際の <a class="reference internal" href="#c.Py_tracefunc" title="Py_tracefunc"><code class="xref c c-type docutils literal"><span class="pre">Py_tracefunc</span></code></a> の <em>what</em> の値です。現在実行されているフレームで例外がセットされ、何らかのバイトコードが処理された後に、 <em>what</em> にこの値がセットされた状態でコールバック関数が呼び出されます。この結果、例外の伝播によって Python が呼び出しスタックを逆戻りする際に、各フレームから処理が戻るごとにコールバック関数が呼び出されます。トレース関数だけがこれらのイベントを受け取ります; プロファイラはこの種のイベントを必要としません。</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.PyTrace_LINE">
+int <code class="descname">PyTrace_LINE</code><a class="headerlink" href="#c.PyTrace_LINE" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>行番号イベントを報告するときに (プロファイル関数ではなく) トレース関数の <em>what</em> パラメタとして渡す値です。</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.PyTrace_RETURN">
+int <code class="descname">PyTrace_RETURN</code><a class="headerlink" href="#c.PyTrace_RETURN" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>関数呼び出しが例外の伝播なしに返るときに <a class="reference internal" href="#c.Py_tracefunc" title="Py_tracefunc"><code class="xref c c-type docutils literal"><span class="pre">Py_tracefunc</span></code></a> 関数の <em>what</em> パラメタとして渡す値です。</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.PyTrace_C_CALL">
+int <code class="descname">PyTrace_C_CALL</code><a class="headerlink" href="#c.PyTrace_C_CALL" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>C関数を呼び出す直前に <a class="reference internal" href="#c.Py_tracefunc" title="Py_tracefunc"><code class="xref c c-type docutils literal"><span class="pre">Py_tracefunc</span></code></a> 関数の <em>what</em> パラメタとして渡す値です。</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.PyTrace_C_EXCEPTION">
+int <code class="descname">PyTrace_C_EXCEPTION</code><a class="headerlink" href="#c.PyTrace_C_EXCEPTION" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>C関数が例外を送出したときに <a class="reference internal" href="#c.Py_tracefunc" title="Py_tracefunc"><code class="xref c c-type docutils literal"><span class="pre">Py_tracefunc</span></code></a> 関数の <em>what</em> パラメタとして渡す値です。</p>
+</dd></dl>
+
+<dl class="var">
+<dt id="c.PyTrace_C_RETURN">
+int <code class="descname">PyTrace_C_RETURN</code><a class="headerlink" href="#c.PyTrace_C_RETURN" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>C関数から戻るときに <a class="reference internal" href="#c.Py_tracefunc" title="Py_tracefunc"><code class="xref c c-type docutils literal"><span class="pre">Py_tracefunc</span></code></a> 関数の <em>what</em> パラメタとして渡す値です。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyEval_SetProfile">
+void <code class="descname">PyEval_SetProfile</code><span class="sig-paren">(</span><a class="reference internal" href="#c.Py_tracefunc" title="Py_tracefunc">Py_tracefunc</a><em>&nbsp;func</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*obj</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyEval_SetProfile" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プロファイル関数を <em>func</em> に設定します。<em>obj</em> パラメタは関数の第一パラメタとして渡され、何らかの Python オブジェクトかまたは <em>NULL</em> になります。プロファイル関数がスレッド状態を維持する必要があるなら、各々のスレッドに異なる <em>obj</em> を使うことで、状態を記憶しておく便利でスレッドセーフな場所を提供できます。プロファイル関数は、モニタされているイベントのうち、行番号イベントを除く全てのイベントに対して呼び出されます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyEval_SetTrace">
+void <code class="descname">PyEval_SetTrace</code><span class="sig-paren">(</span><a class="reference internal" href="#c.Py_tracefunc" title="Py_tracefunc">Py_tracefunc</a><em>&nbsp;func</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*obj</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyEval_SetTrace" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トレース関数を <em>func</em> にセットします。 <a class="reference internal" href="#c.PyEval_SetProfile" title="PyEval_SetProfile"><code class="xref c c-func docutils literal"><span class="pre">PyEval_SetProfile()</span></code></a> に似ていますが、トレース関数は行番号イベントを受け取る点が違います。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyEval_GetCallStats">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyEval_GetCallStats</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*self</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyEval_GetCallStats" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return a tuple of function call counts.  There are constants defined for the
+positions within the tuple:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="82%" />
+<col width="18%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">名前</p>
+</th>
+<th class="head"><p class="first last">値</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">PCALL_ALL</span></code></td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">PCALL_FUNCTION</span></code></td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">PCALL_FAST_FUNCTION</span></code></td>
+<td>2</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">PCALL_FASTER_FUNCTION</span></code></td>
+<td>3</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">PCALL_METHOD</span></code></td>
+<td>4</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">PCALL_BOUND_METHOD</span></code></td>
+<td>5</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">PCALL_CFUNCTION</span></code></td>
+<td>6</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">PCALL_TYPE</span></code></td>
+<td>7</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">PCALL_GENERATOR</span></code></td>
+<td>8</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">PCALL_OTHER</span></code></td>
+<td>9</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">PCALL_POP</span></code></td>
+<td>10</td>
+</tr>
+</tbody>
+</table>
+<p><code class="xref py py-const docutils literal"><span class="pre">PCALL_FAST_FUNCTION</span></code> means no argument tuple needs to be created.
+<code class="xref py py-const docutils literal"><span class="pre">PCALL_FASTER_FUNCTION</span></code> means that the fast-path frame setup code is used.</p>
+<p>If there is a method call where the call can be optimized by changing
+the argument tuple and calling the function directly, it gets recorded
+twice.</p>
+<p>This function is only present if Python is compiled with <code class="xref py py-const docutils literal"><span class="pre">CALL_PROFILE</span></code>
+defined.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="advanced-debugger-support">
+<span id="advanced-debugging"></span><h2>高度なデバッガサポート (advanced debugger support)<a class="headerlink" href="#advanced-debugger-support" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>以下の関数は高度なデバッグツールでの使用のためだけのものです。</p>
+<dl class="function">
+<dt id="c.PyInterpreterState_Head">
+<a class="reference internal" href="#c.PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a>* <code class="descname">PyInterpreterState_Head</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInterpreterState_Head" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インタプリタ状態オブジェクトからなるリストのうち、先頭にあるものを返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInterpreterState_Next">
+<a class="reference internal" href="#c.PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a>* <code class="descname">PyInterpreterState_Next</code><span class="sig-paren">(</span><a class="reference internal" href="#c.PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a><em>&nbsp;*interp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInterpreterState_Next" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インタプリタ状態オブジェクトからなるリストのうち、<em>interp</em> の次にあるものを返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyInterpreterState_ThreadHead">
+<a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a> * <code class="descname">PyInterpreterState_ThreadHead</code><span class="sig-paren">(</span><a class="reference internal" href="#c.PyInterpreterState" title="PyInterpreterState">PyInterpreterState</a><em>&nbsp;*interp</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyInterpreterState_ThreadHead" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インタプリタ <em>interp</em> に関連付けられているスレッドからなるリストのうち、先頭にある <a class="reference internal" href="#c.PyThreadState" title="PyThreadState"><code class="xref c c-type docutils literal"><span class="pre">PyThreadState</span></code></a> オブジェクトを返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyThreadState_Next">
+<a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a>* <code class="descname">PyThreadState_Next</code><span class="sig-paren">(</span><a class="reference internal" href="#c.PyThreadState" title="PyThreadState">PyThreadState</a><em>&nbsp;*tstate</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyThreadState_Next" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>tstate</em> と同じ <a class="reference internal" href="#c.PyInterpreterState" title="PyInterpreterState"><code class="xref c c-type docutils literal"><span class="pre">PyInterpreterState</span></code></a> オブジェクトに属しているスレッド状態オブジェクトのうち、 <em>tstate</em> の次にあるものを返します。</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">初期化 (initialization)、終了処理 (finalization)、スレッド</a><ul>
+<li><a class="reference internal" href="#initializing-and-finalizing-the-interpreter">インタプリタの初期化と終了処理</a></li>
+<li><a class="reference internal" href="#process-wide-parameters">プロセスワイドのパラメータ</a></li>
+<li><a class="reference internal" href="#thread-state-and-the-global-interpreter-lock">スレッド状態 (thread state) とグローバルインタプリタロック (global interpreter lock)</a><ul>
+<li><a class="reference internal" href="#releasing-the-gil-from-extension-code">拡張コード内で GIL を解放する</a></li>
+<li><a class="reference internal" href="#non-python-created-threads">Python 以外で作られたスレッド</a></li>
+<li><a class="reference internal" href="#high-level-api">高レベルAPI</a></li>
+<li><a class="reference internal" href="#low-level-api">低レベルAPI</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sub-interpreter-support">サブインタプリタサポート</a><ul>
+<li><a class="reference internal" href="#bugs-and-caveats">バグと注意事項</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#asynchronous-notifications">非同期通知</a></li>
+<li><a class="reference internal" href="#profiling-and-tracing">プロファイルとトレース (profiling and tracing)</a></li>
+<li><a class="reference internal" href="#advanced-debugger-support">高度なデバッガサポート (advanced debugger support)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="datetime.html"
+                        title="前の章へ">DateTime オブジェクト</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="memory.html"
+                        title="次の章へ">メモリ管理</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/init.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="memory.html" title="メモリ管理"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="datetime.html" title="DateTime オブジェクト"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API リファレンスマニュアル</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

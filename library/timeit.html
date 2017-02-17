@@ -1,0 +1,513 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>27.5. timeit — 小さなコード断片の実行時間計測 &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="27. デバッグとプロファイル" href="debug.html" />
+    <link rel="next" title="27.6. trace — Python 文実行のトレースと追跡" href="trace.html" />
+    <link rel="prev" title="27.4. Python プロファイラ" href="profile.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/timeit.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/timeit.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="trace.html" title="27.6. trace — Python 文実行のトレースと追跡"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="profile.html" title="27.4. Python プロファイラ"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="debug.html" accesskey="U">27. デバッグとプロファイル</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-timeit">
+<span id="timeit-measure-execution-time-of-small-code-snippets"></span><h1>27.5. <a class="reference internal" href="#module-timeit" title="timeit: Measure the execution time of small code snippets."><code class="xref py py-mod docutils literal"><span class="pre">timeit</span></code></a> &#8212; 小さなコード断片の実行時間計測<a class="headerlink" href="#module-timeit" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/timeit.py">Lib/timeit.py</a></p>
+<hr class="docutils" id="index-0" />
+<p>このモジュールは小さい Python コードをの時間を計測するシンプルな手段を提供しています。<a class="reference internal" href="#timeit-command-line-interface"><span class="std std-ref">コマンドラインインターフェイス</span></a> の他 <a class="reference internal" href="#python-interface"><span class="std std-ref">呼び出しも可能</span></a> です。このモジュールは実行時間を計測するときに共通するいくつかの罠を回避します。O&#8217;Reilly 出版の <em>Python Cookbook</em> にある、Tim Peter による &#8220;Algorithms&#8221; 章も参照してください。</p>
+<div class="section" id="basic-examples">
+<h2>27.5.1. 基本的な例<a class="headerlink" href="#basic-examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>次の例は <a class="reference internal" href="#timeit-command-line-interface"><span class="std std-ref">コマンドラインインターフェイス</span></a> を使って 3 つの異なる式の時間を測定する方法を示しています。</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>$ python3 -m timeit <span class="s1">&#39;&quot;-&quot;.join(str(n) for n in range(100))&#39;</span>
+<span class="m">10000</span> loops, best of <span class="m">3</span>: <span class="m">30</span>.2 usec per loop
+$ python3 -m timeit <span class="s1">&#39;&quot;-&quot;.join([str(n) for n in range(100)])&#39;</span>
+<span class="m">10000</span> loops, best of <span class="m">3</span>: <span class="m">27</span>.5 usec per loop
+$ python3 -m timeit <span class="s1">&#39;&quot;-&quot;.join(map(str, range(100)))&#39;</span>
+<span class="m">10000</span> loops, best of <span class="m">3</span>: <span class="m">23</span>.2 usec per loop
+</pre></div>
+</div>
+<p>同じ事を <a class="reference internal" href="#python-interface"><span class="std std-ref">Python インターフェイス</span></a> を使って実現することもできます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">timeit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s1">&#39;&quot;-&quot;.join(str(n) for n in range(100))&#39;</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="go">0.3018611848820001</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s1">&#39;&quot;-&quot;.join([str(n) for n in range(100)])&#39;</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="go">0.2727368790656328</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s1">&#39;&quot;-&quot;.join(map(str, range(100)))&#39;</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<span class="go">0.23702679807320237</span>
+</pre></div>
+</div>
+<p>ただし、<a class="reference internal" href="#module-timeit" title="timeit: Measure the execution time of small code snippets."><code class="xref py py-mod docutils literal"><span class="pre">timeit</span></code></a> はコマンドラインインターフェイスを使った時だけ繰り返し回数を自動で決定する事に注意してください。<a class="reference internal" href="#timeit-examples"><span class="std std-ref">使用例</span></a> 節でより高度な例を説明しています。</p>
+</div>
+<div class="section" id="python-interface">
+<span id="id1"></span><h2>27.5.2. Python インターフェイス<a class="headerlink" href="#python-interface" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>このモジュールは 3 つの有用な関数と 1 つの公開クラスを持っています:</p>
+<dl class="function">
+<dt id="timeit.timeit">
+<code class="descclassname">timeit.</code><code class="descname">timeit</code><span class="sig-paren">(</span><em>stmt='pass'</em>, <em>setup='pass'</em>, <em>timer=&lt;default timer&gt;</em>, <em>number=1000000</em>, <em>globals=None</em><span class="sig-paren">)</span><a class="headerlink" href="#timeit.timeit" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>与えられた文、<em>setup</em> コードおよび <em>timer</em> 関数で <a class="reference internal" href="#timeit.Timer" title="timeit.Timer"><code class="xref py py-class docutils literal"><span class="pre">Timer</span></code></a> インスタンスを作成し、その <a class="reference internal" href="#timeit.Timer.timeit" title="timeit.Timer.timeit"><code class="xref py py-meth docutils literal"><span class="pre">timeit()</span></code></a> メソッドを <em>number</em> 回実行します。
+任意の <em>globals</em> 引数はコードを実行する名前空間を指定します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>任意の <em>globals</em> 引数が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="timeit.repeat">
+<code class="descclassname">timeit.</code><code class="descname">repeat</code><span class="sig-paren">(</span><em>stmt='pass'</em>, <em>setup='pass'</em>, <em>timer=&lt;default timer&gt;</em>, <em>repeat=3</em>, <em>number=1000000</em>, <em>globals=None</em><span class="sig-paren">)</span><a class="headerlink" href="#timeit.repeat" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>与えられた文、<em>setup</em> コードおよび <em>timer</em> 関数で <a class="reference internal" href="#timeit.Timer" title="timeit.Timer"><code class="xref py py-class docutils literal"><span class="pre">Timer</span></code></a> インスタンスを作成し、その <a class="reference internal" href="#timeit.Timer.repeat" title="timeit.Timer.repeat"><code class="xref py py-meth docutils literal"><span class="pre">repeat()</span></code></a> メソッドを <em>repeat</em> 回繰り返すのを <em>number</em> 回実行します。
+任意の <em>globals</em> 引数はコードを実行する名前空間を指定します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>任意の <em>globals</em> 引数が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="timeit.default_timer">
+<code class="descclassname">timeit.</code><code class="descname">default_timer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#timeit.default_timer" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>デフォルトのタイマーです。常に <a class="reference internal" href="time.html#time.perf_counter" title="time.perf_counter"><code class="xref py py-func docutils literal"><span class="pre">time.perf_counter()</span></code></a> です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>デフォルトのタイマーが <a class="reference internal" href="time.html#time.perf_counter" title="time.perf_counter"><code class="xref py py-func docutils literal"><span class="pre">time.perf_counter()</span></code></a> になりました。</p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="timeit.Timer">
+<em class="property">class </em><code class="descclassname">timeit.</code><code class="descname">Timer</code><span class="sig-paren">(</span><em>stmt='pass'</em>, <em>setup='pass'</em>, <em>timer=&lt;timer function&gt;</em>, <em>globals=None</em><span class="sig-paren">)</span><a class="headerlink" href="#timeit.Timer" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>小さなコード片の実行時間を計測するためのクラスです。</p>
+<p>コンストラクターは計測する文、セットアップのための追加の文、ならびにタイマー関数を取ります。
+両文のデフォルトは <code class="docutils literal"><span class="pre">'pass'</span></code> です。
+タイマー関数はプラットフォーム依存です (モジュールの doctring を参照)。
+<em>stmt</em> および  <em>setup</em> には、複数行の文字列リテラルを含まない限り、 <code class="docutils literal"><span class="pre">;</span></code> や改行で区切られた複数の文でも構いません。
+デフォルトでは文は timeit の名前空間内で実行されます。
+この挙動は名前空間を <em>globals</em>  に渡すことで制御出来ます。</p>
+<p>To measure the execution time of the first statement, use the <a class="reference internal" href="#timeit.Timer.timeit" title="timeit.Timer.timeit"><code class="xref py py-meth docutils literal"><span class="pre">timeit()</span></code></a>
+method.  The <a class="reference internal" href="#timeit.Timer.repeat" title="timeit.Timer.repeat"><code class="xref py py-meth docutils literal"><span class="pre">repeat()</span></code></a> and <a class="reference internal" href="#timeit.Timer.autorange" title="timeit.Timer.autorange"><code class="xref py py-meth docutils literal"><span class="pre">autorange()</span></code></a> methods are convenience
+methods to call <a class="reference internal" href="#timeit.Timer.timeit" title="timeit.Timer.timeit"><code class="xref py py-meth docutils literal"><span class="pre">timeit()</span></code></a> multiple times.</p>
+<p><em>setup</em> の実行時間は全実行時間から除外されています。</p>
+<p><em>stmt</em> および <em>setup</em> パラメーターは、引数なしの呼び出し可能オブジェクトをとることもできます。呼び出し可能オブジェクトを指定すると、そのオブジェクトの呼び出しがタイマー関数に埋め込まれ、その関数が <a class="reference internal" href="#timeit.Timer.timeit" title="timeit.Timer.timeit"><code class="xref py py-meth docutils literal"><span class="pre">timeit()</span></code></a> メソッドによって実行されます。この場合、関数呼び出しが増えるためにタイミングのオーバーヘッドが少し増える点に注意してください。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>任意の <em>globals</em> 引数が追加されました。</p>
+</div>
+<dl class="method">
+<dt id="timeit.Timer.timeit">
+<code class="descname">timeit</code><span class="sig-paren">(</span><em>number=1000000</em><span class="sig-paren">)</span><a class="headerlink" href="#timeit.Timer.timeit" title="この定義へのパーマリンク">¶</a></dt>
+<dd><blockquote>
+<div><p>メイン文を <em>number</em> 回実行した時間を計測します。このメソッドはセットアップ文を1回だけ実行し、メイン文を指定回数実行するのにかかった秒数を浮動小数で返します。引数はループを何回実行するかの指定で、デフォルト値は 100万回です。メイン文、セットアップ文、タイマー関数はコンストラクターで指定されたものを使用します。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p>デフォルトでは、<a class="reference internal" href="#timeit.Timer.timeit" title="timeit.Timer.timeit"><code class="xref py py-meth docutils literal"><span class="pre">timeit()</span></code></a> は計測中、一時的に <a class="reference internal" href="../glossary.html#term-garbage-collection"><span class="xref std std-term">ガベージコレクション</span></a> を停止します。
+この手法の利点は個々の計測結果がより比較しやすくなることです。
+欠点は、ガベージコレクションが計測される関数の性能の重要な要素である場合があることです。
+その場合、<em>setup</em> 文字列の最初の文でガベージコレクションを有効にできます。
+以下に例を示します:</p>
+<div class="last highlight-python3"><div class="highlight"><pre><span></span><span class="n">timeit</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="s1">&#39;for i in range(10): oct(i)&#39;</span><span class="p">,</span> <span class="s1">&#39;gc.enable()&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">timeit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+<dl class="method">
+<dt id="timeit.Timer.autorange">
+<code class="descname">autorange</code><span class="sig-paren">(</span><em>callback=None</em><span class="sig-paren">)</span><a class="headerlink" href="#timeit.Timer.autorange" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Automatically determine how many times to call <a class="reference internal" href="#timeit.Timer.timeit" title="timeit.Timer.timeit"><code class="xref py py-meth docutils literal"><span class="pre">timeit()</span></code></a>.</p>
+<p>This is a convenience function that calls <a class="reference internal" href="#timeit.Timer.timeit" title="timeit.Timer.timeit"><code class="xref py py-meth docutils literal"><span class="pre">timeit()</span></code></a> repeatedly
+so that the total time &gt;= 0.2 second, returning the eventual
+(number of loops, time taken for that number of loops). It calls
+<a class="reference internal" href="#timeit.Timer.timeit" title="timeit.Timer.timeit"><code class="xref py py-meth docutils literal"><span class="pre">timeit()</span></code></a> with <em>number</em> set to successive powers of ten (10,
+100, 1000, ...) up to a maximum of one billion, until the time taken
+is at least 0.2 second, or the maximum is reached.</p>
+<blockquote>
+<div><p>If <em>callback</em> is given and is not <code class="docutils literal"><span class="pre">None</span></code>, it will be called after
+each trial with two arguments: <code class="docutils literal"><span class="pre">callback(number,</span> <span class="pre">time_taken)</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
+</div>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="timeit.Timer.repeat">
+<code class="descname">repeat</code><span class="sig-paren">(</span><em>repeat=3</em>, <em>number=1000000</em><span class="sig-paren">)</span><a class="headerlink" href="#timeit.Timer.repeat" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#timeit.Timer.timeit" title="timeit.Timer.timeit"><code class="xref py py-meth docutils literal"><span class="pre">timeit()</span></code></a> を複数回繰り返します。</p>
+<p>これは <a class="reference internal" href="#timeit.Timer.timeit" title="timeit.Timer.timeit"><code class="xref py py-meth docutils literal"><span class="pre">timeit()</span></code></a> を繰り返し呼び出したい時に有用で、結果をリストにして返します。最初の引数で何回 <a class="reference internal" href="#timeit.Timer.timeit" title="timeit.Timer.timeit"><code class="xref py py-meth docutils literal"><span class="pre">timeit()</span></code></a> を呼ぶか指定します。第 2 引数で <a class="reference internal" href="#timeit.Timer.timeit" title="timeit.Timer.timeit"><code class="xref py py-meth docutils literal"><span class="pre">timeit()</span></code></a> の引数 <em>number</em> を指定します。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">結果のベクトルから平均値や標準偏差を計算して出力させたいと思うかもしれませんが、それはあまり意味がありません。多くの場合、最も低い値がそのマシンが与えられたコード断片を実行する場合の下限値です。結果のうち高めの値は、Python のスピードが一定しないために生じたものではなく、その他の計測精度に影響を及ぼすプロセスによるものです。したがって、結果のうち <a class="reference internal" href="functions.html#min" title="min"><code class="xref py py-func docutils literal"><span class="pre">min()</span></code></a> だけが見るべき値となるでしょう。この点を押さえた上で、統計的な分析よりも常識的な判断で結果を見るようにしてください。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="timeit.Timer.print_exc">
+<code class="descname">print_exc</code><span class="sig-paren">(</span><em>file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#timeit.Timer.print_exc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>計測対象コードのトレースバックを出力するためのヘルパーです。</p>
+<p>利用例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>       <span class="c1"># outside the try/except</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="c1"># or t.repeat(...)</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>これの標準のトレースバックより優れた点は、コンパイルしたテンプレートのソース行が表示されることです。オプションの引数 <em>file</em> にはトレースバックの出力先を指定します。デフォルトは <a class="reference internal" href="sys.html#sys.stderr" title="sys.stderr"><code class="xref py py-data docutils literal"><span class="pre">sys.stderr</span></code></a> になります。</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="command-line-interface">
+<span id="timeit-command-line-interface"></span><h2>27.5.3. コマンドラインインターフェイス<a class="headerlink" href="#command-line-interface" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>コマンドラインからプログラムとして呼び出す場合は、次の書式を使います:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">timeit</span> <span class="p">[</span><span class="o">-</span><span class="n">n</span> <span class="n">N</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">r</span> <span class="n">N</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">u</span> <span class="n">U</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">s</span> <span class="n">S</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">t</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="n">statement</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>以下のオプションが使用できます:</p>
+<dl class="cmdoption">
+<dt id="cmdoption-timeit-n">
+<span id="cmdoption-timeit--number"></span><code class="descname">-n</code><code class="descclassname"> N</code><code class="descclassname">, </code><code class="descname">--number</code><code class="descclassname">=N</code><a class="headerlink" href="#cmdoption-timeit-n" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>&#8216;statement&#8217; を実行する回数</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-timeit-r">
+<span id="cmdoption-timeit--repeat"></span><code class="descname">-r</code><code class="descclassname"> N</code><code class="descclassname">, </code><code class="descname">--repeat</code><code class="descclassname">=N</code><a class="headerlink" href="#cmdoption-timeit-r" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>タイマーを繰り返す回数 (デフォルトは 3)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-timeit-s">
+<span id="cmdoption-timeit--setup"></span><code class="descname">-s</code><code class="descclassname"> S</code><code class="descclassname">, </code><code class="descname">--setup</code><code class="descclassname">=S</code><a class="headerlink" href="#cmdoption-timeit-s" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最初に1回だけ実行する文 (デフォルトは <code class="docutils literal"><span class="pre">pass</span></code>)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-timeit-p">
+<span id="cmdoption-timeit--process"></span><code class="descname">-p</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--process</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-timeit-p" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>デフォルトの <a class="reference internal" href="time.html#time.perf_counter" title="time.perf_counter"><code class="xref py py-func docutils literal"><span class="pre">time.perf_counter()</span></code></a> の代わり <a class="reference internal" href="time.html#time.process_time" title="time.process_time"><code class="xref py py-func docutils literal"><span class="pre">time.process_time()</span></code></a> を利用して、実時間ではなくプロセス時間を計測します</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-timeit-t">
+<span id="cmdoption-timeit--time"></span><code class="descname">-t</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--time</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-timeit-t" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="time.html#time.time" title="time.time"><code class="xref py py-func docutils literal"><span class="pre">time.time()</span></code></a> を使用する (廃止予定)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-timeit-u">
+<span id="cmdoption-timeit--unit"></span><code class="descname">-u</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--unit</code><code class="descclassname">=U</code><a class="headerlink" href="#cmdoption-timeit-u" title="この定義へのパーマリンク">¶</a></dt>
+<dd><blockquote>
+<div><p>タイマーの出力の時間単位を指定します (usec, msec, または sec)。</p>
+</div></blockquote>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-timeit-c">
+<span id="cmdoption-timeit--clock"></span><code class="descname">-c</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--clock</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-timeit-c" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="time.html#time.clock" title="time.clock"><code class="xref py py-func docutils literal"><span class="pre">time.clock()</span></code></a> を使用する (廃止予定)</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-timeit-v">
+<span id="cmdoption-timeit--verbose"></span><code class="descname">-v</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--verbose</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-timeit-v" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>時間計測の結果をそのまま詳細な数値でくり返し表示する</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-timeit-h">
+<span id="cmdoption-timeit--help"></span><code class="descname">-h</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--help</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-timeit-h" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>簡単な使い方を表示して終了する</p>
+</dd></dl>
+
+<p>文は複数行指定することもできます。その場合、各行は独立した文として引数に指定されたものとして処理します。クォートと行頭のスペースを使って、インデントした文を使うことも可能です。この複数行のオプションは  <a class="reference internal" href="#cmdoption-timeit-s"><code class="xref std std-option docutils literal"><span class="pre">-s</span></code></a> においても同じ形式で指定可能です。</p>
+<p>オプション <a class="reference internal" href="#cmdoption-timeit-n"><code class="xref std std-option docutils literal"><span class="pre">-n</span></code></a> でループの回数が指定されていない場合、10 回から始めて、所要時間が 0.2 秒になるまで回数を増やすことで適切なループ回数が自動計算されるようになっています。</p>
+<p><a class="reference internal" href="#timeit.default_timer" title="timeit.default_timer"><code class="xref py py-func docutils literal"><span class="pre">default_timer()</span></code></a> による計測結果は同じマシンで実行されている他のプログラムに影響されるので、正確な計測がしたい場合は数回計測を繰り返して一番良かった結果を採用すると良いでしょう。<a class="reference internal" href="#cmdoption-timeit-r"><code class="xref std std-option docutils literal"><span class="pre">-r</span></code></a> オプションはそのためのもので、デフォルトの 3 回実行はほとんどのケースで充分でしょう。<a class="reference internal" href="time.html#time.process_time" title="time.process_time"><code class="xref py py-func docutils literal"><span class="pre">time.process_time()</span></code></a> を使って CPU 時間を計測することもできます。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">pass 文の実行には基本的なオーバーヘッドが存在します。ここにあるコードはこの事実を隠そうとはしていませんが、注意する必要があります。基本的なオーバーヘッドは引数なしでプログラムを起動することにより計測でき、それは Python のバージョンによって異なるでしょう。</p>
+</div>
+</div>
+<div class="section" id="examples">
+<span id="timeit-examples"></span><h2>27.5.4. 使用例<a class="headerlink" href="#examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>最初に 1 回だけ実行されるセットアップ文を指定することが可能です:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>$ python -m timeit -s <span class="s1">&#39;text = &quot;sample string&quot;; char = &quot;g&quot;&#39;</span>  <span class="s1">&#39;char in text&#39;</span>
+<span class="m">10000000</span> loops, best of <span class="m">3</span>: <span class="m">0</span>.0877 usec per loop
+$ python -m timeit -s <span class="s1">&#39;text = &quot;sample string&quot;; char = &quot;g&quot;&#39;</span>  <span class="s1">&#39;text.find(char)&#39;</span>
+<span class="m">1000000</span> loops, best of <span class="m">3</span>: <span class="m">0</span>.342 usec per loop
+</pre></div>
+</div>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">timeit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s1">&#39;char in text&#39;</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="s1">&#39;text = &quot;sample string&quot;; char = &quot;g&quot;&#39;</span><span class="p">)</span>
+<span class="go">0.41440500499993504</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s1">&#39;text.find(char)&#39;</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="s1">&#39;text = &quot;sample string&quot;; char = &quot;g&quot;&#39;</span><span class="p">)</span>
+<span class="go">1.7246671520006203</span>
+</pre></div>
+</div>
+<p>同じことは <a class="reference internal" href="#timeit.Timer" title="timeit.Timer"><code class="xref py py-class docutils literal"><span class="pre">Timer</span></code></a> クラスとそのメソッドを使用して行うこともできます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">timeit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">timeit</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="s1">&#39;char in text&#39;</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="s1">&#39;text = &quot;sample string&quot;; char = &quot;g&quot;&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">timeit</span><span class="p">()</span>
+<span class="go">0.3955516149999312</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">repeat</span><span class="p">()</span>
+<span class="go">[0.40193588800002544, 0.3960157959998014, 0.39594301399984033]</span>
+</pre></div>
+</div>
+<p>以下の例は、複数行を含んだ式を計測する方法を示しています。ここでは、オブジェクトの存在する属性と存在しない属性に対してテストするために <a class="reference internal" href="functions.html#hasattr" title="hasattr"><code class="xref py py-func docutils literal"><span class="pre">hasattr()</span></code></a> と <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a>/<a class="reference internal" href="../reference/compound_stmts.html#except"><code class="xref std std-keyword docutils literal"><span class="pre">except</span></code></a> を使用した場合のコストを比較しています:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>$ python -m timeit <span class="s1">&#39;try:&#39;</span> <span class="s1">&#39;  str.__bool__&#39;</span> <span class="s1">&#39;except AttributeError:&#39;</span> <span class="s1">&#39;  pass&#39;</span>
+<span class="m">100000</span> loops, best of <span class="m">3</span>: <span class="m">15</span>.7 usec per loop
+$ python -m timeit <span class="s1">&#39;if hasattr(str, &quot;__bool__&quot;): pass&#39;</span>
+<span class="m">100000</span> loops, best of <span class="m">3</span>: <span class="m">4</span>.26 usec per loop
+
+$ python -m timeit <span class="s1">&#39;try:&#39;</span> <span class="s1">&#39;  int.__bool__&#39;</span> <span class="s1">&#39;except AttributeError:&#39;</span> <span class="s1">&#39;  pass&#39;</span>
+<span class="m">1000000</span> loops, best of <span class="m">3</span>: <span class="m">1</span>.43 usec per loop
+$ python -m timeit <span class="s1">&#39;if hasattr(int, &quot;__bool__&quot;): pass&#39;</span>
+<span class="m">100000</span> loops, best of <span class="m">3</span>: <span class="m">2</span>.23 usec per loop
+</pre></div>
+</div>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">timeit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># attribute is missing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="gp">... </span><span class="s2">try:</span>
+<span class="gp">... </span><span class="s2">    str.__bool__</span>
+<span class="gp">... </span><span class="s2">except AttributeError:</span>
+<span class="gp">... </span><span class="s2">    pass</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">stmt</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+<span class="go">0.9138244460009446</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;if hasattr(str, &#39;__bool__&#39;): pass&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">stmt</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+<span class="go">0.5829014980008651</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># attribute is present</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="gp">... </span><span class="s2">try:</span>
+<span class="gp">... </span><span class="s2">    int.__bool__</span>
+<span class="gp">... </span><span class="s2">except AttributeError:</span>
+<span class="gp">... </span><span class="s2">    pass</span>
+<span class="gp">... </span><span class="s2">&quot;&quot;&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">stmt</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+<span class="go">0.04215312199994514</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;if hasattr(int, &#39;__bool__&#39;): pass&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="n">stmt</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">100000</span><span class="p">)</span>
+<span class="go">0.08588060699912603</span>
+</pre></div>
+</div>
+<p>定義した関数に <a class="reference internal" href="#module-timeit" title="timeit: Measure the execution time of small code snippets."><code class="xref py py-mod docutils literal"><span class="pre">timeit</span></code></a> モジュールがアクセスできるようにするために、 import 文の入った <em>setup</em> パラメーターを渡すことができます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Stupid test function&quot;&quot;&quot;</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)]</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">timeit</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s2">&quot;test()&quot;</span><span class="p">,</span> <span class="n">setup</span><span class="o">=</span><span class="s2">&quot;from __main__ import test&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>他のオプションは <a class="reference internal" href="functions.html#globals" title="globals"><code class="xref py py-func docutils literal"><span class="pre">globals()</span></code></a> を <em>globals</em> 引数に渡すことです。
+これによりコードはあなたのグローバル名前空間内で実行されます。
+これはそれぞれでインポートするより 便利です:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+<span class="k">def</span> <span class="nf">g</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">**</span><span class="mi">4</span>
+<span class="k">def</span> <span class="nf">h</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">**</span><span class="mi">8</span>
+
+<span class="kn">import</span> <span class="nn">timeit</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">timeit</span><span class="o">.</span><span class="n">timeit</span><span class="p">(</span><span class="s1">&#39;[func(42) for func in (f,g,h)]&#39;</span><span class="p">,</span> <span class="nb">globals</span><span class="o">=</span><span class="nb">globals</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">27.5. <code class="docutils literal"><span class="pre">timeit</span></code> &#8212; 小さなコード断片の実行時間計測</a><ul>
+<li><a class="reference internal" href="#basic-examples">27.5.1. 基本的な例</a></li>
+<li><a class="reference internal" href="#python-interface">27.5.2. Python インターフェイス</a></li>
+<li><a class="reference internal" href="#command-line-interface">27.5.3. コマンドラインインターフェイス</a></li>
+<li><a class="reference internal" href="#examples">27.5.4. 使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="profile.html"
+                        title="前の章へ">27.4. Python プロファイラ</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="trace.html"
+                        title="次の章へ">27.6. <code class="docutils literal"><span class="pre">trace</span></code> &#8212; Python 文実行のトレースと追跡</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/timeit.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="trace.html" title="27.6. trace — Python 文実行のトレースと追跡"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="profile.html" title="27.4. Python プロファイラ"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="debug.html" >27. デバッグとプロファイル</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

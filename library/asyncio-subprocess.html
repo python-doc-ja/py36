@@ -1,0 +1,532 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18.5.6. サブプロセス &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="18.5. asyncio — 非同期 I/O、イベントループ、コルーチンおよびタスク" href="asyncio.html" />
+    <link rel="next" title="18.5.7. 同期プリミティブ" href="asyncio-sync.html" />
+    <link rel="prev" title="18.5.5. ストリーム (コルーチンベースの API)" href="asyncio-stream.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/asyncio-subprocess.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/asyncio-subprocess.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-sync.html" title="18.5.7. 同期プリミティブ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="asyncio-stream.html" title="18.5.5. ストリーム (コルーチンベースの API)"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" accesskey="U">18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="subprocess">
+<span id="asyncio-subprocess"></span><h1>18.5.6. サブプロセス<a class="headerlink" href="#subprocess" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="windows-event-loop">
+<h2>18.5.6.1. Windows でのイベントループ<a class="headerlink" href="#windows-event-loop" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Windows では、デフォルトのイベントループは <a class="reference internal" href="asyncio-eventloops.html#asyncio.SelectorEventLoop" title="asyncio.SelectorEventLoop"><code class="xref py py-class docutils literal"><span class="pre">SelectorEventLoop</span></code></a> になりますが、これはサブプロセスをサポートしていません。代わりに <a class="reference internal" href="asyncio-eventloops.html#asyncio.ProactorEventLoop" title="asyncio.ProactorEventLoop"><code class="xref py py-class docutils literal"><span class="pre">ProactorEventLoop</span></code></a> を使用します。Windows で使用する例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span><span class="o">,</span> <span class="nn">sys</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;win32&#39;</span><span class="p">:</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">ProactorEventLoop</span><span class="p">()</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><a class="reference internal" href="asyncio-eventloops.html#asyncio-event-loops"><span class="std std-ref">利用可能なイベントループ</span></a> および <a class="reference internal" href="asyncio-eventloops.html#asyncio-platform-support"><span class="std std-ref">プラットフォームでのサポート</span></a>。</p>
+</div>
+</div>
+<div class="section" id="create-a-subprocess-high-level-api-using-process">
+<h2>18.5.6.2. サブプロセスの作成: Process を使用した高水準 API<a class="headerlink" href="#create-a-subprocess-high-level-api-using-process" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="function">
+<dt id="asyncio.create_subprocess_exec">
+<em class="property">coroutine </em><code class="descclassname">asyncio.</code><code class="descname">create_subprocess_exec</code><span class="sig-paren">(</span><em>*args</em>, <em>stdin=None</em>, <em>stdout=None</em>, <em>stderr=None</em>, <em>loop=None</em>, <em>limit=None</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.create_subprocess_exec" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>サブプロセスを作成します。</p>
+<p><em>limit</em> 引数で <a class="reference internal" href="asyncio-stream.html#asyncio.StreamReader" title="asyncio.StreamReader"><code class="xref py py-class docutils literal"><span class="pre">StreamReader</span></code></a> に渡すバッファリミットを設定します。他の引数については <a class="reference internal" href="#asyncio.AbstractEventLoop.subprocess_exec" title="asyncio.AbstractEventLoop.subprocess_exec"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.subprocess_exec()</span></code></a> を参照してください。</p>
+<p><a class="reference internal" href="#asyncio.asyncio.subprocess.Process" title="asyncio.asyncio.subprocess.Process"><code class="xref py py-class docutils literal"><span class="pre">Process</span></code></a> のインスタンスを返します。</p>
+<p>この関数は <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="asyncio.create_subprocess_shell">
+<em class="property">coroutine </em><code class="descclassname">asyncio.</code><code class="descname">create_subprocess_shell</code><span class="sig-paren">(</span><em>cmd</em>, <em>stdin=None</em>, <em>stdout=None</em>, <em>stderr=None</em>, <em>loop=None</em>, <em>limit=None</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.create_subprocess_shell" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>シェルコマンド <em>cmd</em> を実行します。</p>
+<p><em>limit</em> 引数で <a class="reference internal" href="asyncio-stream.html#asyncio.StreamReader" title="asyncio.StreamReader"><code class="xref py py-class docutils literal"><span class="pre">StreamReader</span></code></a> に渡すバッファリミットを設定します。他の引数については <a class="reference internal" href="#asyncio.AbstractEventLoop.subprocess_shell" title="asyncio.AbstractEventLoop.subprocess_shell"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.subprocess_shell()</span></code></a> を参照してください。</p>
+<p><a class="reference internal" href="#asyncio.asyncio.subprocess.Process" title="asyncio.asyncio.subprocess.Process"><code class="xref py py-class docutils literal"><span class="pre">Process</span></code></a> のインスタンスを返します。</p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Shell_injection#Shell_injection">シェルインジェクション</a> の脆弱性を回避するために、すべての空白文字およびメタ文字を適切にクオートすることはアプリケーション側の責任です。
+<a class="reference internal" href="shlex.html#shlex.quote" title="shlex.quote"><code class="xref py py-func docutils literal"><span class="pre">shlex.quote()</span></code></a> 関数は、シェルコマンドで使用される文字列内の、空白文字とシェルのメタ文字の適切なエスケープに使用できます。</p>
+<p>この関数は <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+</dd></dl>
+
+<p>パイプに接続するには <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.connect_read_pipe" title="asyncio.AbstractEventLoop.connect_read_pipe"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.connect_read_pipe()</span></code></a> および <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.connect_write_pipe" title="asyncio.AbstractEventLoop.connect_write_pipe"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.connect_write_pipe()</span></code></a> メソッドを使用します。</p>
+</div>
+<div class="section" id="create-a-subprocess-low-level-api-using-subprocess-popen">
+<h2>18.5.6.3. サブプロセスの作成: subprocess.Popen を使用した低水準 API<a class="headerlink" href="#create-a-subprocess-low-level-api-using-subprocess-popen" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference internal" href="subprocess.html#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal"><span class="pre">subprocess</span></code></a> モジュールを使用して非同期にサブプロセスを実行します。</p>
+<dl class="method">
+<dt id="asyncio.AbstractEventLoop.subprocess_exec">
+<em class="property">coroutine </em><code class="descclassname">AbstractEventLoop.</code><code class="descname">subprocess_exec</code><span class="sig-paren">(</span><em>protocol_factory</em>, <em>*args</em>, <em>stdin=subprocess.PIPE</em>, <em>stdout=subprocess.PIPE</em>, <em>stderr=subprocess.PIPE</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.AbstractEventLoop.subprocess_exec" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>1 個以上の文字列引数 (<a class="reference internal" href="os.html#filesystem-encoding"><span class="std std-ref">ファイルシステムエンコーディング</span></a> にエンコードされた文字列またはバイト列) からサブプロセスを作成します。先頭の文字列で実行するプログラムを指定し、残りの文字列でプログラムの引数を指定します (それが Python スクリプトであれば、<code class="docutils literal"><span class="pre">sys.argv</span></code> の値に相当します)。これは標準ライブラリの <a class="reference internal" href="subprocess.html#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">subprocess.Popen</span></code></a> クラスが shell=False で呼び出され、文字列のリストが第 1 引数として渡されたときと似ていますが、<a class="reference internal" href="subprocess.html#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">Popen</span></code></a> が引数として文字列のリストを 1 個取るのに対し、<a class="reference internal" href="#asyncio.AbstractEventLoop.subprocess_exec" title="asyncio.AbstractEventLoop.subprocess_exec"><code class="xref py py-func docutils literal"><span class="pre">subprocess_exec()</span></code></a> 引数として複数の文字列を取ります。</p>
+<p><em>protocol_factory</em> はクラス <a class="reference internal" href="asyncio-protocol.html#asyncio.SubprocessProtocol" title="asyncio.SubprocessProtocol"><code class="xref py py-class docutils literal"><span class="pre">asyncio.SubprocessProtocol</span></code></a> のサブクラスを作成しなくてはなりません。</p>
+<p>その他の引数:</p>
+<ul class="simple">
+<li><p class="first"><em>stdin</em>: <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.connect_write_pipe" title="asyncio.AbstractEventLoop.connect_write_pipe"><code class="xref py py-meth docutils literal"><span class="pre">connect_write_pipe()</span></code></a> を使用してサブプロセスの標準入力ストリームに接続されたパイプを表すファイルライクオブジェクト、もしくは定数 <a class="reference internal" href="subprocess.html#subprocess.PIPE" title="subprocess.PIPE"><code class="xref py py-const docutils literal"><span class="pre">subprocess.PIPE</span></code></a> (デフォルト) のどちらかになります。
+デフォルトでは、パイプが新しく作成され、接続されます。</p>
+</li>
+<li><p class="first"><em>stdout</em>: <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.connect_read_pipe" title="asyncio.AbstractEventLoop.connect_read_pipe"><code class="xref py py-meth docutils literal"><span class="pre">connect_read_pipe()</span></code></a>, を使用してサブプロセスの標準出力ストリームに接続されたパイプを表すファイルライクオブジェクト、もしくは定数 <a class="reference internal" href="subprocess.html#subprocess.PIPE" title="subprocess.PIPE"><code class="xref py py-const docutils literal"><span class="pre">subprocess.PIPE</span></code></a> (デフォルト) のどちらかになります。
+デフォルトでは、パイプが新しく作成され、接続されます。</p>
+</li>
+<li><p class="first"><em>stderr</em>: <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.connect_read_pipe" title="asyncio.AbstractEventLoop.connect_read_pipe"><code class="xref py py-meth docutils literal"><span class="pre">connect_read_pipe()</span></code></a> を使用してサブプロセスの標準エラー出力ストリームに接続されたパイプを表すファイルライクオブジェクト、もしくは定数 <a class="reference internal" href="subprocess.html#subprocess.PIPE" title="subprocess.PIPE"><code class="xref py py-const docutils literal"><span class="pre">subprocess.PIPE</span></code></a> (デフォルト) と定数 <a class="reference internal" href="subprocess.html#subprocess.STDOUT" title="subprocess.STDOUT"><code class="xref py py-const docutils literal"><span class="pre">subprocess.STDOUT</span></code></a> のどちらかになります。
+デフォルトでは、パイプが新しく作成され、接続されます。
+<a class="reference internal" href="subprocess.html#subprocess.STDOUT" title="subprocess.STDOUT"><code class="xref py py-const docutils literal"><span class="pre">subprocess.STDOUT</span></code></a> が指定された場合、サブプロセスの標準エラー出力ストリームは標準出力ストリームと同じパイプに接続されます。</p>
+</li>
+<li><p class="first">その他のキーワード引数は、指定してはならない <em>bufsize</em>、<em>universal_newlines</em> および <em>shell</em> を除き、すべて解釈されずに <a class="reference internal" href="subprocess.html#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">subprocess.Popen</span></code></a> に渡されます。</p>
+</li>
+</ul>
+<p><code class="docutils literal"><span class="pre">(transport,</span> <span class="pre">protocol)</span></code> のペアを返します。<em>transport</em> は <a class="reference internal" href="asyncio-protocol.html#asyncio.BaseSubprocessTransport" title="asyncio.BaseSubprocessTransport"><code class="xref py py-class docutils literal"><span class="pre">BaseSubprocessTransport</span></code></a> のインスタンスです。</p>
+<p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+<p>引数については <a class="reference internal" href="subprocess.html#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">subprocess.Popen</span></code></a> クラスのコンストラクタを参照してください。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.AbstractEventLoop.subprocess_shell">
+<em class="property">coroutine </em><code class="descclassname">AbstractEventLoop.</code><code class="descname">subprocess_shell</code><span class="sig-paren">(</span><em>protocol_factory</em>, <em>cmd</em>, <em>*</em>, <em>stdin=subprocess.PIPE</em>, <em>stdout=subprocess.PIPE</em>, <em>stderr=subprocess.PIPE</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.AbstractEventLoop.subprocess_shell" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プラットフォームの &#8220;シェル&#8221; 構文を使用して <em>cmd</em> (<a class="reference internal" href="os.html#filesystem-encoding"><span class="std std-ref">ファイルシステムエンコーディング</span></a> にエンコードされた文字列またはバイト列) からサブプロセスを作成します。これは標準ライブラリ <a class="reference internal" href="subprocess.html#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">subprocess.Popen</span></code></a> クラスを <code class="docutils literal"><span class="pre">shell=True</span></code> で呼び出したときと似ています。</p>
+<p><em>protocol_factory</em> はクラス <a class="reference internal" href="asyncio-protocol.html#asyncio.SubprocessProtocol" title="asyncio.SubprocessProtocol"><code class="xref py py-class docutils literal"><span class="pre">asyncio.SubprocessProtocol</span></code></a> のサブクラスを作成しなくてはなりません。</p>
+<p>その他の引数についての詳細は <a class="reference internal" href="#asyncio.AbstractEventLoop.subprocess_exec" title="asyncio.AbstractEventLoop.subprocess_exec"><code class="xref py py-meth docutils literal"><span class="pre">subprocess_exec()</span></code></a> を参照してください。</p>
+<p><code class="docutils literal"><span class="pre">(transport,</span> <span class="pre">protocol)</span></code> のペアを返します。<em>transport</em> は <a class="reference internal" href="asyncio-protocol.html#asyncio.BaseSubprocessTransport" title="asyncio.BaseSubprocessTransport"><code class="xref py py-class docutils literal"><span class="pre">BaseSubprocessTransport</span></code></a> のインスタンスです。</p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Shell_injection#Shell_injection">シェルインジェクション</a> の脆弱性を回避するために、すべての空白文字およびメタ文字を適切にクオートすることはアプリケーション側の責任です。
+<a class="reference internal" href="shlex.html#shlex.quote" title="shlex.quote"><code class="xref py py-func docutils literal"><span class="pre">shlex.quote()</span></code></a> 関数は、シェルコマンドで使用される文字列内の、空白文字とシェルのメタ文字の適切なエスケープに使用できます。</p>
+<p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.connect_read_pipe" title="asyncio.AbstractEventLoop.connect_read_pipe"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.connect_read_pipe()</span></code></a> および <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.connect_write_pipe" title="asyncio.AbstractEventLoop.connect_write_pipe"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.connect_write_pipe()</span></code></a> メソッド。</p>
+</div>
+</div>
+<div class="section" id="constants">
+<h2>18.5.6.4. 定数<a class="headerlink" href="#constants" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="data">
+<dt id="asyncio.asyncio.subprocess.PIPE">
+<code class="descclassname">asyncio.subprocess.</code><code class="descname">PIPE</code><a class="headerlink" href="#asyncio.asyncio.subprocess.PIPE" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#asyncio.create_subprocess_shell" title="asyncio.create_subprocess_shell"><code class="xref py py-func docutils literal"><span class="pre">create_subprocess_shell()</span></code></a> および <a class="reference internal" href="#asyncio.create_subprocess_exec" title="asyncio.create_subprocess_exec"><code class="xref py py-func docutils literal"><span class="pre">create_subprocess_exec()</span></code></a> の引数 <em>stdin</em>、<em>stdout</em> あるいは <em>stderr</em> で使用できる特殊な値です。オープンすべき標準ストリームへのパイプを示します。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="asyncio.asyncio.subprocess.STDOUT">
+<code class="descclassname">asyncio.subprocess.</code><code class="descname">STDOUT</code><a class="headerlink" href="#asyncio.asyncio.subprocess.STDOUT" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#asyncio.create_subprocess_shell" title="asyncio.create_subprocess_shell"><code class="xref py py-func docutils literal"><span class="pre">create_subprocess_shell()</span></code></a> および <a class="reference internal" href="#asyncio.create_subprocess_exec" title="asyncio.create_subprocess_exec"><code class="xref py py-func docutils literal"><span class="pre">create_subprocess_exec()</span></code></a> の引数 <em>stderr</em> で使用できる特殊な値です。標準エラー出力を標準出力と同様に扱うための標準出力へのパイプを示します。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="asyncio.asyncio.subprocess.DEVNULL">
+<code class="descclassname">asyncio.subprocess.</code><code class="descname">DEVNULL</code><a class="headerlink" href="#asyncio.asyncio.subprocess.DEVNULL" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#asyncio.create_subprocess_shell" title="asyncio.create_subprocess_shell"><code class="xref py py-func docutils literal"><span class="pre">create_subprocess_shell()</span></code></a> および <a class="reference internal" href="#asyncio.create_subprocess_exec" title="asyncio.create_subprocess_exec"><code class="xref py py-func docutils literal"><span class="pre">create_subprocess_exec()</span></code></a> の引数 <em>stdin</em>、<em>stdout</em> あるいは <em>stderr</em> で使用できる特殊な値です。特殊ファイル <a class="reference internal" href="os.html#os.devnull" title="os.devnull"><code class="xref py py-data docutils literal"><span class="pre">os.devnull</span></code></a> を使用するよう示します。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="process">
+<h2>18.5.6.5. Process<a class="headerlink" href="#process" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="class">
+<dt id="asyncio.asyncio.subprocess.Process">
+<em class="property">class </em><code class="descclassname">asyncio.subprocess.</code><code class="descname">Process</code><a class="headerlink" href="#asyncio.asyncio.subprocess.Process" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>関数 <a class="reference internal" href="#asyncio.create_subprocess_exec" title="asyncio.create_subprocess_exec"><code class="xref py py-func docutils literal"><span class="pre">create_subprocess_exec()</span></code></a> あるいは <a class="reference internal" href="#asyncio.create_subprocess_shell" title="asyncio.create_subprocess_shell"><code class="xref py py-func docutils literal"><span class="pre">create_subprocess_shell()</span></code></a> によって作成されたサブプロセスです。</p>
+<p><a class="reference internal" href="#asyncio.asyncio.subprocess.Process" title="asyncio.asyncio.subprocess.Process"><code class="xref py py-class docutils literal"><span class="pre">Process</span></code></a> クラスの API は <a class="reference internal" href="subprocess.html#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">subprocess.Popen</span></code></a> クラスの API に似せて設計されましたが、一部異なります:</p>
+<ul class="simple">
+<li><p class="first">明示的な <a class="reference internal" href="subprocess.html#subprocess.Popen.poll" title="subprocess.Popen.poll"><code class="xref py py-meth docutils literal"><span class="pre">poll()</span></code></a> メソッドはありません</p>
+</li>
+<li><p class="first"><a class="reference internal" href="subprocess.html#subprocess.Popen.communicate" title="subprocess.Popen.communicate"><code class="xref py py-meth docutils literal"><span class="pre">communicate()</span></code></a> および <a class="reference internal" href="subprocess.html#subprocess.Popen.wait" title="subprocess.Popen.wait"><code class="xref py py-meth docutils literal"><span class="pre">wait()</span></code></a> メソッドは <em>timeout</em> 引数を取りません: <a class="reference internal" href="asyncio-task.html#asyncio.wait_for" title="asyncio.wait_for"><code class="xref py py-func docutils literal"><span class="pre">wait_for()</span></code></a> 関数を使用してください</p>
+</li>
+<li><p class="first"><em>universal_newlines</em> 引数はサポートされません (バイト文字列のみサポートします)</p>
+</li>
+<li><p class="first"><a class="reference internal" href="#asyncio.asyncio.subprocess.Process" title="asyncio.asyncio.subprocess.Process"><code class="xref py py-class docutils literal"><span class="pre">Process</span></code></a> クラスの <a class="reference internal" href="#asyncio.asyncio.subprocess.Process.wait" title="asyncio.asyncio.subprocess.Process.wait"><code class="xref py py-meth docutils literal"><span class="pre">wait()</span></code></a> メソッドは非同期であるのに対し、<a class="reference internal" href="subprocess.html#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">Popen</span></code></a> クラスの <a class="reference internal" href="subprocess.html#subprocess.Popen.wait" title="subprocess.Popen.wait"><code class="xref py py-meth docutils literal"><span class="pre">wait()</span></code></a> メソッドはビジーループとして実装されています。</p>
+</li>
+</ul>
+<p>このクラスは <a class="reference internal" href="asyncio-dev.html#asyncio-multithreading"><span class="std std-ref">スレッド安全ではありません</span></a>。 <a class="reference internal" href="#asyncio-subprocess-threads"><span class="std std-ref">asyncio-subprocess-threads</span></a> 節を参照してください。</p>
+<dl class="method">
+<dt id="asyncio.asyncio.subprocess.Process.wait">
+<em class="property">coroutine </em><code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.asyncio.subprocess.Process.wait" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プロセスの終了を待ちます。リターンコードが <a class="reference internal" href="#asyncio.asyncio.subprocess.Process.returncode" title="asyncio.asyncio.subprocess.Process.returncode"><code class="xref py py-attr docutils literal"><span class="pre">returncode</span></code></a> 属性に設定され、返されます。</p>
+<p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last"><code class="docutils literal"><span class="pre">stdout=PIPE</span></code> または <code class="docutils literal"><span class="pre">stderr=PIPE</span></code> を使用しており、OS パイプバッファのそれ以上のデータを受け取りの待機をブロックするほど子プロセスがパイプに出力した場合、このメソッドはデッドロックします。
+これを回避するには <a class="reference internal" href="#asyncio.asyncio.subprocess.Process.communicate" title="asyncio.asyncio.subprocess.Process.communicate"><code class="xref py py-meth docutils literal"><span class="pre">communicate()</span></code></a> メソッドを使用してください。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.asyncio.subprocess.Process.communicate">
+<em class="property">coroutine </em><code class="descname">communicate</code><span class="sig-paren">(</span><em>input=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.asyncio.subprocess.Process.communicate" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プロセスと交信、すなわち、標準入力へのデータ送信、EOF に達するまで標準出力および標準エラー出力からのデータ受信、およびプロセスの終了の待機を行います。任意の引数 <em>input</em> は子プロセスに送信するデータを設定します。送信するデータがない場合は <code class="docutils literal"><span class="pre">None</span></code> を設定します (デフォルト)。<em>input</em> はバイト列でなければなりません。</p>
+<p><a class="reference internal" href="#asyncio.asyncio.subprocess.Process.communicate" title="asyncio.asyncio.subprocess.Process.communicate"><code class="xref py py-meth docutils literal"><span class="pre">communicate()</span></code></a> は <code class="docutils literal"><span class="pre">(stdout_data,</span> <span class="pre">stderr_data)</span></code> のタプルを返します。</p>
+<p><em>input</em> を標準入力に書き込んだときに <a class="reference internal" href="exceptions.html#BrokenPipeError" title="BrokenPipeError"><code class="xref py py-exc docutils literal"><span class="pre">BrokenPipeError</span></code></a> または <a class="reference internal" href="exceptions.html#ConnectionResetError" title="ConnectionResetError"><code class="xref py py-exc docutils literal"><span class="pre">ConnectionResetError</span></code></a> 例外が送出された場合、例外は無視されます。これは全データが標準入力に書き込まれる前にプロセスが終了したときに発生します。</p>
+<p>プロセスの標準入力にデータを送りたい場合、<code class="docutils literal"><span class="pre">stdin=PIPE</span></code> で Process オブジェクトを作成する必要があります。同様に、結果のタプルに <code class="docutils literal"><span class="pre">None</span></code> 以外のものを受け取りたい場合には <code class="docutils literal"><span class="pre">stdout=PIPE</span></code> および/または <code class="docutils literal"><span class="pre">stderr=PIPE</span></code> を指定する必要があります。</p>
+<p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">受信したデータはメモリにバッファーされます。そのため、返されるデータが大きいかあるいは制限がないような場合はこのメソッドを使うべきではありません。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4.2 で変更: </span>このメソッドは <a class="reference internal" href="exceptions.html#BrokenPipeError" title="BrokenPipeError"><code class="xref py py-exc docutils literal"><span class="pre">BrokenPipeError</span></code></a> および <a class="reference internal" href="exceptions.html#ConnectionResetError" title="ConnectionResetError"><code class="xref py py-exc docutils literal"><span class="pre">ConnectionResetError</span></code></a> を無視するようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.asyncio.subprocess.Process.send_signal">
+<code class="descname">send_signal</code><span class="sig-paren">(</span><em>signal</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.asyncio.subprocess.Process.send_signal" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>子プロセスにシグナル <em>signal</em> を送信します。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">Windows では、<code class="xref py py-data docutils literal"><span class="pre">SIGTERM</span></code> は <a class="reference internal" href="#asyncio.asyncio.subprocess.Process.terminate" title="asyncio.asyncio.subprocess.Process.terminate"><code class="xref py py-meth docutils literal"><span class="pre">terminate()</span></code></a> の別名になります。<code class="docutils literal"><span class="pre">CTRL_C_EVENT</span></code> および <code class="docutils literal"><span class="pre">CTRL_BREAK_EVENT</span></code> で、<em>creationflags</em> で始まり、<code class="docutils literal"><span class="pre">CREATE_NEW_PROCESS_GROUP</span></code> を含むパラメーターをプロセスに送信することができます。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.asyncio.subprocess.Process.terminate">
+<code class="descname">terminate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.asyncio.subprocess.Process.terminate" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>子プロセスを停止します。POSIX システムでは、子プロセスに <code class="xref py py-data docutils literal"><span class="pre">signal.SIGTERM</span></code> を送信します。Windows では、Win32 API 関数 <code class="xref c c-func docutils literal"><span class="pre">TerminateProcess()</span></code> が呼び出されます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.asyncio.subprocess.Process.kill">
+<code class="descname">kill</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.asyncio.subprocess.Process.kill" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>子プロセスを kill します。POSIX システムでは <code class="xref py py-data docutils literal"><span class="pre">SIGKILL</span></code> を子プロセスに送信します。Windows では <a class="reference internal" href="#asyncio.asyncio.subprocess.Process.kill" title="asyncio.asyncio.subprocess.Process.kill"><code class="xref py py-meth docutils literal"><span class="pre">kill()</span></code></a> は <a class="reference internal" href="#asyncio.asyncio.subprocess.Process.terminate" title="asyncio.asyncio.subprocess.Process.terminate"><code class="xref py py-meth docutils literal"><span class="pre">terminate()</span></code></a> の別名になります。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="asyncio.asyncio.subprocess.Process.stdin">
+<code class="descname">stdin</code><a class="headerlink" href="#asyncio.asyncio.subprocess.Process.stdin" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>標準入力ストリーム (<a class="reference internal" href="asyncio-stream.html#asyncio.StreamWriter" title="asyncio.StreamWriter"><code class="xref py py-class docutils literal"><span class="pre">StreamWriter</span></code></a>) になります。プロセスが <code class="docutils literal"><span class="pre">stdin=None</span></code> で作成されていた場合 <code class="docutils literal"><span class="pre">None</span></code> になります。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="asyncio.asyncio.subprocess.Process.stdout">
+<code class="descname">stdout</code><a class="headerlink" href="#asyncio.asyncio.subprocess.Process.stdout" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>標準出力ストリーム (<a class="reference internal" href="asyncio-stream.html#asyncio.StreamReader" title="asyncio.StreamReader"><code class="xref py py-class docutils literal"><span class="pre">StreamReader</span></code></a>) になります。プロセスが <code class="docutils literal"><span class="pre">stdout=None</span></code> で作成されていた場合 <code class="docutils literal"><span class="pre">None</span></code> になります。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="asyncio.asyncio.subprocess.Process.stderr">
+<code class="descname">stderr</code><a class="headerlink" href="#asyncio.asyncio.subprocess.Process.stderr" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>標準エラー出力ストリーム (<a class="reference internal" href="asyncio-stream.html#asyncio.StreamReader" title="asyncio.StreamReader"><code class="xref py py-class docutils literal"><span class="pre">StreamReader</span></code></a>) になります。プロセスが <code class="docutils literal"><span class="pre">stderr=None</span></code> で作成されていた場合 <code class="docutils literal"><span class="pre">None</span></code> になります。</p>
+</dd></dl>
+
+<div class="admonition warning">
+<p class="first admonition-title">警告</p>
+<p class="last">ストリームの読み込みまたは書き込みの一時停止およびプロセスのブロックによるデッドロックを回避するには、<a class="reference internal" href="#asyncio.asyncio.subprocess.Process.stdin" title="asyncio.asyncio.subprocess.Process.stdin"><code class="xref py py-attr docutils literal"><span class="pre">.stdin.write</span></code></a>、<a class="reference internal" href="#asyncio.asyncio.subprocess.Process.stdout" title="asyncio.asyncio.subprocess.Process.stdout"><code class="xref py py-attr docutils literal"><span class="pre">.stdout.read</span></code></a> あるいは <a class="reference internal" href="#asyncio.asyncio.subprocess.Process.stderr" title="asyncio.asyncio.subprocess.Process.stderr"><code class="xref py py-attr docutils literal"><span class="pre">.stderr.read</span></code></a> ではなく、<a class="reference internal" href="#asyncio.asyncio.subprocess.Process.communicate" title="asyncio.asyncio.subprocess.Process.communicate"><code class="xref py py-meth docutils literal"><span class="pre">communicate()</span></code></a> メソッドを使用してください。</p>
+</div>
+<dl class="attribute">
+<dt id="asyncio.asyncio.subprocess.Process.pid">
+<code class="descname">pid</code><a class="headerlink" href="#asyncio.asyncio.subprocess.Process.pid" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プロセスの識別子です。</p>
+<p><a class="reference internal" href="#asyncio.create_subprocess_shell" title="asyncio.create_subprocess_shell"><code class="xref py py-func docutils literal"><span class="pre">create_subprocess_shell()</span></code></a> 関数によって作成されたプロセスでは、この属性は生成したシェルのプロセス識別子になる点に注意してください。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="asyncio.asyncio.subprocess.Process.returncode">
+<code class="descname">returncode</code><a class="headerlink" href="#asyncio.asyncio.subprocess.Process.returncode" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プロセスが終了したときのリターンコードです。<code class="docutils literal"><span class="pre">None</span></code> 値はプロセスがまだ終了していないことを示します。</p>
+<p>負の値 <code class="docutils literal"><span class="pre">-N</span></code> は子プロセスがシグナル <code class="docutils literal"><span class="pre">N</span></code> により中止させられたことを示します (Unix のみ)。</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="subprocess-and-threads">
+<span id="asyncio-subprocess-threads"></span><h2>18.5.6.6. サブプロセスとスレッド<a class="headerlink" href="#subprocess-and-threads" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>asyncio はサブプロセスを異なるスレッドから実行するのをサポートしていますが、制限があります:</p>
+<ul class="simple">
+<li><p class="first">イベントループはメインスレッド内で実行されなければなりません</p>
+</li>
+<li><p class="first">子ウォッチャーは、他のスレッドからサブプロセスが実行される前に、メインスレッドで作成されなければなりません。
+メインスレッドで <code class="xref py py-func docutils literal"><span class="pre">get_child_watcher()</span></code> を呼んで子ウォッチャーをインスタンス化してください。</p>
+</li>
+</ul>
+<p><a class="reference internal" href="#asyncio.asyncio.subprocess.Process" title="asyncio.asyncio.subprocess.Process"><code class="xref py py-class docutils literal"><span class="pre">asyncio.subprocess.Process</span></code></a> クラスはスレッド安全ではありません。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><a class="reference internal" href="asyncio-dev.html#asyncio-multithreading"><span class="std std-ref">asyncio-multithreading</span></a></p>
+</div>
+</div>
+<div class="section" id="subprocess-examples">
+<h2>18.5.6.7. サブプロセスの例<a class="headerlink" href="#subprocess-examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="subprocess-using-transport-and-protocol">
+<h3>18.5.6.7.1. トランスポートおよびプロトコルを使用したサブプロセス<a class="headerlink" href="#subprocess-using-transport-and-protocol" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>サブプロセスの出力を取得しサブプロセスの終了を待機するサブプロセスプロトコルの例です。サブプロセスは <a class="reference internal" href="#asyncio.AbstractEventLoop.subprocess_exec" title="asyncio.AbstractEventLoop.subprocess_exec"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.subprocess_exec()</span></code></a> メソッドで作成されます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">class</span> <span class="nc">DateProtocol</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">SubprocessProtocol</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exit_future</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exit_future</span> <span class="o">=</span> <span class="n">exit_future</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">pipe_data_received</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fd</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">process_exited</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exit_future</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nd">@asyncio</span><span class="o">.</span><span class="n">coroutine</span>
+<span class="k">def</span> <span class="nf">get_date</span><span class="p">(</span><span class="n">loop</span><span class="p">):</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="s1">&#39;import datetime; print(datetime.datetime.now())&#39;</span>
+    <span class="n">exit_future</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Future</span><span class="p">(</span><span class="n">loop</span><span class="o">=</span><span class="n">loop</span><span class="p">)</span>
+
+    <span class="c1"># Create the subprocess controlled by the protocol DateProtocol,</span>
+    <span class="c1"># redirect the standard output into a pipe</span>
+    <span class="n">create</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">subprocess_exec</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">DateProtocol</span><span class="p">(</span><span class="n">exit_future</span><span class="p">),</span>
+                                  <span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span>
+                                  <span class="n">stdin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">transport</span><span class="p">,</span> <span class="n">protocol</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">create</span>
+
+    <span class="c1"># Wait for the subprocess exit using the process_exited() method</span>
+    <span class="c1"># of the protocol</span>
+    <span class="k">yield from</span> <span class="n">exit_future</span>
+
+    <span class="c1"># Close the stdout pipe</span>
+    <span class="n">transport</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c1"># Read the output which was collected by the pipe_data_received()</span>
+    <span class="c1"># method of the protocol</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">ProactorEventLoop</span><span class="p">()</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+
+<span class="n">date</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">get_date</span><span class="p">(</span><span class="n">loop</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Current date: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">date</span><span class="p">)</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="subprocess-using-streams">
+<h3>18.5.6.7.2. ストリームを使用したサブプロセス<a class="headerlink" href="#subprocess-using-streams" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>サブプロセスを制御する <a class="reference internal" href="#asyncio.asyncio.subprocess.Process" title="asyncio.asyncio.subprocess.Process"><code class="xref py py-class docutils literal"><span class="pre">Process</span></code></a> クラスと標準出力から読み込む <a class="reference internal" href="asyncio-stream.html#asyncio.StreamReader" title="asyncio.StreamReader"><code class="xref py py-class docutils literal"><span class="pre">StreamReader</span></code></a> クラスを使用した例で得す。サブプロセスは <a class="reference internal" href="#asyncio.create_subprocess_exec" title="asyncio.create_subprocess_exec"><code class="xref py py-func docutils literal"><span class="pre">create_subprocess_exec()</span></code></a> 関数で作成されます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio.subprocess</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="nd">@asyncio</span><span class="o">.</span><span class="n">coroutine</span>
+<span class="k">def</span> <span class="nf">get_date</span><span class="p">():</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="s1">&#39;import datetime; print(datetime.datetime.now())&#39;</span>
+
+    <span class="c1"># Create the subprocess, redirect the standard output into a pipe</span>
+    <span class="n">create</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_subprocess_exec</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span>
+                                            <span class="n">stdout</span><span class="o">=</span><span class="n">asyncio</span><span class="o">.</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+    <span class="n">proc</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">create</span>
+
+    <span class="c1"># Read one line of output</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">proc</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+
+    <span class="c1"># Wait for the subprocess exit</span>
+    <span class="k">yield from</span> <span class="n">proc</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">line</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">ProactorEventLoop</span><span class="p">()</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+
+<span class="n">date</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">get_date</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Current date: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">date</span><span class="p">)</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.5.6. サブプロセス</a><ul>
+<li><a class="reference internal" href="#windows-event-loop">18.5.6.1. Windows でのイベントループ</a></li>
+<li><a class="reference internal" href="#create-a-subprocess-high-level-api-using-process">18.5.6.2. サブプロセスの作成: Process を使用した高水準 API</a></li>
+<li><a class="reference internal" href="#create-a-subprocess-low-level-api-using-subprocess-popen">18.5.6.3. サブプロセスの作成: subprocess.Popen を使用した低水準 API</a></li>
+<li><a class="reference internal" href="#constants">18.5.6.4. 定数</a></li>
+<li><a class="reference internal" href="#process">18.5.6.5. Process</a></li>
+<li><a class="reference internal" href="#subprocess-and-threads">18.5.6.6. サブプロセスとスレッド</a></li>
+<li><a class="reference internal" href="#subprocess-examples">18.5.6.7. サブプロセスの例</a><ul>
+<li><a class="reference internal" href="#subprocess-using-transport-and-protocol">18.5.6.7.1. トランスポートおよびプロトコルを使用したサブプロセス</a></li>
+<li><a class="reference internal" href="#subprocess-using-streams">18.5.6.7.2. ストリームを使用したサブプロセス</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="asyncio-stream.html"
+                        title="前の章へ">18.5.5. ストリーム (コルーチンベースの API)</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="asyncio-sync.html"
+                        title="次の章へ">18.5.7. 同期プリミティブ</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio-subprocess.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-sync.html" title="18.5.7. 同期プリミティブ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="asyncio-stream.html" title="18.5.5. ストリーム (コルーチンベースの API)"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" >18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

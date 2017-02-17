@@ -1,0 +1,323 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>11.3. fileinput — 複数の入力ストリームをまたいだ行の繰り返し処理をサポートする &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="11. ファイルとディレクトリへのアクセス" href="filesys.html" />
+    <link rel="next" title="11.4. stat — stat() の結果を解釈する" href="stat.html" />
+    <link rel="prev" title="11.2. os.path — 共通のパス名操作" href="os.path.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/fileinput.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/fileinput.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="stat.html" title="11.4. stat — stat() の結果を解釈する"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="os.path.html" title="11.2. os.path — 共通のパス名操作"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="filesys.html" accesskey="U">11. ファイルとディレクトリへのアクセス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-fileinput">
+<span id="fileinput-iterate-over-lines-from-multiple-input-streams"></span><h1>11.3. <a class="reference internal" href="#module-fileinput" title="fileinput: Loop over standard input or a list of files."><code class="xref py py-mod docutils literal"><span class="pre">fileinput</span></code></a> &#8212; 複数の入力ストリームをまたいだ行の繰り返し処理をサポートする<a class="headerlink" href="#module-fileinput" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/fileinput.py">Lib/fileinput.py</a></p>
+<hr class="docutils" />
+<p>このモジュールは標準入力やファイルの並びにまたがるループを素早く書くためのヘルパークラスと関数を提供しています。単一のファイルを読み書きしたいだけなら、 <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> を参照してください。</p>
+<p>典型的な使い方は以下の通りです:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fileinput</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fileinput</span><span class="o">.</span><span class="n">input</span><span class="p">():</span>
+    <span class="n">process</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>このプログラムは <code class="docutils literal"><span class="pre">sys.argv[1:]</span></code> に含まれる全てのファイルをまたいで繰り返します。もし該当するものがなければ、 <code class="docutils literal"><span class="pre">sys.stdin</span></code> がデフォルトとして扱われます。ファイル名として <code class="docutils literal"><span class="pre">'-'</span></code> が与えられた場合も、 <code class="docutils literal"><span class="pre">sys.stdin</span></code> に置き換えられます。別のファイル名リストを使いたい時には、 <a class="reference internal" href="#fileinput.input" title="fileinput.input"><code class="xref py py-func docutils literal"><span class="pre">input()</span></code></a> の最初の引数にリストを与えます。単一ファイル名の文字列も受け付けます。</p>
+<p>全てのファイルはデフォルトでテキストモードでオープンされます。しかし、 <a class="reference internal" href="#fileinput.input" title="fileinput.input"><code class="xref py py-func docutils literal"><span class="pre">input()</span></code></a> や <a class="reference internal" href="#fileinput.FileInput" title="fileinput.FileInput"><code class="xref py py-class docutils literal"><span class="pre">FileInput</span></code></a> をコールする際に <em>mode</em> パラメータを指定すれば、これをオーバーライドすることができます。オープン中あるいは読み込み中にI/Oエラーが発生した場合には、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> が発生します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>以前は <a class="reference internal" href="exceptions.html#IOError" title="IOError"><code class="xref py py-exc docutils literal"><span class="pre">IOError</span></code></a> が送出されました; それは現在 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> のエイリアスです。</p>
+</div>
+<p><code class="docutils literal"><span class="pre">sys.stdin</span></code> が2回以上使われた場合は、2回目以降は行を返しません。ただしインタラクティブに利用している時や明示的にリセット (<code class="docutils literal"><span class="pre">sys.stdin.seek(0)</span></code> を使う) を行った場合はその限りではありません。</p>
+<p>空のファイルは開いた後すぐ閉じられます。空のファイルはファイル名リストの最後にある場合にしか外部に影響を与えません。</p>
+<p>ファイルの各行は、各種改行文字まで含めて返されます。ファイルの最後が改行文字で終っていない場合には、改行文字で終わらない行が返されます。</p>
+<p>ファイルのオープン方法を制御するためのオープン時フックは、 <a class="reference internal" href="#fileinput.input" title="fileinput.input"><code class="xref py py-func docutils literal"><span class="pre">fileinput.input()</span></code></a> あるいは <a class="reference internal" href="#fileinput.FileInput" title="fileinput.FileInput"><code class="xref py py-class docutils literal"><span class="pre">FileInput()</span></code></a> の <em>openhook</em> パラメータで設定します。このフックは、ふたつの引数 <em>filename</em> と <em>mode</em> をとる関数でなければなりません。そしてその関数の返り値はオープンしたファイルオブジェクトとなります。このモジュールには、便利なフックが既に用意されています。</p>
+<p>以下の関数がこのモジュールの基本的なインタフェースです:</p>
+<dl class="function">
+<dt id="fileinput.input">
+<code class="descclassname">fileinput.</code><code class="descname">input</code><span class="sig-paren">(</span><em>files=None</em>, <em>inplace=False</em>, <em>backup=''</em>, <em>bufsize=0</em>, <em>mode='r'</em>, <em>openhook=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fileinput.input" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#fileinput.FileInput" title="fileinput.FileInput"><code class="xref py py-class docutils literal"><span class="pre">FileInput</span></code></a> クラスのインスタンスを作ります。生成されたインスタンスは、このモジュールの関数群が利用するグローバルな状態として利用されます。この関数への引数は <a class="reference internal" href="#fileinput.FileInput" title="fileinput.FileInput"><code class="xref py py-class docutils literal"><span class="pre">FileInput</span></code></a> クラスのコンストラクタへ渡されます。</p>
+<p><a class="reference internal" href="#fileinput.FileInput" title="fileinput.FileInput"><code class="xref py py-class docutils literal"><span class="pre">FileInput</span></code></a> のインスタンスは <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文の中でコンテキストマネージャーとして使用することができます。以下の例では、仮に例外が生じても <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文から抜けた後で <em>input</em> は閉じられます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">fileinput</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">files</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;spam.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;eggs.txt&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">process</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>コンテキストマネージャとして使うことができるようになりました。</p>
+</div>
+<div class="deprecated-removed">
+<p><span class="versionmodified">Deprecated since version 3.6, will be removed in version 3.8: </span>The <em>bufsize</em> parameter.</p>
+</div>
+</dd></dl>
+
+<p>以下の関数は <a class="reference internal" href="#fileinput.input" title="fileinput.input"><code class="xref py py-func docutils literal"><span class="pre">fileinput.input()</span></code></a> 関数によって作られたグローバルな状態を利用します。アクティブな状態が無い場合には、 <a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code></a> が発生します。</p>
+<dl class="function">
+<dt id="fileinput.filename">
+<code class="descclassname">fileinput.</code><code class="descname">filename</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fileinput.filename" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在読み込み中のファイル名を返します。一行目が読み込まれる前は <code class="docutils literal"><span class="pre">None</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fileinput.fileno">
+<code class="descclassname">fileinput.</code><code class="descname">fileno</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fileinput.fileno" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在のファイルの &#8220;ファイル記述子&#8221; を整数値で返します。ファイルがオープンされていない場合 (最初の行の前、ファイルとファイルの間) は <code class="docutils literal"><span class="pre">-1</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fileinput.lineno">
+<code class="descclassname">fileinput.</code><code class="descname">lineno</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fileinput.lineno" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最後に読み込まれた行の、累積した行番号を返します。1行目が読み込まれる前は <code class="docutils literal"><span class="pre">0</span></code> を返します。最後のファイルの最終行が読み込まれた後には、その行の行番号を返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fileinput.filelineno">
+<code class="descclassname">fileinput.</code><code class="descname">filelineno</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fileinput.filelineno" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在のファイル中での行番号を返します。1行目が読み込まれる前は <code class="docutils literal"><span class="pre">0</span></code> を返します。最後のファイルの最終行が読み込まれた後には、その行のファイル中での行番号を返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fileinput.isfirstline">
+<code class="descclassname">fileinput.</code><code class="descname">isfirstline</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fileinput.isfirstline" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最後に読み込まれた行がファイルの 1 行目なら True、そうでなければ False を返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fileinput.isstdin">
+<code class="descclassname">fileinput.</code><code class="descname">isstdin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fileinput.isstdin" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最後に読み込まれた行が <code class="docutils literal"><span class="pre">sys.stdin</span></code> から読まれていれば True、そうでなければFalseを返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fileinput.nextfile">
+<code class="descclassname">fileinput.</code><code class="descname">nextfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fileinput.nextfile" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>現在のファイルを閉じます。次の繰り返しでは(存在すれば)次のファイルの最初の行が読み込まれます。閉じたファイルの読み込まれなかった行は、累積の行数にカウントされません。ファイル名は次のファイルの最初の行が読み込まれるまで変更されません。最初の行の読み込みが行われるまでは、この関数は呼び出されても何もしませんので、最初のファイルをスキップするために利用することはできません。最後のファイルの最終行が読み込まれた後にも、この関数は呼び出されても何もしません。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fileinput.close">
+<code class="descclassname">fileinput.</code><code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fileinput.close" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>シーケンスを閉じます。</p>
+</dd></dl>
+
+<p>このモジュールのシーケンスの振舞いを実装しているクラスのサブクラスを作ることもできます:</p>
+<dl class="class">
+<dt id="fileinput.FileInput">
+<em class="property">class </em><code class="descclassname">fileinput.</code><code class="descname">FileInput</code><span class="sig-paren">(</span><em>files=None</em>, <em>inplace=False</em>, <em>backup=''</em>, <em>bufsize=0</em>, <em>mode='r'</em>, <em>openhook=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fileinput.FileInput" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#fileinput.FileInput" title="fileinput.FileInput"><code class="xref py py-class docutils literal"><span class="pre">FileInput</span></code></a> クラスはモジュールの関数に対応するメソッド <a class="reference internal" href="#fileinput.filename" title="fileinput.filename"><code class="xref py py-meth docutils literal"><span class="pre">filename()</span></code></a> 、 <a class="reference internal" href="#fileinput.fileno" title="fileinput.fileno"><code class="xref py py-meth docutils literal"><span class="pre">fileno()</span></code></a> 、 <a class="reference internal" href="#fileinput.lineno" title="fileinput.lineno"><code class="xref py py-meth docutils literal"><span class="pre">lineno()</span></code></a> 、 <a class="reference internal" href="#fileinput.filelineno" title="fileinput.filelineno"><code class="xref py py-meth docutils literal"><span class="pre">filelineno()</span></code></a> 、 <a class="reference internal" href="#fileinput.isfirstline" title="fileinput.isfirstline"><code class="xref py py-meth docutils literal"><span class="pre">isfirstline()</span></code></a> 、 <a class="reference internal" href="#fileinput.isstdin" title="fileinput.isstdin"><code class="xref py py-meth docutils literal"><span class="pre">isstdin()</span></code></a> 、 <a class="reference internal" href="#fileinput.nextfile" title="fileinput.nextfile"><code class="xref py py-meth docutils literal"><span class="pre">nextfile()</span></code></a> および <a class="reference internal" href="#fileinput.close" title="fileinput.close"><code class="xref py py-meth docutils literal"><span class="pre">close()</span></code></a> を実装しています。それに加えて、次の入力行を返す <a class="reference internal" href="io.html#io.TextIOBase.readline" title="io.TextIOBase.readline"><code class="xref py py-meth docutils literal"><span class="pre">readline()</span></code></a> メソッドと、シーケンスの振舞いの実装をしている <a class="reference internal" href="../reference/datamodel.html#object.__getitem__" title="object.__getitem__"><code class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></code></a> メソッドがあります。シーケンスはシーケンシャルに読み込むことしかできません。つまりランダムアクセスと <a class="reference internal" href="io.html#io.TextIOBase.readline" title="io.TextIOBase.readline"><code class="xref py py-meth docutils literal"><span class="pre">readline()</span></code></a> を混在させることはできません。</p>
+<p><em>mode</em> を使用すると、 <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> に渡すファイルモードを指定することができます。これは <code class="docutils literal"><span class="pre">'r'</span></code> 、 <code class="docutils literal"><span class="pre">'rU'</span></code> 、 <code class="docutils literal"><span class="pre">'U'</span></code> および <code class="docutils literal"><span class="pre">'rb'</span></code> のうちのいずれかとなります。</p>
+<p><em>openhook</em> を指定する場合は、ふたつの引数 <em>filename</em> と <em>mode</em> をとる関数でなければなりません。この関数の返り値は、オープンしたファイルオブジェクトとなります。<em>inplace</em> と <em>openhook</em> を同時に使うことはできません。</p>
+<p><a class="reference internal" href="#fileinput.FileInput" title="fileinput.FileInput"><code class="xref py py-class docutils literal"><span class="pre">FileInput</span></code></a> のインスタンスは <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文の中でコンテキストマネージャーとして使用することができます。以下の例では、仮に例外が生じても <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文から抜けた後で <em>input</em> は閉じられます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">FileInput</span><span class="p">(</span><span class="n">files</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;spam.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;eggs.txt&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="nb">input</span><span class="p">:</span>
+    <span class="n">process</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>コンテキストマネージャとして使うことができるようになりました。</p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified">バージョン 3.4 で撤廃: </span><code class="docutils literal"><span class="pre">'rU'</span></code> および <code class="docutils literal"><span class="pre">'U'</span></code> モード。</p>
+</div>
+<div class="deprecated-removed">
+<p><span class="versionmodified">Deprecated since version 3.6, will be removed in version 3.8: </span>The <em>bufsize</em> parameter.</p>
+</div>
+</dd></dl>
+
+<p><strong>インプレース(in-place)フィルタオプション:</strong> キーワード引数 <code class="docutils literal"><span class="pre">inplace=True</span></code> が <a class="reference internal" href="#fileinput.input" title="fileinput.input"><code class="xref py py-func docutils literal"><span class="pre">fileinput.input()</span></code></a> か <a class="reference internal" href="#fileinput.FileInput" title="fileinput.FileInput"><code class="xref py py-class docutils literal"><span class="pre">FileInput</span></code></a> クラスのコンストラクタに渡された場合には、入力ファイルはバックアップファイルに移動され、標準出力が入力ファイルに設定されます(バックアップファイルと同じ名前のファイルが既に存在していた場合には、警告無しに置き替えられます)。これによって入力ファイルをその場で書き替えるフィルタを書くことができます。キーワード引数 <em>backup</em> (通常は <code class="docutils literal"><span class="pre">backup='.&lt;拡張子&gt;'</span></code> という形で利用します)が与えられていた場合、バックアップファイルの拡張子として利用され、バックアップファイルは削除されずに残ります。デフォルトでは、拡張子は <code class="docutils literal"><span class="pre">'.bak'</span></code> になっていて、出力先のファイルが閉じられればバックアップファイルも消されます。インプレースフィルタ機能は、標準入力を読み込んでいる間は無効にされます。</p>
+<p>このモジュールには、次のふたつのオープン時フックが用意されています:</p>
+<dl class="function">
+<dt id="fileinput.hook_compressed">
+<code class="descclassname">fileinput.</code><code class="descname">hook_compressed</code><span class="sig-paren">(</span><em>filename</em>, <em>mode</em><span class="sig-paren">)</span><a class="headerlink" href="#fileinput.hook_compressed" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>gzip や bzip2 で圧縮された (拡張子が <code class="docutils literal"><span class="pre">'.gz'</span></code> や <code class="docutils literal"><span class="pre">'.bz2'</span></code> の) ファイルを、 <a class="reference internal" href="gzip.html#module-gzip" title="gzip: Interfaces for gzip compression and decompression using file objects."><code class="xref py py-mod docutils literal"><span class="pre">gzip</span></code></a> モジュールや <a class="reference internal" href="bz2.html#module-bz2" title="bz2: Interfaces for bzip2 compression and decompression."><code class="xref py py-mod docutils literal"><span class="pre">bz2</span></code></a> モジュールを使って透過的にオープンします。ファイルの拡張子が <code class="docutils literal"><span class="pre">'.gz'</span></code> や <code class="docutils literal"><span class="pre">'.bz2'</span></code> でない場合は、通常通りファイルをオープンします (つまり、 <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> をコールする際に伸長を行いません)。</p>
+<p>使用例: <code class="docutils literal"><span class="pre">fi</span> <span class="pre">=</span> <span class="pre">fileinput.FileInput(openhook=fileinput.hook_compressed)</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fileinput.hook_encoded">
+<code class="descclassname">fileinput.</code><code class="descname">hook_encoded</code><span class="sig-paren">(</span><em>encoding</em>, <em>errors=None</em><span class="sig-paren">)</span><a class="headerlink" href="#fileinput.hook_encoded" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Returns a hook which opens each file with <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a>, using the given
+<em>encoding</em> and <em>errors</em> to read the file.</p>
+<p>Usage example: <code class="docutils literal"><span class="pre">fi</span> <span class="pre">=</span>
+<span class="pre">fileinput.FileInput(openhook=fileinput.hook_encoded(&quot;utf-8&quot;,</span>
+<span class="pre">&quot;surrogateescape&quot;))</span></code></p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>Added the optional <em>errors</em> parameter.</p>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="os.path.html"
+                        title="前の章へ">11.2. <code class="docutils literal"><span class="pre">os.path</span></code> &#8212; 共通のパス名操作</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="stat.html"
+                        title="次の章へ">11.4. <code class="docutils literal"><span class="pre">stat</span></code> &#8212; <code class="docutils literal"><span class="pre">stat()</span></code> の結果を解釈する</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/fileinput.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="stat.html" title="11.4. stat — stat() の結果を解釈する"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="os.path.html" title="11.2. os.path — 共通のパス名操作"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="filesys.html" >11. ファイルとディレクトリへのアクセス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

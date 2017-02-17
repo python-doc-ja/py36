@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. setup 設定ファイル (setup configuration file) を書く &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="Python モジュールの配布 (レガシーバージョン)" href="index.html" />
+    <link rel="next" title="4. ソースコード配布物を作成する" href="sourcedist.html" />
+    <link rel="prev" title="2. setup スクリプトを書く" href="setupscript.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/distutils/configfile.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/distutils/configfile.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="sourcedist.html" title="4. ソースコード配布物を作成する"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="setupscript.html" title="2. setup スクリプトを書く"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python モジュールの配布 (レガシーバージョン)</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="writing-the-setup-configuration-file">
+<span id="setup-config"></span><h1>3. setup 設定ファイル (setup configuration file) を書く<a class="headerlink" href="#writing-the-setup-configuration-file" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>時に、配布物をビルドする際に必要な全ての設定を <em>あらかじめ</em> 書ききれない状況が起きます: 例えば、ビルドを進めるために、ユーザに関する情報や、ユーザのシステムに関する情報を必要とするかもしれません。こうした情報が単純 &#8212; C ヘッダファイルやライブラリを検索するディレクトリのリストのように &#8212; であるかぎり、ユーザに設定ファイル (configuration file) <code class="file docutils literal"><span class="pre">setup.cfg</span></code> を提供して編集してもらうのが、安上がりで簡単な特定方法になります。設定ファイルはまた、あらゆるコマンドにおけるオプションにデフォルト値を与えておき、インストール作業者がコマンドライン上や設定ファイルの編集でデフォルト設定を上書きできるようにします。</p>
+<p>setup 設定ファイルは setup スクリプト &#8212;理想的にはインストール作業者から見えないもの  <a class="footnote-reference" href="#id2" id="id1">[1]</a> &#8212;と、作者の手を離れて、全てインストール作業者次第となる setup スクリプトのコマンドライン引数との間を橋渡しする中間層として有効です。実際、 <code class="file docutils literal"><span class="pre">setup.cfg</span></code> (と、ターゲットシステム上にある、その他の Distutils 設定ファイル) は、 setup スクリプトの内容より後で、かつコマンドラインで上書きする前に処理されます。この仕様の結果、いくつかの利点が生まれます:</p>
+<ul class="simple">
+<li><p class="first">インストール作業者は、作者が <code class="file docutils literal"><span class="pre">setup.py</span></code> に設定した項目のいくつかを <code class="file docutils literal"><span class="pre">setup.cfg</span></code> を変更して上書きできます</p>
+</li>
+<li><p class="first"><code class="file docutils literal"><span class="pre">setup.py</span></code> では簡単に設定できないような、標準でないオプションのデフォルト値を設定できます</p>
+</li>
+<li><p class="first">インストール作業者は、 <code class="file docutils literal"><span class="pre">setup.cfg</span></code> に書かれたどんな設定も <code class="file docutils literal"><span class="pre">setup.py</span></code> のコマンドラインオプションで上書きできます</p>
+</li>
+</ul>
+<p>設定ファイルの基本的な構文は簡単なものです:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">command</span><span class="p">]</span>
+<span class="n">option</span><span class="o">=</span><span class="n">value</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>ここで、 <em>command</em> は Distutils コマンドのうちの一つ (例えば <strong class="command">build_py</strong>, <strong class="command">install</strong>) で、 <em>option</em>  はそのコマンドでサポートされているオプションのうちの一つです。各コマンドには任意の数のオプションを設定でき、一つの設定ファイル中には任意の数のコマンドセクションを収められます。空白行は無視されます、 <code class="docutils literal"><span class="pre">'#'</span></code> 文字で開始して行末まで続くコメントも同様に無視されます。長いオプション設定値は、継続行をインデントするだけで複数行にわたって記述できます。</p>
+<p>あるコマンドがサポートしているオプションのリストは、 <code class="xref std std-option docutils literal"><span class="pre">--help</span></code> オプションで調べられます。例えば以下のように。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span> <span class="n">build_ext</span>
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<span class="n">Options</span> <span class="k">for</span> <span class="s1">&#39;build_ext&#39;</span> <span class="n">command</span><span class="p">:</span>
+  <span class="o">--</span><span class="n">build</span><span class="o">-</span><span class="n">lib</span> <span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="p">)</span>     <span class="n">directory</span> <span class="k">for</span> <span class="n">compiled</span> <span class="n">extension</span> <span class="n">modules</span>
+  <span class="o">--</span><span class="n">build</span><span class="o">-</span><span class="n">temp</span> <span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="p">)</span>    <span class="n">directory</span> <span class="k">for</span> <span class="n">temporary</span> <span class="n">files</span> <span class="p">(</span><span class="n">build</span> <span class="n">by</span><span class="o">-</span><span class="n">products</span><span class="p">)</span>
+  <span class="o">--</span><span class="n">inplace</span> <span class="p">(</span><span class="o">-</span><span class="n">i</span><span class="p">)</span>       <span class="n">ignore</span> <span class="n">build</span><span class="o">-</span><span class="n">lib</span> <span class="ow">and</span> <span class="n">put</span> <span class="n">compiled</span> <span class="n">extensions</span> <span class="n">into</span> <span class="n">the</span>
+                       <span class="n">source</span> <span class="n">directory</span> <span class="n">alongside</span> <span class="n">your</span> <span class="n">pure</span> <span class="n">Python</span> <span class="n">modules</span>
+  <span class="o">--</span><span class="n">include</span><span class="o">-</span><span class="n">dirs</span> <span class="p">(</span><span class="o">-</span><span class="n">I</span><span class="p">)</span>  <span class="nb">list</span> <span class="n">of</span> <span class="n">directories</span> <span class="n">to</span> <span class="n">search</span> <span class="k">for</span> <span class="n">header</span> <span class="n">files</span>
+  <span class="o">--</span><span class="n">define</span> <span class="p">(</span><span class="o">-</span><span class="n">D</span><span class="p">)</span>        <span class="n">C</span> <span class="n">preprocessor</span> <span class="n">macros</span> <span class="n">to</span> <span class="n">define</span>
+  <span class="o">--</span><span class="n">undef</span> <span class="p">(</span><span class="o">-</span><span class="n">U</span><span class="p">)</span>         <span class="n">C</span> <span class="n">preprocessor</span> <span class="n">macros</span> <span class="n">to</span> <span class="n">undefine</span>
+  <span class="o">--</span><span class="n">swig</span><span class="o">-</span><span class="n">opts</span>          <span class="nb">list</span> <span class="n">of</span> <span class="n">SWIG</span> <span class="n">command</span> <span class="n">line</span> <span class="n">options</span>
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Note that an option spelled <code class="xref std std-option docutils literal"><span class="pre">--foo-bar</span></code> on the command-line  is spelled
+<code class="docutils literal"><span class="pre">foo_bar</span></code> in configuration files.</p>
+<p id="distutils-build-ext-inplace">For example, say you want your extensions to be built &#8220;in-place&#8221;&#8212;that is, you
+have an extension <code class="xref py py-mod docutils literal"><span class="pre">pkg.ext</span></code>, and you want the compiled extension file
+(<code class="file docutils literal"><span class="pre">ext.so</span></code> on Unix, say) to be put in the same source directory as your
+pure Python modules <code class="xref py py-mod docutils literal"><span class="pre">pkg.mod1</span></code> and <code class="xref py py-mod docutils literal"><span class="pre">pkg.mod2</span></code>.  You can always use the
+<code class="xref std std-option docutils literal"><span class="pre">--inplace</span></code> option on the command-line to ensure this:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build_ext</span> <span class="o">--</span><span class="n">inplace</span>
+</pre></div>
+</div>
+<p>But this requires that you always specify the <strong class="command">build_ext</strong> command
+explicitly, and remember to provide <code class="xref std std-option docutils literal"><span class="pre">--inplace</span></code>. An easier way is to
+&#8220;set and forget&#8221; this option, by encoding it in <code class="file docutils literal"><span class="pre">setup.cfg</span></code>, the
+configuration file for this distribution:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">build_ext</span><span class="p">]</span>
+<span class="n">inplace</span><span class="o">=</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p>この設定は、明示的に <strong class="command">build_ext</strong> を指定するかどうかに関わらず、モジュール配布物の全てのビルドに影響します。ソース配布物に <code class="file docutils literal"><span class="pre">setup.cfg</span></code> を含めると、エンドユーザの手で行われるビルドにも影響します &#8212; このオプションの例に関しては <code class="file docutils literal"><span class="pre">setup.cfg</span></code> を含めるのはおそらくよくないアイデアでしょう。というのは、拡張モジュールをインプレースでビルドすると常にインストールしたモジュール配布物を壊してしまうからです。とはいえ、ある特定の状況では、モジュールをインストールディレクトリの下に正しく構築できるので、機能としては有用だと考えられます。 (ただ、インストールディレクトリ上でのビルドを想定するような拡張モジュールの配布は、ほとんどの場合よくない考え方です。)</p>
+<p>もう一つ、例があります: コマンドによっては、実行時にほとんど変更されないたくさんのオプションがあります; 例えば、 <strong class="command">bdist_rpm</strong> には、RPM 配布物を作成する際に、&#8221;spec&#8221;  ファイルを作成するために必要な情報を全て与えなければなりません。この情報には setup スクリプトから与えるものもあり、 (インストールされるファイルのリストのように) Distutils が自動的に生成するものもあります。しかし、こうした情報の中には <strong class="command">bdist_rpm</strong> のオプションとして与えるものがあり、毎回実行するごとにコマンドライン上で指定するのが面倒です。そこで、以下のような内容が Distutils 自体の <code class="file docutils literal"><span class="pre">setup.cfg</span></code> には入っています:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">bdist_rpm</span><span class="p">]</span>
+<span class="n">release</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">packager</span> <span class="o">=</span> <span class="n">Greg</span> <span class="n">Ward</span> <span class="o">&lt;</span><span class="n">gward</span><span class="nd">@python</span><span class="o">.</span><span class="n">net</span><span class="o">&gt;</span>
+<span class="n">doc_files</span> <span class="o">=</span> <span class="n">CHANGES</span><span class="o">.</span><span class="n">txt</span>
+            <span class="n">README</span><span class="o">.</span><span class="n">txt</span>
+            <span class="n">USAGE</span><span class="o">.</span><span class="n">txt</span>
+            <span class="n">doc</span><span class="o">/</span>
+            <span class="n">examples</span><span class="o">/</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">doc_files</span></code> オプションは、単に空白で区切られた文字列で、ここでは可読性のために複数行をまたぐようにしています。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<dl class="last docutils">
+<dt>&#8220;Python モジュールのインストール&#8221; の <a class="reference internal" href="../install/index.html#inst-config-syntax"><span class="std std-ref">設定ファイルの構文</span></a></dt>
+<dd><p class="first last">設定ファイルに関する詳細情報は、システム管理者向けのこのマニュアルにあります。</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">脚注</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><p class="first last">Distutils が自動設定機能 (auto-configuration) をサポートするまで、おそらくこの理想状態を達成することはないでしょう。</p>
+</td></tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="setupscript.html"
+                        title="前の章へ">2. setup スクリプトを書く</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="sourcedist.html"
+                        title="次の章へ">4. ソースコード配布物を作成する</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/distutils/configfile.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="sourcedist.html" title="4. ソースコード配布物を作成する"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="setupscript.html" title="2. setup スクリプトを書く"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python モジュールの配布 (レガシーバージョン)</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

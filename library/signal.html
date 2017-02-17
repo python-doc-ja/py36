@@ -1,0 +1,548 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18.8. signal — 非同期イベントにハンドラを設定する &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="18. プロセス間通信とネットワーク" href="ipc.html" />
+    <link rel="next" title="18.9. mmap — メモリマップファイル" href="mmap.html" />
+    <link rel="prev" title="18.7. asynchat — 非同期ソケットコマンド/レスポンスハンドラ" href="asynchat.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/signal.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/signal.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="mmap.html" title="18.9. mmap — メモリマップファイル"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="asynchat.html" title="18.7. asynchat — 非同期ソケットコマンド/レスポンスハンドラ"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" accesskey="U">18. プロセス間通信とネットワーク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-signal">
+<span id="signal-set-handlers-for-asynchronous-events"></span><h1>18.8. <a class="reference internal" href="#module-signal" title="signal: Set handlers for asynchronous events."><code class="xref py py-mod docutils literal"><span class="pre">signal</span></code></a> &#8212; 非同期イベントにハンドラを設定する<a class="headerlink" href="#module-signal" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<hr class="docutils" />
+<p>このモジュールでは Python でシグナルハンドラを使うための機構を提供します。</p>
+<div class="section" id="general-rules">
+<h2>18.8.1. 一般的なルール<a class="headerlink" href="#general-rules" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference internal" href="#signal.signal" title="signal.signal"><code class="xref py py-func docutils literal"><span class="pre">signal.signal()</span></code></a> 関数を使って、シグナルを受信した時に実行されるハンドラを定義することができます。 Python は標準でごく少数のシグナルハンドラをインストールしています: <code class="xref py py-const docutils literal"><span class="pre">SIGPIPE</span></code> は無視され (したがって、 pipe や socket に対する書き込みで生じたエラーは通常の Python 例外として報告されます)、 <code class="xref py py-const docutils literal"><span class="pre">SIGINT</span></code> は <a class="reference internal" href="exceptions.html#KeyboardInterrupt" title="KeyboardInterrupt"><code class="xref py py-exc docutils literal"><span class="pre">KeyboardInterrupt</span></code></a> 例外に変換されます。これらはどれも上書きすることができます。</p>
+<p>特定のシグナルに対するハンドラが一度設定されると、明示的にリセットしないかぎり設定されたままになります (Python は背後の実装系に関係なく BSD 形式のインタフェースをエミュレートします)。例外は <code class="xref py py-const docutils literal"><span class="pre">SIGCHLD</span></code> のハンドラで、この場合は背後の実装系の仕様に従います。</p>
+<div class="section" id="execution-of-python-signal-handlers">
+<h3>18.8.1.1. Python のシグナルハンドラの実行<a class="headerlink" href="#execution-of-python-signal-handlers" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Python のシグナルハンドラは、低水準 (C言語) のシグナルハンドラ内で実行されるわけではありません。代わりに、低水準のシグナルハンドラが <a class="reference internal" href="../glossary.html#term-virtual-machine"><span class="xref std std-term">virtual machine</span></a> が対応する Python のシグナルハンドラを後から (例えば次の <a class="reference internal" href="../glossary.html#term-bytecode"><span class="xref std std-term">bytecode</span></a> 命令時に) 実行するようにフラグを立てます:</p>
+<ul class="simple">
+<li>It makes little sense to catch synchronous errors like <code class="xref py py-const docutils literal"><span class="pre">SIGFPE</span></code> or
+<code class="xref py py-const docutils literal"><span class="pre">SIGSEGV</span></code> that are caused by an invalid operation in C code.  Python
+will return from the signal handler to the C code, which is likely to raise
+the same signal again, causing Python to apparently hang.  From Python 3.3
+onwards, you can use the <a class="reference internal" href="faulthandler.html#module-faulthandler" title="faulthandler: Dump the Python traceback."><code class="xref py py-mod docutils literal"><span class="pre">faulthandler</span></code></a> module to report on synchronous
+errors.</li>
+<li><p class="first">完全にCで実装された長時間かかる計算 (大きいテキストに対する正規表現のマッチなど) は、どのシグナルを受信しても中断されないまま長時間実行され続ける可能性があります。Python のシグナルハンドラはその計算が終了してから呼び出されます。</p>
+</li>
+</ul>
+</div>
+<div class="section" id="signals-and-threads">
+<span id="id1"></span><h3>18.8.1.2. シグナルとスレッド<a class="headerlink" href="#signals-and-threads" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Python のシグナルハンドラは、もしシグナルを受け取ったのが別のスレッドだったとしても、常に Python のメインスレッドで実行されます。このためシグナルをスレッド間通信に使うことはできません。代わりに <a class="reference internal" href="threading.html#module-threading" title="threading: Thread-based parallelism."><code class="xref py py-mod docutils literal"><span class="pre">threading</span></code></a> モジュールが提供している同期プリミティブを利用できます。</p>
+<p>また、メインスレッドだけが新しいシグナルハンドラを登録できます。</p>
+</div>
+</div>
+<div class="section" id="module-contents">
+<h2>18.8.2. モジュールの内容<a class="headerlink" href="#module-contents" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>signal (SIG*), handler (<a class="reference internal" href="#signal.SIG_DFL" title="signal.SIG_DFL"><code class="xref py py-const docutils literal"><span class="pre">SIG_DFL</span></code></a>, <a class="reference internal" href="#signal.SIG_IGN" title="signal.SIG_IGN"><code class="xref py py-const docutils literal"><span class="pre">SIG_IGN</span></code></a>) and sigmask
+(<a class="reference internal" href="#signal.SIG_BLOCK" title="signal.SIG_BLOCK"><code class="xref py py-const docutils literal"><span class="pre">SIG_BLOCK</span></code></a>, <a class="reference internal" href="#signal.SIG_UNBLOCK" title="signal.SIG_UNBLOCK"><code class="xref py py-const docutils literal"><span class="pre">SIG_UNBLOCK</span></code></a>, <a class="reference internal" href="#signal.SIG_SETMASK" title="signal.SIG_SETMASK"><code class="xref py py-const docutils literal"><span class="pre">SIG_SETMASK</span></code></a>)
+related constants listed below were turned into
+<a class="reference internal" href="enum.html#enum.IntEnum" title="enum.IntEnum"><code class="xref py py-class docutils literal"><span class="pre">enums</span></code></a>.
+<a class="reference internal" href="#signal.getsignal" title="signal.getsignal"><code class="xref py py-func docutils literal"><span class="pre">getsignal()</span></code></a>, <a class="reference internal" href="#signal.pthread_sigmask" title="signal.pthread_sigmask"><code class="xref py py-func docutils literal"><span class="pre">pthread_sigmask()</span></code></a>, <a class="reference internal" href="#signal.sigpending" title="signal.sigpending"><code class="xref py py-func docutils literal"><span class="pre">sigpending()</span></code></a> and
+<a class="reference internal" href="#signal.sigwait" title="signal.sigwait"><code class="xref py py-func docutils literal"><span class="pre">sigwait()</span></code></a> functions return human-readable
+<a class="reference internal" href="enum.html#enum.IntEnum" title="enum.IntEnum"><code class="xref py py-class docutils literal"><span class="pre">enums</span></code></a>.</p>
+</div>
+<p>以下に <a class="reference internal" href="#module-signal" title="signal: Set handlers for asynchronous events."><code class="xref py py-mod docutils literal"><span class="pre">signal</span></code></a> モジュールで定義されている変数を示します:</p>
+<dl class="data">
+<dt id="signal.SIG_DFL">
+<code class="descclassname">signal.</code><code class="descname">SIG_DFL</code><a class="headerlink" href="#signal.SIG_DFL" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>二つある標準シグナル処理オプションのうちの一つです; 単純にシグナルに対する標準の関数を実行します。例えば、ほとんどのシステムでは、 <code class="xref py py-const docutils literal"><span class="pre">SIGQUIT</span></code> に対する標準の動作はコアダンプと終了で、 <code class="xref py py-const docutils literal"><span class="pre">SIGCHLD</span></code> に対する標準の動作は単にシグナルの無視です。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="signal.SIG_IGN">
+<code class="descclassname">signal.</code><code class="descname">SIG_IGN</code><a class="headerlink" href="#signal.SIG_IGN" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>もう一つの標準シグナル処理オプションで、受け取ったシグナルを単に無視します。</p>
+</dd></dl>
+
+<dl class="data">
+<dt>
+<code class="descname">SIG*</code></dt>
+<dd><p>全てのシグナル番号はシンボル定義されています。例えば、ハングアップシグナルは <code class="xref py py-const docutils literal"><span class="pre">signal.SIGHUP</span></code> で定義されています; 変数名は C 言語のプログラムで使われているのと同じ名前で、 <code class="docutils literal"><span class="pre">&lt;signal.h&gt;</span></code> にあります。 &#8216;<code class="xref c c-func docutils literal"><span class="pre">signal()</span></code>&#8216; に関する Unix マニュアルページでは、システムで定義されているシグナルを列挙しています (あるシステムではリストは <em class="manpage">signal(2)</em> に、別のシステムでは <em class="manpage">signal(7)</em> に列挙されています)。全てのシステムで同じシグナル名のセットを定義しているわけではないので注意してください; このモジュールでは、システムで定義されているシグナル名だけを定義しています。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="signal.CTRL_C_EVENT">
+<code class="descclassname">signal.</code><code class="descname">CTRL_C_EVENT</code><a class="headerlink" href="#signal.CTRL_C_EVENT" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="kbd docutils literal"><span class="pre">CTRL+C</span></code> キーストロークに該当するシグナル。このシグナルは <a class="reference internal" href="os.html#os.kill" title="os.kill"><code class="xref py py-func docutils literal"><span class="pre">os.kill()</span></code></a> でだけ利用できます。</p>
+<p>利用できる環境 : Windows.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="signal.CTRL_BREAK_EVENT">
+<code class="descclassname">signal.</code><code class="descname">CTRL_BREAK_EVENT</code><a class="headerlink" href="#signal.CTRL_BREAK_EVENT" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="kbd docutils literal"><span class="pre">CTRL+BREAK</span></code> キーストロークに該当するシグナル。このシグナルは <a class="reference internal" href="os.html#os.kill" title="os.kill"><code class="xref py py-func docutils literal"><span class="pre">os.kill()</span></code></a> でだけ利用できます。</p>
+<p>利用できる環境 : Windows.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="signal.NSIG">
+<code class="descclassname">signal.</code><code class="descname">NSIG</code><a class="headerlink" href="#signal.NSIG" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最も大きいシグナル番号に 1 を足した値です。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="signal.ITIMER_REAL">
+<code class="descclassname">signal.</code><code class="descname">ITIMER_REAL</code><a class="headerlink" href="#signal.ITIMER_REAL" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>実時間でデクリメントするインターバルタイマーです。タイマーが発火したときに <code class="xref py py-const docutils literal"><span class="pre">SIGALRM</span></code> を送ります。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="signal.ITIMER_VIRTUAL">
+<code class="descclassname">signal.</code><code class="descname">ITIMER_VIRTUAL</code><a class="headerlink" href="#signal.ITIMER_VIRTUAL" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プロセスの実行時間だけデクリメントするインターバルタイマーです。タイマーが発火したときに <code class="xref py py-const docutils literal"><span class="pre">SIGVTALRM</span></code> を送ります。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="signal.ITIMER_PROF">
+<code class="descclassname">signal.</code><code class="descname">ITIMER_PROF</code><a class="headerlink" href="#signal.ITIMER_PROF" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プロセスの実行中と、システムがそのプロセスのために実行している時間だけデクリメントするインターバルタイマーです。ITIMER_VIRTUAL と組み合わせて、このタイマーはよくアプリケーションがユーザー空間とカーネル空間で消費した時間のプロファイリングに利用されます。タイマーが発火したときに <code class="xref py py-const docutils literal"><span class="pre">SIGPROF</span></code> を送ります。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="signal.SIG_BLOCK">
+<code class="descclassname">signal.</code><code class="descname">SIG_BLOCK</code><a class="headerlink" href="#signal.SIG_BLOCK" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#signal.pthread_sigmask" title="signal.pthread_sigmask"><code class="xref py py-func docutils literal"><span class="pre">pthread_sigmask()</span></code></a> の <em>how</em> 引数に渡せる値で、シグナルがブロックされることを意味します。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="signal.SIG_UNBLOCK">
+<code class="descclassname">signal.</code><code class="descname">SIG_UNBLOCK</code><a class="headerlink" href="#signal.SIG_UNBLOCK" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#signal.pthread_sigmask" title="signal.pthread_sigmask"><code class="xref py py-func docutils literal"><span class="pre">pthread_sigmask()</span></code></a> の <em>how</em> 引数に渡せる値で、シグナルがブロック解除されることを意味します。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="signal.SIG_SETMASK">
+<code class="descclassname">signal.</code><code class="descname">SIG_SETMASK</code><a class="headerlink" href="#signal.SIG_SETMASK" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#signal.pthread_sigmask" title="signal.pthread_sigmask"><code class="xref py py-func docutils literal"><span class="pre">pthread_sigmask()</span></code></a> の <em>how</em> 引数に渡せる値で、シグナルが置換されることを意味します。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<p><a class="reference internal" href="#module-signal" title="signal: Set handlers for asynchronous events."><code class="xref py py-mod docutils literal"><span class="pre">signal</span></code></a> モジュールは1つの例外を定義しています:</p>
+<dl class="exception">
+<dt id="signal.ItimerError">
+<em class="property">exception </em><code class="descclassname">signal.</code><code class="descname">ItimerError</code><a class="headerlink" href="#signal.ItimerError" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>背後の <a class="reference internal" href="#signal.setitimer" title="signal.setitimer"><code class="xref py py-func docutils literal"><span class="pre">setitimer()</span></code></a> または <a class="reference internal" href="#signal.getitimer" title="signal.getitimer"><code class="xref py py-func docutils literal"><span class="pre">getitimer()</span></code></a> 実装からエラーを通知するために送出されます。無効なインタバルタイマーや負の時間が <a class="reference internal" href="#signal.setitimer" title="signal.setitimer"><code class="xref py py-func docutils literal"><span class="pre">setitimer()</span></code></a> に渡された場合、このエラーを予期してください。このエラーは <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> を継承しています。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加: </span>このエラーは以前は <a class="reference internal" href="exceptions.html#IOError" title="IOError"><code class="xref py py-exc docutils literal"><span class="pre">IOError</span></code></a> のサブタイプでしたが、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> のエイリアスになりました。</p>
+</div>
+</dd></dl>
+
+<p><a class="reference internal" href="#module-signal" title="signal: Set handlers for asynchronous events."><code class="xref py py-mod docutils literal"><span class="pre">signal</span></code></a> モジュールでは以下の関数を定義しています:</p>
+<dl class="function">
+<dt id="signal.alarm">
+<code class="descclassname">signal.</code><code class="descname">alarm</code><span class="sig-paren">(</span><em>time</em><span class="sig-paren">)</span><a class="headerlink" href="#signal.alarm" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>time</em> がゼロでない値の場合、この関数は <em>time</em> 秒後頃に <code class="xref py py-const docutils literal"><span class="pre">SIGALRM</span></code> をプロセスに送るように要求します。それ以前にスケジュールしたアラームはキャンセルされます (常に一つのアラームしかスケジュールできません)。この場合、戻り値は以前に設定されたアラームシグナルが通知されるまであと何秒だったかを示す値です。 <em>time</em> がゼロの場合、アラームは一切スケジュールされず、現在スケジュールされているアラームがキャンセルされます。戻り値がゼロの場合、現在アラームがスケジュールされていないことを示します。(Unix マニュアルページ <em class="manpage">alarm(2)</em> を参照してください)。利用できる環境: Unix。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="signal.getsignal">
+<code class="descclassname">signal.</code><code class="descname">getsignal</code><span class="sig-paren">(</span><em>signalnum</em><span class="sig-paren">)</span><a class="headerlink" href="#signal.getsignal" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>シグナル <em>signalnum</em> に対する現在のシグナルハンドラを返します。戻り値は呼び出し可能な Python オブジェクトか、 <a class="reference internal" href="#signal.SIG_IGN" title="signal.SIG_IGN"><code class="xref py py-const docutils literal"><span class="pre">signal.SIG_IGN</span></code></a>、 <a class="reference internal" href="#signal.SIG_DFL" title="signal.SIG_DFL"><code class="xref py py-const docutils literal"><span class="pre">signal.SIG_DFL</span></code></a>、および <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> といった特殊な値のいずれかです。ここで <a class="reference internal" href="#signal.SIG_IGN" title="signal.SIG_IGN"><code class="xref py py-const docutils literal"><span class="pre">signal.SIG_IGN</span></code></a> は以前そのシグナルが無視されていたことを示し、 <a class="reference internal" href="#signal.SIG_DFL" title="signal.SIG_DFL"><code class="xref py py-const docutils literal"><span class="pre">signal.SIG_DFL</span></code></a> は以前そのシグナルの標準の処理方法が使われていたことを示し、 <code class="docutils literal"><span class="pre">None</span></code> はシグナルハンドラがまだ Python によってインストールされていないことを示します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="signal.pause">
+<code class="descclassname">signal.</code><code class="descname">pause</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#signal.pause" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>シグナルを受け取るまでプロセスを一時停止します; その後、適切なハンドラが呼び出されます。戻り値はありません。Windows では利用できません。(Unix マニュアルページ <em class="manpage">signal(2)</em> を参照してください。)</p>
+<p><a class="reference internal" href="#signal.sigwait" title="signal.sigwait"><code class="xref py py-func docutils literal"><span class="pre">sigwait()</span></code></a>, <a class="reference internal" href="#signal.sigwaitinfo" title="signal.sigwaitinfo"><code class="xref py py-func docutils literal"><span class="pre">sigwaitinfo()</span></code></a>, <a class="reference internal" href="#signal.sigtimedwait" title="signal.sigtimedwait"><code class="xref py py-func docutils literal"><span class="pre">sigtimedwait()</span></code></a> <a class="reference internal" href="#signal.sigpending" title="signal.sigpending"><code class="xref py py-func docutils literal"><span class="pre">sigpending()</span></code></a> も参照してください。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="signal.pthread_kill">
+<code class="descclassname">signal.</code><code class="descname">pthread_kill</code><span class="sig-paren">(</span><em>thread_id</em>, <em>signalnum</em><span class="sig-paren">)</span><a class="headerlink" href="#signal.pthread_kill" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Send the signal <em>signalnum</em> to the thread <em>thread_id</em>, another thread in the
+same process as the caller.  The target thread can be executing any code
+(Python or not).  However, if the target thread is executing the Python
+interpreter, the Python signal handlers will be <a class="reference internal" href="#signals-and-threads"><span class="std std-ref">executed by the main
+thread</span></a>.  Therefore, the only point of sending a
+signal to a particular Python thread would be to force a running system call
+to fail with <a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a>.</p>
+<p>Use <a class="reference internal" href="threading.html#threading.get_ident" title="threading.get_ident"><code class="xref py py-func docutils literal"><span class="pre">threading.get_ident()</span></code></a> or the <a class="reference internal" href="threading.html#threading.Thread.ident" title="threading.Thread.ident"><code class="xref py py-attr docutils literal"><span class="pre">ident</span></code></a>
+attribute of <a class="reference internal" href="threading.html#threading.Thread" title="threading.Thread"><code class="xref py py-class docutils literal"><span class="pre">threading.Thread</span></code></a> objects to get a suitable value
+for <em>thread_id</em>.</p>
+<p>If <em>signalnum</em> is 0, then no signal is sent, but error checking is still
+performed; this can be used to check if the target thread is still running.</p>
+<p>利用可能な環境: Unix (更なる情報については <em class="manpage">pthread_kill(3)</em> の man を参照してください)。</p>
+<p><a class="reference internal" href="os.html#os.kill" title="os.kill"><code class="xref py py-func docutils literal"><span class="pre">os.kill()</span></code></a> を参照してください。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="signal.pthread_sigmask">
+<code class="descclassname">signal.</code><code class="descname">pthread_sigmask</code><span class="sig-paren">(</span><em>how</em>, <em>mask</em><span class="sig-paren">)</span><a class="headerlink" href="#signal.pthread_sigmask" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>これを呼び出すスレッドにセットされているシグナルマスクを取り出したり変更したりします。シグナルマスクは、呼び出し側のために現在どのシグナルの配送がブロックされているかを示す集合 (set) です。呼び出し前のもとのシグナルマスクを集合として返却します。</p>
+<p>この関数の振る舞いは <em>how</em> に依存して以下のようになります。</p>
+<ul class="simple">
+<li><p class="first"><a class="reference internal" href="#signal.SIG_BLOCK" title="signal.SIG_BLOCK"><code class="xref py py-data docutils literal"><span class="pre">SIG_BLOCK</span></code></a>: <em>mask</em> で指定されるシグナルが現時点のシグナルマスクに追加されます。</p>
+</li>
+<li><p class="first"><a class="reference internal" href="#signal.SIG_UNBLOCK" title="signal.SIG_UNBLOCK"><code class="xref py py-data docutils literal"><span class="pre">SIG_UNBLOCK</span></code></a>: <em>mask</em> で指定されるシグナルが現時点のシグナルマスクから取り除かれます。もともとブロックされていないシグナルをブロック解除しようとしても問題ありません。</p>
+</li>
+<li><p class="first"><a class="reference internal" href="#signal.SIG_SETMASK" title="signal.SIG_SETMASK"><code class="xref py py-data docutils literal"><span class="pre">SIG_SETMASK</span></code></a>: シグナルマスク全体を <em>mask</em> としてセットします。</p>
+</li>
+</ul>
+<p><em>mask</em> はシグナル番号の集合です (例えば {<code class="xref py py-const docutils literal"><span class="pre">signal.SIGINT</span></code>, <code class="xref py py-const docutils literal"><span class="pre">signal.SIGTERM</span></code>})。全てのシグナルを含む全集合として <code class="docutils literal"><span class="pre">range(1,</span> <span class="pre">signal.NSIG)</span></code> を使うことが出来ます。</p>
+<p>呼び出しスレッドにセットされたシグナルマスクを問い合わせるには例えば <code class="docutils literal"><span class="pre">signal.pthread_sigmask(signal.SIG_BLOCK,</span> <span class="pre">[])</span></code> とします。</p>
+<p>利用出来る環境 :  Unix。 さらに詳しい情報についてはオンラインマニュアルページ <em class="manpage">sigprocmask(3)</em> と <em class="manpage">pthread_sigmask(3)</em> を参照して下さい。</p>
+<p><a class="reference internal" href="#signal.pause" title="signal.pause"><code class="xref py py-func docutils literal"><span class="pre">pause()</span></code></a>, <a class="reference internal" href="#signal.sigpending" title="signal.sigpending"><code class="xref py py-func docutils literal"><span class="pre">sigpending()</span></code></a>, <a class="reference internal" href="#signal.sigwait" title="signal.sigwait"><code class="xref py py-func docutils literal"><span class="pre">sigwait()</span></code></a> も参照して下さい。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="signal.setitimer">
+<code class="descclassname">signal.</code><code class="descname">setitimer</code><span class="sig-paren">(</span><em>which</em>, <em>seconds</em><span class="optional">[</span>, <em>interval</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#signal.setitimer" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>which</em> で指定されたタイマー (<a class="reference internal" href="#signal.ITIMER_REAL" title="signal.ITIMER_REAL"><code class="xref py py-const docutils literal"><span class="pre">signal.ITIMER_REAL</span></code></a>, <a class="reference internal" href="#signal.ITIMER_VIRTUAL" title="signal.ITIMER_VIRTUAL"><code class="xref py py-const docutils literal"><span class="pre">signal.ITIMER_VIRTUAL</span></code></a>, <a class="reference internal" href="#signal.ITIMER_PROF" title="signal.ITIMER_PROF"><code class="xref py py-const docutils literal"><span class="pre">signal.ITIMER_PROF</span></code></a> のどれか) を、 <em>seconds</em> 秒後と (<a class="reference internal" href="#signal.alarm" title="signal.alarm"><code class="xref py py-func docutils literal"><span class="pre">alarm()</span></code></a> と異なり、floatを指定できます)、それから <em>interval</em> 秒間隔で起動するように設定します。 <em>seconds</em> に0を指定すると、<em>which</em> で指定されたタイマーをクリアすることができます。</p>
+<p>インターバルタイマーが起動したとき、シグナルがプロセスに送られます。送られるシグナルは利用されたタイマーの種類に依存します。 <a class="reference internal" href="#signal.ITIMER_REAL" title="signal.ITIMER_REAL"><code class="xref py py-const docutils literal"><span class="pre">signal.ITIMER_REAL</span></code></a> の場合は <code class="xref py py-const docutils literal"><span class="pre">SIGALRM</span></code> が、 <a class="reference internal" href="#signal.ITIMER_VIRTUAL" title="signal.ITIMER_VIRTUAL"><code class="xref py py-const docutils literal"><span class="pre">signal.ITIMER_VIRTUAL</span></code></a> の場合は <code class="xref py py-const docutils literal"><span class="pre">SIGVTALRM</span></code> が、 <a class="reference internal" href="#signal.ITIMER_PROF" title="signal.ITIMER_PROF"><code class="xref py py-const docutils literal"><span class="pre">signal.ITIMER_PROF</span></code></a> の場合は <code class="xref py py-const docutils literal"><span class="pre">SIGPROF</span></code> が送られます。</p>
+<p>以前の値が (delay, interval) のタプルとして返されます。</p>
+<p>無効なインターバルタイマーを渡すと <a class="reference internal" href="#signal.ItimerError" title="signal.ItimerError"><code class="xref py py-exc docutils literal"><span class="pre">ItimerError</span></code></a> 例外が発生します。利用できる環境: Unix。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="signal.getitimer">
+<code class="descclassname">signal.</code><code class="descname">getitimer</code><span class="sig-paren">(</span><em>which</em><span class="sig-paren">)</span><a class="headerlink" href="#signal.getitimer" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>which</em> で指定されたインターバルタイマーの現在の値を返します。利用できる環境: Unix。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="signal.set_wakeup_fd">
+<code class="descclassname">signal.</code><code class="descname">set_wakeup_fd</code><span class="sig-paren">(</span><em>fd</em><span class="sig-paren">)</span><a class="headerlink" href="#signal.set_wakeup_fd" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Set the wakeup file descriptor to <em>fd</em>.  When a signal is received, the
+signal number is written as a single byte into the fd.  This can be used by
+a library to wakeup a poll or select call, allowing the signal to be fully
+processed.</p>
+<p>戻り値は古い wakeup fd です。<em>fd</em> はノンブロッキングでなければなりません。起こされたライブラリは、次の poll や select を実行する前にこの fd からすべてのバイトを取り除かなければなりません。</p>
+<p>Use for example <code class="docutils literal"><span class="pre">struct.unpack('%uB'</span> <span class="pre">%</span> <span class="pre">len(data),</span> <span class="pre">data)</span></code> to decode the
+signal numbers list.</p>
+<p>スレッドが有効な場合、この関数はメインスレッドからしか実行できません。それ以外のスレッドからこの関数を実行しようとすると <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> 例外が発生します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>Windowsで、この関数はソケットハンドルをサポートするようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="signal.siginterrupt">
+<code class="descclassname">signal.</code><code class="descname">siginterrupt</code><span class="sig-paren">(</span><em>signalnum</em>, <em>flag</em><span class="sig-paren">)</span><a class="headerlink" href="#signal.siginterrupt" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>システムコールのリスタートの動作を変更します。 <em>flag</em> が <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal"><span class="pre">False</span></code></a> の場合、 <em>signalnum</em> シグナルに中断されたシステムコールは再実行されます。それ以外の場合、システムコールは中断されます。戻り値はありません。利用できる環境: Unix (詳しい情報についてはマニュアルページ <em class="manpage">siginterrupt(3)</em> を参照してください)。</p>
+<p><a class="reference internal" href="#module-signal" title="signal: Set handlers for asynchronous events."><code class="xref py py-func docutils literal"><span class="pre">signal()</span></code></a> を使ってシグナルハンドラを設定したときに、暗黙のうちに <em>flag</em> に true を指定して <code class="xref c c-func docutils literal"><span class="pre">siginterrupt()</span></code> が実行されるため、中断に対するリスタートの動作がリセットされることに注意してください。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="signal.signal">
+<code class="descclassname">signal.</code><code class="descname">signal</code><span class="sig-paren">(</span><em>signalnum</em>, <em>handler</em><span class="sig-paren">)</span><a class="headerlink" href="#signal.signal" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>シグナル <em>signalnum</em> に対するハンドラを関数 <em>handler</em> にします。 <em>handler</em> は二つの引数 (下記参照) を取る呼び出し可能な Python オブジェクトか、 <a class="reference internal" href="#signal.SIG_IGN" title="signal.SIG_IGN"><code class="xref py py-const docutils literal"><span class="pre">signal.SIG_IGN</span></code></a> あるいは <a class="reference internal" href="#signal.SIG_DFL" title="signal.SIG_DFL"><code class="xref py py-const docutils literal"><span class="pre">signal.SIG_DFL</span></code></a> といった特殊な値にすることができます。以前に使われていたシグナルハンドラが返されます (上記の <a class="reference internal" href="#signal.getsignal" title="signal.getsignal"><code class="xref py py-func docutils literal"><span class="pre">getsignal()</span></code></a> の記述を参照してください)。 (Unix マニュアルページ <em class="manpage">signal(2)</em> を参照してください。)</p>
+<p>スレッドが有効な場合、この関数はメインスレッドからしか実行できません。それ以外のスレッドからこの関数を実行しようとすると <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> 例外が発生します。</p>
+<p><em>handler</em> は二つの引数とともに呼び出されます: シグナル番号、および現在のスタックフレーム (<code class="docutils literal"><span class="pre">None</span></code> またはフレームオブジェクト; フレームオブジェクトについての記述は <a class="reference internal" href="../reference/datamodel.html#frame-objects"><span class="std std-ref">標準型の階層における説明</span></a> か、 <a class="reference internal" href="inspect.html#module-inspect" title="inspect: Extract information and source code from live objects."><code class="xref py py-mod docutils literal"><span class="pre">inspect</span></code></a> モジュールの属性の説明を参照してください)。</p>
+<p>On Windows, <a class="reference internal" href="#module-signal" title="signal: Set handlers for asynchronous events."><code class="xref py py-func docutils literal"><span class="pre">signal()</span></code></a> can only be called with <code class="xref py py-const docutils literal"><span class="pre">SIGABRT</span></code>,
+<code class="xref py py-const docutils literal"><span class="pre">SIGFPE</span></code>, <code class="xref py py-const docutils literal"><span class="pre">SIGILL</span></code>, <code class="xref py py-const docutils literal"><span class="pre">SIGINT</span></code>, <code class="xref py py-const docutils literal"><span class="pre">SIGSEGV</span></code>,
+<code class="xref py py-const docutils literal"><span class="pre">SIGTERM</span></code>, or <code class="xref py py-const docutils literal"><span class="pre">SIGBREAK</span></code>.
+A <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> will be raised in any other case.
+Note that not all systems define the same set of signal names; an
+<a class="reference internal" href="exceptions.html#AttributeError" title="AttributeError"><code class="xref py py-exc docutils literal"><span class="pre">AttributeError</span></code></a> will be raised if a signal name is not defined as
+<code class="docutils literal"><span class="pre">SIG*</span></code> module level constant.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="signal.sigpending">
+<code class="descclassname">signal.</code><code class="descname">sigpending</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#signal.sigpending" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>呼び出しスレッドで配送が保留されているシグナル (つまり配送がブロックされている間に発生したシグナル) の集合を調べます。保留中のシグナルの集合を返します。</p>
+<p>利用出来る環境 : Unix (さらに詳しい情報についてはオンラインマニュアルページ <em class="manpage">sigpending(2)</em> を参照して下さい)。</p>
+<p><a class="reference internal" href="#signal.pause" title="signal.pause"><code class="xref py py-func docutils literal"><span class="pre">pause()</span></code></a>, <a class="reference internal" href="#signal.pthread_sigmask" title="signal.pthread_sigmask"><code class="xref py py-func docutils literal"><span class="pre">pthread_sigmask()</span></code></a>, <a class="reference internal" href="#signal.sigwait" title="signal.sigwait"><code class="xref py py-func docutils literal"><span class="pre">sigwait()</span></code></a> も参照して下さい。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="signal.sigwait">
+<code class="descclassname">signal.</code><code class="descname">sigwait</code><span class="sig-paren">(</span><em>sigset</em><span class="sig-paren">)</span><a class="headerlink" href="#signal.sigwait" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>sigset</em> 集合で指定されたシグナルのうちどれか一つが届くまで呼び出しスレッドを一時停止します。この関数はそのシグナルを受け取ると (それを保留シグナルリストから取り除いて) そのシグナル番号を返します。</p>
+<p>利用出来る環境 : Unix (さらに詳しい情報についてはオンラインマニュアルページ <em class="manpage">sigwait(3)</em> を参照して下さい)。</p>
+<p><a class="reference internal" href="#signal.pause" title="signal.pause"><code class="xref py py-func docutils literal"><span class="pre">pause()</span></code></a>, <a class="reference internal" href="#signal.pthread_sigmask" title="signal.pthread_sigmask"><code class="xref py py-func docutils literal"><span class="pre">pthread_sigmask()</span></code></a>, <a class="reference internal" href="#signal.sigpending" title="signal.sigpending"><code class="xref py py-func docutils literal"><span class="pre">sigpending()</span></code></a>, <a class="reference internal" href="#signal.sigwaitinfo" title="signal.sigwaitinfo"><code class="xref py py-func docutils literal"><span class="pre">sigwaitinfo()</span></code></a>, <a class="reference internal" href="#signal.sigtimedwait" title="signal.sigtimedwait"><code class="xref py py-func docutils literal"><span class="pre">sigtimedwait()</span></code></a> も参照して下さい。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="signal.sigwaitinfo">
+<code class="descclassname">signal.</code><code class="descname">sigwaitinfo</code><span class="sig-paren">(</span><em>sigset</em><span class="sig-paren">)</span><a class="headerlink" href="#signal.sigwaitinfo" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Suspend execution of the calling thread until the delivery of one of the
+signals specified in the signal set <em>sigset</em>.  The function accepts the
+signal and removes it from the pending list of signals. If one of the
+signals in <em>sigset</em> is already pending for the calling thread, the function
+will return immediately with information about that signal. The signal
+handler is not called for the delivered signal. The function raises an
+<a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> if it is interrupted by a signal that is not in
+<em>sigset</em>.</p>
+<p>The return value is an object representing the data contained in the
+<code class="xref c c-type docutils literal"><span class="pre">siginfo_t</span></code> structure, namely: <code class="xref py py-attr docutils literal"><span class="pre">si_signo</span></code>, <code class="xref py py-attr docutils literal"><span class="pre">si_code</span></code>,
+<code class="xref py py-attr docutils literal"><span class="pre">si_errno</span></code>, <code class="xref py py-attr docutils literal"><span class="pre">si_pid</span></code>, <code class="xref py py-attr docutils literal"><span class="pre">si_uid</span></code>, <code class="xref py py-attr docutils literal"><span class="pre">si_status</span></code>,
+<code class="xref py py-attr docutils literal"><span class="pre">si_band</span></code>.</p>
+<p>利用出来る環境 : Unix (さらに詳しい情報についてはオンラインマニュアルページ <em class="manpage">sigwaitinfo(2)</em> を参照して下さい)。</p>
+<p><a class="reference internal" href="#signal.pause" title="signal.pause"><code class="xref py py-func docutils literal"><span class="pre">pause()</span></code></a>, <a class="reference internal" href="#signal.sigwait" title="signal.sigwait"><code class="xref py py-func docutils literal"><span class="pre">sigwait()</span></code></a>, <a class="reference internal" href="#signal.sigtimedwait" title="signal.sigtimedwait"><code class="xref py py-func docutils literal"><span class="pre">sigtimedwait()</span></code></a> も参照して下さい。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>The function is now retried if interrupted by a signal not in <em>sigset</em>
+and the signal handler does not raise an exception (see <span class="target" id="index-0"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> for
+the rationale).</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="signal.sigtimedwait">
+<code class="descclassname">signal.</code><code class="descname">sigtimedwait</code><span class="sig-paren">(</span><em>sigset</em>, <em>timeout</em><span class="sig-paren">)</span><a class="headerlink" href="#signal.sigtimedwait" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Like <a class="reference internal" href="#signal.sigwaitinfo" title="signal.sigwaitinfo"><code class="xref py py-func docutils literal"><span class="pre">sigwaitinfo()</span></code></a>, but takes an additional <em>timeout</em> argument
+specifying a timeout. If <em>timeout</em> is specified as <code class="xref py py-const docutils literal"><span class="pre">0</span></code>, a poll is
+performed. Returns <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> if a timeout occurs.</p>
+<p>利用出来る環境 : Unix (さらに詳しい情報についてはオンラインマニュアルページ <em class="manpage">sigtimedwait(2)</em> を参照して下さい)。</p>
+<p><a class="reference internal" href="#signal.pause" title="signal.pause"><code class="xref py py-func docutils literal"><span class="pre">pause()</span></code></a>, <a class="reference internal" href="#signal.sigwait" title="signal.sigwait"><code class="xref py py-func docutils literal"><span class="pre">sigwait()</span></code></a>, <a class="reference internal" href="#signal.sigwaitinfo" title="signal.sigwaitinfo"><code class="xref py py-func docutils literal"><span class="pre">sigwaitinfo()</span></code></a> も参照して下さい。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>The function is now retried with the recomputed <em>timeout</em> if interrupted
+by a signal not in <em>sigset</em> and the signal handler does not raise an
+exception (see <span class="target" id="index-1"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> for the rationale).</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="example">
+<span id="signal-example"></span><h2>18.8.3. 使用例<a class="headerlink" href="#example" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>以下は最小限のプログラム例です。この例では <a class="reference internal" href="#signal.alarm" title="signal.alarm"><code class="xref py py-func docutils literal"><span class="pre">alarm()</span></code></a> を使ってファイルを開く処理を待つのに費やす時間を制限します; 例えば、電源の入っていないシリアルデバイスを開こうとすると、通常 <a class="reference internal" href="os.html#os.open" title="os.open"><code class="xref py py-func docutils literal"><span class="pre">os.open()</span></code></a> は未定義の期間ハングアップしてしまいますが、この方法はそうした場合に便利です。ここではファイルを開くまで 5 秒間のアラームを設定することで解決しています; ファイルを開く処理が長くかかりすぎると、アラームシグナルが送信され、ハンドラが例外を送出するようになっています。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">signal</span><span class="o">,</span> <span class="nn">os</span>
+
+<span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">signum</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Signal handler called with signal&#39;</span><span class="p">,</span> <span class="n">signum</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t open device!&quot;</span><span class="p">)</span>
+
+<span class="c1"># Set the signal handler and a 5-second alarm</span>
+<span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGALRM</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span>
+<span class="n">signal</span><span class="o">.</span><span class="n">alarm</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># This open() may hang indefinitely</span>
+<span class="n">fd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;/dev/ttyS0&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">O_RDWR</span><span class="p">)</span>
+
+<span class="n">signal</span><span class="o">.</span><span class="n">alarm</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>          <span class="c1"># Disable the alarm</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.8. <code class="docutils literal"><span class="pre">signal</span></code> &#8212; 非同期イベントにハンドラを設定する</a><ul>
+<li><a class="reference internal" href="#general-rules">18.8.1. 一般的なルール</a><ul>
+<li><a class="reference internal" href="#execution-of-python-signal-handlers">18.8.1.1. Python のシグナルハンドラの実行</a></li>
+<li><a class="reference internal" href="#signals-and-threads">18.8.1.2. シグナルとスレッド</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-contents">18.8.2. モジュールの内容</a></li>
+<li><a class="reference internal" href="#example">18.8.3. 使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="asynchat.html"
+                        title="前の章へ">18.7. <code class="docutils literal"><span class="pre">asynchat</span></code> &#8212; 非同期ソケットコマンド/レスポンスハンドラ</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="mmap.html"
+                        title="次の章へ">18.9. <code class="docutils literal"><span class="pre">mmap</span></code> &#8212; メモリマップファイル</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/signal.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="mmap.html" title="18.9. mmap — メモリマップファイル"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="asynchat.html" title="18.7. asynchat — 非同期ソケットコマンド/レスポンスハンドラ"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

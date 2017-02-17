@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>35.7. tty — 端末制御のための関数群 &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="35. Unix 固有のサービス" href="unix.html" />
+    <link rel="next" title="35.8. pty — 擬似端末ユーティリティ" href="pty.html" />
+    <link rel="prev" title="35.6. termios — POSIX スタイルの端末制御" href="termios.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/tty.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/tty.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="pty.html" title="35.8. pty — 擬似端末ユーティリティ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="termios.html" title="35.6. termios — POSIX スタイルの端末制御"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" accesskey="U">35. Unix 固有のサービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-tty">
+<span id="tty-terminal-control-functions"></span><h1>35.7. <a class="reference internal" href="#module-tty" title="tty: Utility functions that perform common terminal control operations. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">tty</span></code></a> &#8212; 端末制御のための関数群<a class="headerlink" href="#module-tty" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/tty.py">Lib/tty.py</a></p>
+<hr class="docutils" />
+<p><a class="reference internal" href="#module-tty" title="tty: Utility functions that perform common terminal control operations. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">tty</span></code></a> モジュールは端末を cbreak および raw モードにするための関数を定義しています。</p>
+<p>このモジュールは <a class="reference internal" href="termios.html#module-termios" title="termios: POSIX style tty control. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">termios</span></code></a> モジュールを必要とするため、 Unix でしか動作しません。</p>
+<p><a class="reference internal" href="#module-tty" title="tty: Utility functions that perform common terminal control operations. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">tty</span></code></a> モジュールでは、以下の関数を定義しています:</p>
+<dl class="function">
+<dt id="tty.setraw">
+<code class="descclassname">tty.</code><code class="descname">setraw</code><span class="sig-paren">(</span><em>fd</em>, <em>when=termios.TCSAFLUSH</em><span class="sig-paren">)</span><a class="headerlink" href="#tty.setraw" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ファイル記述子 <em>fd</em> のモードを raw モードに変えます。 <em>when</em> を省略すると標準の値は <code class="xref py py-const docutils literal"><span class="pre">termios.TCSAFLUSH</span></code> になり、 <a class="reference internal" href="termios.html#termios.tcsetattr" title="termios.tcsetattr"><code class="xref py py-func docutils literal"><span class="pre">termios.tcsetattr()</span></code></a> に渡されます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tty.setcbreak">
+<code class="descclassname">tty.</code><code class="descname">setcbreak</code><span class="sig-paren">(</span><em>fd</em>, <em>when=termios.TCSAFLUSH</em><span class="sig-paren">)</span><a class="headerlink" href="#tty.setcbreak" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ファイル記述子 <em>fd</em> のモードを cbreakモードに変えます。 <em>when</em> を省略すると標準の値は <code class="xref py py-const docutils literal"><span class="pre">termios.TCSAFLUSH</span></code> になり、 <a class="reference internal" href="termios.html#termios.tcsetattr" title="termios.tcsetattr"><code class="xref py py-func docutils literal"><span class="pre">termios.tcsetattr()</span></code></a> に渡されます。</p>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<dl class="last docutils">
+<dt>モジュール <a class="reference internal" href="termios.html#module-termios" title="termios: POSIX style tty control. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">termios</span></code></a></dt>
+<dd><p class="first last">低水準端末制御インタフェース。</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="termios.html"
+                        title="前の章へ">35.6. <code class="docutils literal"><span class="pre">termios</span></code> &#8212; POSIX スタイルの端末制御</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="pty.html"
+                        title="次の章へ">35.8. <code class="docutils literal"><span class="pre">pty</span></code> &#8212; 擬似端末ユーティリティ</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/tty.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="pty.html" title="35.8. pty — 擬似端末ユーティリティ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="termios.html" title="35.6. termios — POSIX スタイルの端末制御"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" >35. Unix 固有のサービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

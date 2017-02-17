@@ -1,0 +1,443 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18.5.7. 同期プリミティブ &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="18.5. asyncio — 非同期 I/O、イベントループ、コルーチンおよびタスク" href="asyncio.html" />
+    <link rel="next" title="18.5.8. キュー" href="asyncio-queue.html" />
+    <link rel="prev" title="18.5.6. サブプロセス" href="asyncio-subprocess.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/asyncio-sync.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/asyncio-sync.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-queue.html" title="18.5.8. キュー"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="asyncio-subprocess.html" title="18.5.6. サブプロセス"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" accesskey="U">18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="synchronization-primitives">
+<span id="asyncio-sync"></span><h1>18.5.7. 同期プリミティブ<a class="headerlink" href="#synchronization-primitives" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>ロック:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#asyncio.Lock" title="asyncio.Lock"><code class="xref py py-class docutils literal"><span class="pre">Lock</span></code></a></li>
+<li><a class="reference internal" href="#asyncio.Event" title="asyncio.Event"><code class="xref py py-class docutils literal"><span class="pre">Event</span></code></a></li>
+<li><a class="reference internal" href="#asyncio.Condition" title="asyncio.Condition"><code class="xref py py-class docutils literal"><span class="pre">Condition</span></code></a></li>
+</ul>
+<p>セマフォ:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#asyncio.Semaphore" title="asyncio.Semaphore"><code class="xref py py-class docutils literal"><span class="pre">Semaphore</span></code></a></li>
+<li><a class="reference internal" href="#asyncio.BoundedSemaphore" title="asyncio.BoundedSemaphore"><code class="xref py py-class docutils literal"><span class="pre">BoundedSemaphore</span></code></a></li>
+</ul>
+<p>asyncio lock API は <a class="reference internal" href="threading.html#module-threading" title="threading: Thread-based parallelism."><code class="xref py py-mod docutils literal"><span class="pre">threading</span></code></a> モジュールのクラス (<a class="reference internal" href="threading.html#threading.Lock" title="threading.Lock"><code class="xref py py-class docutils literal"><span class="pre">Lock</span></code></a>, <a class="reference internal" href="threading.html#threading.Event" title="threading.Event"><code class="xref py py-class docutils literal"><span class="pre">Event</span></code></a>, <a class="reference internal" href="threading.html#threading.Condition" title="threading.Condition"><code class="xref py py-class docutils literal"><span class="pre">Condition</span></code></a>, <a class="reference internal" href="threading.html#threading.Semaphore" title="threading.Semaphore"><code class="xref py py-class docutils literal"><span class="pre">Semaphore</span></code></a>, <a class="reference internal" href="threading.html#threading.BoundedSemaphore" title="threading.BoundedSemaphore"><code class="xref py py-class docutils literal"><span class="pre">BoundedSemaphore</span></code></a>) に近くなるよう設計されましたが、 <em>timeout</em> 引数はありません。
+<a class="reference internal" href="asyncio-task.html#asyncio.wait_for" title="asyncio.wait_for"><code class="xref py py-func docutils literal"><span class="pre">asyncio.wait_for()</span></code></a> 関数を用いてタイムアオウト後にタスクをキャンセルすることが出来ます。</p>
+<div class="section" id="locks">
+<h2>18.5.7.1. ロック<a class="headerlink" href="#locks" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="lock">
+<h3>18.5.7.1.1. Lock<a class="headerlink" href="#lock" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="class">
+<dt id="asyncio.Lock">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">Lock</code><span class="sig-paren">(</span><em>*</em>, <em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Lock" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プリミティブなロックオブジェクトです。</p>
+<p>プリミティブロックは、ロックされたときに特定のコルーチンに所有されない同期プリミティブです。プリミティブロックは &#8216;ロック状態&#8217; か &#8216;アンロック状態&#8217; のどちらかの状態になります。</p>
+<p>これはアンロック状態で作成されます。基本メソッド <a class="reference internal" href="#asyncio.Lock.acquire" title="asyncio.Lock.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> と <a class="reference internal" href="#asyncio.Lock.release" title="asyncio.Lock.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> を持ちます。アンロック状態のとき、acquire() でロック状態に変更し直ちに返します。ロック状態のとき、acquire() は、他のコルーチンが release() を呼び出しアンロック状態に変更するまでブロックします。その後 acquire() はそれをロック状態にして返します。release() メソッドはロック状態のとき以外に呼び出してはなりません; これは状態をアンロック状態に変更して直ちに返します。アンロック状態でロック解除を行おうとすると <a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code></a> が送出されます。</p>
+<p>1 個以上のコルーチンが acquire() でブロックされ、アンロック状態への変更を待っている場合、release() が呼び出されアンロック状態にリセットされたとき 1 個のコルーチンのみが開始されます; 最初に acquire() でプロックされたコルーチンが開始されます。</p>
+<p><a class="reference internal" href="#asyncio.Lock.acquire" title="asyncio.Lock.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> はコルーチンであり、<code class="docutils literal"><span class="pre">yield</span> <span class="pre">from</span></code> で呼び出すべきです。</p>
+<p>ロックはコンテキストマネージャープロトコルもサポートしています。コンテキストマネージャー表現では、<code class="docutils literal"><span class="pre">(yield</span> <span class="pre">from</span> <span class="pre">lock)</span></code> のように使用します。</p>
+<p>このクラスは <a class="reference internal" href="asyncio-dev.html#asyncio-multithreading"><span class="std std-ref">スレッド安全ではありません</span></a>。</p>
+<p>使い方:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+<span class="o">...</span>
+<span class="k">yield from</span> <span class="n">lock</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="o">...</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>コンテキストマネージャーでの使用法:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+<span class="o">...</span>
+<span class="k">with</span> <span class="p">(</span><span class="k">yield from</span> <span class="n">lock</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>ロックオブジェクトはロック状態か否かを確認できます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">lock</span><span class="o">.</span><span class="n">locked</span><span class="p">():</span>
+    <span class="k">yield from</span> <span class="n">lock</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># lock is acquired</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="asyncio.Lock.locked">
+<code class="descname">locked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Lock.locked" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ロック状態のとき <code class="docutils literal"><span class="pre">True</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Lock.acquire">
+<em class="property">coroutine </em><code class="descname">acquire</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Lock.acquire" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ロックを獲得します。</p>
+<p>このメソッドはロックが解除されるまでブロックし、ロック状態に変更して <code class="docutils literal"><span class="pre">True</span></code> を返します。</p>
+<p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Lock.release">
+<code class="descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Lock.release" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ロックを解放します。</p>
+<p>ロックがロック状態のとき、アンロック状態にリセットして返します。他のコルーチンがプロックされロック解除を待っている場合、そのうちのひとつだけ開始されます。</p>
+<p>アンロック状態のロックに対して呼び出された場合、<a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code></a> が送出されます。</p>
+<p>戻り値はありません。</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="event">
+<h3>18.5.7.1.2. Event<a class="headerlink" href="#event" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="class">
+<dt id="asyncio.Event">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">Event</code><span class="sig-paren">(</span><em>*</em>, <em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Event" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="threading.html#threading.Event" title="threading.Event"><code class="xref py py-class docutils literal"><span class="pre">threading.Event</span></code></a> と等価で非同期な Event 実装です。</p>
+<p>イベントオブジェクトを実装するクラスです。イベントは <a class="reference internal" href="stdtypes.html#set" title="set"><code class="xref py py-meth docutils literal"><span class="pre">set()</span></code></a> メソッドで真に設定され、<a class="reference internal" href="#asyncio.Event.clear" title="asyncio.Event.clear"><code class="xref py py-meth docutils literal"><span class="pre">clear()</span></code></a> メソッドで偽にリセットされるフラグを管理します。<a class="reference internal" href="asyncio-task.html#asyncio.wait" title="asyncio.wait"><code class="xref py py-meth docutils literal"><span class="pre">wait()</span></code></a> メソッドはフラグが真になるまでブロックします。フラグの最初の値は偽です。</p>
+<p>このクラスは <a class="reference internal" href="asyncio-dev.html#asyncio-multithreading"><span class="std std-ref">スレッド安全ではありません</span></a>。</p>
+<dl class="method">
+<dt id="asyncio.Event.clear">
+<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Event.clear" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>内部フラグを偽にリセットします。その後 <a class="reference internal" href="asyncio-task.html#asyncio.wait" title="asyncio.wait"><code class="xref py py-meth docutils literal"><span class="pre">wait()</span></code></a> を呼んでいるコルーチンは <a class="reference internal" href="stdtypes.html#set" title="set"><code class="xref py py-meth docutils literal"><span class="pre">set()</span></code></a> が呼び出されて内部フラグが真に設定されるまでブロックします。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Event.is_set">
+<code class="descname">is_set</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Event.is_set" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>内部フラグが真のとき <code class="docutils literal"><span class="pre">True</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Event.set">
+<code class="descname">set</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Event.set" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>内部フラグを真に設定します。それを待っていたすべてのコルーチンが再開します。<a class="reference internal" href="asyncio-task.html#asyncio.wait" title="asyncio.wait"><code class="xref py py-meth docutils literal"><span class="pre">wait()</span></code></a> を呼び出していたコルーチンへのブロックが解除されます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Event.wait">
+<em class="property">coroutine </em><code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Event.wait" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>内部フラグが真になるまでブロックします。</p>
+<p>入力時に内部フラグが真のとき直ちに <code class="docutils literal"><span class="pre">True</span></code> を返します。偽のときはコルーチンが <a class="reference internal" href="stdtypes.html#set" title="set"><code class="xref py py-meth docutils literal"><span class="pre">set()</span></code></a> を呼び出してフラグが真になるまでブロックし、真になった時点で <code class="docutils literal"><span class="pre">True</span></code> を返します。</p>
+<p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="condition">
+<h3>18.5.7.1.3. Condition<a class="headerlink" href="#condition" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="class">
+<dt id="asyncio.Condition">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">Condition</code><span class="sig-paren">(</span><em>lock=None</em>, <em>*</em>, <em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Condition" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="threading.html#threading.Condition" title="threading.Condition"><code class="xref py py-class docutils literal"><span class="pre">threading.Condition</span></code></a> と等価で非同期な Condition 実装です。</p>
+<p>このクラスは条件変数オブジェクトを実装しています。条件変数は 1 個以上のコルーチンが他のコルーチンから通知を受けるまで待機できるようにします。</p>
+<p>引数 <em>lock</em> に非 <code class="docutils literal"><span class="pre">None</span></code> が与えられた場合、それは <a class="reference internal" href="#asyncio.Lock" title="asyncio.Lock"><code class="xref py py-class docutils literal"><span class="pre">Lock</span></code></a> オブジェクトでなければなりません。これは下層のロックとして使用されます。与えられない場合、新しく <a class="reference internal" href="#asyncio.Lock" title="asyncio.Lock"><code class="xref py py-class docutils literal"><span class="pre">Lock</span></code></a> オブジェクトが作成されます。</p>
+<p>このクラスは <a class="reference internal" href="asyncio-dev.html#asyncio-multithreading"><span class="std std-ref">スレッド安全ではありません</span></a>。</p>
+<dl class="method">
+<dt id="asyncio.Condition.acquire">
+<em class="property">coroutine </em><code class="descname">acquire</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Condition.acquire" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>下層でのロックを獲得します。</p>
+<p>このメソッドはロックが解除されるまでブロックし、ロック状態に変更して <code class="docutils literal"><span class="pre">True</span></code> を返します。</p>
+<p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Condition.notify">
+<code class="descname">notify</code><span class="sig-paren">(</span><em>n=1</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Condition.notify" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>デフォルトでは、この条件を待機しているコルーチンがあればそれが再開されます。呼び出したコルーチンがこのロックを獲得していない状態でこのメソッドが呼び出されると <a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code></a> が送出されます。</p>
+<p>このメソッドではこの条件変数を待機しているうち最大で <em>n</em> 個のコルーチンが再開されます; 待機しているコルーチンがなければ何もしません。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">そのロックを獲得できるまで、再開されたコルーチンは実際には自身の <a class="reference internal" href="asyncio-task.html#asyncio.wait" title="asyncio.wait"><code class="xref py py-meth docutils literal"><span class="pre">wait()</span></code></a> 呼び出しから復帰しません。<a class="reference internal" href="#asyncio.Condition.notify" title="asyncio.Condition.notify"><code class="xref py py-meth docutils literal"><span class="pre">notify()</span></code></a> はロックの解除を行わないため、呼び出し元がそれを行わなければなりません。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Condition.locked">
+<code class="descname">locked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Condition.locked" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>下層のロックを獲得していれば <code class="docutils literal"><span class="pre">True</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Condition.notify_all">
+<code class="descname">notify_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Condition.notify_all" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この条件を待機しているすべてのコルーチンを再開します。このメソッドは <a class="reference internal" href="#asyncio.Condition.notify" title="asyncio.Condition.notify"><code class="xref py py-meth docutils literal"><span class="pre">notify()</span></code></a> のように振る舞いますが、1 個ではなくすべてのコルーチンが再開されます。呼び出したコルーチンがロックを獲得していない状態でこのメソッドが呼び出されると <a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code></a> が送出されます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Condition.release">
+<code class="descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Condition.release" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>下層のロックを解除します。</p>
+<p>ロックがロック状態のとき、アンロック状態にリセットされます。他にこのロックの解除を待機していたコルーチンが存在していた場合、そのうちの一つが再開されます。</p>
+<p>アンロック状態のロックに対して呼び出された場合、<a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code></a> が送出されます。</p>
+<p>戻り値はありません。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Condition.wait">
+<em class="property">coroutine </em><code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Condition.wait" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>通知を受けるまで待機します。</p>
+<p>呼び出したコルーチンがロックを獲得していない状態でこのメソッドが呼び出されると、<a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code></a> が送出されます。</p>
+<p>このメソッドは下層のロックを解除し、その後それが他のコルーチンで同じ条件変数の <a class="reference internal" href="#asyncio.Condition.notify" title="asyncio.Condition.notify"><code class="xref py py-meth docutils literal"><span class="pre">notify()</span></code></a> か <a class="reference internal" href="#asyncio.Condition.notify_all" title="asyncio.Condition.notify_all"><code class="xref py py-meth docutils literal"><span class="pre">notify_all()</span></code></a> によって再開されるまでブロックします。再開されると、再びロックを獲得して <code class="docutils literal"><span class="pre">True</span></code> を返します。</p>
+<p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Condition.wait_for">
+<em class="property">coroutine </em><code class="descname">wait_for</code><span class="sig-paren">(</span><em>predicate</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Condition.wait_for" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>predicate</em> が真になるまで待機します。</p>
+<p><em>predicate</em> は呼び出し可能オブジェクトで、結果がブール値で解析できなければなりません。最終的な <em>predicate</em> の結果が戻り値となります。</p>
+<p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="semaphores">
+<h2>18.5.7.2. セマフォ<a class="headerlink" href="#semaphores" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="semaphore">
+<h3>18.5.7.2.1. Semaphore<a class="headerlink" href="#semaphore" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="class">
+<dt id="asyncio.Semaphore">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">Semaphore</code><span class="sig-paren">(</span><em>value=1</em>, <em>*</em>, <em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Semaphore" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Semaphore 実装です。</p>
+<p>セマフォは <a class="reference internal" href="#asyncio.Semaphore.acquire" title="asyncio.Semaphore.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> の呼び出しで減算し、<a class="reference internal" href="#asyncio.Semaphore.release" title="asyncio.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> で加算する内部カウンターを管理します。カウンターは負数になることはありません;  <a class="reference internal" href="#asyncio.Semaphore.acquire" title="asyncio.Semaphore.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> が呼び出されたときにセマフォがゼロであればブロックされ、他のコルーチンが <a class="reference internal" href="#asyncio.Semaphore.release" title="asyncio.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> を呼び出すまで待機します。</p>
+<p>セマフォはコンテキストマネージャープロトコルもサポートしています。</p>
+<p>任意の引数 <em>value</em> で内部カウンターの初期値を指定できます; デフォルトは <code class="docutils literal"><span class="pre">1</span></code> です。value に <code class="docutils literal"><span class="pre">0</span></code> 未満の値が指定されると、<a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> が送出されます。</p>
+<p>このクラスは <a class="reference internal" href="asyncio-dev.html#asyncio-multithreading"><span class="std std-ref">スレッド安全ではありません</span></a>。</p>
+<dl class="method">
+<dt id="asyncio.Semaphore.acquire">
+<em class="property">coroutine </em><code class="descname">acquire</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Semaphore.acquire" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>セマフォを獲得します。</p>
+<p>入力時内部カウンターがゼロより大きかった場合、1 減算され、直ちに <code class="docutils literal"><span class="pre">True</span></code> を返します。ゼロだった場合、ブロックされ、他のコルーチンが <a class="reference internal" href="#asyncio.Semaphore.release" title="asyncio.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> を呼び出してカウンター値が <code class="docutils literal"><span class="pre">0</span></code> より大きくなるまで待機し、獲得できると <code class="docutils literal"><span class="pre">True</span></code> を返します。</p>
+<p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Semaphore.locked">
+<code class="descname">locked</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Semaphore.locked" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>セマフォを直ちに獲得できる場合 <code class="docutils literal"><span class="pre">True</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Semaphore.release">
+<code class="descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Semaphore.release" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>セマフォを解放し、内部カウンターを 1 加算します。カウンター値がゼロで他のコルーチンが待機状態にあった場合、加算後そのコルーチンが再開されます。</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="boundedsemaphore">
+<h3>18.5.7.2.2. BoundedSemaphore<a class="headerlink" href="#boundedsemaphore" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="class">
+<dt id="asyncio.BoundedSemaphore">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">BoundedSemaphore</code><span class="sig-paren">(</span><em>value=1</em>, <em>*</em>, <em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BoundedSemaphore" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#asyncio.Semaphore" title="asyncio.Semaphore"><code class="xref py py-class docutils literal"><span class="pre">Semaphore</span></code></a> を継承した有限セマフォの実装です。</p>
+<p><a class="reference internal" href="#asyncio.Semaphore.release" title="asyncio.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> 内でカウンター値が加算されて引数 <em>value</em> を超えると <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> を送出します。</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.5.7. 同期プリミティブ</a><ul>
+<li><a class="reference internal" href="#locks">18.5.7.1. ロック</a><ul>
+<li><a class="reference internal" href="#lock">18.5.7.1.1. Lock</a></li>
+<li><a class="reference internal" href="#event">18.5.7.1.2. Event</a></li>
+<li><a class="reference internal" href="#condition">18.5.7.1.3. Condition</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#semaphores">18.5.7.2. セマフォ</a><ul>
+<li><a class="reference internal" href="#semaphore">18.5.7.2.1. Semaphore</a></li>
+<li><a class="reference internal" href="#boundedsemaphore">18.5.7.2.2. BoundedSemaphore</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="asyncio-subprocess.html"
+                        title="前の章へ">18.5.6. サブプロセス</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="asyncio-queue.html"
+                        title="次の章へ">18.5.8. キュー</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio-sync.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-queue.html" title="18.5.8. キュー"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="asyncio-subprocess.html" title="18.5.6. サブプロセス"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" >18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

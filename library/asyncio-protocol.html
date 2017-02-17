@@ -1,0 +1,878 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18.5.4. トランスポートとプロトコル (コールバックベースの API) &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="18.5. asyncio — 非同期 I/O、イベントループ、コルーチンおよびタスク" href="asyncio.html" />
+    <link rel="next" title="18.5.5. ストリーム (コルーチンベースの API)" href="asyncio-stream.html" />
+    <link rel="prev" title="18.5.3. タスクとコルーチン" href="asyncio-task.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/asyncio-protocol.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/asyncio-protocol.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-stream.html" title="18.5.5. ストリーム (コルーチンベースの API)"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="asyncio-task.html" title="18.5.3. タスクとコルーチン"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" accesskey="U">18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="transports-and-protocols-callback-based-api">
+<h1>18.5.4. トランスポートとプロトコル (コールバックベースの API)<a class="headerlink" href="#transports-and-protocols-callback-based-api" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="transports">
+<span id="asyncio-transport"></span><h2>18.5.4.1. トランスポート<a class="headerlink" href="#transports" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Transports are classes provided by <a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> in order to abstract
+various kinds of communication channels.  You generally won&#8217;t instantiate
+a transport yourself; instead, you will call an <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop" title="asyncio.AbstractEventLoop"><code class="xref py py-class docutils literal"><span class="pre">AbstractEventLoop</span></code></a> method
+which will create the transport and try to initiate the underlying
+communication channel, calling you back when it succeeds.</p>
+<p>いったん通信チャンネルが確立されると、トランスポートは常に <a class="reference internal" href="#asyncio-protocol"><span class="std std-ref">プロトコル</span></a> インスタンスとのペアを成します。プロトコルはその後さまざまな用途のためトランスポートのメソッドを呼び出します。</p>
+<p><a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> は現在 TCP、UDP、SSL およびサブプロセスパイプのトランスポートを実装しています。利用可能なトランスポートのメソッドはトランスポートの種類に依存します。</p>
+<p>トランスポートクラスは <a class="reference internal" href="asyncio-dev.html#asyncio-multithreading"><span class="std std-ref">スレッド安全ではありません</span></a>。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>The socket option <code class="docutils literal"><span class="pre">TCP_NODELAY</span></code> is now set by default.</p>
+</div>
+<div class="section" id="basetransport">
+<h3>18.5.4.1.1. BaseTransport<a class="headerlink" href="#basetransport" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="class">
+<dt id="asyncio.BaseTransport">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">BaseTransport</code><a class="headerlink" href="#asyncio.BaseTransport" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トランスポートの基底クラスです。</p>
+<dl class="method">
+<dt id="asyncio.BaseTransport.close">
+<code class="descname">close</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseTransport.close" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トランスポートをクローズします。トランスポートが発信データのバッファーを持っていた場合、バッファーされたデータは非同期にフラッシュされます。それ以降データは受信されません。バッファーされていたデータがすべてフラッシュされた後、そのプロトコルの <code class="xref py py-meth docutils literal"><span class="pre">connection_lost()</span></code> メソッドが引数 <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> で呼び出されます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.BaseTransport.is_closing">
+<code class="descname">is_closing</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseTransport.is_closing" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トランスポートを閉じている最中か閉じていた場合 <code class="docutils literal"><span class="pre">True</span></code> を返します。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5.1 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.BaseTransport.get_extra_info">
+<code class="descname">get_extra_info</code><span class="sig-paren">(</span><em>name</em>, <em>default=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseTransport.get_extra_info" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのトランスポート情報を返します。<em>name</em> は取得したトランスポート固有の情報を表す文字列で、<em>default</em> は情報が存在しなかったときに返す値になります。</p>
+<p>このメソッドはトランスポートの実装に容易にチャンネル固有の情報を渡すことができます。</p>
+<ul class="simple">
+<li><p class="first">ソケット:</p>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">'peername'</span></code>: ソケットが接続されているリモートアドレスで、<a class="reference internal" href="socket.html#socket.socket.getpeername" title="socket.socket.getpeername"><code class="xref py py-meth docutils literal"><span class="pre">socket.socket.getpeername()</span></code></a> の結果になります (エラーのときは <code class="docutils literal"><span class="pre">None</span></code>)</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">'socket'</span></code>: <a class="reference internal" href="socket.html#socket.socket" title="socket.socket"><code class="xref py py-class docutils literal"><span class="pre">socket.socket</span></code></a> のインスタンスになります</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">'sockname'</span></code>: ソケット自身のアドレスで、<a class="reference internal" href="socket.html#socket.socket.getsockname" title="socket.socket.getsockname"><code class="xref py py-meth docutils literal"><span class="pre">socket.socket.getsockname()</span></code></a> の結果になります</p>
+</li>
+</ul>
+</li>
+<li><p class="first">SSL ソケット:</p>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">'compression'</span></code>: 圧縮アルゴリズムで、<a class="reference internal" href="ssl.html#ssl.SSLSocket.compression" title="ssl.SSLSocket.compression"><code class="xref py py-meth docutils literal"><span class="pre">ssl.SSLSocket.compression()</span></code></a> の結果になります。圧縮されていないときは <code class="docutils literal"><span class="pre">None</span></code> になります</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">'cipher'</span></code>: 3 個の値 (使用されている暗号アルゴリズムの名称、使用が定義されている SSL プロトコルのバージョン、および使用されている秘密鍵のビット数) からなるタプルで、<a class="reference internal" href="ssl.html#ssl.SSLSocket.cipher" title="ssl.SSLSocket.cipher"><code class="xref py py-meth docutils literal"><span class="pre">ssl.SSLSocket.cipher()</span></code></a> の結果になります</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">'peercert'</span></code>: ピアの証明書で、<a class="reference internal" href="ssl.html#ssl.SSLSocket.getpeercert" title="ssl.SSLSocket.getpeercert"><code class="xref py py-meth docutils literal"><span class="pre">ssl.SSLSocket.getpeercert()</span></code></a> の結果になります</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">'sslcontext'</span></code>: <a class="reference internal" href="ssl.html#ssl.SSLContext" title="ssl.SSLContext"><code class="xref py py-class docutils literal"><span class="pre">ssl.SSLContext</span></code></a> のインスタンスになります</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">'ssl_object'</span></code>: <a class="reference internal" href="ssl.html#ssl.SSLObject" title="ssl.SSLObject"><code class="xref py py-class docutils literal"><span class="pre">ssl.SSLObject</span></code></a> または <a class="reference internal" href="ssl.html#ssl.SSLSocket" title="ssl.SSLSocket"><code class="xref py py-class docutils literal"><span class="pre">ssl.SSLSocket</span></code></a> インスタンス</p>
+</li>
+</ul>
+</li>
+<li><p class="first">パイプ:</p>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">'pipe'</span></code>: パイプオブジェクトです</p>
+</li>
+</ul>
+</li>
+<li><p class="first">サブプロセス:</p>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">'subprocess'</span></code>: <a class="reference internal" href="subprocess.html#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">subprocess.Popen</span></code></a> のインスタンスになります</p>
+</li>
+</ul>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.BaseTransport.set_protocol">
+<code class="descname">set_protocol</code><span class="sig-paren">(</span><em>protocol</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseTransport.set_protocol" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Set a new protocol.  Switching protocol should only be done when both
+protocols are documented to support the switch.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.BaseTransport.get_protocol">
+<code class="descname">get_protocol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseTransport.get_protocol" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return the current protocol.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5.1 で変更: </span><code class="docutils literal"><span class="pre">'ssl_object'</span></code> 情報が SSL ソケットに追加されました。</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="readtransport">
+<h3>18.5.4.1.2. ReadTransport<a class="headerlink" href="#readtransport" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="class">
+<dt id="asyncio.ReadTransport">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">ReadTransport</code><a class="headerlink" href="#asyncio.ReadTransport" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>読み込み専用トランスポートのインターフェースです。</p>
+<dl class="method">
+<dt id="asyncio.ReadTransport.pause_reading">
+<code class="descname">pause_reading</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.ReadTransport.pause_reading" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トランスポートの受信側を一時停止します。<a class="reference internal" href="#asyncio.ReadTransport.resume_reading" title="asyncio.ReadTransport.resume_reading"><code class="xref py py-meth docutils literal"><span class="pre">resume_reading()</span></code></a> が呼び出されるまでそのプロトコルの <code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code> メソッドにデータは渡されません。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.ReadTransport.resume_reading">
+<code class="descname">resume_reading</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.ReadTransport.resume_reading" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>受信を再開します。読み込み可能データが存在した場合そのプロトコルの <code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code> メソッドが一度呼び出されます。</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="writetransport">
+<h3>18.5.4.1.3. WriteTransport<a class="headerlink" href="#writetransport" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="class">
+<dt id="asyncio.WriteTransport">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">WriteTransport</code><a class="headerlink" href="#asyncio.WriteTransport" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>書き込み専用トランスポートのインターフェースです。</p>
+<dl class="method">
+<dt id="asyncio.WriteTransport.abort">
+<code class="descname">abort</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.WriteTransport.abort" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トランスポートを即座にクローズします。未完了の処理があってもそれを待ちません。バッファーされているデータは失われます。それ以降データは受信されません。最終的にそのプロトコルの <code class="xref py py-meth docutils literal"><span class="pre">connection_lost()</span></code> メソッドが引数 <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> で呼び出されます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.WriteTransport.can_write_eof">
+<code class="descname">can_write_eof</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.WriteTransport.can_write_eof" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トランスポートが <a class="reference internal" href="#asyncio.WriteTransport.write_eof" title="asyncio.WriteTransport.write_eof"><code class="xref py py-meth docutils literal"><span class="pre">write_eof()</span></code></a> をサポートしている場合 <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-const docutils literal"><span class="pre">True</span></code></a> を、サポートしていない場合は <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal"><span class="pre">False</span></code></a> を返します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.WriteTransport.get_write_buffer_size">
+<code class="descname">get_write_buffer_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.WriteTransport.get_write_buffer_size" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トランスポートで使用されている出力バッファーの現在のサイズを返します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.WriteTransport.get_write_buffer_limits">
+<code class="descname">get_write_buffer_limits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.WriteTransport.get_write_buffer_limits" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>書き込みフロー制御の <em>最高</em> および <em>最低</em> 水位点 (<em>high</em>- and <em>low</em>-water limits) を取得します。<code class="docutils literal"><span class="pre">(low,</span> <span class="pre">high)</span></code> のタプルを返します。<em>low</em> および <em>high</em> は整数のバイト列になります。</p>
+<p>水位点の設定は <a class="reference internal" href="#asyncio.WriteTransport.set_write_buffer_limits" title="asyncio.WriteTransport.set_write_buffer_limits"><code class="xref py py-meth docutils literal"><span class="pre">set_write_buffer_limits()</span></code></a> で行います。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4.2 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.WriteTransport.set_write_buffer_limits">
+<code class="descname">set_write_buffer_limits</code><span class="sig-paren">(</span><em>high=None</em>, <em>low=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.WriteTransport.set_write_buffer_limits" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>書き込みフロー制御の <em>最高</em> および <em>最低</em> 水位点 (<em>high</em>- and <em>low</em>-water limits) を設定します。</p>
+<p>これら 2 個の値はプロトコルの <code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> および <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> メソッドが呼ばれたときの振る舞いを制御します。指定する場合、<em>low</em> は <em>high</em> 以下でなければなりません。<em>high</em> も <em>low</em> も負数は指定できません。</p>
+<p>The defaults are implementation-specific.  If only the
+high-water limit is given, the low-water limit defaults to an
+implementation-specific value less than or equal to the
+high-water limit.  Setting <em>high</em> to zero forces <em>low</em> to zero as
+well, and causes <code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> to be called whenever the
+buffer becomes non-empty.  Setting <em>low</em> to zero causes
+<code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> to be called only once the buffer is empty.
+Use of zero for either limit is generally sub-optimal as it
+reduces opportunities for doing I/O and computation
+concurrently.</p>
+<p>水位点の取得には <a class="reference internal" href="#asyncio.WriteTransport.get_write_buffer_limits" title="asyncio.WriteTransport.get_write_buffer_limits"><code class="xref py py-meth docutils literal"><span class="pre">get_write_buffer_limits()</span></code></a> を使用します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.WriteTransport.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.WriteTransport.write" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トランスポートにバイト列 <em>data</em> を書き込みます。</p>
+<p>このメソッドはブロックしません; データをバッファーし、非同期に送信する準備を行います。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.WriteTransport.writelines">
+<code class="descname">writelines</code><span class="sig-paren">(</span><em>list_of_data</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.WriteTransport.writelines" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>バイト列のデータのリスト (またはイテラブル) をトランスポートに書き込みます。この振る舞いはイテラブルを yield して各要素で <a class="reference internal" href="#asyncio.WriteTransport.write" title="asyncio.WriteTransport.write"><code class="xref py py-meth docutils literal"><span class="pre">write()</span></code></a> を呼び出すことと等価ですが、より効率的な実装となる場合があります。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.WriteTransport.write_eof">
+<code class="descname">write_eof</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.WriteTransport.write_eof" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>バッファーされたデータをフラッシュした後トランスポートの送信側をクローズします。データは受信されます。</p>
+<p>このメソッドはトランスポート (例えば SSL) がハーフクローズをサポートしていない場合 <a class="reference internal" href="exceptions.html#NotImplementedError" title="NotImplementedError"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code></a> を送出します。</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="datagramtransport">
+<h3>18.5.4.1.4. DatagramTransport<a class="headerlink" href="#datagramtransport" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="method">
+<dt id="asyncio.DatagramTransport.sendto">
+<code class="descclassname">DatagramTransport.</code><code class="descname">sendto</code><span class="sig-paren">(</span><em>data</em>, <em>addr=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.DatagramTransport.sendto" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>リモートピア <em>addr</em> (トランスポート依存の対象アドレス) にバイト列 <em>data</em> を送信します。<em>addr</em> が <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> の場合、データはトランスポートの作成時に指定された送信先に送られます。</p>
+<p>このメソッドはブロックしません; データをバッファーし、非同期に送信する準備を行います。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.DatagramTransport.abort">
+<code class="descclassname">DatagramTransport.</code><code class="descname">abort</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.DatagramTransport.abort" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トランスポートを即座にクローズします。未完了の処理があってもそれを待ちません。バッファーされているデータは失われます。それ以降データは受信されません。最終的にそのプロトコルの <code class="xref py py-meth docutils literal"><span class="pre">connection_lost()</span></code> メソッドが引数 <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> で呼び出されます。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="basesubprocesstransport">
+<h3>18.5.4.1.5. BaseSubprocessTransport<a class="headerlink" href="#basesubprocesstransport" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="class">
+<dt id="asyncio.BaseSubprocessTransport">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">BaseSubprocessTransport</code><a class="headerlink" href="#asyncio.BaseSubprocessTransport" title="この定義へのパーマリンク">¶</a></dt>
+<dd><dl class="method">
+<dt id="asyncio.BaseSubprocessTransport.get_pid">
+<code class="descname">get_pid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseSubprocessTransport.get_pid" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>サブプロセスのプロセス ID (整数) を返します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.BaseSubprocessTransport.get_pipe_transport">
+<code class="descname">get_pipe_transport</code><span class="sig-paren">(</span><em>fd</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseSubprocessTransport.get_pipe_transport" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>整数のファイル記述子 <em>fd</em> に該当する通信パイプのトランスポートを返します:</p>
+<ul class="simple">
+<li><p class="first"><code class="docutils literal"><span class="pre">0</span></code>: 標準入力 (<em>stdin</em>) の読み込み可能ストリーミングトランスポート。サブプロセスが <code class="docutils literal"><span class="pre">stdin=PIPE</span></code> で作成されていない場合は <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a></p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">1</span></code>: 標準出力 (<em>stdout</em>) の書き込み可能ストリーミングトランスポート。サブプロセスが <code class="docutils literal"><span class="pre">stdout=PIPE</span></code> で作成されていない場合は <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a></p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">2</span></code>: 標準エラー出力 (<em>stderr</em>) の書き込み可能ストリーミングトランスポート。サブプロセスが <code class="docutils literal"><span class="pre">stderr=PIPE</span></code> で作成されていない場合は <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a></p>
+</li>
+<li><p class="first">その他の <em>fd</em>: <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a></p>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.BaseSubprocessTransport.get_returncode">
+<code class="descname">get_returncode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseSubprocessTransport.get_returncode" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>サブプロセスのリターンコード (整数) を返します。リターンコードを持たない場合 <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> を返します。<a class="reference internal" href="subprocess.html#subprocess.Popen.returncode" title="subprocess.Popen.returncode"><code class="xref py py-attr docutils literal"><span class="pre">subprocess.Popen.returncode</span></code></a> 属性と同じです。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.BaseSubprocessTransport.kill">
+<code class="descname">kill</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseSubprocessTransport.kill" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Kill the subprocess, as in <a class="reference internal" href="subprocess.html#subprocess.Popen.kill" title="subprocess.Popen.kill"><code class="xref py py-meth docutils literal"><span class="pre">subprocess.Popen.kill()</span></code></a>.</p>
+<p>POSIX システムでは、この関数はサブプロセスに SIGKILL を送信します。Windows では、このメソッドは <a class="reference internal" href="#asyncio.BaseSubprocessTransport.terminate" title="asyncio.BaseSubprocessTransport.terminate"><code class="xref py py-meth docutils literal"><span class="pre">terminate()</span></code></a> の別名です。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.BaseSubprocessTransport.send_signal">
+<code class="descname">send_signal</code><span class="sig-paren">(</span><em>signal</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseSubprocessTransport.send_signal" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>サブプロセスにシグナル <em>signal</em> を送信します。<a class="reference internal" href="subprocess.html#subprocess.Popen.send_signal" title="subprocess.Popen.send_signal"><code class="xref py py-meth docutils literal"><span class="pre">subprocess.Popen.send_signal()</span></code></a> と同じです。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.BaseSubprocessTransport.terminate">
+<code class="descname">terminate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseSubprocessTransport.terminate" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>サブプロセスに停止を要求します。<a class="reference internal" href="subprocess.html#subprocess.Popen.terminate" title="subprocess.Popen.terminate"><code class="xref py py-meth docutils literal"><span class="pre">subprocess.Popen.terminate()</span></code></a> と同じです。このメソッドは <a class="reference internal" href="#asyncio.BaseSubprocessTransport.close" title="asyncio.BaseSubprocessTransport.close"><code class="xref py py-meth docutils literal"><span class="pre">close()</span></code></a> メソッドの別名です。</p>
+<p>POSIX システムでは、このメソッドはサブプロセスに SIGTERM を送信します。Windows では、Windows API 関数 TerminateProcess() が呼び出されます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.BaseSubprocessTransport.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseSubprocessTransport.close" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>サブプロセスがまだ返していない場合、<a class="reference internal" href="#asyncio.BaseSubprocessTransport.terminate" title="asyncio.BaseSubprocessTransport.terminate"><code class="xref py py-meth docutils literal"><span class="pre">terminate()</span></code></a> メソッドの呼び出しによってサブプロセスに停止を要求し、全パイプ (<em>stdin</em>、<em>stdout</em> および <em>stderr</em>) のトランスポートをクローズします。</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="protocols">
+<span id="asyncio-protocol"></span><h2>18.5.4.2. プロトコル<a class="headerlink" href="#protocols" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> はネットワークプロトコルの実装をサブクラス化する基底クラスを提供します。これらクラスは <a class="reference internal" href="#asyncio-transport"><span class="std std-ref">トランスポート</span></a> と連動して使用されます: プロトコルは入力データの解析および出力データの書き込みのための問い合わせを行い、トランスポートは実際の I/O とバッファリングに責任を持ちます。</p>
+<p>プロトコルクラスをサブクラス化するとき、いくつかのメソッドをオーバーライドすることを推奨します。これらメソッドはコールバックです: いくつかのイベントが発生したとき (例えばデータの受信など) に呼び出されます; あなたがトランスポートを実装する場合を除き、これらを直接呼び出すべきではありません。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">すべてのコールバックはデフォルトで空の実装を持ちます。したがって、あなたが興味を持ったイベント用のコールバックのみ実装が必要になります。</p>
+</div>
+<div class="section" id="protocol-classes">
+<h3>18.5.4.2.1. プロトコルクラス群<a class="headerlink" href="#protocol-classes" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="class">
+<dt id="asyncio.Protocol">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">Protocol</code><a class="headerlink" href="#asyncio.Protocol" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>(例えば TCP や SSL トランスポートとともに使用する) ストリーミングプロトコルを実装する基底クラスです。</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="asyncio.DatagramProtocol">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">DatagramProtocol</code><a class="headerlink" href="#asyncio.DatagramProtocol" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>(例えば UDP トランスポートともに使用する) データグラムプロトコルを実装する基底クラスです。</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="asyncio.SubprocessProtocol">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">SubprocessProtocol</code><a class="headerlink" href="#asyncio.SubprocessProtocol" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>子プロセスと (一方向パイプを使用して) 通信するプロトコルを実装する基底クラスです。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="connection-callbacks">
+<h3>18.5.4.2.2. コネクションコールバック<a class="headerlink" href="#connection-callbacks" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>これらコールバックは <a class="reference internal" href="#asyncio.Protocol" title="asyncio.Protocol"><code class="xref py py-class docutils literal"><span class="pre">Protocol</span></code></a>、<a class="reference internal" href="#asyncio.DatagramProtocol" title="asyncio.DatagramProtocol"><code class="xref py py-class docutils literal"><span class="pre">DatagramProtocol</span></code></a> および <a class="reference internal" href="#asyncio.SubprocessProtocol" title="asyncio.SubprocessProtocol"><code class="xref py py-class docutils literal"><span class="pre">SubprocessProtocol</span></code></a> インスタンスから呼び出される場合があります:</p>
+<dl class="method">
+<dt id="asyncio.BaseProtocol.connection_made">
+<code class="descclassname">BaseProtocol.</code><code class="descname">connection_made</code><span class="sig-paren">(</span><em>transport</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseProtocol.connection_made" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>コネクションが作成されたときに呼び出されます。</p>
+<p>引数 <em>transport</em> はコネクションを表すトランスポートです。必要であれば、それをどこに格納するか (例えば属性へ) を決めるのはあなたです。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.BaseProtocol.connection_lost">
+<code class="descclassname">BaseProtocol.</code><code class="descname">connection_lost</code><span class="sig-paren">(</span><em>exc</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseProtocol.connection_lost" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>コネクションが失われた、あるいはクローズされたときに呼び出されます。</p>
+<p>引数は例外オブジェクトまたは <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> になります。<a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> のとき、通常の EOF が受信されたか、あるいはコネクションがこちら側から中止またはクローズされたことを意味します。</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#asyncio.BaseProtocol.connection_made" title="asyncio.BaseProtocol.connection_made"><code class="xref py py-meth docutils literal"><span class="pre">connection_made()</span></code></a> および <a class="reference internal" href="#asyncio.BaseProtocol.connection_lost" title="asyncio.BaseProtocol.connection_lost"><code class="xref py py-meth docutils literal"><span class="pre">connection_lost()</span></code></a> は接続が成功するたびに厳密に 1 回呼び出されます。その他のすべてのコールバックはこれら 2 つのメソッドの間に呼び出され、あなたのプロトコルの実装内のリソース管理を容易に行えます。</p>
+<p>以下のコールバックを呼び出すのは <a class="reference internal" href="#asyncio.SubprocessProtocol" title="asyncio.SubprocessProtocol"><code class="xref py py-class docutils literal"><span class="pre">SubprocessProtocol</span></code></a> インスタンスのみかもしれません:</p>
+<dl class="method">
+<dt id="asyncio.SubprocessProtocol.pipe_data_received">
+<code class="descclassname">SubprocessProtocol.</code><code class="descname">pipe_data_received</code><span class="sig-paren">(</span><em>fd</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.SubprocessProtocol.pipe_data_received" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>子プロセスが自身の標準出力や標準エラー出力のパイプにデータを書き込んだときに呼び出されます。<em>fd</em> はパイプのファイル記述子 (整数) になります。<em>data</em> はデータを含む空ではないバイト列になります。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.SubprocessProtocol.pipe_connection_lost">
+<code class="descclassname">SubprocessProtocol.</code><code class="descname">pipe_connection_lost</code><span class="sig-paren">(</span><em>fd</em>, <em>exc</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.SubprocessProtocol.pipe_connection_lost" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>子プロセスと通信するパイプの一つがクローズされると呼び出されます。<em>fd</em> はクローズされたファイル記述子 (整数) になります。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.SubprocessProtocol.process_exited">
+<code class="descclassname">SubprocessProtocol.</code><code class="descname">process_exited</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.SubprocessProtocol.process_exited" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>子プロセスが終了したときに呼び出されます。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="streaming-protocols">
+<h3>18.5.4.2.3. ストリーミングプロトコル<a class="headerlink" href="#streaming-protocols" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>以下のコールバックは <a class="reference internal" href="#asyncio.Protocol" title="asyncio.Protocol"><code class="xref py py-class docutils literal"><span class="pre">Protocol</span></code></a> インスタンス上で呼び出されます:</p>
+<dl class="method">
+<dt id="asyncio.Protocol.data_received">
+<code class="descclassname">Protocol.</code><code class="descname">data_received</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Protocol.data_received" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>データを受信したときに呼び出されます。<em>data</em> は受信したデータを含む空ではないバイト列オブジェクトになります。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">トランスポートによって、データのバッファー、チャンクあるいは再構築のどれかが行われます。一般に、固有のセマンティックを信頼すべきではなく、代わりに全体的かつ十分に柔軟な解析を行うべきです。ただし、データは常に正しい順序で受信されます。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Protocol.eof_received">
+<code class="descclassname">Protocol.</code><code class="descname">eof_received</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Protocol.eof_received" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>相手方が送信するデータがないことを伝えてきたとき (例えば相手方が asyncio を使用しており <code class="xref py py-meth docutils literal"><span class="pre">write_eof()</span></code> を呼び出したなど) 呼び出されます。</p>
+<p>This method may return a false value (including <code class="docutils literal"><span class="pre">None</span></code>), in which case
+the transport will close itself.  Conversely, if this method returns a
+true value, closing the transport is up to the protocol.  Since the
+default implementation returns <code class="docutils literal"><span class="pre">None</span></code>, it implicitly closes the connection.</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">SSL のような一部のトランスポートはハーフクローズ接続をサポートしていません。その場合このメソッドが真値を返すとコネクションのクローズを回避できません。</p>
+</div>
+</dd></dl>
+
+<p>接続中、<code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code> は複数回呼び出されえます。<code class="xref py py-meth docutils literal"><span class="pre">eof_received()</span></code> が呼び出されるのは 1 回で、1 度呼び出されると、その後 <code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code> が呼び出されることはありません。</p>
+<p>State machine:</p>
+<blockquote>
+<div>start -&gt; <a class="reference internal" href="#asyncio.BaseProtocol.connection_made" title="asyncio.BaseProtocol.connection_made"><code class="xref py py-meth docutils literal"><span class="pre">connection_made()</span></code></a>
+[-&gt; <a class="reference internal" href="#asyncio.Protocol.data_received" title="asyncio.Protocol.data_received"><code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code></a> *]
+[-&gt; <a class="reference internal" href="#asyncio.Protocol.eof_received" title="asyncio.Protocol.eof_received"><code class="xref py py-meth docutils literal"><span class="pre">eof_received()</span></code></a> ?]
+-&gt; <a class="reference internal" href="#asyncio.BaseProtocol.connection_lost" title="asyncio.BaseProtocol.connection_lost"><code class="xref py py-meth docutils literal"><span class="pre">connection_lost()</span></code></a> -&gt; end</div></blockquote>
+</div>
+<div class="section" id="datagram-protocols">
+<h3>18.5.4.2.4. データグラムプロトコル<a class="headerlink" href="#datagram-protocols" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>以下のコールバックは <a class="reference internal" href="#asyncio.DatagramProtocol" title="asyncio.DatagramProtocol"><code class="xref py py-class docutils literal"><span class="pre">DatagramProtocol</span></code></a> インスタンス上で呼び出されます。</p>
+<dl class="method">
+<dt id="asyncio.DatagramProtocol.datagram_received">
+<code class="descclassname">DatagramProtocol.</code><code class="descname">datagram_received</code><span class="sig-paren">(</span><em>data</em>, <em>addr</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.DatagramProtocol.datagram_received" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>データグラムを受信したときに呼び出されます。<em>data</em> は受信データを含むバイトオブジェクトです。<em>addr</em> はデータを送信するピアのアドレスです; 正確な形式はトランスポートに依存します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.DatagramProtocol.error_received">
+<code class="descclassname">DatagramProtocol.</code><code class="descname">error_received</code><span class="sig-paren">(</span><em>exc</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.DatagramProtocol.error_received" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>直前の送信あるいは受信が <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-class docutils literal"><span class="pre">OSError</span></code></a> を送出したときに呼び出されます。<em>exc</em> は <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-class docutils literal"><span class="pre">OSError</span></code></a> のインスタンスになります。</p>
+<p>このメソッドが呼ばれるのは、トランスポート (UDP など) がデータグラムを受信側に配信できなかったことが検出されたなどの、まれな場合においてのみです。ほとんどの場合、データグラムが配信できなければそのまま通知されることなく破棄されます。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="flow-control-callbacks">
+<h3>18.5.4.2.5. フロー制御コールバック<a class="headerlink" href="#flow-control-callbacks" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>これらコールバックは <a class="reference internal" href="#asyncio.Protocol" title="asyncio.Protocol"><code class="xref py py-class docutils literal"><span class="pre">Protocol</span></code></a>、<a class="reference internal" href="#asyncio.DatagramProtocol" title="asyncio.DatagramProtocol"><code class="xref py py-class docutils literal"><span class="pre">DatagramProtocol</span></code></a> および <a class="reference internal" href="#asyncio.SubprocessProtocol" title="asyncio.SubprocessProtocol"><code class="xref py py-class docutils literal"><span class="pre">SubprocessProtocol</span></code></a> インスタンスから呼び出される場合があります:</p>
+<dl class="method">
+<dt id="asyncio.BaseProtocol.pause_writing">
+<code class="descclassname">BaseProtocol.</code><code class="descname">pause_writing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseProtocol.pause_writing" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トランスポートのバッファーサイズが最高水位点 (High-Water Mark) を超えたときに呼び出されます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.BaseProtocol.resume_writing">
+<code class="descclassname">BaseProtocol.</code><code class="descname">resume_writing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseProtocol.resume_writing" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トランスポートのバッファーサイズが最低水位点 (Low-Water Mark) に達したきに呼び出されます。</p>
+</dd></dl>
+
+<p><code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> および <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> の呼び出しは対になります。&#8211; <code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> はバッファーが完全に最高水位点を超えたとき (後続の書き込みがさらにバッファーサイズを増やすとしても) 1 度呼び出され、バッファーサイズが最終的に最低水位点に達したときに <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> が 1 度呼び出されます。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">バッファーサイズが最高水位点と等しくなった時点では <code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> は呼び出されません &#8211; 完全に超えなければなりません。対して、バッファーサイズが最低水位点と等しくなったときは <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> は呼び出されます。これら端末条件は各点がゼロになったとき予定通りに動作するかどうか確認するために重要です。</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">BSD システム (OS X、FreeBSD など) では、<a class="reference internal" href="#asyncio.DatagramProtocol" title="asyncio.DatagramProtocol"><code class="xref py py-class docutils literal"><span class="pre">DatagramProtocol</span></code></a> でのフロー制御は、大量のパケット送信による送信失敗を検知するのが容易ではないためサポートされていません。ソケットは常に &#8216;待機状態&#8217; のように見え、超過分のパケットは破棄されます; エラー番号 <a class="reference internal" href="errno.html#errno.ENOBUFS" title="errno.ENOBUFS"><code class="xref py py-const docutils literal"><span class="pre">errno.ENOBUFS</span></code></a> が設定された <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-class docutils literal"><span class="pre">OSError</span></code></a> が送出されるときもあればされないときもあります; 送出された場合、<a class="reference internal" href="#asyncio.DatagramProtocol.error_received" title="asyncio.DatagramProtocol.error_received"><code class="xref py py-meth docutils literal"><span class="pre">DatagramProtocol.error_received()</span></code></a> に通知されますが、送出されないと無視されます。</p>
+</div>
+</div>
+<div class="section" id="coroutines-and-protocols">
+<h3>18.5.4.2.6. コルーチンとプロトコル<a class="headerlink" href="#coroutines-and-protocols" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Coroutines can be scheduled in a protocol method using <a class="reference internal" href="asyncio-task.html#asyncio.ensure_future" title="asyncio.ensure_future"><code class="xref py py-func docutils literal"><span class="pre">ensure_future()</span></code></a>,
+but there is no guarantee made about the execution order.  Protocols are not
+aware of coroutines created in protocol methods and so will not wait for them.</p>
+<p>信頼できる実行順を持つには、コルーチンの  <code class="docutils literal"><span class="pre">yield</span> <span class="pre">from</span></code> で <a class="reference internal" href="asyncio-stream.html#asyncio-streams"><span class="std std-ref">ストリームオブジェクト</span></a> を使用します。例えば、<a class="reference internal" href="asyncio-stream.html#asyncio.StreamWriter.drain" title="asyncio.StreamWriter.drain"><code class="xref py py-meth docutils literal"><span class="pre">StreamWriter.drain()</span></code></a> コルーチンは書き込みバッファーがフラッシュされるまで待機することができます。</p>
+</div>
+</div>
+<div class="section" id="protocol-examples">
+<h2>18.5.4.3. プロトコルの例<a class="headerlink" href="#protocol-examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="tcp-echo-client-protocol">
+<span id="asyncio-tcp-echo-client-protocol"></span><h3>18.5.4.3.1. TCP Echo クライアントプロトコル<a class="headerlink" href="#tcp-echo-client-protocol" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>TCP echo client  using the <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_connection" title="asyncio.AbstractEventLoop.create_connection"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_connection()</span></code></a> method, send
+data and wait until the connection is closed:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">class</span> <span class="nc">EchoClientProtocol</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">loop</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="o">=</span> <span class="n">loop</span>
+
+    <span class="k">def</span> <span class="nf">connection_made</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transport</span><span class="p">):</span>
+        <span class="n">transport</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data sent: </span><span class="si">{!r}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">data_received</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data received: </span><span class="si">{!r}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">()))</span>
+
+    <span class="k">def</span> <span class="nf">connection_lost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The server closed the connection&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Stop the event loop&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;Hello World!&#39;</span>
+<span class="n">coro</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">create_connection</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">EchoClientProtocol</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">loop</span><span class="p">),</span>
+                              <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">8888</span><span class="p">)</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">coro</span><span class="p">)</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">run_forever</span><span class="p">()</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The event loop is running twice. The
+<a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.run_until_complete" title="asyncio.AbstractEventLoop.run_until_complete"><code class="xref py py-meth docutils literal"><span class="pre">run_until_complete()</span></code></a> method is preferred in this short
+example to raise an exception if the server is not listening, instead of
+having to write a short coroutine to handle the exception and stop the
+running loop. At <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.run_until_complete" title="asyncio.AbstractEventLoop.run_until_complete"><code class="xref py py-meth docutils literal"><span class="pre">run_until_complete()</span></code></a> exit, the loop is
+no longer running, so there is no need to stop the loop in case of an error.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><a class="reference internal" href="asyncio-stream.html#asyncio-tcp-echo-client-streams"><span class="std std-ref">ストリームを使った TCP Echo クライアント</span></a> の例では <a class="reference internal" href="asyncio-stream.html#asyncio.open_connection" title="asyncio.open_connection"><code class="xref py py-func docutils literal"><span class="pre">asyncio.open_connection()</span></code></a> 関数を使用しています。</p>
+</div>
+</div>
+<div class="section" id="tcp-echo-server-protocol">
+<span id="asyncio-tcp-echo-server-protocol"></span><h3>18.5.4.3.2. TCP Echo サーバープロトコル<a class="headerlink" href="#tcp-echo-server-protocol" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>TCP echo server using the <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_server" title="asyncio.AbstractEventLoop.create_server"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_server()</span></code></a> method, send back
+received data and close the connection:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">class</span> <span class="nc">EchoServerClientProtocol</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">connection_made</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transport</span><span class="p">):</span>
+        <span class="n">peername</span> <span class="o">=</span> <span class="n">transport</span><span class="o">.</span><span class="n">get_extra_info</span><span class="p">(</span><span class="s1">&#39;peername&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Connection from </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">peername</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span> <span class="o">=</span> <span class="n">transport</span>
+
+    <span class="k">def</span> <span class="nf">data_received</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data received: </span><span class="si">{!r}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Send: </span><span class="si">{!r}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Close the client socket&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="c1"># Each client connection will create a new protocol instance</span>
+<span class="n">coro</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">create_server</span><span class="p">(</span><span class="n">EchoServerClientProtocol</span><span class="p">,</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">8888</span><span class="p">)</span>
+<span class="n">server</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">coro</span><span class="p">)</span>
+
+<span class="c1"># Serve requests until Ctrl+C is pressed</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Serving on </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">sockets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getsockname</span><span class="p">()))</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">run_forever</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="c1"># Close the server</span>
+<span class="n">server</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">wait_closed</span><span class="p">())</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><code class="xref py py-meth docutils literal"><span class="pre">Transport.close()</span></code> は、データがまだソケットに送信されていなくても、<a class="reference internal" href="#asyncio.WriteTransport.write" title="asyncio.WriteTransport.write"><code class="xref py py-meth docutils literal"><span class="pre">WriteTransport.write()</span></code></a> の直後に呼び出されます: それぞれのメソッドは非同期です。これらトランスポートメソッドはコルーチンではないため、<code class="docutils literal"><span class="pre">yield</span> <span class="pre">from</span></code> は必要ありません。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><a class="reference internal" href="asyncio-stream.html#asyncio-tcp-echo-server-streams"><span class="std std-ref">ストリームを使った TCP Echo サーバー</span></a> の例では <a class="reference internal" href="asyncio-stream.html#asyncio.start_server" title="asyncio.start_server"><code class="xref py py-func docutils literal"><span class="pre">asyncio.start_server()</span></code></a> 関数を使用しています。</p>
+</div>
+</div>
+<div class="section" id="udp-echo-client-protocol">
+<span id="asyncio-udp-echo-client-protocol"></span><h3>18.5.4.3.3. UDP Echo クライアントプロトコル<a class="headerlink" href="#udp-echo-client-protocol" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>UDP echo client using the <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_datagram_endpoint" title="asyncio.AbstractEventLoop.create_datagram_endpoint"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_datagram_endpoint()</span></code></a>
+method, send data and close the transport when we received the answer:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">class</span> <span class="nc">EchoClientProtocol</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">loop</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="o">=</span> <span class="n">loop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">connection_made</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transport</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span> <span class="o">=</span> <span class="n">transport</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Send:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">sendto</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">datagram_received</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Received:&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Close the socket&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">error_received</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error received:&#39;</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">connection_lost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Socket closed, stop the event loop&quot;</span><span class="p">)</span>
+        <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+        <span class="n">loop</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Hello World!&quot;</span>
+<span class="n">connect</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">create_datagram_endpoint</span><span class="p">(</span>
+    <span class="k">lambda</span><span class="p">:</span> <span class="n">EchoClientProtocol</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">loop</span><span class="p">),</span>
+    <span class="n">remote_addr</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">9999</span><span class="p">))</span>
+<span class="n">transport</span><span class="p">,</span> <span class="n">protocol</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">connect</span><span class="p">)</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">run_forever</span><span class="p">()</span>
+<span class="n">transport</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="udp-echo-server-protocol">
+<span id="asyncio-udp-echo-server-protocol"></span><h3>18.5.4.3.4. UDP Echo サーバープロトコル<a class="headerlink" href="#udp-echo-server-protocol" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>UDP echo server using the <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_datagram_endpoint" title="asyncio.AbstractEventLoop.create_datagram_endpoint"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_datagram_endpoint()</span></code></a>
+method, send back received data:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">class</span> <span class="nc">EchoServerProtocol</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">connection_made</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transport</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span> <span class="o">=</span> <span class="n">transport</span>
+
+    <span class="k">def</span> <span class="nf">datagram_received</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Received </span><span class="si">%r</span><span class="s1"> from </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">addr</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Send </span><span class="si">%r</span><span class="s1"> to </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">addr</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">sendto</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting UDP server&quot;</span><span class="p">)</span>
+<span class="c1"># One protocol instance will be created to serve all client requests</span>
+<span class="n">listen</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">create_datagram_endpoint</span><span class="p">(</span>
+    <span class="n">EchoServerProtocol</span><span class="p">,</span> <span class="n">local_addr</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">9999</span><span class="p">))</span>
+<span class="n">transport</span><span class="p">,</span> <span class="n">protocol</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">listen</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">run_forever</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="n">transport</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="register-an-open-socket-to-wait-for-data-using-a-protocol">
+<span id="asyncio-register-socket"></span><h3>18.5.4.3.5. プロトコルを使ってデータを待つオープンソケットの登録<a class="headerlink" href="#register-an-open-socket-to-wait-for-data-using-a-protocol" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Wait until a socket receives data using the
+<a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_connection" title="asyncio.AbstractEventLoop.create_connection"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_connection()</span></code></a> method with a protocol, and then close
+the event loop</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">socket</span> <span class="k">import</span> <span class="n">socketpair</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">asyncio.windows_utils</span> <span class="k">import</span> <span class="n">socketpair</span>
+
+<span class="c1"># Create a pair of connected sockets</span>
+<span class="n">rsock</span><span class="p">,</span> <span class="n">wsock</span> <span class="o">=</span> <span class="n">socketpair</span><span class="p">()</span>
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">MyProtocol</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="n">transport</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">connection_made</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transport</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span> <span class="o">=</span> <span class="n">transport</span>
+
+    <span class="k">def</span> <span class="nf">data_received</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Received:&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+
+        <span class="c1"># We are done: close the transport (it will call connection_lost())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">connection_lost</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">):</span>
+        <span class="c1"># The socket has been closed, stop the event loop</span>
+        <span class="n">loop</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+<span class="c1"># Register the socket to wait for data</span>
+<span class="n">connect_coro</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">create_connection</span><span class="p">(</span><span class="n">MyProtocol</span><span class="p">,</span> <span class="n">sock</span><span class="o">=</span><span class="n">rsock</span><span class="p">)</span>
+<span class="n">transport</span><span class="p">,</span> <span class="n">protocol</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">connect_coro</span><span class="p">)</span>
+
+<span class="c1"># Simulate the reception of data from the network</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">call_soon</span><span class="p">(</span><span class="n">wsock</span><span class="o">.</span><span class="n">send</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+
+<span class="c1"># Run the event loop</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">run_forever</span><span class="p">()</span>
+
+<span class="c1"># We are done, close sockets and the event loop</span>
+<span class="n">rsock</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">wsock</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p><a class="reference internal" href="asyncio-eventloop.html#asyncio-watch-read-event"><span class="std std-ref">読み込みイベント用のファイル記述子の監視</span></a> の例では、ソケットのファイル記述子を登録するのに低水準の <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.add_reader" title="asyncio.AbstractEventLoop.add_reader"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.add_reader()</span></code></a> メソッドを使用しています。</p>
+<p class="last"><a class="reference internal" href="asyncio-stream.html#asyncio-register-socket-streams"><span class="std std-ref">ストリームを使ってデータを待つオープンソケットの登録</span></a> の例ではコルーチンの <a class="reference internal" href="asyncio-stream.html#asyncio.open_connection" title="asyncio.open_connection"><code class="xref py py-func docutils literal"><span class="pre">open_connection()</span></code></a> 関数によって作成された高水準ストリームを使用しています。</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.5.4. トランスポートとプロトコル (コールバックベースの API)</a><ul>
+<li><a class="reference internal" href="#transports">18.5.4.1. トランスポート</a><ul>
+<li><a class="reference internal" href="#basetransport">18.5.4.1.1. BaseTransport</a></li>
+<li><a class="reference internal" href="#readtransport">18.5.4.1.2. ReadTransport</a></li>
+<li><a class="reference internal" href="#writetransport">18.5.4.1.3. WriteTransport</a></li>
+<li><a class="reference internal" href="#datagramtransport">18.5.4.1.4. DatagramTransport</a></li>
+<li><a class="reference internal" href="#basesubprocesstransport">18.5.4.1.5. BaseSubprocessTransport</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#protocols">18.5.4.2. プロトコル</a><ul>
+<li><a class="reference internal" href="#protocol-classes">18.5.4.2.1. プロトコルクラス群</a></li>
+<li><a class="reference internal" href="#connection-callbacks">18.5.4.2.2. コネクションコールバック</a></li>
+<li><a class="reference internal" href="#streaming-protocols">18.5.4.2.3. ストリーミングプロトコル</a></li>
+<li><a class="reference internal" href="#datagram-protocols">18.5.4.2.4. データグラムプロトコル</a></li>
+<li><a class="reference internal" href="#flow-control-callbacks">18.5.4.2.5. フロー制御コールバック</a></li>
+<li><a class="reference internal" href="#coroutines-and-protocols">18.5.4.2.6. コルーチンとプロトコル</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#protocol-examples">18.5.4.3. プロトコルの例</a><ul>
+<li><a class="reference internal" href="#tcp-echo-client-protocol">18.5.4.3.1. TCP Echo クライアントプロトコル</a></li>
+<li><a class="reference internal" href="#tcp-echo-server-protocol">18.5.4.3.2. TCP Echo サーバープロトコル</a></li>
+<li><a class="reference internal" href="#udp-echo-client-protocol">18.5.4.3.3. UDP Echo クライアントプロトコル</a></li>
+<li><a class="reference internal" href="#udp-echo-server-protocol">18.5.4.3.4. UDP Echo サーバープロトコル</a></li>
+<li><a class="reference internal" href="#register-an-open-socket-to-wait-for-data-using-a-protocol">18.5.4.3.5. プロトコルを使ってデータを待つオープンソケットの登録</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="asyncio-task.html"
+                        title="前の章へ">18.5.3. タスクとコルーチン</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="asyncio-stream.html"
+                        title="次の章へ">18.5.5. ストリーム (コルーチンベースの API)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio-protocol.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-stream.html" title="18.5.5. ストリーム (コルーチンベースの API)"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="asyncio-task.html" title="18.5.3. タスクとコルーチン"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" >18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

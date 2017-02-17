@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>8.10. copy — 浅いコピーおよび深いコピー操作 &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="8. データ型" href="datatypes.html" />
+    <link rel="next" title="8.11. pprint — データ出力の整然化" href="pprint.html" />
+    <link rel="prev" title="8.9. types — 動的な型生成と組み込み型に対する名前" href="types.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/copy.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/copy.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="pprint.html" title="8.11. pprint — データ出力の整然化"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="types.html" title="8.9. types — 動的な型生成と組み込み型に対する名前"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="datatypes.html" accesskey="U">8. データ型</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-copy">
+<span id="copy-shallow-and-deep-copy-operations"></span><h1>8.10. <a class="reference internal" href="#module-copy" title="copy: Shallow and deep copy operations."><code class="xref py py-mod docutils literal"><span class="pre">copy</span></code></a> &#8212; 浅いコピーおよび深いコピー操作<a class="headerlink" href="#module-copy" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/copy.py">Lib/copy.py</a></p>
+<hr class="docutils" />
+<p>Python において代入文はオブジェクトをコピーしません。代入はターゲットとオブジェクトの間に束縛を作ります。ミュータブルなコレクションまたはミュータブルなアイテムを含むコレクションについては、元のオブジェクトを変更せずにコピーを変更できるように、コピーが必要になることが時々あります。このモジュールは、汎用的な浅い (shallow) コピーと深い (deep) コピーの操作 (以下で説明されます) を提供します。</p>
+<p>以下にインタフェースをまとめます:</p>
+<dl class="function">
+<dt id="copy.copy">
+<code class="descclassname">copy.</code><code class="descname">copy</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#copy.copy" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>x</em> の浅い (shallow) コピーを返します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="copy.deepcopy">
+<code class="descclassname">copy.</code><code class="descname">deepcopy</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#copy.deepcopy" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>x</em> の深い (deep) コピーを返します。</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="copy.error">
+<em class="property">exception </em><code class="descclassname">copy.</code><code class="descname">error</code><a class="headerlink" href="#copy.error" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>モジュール特有のエラーを送出します。</p>
+</dd></dl>
+
+<p>浅い (shallow) コピーと深い (deep) コピーの違いが関係するのは、複合オブジェクト (リストやクラスインスタンスのような他のオブジェクトを含むオブジェクト) だけです:</p>
+<ul class="simple">
+<li><p class="first"><em>浅いコピー (shallow copy)</em> は新たな複合オブジェクトを作成し、その後 (可能な限り) 元のオブジェクト中に見つかったオブジェクトに対する <em>参照</em> を挿入します。</p>
+</li>
+<li><p class="first"><em>深いコピー (deep copy)</em> は新たな複合オブジェクトを作成し、その後元のオブジェクト中に見つかったオブジェクトの <em>コピー</em> を挿入します。</p>
+</li>
+</ul>
+<p>深いコピー操作には、しばしば浅いコピー操作の時には存在しない 2 つの問題がついてまわります:</p>
+<ul class="simple">
+<li><p class="first">再帰的なオブジェクト (直接、間接に関わらず、自分自身に対する参照を持つ複合オブジェクト) は再帰ループを引き起こします。</p>
+</li>
+<li><p class="first">深いコピーでは、<em>何もかも</em> をコピーするため、例えば複数のコピー間で共有されるべき管理データ構造までも、余分にコピーしてしまいます。</p>
+</li>
+</ul>
+<p><a class="reference internal" href="#copy.deepcopy" title="copy.deepcopy"><code class="xref py py-func docutils literal"><span class="pre">deepcopy()</span></code></a> 関数では、これらの問題を以下のようにして回避しています:</p>
+<ul class="simple">
+<li><p class="first">現在のコピー過程ですでにコピーされたオブジェクトからなる、&#8221;メモ&#8221; 辞書を保持します; かつ</p>
+</li>
+<li><p class="first">ユーザ定義のクラスでコピー操作やコピーされる内容の集合を上書きできるようにします。</p>
+</li>
+</ul>
+<p>このモジュールでは、モジュール、メソッド、スタックトレース、スタックフレーム、ファイル、ソケット、ウィンドウ、アレイ、その他これらに類似の型をコピーしません。このモジュールでは元のオブジェクトを変更せずに返すことで関数とクラスを (浅くまたは深く)「コピー」します。これは <a class="reference internal" href="pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code></a> モジュールでの扱われかたと同じです。</p>
+<p>辞書型の浅いコピーは <a class="reference internal" href="stdtypes.html#dict.copy" title="dict.copy"><code class="xref py py-meth docutils literal"><span class="pre">dict.copy()</span></code></a> で、リストの浅いコピーはリスト全体を指すスライス (例えば <code class="docutils literal"><span class="pre">copied_list</span> <span class="pre">=</span> <span class="pre">original_list[:]</span></code>) でできます。</p>
+<p id="index-0">クラスは、コピーを制御するために pickle の制御に使用するのと同じインターフェースを使用することができます。これらのメソッドについての情報はモジュール <a class="reference internal" href="pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code></a> の説明を参照してください。実際、 <a class="reference internal" href="#module-copy" title="copy: Shallow and deep copy operations."><code class="xref py py-mod docutils literal"><span class="pre">copy</span></code></a> モジュールは、 <a class="reference internal" href="copyreg.html#module-copyreg" title="copyreg: Register pickle support functions."><code class="xref py py-mod docutils literal"><span class="pre">copyreg</span></code></a> モジュールによって登録された picle 関数を使用します。</p>
+<p id="index-1">クラス独自のコピー実装を定義するために、特殊メソッド <code class="xref py py-meth docutils literal"><span class="pre">__copy__()</span></code> および <code class="xref py py-meth docutils literal"><span class="pre">__deepcopy__()</span></code> を定義することができます。前者は浅いコピー操作を実装するために使われます; 追加の引数はありません。後者は深いコピー操作を実現するために呼び出されます; この関数には単一の引数としてメモ辞書が渡されます。 <code class="xref py py-meth docutils literal"><span class="pre">__deepcopy__()</span></code> の実装で、内容のオブジェクトに対して深いコピーを生成する必要がある場合、 <a class="reference internal" href="#copy.deepcopy" title="copy.deepcopy"><code class="xref py py-func docutils literal"><span class="pre">deepcopy()</span></code></a> を呼び出し、最初の引数にそのオブジェクトを、メモ辞書を二つ目の引数に与えなければなりません。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code></a> モジュール</dt>
+<dd><p class="first last">オブジェクト状態の取得と復元をサポートするために使われる特殊メソッドについて議論されています。</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="types.html"
+                        title="前の章へ">8.9. <code class="docutils literal"><span class="pre">types</span></code> &#8212; 動的な型生成と組み込み型に対する名前</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="pprint.html"
+                        title="次の章へ">8.11. <code class="docutils literal"><span class="pre">pprint</span></code> &#8212; データ出力の整然化</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/copy.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="pprint.html" title="8.11. pprint — データ出力の整然化"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="types.html" title="8.9. types — 動的な型生成と組み込み型に対する名前"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="datatypes.html" >8. データ型</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

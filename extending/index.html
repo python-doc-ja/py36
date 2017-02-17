@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Python インタプリタの拡張と埋め込み &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="next" title="1. C や C++ による Python の拡張" href="extending.html" />
+    <link rel="prev" title="37. ドキュメント化されていないモジュール" href="../library/undoc.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/extending/index.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/extending/index.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="extending.html" title="1. C や C++ による Python の拡張"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../library/undoc.html" title="37. ドキュメント化されていないモジュール"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="extending-and-embedding-the-python-interpreter">
+<span id="extending-index"></span><h1>Python インタプリタの拡張と埋め込み<a class="headerlink" href="#extending-and-embedding-the-python-interpreter" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>このドキュメントでは、Pythonインタプリンタを拡張する新しいモジュールをで C またはC++ で書く方法を解説しています。このようなモジュールでは新しい関数を定義するだけではなく、新しい型や、そのメソッドを定義することができます。ドキュメントでは他のアプリケーションでPythonを拡張言語として使用するために、Pythonインタプリタをアプリケーションに埋め込む方法についても解説します。最後に、下層のオペレーティングシステムが動的(実行時)ロードをサポートしていれば、拡張モジュールが動的にライブラリにロードされるように、モジュールをコンパイルしリンクする方法について解説します。</p>
+<p>このドキュメントでは、読者は Python について基礎的な知識を持ち合わせているものと仮定しています。形式ばらない Python 言語の入門には、 <a class="reference internal" href="../tutorial/index.html#tutorial-index"><span class="std std-ref">Python チュートリアル</span></a> を読んでください。 <a class="reference internal" href="../reference/index.html#reference-index"><span class="std std-ref">Python 言語リファレンス</span></a> を読めば、 Python 言語についてより形式的な定義を得られます。また、 <a class="reference internal" href="../library/index.html#library-index"><span class="std std-ref">Python 標準ライブラリ</span></a> では、Python に広い適用範囲をもたらしている既存のオブジェクト型、関数、および (組み込み、および Python で書かれたものの両方の) モジュールについて解説しています。</p>
+<p>Python/C API 全体の詳しい説明は、別のドキュメントである、 <a class="reference internal" href="../c-api/index.html#c-api-index"><span class="std std-ref">Python/C API リファレンスマニュアル</span></a> を参照してください。</p>
+<div class="section" id="recommended-third-party-tools">
+<h2>おすすめのサードパーティツール<a class="headerlink" href="#recommended-third-party-tools" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>このガイドがカバーするのは、このバージョンの CPython の一部として提供されている、拡張を作成するための基本的なツールだけです。
+Cython 、 <code class="docutils literal"><span class="pre">cffi</span></code> 、 SWIG 、 Numbaのようなサードパーティのツールは、 Python の C および C++ 拡張を作成する、より簡潔かつより洗練された手法を提供します。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="https://packaging.python.org/en/latest/extensions/">Python Packaging User Guide: Binary Extensions</a></dt>
+<dd><p class="first last">Python Packaging User Guideはバイナリ拡張の作成が簡単になる便利なツールをカバーしているだけではなく、まず始めになぜ拡張モジュールを作ることが望ましいかの様々な理由について議論しています。</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="creating-extensions-without-third-party-tools">
+<h2>サードパーティツールなしで拡張を作る<a class="headerlink" href="#creating-extensions-without-third-party-tools" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>ガイドのこの節ではサードパーティツールの補助無しに C および C++ 拡張を作成する方法を説明します。
+これは自分自身の C 拡張を作成するおすすめの方法というよりも、主にそれらのツールを作成する人向けのものです。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">1. C や C++ による Python の拡張</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#a-simple-example">1.1. 簡単な例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#intermezzo-errors-and-exceptions">1.2. 幕間小話: エラーと例外</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#back-to-the-example">1.3. 例に戻る</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#the-module-s-method-table-and-initialization-function">1.4. モジュールのメソッドテーブルと初期化関数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#compilation-and-linkage">1.5. コンパイルとリンク</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#calling-python-functions-from-c">1.6. C から Python 関数を呼び出す</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#extracting-parameters-in-extension-functions">1.7. 拡張モジュール関数でのパラメタ展開</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#keyword-parameters-for-extension-functions">1.8. 拡張モジュール関数のキーワードパラメタ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#building-arbitrary-values">1.9. 任意の値を構築する</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#reference-counts">1.10. 参照カウント法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#writing-extensions-in-c">1.11. C++での拡張モジュール作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#providing-a-c-api-for-an-extension-module">1.12. 拡張モジュールに C API を提供する</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="newtypes.html">2. 新しい型を定義する</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="newtypes.html#the-basics">2.1. 基本的なこと</a></li>
+<li class="toctree-l2"><a class="reference internal" href="newtypes.html#type-methods">2.2. タイプメソッド</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">3. C および C++ 拡張のビルド</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="building.html#building-c-and-c-extensions-with-distutils">3.1. distutils による C および C++ 拡張モジュールのビルド</a></li>
+<li class="toctree-l2"><a class="reference internal" href="building.html#distributing-your-extension-modules">3.2. 拡張モジュールの配布</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">4. Windows 上での C および C++ 拡張モジュールのビルド</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="windows.html#a-cookbook-approach">4.1. 型どおりのアプローチ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="windows.html#differences-between-unix-and-windows">4.2. Unix と Windows の相違点</a></li>
+<li class="toctree-l2"><a class="reference internal" href="windows.html#using-dlls-in-practice">4.3. DLL 使用の実際</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="embedding-the-cpython-runtime-in-a-larger-application">
+<h2>大規模なアプリケーションへの Python ランライムの埋め込み<a class="headerlink" href="#embedding-the-cpython-runtime-in-a-larger-application" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Python インタープリタの中でメインアプリケーションとして実行される拡張を作るのではなく、 CPython をより大きなアプリケーションの中に埋め込む方が望ましいことがあります。
+この節ではその上手い埋め込みに関わる詳細について説明します。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="embedding.html">1. 他のアプリケーションへの Python の埋め込み</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#very-high-level-embedding">1.1. 高水準の埋め込み</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#beyond-very-high-level-embedding-an-overview">1.2. 超高水準の埋め込みから踏み出す: 概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#pure-embedding">1.3. 純粋な埋め込み</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#extending-embedded-python">1.4. 埋め込まれた Python の拡張</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#embedding-python-in-c">1.5. C++による Python の埋め込み</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#compiling-and-linking-under-unix-like-systems">1.6. Unix 系システムにおけるコンパイルとリンク</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Python インタプリタの拡張と埋め込み</a><ul>
+<li><a class="reference internal" href="#recommended-third-party-tools">おすすめのサードパーティツール</a></li>
+<li><a class="reference internal" href="#creating-extensions-without-third-party-tools">サードパーティツールなしで拡張を作る</a></li>
+<li><a class="reference internal" href="#embedding-the-cpython-runtime-in-a-larger-application">大規模なアプリケーションへの Python ランライムの埋め込み</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="../library/undoc.html"
+                        title="前の章へ">37. ドキュメント化されていないモジュール</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="extending.html"
+                        title="次の章へ">1. C や C++ による Python の拡張</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/extending/index.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="extending.html" title="1. C や C++ による Python の拡張"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../library/undoc.html" title="37. ドキュメント化されていないモジュール"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

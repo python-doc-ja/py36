@@ -1,0 +1,552 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>9.7. statistics — 数理統計関数 &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="9. 数値と数学モジュール" href="numeric.html" />
+    <link rel="next" title="10. 関数型プログラミング用モジュール" href="functional.html" />
+    <link rel="prev" title="9.6. random — 擬似乱数を生成する" href="random.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/statistics.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/statistics.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="functional.html" title="10. 関数型プログラミング用モジュール"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="random.html" title="9.6. random — 擬似乱数を生成する"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="numeric.html" accesskey="U">9. 数値と数学モジュール</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-statistics">
+<span id="statistics-mathematical-statistics-functions"></span><h1>9.7. <a class="reference internal" href="#module-statistics" title="statistics: mathematical statistics functions"><code class="xref py py-mod docutils literal"><span class="pre">statistics</span></code></a> &#8212; 数理統計関数<a class="headerlink" href="#module-statistics" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/statistics.py">Lib/statistics.py</a></p>
+<hr class="docutils" />
+<p>このモジュールは、数値 (<code class="xref py py-class docutils literal"><span class="pre">Real</span></code> 型) データを数学的に統計計算するための関数を提供します。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">特に明記しない限り、これらの関数は <a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>, <a class="reference internal" href="functions.html#float" title="float"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>, <a class="reference internal" href="decimal.html#decimal.Decimal" title="decimal.Decimal"><code class="xref py py-class docutils literal"><span class="pre">decimal.Decimal</span></code></a> そして <a class="reference internal" href="fractions.html#fractions.Fraction" title="fractions.Fraction"><code class="xref py py-class docutils literal"><span class="pre">fractions.Fraction</span></code></a> をサポートします。他の型 (算術型及びそれ以外) は現在サポートされていません。混合型 (mixed type) も未定義で実装依存です。入力データが混合型を含んでいる場合、<a class="reference internal" href="functions.html#map" title="map"><code class="xref py py-func docutils literal"><span class="pre">map()</span></code></a> を使用すると正しい結果が得られるでしょう。 e.g. <code class="docutils literal"><span class="pre">map(float,</span> <span class="pre">input_data)</span></code>。</p>
+</div>
+<div class="section" id="averages-and-measures-of-central-location">
+<h2>9.7.1. 平均及び中心位置の測度<a class="headerlink" href="#averages-and-measures-of-central-location" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>これらの関数は母集団または標本の平均値や標準値を計算します。</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="66%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#statistics.mean" title="statistics.mean"><code class="xref py py-func docutils literal"><span class="pre">mean()</span></code></a></td>
+<td><p class="first last">データの算術平均。</p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#statistics.harmonic_mean" title="statistics.harmonic_mean"><code class="xref py py-func docutils literal"><span class="pre">harmonic_mean()</span></code></a></td>
+<td>Harmonic mean of data.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#statistics.median" title="statistics.median"><code class="xref py py-func docutils literal"><span class="pre">median()</span></code></a></td>
+<td><p class="first last">データの中央値。</p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#statistics.median_low" title="statistics.median_low"><code class="xref py py-func docutils literal"><span class="pre">median_low()</span></code></a></td>
+<td><p class="first last">データの low median。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#statistics.median_high" title="statistics.median_high"><code class="xref py py-func docutils literal"><span class="pre">median_high()</span></code></a></td>
+<td><p class="first last">データの high median。</p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#statistics.median_grouped" title="statistics.median_grouped"><code class="xref py py-func docutils literal"><span class="pre">median_grouped()</span></code></a></td>
+<td><p class="first last">grouped data の中央値、すなわち50パーセンタイル。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#statistics.mode" title="statistics.mode"><code class="xref py py-func docutils literal"><span class="pre">mode()</span></code></a></td>
+<td><p class="first last">離散データの最頻値。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="measures-of-spread">
+<h2>9.7.2. 分散の測度<a class="headerlink" href="#measures-of-spread" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>これらの関数は母集団または標本が標準値や平均値からどれくらい離れているかについて計算します。</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="66%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#statistics.pstdev" title="statistics.pstdev"><code class="xref py py-func docutils literal"><span class="pre">pstdev()</span></code></a></td>
+<td><p class="first last">データの母標準偏差。</p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#statistics.pvariance" title="statistics.pvariance"><code class="xref py py-func docutils literal"><span class="pre">pvariance()</span></code></a></td>
+<td><p class="first last">データの母分散。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#statistics.stdev" title="statistics.stdev"><code class="xref py py-func docutils literal"><span class="pre">stdev()</span></code></a></td>
+<td><p class="first last">データの標本標準偏差。</p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#statistics.variance" title="statistics.variance"><code class="xref py py-func docutils literal"><span class="pre">variance()</span></code></a></td>
+<td><p class="first last">データの標本標準分散。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="function-details">
+<h2>9.7.3. 関数の詳細<a class="headerlink" href="#function-details" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>註釈: 関数の引数となるデータをソートしておく必要はありません。例の多くがソートされているのは見やすさのためです。</p>
+<dl class="function">
+<dt id="statistics.mean">
+<code class="descclassname">statistics.</code><code class="descname">mean</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#statistics.mean" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return the sample arithmetic mean of <em>data</em> which can be a sequence or iterator.</p>
+<p>算術平均はデータの総和をデータ数で除したものです。単に「平均」と呼ばれることも多いですが、数学における平均の一種に過ぎません。データの中心位置の測度の一つです。</p>
+<p><em>data</em> が空の場合 <a class="reference internal" href="#statistics.StatisticsError" title="statistics.StatisticsError"><code class="xref py py-exc docutils literal"><span class="pre">StatisticsError</span></code></a> を送出します。</p>
+<p>使用例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="go">2.8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span><span class="p">([</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">3.25</span><span class="p">,</span> <span class="mf">5.75</span><span class="p">])</span>
+<span class="go">2.625</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fractions</span> <span class="k">import</span> <span class="n">Fraction</span> <span class="k">as</span> <span class="n">F</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span><span class="p">([</span><span class="n">F</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">F</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">),</span> <span class="n">F</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">F</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)])</span>
+<span class="go">Fraction(13, 21)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">decimal</span> <span class="k">import</span> <span class="n">Decimal</span> <span class="k">as</span> <span class="n">D</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mean</span><span class="p">([</span><span class="n">D</span><span class="p">(</span><span class="s2">&quot;0.5&quot;</span><span class="p">),</span> <span class="n">D</span><span class="p">(</span><span class="s2">&quot;0.75&quot;</span><span class="p">),</span> <span class="n">D</span><span class="p">(</span><span class="s2">&quot;0.625&quot;</span><span class="p">),</span> <span class="n">D</span><span class="p">(</span><span class="s2">&quot;0.375&quot;</span><span class="p">)])</span>
+<span class="go">Decimal(&#39;0.5625&#39;)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p>平均値は外れ値に大きく影響を受けるため、中心位置のロバストな推定量ではありません。すなわち、平均値はデータ点の代表例では必ずしもありません。よりロバストですが低効率な中心位置の測度には <a class="reference internal" href="#statistics.median" title="statistics.median"><code class="xref py py-func docutils literal"><span class="pre">median()</span></code></a> および <a class="reference internal" href="#statistics.mode" title="statistics.mode"><code class="xref py py-func docutils literal"><span class="pre">mode()</span></code></a> があります。 (&#8220;効率&#8221; は計算効率ではなく統計効率を指します。)</p>
+<p class="last">標本平均は真の母平均の不偏推定量です。すなわち、出来る限り多くの標本から平均を求めると、<code class="docutils literal"><span class="pre">mean(sample)</span></code> は真の母平均に収束します (訳注: 大数の法則)。<em>data</em> が標本ではなく母集団全体の場合、<code class="docutils literal"><span class="pre">mean(data)</span></code> は真の母平均 μ を計算することと等価です。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="statistics.harmonic_mean">
+<code class="descclassname">statistics.</code><code class="descname">harmonic_mean</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#statistics.harmonic_mean" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return the harmonic mean of <em>data</em>, a sequence or iterator of
+real-valued numbers.</p>
+<p>The harmonic mean, sometimes called the subcontrary mean, is the
+reciprocal of the arithmetic <a class="reference internal" href="#statistics.mean" title="statistics.mean"><code class="xref py py-func docutils literal"><span class="pre">mean()</span></code></a> of the reciprocals of the
+data. For example, the harmonic mean of three values <em>a</em>, <em>b</em> and <em>c</em>
+will be equivalent to <code class="docutils literal"><span class="pre">3/(1/a</span> <span class="pre">+</span> <span class="pre">1/b</span> <span class="pre">+</span> <span class="pre">1/c)</span></code>.</p>
+<p>The harmonic mean is a type of average, a measure of the central
+location of the data.  It is often appropriate when averaging quantities
+which are rates or ratios, for example speeds. For example:</p>
+<p>Suppose an investor purchases an equal value of shares in each of
+three companies, with P/E (price/earning) ratios of 2.5, 3 and 10.
+What is the average P/E ratio for the investor&#8217;s portfolio?</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">harmonic_mean</span><span class="p">([</span><span class="mf">2.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>  <span class="c1"># For an equal investment portfolio.</span>
+<span class="go">3.6</span>
+</pre></div>
+</div>
+<p>Using the arithmetic mean would give an average of about 5.167, which
+is too high.</p>
+<p><a class="reference internal" href="#statistics.StatisticsError" title="statistics.StatisticsError"><code class="xref py py-exc docutils literal"><span class="pre">StatisticsError</span></code></a> is raised if <em>data</em> is empty, or any element
+is less than zero.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="statistics.median">
+<code class="descclassname">statistics.</code><code class="descname">median</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#statistics.median" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return the median (middle value) of numeric data, using the common &#8220;mean of
+middle two&#8221; method.  If <em>data</em> is empty, <a class="reference internal" href="#statistics.StatisticsError" title="statistics.StatisticsError"><code class="xref py py-exc docutils literal"><span class="pre">StatisticsError</span></code></a> is raised.
+<em>data</em> can be a sequence or iterator.</p>
+<p>中央値は外れ値の影響を受けにくいため、中心位置のロバストな測度です。データ数が奇数の場合は中央の値を返します:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">median</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p>データ数が偶数の場合は、中央値は中央に最も近い2値の算術平均で補間されます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">median</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span>
+<span class="go">4.0</span>
+</pre></div>
+</div>
+<p>データが離散的で、中央値がデータ点にない値でも構わない場合に適しています。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><a class="reference internal" href="#statistics.median_low" title="statistics.median_low"><code class="xref py py-func docutils literal"><span class="pre">median_low()</span></code></a>, <a class="reference internal" href="#statistics.median_high" title="statistics.median_high"><code class="xref py py-func docutils literal"><span class="pre">median_high()</span></code></a>, <a class="reference internal" href="#statistics.median_grouped" title="statistics.median_grouped"><code class="xref py py-func docutils literal"><span class="pre">median_grouped()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="statistics.median_low">
+<code class="descclassname">statistics.</code><code class="descname">median_low</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#statistics.median_low" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return the low median of numeric data.  If <em>data</em> is empty,
+<a class="reference internal" href="#statistics.StatisticsError" title="statistics.StatisticsError"><code class="xref py py-exc docutils literal"><span class="pre">StatisticsError</span></code></a> is raised.  <em>data</em> can be a sequence or iterator.</p>
+<p>low median は必ずデータに含まれています。データ数が奇数の場合は中央の値を返し、偶数の場合は中央の2値の小さい方を返します。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">median_low</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">median_low</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p>データが離散的で、中央値が補間値よりもデータ点にある値の方が良い場合に用いてください。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="statistics.median_high">
+<code class="descclassname">statistics.</code><code class="descname">median_high</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#statistics.median_high" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return the high median of data.  If <em>data</em> is empty, <a class="reference internal" href="#statistics.StatisticsError" title="statistics.StatisticsError"><code class="xref py py-exc docutils literal"><span class="pre">StatisticsError</span></code></a>
+is raised.  <em>data</em> can be a sequence or iterator.</p>
+<p>high median は必ずデータに含まれています。データ数が奇数の場合は中央の値を返し、偶数の場合は中央の2値の大きい方を返します。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">median_high</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">median_high</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<p>データが離散的で、中央値が補間値よりもデータ点にある値の方が良い場合に用いてください。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="statistics.median_grouped">
+<code class="descclassname">statistics.</code><code class="descname">median_grouped</code><span class="sig-paren">(</span><em>data</em>, <em>interval=1</em><span class="sig-paren">)</span><a class="headerlink" href="#statistics.median_grouped" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return the median of grouped continuous data, calculated as the 50th
+percentile, using interpolation.  If <em>data</em> is empty, <a class="reference internal" href="#statistics.StatisticsError" title="statistics.StatisticsError"><code class="xref py py-exc docutils literal"><span class="pre">StatisticsError</span></code></a>
+is raised.  <em>data</em> can be a sequence or iterator.</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">median_grouped</span><span class="p">([</span><span class="mi">52</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">54</span><span class="p">])</span>
+<span class="go">52.5</span>
+</pre></div>
+</div>
+<p>次の例ではデータは丸められているため、各値はデータの中間です。例えば 1 は 0.5 と 1.5 の中間、2 は 1.5 と 2.5 の中間、3 は 2.5 と 3.5 の中間です。例では中央の値は 3.5 から 4.5 で、補間により推定されます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">median_grouped</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="go">3.7</span>
+</pre></div>
+</div>
+<p><em>interval</em> は間隔を表します。デフォルトは1です。間隔を変えると当然補間値は変わります:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">median_grouped</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span> <span class="n">interval</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">3.25</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">median_grouped</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span> <span class="n">interval</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">3.5</span>
+</pre></div>
+</div>
+<p>この関数はデータ点が少なくとも <em>interval</em> だけ差があるかどうかチェックしません。</p>
+<div class="impl-detail compound">
+<p><strong>CPython 実装の詳細:</strong> 環境によっては <a class="reference internal" href="#statistics.median_grouped" title="statistics.median_grouped"><code class="xref py py-func docutils literal"><span class="pre">median_grouped()</span></code></a> はデータ点を強制的に浮動小数点に変換します。この挙動はいずれ変更されるでしょう。</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<ul class="last simple">
+<li>&#8220;Statistics for the Behavioral Sciences&#8221;, Frederick J Gravetter and
+Larry B Wallnau (8th Edition).</li>
+<li>Calculating the <a class="reference external" href="https://www.ualberta.ca/~opscan/median.html">median</a>.</li>
+<li>The <a class="reference external" href="https://help.gnome.org/users/gnumeric/stable/gnumeric.html#gnumeric-function-SSMEDIAN">SSMEDIAN</a>
+function in the Gnome Gnumeric spreadsheet, including <a class="reference external" href="https://mail.gnome.org/archives/gnumeric-list/2011-April/msg00018.html">this discussion</a>.</li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="statistics.mode">
+<code class="descclassname">statistics.</code><code class="descname">mode</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#statistics.mode" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>離散データや名目データ <em>data</em> の最頻値を返します。最頻値は (存在するときは) 最も標準的な値で、中心位置のロバストな測度です。</p>
+<p><em>data</em> が空の場合や最頻値が1つでない場合 <a class="reference internal" href="#statistics.StatisticsError" title="statistics.StatisticsError"><code class="xref py py-exc docutils literal"><span class="pre">StatisticsError</span></code></a> を送出します。</p>
+<p><code class="docutils literal"><span class="pre">mode</span></code> は離散データであることを想定していて、1つの値を返します。これは学校で教わるような最頻値の標準的な取扱いです:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mode</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p>最頻値は (数値でない) 名目データにも適用出来る統計量という点でユニークです:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mode</span><span class="p">([</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">])</span>
+<span class="go">&#39;red&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="statistics.pstdev">
+<code class="descclassname">statistics.</code><code class="descname">pstdev</code><span class="sig-paren">(</span><em>data</em>, <em>mu=None</em><span class="sig-paren">)</span><a class="headerlink" href="#statistics.pstdev" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>母標準偏差 (母分散の平方根) を返します。引数や詳細は <a class="reference internal" href="#statistics.pvariance" title="statistics.pvariance"><code class="xref py py-func docutils literal"><span class="pre">pvariance()</span></code></a> を参照してください。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pstdev</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.75</span><span class="p">,</span> <span class="mf">3.25</span><span class="p">,</span> <span class="mf">4.75</span><span class="p">])</span>
+<span class="go">0.986893273527251</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="statistics.pvariance">
+<code class="descclassname">statistics.</code><code class="descname">pvariance</code><span class="sig-paren">(</span><em>data</em>, <em>mu=None</em><span class="sig-paren">)</span><a class="headerlink" href="#statistics.pvariance" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>data</em> の母分散を返します。<em>data</em> は実数の空でない iterable です。分散、すなわち2次の中心化モーメントはデータの散らばり具合の測度です。分散が大きいデータはばらつきが大きく、分散が小さいデータは平均値のまわりに固まっています。</p>
+<p>第2引数 <em>mu</em> に値を渡す場合は <em>data</em> の平均値でなくてはなりません。<em>mu</em> が与えられない場合や <code class="docutils literal"><span class="pre">None</span></code> の場合 (デフォルト)、平均値は自動的に計算されます。</p>
+<p>母集団全体から分散を計算する場合に用いてください。標本から分散を推定する場合は <a class="reference internal" href="#statistics.variance" title="statistics.variance"><code class="xref py py-func docutils literal"><span class="pre">variance()</span></code></a> を使いましょう。</p>
+<p><em>data</em> が空の場合 <a class="reference internal" href="#statistics.StatisticsError" title="statistics.StatisticsError"><code class="xref py py-exc docutils literal"><span class="pre">StatisticsError</span></code></a> を送出します。</p>
+<p>例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">,</span> <span class="mf">2.75</span><span class="p">,</span> <span class="mf">3.25</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pvariance</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">1.25</span>
+</pre></div>
+</div>
+<p>既にデータの平均値を計算している場合、それを第2引数 <em>mu</em> に渡して再計算を避けることが出来ます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mu</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pvariance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mu</span><span class="p">)</span>
+<span class="go">1.25</span>
+</pre></div>
+</div>
+<p>この関数は引数として渡した <em>mu</em> が実際の平均値かどうかチェックしません。任意の値を <em>mu</em> に渡すと無効な結果やありえない結果が返ることがあります。</p>
+<p>Decimal と Fraction がサポートされています:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">decimal</span> <span class="k">import</span> <span class="n">Decimal</span> <span class="k">as</span> <span class="n">D</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pvariance</span><span class="p">([</span><span class="n">D</span><span class="p">(</span><span class="s2">&quot;27.5&quot;</span><span class="p">),</span> <span class="n">D</span><span class="p">(</span><span class="s2">&quot;30.25&quot;</span><span class="p">),</span> <span class="n">D</span><span class="p">(</span><span class="s2">&quot;30.25&quot;</span><span class="p">),</span> <span class="n">D</span><span class="p">(</span><span class="s2">&quot;34.5&quot;</span><span class="p">),</span> <span class="n">D</span><span class="p">(</span><span class="s2">&quot;41.75&quot;</span><span class="p">)])</span>
+<span class="go">Decimal(&#39;24.815&#39;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fractions</span> <span class="k">import</span> <span class="n">Fraction</span> <span class="k">as</span> <span class="n">F</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pvariance</span><span class="p">([</span><span class="n">F</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">F</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">F</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)])</span>
+<span class="go">Fraction(13, 72)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p>母集団全体で呼んだ場合は母分散 σ² を返します。代わりに標本で呼んだ場合は biased variance s²、すなわち自由度 N の分散を返します。</p>
+<p class="last">何らかの方法で真の母平均 μ を知っている場合、それを第2引数に渡して標本の分散を計算することが出来ます。与えられたデータ点が代表的 (たとえば独立で均等に分布) な場合、戻り値は母分散の不偏推定量になります。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="statistics.stdev">
+<code class="descclassname">statistics.</code><code class="descname">stdev</code><span class="sig-paren">(</span><em>data</em>, <em>xbar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#statistics.stdev" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>標本標準偏差 (標本分散の平方根) を返します。引数や詳細は <a class="reference internal" href="#statistics.variance" title="statistics.variance"><code class="xref py py-func docutils literal"><span class="pre">variance()</span></code></a> を参照してください。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">stdev</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.75</span><span class="p">,</span> <span class="mf">3.25</span><span class="p">,</span> <span class="mf">4.75</span><span class="p">])</span>
+<span class="go">1.0810874155219827</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="statistics.variance">
+<code class="descclassname">statistics.</code><code class="descname">variance</code><span class="sig-paren">(</span><em>data</em>, <em>xbar=None</em><span class="sig-paren">)</span><a class="headerlink" href="#statistics.variance" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>data</em> の標本分散を返します。<em>data</em> は少なくとも2つの実数の iterable です。分散、すなわち2次の中心化モーメントはデータの散らばり具合の測度です。分散が大きいデータはばらつきが大きく、分散が小さいデータは平均値のまわりに固まっています。</p>
+<p>第2引数 <em>xbar</em> に値を渡す場合は <em>data</em> の平均値でなくてはなりません。<em>xbar</em> が与えられない場合や <code class="docutils literal"><span class="pre">None</span></code> の場合 (デフォルト)、平均値は自動的に計算されます。</p>
+<p>データが母集団の標本であるときに用いてください。母集団全体から分散を計算するには <a class="reference internal" href="#statistics.pvariance" title="statistics.pvariance"><code class="xref py py-func docutils literal"><span class="pre">pvariance()</span></code></a> を参照してください。</p>
+<p><em>data</em> の値が2より少ない場合 <a class="reference internal" href="#statistics.StatisticsError" title="statistics.StatisticsError"><code class="xref py py-exc docutils literal"><span class="pre">StatisticsError</span></code></a> を送出します。</p>
+<p>例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2.75</span><span class="p">,</span> <span class="mf">1.75</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.25</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">variance</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">1.3720238095238095</span>
+</pre></div>
+</div>
+<p>既にデータの平均値を計算している場合、それを第2引数 <em>xbar</em> に渡して再計算を避けることが出来ます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">variance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+<span class="go">1.3720238095238095</span>
+</pre></div>
+</div>
+<p>この関数は引数として渡した <em>xbar</em> が実際の平均値かどうかチェックしません。任意の値を <em>xbar</em> に渡すと無効な結果やありえない結果が返ることがあります。</p>
+<p>Decimal と Fraction がサポートされています:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">decimal</span> <span class="k">import</span> <span class="n">Decimal</span> <span class="k">as</span> <span class="n">D</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">variance</span><span class="p">([</span><span class="n">D</span><span class="p">(</span><span class="s2">&quot;27.5&quot;</span><span class="p">),</span> <span class="n">D</span><span class="p">(</span><span class="s2">&quot;30.25&quot;</span><span class="p">),</span> <span class="n">D</span><span class="p">(</span><span class="s2">&quot;30.25&quot;</span><span class="p">),</span> <span class="n">D</span><span class="p">(</span><span class="s2">&quot;34.5&quot;</span><span class="p">),</span> <span class="n">D</span><span class="p">(</span><span class="s2">&quot;41.75&quot;</span><span class="p">)])</span>
+<span class="go">Decimal(&#39;31.01875&#39;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fractions</span> <span class="k">import</span> <span class="n">Fraction</span> <span class="k">as</span> <span class="n">F</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">variance</span><span class="p">([</span><span class="n">F</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">F</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">F</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)])</span>
+<span class="go">Fraction(67, 108)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p>Bessel 補正済みの標本分散 s²、すなわち自由度 N-1 の分散です。与えられたデータ点が代表的 (たとえば独立で均等に分布) な場合、戻り値は母分散の不偏推定量になります。</p>
+<p class="last">何らかの方法で真の母平均 μ を知っている場合、それを  <a class="reference internal" href="#statistics.pvariance" title="statistics.pvariance"><code class="xref py py-func docutils literal"><span class="pre">pvariance()</span></code></a>  の引数 <em>mu</em> に渡して標本の分散を計算することが出来ます。</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="exceptions">
+<h2>9.7.4. 例外<a class="headerlink" href="#exceptions" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>例外が1つ定義されています:</p>
+<dl class="exception">
+<dt id="statistics.StatisticsError">
+<em class="property">exception </em><code class="descclassname">statistics.</code><code class="descname">StatisticsError</code><a class="headerlink" href="#statistics.StatisticsError" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>統計関係の例外。<a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> の派生クラス。</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">9.7. <code class="docutils literal"><span class="pre">statistics</span></code> &#8212; 数理統計関数</a><ul>
+<li><a class="reference internal" href="#averages-and-measures-of-central-location">9.7.1. 平均及び中心位置の測度</a></li>
+<li><a class="reference internal" href="#measures-of-spread">9.7.2. 分散の測度</a></li>
+<li><a class="reference internal" href="#function-details">9.7.3. 関数の詳細</a></li>
+<li><a class="reference internal" href="#exceptions">9.7.4. 例外</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="random.html"
+                        title="前の章へ">9.6. <code class="docutils literal"><span class="pre">random</span></code> &#8212; 擬似乱数を生成する</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="functional.html"
+                        title="次の章へ">10. 関数型プログラミング用モジュール</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/statistics.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="functional.html" title="10. 関数型プログラミング用モジュール"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="random.html" title="9.6. random — 擬似乱数を生成する"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="numeric.html" >9. 数値と数学モジュール</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

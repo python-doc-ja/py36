@@ -1,0 +1,473 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>8.11. pprint — データ出力の整然化 &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="8. データ型" href="datatypes.html" />
+    <link rel="next" title="8.12. reprlib — もう一つの repr() の実装" href="reprlib.html" />
+    <link rel="prev" title="8.10. copy — 浅いコピーおよび深いコピー操作" href="copy.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/pprint.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/pprint.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="reprlib.html" title="8.12. reprlib — もう一つの repr() の実装"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="copy.html" title="8.10. copy — 浅いコピーおよび深いコピー操作"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="datatypes.html" accesskey="U">8. データ型</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pprint">
+<span id="pprint-data-pretty-printer"></span><h1>8.11. <a class="reference internal" href="#module-pprint" title="pprint: Data pretty printer."><code class="xref py py-mod docutils literal"><span class="pre">pprint</span></code></a> &#8212; データ出力の整然化<a class="headerlink" href="#module-pprint" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/pprint.py">Lib/pprint.py</a></p>
+<hr class="docutils" />
+<p><a class="reference internal" href="#module-pprint" title="pprint: Data pretty printer."><code class="xref py py-mod docutils literal"><span class="pre">pprint</span></code></a> モジュールを使うと、Pythonの任意のデータ構造をインタープリタへの入力で使われる形式にして &#8220;pretty-print&#8221; できます。書式化された構造の中にPythonの基本的なタイプではないオブジェクトがあるなら、表示できないかもしれません。表示できないのは、ファイル、ソケット、あるいはクラスのようなオブジェクトや、 その他Pythonのリテラルとして表現できない様々なオブジェクトが含まれていた場合です。</p>
+<p>可能であればオブジェクトを書式化して1行に出力しますが、与えられた幅に合わないなら複数行に分けて出力します。無理に幅を設定したいなら、 <a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal"><span class="pre">PrettyPrinter</span></code></a> オブジェクトを作成して明示してください。</p>
+<p>辞書は表示される前にキーの順でソートされます。</p>
+<p><a class="reference internal" href="#module-pprint" title="pprint: Data pretty printer."><code class="xref py py-mod docutils literal"><span class="pre">pprint</span></code></a> モジュールには1つのクラスが定義されています:</p>
+<dl class="class">
+<dt id="pprint.PrettyPrinter">
+<em class="property">class </em><code class="descclassname">pprint.</code><code class="descname">PrettyPrinter</code><span class="sig-paren">(</span><em>indent=1</em>, <em>width=80</em>, <em>depth=None</em>, <em>stream=None</em>, <em>*</em>, <em>compact=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.PrettyPrinter" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal"><span class="pre">PrettyPrinter</span></code></a> インスタンスを作ります。このコンストラクタにはいくつかのキーワード引数を設定できます。 <em>stream</em> キーワードで出力ストリームを設定できます；このストリームに対して呼び出されるメソッドはファイルプロトコルの <code class="xref py py-meth docutils literal"><span class="pre">write()</span></code> メソッドだけです。もし設定されなければ、 <a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal"><span class="pre">PrettyPrinter</span></code></a> は <code class="docutils literal"><span class="pre">sys.stdout</span></code> を使用します。再帰的なレベルごとに加えるインデントの量は <em>indent</em> で設定できます；デフォルト値は1です。他の値にすると出力が少しおかしく見えますが、ネスト化されたところが見分け易くなります。出力されるレベルは <em>depth</em> で設定できます；出力されるデータ構造が深いなら、指定以上の深いレベルのものは <code class="docutils literal"><span class="pre">...</span></code> で置き換えられて表示されます。デフォルトでは、オブジェクトの深さを制限しません。 <em>width</em> 引数を使うと、出力する幅を望みの文字数に設定できます；デフォルトでは80文字です。もし指定した幅に書式化できない場合は、できるだけ近づけます。 <em>compact</em> が偽ならば(これがデフォルトです)、長いシーケンスのアイテム一つずつが、一行ずつ分けて書式化されます。 <em>compact</em> を真にすると、 <em>width</em> 幅に収まるだけの量のアイテムがそれぞれの出力行に書式化されます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span><em>compact</em> 引数が追加されました。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;spam&#39;</span><span class="p">,</span> <span class="s1">&#39;eggs&#39;</span><span class="p">,</span> <span class="s1">&#39;lumberjack&#39;</span><span class="p">,</span> <span class="s1">&#39;knights&#39;</span><span class="p">,</span> <span class="s1">&#39;ni&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">stuff</span><span class="p">[:])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">PrettyPrinter</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">stuff</span><span class="p">)</span>
+<span class="go">[   [&#39;spam&#39;, &#39;eggs&#39;, &#39;lumberjack&#39;, &#39;knights&#39;, &#39;ni&#39;],</span>
+<span class="go">    &#39;spam&#39;,</span>
+<span class="go">    &#39;eggs&#39;,</span>
+<span class="go">    &#39;lumberjack&#39;,</span>
+<span class="go">    &#39;knights&#39;,</span>
+<span class="go">    &#39;ni&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">PrettyPrinter</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">41</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">stuff</span><span class="p">)</span>
+<span class="go">[[&#39;spam&#39;, &#39;eggs&#39;, &#39;lumberjack&#39;,</span>
+<span class="go">  &#39;knights&#39;, &#39;ni&#39;],</span>
+<span class="go"> &#39;spam&#39;, &#39;eggs&#39;, &#39;lumberjack&#39;, &#39;knights&#39;,</span>
+<span class="go"> &#39;ni&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tup</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;spam&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;eggs&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;lumberjack&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;knights&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;ni&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;dead&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">(</span><span class="s1">&#39;parrot&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;fresh fruit&#39;</span><span class="p">,))))))))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">PrettyPrinter</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span>
+<span class="go">(&#39;spam&#39;, (&#39;eggs&#39;, (&#39;lumberjack&#39;, (&#39;knights&#39;, (&#39;ni&#39;, (&#39;dead&#39;, (...)))))))</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<p><a class="reference internal" href="#module-pprint" title="pprint: Data pretty printer."><code class="xref py py-mod docutils literal"><span class="pre">pprint</span></code></a> モジュールは幾つかのショートカット関数も提供しています:</p>
+<dl class="function">
+<dt id="pprint.pformat">
+<code class="descclassname">pprint.</code><code class="descname">pformat</code><span class="sig-paren">(</span><em>object</em>, <em>indent=1</em>, <em>width=80</em>, <em>depth=None</em>, <em>*</em>, <em>compact=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.pformat" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>object</em> を書式化して文字列として返します。 <em>indent</em> 、 <em>width</em>  <em>depth</em> と、 <em>compact</em> は <a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal"><span class="pre">PrettyPrinter</span></code></a> コンストラクタに書式化引数として渡されます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span><em>compact</em> 引数が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pprint.pprint">
+<code class="descclassname">pprint.</code><code class="descname">pprint</code><span class="sig-paren">(</span><em>object</em>, <em>stream=None</em>, <em>indent=1</em>, <em>width=80</em>, <em>depth=None</em>, <em>*</em>, <em>compact=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.pprint" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>stream</em> 上に <em>object</em> の書式化された表現、続いて改行を出力します。 <em>stream</em> が <code class="docutils literal"><span class="pre">None</span></code> の場合、 <code class="docutils literal"><span class="pre">sys.stdout</span></code> が使用されます。これは、対話型インタプリタの中で値を調査するために <a class="reference internal" href="functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a>  関数の代わりに使用されることがあります (さらに、スコープ内で使用するために <code class="docutils literal"><span class="pre">print</span> <span class="pre">=</span> <span class="pre">pprint.pprint</span></code> を再代入することができます)。 <em>indent</em>, <em>width</em>, <em>depth</em>, <em>compact</em> は、書式化引数として <a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal"><span class="pre">PrettyPrinter</span></code></a> コンストラクタに渡されます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span><em>compact</em> 引数が追加されました。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;spam&#39;</span><span class="p">,</span> <span class="s1">&#39;eggs&#39;</span><span class="p">,</span> <span class="s1">&#39;lumberjack&#39;</span><span class="p">,</span> <span class="s1">&#39;knights&#39;</span><span class="p">,</span> <span class="s1">&#39;ni&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stuff</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">stuff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">stuff</span><span class="p">)</span>
+<span class="go">[&lt;Recursion on list with id=...&gt;,</span>
+<span class="go"> &#39;spam&#39;,</span>
+<span class="go"> &#39;eggs&#39;,</span>
+<span class="go"> &#39;lumberjack&#39;,</span>
+<span class="go"> &#39;knights&#39;,</span>
+<span class="go"> &#39;ni&#39;]</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pprint.isreadable">
+<code class="descclassname">pprint.</code><code class="descname">isreadable</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.isreadable" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-0"><em>object</em> を書式化して出力できる(&#8220;readable&#8221;) か、あるいは <a class="reference internal" href="functions.html#eval" title="eval"><code class="xref py py-func docutils literal"><span class="pre">eval()</span></code></a> を使って値を再構成できるかを返します。再帰的なオブジェクトに対しては常に <code class="docutils literal"><span class="pre">False</span></code> を返します。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">isreadable</span><span class="p">(</span><span class="n">stuff</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="pprint.isrecursive">
+<code class="descclassname">pprint.</code><code class="descname">isrecursive</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.isrecursive" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>object</em> が再帰的な表現かどうかを返します。</p>
+</dd></dl>
+
+<p>さらにもう1つ、関数が定義されています:</p>
+<dl class="function">
+<dt id="pprint.saferepr">
+<code class="descclassname">pprint.</code><code class="descname">saferepr</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.saferepr" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>object</em> の文字列表現を、再帰的なデータ構造から保護した形式で返します。もし <em>object</em> の文字列表現が再帰的な要素を持っているなら、再帰的な参照は <code class="docutils literal"><span class="pre">&lt;Recursion</span> <span class="pre">on</span> <span class="pre">typename</span> <span class="pre">with</span> <span class="pre">id=number&gt;</span></code> で表示されます。出力は他と違って書式化されません。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">saferepr</span><span class="p">(</span><span class="n">stuff</span><span class="p">)</span>
+<span class="go">&quot;[&lt;Recursion on list with id=...&gt;, &#39;spam&#39;, &#39;eggs&#39;, &#39;lumberjack&#39;, &#39;knights&#39;, &#39;ni&#39;]&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="section" id="prettyprinter-objects">
+<span id="id1"></span><h2>8.11.1. PrettyPrinter オブジェクト<a class="headerlink" href="#prettyprinter-objects" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal"><span class="pre">PrettyPrinter</span></code></a> インスタンスには以下のメソッドがあります:</p>
+<dl class="method">
+<dt id="pprint.PrettyPrinter.pformat">
+<code class="descclassname">PrettyPrinter.</code><code class="descname">pformat</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.PrettyPrinter.pformat" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>object</em> の書式化した表現を返します。これは <a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal"><span class="pre">PrettyPrinter</span></code></a> のコンストラクタに渡されたオプションを考慮して書式化されます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pprint.PrettyPrinter.pprint">
+<code class="descclassname">PrettyPrinter.</code><code class="descname">pprint</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.PrettyPrinter.pprint" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>object</em> の書式化した表現を指定したストリームに出力し、最後に改行します。</p>
+</dd></dl>
+
+<p>以下のメソッドは、対応する同じ名前の関数と同じ機能を持っています。以下のメソッドをインスタンスに対して使うと、新たに <a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal"><span class="pre">PrettyPrinter</span></code></a> オブジェクトを作る必要がないのでちょっぴり効果的です。</p>
+<dl class="method">
+<dt id="pprint.PrettyPrinter.isreadable">
+<code class="descclassname">PrettyPrinter.</code><code class="descname">isreadable</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.PrettyPrinter.isreadable" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-1"><em>object</em> を書式化して出力できる（&#8221;readable&#8221;）か、あるいは <a class="reference internal" href="functions.html#eval" title="eval"><code class="xref py py-func docutils literal"><span class="pre">eval()</span></code></a> を使って値を再構成できるかを返します。これは再帰的なオブジェクトに対して <code class="docutils literal"><span class="pre">False</span></code> を返すことに注意して下さい。もし <a class="reference internal" href="#pprint.PrettyPrinter" title="pprint.PrettyPrinter"><code class="xref py py-class docutils literal"><span class="pre">PrettyPrinter</span></code></a> の <em>depth</em> 引数が設定されていて、オブジェクトのレベルが設定よりも深かったら、 <code class="docutils literal"><span class="pre">False</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pprint.PrettyPrinter.isrecursive">
+<code class="descclassname">PrettyPrinter.</code><code class="descname">isrecursive</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.PrettyPrinter.isrecursive" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オブジェクトが再帰的な表現かどうかを返します。</p>
+</dd></dl>
+
+<p>このメソッドをフックとして、サブクラスがオブジェクトを文字列に変換する方法を修正するのが可能になっています。デフォルトの実装では、内部で <a class="reference internal" href="#pprint.saferepr" title="pprint.saferepr"><code class="xref py py-func docutils literal"><span class="pre">saferepr()</span></code></a> を呼び出しています。</p>
+<dl class="method">
+<dt id="pprint.PrettyPrinter.format">
+<code class="descclassname">PrettyPrinter.</code><code class="descname">format</code><span class="sig-paren">(</span><em>object</em>, <em>context</em>, <em>maxlevels</em>, <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#pprint.PrettyPrinter.format" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>次の3つの値を返します。<em>object</em> をフォーマット化して文字列にしたもの、その結果が読み込み可能かどうかを示すフラグ、再帰が含まれているかどうかを示すフラグ。最初の引数は表示するオブジェクトです。 2つめの引数はオブジェクトの <a class="reference internal" href="functions.html#id" title="id"><code class="xref py py-func docutils literal"><span class="pre">id()</span></code></a> をキーとして含むディクショナリで、オブジェクトを含んでいる現在の（直接、間接に <em>object</em> のコンテナとして表示に影響を与える）環境です。ディクショナリ <em>context</em> の中でどのオブジェクトが表示されたか表示する必要があるなら、3つめの返り値は <code class="docutils literal"><span class="pre">True</span></code> になります。 <a class="reference internal" href="#pprint.PrettyPrinter.format" title="pprint.PrettyPrinter.format"><code class="xref py py-meth docutils literal"><span class="pre">format()</span></code></a> メソッドの再帰呼び出しではこのディクショナリのコンテナに対してさらにエントリを加えます。 3つめの引数 <em>maxlevels</em> で再帰呼び出しのレベルを制限します。制限しない場合、 <code class="docutils literal"><span class="pre">0</span></code> になります。この引数は再帰呼び出しでそのまま渡されます。 4つめの引数 <em>level</em> で現在のレベルを設定します。再帰呼び出しでは、現在の呼び出しより小さい値が渡されます。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="example">
+<span id="pprint-example"></span><h2>8.11.2. 使用例<a class="headerlink" href="#example" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference internal" href="#module-pprint" title="pprint: Data pretty printer."><code class="xref py py-func docutils literal"><span class="pre">pprint()</span></code></a> 関数のいくつかの用途とそのパラメータを実証するために、<a class="reference external" href="https://pypi.python.org/pypi">PyPI</a> からプロジェクトに関する情報を取って来ましょう:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">json</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="k">import</span> <span class="n">urlopen</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">urlopen</span><span class="p">(</span><span class="s1">&#39;http://pypi.python.org/pypi/Twisted/json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">url</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">http_info</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">raw_data</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">http_info</span><span class="o">.</span><span class="n">get_content_charset</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">project_info</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>その基本形式では、 <a class="reference internal" href="#module-pprint" title="pprint: Data pretty printer."><code class="xref py py-func docutils literal"><span class="pre">pprint()</span></code></a> はオブジェクト全体を表示します:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">project_info</span><span class="p">)</span>
+<span class="go">{&#39;info&#39;: {&#39;_pypi_hidden&#39;: False,</span>
+<span class="go">          &#39;_pypi_ordering&#39;: 125,</span>
+<span class="go">          &#39;author&#39;: &#39;Glyph Lefkowitz&#39;,</span>
+<span class="go">          &#39;author_email&#39;: &#39;glyph@twistedmatrix.com&#39;,</span>
+<span class="go">          &#39;bugtrack_url&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;cheesecake_code_kwalitee_id&#39;: None,</span>
+<span class="go">          &#39;cheesecake_documentation_id&#39;: None,</span>
+<span class="go">          &#39;cheesecake_installability_id&#39;: None,</span>
+<span class="go">          &#39;classifiers&#39;: [&#39;Programming Language :: Python :: 2.6&#39;,</span>
+<span class="go">                          &#39;Programming Language :: Python :: 2.7&#39;,</span>
+<span class="go">                          &#39;Programming Language :: Python :: 2 :: Only&#39;],</span>
+<span class="go">          &#39;description&#39;: &#39;An extensible framework for Python programming, with &#39;</span>
+<span class="go">                         &#39;special focus\r\n&#39;</span>
+<span class="go">                         &#39;on event-based network programming and multiprotocol &#39;</span>
+<span class="go">                         &#39;integration.&#39;,</span>
+<span class="go">          &#39;docs_url&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;download_url&#39;: &#39;UNKNOWN&#39;,</span>
+<span class="go">          &#39;home_page&#39;: &#39;http://twistedmatrix.com/&#39;,</span>
+<span class="go">          &#39;keywords&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;license&#39;: &#39;MIT&#39;,</span>
+<span class="go">          &#39;maintainer&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;maintainer_email&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;name&#39;: &#39;Twisted&#39;,</span>
+<span class="go">          &#39;package_url&#39;: &#39;http://pypi.python.org/pypi/Twisted&#39;,</span>
+<span class="go">          &#39;platform&#39;: &#39;UNKNOWN&#39;,</span>
+<span class="go">          &#39;release_url&#39;: &#39;http://pypi.python.org/pypi/Twisted/12.3.0&#39;,</span>
+<span class="go">          &#39;requires_python&#39;: None,</span>
+<span class="go">          &#39;stable_version&#39;: None,</span>
+<span class="go">          &#39;summary&#39;: &#39;An asynchronous networking framework written in Python&#39;,</span>
+<span class="go">          &#39;version&#39;: &#39;12.3.0&#39;},</span>
+<span class="go"> &#39;urls&#39;: [{&#39;comment_text&#39;: &#39;&#39;,</span>
+<span class="go">           &#39;downloads&#39;: 71844,</span>
+<span class="go">           &#39;filename&#39;: &#39;Twisted-12.3.0.tar.bz2&#39;,</span>
+<span class="go">           &#39;has_sig&#39;: False,</span>
+<span class="go">           &#39;md5_digest&#39;: &#39;6e289825f3bf5591cfd670874cc0862d&#39;,</span>
+<span class="go">           &#39;packagetype&#39;: &#39;sdist&#39;,</span>
+<span class="go">           &#39;python_version&#39;: &#39;source&#39;,</span>
+<span class="go">           &#39;size&#39;: 2615733,</span>
+<span class="go">           &#39;upload_time&#39;: &#39;2012-12-26T12:47:03&#39;,</span>
+<span class="go">           &#39;url&#39;: &#39;https://pypi.python.org/packages/source/T/Twisted/Twisted-12.3.0.tar.bz2&#39;},</span>
+<span class="go">          {&#39;comment_text&#39;: &#39;&#39;,</span>
+<span class="go">           &#39;downloads&#39;: 5224,</span>
+<span class="go">           &#39;filename&#39;: &#39;Twisted-12.3.0.win32-py2.7.msi&#39;,</span>
+<span class="go">           &#39;has_sig&#39;: False,</span>
+<span class="go">           &#39;md5_digest&#39;: &#39;6b778f5201b622a5519a2aca1a2fe512&#39;,</span>
+<span class="go">           &#39;packagetype&#39;: &#39;bdist_msi&#39;,</span>
+<span class="go">           &#39;python_version&#39;: &#39;2.7&#39;,</span>
+<span class="go">           &#39;size&#39;: 2916352,</span>
+<span class="go">           &#39;upload_time&#39;: &#39;2012-12-26T12:48:15&#39;,</span>
+<span class="go">           &#39;url&#39;: &#39;https://pypi.python.org/packages/2.7/T/Twisted/Twisted-12.3.0.win32-py2.7.msi&#39;}]}</span>
+</pre></div>
+</div>
+<p>結果をある深さ <em>depth</em> に制限することができます (より深い内容には省略記号が使用されます):</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">project_info</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">{&#39;info&#39;: {&#39;_pypi_hidden&#39;: False,</span>
+<span class="go">          &#39;_pypi_ordering&#39;: 125,</span>
+<span class="go">          &#39;author&#39;: &#39;Glyph Lefkowitz&#39;,</span>
+<span class="go">          &#39;author_email&#39;: &#39;glyph@twistedmatrix.com&#39;,</span>
+<span class="go">          &#39;bugtrack_url&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;cheesecake_code_kwalitee_id&#39;: None,</span>
+<span class="go">          &#39;cheesecake_documentation_id&#39;: None,</span>
+<span class="go">          &#39;cheesecake_installability_id&#39;: None,</span>
+<span class="go">          &#39;classifiers&#39;: [...],</span>
+<span class="go">          &#39;description&#39;: &#39;An extensible framework for Python programming, with &#39;</span>
+<span class="go">                         &#39;special focus\r\n&#39;</span>
+<span class="go">                         &#39;on event-based network programming and multiprotocol &#39;</span>
+<span class="go">                         &#39;integration.&#39;,</span>
+<span class="go">          &#39;docs_url&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;download_url&#39;: &#39;UNKNOWN&#39;,</span>
+<span class="go">          &#39;home_page&#39;: &#39;http://twistedmatrix.com/&#39;,</span>
+<span class="go">          &#39;keywords&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;license&#39;: &#39;MIT&#39;,</span>
+<span class="go">          &#39;maintainer&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;maintainer_email&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;name&#39;: &#39;Twisted&#39;,</span>
+<span class="go">          &#39;package_url&#39;: &#39;http://pypi.python.org/pypi/Twisted&#39;,</span>
+<span class="go">          &#39;platform&#39;: &#39;UNKNOWN&#39;,</span>
+<span class="go">          &#39;release_url&#39;: &#39;http://pypi.python.org/pypi/Twisted/12.3.0&#39;,</span>
+<span class="go">          &#39;requires_python&#39;: None,</span>
+<span class="go">          &#39;stable_version&#39;: None,</span>
+<span class="go">          &#39;summary&#39;: &#39;An asynchronous networking framework written in Python&#39;,</span>
+<span class="go">          &#39;version&#39;: &#39;12.3.0&#39;},</span>
+<span class="go"> &#39;urls&#39;: [{...}, {...}]}</span>
+</pre></div>
+</div>
+<p>それに加えて、最大の文字幅 <em>width</em> を指示することもできます。長いオブジェクトを分離することができなければ、指定された幅を超過します:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">project_info</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="go">{&#39;info&#39;: {&#39;_pypi_hidden&#39;: False,</span>
+<span class="go">          &#39;_pypi_ordering&#39;: 125,</span>
+<span class="go">          &#39;author&#39;: &#39;Glyph Lefkowitz&#39;,</span>
+<span class="go">          &#39;author_email&#39;: &#39;glyph@twistedmatrix.com&#39;,</span>
+<span class="go">          &#39;bugtrack_url&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;cheesecake_code_kwalitee_id&#39;: None,</span>
+<span class="go">          &#39;cheesecake_documentation_id&#39;: None,</span>
+<span class="go">          &#39;cheesecake_installability_id&#39;: None,</span>
+<span class="go">          &#39;classifiers&#39;: [...],</span>
+<span class="go">          &#39;description&#39;: &#39;An extensible &#39;</span>
+<span class="go">                         &#39;framework for Python &#39;</span>
+<span class="go">                         &#39;programming, with &#39;</span>
+<span class="go">                         &#39;special focus\r\n&#39;</span>
+<span class="go">                         &#39;on event-based network &#39;</span>
+<span class="go">                         &#39;programming and &#39;</span>
+<span class="go">                         &#39;multiprotocol &#39;</span>
+<span class="go">                         &#39;integration.&#39;,</span>
+<span class="go">          &#39;docs_url&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;download_url&#39;: &#39;UNKNOWN&#39;,</span>
+<span class="go">          &#39;home_page&#39;: &#39;http://twistedmatrix.com/&#39;,</span>
+<span class="go">          &#39;keywords&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;license&#39;: &#39;MIT&#39;,</span>
+<span class="go">          &#39;maintainer&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;maintainer_email&#39;: &#39;&#39;,</span>
+<span class="go">          &#39;name&#39;: &#39;Twisted&#39;,</span>
+<span class="go">          &#39;package_url&#39;: &#39;http://pypi.python.org/pypi/Twisted&#39;,</span>
+<span class="go">          &#39;platform&#39;: &#39;UNKNOWN&#39;,</span>
+<span class="go">          &#39;release_url&#39;: &#39;http://pypi.python.org/pypi/Twisted/12.3.0&#39;,</span>
+<span class="go">          &#39;requires_python&#39;: None,</span>
+<span class="go">          &#39;stable_version&#39;: None,</span>
+<span class="go">          &#39;summary&#39;: &#39;An asynchronous networking &#39;</span>
+<span class="go">                     &#39;framework written in &#39;</span>
+<span class="go">                     &#39;Python&#39;,</span>
+<span class="go">          &#39;version&#39;: &#39;12.3.0&#39;},</span>
+<span class="go"> &#39;urls&#39;: [{...}, {...}]}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">8.11. <code class="docutils literal"><span class="pre">pprint</span></code> &#8212; データ出力の整然化</a><ul>
+<li><a class="reference internal" href="#prettyprinter-objects">8.11.1. PrettyPrinter オブジェクト</a></li>
+<li><a class="reference internal" href="#example">8.11.2. 使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="copy.html"
+                        title="前の章へ">8.10. <code class="docutils literal"><span class="pre">copy</span></code> &#8212; 浅いコピーおよび深いコピー操作</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="reprlib.html"
+                        title="次の章へ">8.12. <code class="docutils literal"><span class="pre">reprlib</span></code> &#8212; もう一つの <code class="docutils literal"><span class="pre">repr()</span></code> の実装</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/pprint.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="reprlib.html" title="8.12. reprlib — もう一つの repr() の実装"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="copy.html" title="8.10. copy — 浅いコピーおよび深いコピー操作"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="datatypes.html" >8. データ型</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

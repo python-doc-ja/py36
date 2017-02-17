@@ -1,0 +1,351 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18.5.8. キュー &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="18.5. asyncio — 非同期 I/O、イベントループ、コルーチンおよびタスク" href="asyncio.html" />
+    <link rel="next" title="18.5.9. asyncio での開発" href="asyncio-dev.html" />
+    <link rel="prev" title="18.5.7. 同期プリミティブ" href="asyncio-sync.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/asyncio-queue.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/asyncio-queue.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-dev.html" title="18.5.9. asyncio での開発"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="asyncio-sync.html" title="18.5.7. 同期プリミティブ"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" accesskey="U">18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="queues">
+<h1>18.5.8. キュー<a class="headerlink" href="#queues" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>キュー:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#asyncio.Queue" title="asyncio.Queue"><code class="xref py py-class docutils literal"><span class="pre">Queue</span></code></a></li>
+<li><a class="reference internal" href="#asyncio.PriorityQueue" title="asyncio.PriorityQueue"><code class="xref py py-class docutils literal"><span class="pre">PriorityQueue</span></code></a></li>
+<li><a class="reference internal" href="#asyncio.LifoQueue" title="asyncio.LifoQueue"><code class="xref py py-class docutils literal"><span class="pre">LifoQueue</span></code></a></li>
+</ul>
+<p>asyncio queue API は <a class="reference internal" href="queue.html#module-queue" title="queue: A synchronized queue class."><code class="xref py py-mod docutils literal"><span class="pre">queue</span></code></a> モジュールのクラス (<a class="reference internal" href="queue.html#queue.Queue" title="queue.Queue"><code class="xref py py-class docutils literal"><span class="pre">Queue</span></code></a>, <a class="reference internal" href="queue.html#queue.PriorityQueue" title="queue.PriorityQueue"><code class="xref py py-class docutils literal"><span class="pre">PriorityQueue</span></code></a>, <a class="reference internal" href="queue.html#queue.LifoQueue" title="queue.LifoQueue"><code class="xref py py-class docutils literal"><span class="pre">LifoQueue</span></code></a>) に近くなるよう設計されましたが、 <em>timeout</em> 引数はありません。
+<a class="reference internal" href="asyncio-task.html#asyncio.wait_for" title="asyncio.wait_for"><code class="xref py py-func docutils literal"><span class="pre">asyncio.wait_for()</span></code></a> 関数を用いてタイムアオウト後にタスクをキャンセルすることが出来ます。</p>
+<div class="section" id="queue">
+<h2>18.5.8.1. Queue<a class="headerlink" href="#queue" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="class">
+<dt id="asyncio.Queue">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">Queue</code><span class="sig-paren">(</span><em>maxsize=0</em>, <em>*</em>, <em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Queue" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プロデューサーおよびコンシューマーコルーチンの連係に役立つキューです。</p>
+<p><em>maxsize</em> がゼロ以下であれば、キューの長さは無限になります。<code class="docutils literal"><span class="pre">0</span></code> より大きい整数の場合、キューの長さが <em>maxsize</em> に達すると <code class="docutils literal"><span class="pre">yield</span> <span class="pre">from</span> <span class="pre">put()</span></code> はアイテムが <a class="reference internal" href="#asyncio.Queue.get" title="asyncio.Queue.get"><code class="xref py py-meth docutils literal"><span class="pre">get()</span></code></a> で除去されるまでブロックします。</p>
+<p>標準ライブラリの <a class="reference internal" href="queue.html#module-queue" title="queue: A synchronized queue class."><code class="xref py py-mod docutils literal"><span class="pre">queue</span></code></a> とは異なり、<a class="reference internal" href="#asyncio.Queue.qsize" title="asyncio.Queue.qsize"><code class="xref py py-meth docutils literal"><span class="pre">qsize()</span></code></a> で確実にキューの長さを確認できます。シングルスレッドの asyncio アプリケーションは <a class="reference internal" href="#asyncio.Queue.qsize" title="asyncio.Queue.qsize"><code class="xref py py-meth docutils literal"><span class="pre">qsize()</span></code></a> の呼び出しと Queue に対する操作の間に割り込まれることはありません。</p>
+<p>このクラスは <a class="reference internal" href="asyncio-dev.html#asyncio-multithreading"><span class="std std-ref">スレッド安全ではありません</span></a>。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4.4 で変更: </span>新たなメソッド <a class="reference internal" href="#asyncio.Queue.join" title="asyncio.Queue.join"><code class="xref py py-meth docutils literal"><span class="pre">join()</span></code></a> ならびに <a class="reference internal" href="#asyncio.Queue.task_done" title="asyncio.Queue.task_done"><code class="xref py py-meth docutils literal"><span class="pre">task_done()</span></code></a>。</p>
+</div>
+<dl class="method">
+<dt id="asyncio.Queue.empty">
+<code class="descname">empty</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Queue.empty" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>キューが空ならば <code class="docutils literal"><span class="pre">True</span></code> を、そうでなければ <code class="docutils literal"><span class="pre">False</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Queue.full">
+<code class="descname">full</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Queue.full" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>キューに要素が <a class="reference internal" href="#asyncio.Queue.maxsize" title="asyncio.Queue.maxsize"><code class="xref py py-attr docutils literal"><span class="pre">maxsize</span></code></a> 個あれば <code class="docutils literal"><span class="pre">True</span></code> を返します。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">Queue が <code class="docutils literal"><span class="pre">maxsize=0</span></code> (デフォルト) で初期化された場合、<a class="reference internal" href="#asyncio.Queue.full" title="asyncio.Queue.full"><code class="xref py py-meth docutils literal"><span class="pre">full()</span></code></a> が <code class="docutils literal"><span class="pre">True</span></code> を返すことはありません。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Queue.get">
+<em class="property">coroutine </em><code class="descname">get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Queue.get" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>キューから要素を削除して返します。キューが空の場合項目が利用可能になるまで待機します。</p>
+<p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><a class="reference internal" href="#asyncio.Queue.empty" title="asyncio.Queue.empty"><code class="xref py py-meth docutils literal"><span class="pre">empty()</span></code></a> メソッド。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Queue.get_nowait">
+<code class="descname">get_nowait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Queue.get_nowait" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>キューから要素を削除して返します。</p>
+<p>直ちに利用できるアイテムがあるときはそれを、そうでなければ <a class="reference internal" href="#asyncio.QueueEmpty" title="asyncio.QueueEmpty"><code class="xref py py-exc docutils literal"><span class="pre">QueueEmpty</span></code></a> を返します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Queue.join">
+<em class="property">coroutine </em><code class="descname">join</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Queue.join" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>キューにあるすべてのアイテムが取り出されて処理されるまでブロックします。</p>
+<p>未完了のタスクのカウント値はキューにアイテムが追加されるときは常に加算され、コンシューマースレッドが <a class="reference internal" href="#asyncio.Queue.task_done" title="asyncio.Queue.task_done"><code class="xref py py-meth docutils literal"><span class="pre">task_done()</span></code></a> を呼び出してアイテムの回収とその全処理の完了が示されるときは常に減算されます。未完了のタスクのカウント値がゼロになった場合、<a class="reference internal" href="#asyncio.Queue.join" title="asyncio.Queue.join"><code class="xref py py-meth docutils literal"><span class="pre">join()</span></code></a> のブロックが解除されます。</p>
+<p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Queue.put">
+<em class="property">coroutine </em><code class="descname">put</code><span class="sig-paren">(</span><em>item</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Queue.put" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>要素をキューに入れます。キューがいっぱいの場合、要素を追加する前にスロットが利用できるまで待機します。</p>
+<p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><a class="reference internal" href="#asyncio.Queue.full" title="asyncio.Queue.full"><code class="xref py py-meth docutils literal"><span class="pre">full()</span></code></a> メソッド。</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Queue.put_nowait">
+<code class="descname">put_nowait</code><span class="sig-paren">(</span><em>item</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Queue.put_nowait" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ブロックせずにアイテムをキューに追加します。</p>
+<p>直ちに利用できるスロットがない場合、<a class="reference internal" href="#asyncio.QueueFull" title="asyncio.QueueFull"><code class="xref py py-exc docutils literal"><span class="pre">QueueFull</span></code></a> を送出します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Queue.qsize">
+<code class="descname">qsize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Queue.qsize" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>キュー内のアイテム数です。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Queue.task_done">
+<code class="descname">task_done</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Queue.task_done" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>キューに入っていたタスクが完了したことを示します。</p>
+<p>キューコンシューマーによって使用されます。タスクの取得に <a class="reference internal" href="#asyncio.Queue.get" title="asyncio.Queue.get"><code class="xref py py-meth docutils literal"><span class="pre">get()</span></code></a> を使用し、その後の <a class="reference internal" href="#asyncio.Queue.task_done" title="asyncio.Queue.task_done"><code class="xref py py-meth docutils literal"><span class="pre">task_done()</span></code></a> の呼び出しでタスクの処理が完了したことをキューに通知します。</p>
+<p><a class="reference internal" href="#asyncio.Queue.join" title="asyncio.Queue.join"><code class="xref py py-meth docutils literal"><span class="pre">join()</span></code></a> が現在ブロック中だった場合、全アイテムが処理されたとき (<a class="reference internal" href="#asyncio.Queue.put" title="asyncio.Queue.put"><code class="xref py py-meth docutils literal"><span class="pre">put()</span></code></a> でキューに追加された全アイテムの <a class="reference internal" href="#asyncio.Queue.task_done" title="asyncio.Queue.task_done"><code class="xref py py-meth docutils literal"><span class="pre">task_done()</span></code></a> の呼び出しを受信したとき) に再開します。</p>
+<p>キューに追加されているアイテム数以上の呼び出しが行われたときに <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> を送出します。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="asyncio.Queue.maxsize">
+<code class="descname">maxsize</code><a class="headerlink" href="#asyncio.Queue.maxsize" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>キューに追加できるアイテム数です。</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="priorityqueue">
+<h2>18.5.8.2. PriorityQueue<a class="headerlink" href="#priorityqueue" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="class">
+<dt id="asyncio.PriorityQueue">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">PriorityQueue</code><a class="headerlink" href="#asyncio.PriorityQueue" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#asyncio.Queue" title="asyncio.Queue"><code class="xref py py-class docutils literal"><span class="pre">Queue</span></code></a> のサブクラスです; 優先順位に従ってエントリを回収します (最低が最初)。</p>
+<p>エントリは、(優先順位, データ) 形式のタプルです。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="lifoqueue">
+<h2>18.5.8.3. LifoQueue<a class="headerlink" href="#lifoqueue" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="class">
+<dt id="asyncio.LifoQueue">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">LifoQueue</code><a class="headerlink" href="#asyncio.LifoQueue" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#asyncio.Queue" title="asyncio.Queue"><code class="xref py py-class docutils literal"><span class="pre">Queue</span></code></a> のサブクラスです。エントリは最後に追加されたものから回収されます。</p>
+</dd></dl>
+
+<div class="section" id="exceptions">
+<h3>18.5.8.3.1. 例外<a class="headerlink" href="#exceptions" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="exception">
+<dt id="asyncio.QueueEmpty">
+<em class="property">exception </em><code class="descclassname">asyncio.</code><code class="descname">QueueEmpty</code><a class="headerlink" href="#asyncio.QueueEmpty" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#asyncio.Queue.get_nowait" title="asyncio.Queue.get_nowait"><code class="xref py py-meth docutils literal"><span class="pre">get_nowait()</span></code></a> メソッドが空の <a class="reference internal" href="#asyncio.Queue" title="asyncio.Queue"><code class="xref py py-class docutils literal"><span class="pre">Queue</span></code></a> オブジェクトに対して呼ばれたときに送出されます。</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="asyncio.QueueFull">
+<em class="property">exception </em><code class="descclassname">asyncio.</code><code class="descname">QueueFull</code><a class="headerlink" href="#asyncio.QueueFull" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#asyncio.Queue.put_nowait" title="asyncio.Queue.put_nowait"><code class="xref py py-meth docutils literal"><span class="pre">put_nowait()</span></code></a> メソッドが full の <a class="reference internal" href="#asyncio.Queue" title="asyncio.Queue"><code class="xref py py-class docutils literal"><span class="pre">Queue</span></code></a> オブジェクトに対して呼ばれたときに送出されます。</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.5.8. キュー</a><ul>
+<li><a class="reference internal" href="#queue">18.5.8.1. Queue</a></li>
+<li><a class="reference internal" href="#priorityqueue">18.5.8.2. PriorityQueue</a></li>
+<li><a class="reference internal" href="#lifoqueue">18.5.8.3. LifoQueue</a><ul>
+<li><a class="reference internal" href="#exceptions">18.5.8.3.1. 例外</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="asyncio-sync.html"
+                        title="前の章へ">18.5.7. 同期プリミティブ</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="asyncio-dev.html"
+                        title="次の章へ">18.5.9. asyncio での開発</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio-queue.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-dev.html" title="18.5.9. asyncio での開発"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="asyncio-sync.html" title="18.5.7. 同期プリミティブ"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" >18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

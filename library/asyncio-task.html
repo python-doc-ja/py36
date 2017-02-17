@@ -1,0 +1,831 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>18.5.3. タスクとコルーチン &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="18.5. asyncio — 非同期 I/O、イベントループ、コルーチンおよびタスク" href="asyncio.html" />
+    <link rel="next" title="18.5.4. トランスポートとプロトコル (コールバックベースの API)" href="asyncio-protocol.html" />
+    <link rel="prev" title="18.5.2. イベントループ" href="asyncio-eventloops.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/asyncio-task.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/asyncio-task.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-protocol.html" title="18.5.4. トランスポートとプロトコル (コールバックベースの API)"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="asyncio-eventloops.html" title="18.5.2. イベントループ"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" accesskey="U">18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tasks-and-coroutines">
+<h1>18.5.3. タスクとコルーチン<a class="headerlink" href="#tasks-and-coroutines" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="section" id="coroutines">
+<span id="coroutine"></span><h2>18.5.3.1. コルーチン<a class="headerlink" href="#coroutines" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Coroutines used with <a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> may be implemented using the
+<a class="reference internal" href="../reference/compound_stmts.html#async-def"><code class="xref std std-keyword docutils literal"><span class="pre">async</span> <span class="pre">def</span></code></a> statement, or by using <a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">generators</span></a>.
+The <a class="reference internal" href="../reference/compound_stmts.html#async-def"><code class="xref std std-keyword docutils literal"><span class="pre">async</span> <span class="pre">def</span></code></a> type of coroutine was added in Python 3.5, and
+is recommended if there is no need to support older Python versions.</p>
+<p>Generator-based coroutines should be decorated with <a class="reference internal" href="#asyncio.coroutine" title="asyncio.coroutine"><code class="xref py py-func docutils literal"><span class="pre">&#64;asyncio.coroutine</span></code></a>, although this is not strictly enforced.
+The decorator enables compatibility with <a class="reference internal" href="../reference/compound_stmts.html#async-def"><code class="xref std std-keyword docutils literal"><span class="pre">async</span> <span class="pre">def</span></code></a> coroutines,
+and also serves as documentation.  Generator-based
+coroutines use the <code class="docutils literal"><span class="pre">yield</span> <span class="pre">from</span></code> syntax introduced in <span class="target" id="index-0"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0380"><strong>PEP 380</strong></a>,
+instead of the original <code class="docutils literal"><span class="pre">yield</span></code> syntax.</p>
+<p>単語 &#8220;コルーチン&#8221; は単語 &#8220;ジェネレーター&#8221; のように、(関連はしていますが) 異なる 2 つの概念で使用されます:</p>
+<ul class="simple">
+<li><p class="first">コルーチンを定義した関数 (<a class="reference internal" href="../reference/compound_stmts.html#async-def"><code class="xref std std-keyword docutils literal"><span class="pre">async</span> <span class="pre">def</span></code></a> を使用するか <code class="docutils literal"><span class="pre">&#64;asyncio.coroutine</span></code> でデコレートされた関数定義)。
+曖昧さを避ける際は <em>コルーチン関数</em> と呼びます (<a class="reference internal" href="#asyncio.iscoroutinefunction" title="asyncio.iscoroutinefunction"><code class="xref py py-func docutils literal"><span class="pre">iscoroutinefunction()</span></code></a> は <code class="docutils literal"><span class="pre">True</span></code> を返します)。</p>
+</li>
+<li><p class="first">コルーチン関数の呼び出しによって取得されたオブジェクト。このオブジェクトは、いつかは完了する計算または I/O 操作 (通常はその組み合わせ) を表します。曖昧さの解消が必要な場合はこれを <em>コルーチンオブジェクト</em> (<a class="reference internal" href="#asyncio.iscoroutine" title="asyncio.iscoroutine"><code class="xref py py-func docutils literal"><span class="pre">iscoroutine()</span></code></a> が <code class="docutils literal"><span class="pre">True</span></code> を返す) と呼びます。</p>
+</li>
+</ul>
+<p>コルーチンができること:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">result</span> <span class="pre">=</span> <span class="pre">await</span> <span class="pre">future</span></code> or <code class="docutils literal"><span class="pre">result</span> <span class="pre">=</span> <span class="pre">yield</span> <span class="pre">from</span> <span class="pre">future</span></code> &#8211;
+suspends the coroutine until the
+future is done, then returns the future&#8217;s result, or raises an
+exception, which will be propagated.  (If the future is cancelled,
+it will raise a <code class="docutils literal"><span class="pre">CancelledError</span></code> exception.)  Note that tasks are
+futures, and everything said about futures also applies to tasks.</li>
+<li><code class="docutils literal"><span class="pre">result</span> <span class="pre">=</span> <span class="pre">await</span> <span class="pre">coroutine</span></code> or <code class="docutils literal"><span class="pre">result</span> <span class="pre">=</span> <span class="pre">yield</span> <span class="pre">from</span> <span class="pre">coroutine</span></code> &#8211;
+wait for another coroutine to
+produce a result (or raise an exception, which will be propagated).
+The <code class="docutils literal"><span class="pre">coroutine</span></code> expression must be a <em>call</em> to another coroutine.</li>
+<li><code class="docutils literal"><span class="pre">return</span> <span class="pre">expression</span></code> &#8211; produce a result to the coroutine that is
+waiting for this one using <a class="reference internal" href="../reference/expressions.html#await"><code class="xref std std-keyword docutils literal"><span class="pre">await</span></code></a> or <code class="docutils literal"><span class="pre">yield</span> <span class="pre">from</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">raise</span> <span class="pre">exception</span></code> &#8211; raise an exception in the coroutine that is
+waiting for this one using <a class="reference internal" href="../reference/expressions.html#await"><code class="xref std std-keyword docutils literal"><span class="pre">await</span></code></a> or <code class="docutils literal"><span class="pre">yield</span> <span class="pre">from</span></code>.</li>
+</ul>
+<p>Calling a coroutine does not start its code running &#8211;
+the coroutine object returned by the call doesn&#8217;t do anything until you
+schedule its execution.  There are two basic ways to start it running:
+call <code class="docutils literal"><span class="pre">await</span> <span class="pre">coroutine</span></code> or <code class="docutils literal"><span class="pre">yield</span> <span class="pre">from</span> <span class="pre">coroutine</span></code> from another coroutine
+(assuming the other coroutine is already running!), or schedule its execution
+using the <a class="reference internal" href="#asyncio.ensure_future" title="asyncio.ensure_future"><code class="xref py py-func docutils literal"><span class="pre">ensure_future()</span></code></a> function or the <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_task" title="asyncio.AbstractEventLoop.create_task"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_task()</span></code></a>
+method.</p>
+<p>コルーチン (およびタスク) はイベントループが実行中の場合にのみ起動できます。</p>
+<dl class="function">
+<dt id="asyncio.coroutine">
+<code class="descclassname">&#64;</code><code class="descclassname">asyncio.</code><code class="descname">coroutine</code><a class="headerlink" href="#asyncio.coroutine" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Decorator to mark generator-based coroutines.  This enables
+the generator use <code class="xref std std-keyword docutils literal"><span class="pre">yield</span> <span class="pre">from</span></code> to call <a class="reference internal" href="../reference/compound_stmts.html#async-def"><code class="xref std std-keyword docutils literal"><span class="pre">async</span>
+<span class="pre">def</span></code></a> coroutines, and also enables the generator to be called by
+<a class="reference internal" href="../reference/compound_stmts.html#async-def"><code class="xref std std-keyword docutils literal"><span class="pre">async</span> <span class="pre">def</span></code></a> coroutines, for instance using an
+<a class="reference internal" href="../reference/expressions.html#await"><code class="xref std std-keyword docutils literal"><span class="pre">await</span></code></a> expression.</p>
+<p><a class="reference internal" href="../reference/compound_stmts.html#async-def"><code class="xref std std-keyword docutils literal"><span class="pre">async</span> <span class="pre">def</span></code></a> コルーチン自身をデコレートする必要はありません。</p>
+<p>If the generator is not yielded from before it is destroyed, an error
+message is logged. See <a class="reference internal" href="asyncio-dev.html#asyncio-coroutine-not-scheduled"><span class="std std-ref">Detect coroutines never scheduled</span></a>.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">In this documentation, some methods are documented as coroutines,
+even if they are plain Python functions returning a <a class="reference internal" href="#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">Future</span></code></a>.
+This is intentional to have a freedom of tweaking the implementation
+of these functions in the future. If such a function is needed to be
+used in a callback-style code, wrap its result with <a class="reference internal" href="#asyncio.ensure_future" title="asyncio.ensure_future"><code class="xref py py-func docutils literal"><span class="pre">ensure_future()</span></code></a>.</p>
+</div>
+<div class="section" id="example-hello-world-coroutine">
+<span id="asyncio-hello-world-coroutine"></span><h3>18.5.3.1.1. 例: Hello World コルーチン<a class="headerlink" href="#example-hello-world-coroutine" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">&quot;Hello</span> <span class="pre">World&quot;</span></code> と表示するコルーチンの例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">hello_world</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello World!&quot;</span><span class="p">)</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="c1"># Blocking call which returns when the hello_world() coroutine is done</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">hello_world</span><span class="p">())</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last">The <a class="reference internal" href="asyncio-eventloop.html#asyncio-hello-world-callback"><span class="std std-ref">Hello World with call_soon()</span></a>
+example uses the <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.call_soon" title="asyncio.AbstractEventLoop.call_soon"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.call_soon()</span></code></a> method to schedule a
+callback.</p>
+</div>
+</div>
+<div class="section" id="example-coroutine-displaying-the-current-date">
+<span id="asyncio-date-coroutine"></span><h3>18.5.3.1.2. 例: 現在の日時を表示するコルーチン<a class="headerlink" href="#example-coroutine-displaying-the-current-date" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><a class="reference internal" href="#asyncio.sleep" title="asyncio.sleep"><code class="xref py py-meth docutils literal"><span class="pre">sleep()</span></code></a> 関数を用いて現在の時刻を5秒間、毎秒表示するコルーチンの例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">display_date</span><span class="p">(</span><span class="n">loop</span><span class="p">):</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="mf">5.0</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">loop</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">end_time</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="c1"># Blocking call which returns when the display_date() coroutine is done</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">display_date</span><span class="p">(</span><span class="n">loop</span><span class="p">))</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last">The <a class="reference internal" href="asyncio-eventloop.html#asyncio-date-callback"><span class="std std-ref">display the current date with call_later()</span></a> example uses a callback with the
+<a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.call_later" title="asyncio.AbstractEventLoop.call_later"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.call_later()</span></code></a> method.</p>
+</div>
+</div>
+<div class="section" id="example-chain-coroutines">
+<h3>18.5.3.1.3. 例: コルーチンのチェーン<a class="headerlink" href="#example-chain-coroutines" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>コルーチンをチェーンする例です:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compute </span><span class="si">%s</span><span class="s2"> + </span><span class="si">%s</span><span class="s2"> ...&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">print_sum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">compute</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> + </span><span class="si">%s</span><span class="s2"> = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">result</span><span class="p">))</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">print_sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">compute()</span></code> は <code class="docutils literal"><span class="pre">print_sum()</span></code> にチェーンされます: <code class="docutils literal"><span class="pre">print_sum()</span></code> コルーチンは <code class="docutils literal"><span class="pre">compute()</span></code> が完了するまで待ちます。</p>
+<p>この例のシーケンス図です:</p>
+<img alt="../_images/tulip_coro.png" class="align-center" src="../_images/tulip_coro.png" />
+<p>The &#8220;Task&#8221; is created by the <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.run_until_complete" title="asyncio.AbstractEventLoop.run_until_complete"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.run_until_complete()</span></code></a> method
+when it gets a coroutine object instead of a task.</p>
+<p>The diagram shows the control flow, it does not describe exactly how things
+work internally. For example, the sleep coroutine creates an internal future
+which uses <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.call_later" title="asyncio.AbstractEventLoop.call_later"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.call_later()</span></code></a> to wake up the task in 1 second.</p>
+</div>
+</div>
+<div class="section" id="invalidstateerror">
+<h2>18.5.3.2. InvalidStateError<a class="headerlink" href="#invalidstateerror" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="exception">
+<dt id="asyncio.InvalidStateError">
+<em class="property">exception </em><code class="descclassname">asyncio.</code><code class="descname">InvalidStateError</code><a class="headerlink" href="#asyncio.InvalidStateError" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>操作はこの状態では許可されません。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="timeouterror">
+<h2>18.5.3.3. TimeoutError<a class="headerlink" href="#timeouterror" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="exception">
+<dt id="asyncio.TimeoutError">
+<em class="property">exception </em><code class="descclassname">asyncio.</code><code class="descname">TimeoutError</code><a class="headerlink" href="#asyncio.TimeoutError" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>操作は与えられた期限を超えました。</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">この例外は組み込みの <a class="reference internal" href="exceptions.html#TimeoutError" title="TimeoutError"><code class="xref py py-exc docutils literal"><span class="pre">TimeoutError</span></code></a> 例外とは異なります！</p>
+</div>
+</div>
+<div class="section" id="future">
+<h2>18.5.3.4. フューチャー<a class="headerlink" href="#future" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="class">
+<dt id="asyncio.Future">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">Future</code><span class="sig-paren">(</span><em>*</em>, <em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このクラスは <a class="reference internal" href="concurrent.futures.html#concurrent.futures.Future" title="concurrent.futures.Future"><code class="xref py py-class docutils literal"><span class="pre">concurrent.futures.Future</span></code></a> と <em>ほぼ</em> 互換です。</p>
+<p>相違点:</p>
+<ul class="simple">
+<li><p class="first"><a class="reference internal" href="#asyncio.Future.result" title="asyncio.Future.result"><code class="xref py py-meth docutils literal"><span class="pre">result()</span></code></a> および <a class="reference internal" href="#asyncio.Future.exception" title="asyncio.Future.exception"><code class="xref py py-meth docutils literal"><span class="pre">exception()</span></code></a> はタイムアウト引数を取らず、フューチャがまだ終了していないとき例外を送出します。</p>
+</li>
+<li><p class="first"><a class="reference internal" href="#asyncio.Future.add_done_callback" title="asyncio.Future.add_done_callback"><code class="xref py py-meth docutils literal"><span class="pre">add_done_callback()</span></code></a> で登録されたコールバックは常にイベントループの <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.call_soon_threadsafe" title="asyncio.AbstractEventLoop.call_soon_threadsafe"><code class="xref py py-meth docutils literal"><span class="pre">call_soon_threadsafe()</span></code></a> 経由で呼び出されます。</p>
+</li>
+<li><p class="first">このクラスは <a class="reference internal" href="concurrent.futures.html#module-concurrent.futures" title="concurrent.futures: Execute computations concurrently using threads or processes."><code class="xref py py-mod docutils literal"><span class="pre">concurrent.futures</span></code></a> パッケージの <a class="reference internal" href="concurrent.futures.html#concurrent.futures.wait" title="concurrent.futures.wait"><code class="xref py py-func docutils literal"><span class="pre">wait()</span></code></a> および <a class="reference internal" href="concurrent.futures.html#concurrent.futures.as_completed" title="concurrent.futures.as_completed"><code class="xref py py-func docutils literal"><span class="pre">as_completed()</span></code></a> 関数との互換性はありません。</p>
+</li>
+</ul>
+<p>このクラスは <a class="reference internal" href="asyncio-dev.html#asyncio-multithreading"><span class="std std-ref">スレッド安全ではありません</span></a>。</p>
+<dl class="method">
+<dt id="asyncio.Future.cancel">
+<code class="descname">cancel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.cancel" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>フューチャとスケジュールされたコールバックをキャンセルします。</p>
+<p>フューチャがすでに終了しているかキャンセルされていた場合 <code class="docutils literal"><span class="pre">False</span></code> を返し、そうでない場合フューチャの状態をキャンセルに変更し、コールバックをスケジュールし、<code class="docutils literal"><span class="pre">True</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Future.cancelled">
+<code class="descname">cancelled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.cancelled" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>フューチャがキャンセルされていた場合 <code class="docutils literal"><span class="pre">True</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Future.done">
+<code class="descname">done</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.done" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return <code class="docutils literal"><span class="pre">True</span></code> if the future is done.</p>
+<p>終了とは、結果が返された、例外が送出された、あるいはフューチャがキャンセルされたことを意味します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Future.result">
+<code class="descname">result</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.result" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このフューチャが表す結果を返します。</p>
+<p>フューチャがキャンセルされていた場合 <code class="xref py py-exc docutils literal"><span class="pre">CancelledError</span></code> が送出されます。フューチャの結果がまだ利用できない場合 <a class="reference internal" href="#asyncio.InvalidStateError" title="asyncio.InvalidStateError"><code class="xref py py-exc docutils literal"><span class="pre">InvalidStateError</span></code></a> が送出されます。フューチャが終了し例外の集合を持っていた場合その例外が送出されます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Future.exception">
+<code class="descname">exception</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.exception" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このフューチャで設定された例外を返します。</p>
+<p>例外 (例外が設定されていない場合は <code class="docutils literal"><span class="pre">None</span></code>) はフューチャが終了した場合のみ返されます。フューチャがキャンセルされていた場合 <code class="xref py py-exc docutils literal"><span class="pre">CancelledError</span></code> が送出されます。フューチャがまだ終了していない場合 <a class="reference internal" href="#asyncio.InvalidStateError" title="asyncio.InvalidStateError"><code class="xref py py-exc docutils literal"><span class="pre">InvalidStateError</span></code></a> が送出されます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Future.add_done_callback">
+<code class="descname">add_done_callback</code><span class="sig-paren">(</span><em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.add_done_callback" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>フューチャが終了したときに実行するコールバックを追加します。</p>
+<p>The callback is called with a single argument - the future object. If the
+future is already done when this is called, the callback is scheduled
+with <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.call_soon" title="asyncio.AbstractEventLoop.call_soon"><code class="xref py py-meth docutils literal"><span class="pre">call_soon()</span></code></a>.</p>
+<p><a class="reference internal" href="asyncio-eventloop.html#asyncio-pass-keywords"><span class="std std-ref">引数をコールバックに渡すには functools.partial を使います</span></a>。例えば <code class="docutils literal"><span class="pre">fut.add_done_callback(functools.partial(print,</span> <span class="pre">&quot;Future:&quot;,</span> <span class="pre">flush=True))</span></code> は <code class="docutils literal"><span class="pre">print(&quot;Future:&quot;,</span> <span class="pre">fut,</span> <span class="pre">flush=True)</span></code> を呼びます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Future.remove_done_callback">
+<code class="descname">remove_done_callback</code><span class="sig-paren">(</span><em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.remove_done_callback" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>&#8220;終了時に呼び出す&#8221; リストからコールバックのすべてのインスタンスを除去します。</p>
+<p>除去されたコールバック数を返します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Future.set_result">
+<code class="descname">set_result</code><span class="sig-paren">(</span><em>result</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.set_result" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>フューチャの終了をマークしその結果を設定します。</p>
+<p>このメソッドが呼ばれたときにフューチャがすでに終了している場合、<a class="reference internal" href="#asyncio.InvalidStateError" title="asyncio.InvalidStateError"><code class="xref py py-exc docutils literal"><span class="pre">InvalidStateError</span></code></a> を送出します。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Future.set_exception">
+<code class="descname">set_exception</code><span class="sig-paren">(</span><em>exception</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.set_exception" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>フューチャの終了をマークし例外を設定します。</p>
+<p>このメソッドが呼ばれたときにフューチャがすでに終了している場合、<a class="reference internal" href="#asyncio.InvalidStateError" title="asyncio.InvalidStateError"><code class="xref py py-exc docutils literal"><span class="pre">InvalidStateError</span></code></a> を送出します。</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="example-future-with-run-until-complete">
+<h3>18.5.3.4.1. 例: run_until_complete() を使ったフューチャ<a class="headerlink" href="#example-future-with-run-until-complete" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><a class="reference internal" href="#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">Future</span></code></a> と <a class="reference internal" href="#coroutine"><span class="std std-ref">コルーチン関数</span></a> を組み合わせた例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">slow_operation</span><span class="p">(</span><span class="n">future</span><span class="p">):</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">future</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="s1">&#39;Future is done!&#39;</span><span class="p">)</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="n">future</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Future</span><span class="p">()</span>
+<span class="n">asyncio</span><span class="o">.</span><span class="n">ensure_future</span><span class="p">(</span><span class="n">slow_operation</span><span class="p">(</span><span class="n">future</span><span class="p">))</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">future</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The coroutine function is responsible for the computation (which takes 1 second)
+and it stores the result into the future. The
+<a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.run_until_complete" title="asyncio.AbstractEventLoop.run_until_complete"><code class="xref py py-meth docutils literal"><span class="pre">run_until_complete()</span></code></a> method waits for the completion of
+the future.</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">The <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.run_until_complete" title="asyncio.AbstractEventLoop.run_until_complete"><code class="xref py py-meth docutils literal"><span class="pre">run_until_complete()</span></code></a> method uses internally the
+<a class="reference internal" href="#asyncio.Future.add_done_callback" title="asyncio.Future.add_done_callback"><code class="xref py py-meth docutils literal"><span class="pre">add_done_callback()</span></code></a> method to be notified when the future is
+done.</p>
+</div>
+</div>
+<div class="section" id="example-future-with-run-forever">
+<h3>18.5.3.4.2. 例: run_forever() を使ったフューチャ<a class="headerlink" href="#example-future-with-run-forever" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>上の例を <a class="reference internal" href="#asyncio.Future.add_done_callback" title="asyncio.Future.add_done_callback"><code class="xref py py-meth docutils literal"><span class="pre">Future.add_done_callback()</span></code></a> メソッド使って制御フローを明示して書くこともできます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">slow_operation</span><span class="p">(</span><span class="n">future</span><span class="p">):</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">future</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="s1">&#39;Future is done!&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">got_result</span><span class="p">(</span><span class="n">future</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="n">future</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Future</span><span class="p">()</span>
+<span class="n">asyncio</span><span class="o">.</span><span class="n">ensure_future</span><span class="p">(</span><span class="n">slow_operation</span><span class="p">(</span><span class="n">future</span><span class="p">))</span>
+<span class="n">future</span><span class="o">.</span><span class="n">add_done_callback</span><span class="p">(</span><span class="n">got_result</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">run_forever</span><span class="p">()</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>この例では <code class="docutils literal"><span class="pre">slow_operation()</span></code> を <code class="docutils literal"><span class="pre">got_result()</span></code> にリンクするために future を用いています。<code class="docutils literal"><span class="pre">slow_operation()</span></code> が終了したとき <code class="docutils literal"><span class="pre">got_result()</span></code> が結果と供に呼ばれます。</p>
+</div>
+</div>
+<div class="section" id="task">
+<h2>18.5.3.5. タスク<a class="headerlink" href="#task" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="class">
+<dt id="asyncio.Task">
+<em class="property">class </em><code class="descclassname">asyncio.</code><code class="descname">Task</code><span class="sig-paren">(</span><em>coro</em>, <em>*</em>, <em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Task" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#coroutine"><span class="std std-ref">コルーチン</span></a> の実行をスケジュールします: それをフューチャ内にラップします。タスクは <a class="reference internal" href="#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">Future</span></code></a> のサブクラスです。</p>
+<p>A task is responsible for executing a coroutine object in an event loop.  If
+the wrapped coroutine yields from a future, the task suspends the execution
+of the wrapped coroutine and waits for the completion of the future. When
+the future is done, the execution of the wrapped coroutine restarts with the
+result or the exception of the future.</p>
+<p>イベントループは協調スケジューリングを使用します: 1 つのイベントループは同時に 1 つのタスクのみ実行します。その他のタスクは、他のイベントループが異なるメソッドで実行されている場合に並列で実行されるかもしれません。タスクがフューチャの計算を待っている間、イベントループは新しいタスクを実行します。</p>
+<p>タスクのキャンセルはフューチャのキャンセルとは異なります。<a class="reference internal" href="#asyncio.Task.cancel" title="asyncio.Task.cancel"><code class="xref py py-meth docutils literal"><span class="pre">cancel()</span></code></a> はラップされたコルーチンに <a class="reference internal" href="concurrent.futures.html#concurrent.futures.CancelledError" title="concurrent.futures.CancelledError"><code class="xref py py-exc docutils literal"><span class="pre">CancelledError</span></code></a> を送出します。ラップされたコルーチンが <a class="reference internal" href="concurrent.futures.html#concurrent.futures.CancelledError" title="concurrent.futures.CancelledError"><code class="xref py py-exc docutils literal"><span class="pre">CancelledError</span></code></a> 例外を補足しなかった、あるいは <a class="reference internal" href="concurrent.futures.html#concurrent.futures.CancelledError" title="concurrent.futures.CancelledError"><code class="xref py py-exc docutils literal"><span class="pre">CancelledError</span></code></a> 例外を送出しなかった場合、<a class="reference internal" href="#asyncio.Future.cancelled" title="asyncio.Future.cancelled"><code class="xref py py-meth docutils literal"><span class="pre">cancelled()</span></code></a> は常に <code class="docutils literal"><span class="pre">True</span></code> を返します。</p>
+<p>未完のタスクが破棄された場合、それのラップされた <a class="reference internal" href="#coroutine"><span class="std std-ref">コルーチン</span></a> は完了しません。これはおそらくバグであり警告がログに記録されます: <a class="reference internal" href="asyncio-dev.html#asyncio-pending-task-destroyed"><span class="std std-ref">未完のタスクの破棄</span></a> を参照してください。</p>
+<p>Don&#8217;t directly create <a class="reference internal" href="#asyncio.Task" title="asyncio.Task"><code class="xref py py-class docutils literal"><span class="pre">Task</span></code></a> instances: use the <a class="reference internal" href="#asyncio.ensure_future" title="asyncio.ensure_future"><code class="xref py py-func docutils literal"><span class="pre">ensure_future()</span></code></a>
+function or the <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_task" title="asyncio.AbstractEventLoop.create_task"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_task()</span></code></a> method.</p>
+<p>このクラスは <a class="reference internal" href="asyncio-dev.html#asyncio-multithreading"><span class="std std-ref">スレッド安全ではありません</span></a>。</p>
+<dl class="classmethod">
+<dt id="asyncio.Task.all_tasks">
+<em class="property">classmethod </em><code class="descname">all_tasks</code><span class="sig-paren">(</span><em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Task.all_tasks" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>イベントループ <em>loop</em> のすべてのタスクの集合を返します。</p>
+<p>デフォルトでは現在のイベントループの全タスクが返されます。</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="asyncio.Task.current_task">
+<em class="property">classmethod </em><code class="descname">current_task</code><span class="sig-paren">(</span><em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Task.current_task" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>イベントループ内で現在実行中のタスクまたは <code class="docutils literal"><span class="pre">None</span></code> を返します。</p>
+<p>デフォルトでは現在のイベントループの現在のタスクが返されます。</p>
+<p><a class="reference internal" href="#asyncio.Task" title="asyncio.Task"><code class="xref py py-class docutils literal"><span class="pre">Task</span></code></a> のコンテキスト内から呼び出されたのではない場合 <code class="docutils literal"><span class="pre">None</span></code> が返されます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Task.cancel">
+<code class="descname">cancel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Task.cancel" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このタスクのキャンセルを自身で要求します。</p>
+<p>これは、イベントループを通して次のサイクルにおいてラップされたコルーチンに投入される <a class="reference internal" href="concurrent.futures.html#concurrent.futures.CancelledError" title="concurrent.futures.CancelledError"><code class="xref py py-exc docutils literal"><span class="pre">CancelledError</span></code></a> を準備します。コルーチンにはその後 try/except/finally を使用してクリーンアップするか要求を拒否する機会が与えられます。</p>
+<p><a class="reference internal" href="#asyncio.Future.cancel" title="asyncio.Future.cancel"><code class="xref py py-meth docutils literal"><span class="pre">Future.cancel()</span></code></a> と異なり、これはタスクのキャンセルを保証しません: 例外が補足されそれが処理されることで、タスクのキャンセル処理が遅延したりキャンセル処理が完了しない場合があります。また、タスクは戻り値を返すか異なる例外を送出する場合もあります。</p>
+<p>このメソッドが呼び出された直後は <a class="reference internal" href="#asyncio.Future.cancelled" title="asyncio.Future.cancelled"><code class="xref py py-meth docutils literal"><span class="pre">cancelled()</span></code></a> は <code class="docutils literal"><span class="pre">True</span></code> を返しません (タスクがすでにキャンセル済みの場合は除く)。ラップされたコルーチンが <a class="reference internal" href="concurrent.futures.html#concurrent.futures.CancelledError" title="concurrent.futures.CancelledError"><code class="xref py py-exc docutils literal"><span class="pre">CancelledError</span></code></a> で中止されたとき、タスクは (<a class="reference internal" href="#asyncio.Task.cancel" title="asyncio.Task.cancel"><code class="xref py py-meth docutils literal"><span class="pre">cancel()</span></code></a> が呼ばれなかった場合でも) キャンセル済みとマークされます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Task.get_stack">
+<code class="descname">get_stack</code><span class="sig-paren">(</span><em>*</em>, <em>limit=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Task.get_stack" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このタスクのコルーチンのスタックフレームのリストを返します。</p>
+<p>If the coroutine is not done, this returns the stack where it is
+suspended.  If the coroutine has completed successfully or was
+cancelled, this returns an empty list.  If the coroutine was
+terminated by an exception, this returns the list of traceback
+frames.</p>
+<p>フレームは常に古いものから新しい物へ並んでいます。</p>
+<p>任意の引数 <em>limit</em> には返すフレームの最大数を指定します; デフォルトでは有効なすべてのフレームが返されます。これは返される値がスタックかトレースバックかによって意味が変わります: スタックでは最新のフレームから返されますが、トレースバックでは最古のものから返されます。 (これは traceback モジュールの振る舞いと一致します。)</p>
+<p>いかんともしがたい理由により、サスペンドされているコルーチンの場合スタックフレームが 1 個だけ返されます。</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="asyncio.Task.print_stack">
+<code class="descname">print_stack</code><span class="sig-paren">(</span><em>*</em>, <em>limit=None</em>, <em>file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Task.print_stack" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このタスクのコルーチンのスタックあるいはトレースバックを出力します。</p>
+<p>この出力は get_stack() によって回収されたフレームで、traceback モジュールのそれと同じです。引数 <em>limit</em> は get_stack() に渡されます。引数 <em>file</em> は出力を書き込む I/O ストリームです; デフォルトでは <code class="docutils literal"><span class="pre">sys.stderr</span></code> になります。</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="example-parallel-execution-of-tasks">
+<h3>18.5.3.5.1. 例: タスクの並列実行<a class="headerlink" href="#example-parallel-execution-of-tasks" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>3 個のタスク (A, B, C) を並列に実行する例です:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">factorial</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">number</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">number</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task </span><span class="si">%s</span><span class="s2">: Compute factorial(</span><span class="si">%s</span><span class="s2">)...&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">*=</span> <span class="n">i</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Task </span><span class="si">%s</span><span class="s2">: factorial(</span><span class="si">%s</span><span class="s2">) = </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">number</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+
+<span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+    <span class="n">factorial</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">factorial</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="n">factorial</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+<span class="p">))</span>
+<span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>出力:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">Task</span> <span class="n">A</span><span class="p">:</span> <span class="n">Compute</span> <span class="n">factorial</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">...</span>
+<span class="n">Task</span> <span class="n">B</span><span class="p">:</span> <span class="n">Compute</span> <span class="n">factorial</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">...</span>
+<span class="n">Task</span> <span class="n">C</span><span class="p">:</span> <span class="n">Compute</span> <span class="n">factorial</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">...</span>
+<span class="n">Task</span> <span class="n">A</span><span class="p">:</span> <span class="n">factorial</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">Task</span> <span class="n">B</span><span class="p">:</span> <span class="n">Compute</span> <span class="n">factorial</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">...</span>
+<span class="n">Task</span> <span class="n">C</span><span class="p">:</span> <span class="n">Compute</span> <span class="n">factorial</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">...</span>
+<span class="n">Task</span> <span class="n">B</span><span class="p">:</span> <span class="n">factorial</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">Task</span> <span class="n">C</span><span class="p">:</span> <span class="n">Compute</span> <span class="n">factorial</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">...</span>
+<span class="n">Task</span> <span class="n">C</span><span class="p">:</span> <span class="n">factorial</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="mi">24</span>
+</pre></div>
+</div>
+<p>タスクは作成されたときに実行を自動的にスケジュールされます。イベントループはすべてのタスクが終了したときに停止します。</p>
+</div>
+</div>
+<div class="section" id="task-functions">
+<h2>18.5.3.6. タスク関数<a class="headerlink" href="#task-functions" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">In the functions below, the optional <em>loop</em> argument allows explicitly setting
+the event loop object used by the underlying task or coroutine.  If it&#8217;s
+not provided, the default event loop is used.</p>
+</div>
+<dl class="function">
+<dt id="asyncio.as_completed">
+<code class="descclassname">asyncio.</code><code class="descname">as_completed</code><span class="sig-paren">(</span><em>fs</em>, <em>*</em>, <em>loop=None</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.as_completed" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>その値のイテレーターか、待機中のときは <a class="reference internal" href="#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">Future</span></code></a> インスタンスを返します。</p>
+<p>全フューチャが終了する前にタイムアウトが発生した場合 <a class="reference internal" href="#asyncio.TimeoutError" title="asyncio.TimeoutError"><code class="xref py py-exc docutils literal"><span class="pre">asyncio.TimeoutError</span></code></a> を送出します。</p>
+<p>以下はプログラム例です:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">fs</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">f</span>  <span class="c1"># The &#39;yield from&#39; may raise</span>
+    <span class="c1"># Use result</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">フューチャ <code class="docutils literal"><span class="pre">f</span></code> は fs のメンバーである必要はありません。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="asyncio.ensure_future">
+<code class="descclassname">asyncio.</code><code class="descname">ensure_future</code><span class="sig-paren">(</span><em>coro_or_future</em>, <em>*</em>, <em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.ensure_future" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#coroutine"><span class="std std-ref">コルーチンオブジェクト</span></a> の実行をスケジュールします: このときフューチャにラップします。<a class="reference internal" href="#asyncio.Task" title="asyncio.Task"><code class="xref py py-class docutils literal"><span class="pre">Task</span></code></a> オブジェクトを返します。</p>
+<p>引数が <a class="reference internal" href="#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">Future</span></code></a> の場合、それが直接返されます。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4.4 で追加.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5.1 で変更: </span>The function accepts any <a class="reference internal" href="../glossary.html#term-awaitable"><span class="xref std std-term">awaitable</span></a> object.</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last">The <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_task" title="asyncio.AbstractEventLoop.create_task"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_task()</span></code></a> method.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="asyncio.async">
+<code class="descclassname">asyncio.</code><code class="descname">async</code><span class="sig-paren">(</span><em>coro_or_future</em>, <em>*</em>, <em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.async" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#asyncio.ensure_future" title="asyncio.ensure_future"><code class="xref py py-func docutils literal"><span class="pre">ensure_future()</span></code></a> への非推奨なエイリアスです。</p>
+<div class="deprecated">
+<p><span class="versionmodified">バージョン 3.4.4 で撤廃.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="asyncio.gather">
+<code class="descclassname">asyncio.</code><code class="descname">gather</code><span class="sig-paren">(</span><em>*coros_or_futures</em>, <em>loop=None</em>, <em>return_exceptions=False</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.gather" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>与えられたコルーチンオブジェクトあるいはフューチャからの結果を一つにまとめたフューチャを返します。</p>
+<p>All futures must share the same event loop.  If all the tasks are done
+successfully, the returned future&#8217;s result is the list of results (in the
+order of the original sequence, not necessarily the order of results
+arrival).  If <em>return_exceptions</em> is true, exceptions in the tasks are
+treated the same as successful results, and gathered in the result list;
+otherwise, the first raised exception will be immediately propagated to the
+returned future.</p>
+<p>キャンセル: 外側のフューチャがキャンセルされた場合、すべての (まだ完了していない) 子プロセスもキャンセルされます。いずれかの子プロセスがキャンセルされた場合、これは <a class="reference internal" href="concurrent.futures.html#concurrent.futures.CancelledError" title="concurrent.futures.CancelledError"><code class="xref py py-exc docutils literal"><span class="pre">CancelledError</span></code></a> を送出するように扱います &#8211; この場合外側のフューチャはキャンセル <em>されません</em>。 (This is to prevent the cancellation of one child to cause other children to be cancelled.)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="asyncio.iscoroutine">
+<code class="descclassname">asyncio.</code><code class="descname">iscoroutine</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.iscoroutine" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return <code class="docutils literal"><span class="pre">True</span></code> if <em>obj</em> is a <a class="reference internal" href="#coroutine"><span class="std std-ref">coroutine object</span></a>,
+which may be based on a generator or an <a class="reference internal" href="../reference/compound_stmts.html#async-def"><code class="xref std std-keyword docutils literal"><span class="pre">async</span> <span class="pre">def</span></code></a> coroutine.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="asyncio.iscoroutinefunction">
+<code class="descclassname">asyncio.</code><code class="descname">iscoroutinefunction</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.iscoroutinefunction" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Return <code class="docutils literal"><span class="pre">True</span></code> if <em>func</em> is determined to be a <a class="reference internal" href="#coroutine"><span class="std std-ref">coroutine function</span></a>, which may be a decorated generator function or an
+<a class="reference internal" href="../reference/compound_stmts.html#async-def"><code class="xref std std-keyword docutils literal"><span class="pre">async</span> <span class="pre">def</span></code></a> function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="asyncio.run_coroutine_threadsafe">
+<code class="descclassname">asyncio.</code><code class="descname">run_coroutine_threadsafe</code><span class="sig-paren">(</span><em>coro</em>, <em>loop</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.run_coroutine_threadsafe" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Submit a <a class="reference internal" href="#coroutine"><span class="std std-ref">coroutine object</span></a> to a given event loop.</p>
+<p>Return a <a class="reference internal" href="concurrent.futures.html#concurrent.futures.Future" title="concurrent.futures.Future"><code class="xref py py-class docutils literal"><span class="pre">concurrent.futures.Future</span></code></a> to access the result.</p>
+<p>This function is meant to be called from a different thread than the one
+where the event loop is running. Usage:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Create a coroutine</span>
+<span class="n">coro</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1"># Submit the coroutine to a given loop</span>
+<span class="n">future</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">run_coroutine_threadsafe</span><span class="p">(</span><span class="n">coro</span><span class="p">,</span> <span class="n">loop</span><span class="p">)</span>
+<span class="c1"># Wait for the result with an optional timeout argument</span>
+<span class="k">assert</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>If an exception is raised in the coroutine, the returned future will be
+notified. It can also be used to cancel the task in the event loop:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The coroutine took too long, cancelling the task...&#39;</span><span class="p">)</span>
+    <span class="n">future</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The coroutine raised an exception: </span><span class="si">{!r}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The coroutine returned: </span><span class="si">{!r}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>このドキュメントの <a class="reference internal" href="asyncio-dev.html#asyncio-multithreading"><span class="std std-ref">asyncio-multithreading</span></a> 節を参照してください。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">Unlike other functions from the module,
+<a class="reference internal" href="#asyncio.run_coroutine_threadsafe" title="asyncio.run_coroutine_threadsafe"><code class="xref py py-func docutils literal"><span class="pre">run_coroutine_threadsafe()</span></code></a> requires the <em>loop</em> argument to
+be passed explicitly.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5.1 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="asyncio.sleep">
+<em class="property">coroutine </em><code class="descclassname">asyncio.</code><code class="descname">sleep</code><span class="sig-paren">(</span><em>delay</em>, <em>result=None</em>, <em>*</em>, <em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.sleep" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>与えられた時間 (秒) 後に完了する <a class="reference internal" href="#coroutine"><span class="std std-ref">コルーチン</span></a> を作成します。<em>result</em> が与えられた場合、コルーチン完了時にそれが呼び出し元に返されます。</p>
+<p>スリープの分解能は <a class="reference internal" href="asyncio-eventloop.html#asyncio-delayed-calls"><span class="std std-ref">イベントループの粒度</span></a> に依存します。</p>
+<p>この関数は <a class="reference internal" href="#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="asyncio.shield">
+<code class="descclassname">asyncio.</code><code class="descname">shield</code><span class="sig-paren">(</span><em>arg</em>, <em>*</em>, <em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.shield" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>フューチャを待機しキャンセル処理から保護します。</p>
+<p>命令文:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">shield</span><span class="p">(</span><span class="n">something</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>上の文は以下と完全に等価です:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">something</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>それを含むコルーチンがキャンセルされた場合を <em>除き</em>、<code class="docutils literal"><span class="pre">something()</span></code> 内で動作するタスクはキャンセルされません。<code class="docutils literal"><span class="pre">something()</span></code> 側から見るとキャンセル処理は発生しません。ただし、呼び出し元がキャンセルされた場合は、yield-from 表現は <a class="reference internal" href="concurrent.futures.html#concurrent.futures.CancelledError" title="concurrent.futures.CancelledError"><code class="xref py py-exc docutils literal"><span class="pre">CancelledError</span></code></a> を送出します。注意: <code class="docutils literal"><span class="pre">something()</span></code> が他の理由でキャンセルされた場合は <code class="docutils literal"><span class="pre">shield()</span></code> でも保護できません。</p>
+<p>完全にキャンセル処理を無視させたい場合 (推奨はしません) は、以下のように <code class="docutils literal"><span class="pre">shield()</span></code> と try/except 節の組み合わせで行うことができます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">shield</span><span class="p">(</span><span class="n">something</span><span class="p">())</span>
+<span class="k">except</span> <span class="n">CancelledError</span><span class="p">:</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="asyncio.wait">
+<em class="property">coroutine </em><code class="descclassname">asyncio.</code><code class="descname">wait</code><span class="sig-paren">(</span><em>futures</em>, <em>*</em>, <em>loop=None</em>, <em>timeout=None</em>, <em>return_when=ALL_COMPLETED</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.wait" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>シーケンス <em>futures</em> で与えられたフューチャおよびコルーチンオブジェクトが完了するまで待機します。コルーチンはタスクでラップされます。戻り値は (完了した <a class="reference internal" href="#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">Future</span></code></a>, 未完の <a class="reference internal" href="#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">Future</span></code></a>) の 2 個の集合になります。</p>
+<p>シーケンス <em>futures</em> は空であってはなりません。</p>
+<p><em>timeout</em> で結果を返すまで待機する最大秒数を指定できます。<em>timeout</em> は整数か浮動小数点数をとります。<em>timeout</em> が指定されないか <code class="docutils literal"><span class="pre">None</span></code> の場合、無期限に待機します。</p>
+<p><em>return_when</em> でこの関数がいつ結果を返すか指定します。指定できる値は以下の <a class="reference internal" href="concurrent.futures.html#module-concurrent.futures" title="concurrent.futures: Execute computations concurrently using threads or processes."><code class="xref py py-mod docutils literal"><span class="pre">concurrent.futures</span></code></a> モジュール定数のどれか一つです:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="42%" />
+<col width="58%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">定数</p>
+</th>
+<th class="head"><p class="first last">説明</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">FIRST_COMPLETED</span></code></td>
+<td><p class="first last">いずれかのフューチャが終了したかキャンセルされたときに返します。</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">FIRST_EXCEPTION</span></code></td>
+<td><p class="first last">いずれかのフューチャが例外の送出で終了した場合に返します。例外を送出したフューチャがない場合は、<code class="xref py py-const docutils literal"><span class="pre">ALL_COMPLETED</span></code> と等価になります。</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">ALL_COMPLETED</span></code></td>
+<td><p class="first last">すべてのフューチャが終了したかキャンセルされたときに返します。</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>この関数は <a class="reference internal" href="#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
+<p>使い方:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">done</span><span class="p">,</span> <span class="n">pending</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">これは <a class="reference internal" href="#asyncio.TimeoutError" title="asyncio.TimeoutError"><code class="xref py py-exc docutils literal"><span class="pre">asyncio.TimeoutError</span></code></a> を送出しません。タイムアウトが発生して完了しなかったフューチャは戻り値の後者の集合に含まれます。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="asyncio.wait_for">
+<em class="property">coroutine </em><code class="descclassname">asyncio.</code><code class="descname">wait_for</code><span class="sig-paren">(</span><em>fut</em>, <em>timeout</em>, <em>*</em>, <em>loop=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.wait_for" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>単一の <a class="reference internal" href="#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">Future</span></code></a> または <a class="reference internal" href="#coroutine"><span class="std std-ref">コルーチンオブジェクト</span></a> を期限付きで待機します。<em>timeout</em> が <code class="docutils literal"><span class="pre">None</span></code> の場合、フューチャが完了するまでブロックします。</p>
+<p>コルーチンは <a class="reference internal" href="#asyncio.Task" title="asyncio.Task"><code class="xref py py-class docutils literal"><span class="pre">Task</span></code></a> でラップされます。</p>
+<p>フューチャあるいはコルーチンの結果を返します。タイムアウトが発生した場合、タスクをキャンセルし <a class="reference internal" href="#asyncio.TimeoutError" title="asyncio.TimeoutError"><code class="xref py py-exc docutils literal"><span class="pre">asyncio.TimeoutError</span></code></a> を送出します。タスクのキャンセルを抑止したい場合は <a class="reference internal" href="#asyncio.shield" title="asyncio.shield"><code class="xref py py-func docutils literal"><span class="pre">shield()</span></code></a> でラップしてください。</p>
+<p>待機が中止された場合 <em>fut</em> も中止されます。</p>
+<p>この関数は <a class="reference internal" href="#coroutine"><span class="std std-ref">コルーチン</span></a> です。使用法:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">fut</span><span class="p">,</span> <span class="mf">60.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4.3 で変更: </span>待機が中止された場合 <em>fut</em> も中止されます。</p>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">18.5.3. タスクとコルーチン</a><ul>
+<li><a class="reference internal" href="#coroutines">18.5.3.1. コルーチン</a><ul>
+<li><a class="reference internal" href="#example-hello-world-coroutine">18.5.3.1.1. 例: Hello World コルーチン</a></li>
+<li><a class="reference internal" href="#example-coroutine-displaying-the-current-date">18.5.3.1.2. 例: 現在の日時を表示するコルーチン</a></li>
+<li><a class="reference internal" href="#example-chain-coroutines">18.5.3.1.3. 例: コルーチンのチェーン</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#invalidstateerror">18.5.3.2. InvalidStateError</a></li>
+<li><a class="reference internal" href="#timeouterror">18.5.3.3. TimeoutError</a></li>
+<li><a class="reference internal" href="#future">18.5.3.4. フューチャー</a><ul>
+<li><a class="reference internal" href="#example-future-with-run-until-complete">18.5.3.4.1. 例: run_until_complete() を使ったフューチャ</a></li>
+<li><a class="reference internal" href="#example-future-with-run-forever">18.5.3.4.2. 例: run_forever() を使ったフューチャ</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#task">18.5.3.5. タスク</a><ul>
+<li><a class="reference internal" href="#example-parallel-execution-of-tasks">18.5.3.5.1. 例: タスクの並列実行</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#task-functions">18.5.3.6. タスク関数</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="asyncio-eventloops.html"
+                        title="前の章へ">18.5.2. イベントループ</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="asyncio-protocol.html"
+                        title="次の章へ">18.5.4. トランスポートとプロトコル (コールバックベースの API)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio-task.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-protocol.html" title="18.5.4. トランスポートとプロトコル (コールバックベースの API)"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="asyncio-eventloops.html" title="18.5.2. イベントループ"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" >18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

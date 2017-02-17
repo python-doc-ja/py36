@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>35.13. syslog — Unix syslog ライブラリルーチン群 &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="35. Unix 固有のサービス" href="unix.html" />
+    <link rel="next" title="36. 取って代わられたモジュール群" href="superseded.html" />
+    <link rel="prev" title="35.12. nis — Sun の NIS (Yellow Pages) へのインタフェース" href="nis.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/syslog.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/syslog.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="superseded.html" title="36. 取って代わられたモジュール群"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="nis.html" title="35.12. nis — Sun の NIS (Yellow Pages) へのインタフェース"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" accesskey="U">35. Unix 固有のサービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-syslog">
+<span id="syslog-unix-syslog-library-routines"></span><h1>35.13. <a class="reference internal" href="#module-syslog" title="syslog: An interface to the Unix syslog library routines. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">syslog</span></code></a> &#8212; Unix syslog ライブラリルーチン群<a class="headerlink" href="#module-syslog" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<hr class="docutils" />
+<p>このモジュールでは Unix <code class="docutils literal"><span class="pre">syslog</span></code> ライブラリルーチン群へのインタフェースを提供します。<code class="docutils literal"><span class="pre">syslog</span></code> の便宜レベルに関する詳細な記述は Unix マニュアルページを参照してください。</p>
+<p>このモジュールはシステムの <code class="docutils literal"><span class="pre">syslog</span></code> ファミリのルーチンをラップしています。 syslog サーバーと通信できる pure Python のライブラリが、 <a class="reference internal" href="logging.handlers.html#module-logging.handlers" title="logging.handlers: Handlers for the logging module."><code class="xref py py-mod docutils literal"><span class="pre">logging.handlers</span></code></a> モジュールの <code class="xref py py-class docutils literal"><span class="pre">SysLogHandler</span></code> にあります。</p>
+<p>このモジュールには、以下の関数が定義されています:</p>
+<dl class="function">
+<dt id="syslog.syslog">
+<code class="descclassname">syslog.</code><code class="descname">syslog</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#syslog.syslog" title="この定義へのパーマリンク">¶</a></dt>
+<dt>
+<code class="descclassname">syslog.</code><code class="descname">syslog</code><span class="sig-paren">(</span><em>priority</em>, <em>message</em><span class="sig-paren">)</span></dt>
+<dd><p>文字列 <em>message</em> をシステムログ機構に送信します。末尾の改行文字は必要に応じて追加されます。各メッセージは <em>facility</em> および <em>level</em> からなる優先度でタグ付けされます。オプションの <em>priority</em> 引数はメッセージの優先度を定義します。標準の値は <code class="xref py py-const docutils literal"><span class="pre">LOG_INFO</span></code> です。 <em>priority</em> 中に、便宜レベルが  (<code class="docutils literal"><span class="pre">LOG_INFO</span> <span class="pre">|</span> <span class="pre">LOG_USER</span></code> のように) 論理和を使ってコード化されていない場合、 <a class="reference internal" href="#syslog.openlog" title="syslog.openlog"><code class="xref py py-func docutils literal"><span class="pre">openlog()</span></code></a> を呼び出した際の値が使われます。</p>
+<p><a class="reference internal" href="#module-syslog" title="syslog: An interface to the Unix syslog library routines. (Unix)"><code class="xref py py-func docutils literal"><span class="pre">syslog()</span></code></a> が呼び出される前に <a class="reference internal" href="#syslog.openlog" title="syslog.openlog"><code class="xref py py-func docutils literal"><span class="pre">openlog()</span></code></a> が呼び出されなかった場合、 <code class="docutils literal"><span class="pre">openlog()</span></code> が引数なしで呼び出されます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="syslog.openlog">
+<code class="descclassname">syslog.</code><code class="descname">openlog</code><span class="sig-paren">(</span><span class="optional">[</span><em>ident</em><span class="optional">[</span>, <em>logoption</em><span class="optional">[</span>, <em>facility</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#syslog.openlog" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#syslog.openlog" title="syslog.openlog"><code class="xref py py-func docutils literal"><span class="pre">openlog()</span></code></a> 関数を呼び出すことで以降の <a class="reference internal" href="#module-syslog" title="syslog: An interface to the Unix syslog library routines. (Unix)"><code class="xref py py-func docutils literal"><span class="pre">syslog()</span></code></a> の呼び出しに対するログオプションを設定することができます。ログがまだ開かれていない状態で <a class="reference internal" href="#module-syslog" title="syslog: An interface to the Unix syslog library routines. (Unix)"><code class="xref py py-func docutils literal"><span class="pre">syslog()</span></code></a> を呼び出すと <a class="reference internal" href="#syslog.openlog" title="syslog.openlog"><code class="xref py py-func docutils literal"><span class="pre">openlog()</span></code></a> が引数なしで呼び出されます。</p>
+<p>オプションの <em>ident</em> キーワード引数は全てのメッセージの先頭に付く文字列で、デフォルトでは <code class="docutils literal"><span class="pre">sys.argv[0]</span></code> から前方のパス部分を取り除いたものです。オプションの <em>logoption</em> キーワード引数 (デフォルトは 0) はビットフィールドです。組み合わせられる値については下記を参照してください。オプションの <em>facility</em> キーワード引数 (デフォルトは <code class="xref py py-const docutils literal"><span class="pre">LOG_USER</span></code>) は明示的に facility が encode されていないメッセージに設定される facility です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>前のバージョンではキーワード引数が許さておらず、<em>ident</em> が必須であった。<em>ident</em> のデフォルトはシステムライブラリに依存しており、しばしばプログラムファイルではなく <code class="docutils literal"><span class="pre">python</span></code> であった。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="syslog.closelog">
+<code class="descclassname">syslog.</code><code class="descname">closelog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#syslog.closelog" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>syslog モジュールの値をリセットし、システムライブラリの <code class="docutils literal"><span class="pre">closelog()</span></code> を呼び出します。</p>
+<p>この関数を呼ぶと、モジュールが最初に import されたときと同じようにふるまいます。例えば、(<a class="reference internal" href="#syslog.openlog" title="syslog.openlog"><code class="xref py py-func docutils literal"><span class="pre">openlog()</span></code></a> を呼び出さないで) <a class="reference internal" href="#module-syslog" title="syslog: An interface to the Unix syslog library routines. (Unix)"><code class="xref py py-func docutils literal"><span class="pre">syslog()</span></code></a> を最初に呼び出したときに、 <a class="reference internal" href="#syslog.openlog" title="syslog.openlog"><code class="xref py py-func docutils literal"><span class="pre">openlog()</span></code></a> が呼び出され、 <em>ident</em> やその他の <a class="reference internal" href="#syslog.openlog" title="syslog.openlog"><code class="xref py py-func docutils literal"><span class="pre">openlog()</span></code></a> の引数はデフォルト値にリセットされます。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="syslog.setlogmask">
+<code class="descclassname">syslog.</code><code class="descname">setlogmask</code><span class="sig-paren">(</span><em>maskpri</em><span class="sig-paren">)</span><a class="headerlink" href="#syslog.setlogmask" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>優先度マスクを <em>maskpri</em> に設定し、以前のマスク値を返します。 <em>maskpri</em> に設定されていない優先度レベルを持った <a class="reference internal" href="#module-syslog" title="syslog: An interface to the Unix syslog library routines. (Unix)"><code class="xref py py-func docutils literal"><span class="pre">syslog()</span></code></a> の呼び出しは無視されます。標準では全ての優先度をログ出力します。関数 <code class="docutils literal"><span class="pre">LOG_MASK(pri)</span></code> は個々の優先度 <em>pri</em> に対する優先度マスクを計算します。関数 <code class="docutils literal"><span class="pre">LOG_UPTO(pri)</span></code> は優先度 <em>pri</em> までの全ての優先度を含むようなマスクを計算します。</p>
+</dd></dl>
+
+<p>このモジュールでは以下の定数を定義しています:</p>
+<dl class="docutils">
+<dt>優先度 (降順):</dt>
+<dd><p class="first last"><code class="xref py py-const docutils literal"><span class="pre">LOG_EMERG</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_ALERT</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_CRIT</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_ERR</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_WARNING</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_NOTICE</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_INFO</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_DEBUG</span></code> 。</p>
+</dd>
+<dt>機能:</dt>
+<dd><p class="first last"><code class="xref py py-const docutils literal"><span class="pre">LOG_KERN</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_USER</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_MAIL</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_DAEMON</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_AUTH</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_LPR</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_NEWS</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_UUCP</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_CRON</span></code> 、<code class="xref py py-const docutils literal"><span class="pre">LOG_SYSLOG</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_LOCAL0</span></code> から <code class="xref py py-const docutils literal"><span class="pre">LOG_LOCAL7</span></code> 、および <code class="docutils literal"><span class="pre">&lt;syslog.h&gt;</span></code> で定義されていれば、 <code class="xref py py-const docutils literal"><span class="pre">LOG_AUTHPRIV</span></code> 。</p>
+</dd>
+<dt>ログオプション:</dt>
+<dd><p class="first last"><code class="xref py py-const docutils literal"><span class="pre">LOG_PID</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_CONS</span></code> 、 <code class="xref py py-const docutils literal"><span class="pre">LOG_NDELAY</span></code> 、また <code class="docutils literal"><span class="pre">&lt;syslog.h&gt;</span></code> で定義されている場合、 <code class="xref py py-const docutils literal"><span class="pre">LOG_ODELAY</span></code>、 <code class="xref py py-const docutils literal"><span class="pre">LOG_NOWAIT</span></code> 、および <code class="xref py py-const docutils literal"><span class="pre">LOG_PERROR</span></code> 。</p>
+</dd>
+</dl>
+<div class="section" id="examples">
+<h2>35.13.1. 使用例<a class="headerlink" href="#examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<div class="section" id="simple-example">
+<h3>35.13.1.1. シンプルな例<a class="headerlink" href="#simple-example" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>1つ目のシンプルな例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">syslog</span>
+
+<span class="n">syslog</span><span class="o">.</span><span class="n">syslog</span><span class="p">(</span><span class="s1">&#39;Processing started&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">error</span><span class="p">:</span>
+    <span class="n">syslog</span><span class="o">.</span><span class="n">syslog</span><span class="p">(</span><span class="n">syslog</span><span class="o">.</span><span class="n">LOG_ERR</span><span class="p">,</span> <span class="s1">&#39;Processing started&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>いくつかのログオプションを設定する例。ログメッセージにプロセスIDを含み、メッセージをメールのログ用の facility にメッセージを書きます:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">syslog</span><span class="o">.</span><span class="n">openlog</span><span class="p">(</span><span class="n">logoption</span><span class="o">=</span><span class="n">syslog</span><span class="o">.</span><span class="n">LOG_PID</span><span class="p">,</span> <span class="n">facility</span><span class="o">=</span><span class="n">syslog</span><span class="o">.</span><span class="n">LOG_MAIL</span><span class="p">)</span>
+<span class="n">syslog</span><span class="o">.</span><span class="n">syslog</span><span class="p">(</span><span class="s1">&#39;E-mail processing initiated...&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">35.13. <code class="docutils literal"><span class="pre">syslog</span></code> &#8212; Unix syslog ライブラリルーチン群</a><ul>
+<li><a class="reference internal" href="#examples">35.13.1. 使用例</a><ul>
+<li><a class="reference internal" href="#simple-example">35.13.1.1. シンプルな例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="nis.html"
+                        title="前の章へ">35.12. <code class="docutils literal"><span class="pre">nis</span></code> &#8212; Sun の NIS (Yellow Pages) へのインタフェース</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="superseded.html"
+                        title="次の章へ">36. 取って代わられたモジュール群</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/syslog.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="superseded.html" title="36. 取って代わられたモジュール群"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="nis.html" title="35.12. nis — Sun の NIS (Yellow Pages) へのインタフェース"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" >35. Unix 固有のサービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

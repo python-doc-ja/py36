@@ -1,0 +1,723 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>26.7. 2to3 - Python 2 から 3 への自動コード変換 &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="26. 開発ツール" href="development.html" />
+    <link rel="next" title="26.8. test — Python 用回帰テストパッケージ" href="test.html" />
+    <link rel="prev" title="26.6. unittest.mock — 入門" href="unittest.mock-examples.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/2to3.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/2to3.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="test.html" title="26.8. test — Python 用回帰テストパッケージ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="unittest.mock-examples.html" title="26.6. unittest.mock — 入門"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="development.html" accesskey="U">26. 開発ツール</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="to3-automated-python-2-to-3-code-translation">
+<span id="to3-reference"></span><h1>26.7. 2to3 - Python 2 から 3 への自動コード変換<a class="headerlink" href="#to3-automated-python-2-to-3-code-translation" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>2to3 は、 Python 2.x のソースコードを読み込み、一連の <em>変換プログラム</em> を適用して Python 3.x のコードに変換するプログラムです。標準ライブラリはほとんど全てのコードを取り扱うのに十分な変換プログラムを含んでいます。ただし 2to3 を構成している <a class="reference internal" href="#module-lib2to3" title="lib2to3: the 2to3 library"><code class="xref py py-mod docutils literal"><span class="pre">lib2to3</span></code></a> は柔軟かつ一般的なライブラリなので、 2to3 のために自分で変換プログラムを書くこともできます。 <a class="reference internal" href="#module-lib2to3" title="lib2to3: the 2to3 library"><code class="xref py py-mod docutils literal"><span class="pre">lib2to3</span></code></a> は、 Python コードを自動編集する必要がある場合にも適用することができます。</p>
+<div class="section" id="using-2to3">
+<span id="to3-using"></span><h2>26.7.1. 2to3 の使用<a class="headerlink" href="#using-2to3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>2to3 は大抵の場合、 Python インタープリターと共に、スクリプトとしてインストールされます。場所は、 Python のルートディレクトリにある、 <code class="file docutils literal"><span class="pre">Tools/scripts</span></code> ディレクトリです。</p>
+<p>2to3 に与える基本の引数は、変換対象のファイル、もしくは、ディレクトリのリストです。ディレクトリの場合は、 Python ソースコードを再帰的に探索します。</p>
+<p>Python 2.x のサンプルコード、 <code class="file docutils literal"><span class="pre">example.py</span></code> を示します:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="nb">print</span> <span class="s2">&quot;Hello, </span><span class="si">{0}</span><span class="s2">!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="nb">print</span> <span class="s2">&quot;What&#39;s your name?&quot;</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">raw_input</span><span class="p">()</span>
+<span class="n">greet</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It can be converted to Python 3.x code via 2to3 on the command line:</p>
+<div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> 2to3 example.py
+</pre></div>
+</div>
+<p>A diff against the original source file is printed.  2to3 can also write the
+needed modifications right back to the source file.  (A backup of the original
+file is made unless <code class="xref std std-option docutils literal"><span class="pre">-n</span></code> is also given.)  Writing the changes back is
+enabled with the <code class="xref std std-option docutils literal"><span class="pre">-w</span></code> flag:</p>
+<div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> 2to3 -w example.py
+</pre></div>
+</div>
+<p>変換後、 <code class="file docutils literal"><span class="pre">example.py</span></code> は以下のようになります:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hello, </span><span class="si">{0}</span><span class="s2">!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;What&#39;s your name?&quot;</span><span class="p">)</span>
+<span class="n">name</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span>
+<span class="n">greet</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>変換処理を通じて、コメントと、インデントは保存されます。</p>
+<p>By default, 2to3 runs a set of <a class="reference internal" href="#to3-fixers"><span class="std std-ref">predefined fixers</span></a>.  The
+<code class="xref std std-option docutils literal"><span class="pre">-l</span></code> flag lists all available fixers.  An explicit set of fixers to run
+can be given with <code class="xref std std-option docutils literal"><span class="pre">-f</span></code>.  Likewise the <code class="xref std std-option docutils literal"><span class="pre">-x</span></code> explicitly disables a
+fixer.  The following example runs only the <code class="docutils literal"><span class="pre">imports</span></code> and <code class="docutils literal"><span class="pre">has_key</span></code> fixers:</p>
+<div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> 2to3 -f imports -f has_key example.py
+</pre></div>
+</div>
+<p>This command runs every fixer except the <code class="docutils literal"><span class="pre">apply</span></code> fixer:</p>
+<div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> 2to3 -x apply example.py
+</pre></div>
+</div>
+<p>Some fixers are <em>explicit</em>, meaning they aren&#8217;t run by default and must be
+listed on the command line to be run.  Here, in addition to the default fixers,
+the <code class="docutils literal"><span class="pre">idioms</span></code> fixer is run:</p>
+<div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> 2to3 -f all -f idioms example.py
+</pre></div>
+</div>
+<p>ここで、 <code class="docutils literal"><span class="pre">all</span></code> を指定することで、全てのデフォルトの変換プログラムを有効化できることに注意して下さい。</p>
+<p>2to3 がソースコードに修正すべき点を見つけても、自動的には修正できない場合もあります。この場合、 2to3 はファイルの変更点の下に警告を表示します。 3.x に準拠したコードにするために、あなたはこの警告に対処しなくてはなりません。</p>
+<p>2to3 can also refactor doctests.  To enable this mode, use the <code class="xref std std-option docutils literal"><span class="pre">-d</span></code>
+flag.  Note that <em>only</em> doctests will be refactored.  This also doesn&#8217;t require
+the module to be valid Python.  For example, doctest like examples in a reST
+document could also be refactored with this option.</p>
+<p>The <code class="xref std std-option docutils literal"><span class="pre">-v</span></code> option enables output of more information on the translation
+process.</p>
+<p>Since some print statements can be parsed as function calls or statements, 2to3
+cannot always read files containing the print function.  When 2to3 detects the
+presence of the <code class="docutils literal"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span> <span class="pre">print_function</span></code> compiler directive, it
+modifies its internal grammar to interpret <a class="reference internal" href="functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> as a function.  This
+change can also be enabled manually with the <code class="xref std std-option docutils literal"><span class="pre">-p</span></code> flag.  Use
+<code class="xref std std-option docutils literal"><span class="pre">-p</span></code> to run fixers on code that already has had its print statements
+converted.</p>
+<p>The <code class="xref std std-option docutils literal"><span class="pre">-o</span></code> or <code class="xref std std-option docutils literal"><span class="pre">--output-dir</span></code> option allows specification of an
+alternate directory for processed output files to be written to.  The
+<code class="xref std std-option docutils literal"><span class="pre">-n</span></code> flag is required when using this as backup files do not make sense
+when not overwriting the input files.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2.3 で追加: </span>The <code class="xref std std-option docutils literal"><span class="pre">-o</span></code> option was added.</p>
+</div>
+<p>The <code class="xref std std-option docutils literal"><span class="pre">-W</span></code> or <code class="xref std std-option docutils literal"><span class="pre">--write-unchanged-files</span></code> flag tells 2to3 to always
+write output files even if no changes were required to the file.  This is most
+useful with <code class="xref std std-option docutils literal"><span class="pre">-o</span></code> so that an entire Python source tree is copied with
+translation from one directory to another.
+This option implies the <code class="xref std std-option docutils literal"><span class="pre">-w</span></code> flag as it would not make sense otherwise.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2.3 で追加: </span>The <code class="xref std std-option docutils literal"><span class="pre">-W</span></code> flag was added.</p>
+</div>
+<p>The <code class="xref std std-option docutils literal"><span class="pre">--add-suffix</span></code> option specifies a string to append to all output
+filenames.  The <code class="xref std std-option docutils literal"><span class="pre">-n</span></code> flag is required when specifying this as backups
+are not necessary when writing to different filenames.  Example:</p>
+<div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> 2to3 -n -W --add-suffix<span class="o">=</span><span class="m">3</span> example.py
+</pre></div>
+</div>
+<p>とすれば変換後ファイルは <code class="docutils literal"><span class="pre">example.py3</span></code> として書き出されます。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2.3 で追加: </span>The <code class="xref std std-option docutils literal"><span class="pre">--add-suffix</span></code> option was added.</p>
+</div>
+<p>To translate an entire project from one directory tree to another use:</p>
+<div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> 2to3 --output-dir<span class="o">=</span>python3-version/mycode -W -n python2-version/mycode
+</pre></div>
+</div>
+</div>
+<div class="section" id="fixers">
+<span id="to3-fixers"></span><h2>26.7.2. 変換プログラム<a class="headerlink" href="#fixers" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>コード変形の各ステップは変換プログラムに隠蔽されます。 <code class="docutils literal"><span class="pre">2to3</span> <span class="pre">-l</span></code> コマンドは変換プログラムのリストを表示します。 <a class="reference internal" href="#to3-using"><span class="std std-ref">上記</span></a> の通り、それぞれの変換プログラムを個別に有効化したり無効化したりすることができます。ここではそれらをさらに詳細に説明します。</p>
+<dl class="2to3fixer">
+<dt id="2to3fixer-apply">
+<code class="descname">apply</code><a class="headerlink" href="#2to3fixer-apply" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-func docutils literal"><span class="pre">apply()</span></code> の使用を削除します。例えば <code class="docutils literal"><span class="pre">apply(function,</span> <span class="pre">*args,</span> <span class="pre">**kwargs)</span></code> は <code class="docutils literal"><span class="pre">function(*args,</span> <span class="pre">**kwargs)</span></code> に変換されます。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-asserts">
+<code class="descname">asserts</code><a class="headerlink" href="#2to3fixer-asserts" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>廃止になった <a class="reference internal" href="unittest.html#module-unittest" title="unittest: Unit testing framework for Python."><code class="xref py py-mod docutils literal"><span class="pre">unittest</span></code></a> メソッド名を新しい名前に置換します。</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">対象</p>
+</th>
+<th class="head"><p class="first last">変換先</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">failUnlessEqual(a,</span> <span class="pre">b)</span></code></td>
+<td><a class="reference internal" href="unittest.html#unittest.TestCase.assertEqual" title="unittest.TestCase.assertEqual"><code class="xref py py-meth docutils literal"><span class="pre">assertEqual(a,</span> <span class="pre">b)</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">assertEquals(a,</span> <span class="pre">b)</span></code></td>
+<td><a class="reference internal" href="unittest.html#unittest.TestCase.assertEqual" title="unittest.TestCase.assertEqual"><code class="xref py py-meth docutils literal"><span class="pre">assertEqual(a,</span> <span class="pre">b)</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">failIfEqual(a,</span> <span class="pre">b)</span></code></td>
+<td><a class="reference internal" href="unittest.html#unittest.TestCase.assertNotEqual" title="unittest.TestCase.assertNotEqual"><code class="xref py py-meth docutils literal"><span class="pre">assertNotEqual(a,</span> <span class="pre">b)</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">assertNotEquals(a,</span> <span class="pre">b)</span></code></td>
+<td><a class="reference internal" href="unittest.html#unittest.TestCase.assertNotEqual" title="unittest.TestCase.assertNotEqual"><code class="xref py py-meth docutils literal"><span class="pre">assertNotEqual(a,</span> <span class="pre">b)</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">failUnless(a)</span></code></td>
+<td><a class="reference internal" href="unittest.html#unittest.TestCase.assertTrue" title="unittest.TestCase.assertTrue"><code class="xref py py-meth docutils literal"><span class="pre">assertTrue(a)</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">assert_(a)</span></code></td>
+<td><a class="reference internal" href="unittest.html#unittest.TestCase.assertTrue" title="unittest.TestCase.assertTrue"><code class="xref py py-meth docutils literal"><span class="pre">assertTrue(a)</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">failIf(a)</span></code></td>
+<td><a class="reference internal" href="unittest.html#unittest.TestCase.assertFalse" title="unittest.TestCase.assertFalse"><code class="xref py py-meth docutils literal"><span class="pre">assertFalse(a)</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">failUnlessRaises(exc,</span> <span class="pre">cal)</span></code></td>
+<td><a class="reference internal" href="unittest.html#unittest.TestCase.assertRaises" title="unittest.TestCase.assertRaises"><code class="xref py py-meth docutils literal"><span class="pre">assertRaises(exc,</span> <span class="pre">cal)</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">failUnlessAlmostEqual(a,</span> <span class="pre">b)</span></code></td>
+<td><a class="reference internal" href="unittest.html#unittest.TestCase.assertAlmostEqual" title="unittest.TestCase.assertAlmostEqual"><code class="xref py py-meth docutils literal"><span class="pre">assertAlmostEqual(a,</span> <span class="pre">b)</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">assertAlmostEquals(a,</span> <span class="pre">b)</span></code></td>
+<td><a class="reference internal" href="unittest.html#unittest.TestCase.assertAlmostEqual" title="unittest.TestCase.assertAlmostEqual"><code class="xref py py-meth docutils literal"><span class="pre">assertAlmostEqual(a,</span> <span class="pre">b)</span></code></a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">failIfAlmostEqual(a,</span> <span class="pre">b)</span></code></td>
+<td><a class="reference internal" href="unittest.html#unittest.TestCase.assertNotAlmostEqual" title="unittest.TestCase.assertNotAlmostEqual"><code class="xref py py-meth docutils literal"><span class="pre">assertNotAlmostEqual(a,</span> <span class="pre">b)</span></code></a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">assertNotAlmostEquals(a,</span> <span class="pre">b)</span></code></td>
+<td><a class="reference internal" href="unittest.html#unittest.TestCase.assertNotAlmostEqual" title="unittest.TestCase.assertNotAlmostEqual"><code class="xref py py-meth docutils literal"><span class="pre">assertNotAlmostEqual(a,</span> <span class="pre">b)</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-basestring">
+<code class="descname">basestring</code><a class="headerlink" href="#2to3fixer-basestring" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-class docutils literal"><span class="pre">basestring</span></code> を <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> に変換します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-buffer">
+<code class="descname">buffer</code><a class="headerlink" href="#2to3fixer-buffer" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-class docutils literal"><span class="pre">buffer</span></code> を <a class="reference internal" href="stdtypes.html#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> に変換します。 <a class="reference internal" href="stdtypes.html#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> API は <code class="xref py py-class docutils literal"><span class="pre">buffer</span></code> と似ているものの厳密に同じではないので、この変換プログラムはオプションです。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-callable">
+<code class="descname">callable</code><a class="headerlink" href="#2to3fixer-callable" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">callable(x)</span></code> を <code class="docutils literal"><span class="pre">isinstance(x,</span> <span class="pre">collections.Callable)</span></code> に変換し、必要なら <a class="reference internal" href="collections.html#module-collections" title="collections: Container datatypes"><code class="xref py py-mod docutils literal"><span class="pre">collections</span></code></a> のインポートを追加します。 <code class="docutils literal"><span class="pre">callable(x)</span></code> は Python 3.2 で復活したので、もしも Python 3.1 をサポートするつもりがないのであれば、この修正プログラムは無効に出来ます。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-dict">
+<code class="descname">dict</code><a class="headerlink" href="#2to3fixer-dict" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>辞書をイテレートするメソッドを修正します。 <code class="xref py py-meth docutils literal"><span class="pre">dict.iteritems()</span></code> は <a class="reference internal" href="stdtypes.html#dict.items" title="dict.items"><code class="xref py py-meth docutils literal"><span class="pre">dict.items()</span></code></a> に、 <code class="xref py py-meth docutils literal"><span class="pre">dict.iterkeys()</span></code> は <a class="reference internal" href="stdtypes.html#dict.keys" title="dict.keys"><code class="xref py py-meth docutils literal"><span class="pre">dict.keys()</span></code></a> に、 <code class="xref py py-meth docutils literal"><span class="pre">dict.itervalues()</span></code> は <a class="reference internal" href="stdtypes.html#dict.values" title="dict.values"><code class="xref py py-meth docutils literal"><span class="pre">dict.values()</span></code></a> に変換されます。同様に <code class="xref py py-meth docutils literal"><span class="pre">dict.viewitems()</span></code>, <code class="xref py py-meth docutils literal"><span class="pre">dict.viewkeys()</span></code> <code class="xref py py-meth docutils literal"><span class="pre">dict.viewvalues()</span></code> はそれぞれ <a class="reference internal" href="stdtypes.html#dict.items" title="dict.items"><code class="xref py py-meth docutils literal"><span class="pre">dict.items()</span></code></a>, <a class="reference internal" href="stdtypes.html#dict.keys" title="dict.keys"><code class="xref py py-meth docutils literal"><span class="pre">dict.keys()</span></code></a>, <a class="reference internal" href="stdtypes.html#dict.values" title="dict.values"><code class="xref py py-meth docutils literal"><span class="pre">dict.values()</span></code></a> に変換されます。また、 <a class="reference internal" href="stdtypes.html#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> の呼び出しの中で <a class="reference internal" href="stdtypes.html#dict.items" title="dict.items"><code class="xref py py-meth docutils literal"><span class="pre">dict.items()</span></code></a>, <a class="reference internal" href="stdtypes.html#dict.keys" title="dict.keys"><code class="xref py py-meth docutils literal"><span class="pre">dict.keys()</span></code></a>, <a class="reference internal" href="stdtypes.html#dict.values" title="dict.values"><code class="xref py py-meth docutils literal"><span class="pre">dict.values()</span></code></a> を使用している場合はそれをラップします。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-except">
+<code class="descname">except</code><a class="headerlink" href="#2to3fixer-except" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">except</span> <span class="pre">X,</span> <span class="pre">T</span></code> を <code class="docutils literal"><span class="pre">except</span> <span class="pre">X</span> <span class="pre">as</span> <span class="pre">T</span></code> に変換します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-exec">
+<code class="descname">exec</code><a class="headerlink" href="#2to3fixer-exec" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">exec</span></code> 文を <a class="reference internal" href="functions.html#exec" title="exec"><code class="xref py py-func docutils literal"><span class="pre">exec()</span></code></a> 関数に変換します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-execfile">
+<code class="descname">execfile</code><a class="headerlink" href="#2to3fixer-execfile" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-func docutils literal"><span class="pre">execfile()</span></code> の使用を削除します。 <code class="xref py py-func docutils literal"><span class="pre">execfile()</span></code> への引数は <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a>, <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a>, <a class="reference internal" href="functions.html#exec" title="exec"><code class="xref py py-func docutils literal"><span class="pre">exec()</span></code></a> の呼び出しでラップされます。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-exitfunc">
+<code class="descname">exitfunc</code><a class="headerlink" href="#2to3fixer-exitfunc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-attr docutils literal"><span class="pre">sys.exitfunc</span></code> への代入を <a class="reference internal" href="atexit.html#module-atexit" title="atexit: Register and execute cleanup functions."><code class="xref py py-mod docutils literal"><span class="pre">atexit</span></code></a> モジュールの使用に変更します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-filter">
+<code class="descname">filter</code><a class="headerlink" href="#2to3fixer-filter" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="stdtypes.html#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> 呼び出しの中で <a class="reference internal" href="functions.html#filter" title="filter"><code class="xref py py-func docutils literal"><span class="pre">filter()</span></code></a> を使用している部分をラップします。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-funcattrs">
+<code class="descname">funcattrs</code><a class="headerlink" href="#2to3fixer-funcattrs" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>名前が変更された関数の属性を修正します。例えば <code class="docutils literal"><span class="pre">my_function.func_closure</span></code> は <code class="docutils literal"><span class="pre">my_function.__closure__</span></code> に変換されます。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-future">
+<code class="descname">future</code><a class="headerlink" href="#2to3fixer-future" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span> <span class="pre">new_feature</span></code> 文を削除します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-getcwdu">
+<code class="descname">getcwdu</code><a class="headerlink" href="#2to3fixer-getcwdu" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-func docutils literal"><span class="pre">os.getcwdu()</span></code> を <a class="reference internal" href="os.html#os.getcwd" title="os.getcwd"><code class="xref py py-func docutils literal"><span class="pre">os.getcwd()</span></code></a> に置き換えます。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-has_key">
+<code class="descname">has_key</code><a class="headerlink" href="#2to3fixer-has_key" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">dict.has_key(key)</span></code> を <code class="docutils literal"><span class="pre">key</span> <span class="pre">in</span> <span class="pre">dict</span></code> に変更します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-idioms">
+<code class="descname">idioms</code><a class="headerlink" href="#2to3fixer-idioms" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このオプションの変換プログラムは、 Python コードをより Python らしい書き方にするいくつかの変形を行います。 <code class="docutils literal"><span class="pre">type(x)</span> <span class="pre">is</span> <span class="pre">SomeClass</span></code> や <code class="docutils literal"><span class="pre">type(x)</span> <span class="pre">==</span> <span class="pre">SomeClass</span></code> のような型の比較は <code class="docutils literal"><span class="pre">isinstance(x,</span> <span class="pre">SomeClass)</span></code> に変換されます。 <code class="docutils literal"><span class="pre">while</span> <span class="pre">1</span></code> は <code class="docutils literal"><span class="pre">while</span> <span class="pre">True</span></code> になります。また、適切な場所では <a class="reference internal" href="functions.html#sorted" title="sorted"><code class="xref py py-func docutils literal"><span class="pre">sorted()</span></code></a> が使われるようにします。例えば、このブロックは</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">some_iterable</span><span class="p">)</span>
+<span class="n">L</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>次のように変更されます</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">L</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">some_iterable</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-import">
+<code class="descname">import</code><a class="headerlink" href="#2to3fixer-import" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>暗黙の相対インポート (sibling imports) を検出して、明示的な相対インポート (relative imports) に変換します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-imports">
+<code class="descname">imports</code><a class="headerlink" href="#2to3fixer-imports" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>標準ライブラリ中のモジュール名の変更を扱います。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-imports2">
+<code class="descname">imports2</code><a class="headerlink" href="#2to3fixer-imports2" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>標準ライブラリ中の別のモジュール名の変更を扱います。単に技術的な制約のために <a class="reference internal" href="#2to3fixer-imports"><code class="xref std std-2to3fixer docutils literal"><span class="pre">imports</span></code></a> とは別になっています。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-input">
+<code class="descname">input</code><a class="headerlink" href="#2to3fixer-input" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">input(prompt)</span></code> を <code class="docutils literal"><span class="pre">eval(input(prompt))</span></code> に変換します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-intern">
+<code class="descname">intern</code><a class="headerlink" href="#2to3fixer-intern" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-func docutils literal"><span class="pre">intern()</span></code> を <a class="reference internal" href="sys.html#sys.intern" title="sys.intern"><code class="xref py py-func docutils literal"><span class="pre">sys.intern()</span></code></a> に変換します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-isinstance">
+<code class="descname">isinstance</code><a class="headerlink" href="#2to3fixer-isinstance" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="functions.html#isinstance" title="isinstance"><code class="xref py py-func docutils literal"><span class="pre">isinstance()</span></code></a> の第 2 引数の重複を修正します。例えば <code class="docutils literal"><span class="pre">isinstance(x,</span> <span class="pre">(int,</span> <span class="pre">int))</span></code> は <code class="docutils literal"><span class="pre">isinstance(x,</span> <span class="pre">(int))</span></code> に変換されます。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-itertools_imports">
+<code class="descname">itertools_imports</code><a class="headerlink" href="#2to3fixer-itertools_imports" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-func docutils literal"><span class="pre">itertools.ifilter()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">itertools.izip()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">itertools.imap()</span></code> のインポートを削除します。また <code class="xref py py-func docutils literal"><span class="pre">itertools.ifilterfalse()</span></code> のインポートを <a class="reference internal" href="itertools.html#itertools.filterfalse" title="itertools.filterfalse"><code class="xref py py-func docutils literal"><span class="pre">itertools.filterfalse()</span></code></a> に変換します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-itertools">
+<code class="descname">itertools</code><a class="headerlink" href="#2to3fixer-itertools" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-func docutils literal"><span class="pre">itertools.ifilter()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">itertools.izip()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">itertools.imap()</span></code> を使っている箇所を同等の組み込み関数で置き換えます。 <code class="xref py py-func docutils literal"><span class="pre">itertools.ifilterfalse()</span></code> は <a class="reference internal" href="itertools.html#itertools.filterfalse" title="itertools.filterfalse"><code class="xref py py-func docutils literal"><span class="pre">itertools.filterfalse()</span></code></a> に変換されます。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-long">
+<code class="descname">long</code><a class="headerlink" href="#2to3fixer-long" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-class docutils literal"><span class="pre">long</span></code> を <a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a> に変更します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-map">
+<code class="descname">map</code><a class="headerlink" href="#2to3fixer-map" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="stdtypes.html#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> 呼び出しの中の <a class="reference internal" href="functions.html#map" title="map"><code class="xref py py-func docutils literal"><span class="pre">map()</span></code></a> をラップします。また、 <code class="docutils literal"><span class="pre">map(None,</span> <span class="pre">x)</span></code> を <code class="docutils literal"><span class="pre">list(x)</span></code> に変換します。 <code class="docutils literal"><span class="pre">from</span> <span class="pre">future_builtins</span> <span class="pre">import</span> <span class="pre">map</span></code> を使うと、この変換プログラムを無効にできます。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-metaclass">
+<code class="descname">metaclass</code><a class="headerlink" href="#2to3fixer-metaclass" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>古いメタクラス構文 (クラス定義中の <code class="docutils literal"><span class="pre">__metaclass__</span> <span class="pre">=</span> <span class="pre">Meta</span></code>) を、新しい構文 (<code class="docutils literal"><span class="pre">class</span> <span class="pre">X(metaclass=Meta)</span></code>) に変換します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-methodattrs">
+<code class="descname">methodattrs</code><a class="headerlink" href="#2to3fixer-methodattrs" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>古いメソッドの属性名を修正します。例えば <code class="docutils literal"><span class="pre">meth.im_func</span></code> は <code class="docutils literal"><span class="pre">meth.__func__</span></code> に変換されます。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-ne">
+<code class="descname">ne</code><a class="headerlink" href="#2to3fixer-ne" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>古い不等号の構文 <code class="docutils literal"><span class="pre">&lt;&gt;</span></code> を <code class="docutils literal"><span class="pre">!=</span></code> に変換します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-next">
+<code class="descname">next</code><a class="headerlink" href="#2to3fixer-next" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>イテレータの <code class="xref py py-meth docutils literal"><span class="pre">next()</span></code> メソッドの使用を <a class="reference internal" href="functions.html#next" title="next"><code class="xref py py-func docutils literal"><span class="pre">next()</span></code></a> 関数に変換します。また <a class="reference internal" href="functions.html#next" title="next"><code class="xref py py-meth docutils literal"><span class="pre">next()</span></code></a> メソッドを <a class="reference internal" href="stdtypes.html#iterator.__next__" title="iterator.__next__"><code class="xref py py-meth docutils literal"><span class="pre">__next__()</span></code></a> に変更します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-nonzero">
+<code class="descname">nonzero</code><a class="headerlink" href="#2to3fixer-nonzero" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-meth docutils literal"><span class="pre">__nonzero__()</span></code> を <a class="reference internal" href="../reference/datamodel.html#object.__bool__" title="object.__bool__"><code class="xref py py-meth docutils literal"><span class="pre">__bool__()</span></code></a> に変更します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-numliterals">
+<code class="descname">numliterals</code><a class="headerlink" href="#2to3fixer-numliterals" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>8 進数リテラルを新しい構文に変換します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-operator">
+<code class="descname">operator</code><a class="headerlink" href="#2to3fixer-operator" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>関数の呼び出しは、 <a class="reference internal" href="operator.html#module-operator" title="operator: Functions corresponding to the standard operators."><code class="xref py py-mod docutils literal"><span class="pre">operator</span></code></a> モジュール内のさまざまな関数を、他の、しかし機能的には同等の関数の呼び出しに変換します。必要に応じて、適切な <code class="docutils literal"><span class="pre">import</span></code> ステートメントが追加されます。例 <code class="docutils literal"><span class="pre">import</span> <span class="pre">collections</span></code> など。以下のマッピングが行われます。</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="45%" />
+<col width="55%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">対象</p>
+</th>
+<th class="head"><p class="first last">変換先</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">operator.isCallable(obj)</span></code></td>
+<td><code class="docutils literal"><span class="pre">hasattr(obj,</span> <span class="pre">'__call__')</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">operator.sequenceIncludes(obj)</span></code></td>
+<td><code class="docutils literal"><span class="pre">operator.contains(obj)</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">operator.isSequenceType(obj)</span></code></td>
+<td><code class="docutils literal"><span class="pre">isinstance(obj,</span> <span class="pre">collections.Sequence)</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">operator.isMappingType(obj)</span></code></td>
+<td><code class="docutils literal"><span class="pre">isinstance(obj,</span> <span class="pre">collections.Mapping)</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">operator.isNumberType(obj)</span></code></td>
+<td><code class="docutils literal"><span class="pre">isinstance(obj,</span> <span class="pre">numbers.Number)</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">operator.repeat(obj,</span> <span class="pre">n)</span></code></td>
+<td><code class="docutils literal"><span class="pre">operator.mul(obj,</span> <span class="pre">n)</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">operator.irepeat(obj,</span> <span class="pre">n)</span></code></td>
+<td><code class="docutils literal"><span class="pre">operator.imul(obj,</span> <span class="pre">n)</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-paren">
+<code class="descname">paren</code><a class="headerlink" href="#2to3fixer-paren" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>リスト内包表記で必要になる括弧を追加します。例えば <code class="docutils literal"><span class="pre">[x</span> <span class="pre">for</span> <span class="pre">x</span> <span class="pre">in</span> <span class="pre">1,</span> <span class="pre">2]</span></code> は <code class="docutils literal"><span class="pre">[x</span> <span class="pre">for</span> <span class="pre">x</span> <span class="pre">in</span> <span class="pre">(1,</span> <span class="pre">2)]</span></code> になります。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-print">
+<code class="descname">print</code><a class="headerlink" href="#2to3fixer-print" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">print</span></code> 文を <a class="reference internal" href="functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> 関数に変換します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-raise">
+<code class="descname">raise</code><a class="headerlink" href="#2to3fixer-raise" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">raise</span> <span class="pre">E,</span> <span class="pre">V</span></code> を <code class="docutils literal"><span class="pre">raise</span> <span class="pre">E(V)</span></code> に、<code class="docutils literal"><span class="pre">raise</span> <span class="pre">E,</span> <span class="pre">V,</span> <span class="pre">T</span></code> を <code class="docutils literal"><span class="pre">raise</span> <span class="pre">E(V).with_traceback(T)</span></code> に変換します。例外の代わりにタプルを使用することは 3.0 で削除されたので、<code class="docutils literal"><span class="pre">E</span></code> がタプルならこの変換は不正確になります。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-raw_input">
+<code class="descname">raw_input</code><a class="headerlink" href="#2to3fixer-raw_input" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-func docutils literal"><span class="pre">raw_input()</span></code> を <a class="reference internal" href="functions.html#input" title="input"><code class="xref py py-func docutils literal"><span class="pre">input()</span></code></a> に変換します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-reduce">
+<code class="descname">reduce</code><a class="headerlink" href="#2to3fixer-reduce" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-func docutils literal"><span class="pre">reduce()</span></code> が <a class="reference internal" href="functools.html#functools.reduce" title="functools.reduce"><code class="xref py py-func docutils literal"><span class="pre">functools.reduce()</span></code></a> に移動されたことを扱います。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-reload">
+<code class="descname">reload</code><a class="headerlink" href="#2to3fixer-reload" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-func docutils literal"><span class="pre">reload()</span></code> を <a class="reference internal" href="imp.html#imp.reload" title="imp.reload"><code class="xref py py-func docutils literal"><span class="pre">imp.reload()</span></code></a> に変換します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-renames">
+<code class="descname">renames</code><a class="headerlink" href="#2to3fixer-renames" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-data docutils literal"><span class="pre">sys.maxint</span></code> を <a class="reference internal" href="sys.html#sys.maxsize" title="sys.maxsize"><code class="xref py py-data docutils literal"><span class="pre">sys.maxsize</span></code></a> に変更します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-repr">
+<code class="descname">repr</code><a class="headerlink" href="#2to3fixer-repr" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>バッククォートを使った repr を <a class="reference internal" href="functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> 関数に置き換えます。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-set_literal">
+<code class="descname">set_literal</code><a class="headerlink" href="#2to3fixer-set_literal" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="stdtypes.html#set" title="set"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a> コンストラクタの使用を set リテラルに置換します。この変換プログラムはオプションです。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-standarderror">
+<code class="descname">standarderror</code><a class="headerlink" href="#2to3fixer-standarderror" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-exc docutils literal"><span class="pre">StandardError</span></code> を <a class="reference internal" href="exceptions.html#Exception" title="Exception"><code class="xref py py-exc docutils literal"><span class="pre">Exception</span></code></a> に変更します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-sys_exc">
+<code class="descname">sys_exc</code><a class="headerlink" href="#2to3fixer-sys_exc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>廃止された <code class="xref py py-data docutils literal"><span class="pre">sys.exc_value</span></code>, <code class="xref py py-data docutils literal"><span class="pre">sys.exc_type</span></code>, <code class="xref py py-data docutils literal"><span class="pre">sys.exc_traceback</span></code> の代わりに <a class="reference internal" href="sys.html#sys.exc_info" title="sys.exc_info"><code class="xref py py-func docutils literal"><span class="pre">sys.exc_info()</span></code></a> を使うように変更します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-throw">
+<code class="descname">throw</code><a class="headerlink" href="#2to3fixer-throw" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ジェネレータの <code class="xref py py-meth docutils literal"><span class="pre">throw()</span></code> メソッドの API 変更を修正します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-tuple_params">
+<code class="descname">tuple_params</code><a class="headerlink" href="#2to3fixer-tuple_params" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>関数定義における暗黙的なタプルパラメータの展開を取り除きます。この変換プログラムによって一時変数が追加されます。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-types">
+<code class="descname">types</code><a class="headerlink" href="#2to3fixer-types" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="types.html#module-types" title="types: Names for built-in types."><code class="xref py py-mod docutils literal"><span class="pre">types</span></code></a> モジュールのいくつかのメンバオブジェクトが削除されたことによって壊れたコードを修正します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-unicode">
+<code class="descname">unicode</code><a class="headerlink" href="#2to3fixer-unicode" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-class docutils literal"><span class="pre">unicode</span></code> を <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> に変更します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-urllib">
+<code class="descname">urllib</code><a class="headerlink" href="#2to3fixer-urllib" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="urllib.html#module-urllib" title="urllib"><code class="xref py py-mod docutils literal"><span class="pre">urllib</span></code></a> と <code class="xref py py-mod docutils literal"><span class="pre">urllib2</span></code> が <a class="reference internal" href="urllib.html#module-urllib" title="urllib"><code class="xref py py-mod docutils literal"><span class="pre">urllib</span></code></a> パッケージに変更されたことを扱います。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-ws_comma">
+<code class="descname">ws_comma</code><a class="headerlink" href="#2to3fixer-ws_comma" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>コンマ区切りの要素から余計な空白を取り除きます。この変換プログラムはオプションです。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-xrange">
+<code class="descname">xrange</code><a class="headerlink" href="#2to3fixer-xrange" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-func docutils literal"><span class="pre">xrange()</span></code> を <a class="reference internal" href="stdtypes.html#range" title="range"><code class="xref py py-func docutils literal"><span class="pre">range()</span></code></a> に変更して、既存の <a class="reference internal" href="stdtypes.html#range" title="range"><code class="xref py py-func docutils literal"><span class="pre">range()</span></code></a> 呼び出しを <a class="reference internal" href="stdtypes.html#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> でラップします。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-xreadlines">
+<code class="descname">xreadlines</code><a class="headerlink" href="#2to3fixer-xreadlines" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">for</span> <span class="pre">x</span> <span class="pre">in</span> <span class="pre">file.xreadlines()</span></code> を <code class="docutils literal"><span class="pre">for</span> <span class="pre">x</span> <span class="pre">in</span> <span class="pre">file</span></code> に変更します。</p>
+</dd></dl>
+
+<dl class="2to3fixer">
+<dt id="2to3fixer-zip">
+<code class="descname">zip</code><a class="headerlink" href="#2to3fixer-zip" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="stdtypes.html#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> 呼び出しの中で使われている <a class="reference internal" href="functions.html#zip" title="zip"><code class="xref py py-func docutils literal"><span class="pre">zip()</span></code></a> をラップします。これは <code class="docutils literal"><span class="pre">from</span> <span class="pre">future_builtins</span> <span class="pre">import</span> <span class="pre">zip</span></code> が見つかった場合は無効にされます。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lib2to3">
+<span id="lib2to3-2to3-s-library"></span><h2>26.7.3. <a class="reference internal" href="#module-lib2to3" title="lib2to3: the 2to3 library"><code class="xref py py-mod docutils literal"><span class="pre">lib2to3</span></code></a> - 2to3&#8217;s library<a class="headerlink" href="#module-lib2to3" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/lib2to3/">Lib/lib2to3/</a></p>
+<hr class="docutils" />
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last"><a class="reference internal" href="#module-lib2to3" title="lib2to3: the 2to3 library"><code class="xref py py-mod docutils literal"><span class="pre">lib2to3</span></code></a> API は安定しておらず、将来、劇的に変更されるかも知れないと考えるべきです。</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">26.7. 2to3 - Python 2 から 3 への自動コード変換</a><ul>
+<li><a class="reference internal" href="#using-2to3">26.7.1. 2to3 の使用</a></li>
+<li><a class="reference internal" href="#fixers">26.7.2. 変換プログラム</a></li>
+<li><a class="reference internal" href="#module-lib2to3">26.7.3. <code class="docutils literal"><span class="pre">lib2to3</span></code> - 2to3&#8217;s library</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="unittest.mock-examples.html"
+                        title="前の章へ">26.6. <code class="docutils literal"><span class="pre">unittest.mock</span></code> &#8212; 入門</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="test.html"
+                        title="次の章へ">26.8. <code class="docutils literal"><span class="pre">test</span></code> &#8212; Python 用回帰テストパッケージ</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/2to3.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="test.html" title="26.8. test — Python 用回帰テストパッケージ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="unittest.mock-examples.html" title="26.6. unittest.mock — 入門"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="development.html" >26. 開発ツール</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

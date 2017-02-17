@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>11.8. fnmatch — Unix ファイル名のパターンマッチ &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="11. ファイルとディレクトリへのアクセス" href="filesys.html" />
+    <link rel="next" title="11.9. linecache — テキストラインにランダムアクセスする" href="linecache.html" />
+    <link rel="prev" title="11.7. glob — Unix 形式のパス名のパターン展開" href="glob.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/fnmatch.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/fnmatch.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="linecache.html" title="11.9. linecache — テキストラインにランダムアクセスする"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="glob.html" title="11.7. glob — Unix 形式のパス名のパターン展開"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="filesys.html" accesskey="U">11. ファイルとディレクトリへのアクセス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-fnmatch">
+<span id="fnmatch-unix-filename-pattern-matching"></span><h1>11.8. <a class="reference internal" href="#module-fnmatch" title="fnmatch: Unix shell style filename pattern matching."><code class="xref py py-mod docutils literal"><span class="pre">fnmatch</span></code></a> &#8212; Unix ファイル名のパターンマッチ<a class="headerlink" href="#module-fnmatch" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/fnmatch.py">Lib/fnmatch.py</a></p>
+<span class="target" id="index-0"></span><hr class="docutils" id="index-1" />
+<p>このモジュールは Unix のシェル形式のワイルドカードに対応しています。これらは、 (<a class="reference internal" href="re.html#module-re" title="re: Regular expression operations."><code class="xref py py-mod docutils literal"><span class="pre">re</span></code></a> モジュールでドキュメント化されている) 正規表現とは <em>異なります</em> 。シェル形式のワイルドカードで使われる特殊文字は、次のとおりです。</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Pattern</th>
+<th class="head"><p class="first last">意味</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">*</span></code></td>
+<td><p class="first last">すべてにマッチします</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">?</span></code></td>
+<td><p class="first last">任意の一文字にマッチします</p>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">[seq]</span></code></td>
+<td><p class="first last"><em>seq</em> にある任意の文字にマッチします</p>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">[!seq]</span></code></td>
+<td><p class="first last"><em>seq</em> にない任意の文字にマッチします</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>リテラルにマッチさせるには、メタ文字を括弧に入れてください。例えば、<code class="docutils literal"><span class="pre">'[?]'</span></code> は文字 <code class="docutils literal"><span class="pre">'?'</span></code> にマッチします。</p>
+<p id="index-2">ファイル名の区切り文字 (Unixでは <code class="docutils literal"><span class="pre">'/'</span></code>) はこのモジュールに固有なものでは <em>ない</em> ことに注意してください。パス名展開については、 <a class="reference internal" href="glob.html#module-glob" title="glob: Unix shell style pathname pattern expansion."><code class="xref py py-mod docutils literal"><span class="pre">glob</span></code></a> モジュールを参照してください (<a class="reference internal" href="glob.html#module-glob" title="glob: Unix shell style pathname pattern expansion."><code class="xref py py-mod docutils literal"><span class="pre">glob</span></code></a> はパス名の部分にマッチさせるのに <a class="reference internal" href="#module-fnmatch" title="fnmatch: Unix shell style filename pattern matching."><code class="xref py py-func docutils literal"><span class="pre">fnmatch()</span></code></a> を使っています)。同様に、ピリオドで始まるファイル名はこのモジュールに固有ではなくて、 <code class="docutils literal"><span class="pre">*</span></code> と <code class="docutils literal"><span class="pre">?</span></code> のパターンでマッチします。</p>
+<dl class="function">
+<dt id="fnmatch.fnmatch">
+<code class="descclassname">fnmatch.</code><code class="descname">fnmatch</code><span class="sig-paren">(</span><em>filename</em>, <em>pattern</em><span class="sig-paren">)</span><a class="headerlink" href="#fnmatch.fnmatch" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>filename</em> の文字列が <em>pattern</em> の文字列にマッチするかテストして、 <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-const docutils literal"><span class="pre">True</span></code></a> 、 <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal"><span class="pre">False</span></code></a> のいずれかを返します。オペレーティングシステムが大文字、小文字を区別しない場合、比較を行う前に、両方のパラメタを全て大文字、または全て小文字に揃えます。オペレーティングシステムが標準でどうなっているかに関係なく、大小文字を区別して比較する場合には、 <a class="reference internal" href="#fnmatch.fnmatchcase" title="fnmatch.fnmatchcase"><code class="xref py py-func docutils literal"><span class="pre">fnmatchcase()</span></code></a> が使えます。</p>
+<p>次の例では、カレントディレクトリにある、拡張子が <code class="docutils literal"><span class="pre">.txt</span></code> である全てのファイルを表示しています:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">fnmatch</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">fnmatch</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;*.txt&#39;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="fnmatch.fnmatchcase">
+<code class="descclassname">fnmatch.</code><code class="descname">fnmatchcase</code><span class="sig-paren">(</span><em>filename</em>, <em>pattern</em><span class="sig-paren">)</span><a class="headerlink" href="#fnmatch.fnmatchcase" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>filename</em> が <em>pattern</em> にマッチするかテストして、 <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-const docutils literal"><span class="pre">True</span></code></a> 、 <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal"><span class="pre">False</span></code></a> を返します。比較は大文字、小文字を区別します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fnmatch.filter">
+<code class="descclassname">fnmatch.</code><code class="descname">filter</code><span class="sig-paren">(</span><em>names</em>, <em>pattern</em><span class="sig-paren">)</span><a class="headerlink" href="#fnmatch.filter" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>pattern</em> にマッチする <em>names</em> のリストの部分集合を返します。<code class="docutils literal"><span class="pre">[n</span> <span class="pre">for</span> <span class="pre">n</span> <span class="pre">in</span> <span class="pre">names</span> <span class="pre">if</span> <span class="pre">fnmatch(n,</span> <span class="pre">pattern)]</span></code> と同じですが、もっと効率よく実装しています。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fnmatch.translate">
+<code class="descclassname">fnmatch.</code><code class="descname">translate</code><span class="sig-paren">(</span><em>pattern</em><span class="sig-paren">)</span><a class="headerlink" href="#fnmatch.translate" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>シェルスタイルの <em>pattern</em> を、<a class="reference internal" href="re.html#re.match" title="re.match"><code class="xref py py-func docutils literal"><span class="pre">re.match()</span></code></a> で使用するための正規表現に変換して返します。</p>
+<p>例:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">fnmatch</span><span class="o">,</span> <span class="nn">re</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">regex</span> <span class="o">=</span> <span class="n">fnmatch</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;*.txt&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">regex</span>
+<span class="go">&#39;(?s:.*\\.txt)\\Z&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reobj</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reobj</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;foobar.txt&#39;</span><span class="p">)</span>
+<span class="go">&lt;_sre.SRE_Match object; span=(0, 10), match=&#39;foobar.txt&#39;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="glob.html#module-glob" title="glob: Unix shell style pathname pattern expansion."><code class="xref py py-mod docutils literal"><span class="pre">glob</span></code></a> モジュール</dt>
+<dd><p class="first last">Unix シェル形式のパス展開。</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="glob.html"
+                        title="前の章へ">11.7. <code class="docutils literal"><span class="pre">glob</span></code> &#8212; Unix 形式のパス名のパターン展開</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="linecache.html"
+                        title="次の章へ">11.9. <code class="docutils literal"><span class="pre">linecache</span></code> &#8212; テキストラインにランダムアクセスする</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/fnmatch.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="linecache.html" title="11.9. linecache — テキストラインにランダムアクセスする"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="glob.html" title="11.7. glob — Unix 形式のパス名のパターン展開"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="filesys.html" >11. ファイルとディレクトリへのアクセス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

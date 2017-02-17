@@ -1,0 +1,795 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. コマンドラインと環境 &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="Python のセットアップと利用" href="index.html" />
+    <link rel="next" title="2. Unix プラットフォームで Python を使う" href="unix.html" />
+    <link rel="prev" title="Python のセットアップと利用" href="index.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/using/cmdline.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/using/cmdline.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="unix.html" title="2. Unix プラットフォームで Python を使う"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Python のセットアップと利用"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python のセットアップと利用</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="command-line-and-environment">
+<span id="using-on-general"></span><h1>1. コマンドラインと環境<a class="headerlink" href="#command-line-and-environment" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>CPython インタプリタはコマンドラインと環境を読み取って様々な設定を行ないます。</p>
+<div class="impl-detail compound">
+<p><strong>CPython 実装の詳細:</strong> 他の実装のコマンドラインスキームは CPython とは異なります。さらなる情報は <a class="reference internal" href="../reference/introduction.html#implementations"><span class="std std-ref">別のPythonの実装</span></a> を参照してください。</p>
+</div>
+<div class="section" id="command-line">
+<span id="using-on-cmdline"></span><h2>1.1. コマンドライン<a class="headerlink" href="#command-line" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>Python を起動するとき、以下のうち任意のオプションを指定できます:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>python <span class="o">[</span>-bBdEhiIOqsSuvVWx?<span class="o">]</span> <span class="o">[</span>-c <span class="nb">command</span> <span class="p">|</span> -m module-name <span class="p">|</span> script <span class="p">|</span> - <span class="o">]</span> <span class="o">[</span>args<span class="o">]</span>
+</pre></div>
+</div>
+<p>もちろん、もっとも一般的な利用方法は、単純にスクリプトを起動することです:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>python myscript.py
+</pre></div>
+</div>
+<div class="section" id="interface-options">
+<span id="using-on-interface-options"></span><h3>1.1.1. インターフェイスオプション<a class="headerlink" href="#interface-options" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>インタプリタのインターフェイスは UNIX シェルのものに似ていますが、より多くの起動方法を提供しています:</p>
+<ul class="simple">
+<li><p class="first">tty デバイスに接続された標準入力とともに起動された場合、 EOF (end-of-file 文字。 UNIX では <code class="kbd docutils literal"><span class="pre">Ctrl-D</span></code> で、Windows では <code class="kbd docutils literal"><span class="pre">Ctrl-Z,</span> <span class="pre">Enter</span></code> で入力可能) を受け取るまで、コマンドを受け取り、それを実行します。</p>
+</li>
+<li><p class="first">ファイル名引数か、標準入力としてファイルを渡された場合、そのファイルからスクリプトを読み込んで実行します。</p>
+</li>
+<li><p class="first">ディレクトリ名を引数に受け取った場合、そのディレクトリから適切な名前のスクリプトファイルを読み込んで実行します。</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">-c</span> <span class="pre">コマンド</span></code> オプションを利用して起動された場合、 <em>コマンド</em> として渡された Python の文を実行します。 <em>コマンド</em> の部分には改行で区切られた複数行を指定することもできます。行の先頭の空白文字は Python 文の重要要素です！</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">-m</span> <span class="pre">モジュール名</span></code> として Python モジュールパスにあるモジュールを指定された場合、そのモジュールをスクリプトとして実行します。</p>
+</li>
+</ul>
+<p>非インタラクティブモードでは、入力の全体が実行前にパースされます。</p>
+<p>インタプリタによって消費されるオプションリストが終了したあと、継続する全ての引数は <a class="reference internal" href="../library/sys.html#sys.argv" title="sys.argv"><code class="xref py py-data docutils literal"><span class="pre">sys.argv</span></code></a> に渡ります。 &#8211; ただし、添字 0 の先頭要素(<code class="docutils literal"><span class="pre">sys.argv[0]</span></code>) はプログラムのソース自体を示す文字列です。</p>
+<dl class="cmdoption">
+<dt id="cmdoption-c">
+<code class="descname">-c</code><code class="descclassname"> &lt;command&gt;</code><a class="headerlink" href="#cmdoption-c" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>command</em> 内の Python コードを実行します。 <em>command</em> は改行によって区切られた1行以上の文です。通常のモジュールのコードと同じく、行頭の空白文字は意味を持ちます。</p>
+<p>このオプションが指定された場合、 <a class="reference internal" href="../library/sys.html#sys.argv" title="sys.argv"><code class="xref py py-data docutils literal"><span class="pre">sys.argv</span></code></a> の最初の要素は <code class="docutils literal"><span class="pre">&quot;-c&quot;</span></code> になり、カレントディレクトリが <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> の先頭に追加されます (そのディレクトリにあるモジュールをトップレベルモジュールとして import 出来るようになります)。</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-m">
+<code class="descname">-m</code><code class="descclassname"> &lt;module-name&gt;</code><a class="headerlink" href="#cmdoption-m" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> から指定されたモジュール名のモジュールを探し、その内容を <a class="reference internal" href="../library/__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><code class="xref py py-mod docutils literal"><span class="pre">__main__</span></code></a> モジュールとして実行します。</p>
+<p>引数は <em>module</em> 名なので、拡張子 (<code class="docutils literal"><span class="pre">.py</span></code>) を含めてはいけません。モジュール名は有効な Python の絶対モジュール名 (absolute module name) であるべきですが、実装がそれを強制しているとは限りません (例えば、ハイフンを名前に含める事を許可するかもしれません)。</p>
+<p>パッケージ名 (名前空間パッケージも含む) でも構いません。通常のモジュールの代わりにパッケージ名が与えられた場合、インタプリタは <code class="docutils literal"><span class="pre">&lt;pkg&gt;.__main__</span></code> を main モジュールとして実行します。この挙動はスクリプト引数として渡されたディレクトリや zip ファイルをインタプリタが処理するのと意図的に同じにしています。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">このオプションは組み込みモジュールや C で書かれた拡張モジュールには利用できません。 Python モジュールファイルを持っていないからです。しかし、コンパイル済みのモジュールは、たとえ元のソースファイルがなくても利用可能です。</p>
+</div>
+<p>このオプションが指定された場合、 <a class="reference internal" href="../library/sys.html#sys.argv" title="sys.argv"><code class="xref py py-data docutils literal"><span class="pre">sys.argv</span></code></a> の最初の要素はモジュールファイルのフルパスになります (モジュールファイルを検索している間、最初の要素は <code class="docutils literal"><span class="pre">&quot;-m&quot;</span></code> に設定されます)。 <a class="reference internal" href="#cmdoption-c"><code class="xref std std-option docutils literal"><span class="pre">-c</span></code></a> オプションと同様に、カレントディレクトリが <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> の先頭に追加されます。</p>
+<p>多くの標準ライブラリモジュールにはスクリプトとして実行された時のためのコードがあります。例えば、 <a class="reference internal" href="../library/timeit.html#module-timeit" title="timeit: Measure the execution time of small code snippets."><code class="xref py py-mod docutils literal"><span class="pre">timeit</span></code></a> モジュールは次のように実行可能です:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>python -mtimeit -s <span class="s1">&#39;setup here&#39;</span> <span class="s1">&#39;benchmarked code here&#39;</span>
+python -mtimeit -h <span class="c1"># for details</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<dl class="docutils">
+<dt><a class="reference internal" href="../library/runpy.html#runpy.run_module" title="runpy.run_module"><code class="xref py py-func docutils literal"><span class="pre">runpy.run_module()</span></code></a></dt>
+<dd><p class="first last">Python コードで直接使える等価な機能</p>
+</dd>
+</dl>
+<p class="last"><span class="target" id="index-52"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0338"><strong>PEP 338</strong></a> - モジュールをスクリプトとして実行する</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.1 で変更: </span><code class="docutils literal"><span class="pre">__main__</span></code> サブモジュールを実行するパッケージ名が提供されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span>名前空間パッケージもサポートされました</p>
+</div>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<code class="descname">-</code></dt>
+<dd><p>標準入力 (<a class="reference internal" href="../library/sys.html#sys.stdin" title="sys.stdin"><code class="xref py py-data docutils literal"><span class="pre">sys.stdin</span></code></a>) からコマンドを読み込みます。標準入力がターミナルだった場合、暗黙的に <a class="reference internal" href="#cmdoption-i"><code class="xref std std-option docutils literal"><span class="pre">-i</span></code></a> オプションが指定されます。</p>
+<p>このオプションが指定された場合、 <a class="reference internal" href="../library/sys.html#sys.argv" title="sys.argv"><code class="xref py py-data docutils literal"><span class="pre">sys.argv</span></code></a> の最初の要素は <code class="docutils literal"><span class="pre">&quot;-&quot;</span></code> で、カレントディレクトリが <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> の先頭に追加されます。</p>
+</dd></dl>
+
+<dl class="describe">
+<dt>
+<code class="descname">&lt;script&gt;</code></dt>
+<dd><p><em>script</em> 内の Python コードを実行します。 <em>script</em> は、Python ファイル、 <code class="docutils literal"><span class="pre">__main__.py</span></code> ファイルがあるディレクトリ、 <code class="docutils literal"><span class="pre">__main__.py</span></code> ファイルがある zip ファイルのいずれかの、ファイルシステム上の (絶対または相対) パスでなければなりません。</p>
+<p>このオプションが指定された場合、 <a class="reference internal" href="../library/sys.html#sys.argv" title="sys.argv"><code class="xref py py-data docutils literal"><span class="pre">sys.argv</span></code></a> の最初の要素はコマンドラインで指定されたスクリプト名になります。</p>
+<p>スクリプト名が Python ファイルを直接指定していた場合、そのファイルを含むディレクトリが <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> の先頭に追加され、そのファイルは <a class="reference internal" href="../library/__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><code class="xref py py-mod docutils literal"><span class="pre">__main__</span></code></a> モジュールとして実行されます。</p>
+<p>スクリプト名がディレクトリか zip ファイルを指定していた場合、スクリプト名が <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> に追加され、その中の <code class="docutils literal"><span class="pre">__main__.py</span></code> ファイルが <a class="reference internal" href="../library/__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><code class="xref py py-mod docutils literal"><span class="pre">__main__</span></code></a> モジュールとして実行されます。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="../library/runpy.html#runpy.run_path" title="runpy.run_path"><code class="xref py py-func docutils literal"><span class="pre">runpy.run_path()</span></code></a></dt>
+<dd><p class="first last">Python コードで直接使える等価な機能</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<p>インターフェイスオプションが与えられなかった場合、<a class="reference internal" href="#cmdoption-i"><code class="xref std std-option docutils literal"><span class="pre">-i</span></code></a> が暗黙的に指定され、<code class="docutils literal"><span class="pre">sys.argv[0]</span></code> が空の文字列 (<code class="docutils literal"><span class="pre">&quot;&quot;</span></code>) になり、 現在のディレクトリが <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> の先頭に追加されます。また、利用可能であればタブ補完と履歴編集が自動的に有効かされます (<a class="reference internal" href="../library/site.html#rlcompleter-config"><span class="std std-ref">readline の設定</span></a> を参照してください)。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><a class="reference internal" href="../tutorial/interpreter.html#tut-invoking"><span class="std std-ref">インタプリタを起動する</span></a></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span>タブ補完と履歴の編集が自動的に有効化されます。</p>
+</div>
+</div>
+<div class="section" id="generic-options">
+<h3>1.1.2. 一般オプション<a class="headerlink" href="#generic-options" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="cmdoption">
+<dt id="cmdoption-?">
+<code class="descname">-?</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-?" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="cmdoption-h">
+<code class="descname">-h</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-h" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="cmdoption--help">
+<code class="descname">--help</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption--help" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>全コマンドラインオプションの短い説明を出力します。</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-V">
+<code class="descname">-V</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-V" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="cmdoption--version">
+<code class="descname">--version</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption--version" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python のバージョン番号を表示して終了します。出力の例:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>Python <span class="m">3</span>.6.0b2+
+</pre></div>
+</div>
+<p>When given twice, print more information about the build, like:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>Python <span class="m">3</span>.6.0b2+ <span class="o">(</span><span class="m">3</span>.6:84a3c5003510+, Oct <span class="m">26</span> <span class="m">2016</span>, <span class="m">02</span>:33:55<span class="o">)</span>
+<span class="o">[</span>GCC <span class="m">6</span>.2.0 <span class="m">20161005</span><span class="o">]</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加: </span>The <code class="docutils literal"><span class="pre">-VV</span></code> option.</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="miscellaneous-options">
+<span id="using-on-misc-options"></span><h3>1.1.3. その他のオプション<a class="headerlink" href="#miscellaneous-options" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="cmdoption">
+<dt id="cmdoption-b">
+<code class="descname">-b</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-b" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="../library/functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> または <a class="reference internal" href="../library/functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> を <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> と比較した場合、または、 <a class="reference internal" href="../library/functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> を <a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a> と比較した場合に警告を発生させます。このオプションを2度指定した場合 (<code class="xref std std-option docutils literal"><span class="pre">-bb</span></code>) は、エラーを発生させます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span><a class="reference internal" href="../library/functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> と <a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a> の比較に影響します。</p>
+</div>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-B">
+<code class="descname">-B</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-B" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>与えられた場合、Python はソースモジュールのインポート時に <code class="docutils literal"><span class="pre">.pyc</span></code> ファイルの作成を試みません。 <span class="target" id="index-53"></span><a class="reference internal" href="#envvar-PYTHONDONTWRITEBYTECODE"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONDONTWRITEBYTECODE</span></code></a> 環境変数も参照してください。</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-d">
+<code class="descname">-d</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-d" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>パーサーのデバッグ出力を有効にします。(エキスパート専用です。コンパイルオプションに依存します)。 <span class="target" id="index-54"></span><a class="reference internal" href="#envvar-PYTHONDEBUG"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONDEBUG</span></code></a> も参照してください。</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-E">
+<code class="descname">-E</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-E" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>全ての <span class="target" id="index-55"></span><code class="xref std std-envvar docutils literal"><span class="pre">PYTHON*</span></code> 環境変数を無視します。例えば、 <span class="target" id="index-56"></span><a class="reference internal" href="#envvar-PYTHONPATH"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></code></a> や <span class="target" id="index-57"></span><a class="reference internal" href="#envvar-PYTHONHOME"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONHOME</span></code></a> などです。</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-i">
+<code class="descname">-i</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-i" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最初の引数にスクリプトが指定された場合や <a class="reference internal" href="#cmdoption-c"><code class="xref std std-option docutils literal"><span class="pre">-c</span></code></a> オプションが利用された場合、 <a class="reference internal" href="../library/sys.html#sys.stdin" title="sys.stdin"><code class="xref py py-data docutils literal"><span class="pre">sys.stdin</span></code></a> がターミナルに出力されない場合も含めて、スクリプトかコマンドを実行した後にインタラクティブモードに入ります。 <span class="target" id="index-58"></span><a class="reference internal" href="#envvar-PYTHONSTARTUP"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONSTARTUP</span></code></a> ファイルは読み込みません。</p>
+<p>このオプションはグローバル変数や、スクリプトが例外を発生させるときにそのスタックトレースを調べるのに便利です。 <span class="target" id="index-59"></span><a class="reference internal" href="#envvar-PYTHONINSPECT"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONINSPECT</span></code></a> も参照してください。</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-I">
+<code class="descname">-I</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-I" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Python を隔離モードで実行します。-E と -s も暗黙的に指定されます。隔離モードでは <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> はスクリプトのディレクトリやユーザのサイトパッケージのディレクトリを含みません。全 <span class="target" id="index-60"></span><code class="xref std std-envvar docutils literal"><span class="pre">PYTHON*</span></code> 環境変数も無視されます。ユーザが悪意のあるコードを注入するのを防ぐために更なる制限が課されるかもしれません。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-O">
+<code class="descname">-O</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-O" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>基本的な最適化を有効にします。 :envvar:PYTHONOPTIMIZE: も見てください。</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-OO">
+<code class="descname">-OO</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-OO" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#cmdoption-O"><code class="xref std std-option docutils literal"><span class="pre">-O</span></code></a> の最適化に加えて、ドキュメンテーション文字列の除去も行ないます。</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-q">
+<code class="descname">-q</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-q" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インタラクティブモードでも copyright とバージョンのメッセージを表示しません。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-R">
+<code class="descname">-R</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-R" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>互換性のために残されています。Python 3.3 以降ではデフォルトでハッシュランダム化されます。</p>
+<p>以前のバージョンの Python では、このオプションはハッシュのランダム化を有効にします。これにより、 str, bytes, datetime 型の <a class="reference internal" href="../reference/datamodel.html#object.__hash__" title="object.__hash__"><code class="xref py py-meth docutils literal"><span class="pre">__hash__()</span></code></a> 値が予測不可能な乱数で &#8220;塩漬け&#8221; されます。ハッシュ値は各 Python プロセスでは固定ですが、 Python を繰り返し再実行した場合は別の予測不能な値になります。</p>
+<p>ハッシュのランダム化は、dict の生成コストが最悪の O(n^2) になるように注意深く選ばれた入力値を与えることによる DoS 攻撃への防御策として提供されています。詳細は <a class="reference external" href="http://www.ocert.org/advisories/ocert-2011-003.html">http://www.ocert.org/advisories/ocert-2011-003.html</a> を参照してください。</p>
+<p><span class="target" id="index-61"></span><a class="reference internal" href="#envvar-PYTHONHASHSEED"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONHASHSEED</span></code></a> によってハッシュシードの固定値を秘密にすることが出来ます。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-s">
+<code class="descname">-s</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-s" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="../library/site.html#site.USER_SITE" title="site.USER_SITE"><code class="xref py py-data docutils literal"><span class="pre">user</span> <span class="pre">site-packages</span> <span class="pre">directory</span></code></a> を <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> に追加しません。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><span class="target" id="index-62"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0370"><strong>PEP 370</strong></a> &#8211; ユーザごとの <code class="docutils literal"><span class="pre">site-packages</span></code> ディレクトリ</p>
+</div>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-S">
+<code class="descname">-S</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-S" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="../library/site.html#module-site" title="site: Module responsible for site-specific configuration."><code class="xref py py-mod docutils literal"><span class="pre">site</span></code></a> モジュールの import と、そのモジュールが行なっていた site ごとの <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> への操作を無効にします。後に <a class="reference internal" href="../library/site.html#module-site" title="site: Module responsible for site-specific configuration."><code class="xref py py-mod docutils literal"><span class="pre">site</span></code></a> を明示的に import しても、これらの操作は実行されません (実行したい場合は、 <a class="reference internal" href="../library/site.html#site.main" title="site.main"><code class="xref py py-func docutils literal"><span class="pre">site.main()</span></code></a> を呼び出してください)。</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-u">
+<code class="descname">-u</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-u" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>標準出力と標準エラー出力のストリームのバイナリーレイヤー (<code class="docutils literal"><span class="pre">buffer</span></code> 属性として利用可能) がバッファされないよう強制します。それでもテキスト I/O レイヤーは、コンソールに出力する場合はラインバッファされ、日対話的なファイルにリダイレクトされた場合はブロックバッファされます。</p>
+<p><span class="target" id="index-63"></span><a class="reference internal" href="#envvar-PYTHONUNBUFFERED"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONUNBUFFERED</span></code></a> も参照してください。</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-v">
+<code class="descname">-v</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-v" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>モジュールが初期化されるたびに、それがどこ(ファイル名やビルトインモジュール) からロードされたのかを示すメッセージを出力します。 二重に指定された場合(<code class="xref std std-option docutils literal"><span class="pre">-vv</span></code>)は、モジュールを検索するときにチェックされた各ファイルに対してメッセージを出力します。また、終了時のモジュールクリーンアップに関する情報も提供します。 <span class="target" id="index-64"></span><a class="reference internal" href="#envvar-PYTHONVERBOSE"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONVERBOSE</span></code></a> も参照してください。</p>
+</dd></dl>
+
+<span class="target" id="using-on-warnings"></span><dl class="cmdoption">
+<dt id="cmdoption-W">
+<code class="descname">-W</code><code class="descclassname"> arg</code><a class="headerlink" href="#cmdoption-W" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>警告制御。 Python の警告機構はデフォルトでは警告メッセージを <a class="reference internal" href="../library/sys.html#sys.stderr" title="sys.stderr"><code class="xref py py-data docutils literal"><span class="pre">sys.stderr</span></code></a> に出力します。典型的な警告メッセージは次のような形式です:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>file:line: category: message
+</pre></div>
+</div>
+<p>デフォルトでは、各警告は発生したソース行ごとに一度だけ表示されます。このオプションは、警告をどれくらいの頻度で表示するかを制御します。</p>
+<p>複数の <a class="reference internal" href="#cmdoption-W"><code class="xref std std-option docutils literal"><span class="pre">-W</span></code></a> オプションを指定することができます。警告が1つ以上のオプションとマッチしたときは、最後にマッチしたオプションのアクションが有効になります。不正な <a class="reference internal" href="#cmdoption-W"><code class="xref std std-option docutils literal"><span class="pre">-W</span></code></a> オプションは無視されます (最初の警告が発生したときに、不正なオプションに対する警告メッセージが表示されます)。</p>
+<p>警告は Python プログラムの中から <a class="reference internal" href="../library/warnings.html#module-warnings" title="warnings: Issue warning messages and control their disposition."><code class="xref py py-mod docutils literal"><span class="pre">warnings</span></code></a> モジュールを利用して制御することができます。</p>
+<p>引数の最もシンプルな形は、以下のアクションの文字列 (あるいはそのユニークな短縮形) です:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">ignore</span></code></dt>
+<dd><p class="first last">全ての警告を無視する。</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">default</span></code></dt>
+<dd><p class="first last">明示的にデフォルトの動作(ソース行ごとに1度警告を表示する)を要求する。</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">all</span></code></dt>
+<dd><p class="first last">警告が発生するたびに表示する (これは、ループの中などで同じソース行により繰り返し警告が発生された場合に、大量のメッセージを表示します)。</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">module</span></code></dt>
+<dd><p class="first last">各モジュールで最初に発生した警告を表示する。</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">once</span></code></dt>
+<dd><p class="first last">プログラムで最初に発生した警告だけを表示する。</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">error</span></code></dt>
+<dd><p class="first last">警告メッセージを表示する代わりに例外を発生させる。</p>
+</dd>
+</dl>
+<p>引数の完全形は次のようになります:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>action:message:category:module:line
+</pre></div>
+</div>
+<p>ここで、 <em>action</em> は上で説明されたものですが、残りのフィールドにマッチしたメッセージにだけ適用されます。空のフィールドは全ての値にマッチします。空のフィールドの後ろは除外されます。 <em>message</em> フィールドは表示される警告メッセージの先頭に、大文字小文字を無視してマッチします。 <em>category</em> フィールドは警告カテゴリにマッチします。これはクラス名でなければなりません。 <em>category</em> のマッチは、メッセージの実際の警告カテゴリーが指定された警告カテゴリーのサブクラスかどうかをチェックします。完全なクラス名を指定しなければなりません。 <em>module</em> フィールドは、(完全正規形(fully-qualified)の) モジュール名に対してマッチします。このマッチは大文字小文字を区別します。 <em>line</em> フィールドは行番号にマッチします。 0 は全ての行番号にマッチし、省略した時と同じです。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p><a class="reference internal" href="../library/warnings.html#module-warnings" title="warnings: Issue warning messages and control their disposition."><code class="xref py py-mod docutils literal"><span class="pre">warnings</span></code></a> &#8211; 警告モジュール</p>
+<p><span class="target" id="index-14"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0230"><strong>PEP 230</strong></a> &#8211; Warning framework</p>
+<p class="last"><span class="target" id="index-15"></span><a class="reference internal" href="#envvar-PYTHONWARNINGS"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONWARNINGS</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-x">
+<code class="descname">-x</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-x" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Unix 以外の形式の <code class="docutils literal"><span class="pre">#!cmd</span></code> を使うために、ソースの最初の行をスキップします。これは、DOS専用のハックのみを目的としています。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">エラーメッセージ内の行番号は -1 されます。</p>
+</div>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt id="cmdoption-X">
+<code class="descname">-X</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-X" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>様々な実装固有のオプションのために予約されています。現在のところ CPython は以下の値を定義しています:</p>
+<ul class="simple">
+<li><p class="first"><code class="docutils literal"><span class="pre">-X</span> <span class="pre">faulthandler</span></code> は <a class="reference internal" href="../library/faulthandler.html#module-faulthandler" title="faulthandler: Dump the Python traceback."><code class="xref py py-mod docutils literal"><span class="pre">faulthandler</span></code></a> を有効化します;</p>
+</li>
+<li><code class="docutils literal"><span class="pre">-X</span> <span class="pre">showrefcount</span></code> to output the total reference count and number of used
+memory blocks when the program finishes or after each statement in the
+interactive interpreter. This only works on debug builds.</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">-X</span> <span class="pre">tracemalloc</span></code> は <a class="reference internal" href="../library/tracemalloc.html#module-tracemalloc" title="tracemalloc: Trace memory allocations."><code class="xref py py-mod docutils literal"><span class="pre">tracemalloc</span></code></a> モジュールを用いて Python のメモリ割り当てのトレースを開始します。デフォルトでは最新のフレームのみがトレースのトレースバックに格納されます。最大 <em>NFRAME</em> フレームのトレースバックで トレースを開始するには <code class="docutils literal"><span class="pre">-X</span> <span class="pre">tracemalloc=NFRAME</span></code> を使用してください。詳細は <a class="reference internal" href="../library/tracemalloc.html#tracemalloc.start" title="tracemalloc.start"><code class="xref py py-func docutils literal"><span class="pre">tracemalloc.start()</span></code></a> を参照してください。</p>
+</li>
+<li><code class="docutils literal"><span class="pre">-X</span> <span class="pre">showalloccount</span></code> to output the total count of allocated objects for
+each type when the program finishes. This only works when Python was built with
+<code class="docutils literal"><span class="pre">COUNT_ALLOCS</span></code> defined.</li>
+</ul>
+<p>任意の値を渡し、 <a class="reference internal" href="../library/sys.html#sys._xoptions" title="sys._xoptions"><code class="xref py py-data docutils literal"><span class="pre">sys._xoptions</span></code></a> 辞書から取り出すことも出来ます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>The <a class="reference internal" href="#cmdoption-X"><code class="xref std std-option docutils literal"><span class="pre">-X</span></code></a> option was added.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加: </span><code class="docutils literal"><span class="pre">-X</span> <span class="pre">faulthandler</span></code> オプション。</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加: </span><code class="docutils literal"><span class="pre">-X</span> <span class="pre">showrefcount</span></code> および <code class="docutils literal"><span class="pre">-X</span> <span class="pre">tracemalloc</span></code> オプション。</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加: </span>The <code class="docutils literal"><span class="pre">-X</span> <span class="pre">showalloccount</span></code> option.</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="options-you-shouldn-t-use">
+<h3>1.1.4. 使うべきでないオプション<a class="headerlink" href="#options-you-shouldn-t-use" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<dl class="cmdoption">
+<dt id="cmdoption-J">
+<code class="descname">-J</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-J" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference external" href="http://www.jython.org/">Jython</a> のために予約されています。</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="environment-variables">
+<span id="using-on-envvars"></span><h2>1.2. 環境変数<a class="headerlink" href="#environment-variables" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>以下の環境変数は Python の挙動に影響します。環境変数は -E や -I 以外のコマンドラインスイッチの前に処理されます。衝突したときにコマンドラインスイッチが環境変数をオーバーライドするのは慣例です。</p>
+<dl class="envvar">
+<dt id="envvar-PYTHONHOME">
+<code class="descname">PYTHONHOME</code><a class="headerlink" href="#envvar-PYTHONHOME" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>標準 Python ライブラリの場所を変更します。デフォルトでは、ライブラリは <code class="file docutils literal"><em><span class="pre">prefix</span></em><span class="pre">/lib/python</span><em><span class="pre">version</span></em></code> と <code class="file docutils literal"><em><span class="pre">exec_prefix</span></em><span class="pre">/lib/python</span><em><span class="pre">version</span></em></code> から検索されます。ここで、 <code class="file docutils literal"><em><span class="pre">prefix</span></em></code> と <code class="file docutils literal"><em><span class="pre">exec_prefix</span></em></code> はインストール依存のディレクトリで、両方共デフォルトでは <code class="file docutils literal"><span class="pre">/usr/local</span></code> です。</p>
+<p><span class="target" id="index-65"></span><a class="reference internal" href="#envvar-PYTHONHOME"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONHOME</span></code></a> が1つのディレクトリに設定されている場合、その値は <code class="file docutils literal"><em><span class="pre">prefix</span></em></code> と <code class="file docutils literal"><em><span class="pre">exec_prefix</span></em></code> の両方を置き換えます。それらに別々の値を指定したい場合は、 <span class="target" id="index-66"></span><a class="reference internal" href="#envvar-PYTHONHOME"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONHOME</span></code></a> を <code class="file docutils literal"><em><span class="pre">prefix</span></em><span class="pre">:</span><em><span class="pre">exec_prefix</span></em></code> のように指定します。</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONPATH">
+<code class="descname">PYTHONPATH</code><a class="headerlink" href="#envvar-PYTHONPATH" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>モジュールファイルのデフォルトの検索パスを追加します。この環境変数のフォーマットはシェルの <span class="target" id="index-67"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code> と同じで、 <a class="reference internal" href="../library/os.html#os.pathsep" title="os.pathsep"><code class="xref py py-data docutils literal"><span class="pre">os.pathsep</span></code></a> (Unix ならコロン、 Windows ならセミコロン) で区切られた1つ以上のディレクトリパスです。存在しないディレクトリは警告なしに無視されます。</p>
+<p>通常のディレクトリに加えて、 <span class="target" id="index-68"></span><a class="reference internal" href="#envvar-PYTHONPATH"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></code></a> のエントリはピュアPython モジュール(ソース形式でもコンパイルされた形式でも) を含む zip ファイルを参照することもできます。拡張モジュールは zip ファイルの中から import することはできません。</p>
+<p>デフォルトの検索パスはインストール依存ですが、通常は <code class="file docutils literal"><em><span class="pre">prefix</span></em><span class="pre">/lib/python</span><em><span class="pre">version</span></em></code> で始まります。 (上の <span class="target" id="index-69"></span><a class="reference internal" href="#envvar-PYTHONHOME"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONHOME</span></code></a> を参照してください。) これは <em>常に</em> <span class="target" id="index-70"></span><a class="reference internal" href="#envvar-PYTHONPATH"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></code></a> に追加されます。</p>
+<p>上の <a class="reference internal" href="#using-on-interface-options"><span class="std std-ref">インターフェイスオプション</span></a> で説明されているように、追加の検索パスディレクトリが <span class="target" id="index-71"></span><a class="reference internal" href="#envvar-PYTHONPATH"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></code></a> の手前に追加されます。検索パスは Python プログラムから <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> 変数として操作することができます。</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONSTARTUP">
+<code class="descname">PYTHONSTARTUP</code><a class="headerlink" href="#envvar-PYTHONSTARTUP" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この変数が読み込み可能なファイル名の場合、対話モードで最初のプロンプトが表示される前にそのファイルの Python コマンドが実行されます。
+ファイル内で定義されているオブジェクトやインポートされたオブジェクトを対話セッションで修飾せずに使用するために、ファイルは対話的なコマンドと同じ名前空間で実行されます。
+このファイル内のプロンプト <a class="reference internal" href="../library/sys.html#sys.ps1" title="sys.ps1"><code class="xref py py-data docutils literal"><span class="pre">sys.ps1</span></code></a> や <a class="reference internal" href="../library/sys.html#sys.ps2" title="sys.ps2"><code class="xref py py-data docutils literal"><span class="pre">sys.ps2</span></code></a>、ならびにフック <a class="reference internal" href="../library/sys.html#sys.__interactivehook__" title="sys.__interactivehook__"><code class="xref py py-data docutils literal"><span class="pre">sys.__interactivehook__</span></code></a> を変更することも出来ます。</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONOPTIMIZE">
+<code class="descname">PYTHONOPTIMIZE</code><a class="headerlink" href="#envvar-PYTHONOPTIMIZE" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この変数に空でない文字列を設定するのは <a class="reference internal" href="#cmdoption-O"><code class="xref std std-option docutils literal"><span class="pre">-O</span></code></a> オプションを指定するのと等価です。整数を設定した場合、 <a class="reference internal" href="#cmdoption-O"><code class="xref std std-option docutils literal"><span class="pre">-O</span></code></a> を複数回指定したのと同じになります。</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONDEBUG">
+<code class="descname">PYTHONDEBUG</code><a class="headerlink" href="#envvar-PYTHONDEBUG" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この変数に空でない文字列を設定するのは <a class="reference internal" href="#cmdoption-d"><code class="xref std std-option docutils literal"><span class="pre">-d</span></code></a> オプションを指定するのと等価です。整数を指定した場合、 <a class="reference internal" href="#cmdoption-d"><code class="xref std std-option docutils literal"><span class="pre">-d</span></code></a> を複数回指定したのと同じになります。</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONINSPECT">
+<code class="descname">PYTHONINSPECT</code><a class="headerlink" href="#envvar-PYTHONINSPECT" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この変数に空でない文字列を設定するのは <a class="reference internal" href="#cmdoption-i"><code class="xref std std-option docutils literal"><span class="pre">-i</span></code></a> オプションを指定するのと等価です。</p>
+<p>この変数は Python コードから <a class="reference internal" href="../library/os.html#os.environ" title="os.environ"><code class="xref py py-data docutils literal"><span class="pre">os.environ</span></code></a> を使って変更して、プログラム終了時のインスペクトモードを強制することができます。</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONUNBUFFERED">
+<code class="descname">PYTHONUNBUFFERED</code><a class="headerlink" href="#envvar-PYTHONUNBUFFERED" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この変数に空でない文字列を設定するのは <a class="reference internal" href="#cmdoption-u"><code class="xref std std-option docutils literal"><span class="pre">-u</span></code></a> オプションを指定するのと等価です。</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONVERBOSE">
+<code class="descname">PYTHONVERBOSE</code><a class="headerlink" href="#envvar-PYTHONVERBOSE" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この変数に空でない文字列を設定するのは <a class="reference internal" href="#cmdoption-v"><code class="xref std std-option docutils literal"><span class="pre">-v</span></code></a> オプションを指定するのと等価です。整数を設定した場合、 <a class="reference internal" href="#cmdoption-v"><code class="xref std std-option docutils literal"><span class="pre">-v</span></code></a> を複数回指定したのと同じになります。</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONCASEOK">
+<code class="descname">PYTHONCASEOK</code><a class="headerlink" href="#envvar-PYTHONCASEOK" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この環境変数が設定されている場合、 Python は <a class="reference internal" href="../reference/simple_stmts.html#import"><code class="xref std std-keyword docutils literal"><span class="pre">import</span></code></a> 文で大文字/小文字を区別しません。 これは Windows と OS X でのみ動作します。</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONDONTWRITEBYTECODE">
+<code class="descname">PYTHONDONTWRITEBYTECODE</code><a class="headerlink" href="#envvar-PYTHONDONTWRITEBYTECODE" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この変数に空でない文字列を設定した場合、Python はソースモジュールのインポート時に <code class="docutils literal"><span class="pre">.pyc</span></code> や <code class="docutils literal"><span class="pre">.pyo</span></code> の作成を試みません。<a class="reference internal" href="#cmdoption-B"><code class="xref std std-option docutils literal"><span class="pre">-B</span></code></a> オプションを指定するのと等価です。</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONHASHSEED">
+<code class="descname">PYTHONHASHSEED</code><a class="headerlink" href="#envvar-PYTHONHASHSEED" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この変数が設定されていない場合や <code class="docutils literal"><span class="pre">random</span></code> に設定された場合、乱数値が str、bytes ならびに datetime オブジェクトのハッシュのシードに使われます。</p>
+<p><span class="target" id="index-72"></span><a class="reference internal" href="#envvar-PYTHONHASHSEED"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONHASHSEED</span></code></a> が整数値に設定された場合、その値はハッシュランダム化が扱う型の hash() 生成の固定シードに使われます。</p>
+<p>その目的は再現性のあるハッシュを可能にすることです。例えばインタープリタ自身の自己テストや Python プロセスのクラスタでハッシュ値を共有するのに用います。</p>
+<p>整数は [0,4294967295] の十進数でなければなりません。0 を指定するとハッシュランダム化は無効化されます。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONIOENCODING">
+<code class="descname">PYTHONIOENCODING</code><a class="headerlink" href="#envvar-PYTHONIOENCODING" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この変数がインタープリタ実行前に設定されていた場合、<code class="docutils literal"><span class="pre">encodingname:errorhandler</span></code> という文法で標準入力/標準出力/標準エラー出力のエンコードを上書きします。 <code class="docutils literal"><span class="pre">encodingname</span></code> と <code class="docutils literal"><span class="pre">:errorhandler</span></code> の部分はどちらも任意で、<a class="reference internal" href="../library/stdtypes.html#str.encode" title="str.encode"><code class="xref py py-func docutils literal"><span class="pre">str.encode()</span></code></a> と同じ意味を持ちます。</p>
+<p>標準エラー出力の場合、<code class="docutils literal"><span class="pre">:errorhandler</span></code> の部分は無視されます; ハンドラは常に <code class="docutils literal"><span class="pre">'backslashreplace'</span></code> です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span><code class="docutils literal"><span class="pre">encodingname</span></code> の部分が任意になりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>On Windows, the encoding specified by this variable is ignored for interactive
+console buffers unless <span class="target" id="index-24"></span><a class="reference internal" href="#envvar-PYTHONLEGACYWINDOWSIOENCODING"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONLEGACYWINDOWSIOENCODING</span></code></a> is also specified.
+Files and pipes redirected through the standard streams are not affected.</p>
+</div>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONNOUSERSITE">
+<code class="descname">PYTHONNOUSERSITE</code><a class="headerlink" href="#envvar-PYTHONNOUSERSITE" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この環境変数が設定されている場合、 Python は <a class="reference internal" href="../library/site.html#site.USER_SITE" title="site.USER_SITE"><code class="xref py py-data docutils literal"><span class="pre">ユーザ</span> <span class="pre">site-packages</span> <span class="pre">ディレクトリ</span></code></a> を <a class="reference internal" href="../library/sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> に追加しません。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><span class="target" id="index-73"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0370"><strong>PEP 370</strong></a> &#8211; ユーザごとの <code class="docutils literal"><span class="pre">site-packages</span></code> ディレクトリ</p>
+</div>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONUSERBASE">
+<code class="descname">PYTHONUSERBASE</code><a class="headerlink" href="#envvar-PYTHONUSERBASE" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="../library/site.html#site.USER_BASE" title="site.USER_BASE"><code class="xref py py-data docutils literal"><span class="pre">user</span> <span class="pre">base</span> <span class="pre">directory</span></code></a> を設定します。これは <code class="docutils literal"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span> <span class="pre">--user</span></code> 時に <a class="reference internal" href="../library/site.html#site.USER_SITE" title="site.USER_SITE"><code class="xref py py-data docutils literal"><span class="pre">user</span> <span class="pre">site-packages</span> <span class="pre">directory</span></code></a> と <a class="reference internal" href="../install/index.html#inst-alt-install-user"><span class="std std-ref">Distutils installation paths</span></a> のパスを計算するのに使われます。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last"><span class="target" id="index-74"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0370"><strong>PEP 370</strong></a> &#8211; ユーザごとの <code class="docutils literal"><span class="pre">site-packages</span></code> ディレクトリ</p>
+</div>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONEXECUTABLE">
+<code class="descname">PYTHONEXECUTABLE</code><a class="headerlink" href="#envvar-PYTHONEXECUTABLE" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この環境変数が設定された場合、 <code class="docutils literal"><span class="pre">sys.argv[0]</span></code> に、C ランタイムから取得した値の代わりにこの環境変数の値が設定されます。Mac OS X でのみ動作します。</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONWARNINGS">
+<code class="descname">PYTHONWARNINGS</code><a class="headerlink" href="#envvar-PYTHONWARNINGS" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>これは <a class="reference internal" href="#cmdoption-W"><code class="xref std std-option docutils literal"><span class="pre">-W</span></code></a> オプションと等価です。カンマ区切りの文字列を設定するのは <a class="reference internal" href="#cmdoption-W"><code class="xref std std-option docutils literal"><span class="pre">-W</span></code></a> を複数回指定するのと等価です。</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONFAULTHANDLER">
+<code class="descname">PYTHONFAULTHANDLER</code><a class="headerlink" href="#envvar-PYTHONFAULTHANDLER" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この環境変数が空でない文字列に設定された場合、起動時に <a class="reference internal" href="../library/faulthandler.html#faulthandler.enable" title="faulthandler.enable"><code class="xref py py-func docutils literal"><span class="pre">faulthandler.enable()</span></code></a>  が呼び出されます。Python のトレースバックをダンプするために <code class="xref py py-const docutils literal"><span class="pre">SIGSEGV</span></code>、<code class="xref py py-const docutils literal"><span class="pre">SIGFPE</span></code>、<code class="xref py py-const docutils literal"><span class="pre">SIGABRT</span></code>、<code class="xref py py-const docutils literal"><span class="pre">SIGBUS</span></code> および <code class="xref py py-const docutils literal"><span class="pre">SIGILL</span></code> シグナルのハンドラを導入します。<a class="reference internal" href="#cmdoption-X"><code class="xref std std-option docutils literal"><span class="pre">-X</span></code></a> <code class="docutils literal"><span class="pre">faulthandler</span></code> オプションと等価です。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONTRACEMALLOC">
+<code class="descname">PYTHONTRACEMALLOC</code><a class="headerlink" href="#envvar-PYTHONTRACEMALLOC" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この環境変数が空でない文字列に設定された場合、<a class="reference internal" href="../library/tracemalloc.html#module-tracemalloc" title="tracemalloc: Trace memory allocations."><code class="xref py py-mod docutils literal"><span class="pre">tracemalloc</span></code></a> モジュールを利用して Python のメモリ割り当てのトレースを開始します。変数の値はトレース時のトレースバックで保持されるフレームの最大数です。例えば <code class="docutils literal"><span class="pre">PYTHONTRACEMALLOC=1</span></code> の場合、最新のフレームのみを保持します。詳細は <a class="reference internal" href="../library/tracemalloc.html#tracemalloc.start" title="tracemalloc.start"><code class="xref py py-func docutils literal"><span class="pre">tracemalloc.start()</span></code></a> を参照してください、</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONASYNCIODEBUG">
+<code class="descname">PYTHONASYNCIODEBUG</code><a class="headerlink" href="#envvar-PYTHONASYNCIODEBUG" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この環境変数が空でない文字列に設定された場合、<a class="reference internal" href="../library/asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> モジュールの <a class="reference internal" href="../library/asyncio-dev.html#asyncio-debug-mode"><span class="std std-ref">デバッグモード</span></a> が有効化されます。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONMALLOC">
+<code class="descname">PYTHONMALLOC</code><a class="headerlink" href="#envvar-PYTHONMALLOC" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Set the Python memory allocators and/or install debug hooks.</p>
+<p>Set the family of memory allocators used by Python:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">malloc</span></code>: use the <code class="xref c c-func docutils literal"><span class="pre">malloc()</span></code> function of the C library
+for all domains (<a class="reference internal" href="../c-api/memory.html#c.PYMEM_DOMAIN_RAW" title="PYMEM_DOMAIN_RAW"><code class="xref c c-data docutils literal"><span class="pre">PYMEM_DOMAIN_RAW</span></code></a>, <a class="reference internal" href="../c-api/memory.html#c.PYMEM_DOMAIN_MEM" title="PYMEM_DOMAIN_MEM"><code class="xref c c-data docutils literal"><span class="pre">PYMEM_DOMAIN_MEM</span></code></a>,
+<a class="reference internal" href="../c-api/memory.html#c.PYMEM_DOMAIN_OBJ" title="PYMEM_DOMAIN_OBJ"><code class="xref c c-data docutils literal"><span class="pre">PYMEM_DOMAIN_OBJ</span></code></a>).</li>
+<li><code class="docutils literal"><span class="pre">pymalloc</span></code>: use the <a class="reference internal" href="../c-api/memory.html#pymalloc"><span class="std std-ref">pymalloc allocator</span></a> for
+<a class="reference internal" href="../c-api/memory.html#c.PYMEM_DOMAIN_MEM" title="PYMEM_DOMAIN_MEM"><code class="xref c c-data docutils literal"><span class="pre">PYMEM_DOMAIN_MEM</span></code></a> and <a class="reference internal" href="../c-api/memory.html#c.PYMEM_DOMAIN_OBJ" title="PYMEM_DOMAIN_OBJ"><code class="xref c c-data docutils literal"><span class="pre">PYMEM_DOMAIN_OBJ</span></code></a> domains and use
+the <code class="xref c c-func docutils literal"><span class="pre">malloc()</span></code> function for the <a class="reference internal" href="../c-api/memory.html#c.PYMEM_DOMAIN_RAW" title="PYMEM_DOMAIN_RAW"><code class="xref c c-data docutils literal"><span class="pre">PYMEM_DOMAIN_RAW</span></code></a> domain.</li>
+</ul>
+<p>Install debug hooks:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">debug</span></code>: install debug hooks on top of the default memory allocator</li>
+<li><code class="docutils literal"><span class="pre">malloc_debug</span></code>: same as <code class="docutils literal"><span class="pre">malloc</span></code> but also install debug hooks</li>
+<li><code class="docutils literal"><span class="pre">pymalloc_debug</span></code>: same as <code class="docutils literal"><span class="pre">pymalloc</span></code> but also install debug hooks</li>
+</ul>
+<p>When Python is compiled in release mode, the default is <code class="docutils literal"><span class="pre">pymalloc</span></code>. When
+compiled in debug mode, the default is <code class="docutils literal"><span class="pre">pymalloc_debug</span></code> and the debug hooks
+are used automatically.</p>
+<p>If Python is configured without <code class="docutils literal"><span class="pre">pymalloc</span></code> support, <code class="docutils literal"><span class="pre">pymalloc</span></code> and
+<code class="docutils literal"><span class="pre">pymalloc_debug</span></code> are not available, the default is <code class="docutils literal"><span class="pre">malloc</span></code> in release
+mode and <code class="docutils literal"><span class="pre">malloc_debug</span></code> in debug mode.</p>
+<p>See the <a class="reference internal" href="../c-api/memory.html#c.PyMem_SetupDebugHooks" title="PyMem_SetupDebugHooks"><code class="xref c c-func docutils literal"><span class="pre">PyMem_SetupDebugHooks()</span></code></a> function for debug hooks on Python
+memory allocators.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONMALLOCSTATS">
+<code class="descname">PYTHONMALLOCSTATS</code><a class="headerlink" href="#envvar-PYTHONMALLOCSTATS" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>If set to a non-empty string, Python will print statistics of the
+<a class="reference internal" href="../c-api/memory.html#pymalloc"><span class="std std-ref">pymalloc memory allocator</span></a> every time a new pymalloc object
+arena is created, and on shutdown.</p>
+<p>This variable is ignored if the <span class="target" id="index-27"></span><a class="reference internal" href="#envvar-PYTHONMALLOC"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONMALLOC</span></code></a> environment variable
+is used to force the <code class="xref c c-func docutils literal"><span class="pre">malloc()</span></code> allocator of the C library, or if
+Python is configured without <code class="docutils literal"><span class="pre">pymalloc</span></code> support.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>This variable can now also be used on Python compiled in release mode.
+It now has no effect if set to an empty string.</p>
+</div>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONLEGACYWINDOWSFSENCODING">
+<code class="descname">PYTHONLEGACYWINDOWSFSENCODING</code><a class="headerlink" href="#envvar-PYTHONLEGACYWINDOWSFSENCODING" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>If set to a non-empty string, the default filesystem encoding and errors mode
+will revert to their pre-3.6 values of &#8216;mbcs&#8217; and &#8216;replace&#8217;, respectively.
+Otherwise, the new defaults &#8216;utf-8&#8217; and &#8216;surrogatepass&#8217; are used.</p>
+<p>This may also be enabled at runtime with
+<a class="reference internal" href="../library/sys.html#sys._enablelegacywindowsfsencoding" title="sys._enablelegacywindowsfsencoding"><code class="xref py py-func docutils literal"><span class="pre">sys._enablelegacywindowsfsencoding()</span></code></a>.</p>
+<p>Availability: Windows</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加: </span>See <span class="target" id="index-28"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0529"><strong>PEP 529</strong></a> for more details.</p>
+</div>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONLEGACYWINDOWSIOENCODING">
+<code class="descname">PYTHONLEGACYWINDOWSIOENCODING</code><a class="headerlink" href="#envvar-PYTHONLEGACYWINDOWSIOENCODING" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>If set to a non-empty string, does not use the new console reader and
+writer. This means that Unicode characters will be encoded according to
+the active console code page, rather than using utf-8.</p>
+<p>This variable is ignored if the standard streams are redirected (to files
+or pipes) rather than referring to console buffers.</p>
+<p>Availability: Windows</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
+</div>
+</dd></dl>
+
+<div class="section" id="debug-mode-variables">
+<h3>1.2.1. デバッグモード変数<a class="headerlink" href="#debug-mode-variables" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>以下の環境変数は、<code class="docutils literal"><span class="pre">--with-pydebug</span></code> ビルドオプションを指定して構成されたデバッグビルド版の Python でのみ効果があります。</p>
+<dl class="envvar">
+<dt id="envvar-PYTHONTHREADDEBUG">
+<code class="descname">PYTHONTHREADDEBUG</code><a class="headerlink" href="#envvar-PYTHONTHREADDEBUG" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>設定された場合、 Python はスレッドデバッグ情報を表示します。</p>
+</dd></dl>
+
+<dl class="envvar">
+<dt id="envvar-PYTHONDUMPREFS">
+<code class="descname">PYTHONDUMPREFS</code><a class="headerlink" href="#envvar-PYTHONDUMPREFS" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>設定された場合、 Python はインタプリタのシャットダウン後に残っているオブジェクトと参照カウントをダンプします。</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. コマンドラインと環境</a><ul>
+<li><a class="reference internal" href="#command-line">1.1. コマンドライン</a><ul>
+<li><a class="reference internal" href="#interface-options">1.1.1. インターフェイスオプション</a></li>
+<li><a class="reference internal" href="#generic-options">1.1.2. 一般オプション</a></li>
+<li><a class="reference internal" href="#miscellaneous-options">1.1.3. その他のオプション</a></li>
+<li><a class="reference internal" href="#options-you-shouldn-t-use">1.1.4. 使うべきでないオプション</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#environment-variables">1.2. 環境変数</a><ul>
+<li><a class="reference internal" href="#debug-mode-variables">1.2.1. デバッグモード変数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="index.html"
+                        title="前の章へ">Python のセットアップと利用</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="unix.html"
+                        title="次の章へ">2. Unix プラットフォームで Python を使う</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/using/cmdline.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="unix.html" title="2. Unix プラットフォームで Python を使う"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Python のセットアップと利用"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python のセットアップと利用</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

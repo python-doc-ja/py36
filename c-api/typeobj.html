@@ -1,0 +1,1234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>型オブジェクト &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="オブジェクト実装サポート (object implementation support)" href="objimpl.html" />
+    <link rel="next" title="循環参照ガベージコレクションをサポートする" href="gcsupport.html" />
+    <link rel="prev" title="共通のオブジェクト構造体 (common object structure)" href="structures.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/c-api/typeobj.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/c-api/typeobj.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="gcsupport.html" title="循環参照ガベージコレクションをサポートする"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="structures.html" title="共通のオブジェクト構造体 (common object structure)"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API リファレンスマニュアル</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="objimpl.html" accesskey="U">オブジェクト実装サポート (object implementation support)</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="type-objects">
+<span id="type-structs"></span><h1>型オブジェクト<a class="headerlink" href="#type-objects" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p>新スタイルの型を定義する構造体: <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></code></a> 構造体は、おそらく Python オブジェクトシステムの中で最も重要な構造体の1つでしょう。型オブジェクトは <code class="xref c c-func docutils literal"><span class="pre">PyObject_*()</span></code> 系や <code class="xref c c-func docutils literal"><span class="pre">PyType_*()</span></code> 系の関数で扱えますが、ほとんどの Python アプリケーションにとって、さして面白みのある機能を提供しません。型オブジェクトはオブジェクトがどのように振舞うかを決める基盤ですから、インタプリタ自体や新たな型を定義する拡張モジュールでは非常に重要な存在です。</p>
+<p>型オブジェクトは標準の型 (standard type) に比べるとかなり大きな構造体です。各型オブジェクトは多くの値を保持しており、そのほとんどは C 関数へのポインタで、それぞれの関数はその型の機能の小さい部分を実装しています。この節では、型オブジェクトの各フィールドについて詳細を説明します。各フィールドは、構造体内で出現する順番に説明されています。</p>
+<p>Typedefs: unaryfunc, binaryfunc, ternaryfunc, inquiry, intargfunc, intintargfunc, intobjargproc, intintobjargproc, objobjargproc, destructor, freefunc, printfunc, getattrfunc, getattrofunc, setattrfunc, setattrofunc, cmpfunc, reprfunc, hashfunc</p>
+<p><a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></code></a> の構造体定義は <code class="file docutils literal"><span class="pre">Include/object.h</span></code> で見つけられるはずです。参照の手間を省くために、ここでは定義を繰り返します:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_typeobject</span> <span class="p">{</span>
+    <span class="n">PyObject_VAR_HEAD</span>
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">tp_name</span><span class="p">;</span> <span class="cm">/* For printing, in format &quot;&lt;module&gt;.&lt;name&gt;&quot; */</span>
+    <span class="n">Py_ssize_t</span> <span class="n">tp_basicsize</span><span class="p">,</span> <span class="n">tp_itemsize</span><span class="p">;</span> <span class="cm">/* For allocation */</span>
+
+    <span class="cm">/* Methods to implement standard operations */</span>
+
+    <span class="n">destructor</span> <span class="n">tp_dealloc</span><span class="p">;</span>
+    <span class="n">printfunc</span> <span class="n">tp_print</span><span class="p">;</span>
+    <span class="n">getattrfunc</span> <span class="n">tp_getattr</span><span class="p">;</span>
+    <span class="n">setattrfunc</span> <span class="n">tp_setattr</span><span class="p">;</span>
+    <span class="n">PyAsyncMethods</span> <span class="o">*</span><span class="n">tp_as_async</span><span class="p">;</span> <span class="cm">/* formerly known as tp_compare (Python 2)</span>
+<span class="cm">                                    or tp_reserved (Python 3) */</span>
+    <span class="n">reprfunc</span> <span class="n">tp_repr</span><span class="p">;</span>
+
+    <span class="cm">/* Method suites for standard classes */</span>
+
+    <span class="n">PyNumberMethods</span> <span class="o">*</span><span class="n">tp_as_number</span><span class="p">;</span>
+    <span class="n">PySequenceMethods</span> <span class="o">*</span><span class="n">tp_as_sequence</span><span class="p">;</span>
+    <span class="n">PyMappingMethods</span> <span class="o">*</span><span class="n">tp_as_mapping</span><span class="p">;</span>
+
+    <span class="cm">/* More standard operations (here for binary compatibility) */</span>
+
+    <span class="n">hashfunc</span> <span class="n">tp_hash</span><span class="p">;</span>
+    <span class="n">ternaryfunc</span> <span class="n">tp_call</span><span class="p">;</span>
+    <span class="n">reprfunc</span> <span class="n">tp_str</span><span class="p">;</span>
+    <span class="n">getattrofunc</span> <span class="n">tp_getattro</span><span class="p">;</span>
+    <span class="n">setattrofunc</span> <span class="n">tp_setattro</span><span class="p">;</span>
+
+    <span class="cm">/* Functions to access object as input/output buffer */</span>
+    <span class="n">PyBufferProcs</span> <span class="o">*</span><span class="n">tp_as_buffer</span><span class="p">;</span>
+
+    <span class="cm">/* Flags to define presence of optional/expanded features */</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">tp_flags</span><span class="p">;</span>
+
+    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">tp_doc</span><span class="p">;</span> <span class="cm">/* Documentation string */</span>
+
+    <span class="cm">/* call function for all accessible objects */</span>
+    <span class="n">traverseproc</span> <span class="n">tp_traverse</span><span class="p">;</span>
+
+    <span class="cm">/* delete references to contained objects */</span>
+    <span class="n">inquiry</span> <span class="n">tp_clear</span><span class="p">;</span>
+
+    <span class="cm">/* rich comparisons */</span>
+    <span class="n">richcmpfunc</span> <span class="n">tp_richcompare</span><span class="p">;</span>
+
+    <span class="cm">/* weak reference enabler */</span>
+    <span class="n">Py_ssize_t</span> <span class="n">tp_weaklistoffset</span><span class="p">;</span>
+
+    <span class="cm">/* Iterators */</span>
+    <span class="n">getiterfunc</span> <span class="n">tp_iter</span><span class="p">;</span>
+    <span class="n">iternextfunc</span> <span class="n">tp_iternext</span><span class="p">;</span>
+
+    <span class="cm">/* Attribute descriptor and subclassing stuff */</span>
+    <span class="k">struct</span> <span class="n">PyMethodDef</span> <span class="o">*</span><span class="n">tp_methods</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">PyMemberDef</span> <span class="o">*</span><span class="n">tp_members</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">PyGetSetDef</span> <span class="o">*</span><span class="n">tp_getset</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="n">_typeobject</span> <span class="o">*</span><span class="n">tp_base</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_dict</span><span class="p">;</span>
+    <span class="n">descrgetfunc</span> <span class="n">tp_descr_get</span><span class="p">;</span>
+    <span class="n">descrsetfunc</span> <span class="n">tp_descr_set</span><span class="p">;</span>
+    <span class="n">Py_ssize_t</span> <span class="n">tp_dictoffset</span><span class="p">;</span>
+    <span class="n">initproc</span> <span class="n">tp_init</span><span class="p">;</span>
+    <span class="n">allocfunc</span> <span class="n">tp_alloc</span><span class="p">;</span>
+    <span class="n">newfunc</span> <span class="n">tp_new</span><span class="p">;</span>
+    <span class="n">freefunc</span> <span class="n">tp_free</span><span class="p">;</span> <span class="cm">/* Low-level free-memory routine */</span>
+    <span class="n">inquiry</span> <span class="n">tp_is_gc</span><span class="p">;</span> <span class="cm">/* For PyObject_IS_GC */</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_bases</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_mro</span><span class="p">;</span> <span class="cm">/* method resolution order */</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_cache</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_subclasses</span><span class="p">;</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_weaklist</span><span class="p">;</span>
+    <span class="n">destructor</span> <span class="n">tp_del</span><span class="p">;</span>
+
+    <span class="cm">/* Type attribute cache version tag. Added in version 2.6 */</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">tp_version_tag</span><span class="p">;</span>
+
+    <span class="n">destructor</span> <span class="n">tp_finalize</span><span class="p">;</span>
+
+<span class="p">}</span> <span class="n">PyTypeObject</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>型オブジェクト構造体は <a class="reference internal" href="structures.html#c.PyVarObject" title="PyVarObject"><code class="xref c c-type docutils literal"><span class="pre">PyVarObject</span></code></a> 構造体を拡張したものです。 <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> フィールドは、(通常 class 文が呼び出す <code class="xref py py-func docutils literal"><span class="pre">type_new()</span></code> で生成される) 動的な型に使います。 <a class="reference internal" href="type.html#c.PyType_Type" title="PyType_Type"><code class="xref c c-data docutils literal"><span class="pre">PyType_Type</span></code></a> (メタタイプ) は <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> を初期化するので注意してください。すなわち、 インスタンス (つまり型オブジェクト) には <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> フィールドが存在しなければ <em>なりません</em> 。</p>
+<dl class="member">
+<dt id="c.PyObject._ob_next">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyObject._ob_next</code><a class="headerlink" href="#c.PyObject._ob_next" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="c.PyObject._ob_prev">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyObject._ob_prev</code><a class="headerlink" href="#c.PyObject._ob_prev" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>これらのフィールドはマクロ <code class="docutils literal"><span class="pre">Py_TRACE_REFS</span></code> が定義されている場合のみ存在します。 <code class="docutils literal"><span class="pre">PyObject_HEAD_INIT</span></code> マクロを使うと、フィールドを <em>NULL</em> に初期化します。静的にメモリ確保されているオブジェクトでは、これらのフィールドは常に <em>NULL</em> のままです。動的にメモリ確保されるオブジェクトの場合、これら二つのフィールドは、ヒープ上の <em>全ての</em> 存続中のオブジェクトからなる二重リンクリストでオブジェクトをリンクする際に使われます。このことは様々なデバッグ目的に利用できます; 現状では、環境変数 <span class="target" id="index-6"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONDUMPREFS"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONDUMPREFS</span></code></a> が設定されているときに、プログラムの実行終了時点で存続しているオブジェクトを出力するのが唯一の用例です。</p>
+<p>サブタイプはこのフィールドを継承しません。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyObject.ob_refcnt">
+Py_ssize_t <code class="descname">PyObject.ob_refcnt</code><a class="headerlink" href="#c.PyObject.ob_refcnt" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>型オブジェクトの参照カウントで、 <code class="docutils literal"><span class="pre">PyObject_HEAD_INIT</span></code> はこの値を <code class="docutils literal"><span class="pre">1</span></code> に初期化します。静的にメモリ確保された型オブジェクトでは、型のインスタンス (<code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> が該当する型を指しているオブジェクト) は参照をカウントする対象には <em>なりません</em> 。動的にメモリ確保される型オブジェクトの場合、インスタンスは参照カウントの対象に <em>なります</em> 。</p>
+<p>サブタイプはこのフィールドを継承しません。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyObject.ob_type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject">PyTypeObject</a>* <code class="descname">PyObject.ob_type</code><a class="headerlink" href="#c.PyObject.ob_type" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>型自体の型、別の言い方をするとメタタイプです。 <code class="docutils literal"><span class="pre">PyObject_HEAD_INIT</span></code> マクロで初期化され、通常は <code class="docutils literal"><span class="pre">&amp;PyType_Type</span></code> になります。しかし、(少なくとも) Windows で利用できる動的ロード可能な拡張モジュールでは、コンパイラは有効な初期化ではないと文句をつけます。そこで、ならわしとして、 <code class="docutils literal"><span class="pre">PyObject_HEAD_INIT</span></code> には <em>NULL</em> を渡して初期化しておき、他の操作を行う前にモジュールの初期化関数で明示的にこのフィールドを初期化することになっています。この操作は以下のように行います:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">Foo_Type</span><span class="p">.</span><span class="n">ob_type</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">PyType_Type</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>上の操作は、該当する型のいかなるインスタンス生成よりも前にしておかなければなりません。 <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> は <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> が <em>NULL</em> かどうか調べ、 <em>NULL</em> の場合には基底クラスの <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> フィールドに初期化します。 <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> が非ゼロの場合、 <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> はこのフィールドを変更しません。</p>
+<p>サブタイプはこのフィールドを継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyVarObject.ob_size">
+Py_ssize_t <code class="descname">PyVarObject.ob_size</code><a class="headerlink" href="#c.PyVarObject.ob_size" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>静的にメモリ確保されている型オブジェクトの場合、このフィールドはゼロに初期化されます。動的にメモリ確保されている型オブジェクトの場合、このフィールドは内部使用される特殊な意味を持ちます。</p>
+<p>サブタイプはこのフィールドを継承しません。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_name">
+const char* <code class="descname">PyTypeObject.tp_name</code><a class="headerlink" href="#c.PyTypeObject.tp_name" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>型の名前が入っている NUL 終端された文字列へのポインタです。モジュールのグローバル変数としてアクセスできる型の場合、この文字列は完全なモジュール名、ドット、そして型の名前と続く文字列になります; 組み込み型の場合、ただの型の名前です。モジュールがあるパッケージのサブモジュールの場合、完全なパッケージ名が完全なモジュール名の一部になっています。例えば、パッケージ <code class="xref py py-mod docutils literal"><span class="pre">P</span></code> 内のサブモジュール <code class="xref py py-mod docutils literal"><span class="pre">Q</span></code> に入っているモジュール <code class="xref py py-mod docutils literal"><span class="pre">M</span></code> 内で定義されている <code class="xref py py-class docutils literal"><span class="pre">T</span></code> は、 <a class="reference internal" href="#c.PyTypeObject.tp_name" title="PyTypeObject.tp_name"><code class="xref c c-member docutils literal"><span class="pre">tp_name</span></code></a> を <code class="docutils literal"><span class="pre">&quot;P.Q.M.T&quot;</span></code> に初期化します。</p>
+<p>動的にメモリ確保される型オブジェクトの場合、このフィールドは単に型の名前になり、モジュール名は型の辞書内でキー <code class="docutils literal"><span class="pre">'__module__'</span></code> に対する値として明示的に保存されます。</p>
+<p>静的にメモリ確保される型オブジェクトの場合、 <code class="xref py py-attr docutils literal"><span class="pre">tp_name</span></code> フィールドにはドットが含まれているはずです。
+最後のドットよりも前にある部分文字列全体は <code class="xref py py-attr docutils literal"><span class="pre">__module__</span></code> 属性として、またドットよりも後ろにある部分は <a class="reference internal" href="../library/stdtypes.html#definition.__name__" title="definition.__name__"><code class="xref py py-attr docutils literal"><span class="pre">__name__</span></code></a> 属性としてアクセスできます。</p>
+<p>ドットが入っていない場合、 <a class="reference internal" href="#c.PyTypeObject.tp_name" title="PyTypeObject.tp_name"><code class="xref c c-member docutils literal"><span class="pre">tp_name</span></code></a> フィールドの内容全てが <a class="reference internal" href="../library/stdtypes.html#definition.__name__" title="definition.__name__"><code class="xref py py-attr docutils literal"><span class="pre">__name__</span></code></a> 属性になり、 <code class="xref py py-attr docutils literal"><span class="pre">__module__</span></code> 属性は (前述のように型の辞書内で明示的にセットしないかぎり) 未定義になります。
+このため、その型は pickle 化できないことになります。
+さらに、 pydoc が作成するモジュールドキュメントのリストにも載らなくなります。</p>
+<p>サブタイプはこのフィールドを継承しません。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_basicsize">
+Py_ssize_t <code class="descname">PyTypeObject.tp_basicsize</code><a class="headerlink" href="#c.PyTypeObject.tp_basicsize" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="c.PyTypeObject.tp_itemsize">
+Py_ssize_t <code class="descname">PyTypeObject.tp_itemsize</code><a class="headerlink" href="#c.PyTypeObject.tp_itemsize" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>これらのフィールドは、型インスタンスのバイトサイズを計算できるようにします。</p>
+<p>型には二つの種類があります: 固定長インスタンスの型は、 <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> フィールドがゼロで、可変長インスタンスの方は <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> フィールドが非ゼロの値になります。固定長インスタンスの型の場合、全てのインスタンスは等しく <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> で与えられたサイズになります。</p>
+<p>可変長インスタンスの型の場合、インスタンスには <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code>  フィールドがなくてはならず、インスタンスのサイズは N をオブジェクトの &#8220;長さ&#8221; として、 <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> と <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> の N 倍を足したものになります。 N の値は通常、インスタンスの <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code>  フィールドに記憶されます。ただし例外がいくつかあります: 例えば、整数では負の値を <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> に使って、インスタンスの表す値が負であることを示し、 N 自体は <code class="docutils literal"><span class="pre">abs(ob_size)</span></code> になります。また、 <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> フィールドがあるからといって、必ずしもインスタンスが可変長であることを意味しません (例えば、 リスト型の構造体は固定長のインスタンスになるにもかかわらず、インスタンスにはちゃんと意味を持った <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> フィールドがあります)。</p>
+<p>基本サイズには、 <a class="reference internal" href="structures.html#c.PyObject_HEAD" title="PyObject_HEAD"><code class="xref c c-macro docutils literal"><span class="pre">PyObject_HEAD</span></code></a> マクロまたは  <a class="reference internal" href="structures.html#c.PyObject_VAR_HEAD" title="PyObject_VAR_HEAD"><code class="xref c c-macro docutils literal"><span class="pre">PyObject_VAR_HEAD</span></code></a> マクロ (インスタンス構造体を宣言するのに使ったどちらかのマクロ) で宣言されているフィールドが入っています。さらに、 <code class="xref py py-attr docutils literal"><span class="pre">_ob_prev</span></code> および <code class="xref py py-attr docutils literal"><span class="pre">_ob_next</span></code> フィールドがある場合、これらのフィールドもサイズに加算されます。従って、 <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> の正しい初期化値を得るには、インスタンスデータのレイアウトを宣言するのに使う構造体に対して <code class="docutils literal"><span class="pre">sizeof</span></code> 演算子を使うしかありません。基本サイズには、GC ヘッダサイズは入っていません。</p>
+<p>これらのフィールドはサブタイプに別々に継承されます。基底タイプが 0 でない <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> を持っていた場合、基底タイプの実装に依存しますが、一般的にはサブタイプで別の 0 で無い値を <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> に設定するのは安全ではありません。</p>
+<p>アラインメントに関する注釈: 変数の各要素を配置する際に特定のアラインメントが必要となる場合、 <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> の値に気をつけなければなりません。例: ある型が <code class="docutils literal"><span class="pre">double</span></code> の配列を実装しているとします。 <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> は <code class="docutils literal"><span class="pre">sizeof(double)</span></code> です。 <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> が <code class="docutils literal"><span class="pre">sizeof(double)</span></code> (ここではこれを <code class="docutils literal"><span class="pre">double</span></code> のアラインメントが要求するサイズと仮定する) の個数分のサイズになるようにするのはプログラマの責任です。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_dealloc">
+destructor <code class="descname">PyTypeObject.tp_dealloc</code><a class="headerlink" href="#c.PyTypeObject.tp_dealloc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インスタンスのデストラクタ関数へのポインタです。この関数は (単量子 <code class="docutils literal"><span class="pre">None</span></code> や <code class="docutils literal"><span class="pre">Ellipsis</span></code> の場合のように) インスタンスが決してメモリ解放されない型でない限り必ず定義しなければなりません。</p>
+<p>デストラクタ関数は、参照カウントが新たにゼロになった際に <a class="reference internal" href="refcounting.html#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal"><span class="pre">Py_DECREF()</span></code></a> や <a class="reference internal" href="refcounting.html#c.Py_XDECREF" title="Py_XDECREF"><code class="xref c c-func docutils literal"><span class="pre">Py_XDECREF()</span></code></a> マクロから呼び出されます。呼び出された時点では、インスタンスはまだ存在しますが、インスタンスに対する参照は全くない状態です。デストラクタ関数はインスタンスが保持している全ての参照を解放し、インスタンスが確保している全てのメモリバッファを (バッファの確保時に使った関数に対応するメモリ解放関数を使って) 解放し、最後に (デストラクタ関数の最後の操作として) その型の  <a class="reference internal" href="#c.PyTypeObject.tp_free" title="PyTypeObject.tp_free"><code class="xref c c-member docutils literal"><span class="pre">tp_free</span></code></a> 関数を呼び出します。ある型がサブタイプを作成できない (<a class="reference internal" href="#Py_TPFLAGS_BASETYPE" title="Py_TPFLAGS_BASETYPE"><code class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_BASETYPE</span></code></a> フラグがセットされていない) 場合、 <a class="reference internal" href="#c.PyTypeObject.tp_free" title="PyTypeObject.tp_free"><code class="xref c c-member docutils literal"><span class="pre">tp_free</span></code></a> の代わりにオブジェクトのメモリ解放関数 (deallocator) を直接呼び出してもかまいません。オブジェクトのメモリ解放関数は、インスタンスのメモリ確保を行う際に使った関数に対応したものでなければなりません; インスタンスを <a class="reference internal" href="allocation.html#c.PyObject_New" title="PyObject_New"><code class="xref c c-func docutils literal"><span class="pre">PyObject_New()</span></code></a> や <code class="xref c c-func docutils literal"><span class="pre">PyObject_VarNew()</span></code> でメモリ 確保した場合には、通常 <a class="reference internal" href="allocation.html#c.PyObject_Del" title="PyObject_Del"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Del()</span></code></a> を使い、 <a class="reference internal" href="gcsupport.html#c.PyObject_GC_New" title="PyObject_GC_New"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GC_New()</span></code></a> や <a class="reference internal" href="gcsupport.html#c.PyObject_GC_NewVar" title="PyObject_GC_NewVar"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GC_NewVar()</span></code></a> で確保した場合には <a class="reference internal" href="gcsupport.html#c.PyObject_GC_Del" title="PyObject_GC_Del"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GC_Del()</span></code></a> を使います。</p>
+<p>サブタイプはこのフィールドを継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_print">
+printfunc <code class="descname">PyTypeObject.tp_print</code><a class="headerlink" href="#c.PyTypeObject.tp_print" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>予約済みのスロットです。
+以前は Python 2.x でオブジェクトのフォーマット出力をするのに使われていました。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_getattr">
+getattrfunc <code class="descname">PyTypeObject.tp_getattr</code><a class="headerlink" href="#c.PyTypeObject.tp_getattr" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、get-attribute-string を行う関数を指します。</p>
+<p>このフィールドは非推奨です。
+このフィールドを定義するときは、 <a class="reference internal" href="#c.PyTypeObject.tp_getattro" title="PyTypeObject.tp_getattro"><code class="xref c c-member docutils literal"><span class="pre">tp_getattro</span></code></a> 関数と同じように動作し、属性名は Python 文字列 オブジェクトではなく C 文字列で指定するような関数を指すようにしなければなりません。
+シグネチャは次の通りです:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span> <span class="nf">tp_getattr</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">o</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">attr_name</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>このフィールドは <a class="reference internal" href="#c.PyTypeObject.tp_getattro" title="PyTypeObject.tp_getattro"><code class="xref c c-member docutils literal"><span class="pre">tp_getattro</span></code></a> と共にサブタイプに継承されます: すなわち、サブタイプの <a class="reference internal" href="#c.PyTypeObject.tp_getattr" title="PyTypeObject.tp_getattr"><code class="xref c c-member docutils literal"><span class="pre">tp_getattr</span></code></a> および <a class="reference internal" href="#c.PyTypeObject.tp_getattro" title="PyTypeObject.tp_getattro"><code class="xref c c-member docutils literal"><span class="pre">tp_getattro</span></code></a> が共に <em>NULL</em> の場合、サブタイプは基底タイプから <a class="reference internal" href="#c.PyTypeObject.tp_getattr" title="PyTypeObject.tp_getattr"><code class="xref c c-member docutils literal"><span class="pre">tp_getattr</span></code></a> と <a class="reference internal" href="#c.PyTypeObject.tp_getattro" title="PyTypeObject.tp_getattro"><code class="xref c c-member docutils literal"><span class="pre">tp_getattro</span></code></a> を両方とも継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_setattr">
+setattrfunc <code class="descname">PyTypeObject.tp_setattr</code><a class="headerlink" href="#c.PyTypeObject.tp_setattr" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、属性の設定と削除を行う関数を指します。</p>
+<p>このフィールドは非推奨です。
+このフィールドを定義するときは、 <a class="reference internal" href="#c.PyTypeObject.tp_setattro" title="PyTypeObject.tp_setattro"><code class="xref c c-member docutils literal"><span class="pre">tp_setattro</span></code></a> 関数と同じように動作し、属性名は Python 文字列 オブジェクトではなく C 文字列で指定するような関数を指すようにしなければなりません。
+シグネチャは次の通りです:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span> <span class="nf">tp_setattr</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">o</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">attr_name</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">v</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>引数 <em>v</em> に <em>NULL</em> を設定すると属性を削除します。
+このフィールドは <a class="reference internal" href="#c.PyTypeObject.tp_setattro" title="PyTypeObject.tp_setattro"><code class="xref c c-member docutils literal"><span class="pre">tp_setattro</span></code></a> と共にサブタイプに継承されます: すなわち、サブタイプの <a class="reference internal" href="#c.PyTypeObject.tp_setattr" title="PyTypeObject.tp_setattr"><code class="xref c c-member docutils literal"><span class="pre">tp_setattr</span></code></a> および <a class="reference internal" href="#c.PyTypeObject.tp_setattro" title="PyTypeObject.tp_setattro"><code class="xref c c-member docutils literal"><span class="pre">tp_setattro</span></code></a> が両方とも <em>NULL</em> のとき、サブタイプは基底タイプから <a class="reference internal" href="#c.PyTypeObject.tp_setattr" title="PyTypeObject.tp_setattr"><code class="xref c c-member docutils literal"><span class="pre">tp_setattr</span></code></a> と <a class="reference internal" href="#c.PyTypeObject.tp_setattro" title="PyTypeObject.tp_setattro"><code class="xref c c-member docutils literal"><span class="pre">tp_setattro</span></code></a> を両方とも継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.tp_as_async">
+<a class="reference internal" href="#c.PyAsyncMethods" title="PyAsyncMethods">PyAsyncMethods</a>* <code class="descname">tp_as_async</code><a class="headerlink" href="#c.tp_as_async" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>追加の構造体を指すポインタです。
+この構造体は、 C レベルで <a class="reference internal" href="../glossary.html#term-awaitable"><span class="xref std std-term">awaitable</span></a> プロトコルと <a class="reference internal" href="../glossary.html#term-asynchronous-iterator"><span class="xref std std-term">asynchronous iterator</span></a> プロトコルを実装するオブジェクトだけに関係するフィールドを持ちます。
+詳しいことは <a class="reference internal" href="#async-structs"><span class="std std-ref">async オブジェクト構造体</span></a> を参照してください。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加: </span>以前は <code class="docutils literal"><span class="pre">tp_compare</span></code> や <code class="docutils literal"><span class="pre">tp_reserved</span></code> として知られていました。</p>
+</div>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_repr">
+reprfunc <code class="descname">PyTypeObject.tp_repr</code><a class="headerlink" href="#c.PyTypeObject.tp_repr" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-1">オプションのポインタで、組み込み関数 <a class="reference internal" href="../library/functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> を実装している関数を指します。</p>
+<p>シグネチャは <a class="reference internal" href="object.html#c.PyObject_Repr" title="PyObject_Repr"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Repr()</span></code></a> と同じです。この関数は文字列オブジェクトか Unicode オブジェクトを返さなければなりません。理想的には、この関数が返す文字列は、適切な環境で <a class="reference internal" href="../library/functions.html#eval" title="eval"><code class="xref py py-func docutils literal"><span class="pre">eval()</span></code></a> に渡した場合、同じ値を持つオブジェクトになるような文字列でなければなりません。不可能な場合には、オブジェクトの型と値から導出した内容の入った <code class="docutils literal"><span class="pre">'&lt;'</span></code> から始まって <code class="docutils literal"><span class="pre">'&gt;'</span></code> で終わる文字列を返さなければなりません。</p>
+<p>このフィールドが設定されていない場合、 <code class="docutils literal"><span class="pre">&lt;%s</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">%p&gt;</span></code> の形式をとる文字列が返されます。 <code class="docutils literal"><span class="pre">%s</span></code> は型の名前に、 <code class="docutils literal"><span class="pre">%p</span></code> はオブジェクトのメモリアドレスに置き換えられます。</p>
+<p>サブタイプはこのフィールドを継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.tp_as_number">
+<a class="reference internal" href="#c.PyNumberMethods" title="PyNumberMethods">PyNumberMethods</a>* <code class="descname">tp_as_number</code><a class="headerlink" href="#c.tp_as_number" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>数値プロトコルを実装した追加の構造体を指すポインタです。これらのフィールドについては <a class="reference internal" href="#number-structs"><span class="std std-ref">数値オブジェクト構造体</span></a> で説明されています。</p>
+<p><code class="xref c c-member docutils literal"><span class="pre">tp_as_number</span></code> フィールドは継承されませんが、そこの含まれるフィールドが個別に継承されます。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.tp_as_sequence">
+<a class="reference internal" href="#c.PySequenceMethods" title="PySequenceMethods">PySequenceMethods</a>* <code class="descname">tp_as_sequence</code><a class="headerlink" href="#c.tp_as_sequence" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>シーケンスプロトコルを実装した追加の構造体を指すポインタです。これらのフィールドについては <a class="reference internal" href="#sequence-structs"><span class="std std-ref">シーケンスオブジェクト構造体</span></a> で説明されています。</p>
+<p><code class="xref c c-member docutils literal"><span class="pre">tp_as_sequence</span></code> フィールドは継承されませんが、これに含まれるフィールドが個別に継承されます。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.tp_as_mapping">
+<a class="reference internal" href="#c.PyMappingMethods" title="PyMappingMethods">PyMappingMethods</a>* <code class="descname">tp_as_mapping</code><a class="headerlink" href="#c.tp_as_mapping" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>マッピングプロトコルを実装した追加の構造体を指すポインタです。これらのフィールドについては <a class="reference internal" href="#mapping-structs"><span class="std std-ref">マップオブジェクト構造体</span></a> で説明されています。</p>
+<p><code class="xref c c-member docutils literal"><span class="pre">tp_as_mapping</span></code> フィールドは継承されませんが、これに含まれるフィールドが個別に継承されます。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_hash">
+hashfunc <code class="descname">PyTypeObject.tp_hash</code><a class="headerlink" href="#c.PyTypeObject.tp_hash" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-2">オプションのポインタで、組み込み関数 <a class="reference internal" href="../library/functions.html#hash" title="hash"><code class="xref py py-func docutils literal"><span class="pre">hash()</span></code></a> を実装している関数を指します。</p>
+<p>シグネチャは <a class="reference internal" href="object.html#c.PyObject_Hash" title="PyObject_Hash"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Hash()</span></code></a> と同じです。この関数は型 Py_hash_t の値を返さなければなりません。通常時には <code class="docutils literal"><span class="pre">-1</span></code> を戻り値にしてはなりません; ハッシュ値の計算中にエラーが生じた場合、関数は例外をセットして <code class="docutils literal"><span class="pre">-1</span></code> を返さなければなりません。</p>
+<p>このフィールドは明示的に <a class="reference internal" href="object.html#c.PyObject_HashNotImplemented" title="PyObject_HashNotImplemented"><code class="xref c c-func docutils literal"><span class="pre">PyObject_HashNotImplemented()</span></code></a> に設定することで、親 type からのハッシュメソッドの継承をブロックすることができます。これは Python レベルでの <code class="docutils literal"><span class="pre">__hash__</span> <span class="pre">=</span> <span class="pre">None</span></code> と同等に解釈され、 <code class="docutils literal"><span class="pre">isinstance(o,</span> <span class="pre">collections.Hashable)</span></code> が正しく <code class="docutils literal"><span class="pre">False</span></code> を返すようになります。逆もまた可能であることに注意してください - Python レベルで <code class="docutils literal"><span class="pre">__hash__</span> <span class="pre">=</span> <span class="pre">None</span></code> を設定することで <code class="docutils literal"><span class="pre">tp_hash</span></code> スロットは <a class="reference internal" href="object.html#c.PyObject_HashNotImplemented" title="PyObject_HashNotImplemented"><code class="xref c c-func docutils literal"><span class="pre">PyObject_HashNotImplemented()</span></code></a> に設定されます。</p>
+<p>このフィールドがセットされていないときに、オブジェクトのハッシュ値を取ろうとすると <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> が送出されます。</p>
+<p>このフィールドは <a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal"><span class="pre">tp_richcompare</span></code></a> と共にサブタイプに継承されます: すなわち、サブタイプの <a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal"><span class="pre">tp_richcompare</span></code></a> および <a class="reference internal" href="#c.PyTypeObject.tp_hash" title="PyTypeObject.tp_hash"><code class="xref c c-member docutils literal"><span class="pre">tp_hash</span></code></a> が両方とも <em>NULL</em> のとき、サブタイプは基底タイプから <a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal"><span class="pre">tp_richcompare</span></code></a> と <a class="reference internal" href="#c.PyTypeObject.tp_hash" title="PyTypeObject.tp_hash"><code class="xref c c-member docutils literal"><span class="pre">tp_hash</span></code></a> を両方とも継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_call">
+ternaryfunc <code class="descname">PyTypeObject.tp_call</code><a class="headerlink" href="#c.PyTypeObject.tp_call" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、オブジェクトの呼び出しを実装している関数を指します。オブジェクトが呼び出し可能でない場合には <em>NULL</em> にしなければなりません。シグネチャは <a class="reference internal" href="object.html#c.PyObject_Call" title="PyObject_Call"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Call()</span></code></a> と同じです。</p>
+<p>サブタイプはこのフィールドを継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_str">
+reprfunc <code class="descname">PyTypeObject.tp_str</code><a class="headerlink" href="#c.PyTypeObject.tp_str" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、組み込みの演算 <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> を実装している関数を指します。(<a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> が型の一つになったため、 <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> は <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> のコンストラクタを呼び出すことに注意してください。このコンストラクタは実際の処理を行う上で <a class="reference internal" href="object.html#c.PyObject_Str" title="PyObject_Str"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Str()</span></code></a> を呼び出し、さらに <a class="reference internal" href="object.html#c.PyObject_Str" title="PyObject_Str"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Str()</span></code></a> がこのハンドラを呼び出すことになります。)</p>
+<p>シグネチャは <a class="reference internal" href="object.html#c.PyObject_Str" title="PyObject_Str"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Str()</span></code></a> と同じです; この関数は文字列オブジェクトか Unicode オブジェクトを返さなければなりません。また、この関数はオブジェクトを &#8220;分かりやすく (friendly)&#8221; 表現した文字列を返さなければなりません。というのは、この文字列はとりわけ <a class="reference internal" href="../library/functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> 関数で使われることになる表記だからです。</p>
+<p>このフィールドが設定されていない場合、文字列表現を返すためには <a class="reference internal" href="object.html#c.PyObject_Repr" title="PyObject_Repr"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Repr()</span></code></a> が呼び出されます。</p>
+<p>サブタイプはこのフィールドを継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_getattro">
+getattrofunc <code class="descname">PyTypeObject.tp_getattro</code><a class="headerlink" href="#c.PyTypeObject.tp_getattro" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、get-attribute を実装している関数を指します。</p>
+<p>シグネチャは <a class="reference internal" href="object.html#c.PyObject_GetAttr" title="PyObject_GetAttr"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GetAttr()</span></code></a> と同じです。
+通常の属性検索を実装している <a class="reference internal" href="object.html#c.PyObject_GenericGetAttr" title="PyObject_GenericGetAttr"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GenericGetAttr()</span></code></a>  をこのフィールドに設定しておくとたいていの場合は便利です。</p>
+<p>このフィールドは <a class="reference internal" href="#c.PyTypeObject.tp_getattr" title="PyTypeObject.tp_getattr"><code class="xref c c-member docutils literal"><span class="pre">tp_getattr</span></code></a> と共にサブタイプに継承されます: すなわち、サブタイプの <a class="reference internal" href="#c.PyTypeObject.tp_getattr" title="PyTypeObject.tp_getattr"><code class="xref c c-member docutils literal"><span class="pre">tp_getattr</span></code></a> および <a class="reference internal" href="#c.PyTypeObject.tp_getattro" title="PyTypeObject.tp_getattro"><code class="xref c c-member docutils literal"><span class="pre">tp_getattro</span></code></a> が共に <em>NULL</em> の場合、サブタイプは基底タイプから <a class="reference internal" href="#c.PyTypeObject.tp_getattr" title="PyTypeObject.tp_getattr"><code class="xref c c-member docutils literal"><span class="pre">tp_getattr</span></code></a> と <a class="reference internal" href="#c.PyTypeObject.tp_getattro" title="PyTypeObject.tp_getattro"><code class="xref c c-member docutils literal"><span class="pre">tp_getattro</span></code></a> を両方とも継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_setattro">
+setattrofunc <code class="descname">PyTypeObject.tp_setattro</code><a class="headerlink" href="#c.PyTypeObject.tp_setattro" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、属性の設定と削除を行う関数を指します。</p>
+<p>シグネチャは <a class="reference internal" href="object.html#c.PyObject_SetAttr" title="PyObject_SetAttr"><code class="xref c c-func docutils literal"><span class="pre">PyObject_SetAttr()</span></code></a> と同じですが、 <em>v</em> に <em>NULL</em> を指定して属性を削除できるようにしなければなりません。
+通常の属性設定を実装している <a class="reference internal" href="object.html#c.PyObject_GenericSetAttr" title="PyObject_GenericSetAttr"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GenericSetAttr()</span></code></a>  をこのフィールドに設定しておくとたいていの場合は便利です。</p>
+<p>このフィールドは <a class="reference internal" href="#c.PyTypeObject.tp_setattr" title="PyTypeObject.tp_setattr"><code class="xref c c-member docutils literal"><span class="pre">tp_setattr</span></code></a> と共にサブタイプに継承されます: すなわち、サブタイプの <a class="reference internal" href="#c.PyTypeObject.tp_setattr" title="PyTypeObject.tp_setattr"><code class="xref c c-member docutils literal"><span class="pre">tp_setattr</span></code></a> および <a class="reference internal" href="#c.PyTypeObject.tp_setattro" title="PyTypeObject.tp_setattro"><code class="xref c c-member docutils literal"><span class="pre">tp_setattro</span></code></a> が共に <em>NULL</em> の場合、サブタイプは基底タイプから <a class="reference internal" href="#c.PyTypeObject.tp_setattr" title="PyTypeObject.tp_setattr"><code class="xref c c-member docutils literal"><span class="pre">tp_setattr</span></code></a> と <a class="reference internal" href="#c.PyTypeObject.tp_setattro" title="PyTypeObject.tp_setattro"><code class="xref c c-member docutils literal"><span class="pre">tp_setattro</span></code></a> を両方とも継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_as_buffer">
+<a class="reference internal" href="#c.PyBufferProcs" title="PyBufferProcs">PyBufferProcs</a>* <code class="descname">PyTypeObject.tp_as_buffer</code><a class="headerlink" href="#c.PyTypeObject.tp_as_buffer" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>バッファインタフェースを実装しているオブジェクトにのみ関連する、一連のフィールド群が入った別の構造体を指すポインタです。構造体内の各フィールドは <a class="reference internal" href="#buffer-structs"><span class="std std-ref">バッファオブジェクト構造体 (buffer object structure)</span></a> で説明します。</p>
+<p><a class="reference internal" href="#c.PyTypeObject.tp_as_buffer" title="PyTypeObject.tp_as_buffer"><code class="xref c c-member docutils literal"><span class="pre">tp_as_buffer</span></code></a> フィールド自体は継承されませんが、これに含まれるフィールドは個別に継承されます。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_flags">
+unsigned long <code class="descname">PyTypeObject.tp_flags</code><a class="headerlink" href="#c.PyTypeObject.tp_flags" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>このフィールドは様々なフラグからなるビットマスクです。いくつかのフラグは、特定の状況において変則的なセマンティクスが適用されることを示します; その他のフラグは、型オブジェクト (あるいは <code class="xref c c-member docutils literal"><span class="pre">tp_as_number</span></code> 、 <code class="xref c c-member docutils literal"><span class="pre">tp_as_sequence</span></code> 、 <code class="xref c c-member docutils literal"><span class="pre">tp_as_mapping</span></code> 、 および <a class="reference internal" href="#c.PyTypeObject.tp_as_buffer" title="PyTypeObject.tp_as_buffer"><code class="xref c c-member docutils literal"><span class="pre">tp_as_buffer</span></code></a> が参照している拡張機能構造体) の特定のフィールドのうち、過去から現在までずっと存在していたわけではないものが有効になっていることを示すために使われます; フラグビットがクリアされていれば、フラグが保護しているフィールドにはアクセスしない代わりに、その値はゼロか <em>NULL</em> になっているとみなさなければなりません。</p>
+<p>このフィールドの継承は込み入っています。ほとんどのフラグは個別に継承されます。すなわち、基底タイプのフラグビットが設定されていたら、サブタイプのフラグビットもそれを引き継ぎます。拡張機能構造体が継承される場合は、拡張機能構造体に関係するフラグビットは厳密に継承されます。すなわち、基底タイプのフラグビットの値は、拡張機能構造体へのポインタと共に、サブタイプにコピーされます。 <a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> フラグビットは <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal"><span class="pre">tp_traverse</span></code></a> フィールドと <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> フィールドと共に継承されます。すなわち、サブタイプにおいて、 <a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> フラグビットがクリアされていて、 <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal"><span class="pre">tp_traverse</span></code></a> フィールドと <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> フィールドが存在し <em>NULL</em> になっている場合に継承されます。</p>
+<p>以下に挙げるビットマスクは現在定義されているものです; フラグは <code class="docutils literal"><span class="pre">|</span></code> 演算子で論理和を取って <a class="reference internal" href="#c.PyTypeObject.tp_flags" title="PyTypeObject.tp_flags"><code class="xref c c-member docutils literal"><span class="pre">tp_flags</span></code></a> フィールドの値を作成できます。 <a class="reference internal" href="type.html#c.PyType_HasFeature" title="PyType_HasFeature"><code class="xref c c-func docutils literal"><span class="pre">PyType_HasFeature()</span></code></a> マクロは型とフラグ値、 <em>tp</em> および <em>f</em> をとり、 <code class="docutils literal"><span class="pre">tp-&gt;tp_flags</span> <span class="pre">&amp;</span> <span class="pre">f</span></code> が非ゼロかどうか調べます。</p>
+<dl class="data">
+<dt id="Py_TPFLAGS_HEAPTYPE">
+<code class="descname">Py_TPFLAGS_HEAPTYPE</code><a class="headerlink" href="#Py_TPFLAGS_HEAPTYPE" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>型オブジェクト自体がヒープにメモリ確保される場合にセットされるビットです。型オブジェクト自体がヒープにメモリ確保される場合、インスタンスの <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> フィールドは型オブジェクトへの参照とみなされます。この場合、新たなインスタンスを生成する度に型オブジェクトを INCREF し、インスタンスを解放するたびに DECREF します (サブタイプのインスタンスには適当されません; インスタンスが <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> で参照している型だけが INCREF および DECREF されます)。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_BASETYPE">
+<code class="descname">Py_TPFLAGS_BASETYPE</code><a class="headerlink" href="#Py_TPFLAGS_BASETYPE" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>型を別の型の基底タイプとして使える場合にセットされるビットです。このビットがクリアならば、この型のサブタイプは生成できません (Java における &#8220;final&#8221; クラスに似たクラスになります)。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_READY">
+<code class="descname">Py_TPFLAGS_READY</code><a class="headerlink" href="#Py_TPFLAGS_READY" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>型オブジェクトが <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> で完全に初期化されるとセットされるビットです。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_READYING">
+<code class="descname">Py_TPFLAGS_READYING</code><a class="headerlink" href="#Py_TPFLAGS_READYING" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> による型オブジェクトの初期化処理中にセットされるビットです。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_HAVE_GC">
+<code class="descname">Py_TPFLAGS_HAVE_GC</code><a class="headerlink" href="#Py_TPFLAGS_HAVE_GC" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オブジェクトがガベージコレクション (GC) をサポートする場合にセットされるビットです。このビットがセットされている場合、インスタンスは <a class="reference internal" href="gcsupport.html#c.PyObject_GC_New" title="PyObject_GC_New"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GC_New()</span></code></a> を使って生成し、 <a class="reference internal" href="gcsupport.html#c.PyObject_GC_Del" title="PyObject_GC_Del"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GC_Del()</span></code></a> を使って破棄しなければなりません。詳しい情報は <a class="reference internal" href="gcsupport.html#supporting-cycle-detection"><span class="std std-ref">循環参照ガベージコレクションをサポートする</span></a> にあります。このビットは、GC に関連するフィールド <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal"><span class="pre">tp_traverse</span></code></a> および <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> が型オブジェクト内に存在することも示しています。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_DEFAULT">
+<code class="descname">Py_TPFLAGS_DEFAULT</code><a class="headerlink" href="#Py_TPFLAGS_DEFAULT" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>型オブジェクトおよび拡張機能構造体の特定のフィールドの存在の有無に関連する全てのビットからなるビットマスクです。現状では、このビットマスクには以下のビット: <code class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_STACKLESS_EXTENSION</span></code> および <code class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_VERSION_TAG</span></code> が入っています。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_LONG_SUBCLASS">
+<code class="descname">Py_TPFLAGS_LONG_SUBCLASS</code><a class="headerlink" href="#Py_TPFLAGS_LONG_SUBCLASS" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_LIST_SUBCLASS">
+<code class="descname">Py_TPFLAGS_LIST_SUBCLASS</code><a class="headerlink" href="#Py_TPFLAGS_LIST_SUBCLASS" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_TUPLE_SUBCLASS">
+<code class="descname">Py_TPFLAGS_TUPLE_SUBCLASS</code><a class="headerlink" href="#Py_TPFLAGS_TUPLE_SUBCLASS" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_BYTES_SUBCLASS">
+<code class="descname">Py_TPFLAGS_BYTES_SUBCLASS</code><a class="headerlink" href="#Py_TPFLAGS_BYTES_SUBCLASS" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_UNICODE_SUBCLASS">
+<code class="descname">Py_TPFLAGS_UNICODE_SUBCLASS</code><a class="headerlink" href="#Py_TPFLAGS_UNICODE_SUBCLASS" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_DICT_SUBCLASS">
+<code class="descname">Py_TPFLAGS_DICT_SUBCLASS</code><a class="headerlink" href="#Py_TPFLAGS_DICT_SUBCLASS" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_BASE_EXC_SUBCLASS">
+<code class="descname">Py_TPFLAGS_BASE_EXC_SUBCLASS</code><a class="headerlink" href="#Py_TPFLAGS_BASE_EXC_SUBCLASS" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_TYPE_SUBCLASS">
+<code class="descname">Py_TPFLAGS_TYPE_SUBCLASS</code><a class="headerlink" href="#Py_TPFLAGS_TYPE_SUBCLASS" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>これらのフラグは <a class="reference internal" href="long.html#c.PyLong_Check" title="PyLong_Check"><code class="xref c c-func docutils literal"><span class="pre">PyLong_Check()</span></code></a> のような関数が、型がとある組み込み型のサブクラスかどうかを素早く判断するのに使われます;
+この専用のチェックは <a class="reference internal" href="object.html#c.PyObject_IsInstance" title="PyObject_IsInstance"><code class="xref c c-func docutils literal"><span class="pre">PyObject_IsInstance()</span></code></a> のような汎用的なチェックよりも高速です。
+組み込み型を継承した独自の型では <a class="reference internal" href="#c.PyTypeObject.tp_flags" title="PyTypeObject.tp_flags"><code class="xref c c-member docutils literal"><span class="pre">tp_flags</span></code></a> を適切に設定すべきで、そうしないとその型が関わるコードでは、どんなチェックの方法が使われるかによって振る舞いが異なってしまうでしょう。</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="Py_TPFLAGS_HAVE_FINALIZE">
+<code class="descname">Py_TPFLAGS_HAVE_FINALIZE</code><a class="headerlink" href="#Py_TPFLAGS_HAVE_FINALIZE" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>型構造体に <a class="reference internal" href="#c.PyTypeObject.tp_finalize" title="PyTypeObject.tp_finalize"><code class="xref c c-member docutils literal"><span class="pre">tp_finalize</span></code></a> スロットが存在しているときにセットされるビットです。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_doc">
+const char* <code class="descname">PyTypeObject.tp_doc</code><a class="headerlink" href="#c.PyTypeObject.tp_doc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、この型オブジェクトの docstring を与える NUL 終端された C の文字列を指します。この値は型オブジェクトと型のインスタンスにおける <code class="xref py py-attr docutils literal"><span class="pre">__doc__</span></code> 属性として公開されます。</p>
+<p>サブタイプはこのフィールドを継承 <em>しません</em> 。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_traverse">
+<a class="reference internal" href="gcsupport.html#c.traverseproc" title="traverseproc">traverseproc</a> <code class="descname">PyTypeObject.tp_traverse</code><a class="headerlink" href="#c.PyTypeObject.tp_traverse" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、ガベージコレクタのためのトラバーサル関数 (traversal function) を指します。 <a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> がセットされている場合にのみ使われます。Pythonのガベージコレクションの枠組みに関する詳細は <a class="reference internal" href="gcsupport.html#supporting-cycle-detection"><span class="std std-ref">循環参照ガベージコレクションをサポートする</span></a> にあります。</p>
+<p><a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal"><span class="pre">tp_traverse</span></code></a> ポインタは、ガベージコレクタが循環参照を見つけるために使われます。 <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal"><span class="pre">tp_traverse</span></code></a> 関数の典型的な実装は、インスタンスの Pythonオブジェクトである各メンバに対して <a class="reference internal" href="gcsupport.html#c.Py_VISIT" title="Py_VISIT"><code class="xref c c-func docutils literal"><span class="pre">Py_VISIT()</span></code></a> を呼び出します。例えば、次のコードは <a class="reference internal" href="../library/_thread.html#module-_thread" title="_thread: Low-level threading API."><code class="xref py py-mod docutils literal"><span class="pre">_thread</span></code></a> 拡張モジュールの <code class="xref c c-func docutils literal"><span class="pre">local_traverse()</span></code> 関数です:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">int</span>
+<span class="nf">local_traverse</span><span class="p">(</span><span class="n">localobject</span> <span class="o">*</span><span class="n">self</span><span class="p">,</span> <span class="n">visitproc</span> <span class="n">visit</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Py_VISIT</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">args</span><span class="p">);</span>
+    <span class="n">Py_VISIT</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">kw</span><span class="p">);</span>
+    <span class="n">Py_VISIT</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">dict</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="gcsupport.html#c.Py_VISIT" title="Py_VISIT"><code class="xref c c-func docutils literal"><span class="pre">Py_VISIT()</span></code></a> が循環参照になる恐れのあるメンバにだけ呼び出されていることに注目してください。 <code class="docutils literal"><span class="pre">self-&gt;key</span></code> メンバもありますが、それは <em>NULL</em> か Python文字列なので、循環参照の一部になることはありません。</p>
+<p>一方、メンバが循環参照の一部になり得ないと判っていても、デバッグ目的で巡回したい場合があるかもしれないので、 <a class="reference internal" href="../library/gc.html#module-gc" title="gc: Interface to the cycle-detecting garbage collector."><code class="xref py py-mod docutils literal"><span class="pre">gc</span></code></a> モジュールの <a class="reference internal" href="../library/gc.html#gc.get_referents" title="gc.get_referents"><code class="xref py py-func docutils literal"><span class="pre">get_referents()</span></code></a> 関数は循環参照になり得ないメンバも返します。</p>
+<p><a class="reference internal" href="gcsupport.html#c.Py_VISIT" title="Py_VISIT"><code class="xref c c-func docutils literal"><span class="pre">Py_VISIT()</span></code></a> は <code class="xref c c-func docutils literal"><span class="pre">local_traverse()</span></code> が <em>visit</em> と <em>arg</em> という決まった名前の引数を持つことを要求します。</p>
+<p>このフィールドは <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> および <a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> フラグビットと共にサブタイプに継承されます: すなわち、サブタイプの <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal"><span class="pre">tp_traverse</span></code></a> および <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> が両方ともゼロの場合、サブタイプは基底タイプから <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal"><span class="pre">tp_traverse</span></code></a> と <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> を両方とも継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_clear">
+<a class="reference internal" href="gcsupport.html#c.inquiry" title="inquiry">inquiry</a> <code class="descname">PyTypeObject.tp_clear</code><a class="headerlink" href="#c.PyTypeObject.tp_clear" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、ガベージコレクタにおける消去関数 (clear function) を指します。 <a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> がセットされている場合にのみ使われます。</p>
+<p><a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> メンバ関数は GC が検出した循環しているゴミの循環参照を壊すために用いられます。総合的な視点で考えると、システム内の全ての <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> 関数が連携して、全ての循環参照を破壊しなければなりません。 (訳注: ある型が <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> を実装しなくても全ての循環参照が破壊できるのであれば実装しなくても良い) これはとても繊細で、もし少しでも不確かな部分があるのであれば、 <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> 関数を提供するべきです。例えば、タプルは <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> を実装しません。なぜなら、タプルだけで構成された循環参照がみつかることは無いからです。従って、タプル以外の型の <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> 関数だけで、タプルを含むどんな循環参照も必ず破壊できることになります。これは簡単に判ることではなく、 <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> の実装を避ける良い理由はめったにありません。</p>
+<p>次の例にあるように、 <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> の実装は、インスタンスから Python オブジェクトだと思われるメンバへの参照を外し、それらのメンバへのポインタに <em>NULL</em> をセットすべきです:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">int</span>
+<span class="nf">local_clear</span><span class="p">(</span><span class="n">localobject</span> <span class="o">*</span><span class="n">self</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Py_CLEAR</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">key</span><span class="p">);</span>
+    <span class="n">Py_CLEAR</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">args</span><span class="p">);</span>
+    <span class="n">Py_CLEAR</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">kw</span><span class="p">);</span>
+    <span class="n">Py_CLEAR</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">dict</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>参照のクリアはデリケートなので、 <a class="reference internal" href="refcounting.html#c.Py_CLEAR" title="Py_CLEAR"><code class="xref c c-func docutils literal"><span class="pre">Py_CLEAR()</span></code></a> マクロを使うべきです: ポインタを <em>NULL</em> にセットするまで、そのオブジェクトの参照カウントをデクリメントしてはいけません。参照カウントのデクリメントすると、そのオブジェクトが破棄されるかもしれず、 (そのオブジェクトに関連付けられたファイナライザ、弱参照のコールバックにより) 任意のPythonコードの実行を含む後片付け処理が実行されるかもしれないからです。もしそういったコードが再び <em>self</em> を参照することがあれば、すでに持っていたオブジェクトへのポインタは <em>NULL</em> になっているので、 <em>self</em> は所有していたオブジェクトをもう利用できないことを認識できます。 <a class="reference internal" href="refcounting.html#c.Py_CLEAR" title="Py_CLEAR"><code class="xref c c-func docutils literal"><span class="pre">Py_CLEAR()</span></code></a> マクロはその手続きを安全な順番で実行します。</p>
+<p><a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> 関数の目的は参照カウントを破壊することなので、 Python 文字列や Python 整数のような、循環参照に含むことのできないオブジェクトをクリアする必要はありません。一方、所有する全ての Python オブジェクトをクリアするようにし、その型の <a class="reference internal" href="#c.PyTypeObject.tp_dealloc" title="PyTypeObject.tp_dealloc"><code class="xref c c-member docutils literal"><span class="pre">tp_dealloc</span></code></a> 関数が <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> 関数を実行するようにすると実装が楽になるでしょう。</p>
+<p>Pythonのガベージコレクションの仕組みについての詳細は、 <a class="reference internal" href="gcsupport.html#supporting-cycle-detection"><span class="std std-ref">循環参照ガベージコレクションをサポートする</span></a> にあります。</p>
+<p>このフィールドは <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal"><span class="pre">tp_traverse</span></code></a> および <a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> フラグビットと共にサブタイプに継承されます: すなわち、サブタイプの <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal"><span class="pre">tp_traverse</span></code></a> および <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> が両方ともゼロの場合、サブタイプは基底タイプから <a class="reference internal" href="#c.PyTypeObject.tp_traverse" title="PyTypeObject.tp_traverse"><code class="xref c c-member docutils literal"><span class="pre">tp_traverse</span></code></a> と <a class="reference internal" href="#c.PyTypeObject.tp_clear" title="PyTypeObject.tp_clear"><code class="xref c c-member docutils literal"><span class="pre">tp_clear</span></code></a> を両方とも継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_richcompare">
+richcmpfunc <code class="descname">PyTypeObject.tp_richcompare</code><a class="headerlink" href="#c.PyTypeObject.tp_richcompare" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、  <code class="docutils literal"><span class="pre">PyObject</span> <span class="pre">*tp_richcompare(PyObject</span> <span class="pre">*a,</span> <span class="pre">PyObject</span> <span class="pre">*b,</span> <span class="pre">int</span> <span class="pre">op)</span></code> というシグネチャを持つ拡張比較関数を指します。
+1つ目の引数は、 <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></code></a> で定義された型のインスタンスであることが保証されています。</p>
+<p>この関数は、比較結果を返すべきです。(普通は <code class="docutils literal"><span class="pre">Py_True</span></code> か <code class="docutils literal"><span class="pre">Py_False</span></code> です。) 比較が未定義の場合は、<code class="docutils literal"><span class="pre">Py_NotImplemented</span></code> を、それ以外のエラーが発生した場合には例外状態をセットして <code class="docutils literal"><span class="pre">NULL</span></code> を返さなければなりません。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">限られた種類の比較だけが可能 (例えば、 <code class="docutils literal"><span class="pre">==</span></code> と <code class="docutils literal"><span class="pre">!=</span></code> が可能で <code class="docutils literal"><span class="pre">&lt;</span></code> などが不可能) な型を実装したい場合、拡張比較関数で直接 <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> を返します。</p>
+</div>
+<p>このフィールドは <a class="reference internal" href="#c.PyTypeObject.tp_hash" title="PyTypeObject.tp_hash"><code class="xref c c-member docutils literal"><span class="pre">tp_hash</span></code></a> と共にサブタイプに継承されます: すなわち、サブタイプの <a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal"><span class="pre">tp_richcompare</span></code></a> および <a class="reference internal" href="#c.PyTypeObject.tp_hash" title="PyTypeObject.tp_hash"><code class="xref c c-member docutils literal"><span class="pre">tp_hash</span></code></a> が両方とも <em>NULL</em> のとき、サブタイプは基底タイプから <a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal"><span class="pre">tp_richcompare</span></code></a> と <a class="reference internal" href="#c.PyTypeObject.tp_hash" title="PyTypeObject.tp_hash"><code class="xref c c-member docutils literal"><span class="pre">tp_hash</span></code></a> を両方とも継承します。</p>
+<p><a class="reference internal" href="#c.PyTypeObject.tp_richcompare" title="PyTypeObject.tp_richcompare"><code class="xref c c-member docutils literal"><span class="pre">tp_richcompare</span></code></a> および <a class="reference internal" href="object.html#c.PyObject_RichCompare" title="PyObject_RichCompare"><code class="xref c c-func docutils literal"><span class="pre">PyObject_RichCompare()</span></code></a> 関数の第三引数に使うための定数としては以下が定義されています:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="57%" />
+<col width="43%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">定数</p>
+</th>
+<th class="head"><p class="first last">比較</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">Py_LT</span></code></td>
+<td><code class="docutils literal"><span class="pre">&lt;</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">Py_LE</span></code></td>
+<td><code class="docutils literal"><span class="pre">&lt;=</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">Py_EQ</span></code></td>
+<td><code class="docutils literal"><span class="pre">==</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">Py_NE</span></code></td>
+<td><code class="docutils literal"><span class="pre">!=</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">Py_GT</span></code></td>
+<td><code class="docutils literal"><span class="pre">&gt;</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">Py_GE</span></code></td>
+<td><code class="docutils literal"><span class="pre">&gt;=</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_weaklistoffset">
+Py_ssize_t <code class="descname">PyTypeObject.tp_weaklistoffset</code><a class="headerlink" href="#c.PyTypeObject.tp_weaklistoffset" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>型のインスタンスが弱参照可能な場合、このフィールドはゼロよりも大きな数になり、インスタンス構造体における弱参照リストの先頭を示すオフセットが入ります (GC ヘッダがある場合には無視します); このオフセット値は <code class="xref c c-func docutils literal"><span class="pre">PyObject_ClearWeakRefs()</span></code> および <code class="xref c c-func docutils literal"><span class="pre">PyWeakref_*()</span></code> 関数が利用します。インスタンス構造体には、 <em>NULL</em> に初期化された <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject*</span></code></a> 型のフィールドが入っていなければなりません。</p>
+<p>このフィールドを <a class="reference internal" href="#c.PyTypeObject.tp_weaklist" title="PyTypeObject.tp_weaklist"><code class="xref c c-member docutils literal"><span class="pre">tp_weaklist</span></code></a> と混同しないようにしてください; これは型オブジェクト自身への弱参照からなるリストの先頭です。</p>
+<p>このフィールドはサブタイプに継承されますが、以下の規則を読んでください。サブタイプはこのオフセット値をオーバライドすることがあります; 従って、サブタイプでは弱参照リストの先頭が基底タイプとは異なる場合があります。リストの先頭は常に <a class="reference internal" href="#c.PyTypeObject.tp_weaklistoffset" title="PyTypeObject.tp_weaklistoffset"><code class="xref c c-member docutils literal"><span class="pre">tp_weaklistoffset</span></code></a> で分かるはずなので、このことは問題にはならないはずです。</p>
+<p><a class="reference internal" href="../reference/compound_stmts.html#class"><code class="xref std std-keyword docutils literal"><span class="pre">class</span></code></a> 文で定義された型に <a class="reference internal" href="../reference/datamodel.html#object.__slots__" title="object.__slots__"><code class="xref py py-attr docutils literal"><span class="pre">__slots__</span></code></a> 宣言が全くなく、かつ基底タイプが弱参照可能でない場合、その型を弱参照可能にするには弱参照リストの先頭を表すスロットをインスタンスデータレイアウト構造体に追加し、スロットのオフセットを <a class="reference internal" href="#c.PyTypeObject.tp_weaklistoffset" title="PyTypeObject.tp_weaklistoffset"><code class="xref c c-member docutils literal"><span class="pre">tp_weaklistoffset</span></code></a> に設定します。</p>
+<p>型の <code class="xref py py-attr docutils literal"><span class="pre">__slots__</span></code> の宣言に <code class="xref py py-attr docutils literal"><span class="pre">__weakref__</span></code> という名前のスロットが含まれているとき、スロットはその型のインスタンスにおける弱参照リストの先頭を表すスロットになり、スロットのオフセットが型の <a class="reference internal" href="#c.PyTypeObject.tp_weaklistoffset" title="PyTypeObject.tp_weaklistoffset"><code class="xref c c-member docutils literal"><span class="pre">tp_weaklistoffset</span></code></a> に入ります。</p>
+<p>型の <code class="xref py py-attr docutils literal"><span class="pre">__slots__</span></code> 宣言が <code class="xref py py-attr docutils literal"><span class="pre">__weakref__</span></code> という名前のスロットを含んでいないとき、その型は基底タイプから <a class="reference internal" href="#c.PyTypeObject.tp_weaklistoffset" title="PyTypeObject.tp_weaklistoffset"><code class="xref c c-member docutils literal"><span class="pre">tp_weaklistoffset</span></code></a> を継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_iter">
+getiterfunc <code class="descname">PyTypeObject.tp_iter</code><a class="headerlink" href="#c.PyTypeObject.tp_iter" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションの変数で、そのオブジェクトのイテレータを返す関数へのポインタです。この値が存在することは、通常この型のインスタンスがイテレート可能であることを示しています (しかし、シーケンスはこの関数がなくてもイテレート可能です)。</p>
+<p>この関数は <a class="reference internal" href="object.html#c.PyObject_GetIter" title="PyObject_GetIter"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GetIter()</span></code></a> と同じシグネチャを持っています。</p>
+<p>サブタイプはこのフィールドを継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_iternext">
+iternextfunc <code class="descname">PyTypeObject.tp_iternext</code><a class="headerlink" href="#c.PyTypeObject.tp_iternext" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、イテレータにおいて次の要素を返す関数を指します。イテレータの要素がなくなると、この関数は <em>NULL</em> を返さなければなりません。 <a class="reference internal" href="../library/exceptions.html#StopIteration" title="StopIteration"><code class="xref py py-exc docutils literal"><span class="pre">StopIteration</span></code></a> 例外は設定してもしなくても良いです。その他のエラーが発生したときも、 <em>NULL</em> を返さなければなりません。このフィールドがあると、この型のインスタンスがイテレータであることを示します。</p>
+<p>イテレータ型では、 <a class="reference internal" href="#c.PyTypeObject.tp_iter" title="PyTypeObject.tp_iter"><code class="xref c c-member docutils literal"><span class="pre">tp_iter</span></code></a> 関数も定義されていなければならず、その関数は (新たなイテレータインスタンスではなく) イテレータインスタンス自体を返さねばなりません。</p>
+<p>この関数のシグネチャは <a class="reference internal" href="iter.html#c.PyIter_Next" title="PyIter_Next"><code class="xref c c-func docutils literal"><span class="pre">PyIter_Next()</span></code></a> と同じです。</p>
+<p>サブタイプはこのフィールドを継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_methods">
+struct <a class="reference internal" href="structures.html#c.PyMethodDef" title="PyMethodDef">PyMethodDef</a>* <code class="descname">PyTypeObject.tp_methods</code><a class="headerlink" href="#c.PyTypeObject.tp_methods" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、この型の正規 (regular) のメソッドを宣言している <a class="reference internal" href="structures.html#c.PyMethodDef" title="PyMethodDef"><code class="xref c c-type docutils literal"><span class="pre">PyMethodDef</span></code></a> 構造体からなる、 <em>NULL</em> で終端された静的な配列を指します。</p>
+<p>配列の各要素ごとに、メソッドデスクリプタの入った、要素が型の辞書 (下記の <a class="reference internal" href="#c.PyTypeObject.tp_dict" title="PyTypeObject.tp_dict"><code class="xref c c-member docutils literal"><span class="pre">tp_dict</span></code></a> 参照) に追加されます。</p>
+<p>サブタイプはこのフィールドを継承しません (メソッドは別個のメカニズムで継承されています)。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_members">
+struct <a class="reference internal" href="structures.html#c.PyMemberDef" title="PyMemberDef">PyMemberDef</a>* <code class="descname">PyTypeObject.tp_members</code><a class="headerlink" href="#c.PyTypeObject.tp_members" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、型の正規 (regular) のデータメンバ (フィールドおよびスロット) を宣言している <a class="reference internal" href="structures.html#c.PyMemberDef" title="PyMemberDef"><code class="xref c c-type docutils literal"><span class="pre">PyMemberDef</span></code></a> 構造体からなる、 <em>NULL</em> で終端された静的な配列を指します。</p>
+<p>配列の各要素ごとに、メンバデスクリプタの入った要素が型の辞書 (下記の <a class="reference internal" href="#c.PyTypeObject.tp_dict" title="PyTypeObject.tp_dict"><code class="xref c c-member docutils literal"><span class="pre">tp_dict</span></code></a> 参照) に追加されます。</p>
+<p>サブタイプはこのフィールドを継承しません (メンバは別個のメカニズムで継承されています)。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_getset">
+struct PyGetSetDef* <code class="descname">PyTypeObject.tp_getset</code><a class="headerlink" href="#c.PyTypeObject.tp_getset" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、インスタンスの算出属性 (computed attribute) を宣言している <code class="xref c c-type docutils literal"><span class="pre">PyGetSetDef</span></code> 構造体からなる、 <em>NULL</em> で終端された静的な配列を指します。</p>
+<p>配列の各要素ごとに、 getter/setter デスクリプタの入った、要素が型の辞書 (下記の <a class="reference internal" href="#c.PyTypeObject.tp_dict" title="PyTypeObject.tp_dict"><code class="xref c c-member docutils literal"><span class="pre">tp_dict</span></code></a> 参照) に追加されます。</p>
+<p>サブタイプはこのフィールドを継承しません (算出属性は別個のメカニズムで継承されています)。</p>
+<p>PyGetSetDef のドキュメント:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="n">PyObject</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">getter</span><span class="p">)(</span><span class="n">PyObject</span> <span class="o">*</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="p">);</span>
+<span class="k">typedef</span> <span class="nf">int</span> <span class="p">(</span><span class="o">*</span><span class="n">setter</span><span class="p">)(</span><span class="n">PyObject</span> <span class="o">*</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="p">);</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">PyGetSetDef</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>    <span class="cm">/* attribute name */</span>
+    <span class="n">getter</span> <span class="n">get</span><span class="p">;</span>    <span class="cm">/* C function to get the attribute */</span>
+    <span class="n">setter</span> <span class="n">set</span><span class="p">;</span>    <span class="cm">/* C function to set or delete the attribute */</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">doc</span><span class="p">;</span>     <span class="cm">/* optional doc string */</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">closure</span><span class="p">;</span> <span class="cm">/* optional additional data for getter and setter */</span>
+<span class="p">}</span> <span class="n">PyGetSetDef</span><span class="p">;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_base">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject">PyTypeObject</a>* <code class="descname">PyTypeObject.tp_base</code><a class="headerlink" href="#c.PyTypeObject.tp_base" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、型に関するプロパティを継承する基底タイプを指します。このフィールドのレベルでは、単継承 (single inheritance) だけがサポートされています; 多重継承はメタタイプの呼び出しによる動的な型オブジェクトの生成を必要とします。</p>
+<p>(当たり前ですが) サブタイプはこのフィールドを継承しません。しかし、このフィールドのデフォルト値は (Python プログラマは <a class="reference internal" href="../library/functions.html#object" title="object"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a> 型として知っている) <code class="docutils literal"><span class="pre">&amp;PyBaseObject_Type</span></code> になります。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_dict">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyTypeObject.tp_dict</code><a class="headerlink" href="#c.PyTypeObject.tp_dict" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>型の辞書は <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> によってこのフィールドに収められます。</p>
+<p>このフィールドは通常、 <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> を呼び出す前に <em>NULL</em> に初期化しておかなければなりません; あるいは、型の初期属性の入った辞書で初期化しておいてもかまいません。 <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> が型をひとたび初期化すると、型の新たな属性をこの辞書に追加できるのは、属性が (<a class="reference internal" href="../reference/datamodel.html#object.__add__" title="object.__add__"><code class="xref py py-meth docutils literal"><span class="pre">__add__()</span></code></a> のような) オーバロード用演算でないときだけです。</p>
+<p>サブタイプはこのフィールドを継承しません (が、この辞書内で定義されている属性は異なるメカニズムで継承されます)。</p>
+<div class="admonition warning">
+<p class="first admonition-title">警告</p>
+<p class="last"><a class="reference internal" href="#c.PyTypeObject.tp_dict" title="PyTypeObject.tp_dict"><code class="xref c c-member docutils literal"><span class="pre">tp_dict</span></code></a> に <a class="reference internal" href="dict.html#c.PyDict_SetItem" title="PyDict_SetItem"><code class="xref c c-func docutils literal"><span class="pre">PyDict_SetItem()</span></code></a> を使ったり、辞書 C-API で編集するのは安全ではありません。</p>
+</div>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_descr_get">
+descrgetfunc <code class="descname">PyTypeObject.tp_descr_get</code><a class="headerlink" href="#c.PyTypeObject.tp_descr_get" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、デスクリプタの get 関数を指します。</p>
+<p>関数のシグネチャは次のとおりです</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span> <span class="nf">tp_descr_get</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">self</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">obj</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">type</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>サブタイプはこのフィールドを継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_descr_set">
+descrsetfunc <code class="descname">PyTypeObject.tp_descr_set</code><a class="headerlink" href="#c.PyTypeObject.tp_descr_set" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、デスクリプタの値の設定と削除を行う関数を指します。</p>
+<p>関数のシグネチャは次のとおりです</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="nf">tp_descr_set</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">self</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">obj</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">value</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><em>value</em> 引数に <em>NULL</em> を設定して値を消します。
+このフィールドはサブタイプに継承されます。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_dictoffset">
+Py_ssize_t <code class="descname">PyTypeObject.tp_dictoffset</code><a class="headerlink" href="#c.PyTypeObject.tp_dictoffset" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>型のインスタンスにインスタンス変数の入った辞書がある場合、このフィールドは非ゼロの値になり、型のインスタンスデータ構造体におけるインスタンス変数辞書へのオフセットが入ります; このオフセット値は <a class="reference internal" href="object.html#c.PyObject_GenericGetAttr" title="PyObject_GenericGetAttr"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GenericGetAttr()</span></code></a> が使います。</p>
+<p>このフィールドを <a class="reference internal" href="#c.PyTypeObject.tp_dict" title="PyTypeObject.tp_dict"><code class="xref c c-member docutils literal"><span class="pre">tp_dict</span></code></a> と混同しないようにしてください; これは型オブジェクト自身の属性の辞書です。</p>
+<p>このフィールドの値がゼロより大きければ、値はインスタンス構造体の先頭からの オフセットを表します。値がゼロより小さければ、インスタンス構造体の <em>末尾</em> からのオフセットを表します。負のオフセットを使うコストは比較的高くつくので、 インスタンス構造体に可変長部分があるときのみ使うべきです。例えば、 <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> や <a class="reference internal" href="../library/stdtypes.html#tuple" title="tuple"><code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></a> のサブタイプにインスタンス変数の辞書を追加する場合には、負のオフセットを使います。この場合、たとえ辞書が基本のオブジェクトレイアウトに含まれていなくても、 <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> フィールドは追加された辞書を考慮にいれなければならないことに注意してください。ポインタサイズが 4 バイトのシステムでは、 構造体の最後尾に辞書が宣言されていることを示す場合、 <a class="reference internal" href="#c.PyTypeObject.tp_dictoffset" title="PyTypeObject.tp_dictoffset"><code class="xref c c-member docutils literal"><span class="pre">tp_dictoffset</span></code></a> を <code class="docutils literal"><span class="pre">-4</span></code> にしなければなりません。</p>
+<p>負の <a class="reference internal" href="#c.PyTypeObject.tp_dictoffset" title="PyTypeObject.tp_dictoffset"><code class="xref c c-member docutils literal"><span class="pre">tp_dictoffset</span></code></a> から、インスタンスでの実際のオフセットを計算するには以下のようにします:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">dictoffset</span> <span class="o">=</span> <span class="n">tp_basicsize</span> <span class="o">+</span> <span class="n">abs</span><span class="p">(</span><span class="n">ob_size</span><span class="p">)</span><span class="o">*</span><span class="n">tp_itemsize</span> <span class="o">+</span> <span class="n">tp_dictoffset</span>
+<span class="k">if</span> <span class="n">dictoffset</span> <span class="n">is</span> <span class="n">not</span> <span class="n">aligned</span> <span class="n">on</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="o">:</span>
+    <span class="n">round</span> <span class="n">up</span> <span class="n">to</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>ここで、 <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a>、 <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> および <a class="reference internal" href="#c.PyTypeObject.tp_dictoffset" title="PyTypeObject.tp_dictoffset"><code class="xref c c-member docutils literal"><span class="pre">tp_dictoffset</span></code></a> は型オブジェクトから取り出され、 <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> はインスタンスから取り出されます。 整数は符号を記憶するのに <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> の符号を使うため、 <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> は絶対値を使います。(この計算を自分で行う必要はまったくありません; 計算は <code class="xref c c-func docutils literal"><span class="pre">_PyObject_GetDictPtr()</span></code> がやってくれます。)</p>
+<p>このフィールドはサブタイプに継承されますが、以下の規則を読んでください。サブタイプはこのオフセット値をオーバライドすることがあります; 従って、サブタイプでは辞書のオフセットが基底タイプとは異なる場合があります。辞書のオフセットは常に <a class="reference internal" href="#c.PyTypeObject.tp_dictoffset" title="PyTypeObject.tp_dictoffset"><code class="xref c c-member docutils literal"><span class="pre">tp_dictoffset</span></code></a> で分かるはずなので、このことは問題にはならないはずです。</p>
+<p><a class="reference internal" href="../reference/compound_stmts.html#class"><code class="xref std std-keyword docutils literal"><span class="pre">class</span></code></a> 文で定義された型に <a class="reference internal" href="../reference/datamodel.html#object.__slots__" title="object.__slots__"><code class="xref py py-attr docutils literal"><span class="pre">__slots__</span></code></a> 宣言がなく、かつ基底タイプの全てにインスタンス変数辞書がない場合、辞書のスロットをインスタンスデータレイアウト構造体に追加し、スロットのオフセットを <a class="reference internal" href="#c.PyTypeObject.tp_dictoffset" title="PyTypeObject.tp_dictoffset"><code class="xref c c-member docutils literal"><span class="pre">tp_dictoffset</span></code></a> に設定します。</p>
+<p><a class="reference internal" href="../reference/compound_stmts.html#class"><code class="xref std std-keyword docutils literal"><span class="pre">class</span></code></a> 文で定義された型に <code class="xref py py-attr docutils literal"><span class="pre">__slots__</span></code> 宣言がある場合、この型は基底タイプから <a class="reference internal" href="#c.PyTypeObject.tp_dictoffset" title="PyTypeObject.tp_dictoffset"><code class="xref c c-member docutils literal"><span class="pre">tp_dictoffset</span></code></a> を継承します。</p>
+<p>(<a class="reference internal" href="../library/stdtypes.html#object.__dict__" title="object.__dict__"><code class="xref py py-attr docutils literal"><span class="pre">__dict__</span></code></a> という名前のスロットを <code class="xref py py-attr docutils literal"><span class="pre">__slots__</span></code> 宣言に追加しても、期待どおりの効果は得られず、単に混乱を招くだけになります。とはいえ、これは将来 <code class="xref py py-attr docutils literal"><span class="pre">__weakref__</span></code> のように追加されるはずです。)</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_init">
+initproc <code class="descname">PyTypeObject.tp_init</code><a class="headerlink" href="#c.PyTypeObject.tp_init" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、インスタンス初期化関数を指します。</p>
+<p>この関数はクラスにおける <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a> メソッドに対応します。 <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a> と同様、 <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a> を呼び出さずにインスタンスを作成できます。また、 <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a> を再度呼び出してインスタンスの再初期化もできます。</p>
+<p>関数のシグネチャは次のとおりです</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">tp_init</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">self</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">kwds</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>self</em> 引数は初期化するインスタンスです; <em>args</em> および <em>kwds</em> 引数は、 <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a> を呼び出す際の固定引数およびキーワード引数です。</p>
+<p><a class="reference internal" href="#c.PyTypeObject.tp_init" title="PyTypeObject.tp_init"><code class="xref c c-member docutils literal"><span class="pre">tp_init</span></code></a> 関数のフィールドが <em>NULL</em> でない場合、通常の型を呼び出す方法のインスタンス生成において、型の <a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal"><span class="pre">tp_new</span></code></a> 関数がインスタンスを返した後に呼び出されます。 <a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal"><span class="pre">tp_new</span></code></a> が元の型のサブタイプでない別の型を返す場合、 <a class="reference internal" href="#c.PyTypeObject.tp_init" title="PyTypeObject.tp_init"><code class="xref c c-member docutils literal"><span class="pre">tp_init</span></code></a> は全く呼び出されません; <a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal"><span class="pre">tp_new</span></code></a> が元の型のサブタイプのインスタンスを返す場合、サブタイプの <a class="reference internal" href="#c.PyTypeObject.tp_init" title="PyTypeObject.tp_init"><code class="xref c c-member docutils literal"><span class="pre">tp_init</span></code></a> が呼び出されます。</p>
+<p>サブタイプはこのフィールドを継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_alloc">
+allocfunc <code class="descname">PyTypeObject.tp_alloc</code><a class="headerlink" href="#c.PyTypeObject.tp_alloc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、インスタンスのメモリ確保関数を指します。</p>
+<p>関数のシグネチャは次のとおりです</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_alloc</span><span class="p">(</span><span class="n">PyTypeObject</span> <span class="o">*</span><span class="n">self</span><span class="p">,</span> <span class="n">Py_ssize_t</span> <span class="n">nitems</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>この関数の目的は、メモリ確保をメモリ初期化から分離することにあります。この関数は、インスタンス用の的確なサイズ、適切なアラインメント、ゼロによる初期化がなされ、 <code class="xref py py-attr docutils literal"><span class="pre">ob_refcnt</span></code> を <code class="docutils literal"><span class="pre">1</span></code> に、 <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> を型引数 (type argument) にセットしたメモリブロックへのポインタを返さねばなりません。型の <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> がゼロでない場合、オブジェクトの <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> フィールドは <em>nitems</em> に初期化され、確保されるメモリブロックの長さは <code class="docutils literal"><span class="pre">tp_basicsize</span> <span class="pre">+</span> <span class="pre">nitems*tp_itemsize</span></code> を <code class="docutils literal"><span class="pre">sizeof(void*)</span></code> の倍数に切り上げた値になるはずです; それ以外の場合、 <em>nitems</em> の値は使われず、メモリブロックの長さは <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> になるはずです。</p>
+<p>この関数をインスタンス初期化の他のどの処理にも、追加でメモリ確保をする場合でさえ使ってはなりません; そうした処理は <a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal"><span class="pre">tp_new</span></code></a> で行わねばなりません。</p>
+<p>静的なサブタイプはこのフィールドを継承しますが、動的なサブタイプ (<a class="reference internal" href="../reference/compound_stmts.html#class"><code class="xref std std-keyword docutils literal"><span class="pre">class</span></code></a> 文で生成するサブタイプ) の場合は継承しません; 後者の場合、このフィールドは常に <a class="reference internal" href="type.html#c.PyType_GenericAlloc" title="PyType_GenericAlloc"><code class="xref c c-func docutils literal"><span class="pre">PyType_GenericAlloc()</span></code></a> にセットされ、標準のヒープ上メモリ確保戦略が強制されます。静的に定義する型の場合でも、 <a class="reference internal" href="type.html#c.PyType_GenericAlloc" title="PyType_GenericAlloc"><code class="xref c c-func docutils literal"><span class="pre">PyType_GenericAlloc()</span></code></a> を推奨します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_new">
+newfunc <code class="descname">PyTypeObject.tp_new</code><a class="headerlink" href="#c.PyTypeObject.tp_new" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、インスタンス生成関数を指します。</p>
+<p>このフィールドが <em>NULL</em> を指している型では、型を呼び出して新たなインスタンスを生成できません; こうした型では、おそらくファクトリ関数のように、インスタンスを生成する他の方法があるはずです。</p>
+<p>関数のシグネチャは次のとおりです</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span><span class="n">tp_new</span><span class="p">(</span><span class="n">PyTypeObject</span> <span class="o">*</span><span class="n">subtype</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">kwds</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><em>subtype</em> 引数は生成するオブジェクトの型です; <em>args</em> および <em>kwds</em> 引数は、型を呼び出すときの位置引数およびキーワード引数です。サブタイプは <a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal"><span class="pre">tp_new</span></code></a> 関数を呼び出すときに使う型と同じである必要はないことに注意してください; その型の (無関係ではない) サブタイプのこともあります。</p>
+<p><a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal"><span class="pre">tp_new</span></code></a> 関数は <code class="docutils literal"><span class="pre">subtype-&gt;tp_alloc(subtype,</span> <span class="pre">nitems)</span></code> を呼び出してオブジェクトのメモリ領域を確保し、初期化で絶対に必要とされる処理だけを行います。省略したり繰り返したりしても問題のない初期化処理は <a class="reference internal" href="#c.PyTypeObject.tp_init" title="PyTypeObject.tp_init"><code class="xref c c-member docutils literal"><span class="pre">tp_init</span></code></a> ハンドラ内に配置しなければなりません。だいたいの目安としては、変更不能な型では初期化は全て <a class="reference internal" href="#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal"><span class="pre">tp_new</span></code></a> で行い、一方、変更可能な型ではほとんどの初期化を <a class="reference internal" href="#c.PyTypeObject.tp_init" title="PyTypeObject.tp_init"><code class="xref c c-member docutils literal"><span class="pre">tp_init</span></code></a> に回すべきです。</p>
+<p>サブタイプはこのフィールドを継承します。例外として、  <a class="reference internal" href="#c.PyTypeObject.tp_base" title="PyTypeObject.tp_base"><code class="xref c c-member docutils literal"><span class="pre">tp_base</span></code></a> が <em>NULL</em> か <code class="docutils literal"><span class="pre">&amp;PyBaseObject_Type</span></code> になっている静的な型では継承しません。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_free">
+destructor <code class="descname">PyTypeObject.tp_free</code><a class="headerlink" href="#c.PyTypeObject.tp_free" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>インスタンスのメモリ解放関数を指す、オプションのポインタです。シグネチャは <code class="xref c c-type docutils literal"><span class="pre">freefunc</span></code> です:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="n">tp_free</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>このシグネチャと互換性のある初期化子は <code class="xref c c-func docutils literal"><span class="pre">PyObject_Free()</span></code> です。</p>
+<p>静的なサブタイプはこのフィールドを継承しますが、動的なサブタイプ (<a class="reference internal" href="../reference/compound_stmts.html#class"><code class="xref std std-keyword docutils literal"><span class="pre">class</span></code></a> 文で生成するサブタイプ) の場合は継承しません; 後者の場合、このフィールドには <a class="reference internal" href="type.html#c.PyType_GenericAlloc" title="PyType_GenericAlloc"><code class="xref c c-func docutils literal"><span class="pre">PyType_GenericAlloc()</span></code></a> と <a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> フラグビットの値に対応させるのにふさわしいメモリ解放関数がセットされます。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_is_gc">
+<a class="reference internal" href="gcsupport.html#c.inquiry" title="inquiry">inquiry</a> <code class="descname">PyTypeObject.tp_is_gc</code><a class="headerlink" href="#c.PyTypeObject.tp_is_gc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、ガベージコレクタから呼び出される関数を指します。</p>
+<p>ガベージコレクタは、オブジェクトを回収して良いかどうかを知る必要があります。通常は、オブジェクトの型の <a class="reference internal" href="#c.PyTypeObject.tp_flags" title="PyTypeObject.tp_flags"><code class="xref c c-member docutils literal"><span class="pre">tp_flags</span></code></a> フィールドを見て、 <a class="reference internal" href="#Py_TPFLAGS_HAVE_GC" title="Py_TPFLAGS_HAVE_GC"><code class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_GC</span></code></a> フラグビットを調べるだけで十分です。しかし、ある型では静的にメモリ確保されたインスタンスと動的にメモリ確保されたインスタンスが混じっていて、静的にメモリ確保されたインスタンスは回収できません。こうした型では、関数を定義しなければなりません; 関数はインスタンスが回収可能の場合には <code class="docutils literal"><span class="pre">1</span></code> を、回収不能の場合には <code class="docutils literal"><span class="pre">0</span></code> を返さねばなりません。シグネチャは</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">tp_is_gc</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(上記のような型の例は、型オブジェクト自体です。メタタイプ <a class="reference internal" href="type.html#c.PyType_Type" title="PyType_Type"><code class="xref c c-data docutils literal"><span class="pre">PyType_Type</span></code></a> は、型のメモリ確保が静的か動的かを区別するためにこの関数を定義しています。)</p>
+<p>サブタイプはこのフィールドを継承します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_bases">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyTypeObject.tp_bases</code><a class="headerlink" href="#c.PyTypeObject.tp_bases" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>基底型からなるタプルです。</p>
+<p><a class="reference internal" href="../reference/compound_stmts.html#class"><code class="xref std std-keyword docutils literal"><span class="pre">class</span></code></a> 文で生成されたクラスの場合このフィールドがセットされます。静的に定義されている型の場合には、このフィールドは <em>NULL</em> になります。</p>
+<p>このフィールドは継承されません。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_mro">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyTypeObject.tp_mro</code><a class="headerlink" href="#c.PyTypeObject.tp_mro" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>基底タイプ群を展開した集合が入っているタプルです。集合は該当する型自体からはじまり、 <a class="reference internal" href="../library/functions.html#object" title="object"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a> で終わります。メソッド解決順序 (Method Resolution Order) に従って並んでいます。</p>
+<p>このフィールドは継承されません; フィールドの値は <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> で毎回計算されます。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_finalize">
+destructor <code class="descname">PyTypeObject.tp_finalize</code><a class="headerlink" href="#c.PyTypeObject.tp_finalize" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>オプションのポインタで、インスタンスの終了処理関数を指します。
+シグネチャは <code class="xref c c-type docutils literal"><span class="pre">destructor</span></code> です:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="n">tp_finalize</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#c.PyTypeObject.tp_finalize" title="PyTypeObject.tp_finalize"><code class="xref c c-member docutils literal"><span class="pre">tp_finalize</span></code></a> が設定されている場合、インスタンスをファイナライズするときに、インタプリタがこの関数を1回呼び出します。
+ガベージコレクタ (このインスタンスが孤立した循環参照の一部だった場合) やオブジェクトが破棄される直前にもこの関数は呼び出されます。
+どちらの場合でも、循環参照を破壊しようとする前に呼び出されることが保証されていて、確実にオブジェクトが正常な状態にあるようにします。</p>
+<p><a class="reference internal" href="#c.PyTypeObject.tp_finalize" title="PyTypeObject.tp_finalize"><code class="xref c c-member docutils literal"><span class="pre">tp_finalize</span></code></a> は現在の例外状態を変更すべきではありません; 従って、単純でないファイナライザを書くには次の方法が推奨されます:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="kt">void</span>
+<span class="nf">local_finalize</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">self</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">PyObject</span> <span class="o">*</span><span class="n">error_type</span><span class="p">,</span> <span class="o">*</span><span class="n">error_value</span><span class="p">,</span> <span class="o">*</span><span class="n">error_traceback</span><span class="p">;</span>
+
+    <span class="cm">/* Save the current exception, if any. */</span>
+    <span class="n">PyErr_Fetch</span><span class="p">(</span><span class="o">&amp;</span><span class="n">error_type</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">error_value</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">error_traceback</span><span class="p">);</span>
+
+    <span class="cm">/* ... */</span>
+
+    <span class="cm">/* Restore the saved exception. */</span>
+    <span class="n">PyErr_Restore</span><span class="p">(</span><span class="n">error_type</span><span class="p">,</span> <span class="n">error_value</span><span class="p">,</span> <span class="n">error_traceback</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>このフィールドを (継承した場合も含めて) 考慮から漏らさないように、 <a class="reference internal" href="#Py_TPFLAGS_HAVE_FINALIZE" title="Py_TPFLAGS_HAVE_FINALIZE"><code class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_HAVE_FINALIZE</span></code></a> フラグビットも設定しなければなりません。</p>
+<p>サブタイプはこのフィールドを継承します。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last">&#8220;オブジェクトの安全な終了処理&#8221; (<span class="target" id="index-7"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0442"><strong>PEP 442</strong></a>)</p>
+</div>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_cache">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyTypeObject.tp_cache</code><a class="headerlink" href="#c.PyTypeObject.tp_cache" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>使用されていません。継承されません。内部で使用するためだけのものです。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_subclasses">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyTypeObject.tp_subclasses</code><a class="headerlink" href="#c.PyTypeObject.tp_subclasses" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>サブクラスへの弱参照からなるリストです。継承されません。内部で使用するためだけのものです。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_weaklist">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyTypeObject.tp_weaklist</code><a class="headerlink" href="#c.PyTypeObject.tp_weaklist" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この型オブジェクトに対する弱参照からなるリストの先頭です。</p>
+</dd></dl>
+
+<p>残りのフィールドは、機能テスト用のマクロである <code class="xref py py-const docutils literal"><span class="pre">COUNT_ALLOCS</span></code> が定義されている場合のみ利用でき、内部で使用するためだけのものです。これらのフィールドについて記述するのは単に完全性のためです。サブタイプはこれらのフィールドを継承しません。</p>
+<dl class="member">
+<dt id="c.PyTypeObject.tp_allocs">
+Py_ssize_t <code class="descname">PyTypeObject.tp_allocs</code><a class="headerlink" href="#c.PyTypeObject.tp_allocs" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>メモリ確保の回数です。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_frees">
+Py_ssize_t <code class="descname">PyTypeObject.tp_frees</code><a class="headerlink" href="#c.PyTypeObject.tp_frees" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>メモリ解放の回数です。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_maxalloc">
+Py_ssize_t <code class="descname">PyTypeObject.tp_maxalloc</code><a class="headerlink" href="#c.PyTypeObject.tp_maxalloc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>同時にメモリ確保できる最大オブジェクト数です。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyTypeObject.tp_next">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject">PyTypeObject</a>* <code class="descname">PyTypeObject.tp_next</code><a class="headerlink" href="#c.PyTypeObject.tp_next" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>次のゼロでない <a class="reference internal" href="#c.PyTypeObject.tp_allocs" title="PyTypeObject.tp_allocs"><code class="xref c c-member docutils literal"><span class="pre">tp_allocs</span></code></a> フィールドを持つ型オブジェクトへのポインタです。</p>
+</dd></dl>
+
+<p>また、 Python のガベージコレクションでは、 <em>tp_dealloc</em> を呼び出すのはオブジェクトを生成したスレッドだけではなく、任意の Python スレッドかもしれないという点にも注意して下さい。 (オブジェクトが循環参照の一部の場合、任意のスレッドのガベージコレクションによって解放されてしまうかもしれません)。Python API 側からみれば、 <em>tp_dealloc</em> を呼び出すスレッドはグローバルインタプリタロック (GIL: Global Interpreter Lock) を獲得するので、これは問題ではありません。しかしながら、削除されようとしているオブジェクトが何らかの C や C++ ライブラリ由来のオブジェクトを削除する場合、 <em>tp_dealloc</em> を呼び出すスレッドのオブジェクトを削除することで、ライブラリの仮定している何らかの規約に違反しないように気を付ける必要があります。</p>
+</div>
+<div class="section" id="number-object-structures">
+<span id="number-structs"></span><h1>数値オブジェクト構造体<a class="headerlink" href="#number-object-structures" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<dl class="type">
+<dt id="c.PyNumberMethods">
+<code class="descname">PyNumberMethods</code><a class="headerlink" href="#c.PyNumberMethods" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この構造体は数値型プロトコルを実装するために使われる関数群へのポインタを保持しています。
+以下のそれぞれの関数は <a class="reference internal" href="number.html#number"><span class="std std-ref">数値型プロトコル (number protocol)</span></a> で解説されている似た名前の関数から利用されます。</p>
+<p>以下は構造体の定義です:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_add</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_subtract</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_multiply</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_remainder</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_divmod</span><span class="p">;</span>
+     <span class="n">ternaryfunc</span> <span class="n">nb_power</span><span class="p">;</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_negative</span><span class="p">;</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_positive</span><span class="p">;</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_absolute</span><span class="p">;</span>
+     <span class="n">inquiry</span> <span class="n">nb_bool</span><span class="p">;</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_invert</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_lshift</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_rshift</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_and</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_xor</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_or</span><span class="p">;</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_int</span><span class="p">;</span>
+     <span class="kt">void</span> <span class="o">*</span><span class="n">nb_reserved</span><span class="p">;</span>
+     <span class="n">unaryfunc</span> <span class="n">nb_float</span><span class="p">;</span>
+
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_add</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_subtract</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_multiply</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_remainder</span><span class="p">;</span>
+     <span class="n">ternaryfunc</span> <span class="n">nb_inplace_power</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_lshift</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_rshift</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_and</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_xor</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_or</span><span class="p">;</span>
+
+     <span class="n">binaryfunc</span> <span class="n">nb_floor_divide</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_true_divide</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_floor_divide</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_true_divide</span><span class="p">;</span>
+
+     <span class="n">unaryfunc</span> <span class="n">nb_index</span><span class="p">;</span>
+
+     <span class="n">binaryfunc</span> <span class="n">nb_matrix_multiply</span><span class="p">;</span>
+     <span class="n">binaryfunc</span> <span class="n">nb_inplace_matrix_multiply</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">PyNumberMethods</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">二項関数と三項関数は、すべてのオペランドの型をチェックしなければならず、必要な変換を実装しなければなりません (すくなくともオペランドの一つは定義している型のインスタンスです). もし与えられたオペランドに対して操作が定義されなければ、二項関数と三項関数は <code class="docutils literal"><span class="pre">Py_NotImplemented</span></code> を返さなければならず、他のエラーが起こった場合は、<code class="docutils literal"><span class="pre">NULL</span></code> を返して例外を設定しなければなりません。</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last"><code class="xref c c-data docutils literal"><span class="pre">nb_reserved</span></code> フィールドは常に <code class="docutils literal"><span class="pre">NULL</span></code> でなければなりません。以前は <code class="xref c c-data docutils literal"><span class="pre">nb_long</span></code> と呼ばれていて、 Python 3.0.1 で名前が変更されました。</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="mapping-object-structures">
+<span id="mapping-structs"></span><h1>マップオブジェクト構造体<a class="headerlink" href="#mapping-object-structures" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<dl class="type">
+<dt id="c.PyMappingMethods">
+<code class="descname">PyMappingMethods</code><a class="headerlink" href="#c.PyMappingMethods" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この構造体はマップ型プロトコルを実装するために使われる関数群へのポインタを保持しています。
+以下の3つのメンバを持っています:</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyMappingMethods.mp_length">
+lenfunc <code class="descname">PyMappingMethods.mp_length</code><a class="headerlink" href="#c.PyMappingMethods.mp_length" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は <a class="reference internal" href="mapping.html#c.PyMapping_Length" title="PyMapping_Length"><code class="xref c c-func docutils literal"><span class="pre">PyMapping_Length()</span></code></a> や <a class="reference internal" href="object.html#c.PyObject_Size" title="PyObject_Size"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Size()</span></code></a> から利用され、それらと同じシグネチャを持っています。オブジェクトが定義された長さを持たない場合は、このスロットは <em>NULL</em> に設定されることがあります。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyMappingMethods.mp_subscript">
+binaryfunc <code class="descname">PyMappingMethods.mp_subscript</code><a class="headerlink" href="#c.PyMappingMethods.mp_subscript" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は <a class="reference internal" href="object.html#c.PyObject_GetItem" title="PyObject_GetItem"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GetItem()</span></code></a> から利用され、同じシグネチャを持っています。このスロットは <a class="reference internal" href="mapping.html#c.PyMapping_Check" title="PyMapping_Check"><code class="xref c c-func docutils literal"><span class="pre">PyMapping_Check()</span></code></a> が <code class="docutils literal"><span class="pre">1</span></code> を返すためには必要で、そうでなければ <em>NULL</em> の場合があります。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyMappingMethods.mp_ass_subscript">
+objobjargproc <code class="descname">PyMappingMethods.mp_ass_subscript</code><a class="headerlink" href="#c.PyMappingMethods.mp_ass_subscript" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は <a class="reference internal" href="object.html#c.PyObject_SetItem" title="PyObject_SetItem"><code class="xref c c-func docutils literal"><span class="pre">PyObject_SetItem()</span></code></a> および <a class="reference internal" href="object.html#c.PyObject_DelItem" title="PyObject_DelItem"><code class="xref c c-func docutils literal"><span class="pre">PyObject_DelItem()</span></code></a> から利用されます。
+<a class="reference internal" href="object.html#c.PyObject_SetItem" title="PyObject_SetItem"><code class="xref c c-func docutils literal"><span class="pre">PyObject_SetItem()</span></code></a> と同じシグネチャを持ちますが、 <em>v</em> に <em>NULL</em> を設定して要素の削除もできます。このスロットが <em>NULL</em> の場合は、このオブジェクトはアイテムの代入と削除をサポートしません。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="sequence-object-structures">
+<span id="sequence-structs"></span><h1>シーケンスオブジェクト構造体<a class="headerlink" href="#sequence-object-structures" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<dl class="type">
+<dt id="c.PySequenceMethods">
+<code class="descname">PySequenceMethods</code><a class="headerlink" href="#c.PySequenceMethods" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この構造体はシーケンス型プロトコルを実装するために使われる関数群へのポインタを保持しています。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_length">
+lenfunc <code class="descname">PySequenceMethods.sq_length</code><a class="headerlink" href="#c.PySequenceMethods.sq_length" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_Size" title="PySequence_Size"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Size()</span></code></a> や <a class="reference internal" href="object.html#c.PyObject_Size" title="PyObject_Size"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Size()</span></code></a> から利用され、それらと同じシグネチャを持っています。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_concat">
+binaryfunc <code class="descname">PySequenceMethods.sq_concat</code><a class="headerlink" href="#c.PySequenceMethods.sq_concat" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_Concat" title="PySequence_Concat"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Concat()</span></code></a> で利用され、同じシグネチャを持っています。また、 <code class="docutils literal"><span class="pre">+</span></code> 演算子でも、 <code class="xref c c-member docutils literal"><span class="pre">nb_add</span></code> スロットによる数値加算を試した後に利用されます。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_repeat">
+ssizeargfunc <code class="descname">PySequenceMethods.sq_repeat</code><a class="headerlink" href="#c.PySequenceMethods.sq_repeat" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_Repeat" title="PySequence_Repeat"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Repeat()</span></code></a> で利用され、同じシグネチャを持っています。また、 <code class="docutils literal"><span class="pre">*</span></code> 演算でも、 <code class="xref c c-member docutils literal"><span class="pre">nb_multiply</span></code> スロットによる数値乗算を試したあとに利用されます。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_item">
+ssizeargfunc <code class="descname">PySequenceMethods.sq_item</code><a class="headerlink" href="#c.PySequenceMethods.sq_item" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_GetItem" title="PySequence_GetItem"><code class="xref c c-func docutils literal"><span class="pre">PySequence_GetItem()</span></code></a> から利用され、同じシグネチャを持っています。このスロットは <a class="reference internal" href="sequence.html#c.PySequence_Check" title="PySequence_Check"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Check()</span></code></a> が <code class="docutils literal"><span class="pre">1</span></code> を返すためには埋めなければならず、それ以外の場合は <em>NULL</em> の可能性があります。</p>
+<p>負のインデックスは次のように処理されます: <code class="xref py py-attr docutils literal"><span class="pre">sq_length</span></code> スロットが埋められていれば、それを呼び出してシーケンスの長さから正のインデックスを計算し、 <code class="xref py py-attr docutils literal"><span class="pre">sq_item</span></code> に渡します。 <code class="xref py py-attr docutils literal"><span class="pre">sq_length</span></code> が <em>NULL</em> の場合は、インデックスはそのままこの関数に渡されます。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_ass_item">
+ssizeobjargproc <code class="descname">PySequenceMethods.sq_ass_item</code><a class="headerlink" href="#c.PySequenceMethods.sq_ass_item" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_SetItem" title="PySequence_SetItem"><code class="xref c c-func docutils literal"><span class="pre">PySequence_SetItem()</span></code></a> から利用され、同じシグネチャを持っています。
+オブジェクトが要素の代入と削除をサポートしていない場合は、このスロットは <em>NULL</em> かもしれません。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_contains">
+objobjproc <code class="descname">PySequenceMethods.sq_contains</code><a class="headerlink" href="#c.PySequenceMethods.sq_contains" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_Contains" title="PySequence_Contains"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Contains()</span></code></a> から利用され、同じシグネチャを持っています。このスロットは <em>NULL</em> の場合があり、その時 <a class="reference internal" href="sequence.html#c.PySequence_Contains" title="PySequence_Contains"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Contains()</span></code></a> はシンプルにマッチするオブジェクトを見つけるまでシーケンスを巡回します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_inplace_concat">
+binaryfunc <code class="descname">PySequenceMethods.sq_inplace_concat</code><a class="headerlink" href="#c.PySequenceMethods.sq_inplace_concat" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_InPlaceConcat" title="PySequence_InPlaceConcat"><code class="xref c c-func docutils literal"><span class="pre">PySequence_InPlaceConcat()</span></code></a> から利用され、同じシグネチャを持っています。この関数は最初のオペランドを修正してそれを返すべきです。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PySequenceMethods.sq_inplace_repeat">
+ssizeargfunc <code class="descname">PySequenceMethods.sq_inplace_repeat</code><a class="headerlink" href="#c.PySequenceMethods.sq_inplace_repeat" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_InPlaceRepeat" title="PySequence_InPlaceRepeat"><code class="xref c c-func docutils literal"><span class="pre">PySequence_InPlaceRepeat()</span></code></a> から利用され、同じシグネチャを持っています。この関数は最初のオペランドを修正してそれを返すべきです。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="buffer-object-structures">
+<span id="buffer-structs"></span><h1>バッファオブジェクト構造体 (buffer object structure)<a class="headerlink" href="#buffer-object-structures" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<dl class="type">
+<dt id="c.PyBufferProcs">
+<code class="descname">PyBufferProcs</code><a class="headerlink" href="#c.PyBufferProcs" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この構造体は <a class="reference internal" href="buffer.html#bufferobjects"><span class="std std-ref">buffer プロトコル</span></a> が要求する関数群へのポインタを保持しています。
+そのプロトコルは、エクスポーターオブジェクトが如何にして、その内部データをコンシューマオブジェクトに渡すかを定義します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyBufferProcs.bf_getbuffer">
+getbufferproc <code class="descname">PyBufferProcs.bf_getbuffer</code><a class="headerlink" href="#c.PyBufferProcs.bf_getbuffer" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数のシグネチャは以下の通りです:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">exporter</span><span class="p">,</span> <span class="n">Py_buffer</span> <span class="o">*</span><span class="n">view</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><em>flags</em> で指定された方法で <em>view</em> を埋めてほしいという <em>exporter</em> に対する要求を処理します。ステップ(3) を除いて、この関数の実装では以下のステップを行わなければなりません:</p>
+<ol class="arabic simple">
+<li><p class="first">リクエストが合致するか確認します。
+合致しない場合は、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_BufferError</span></code> を送出し、 <code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> に <em>NULL</em> を設定し <code class="docutils literal"><span class="pre">-1</span></code> を返します。</p>
+</li>
+<li><p class="first">要求されたフィールドを埋めます。</p>
+</li>
+<li><p class="first">エクスポートした回数を保持する内部カウンタをインクリメントします。</p>
+</li>
+<li><p class="first"><code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> に <em>exporter</em> を設定し、 <code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> をインクリメントします。</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">0</span></code> を返します。</p>
+</li>
+</ol>
+<p><em>exporter</em> がバッファプロバイダのチェインかツリーの一部であれば、２つの主要な方式が使用できます:</p>
+<ul class="simple">
+<li><p class="first">再エクスポート: ツリーの各要素がエクスポートされるオブジェクトとして振る舞い、自身への新しい参照を <code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> へセットします。</p>
+</li>
+<li><p class="first">リダイレクト: バッファ要求がツリーのルートオブジェクトにリダイレクトされます。ここでは、 <code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> はルートオブジェクトへの新しい参照になります。</p>
+</li>
+</ul>
+<p><em>view</em> の個別のフィールドは <a class="reference internal" href="buffer.html#buffer-structure"><span class="std std-ref">バッファ構造体</span></a> の節で説明されており、エクスポートが特定の要求に対しどう対応しなければならないかの規則は、 <a class="reference internal" href="buffer.html#buffer-request-types"><span class="std std-ref">バッファ要求のタイプ</span></a> の節にあります。</p>
+<p><a class="reference internal" href="buffer.html#c.Py_buffer" title="Py_buffer"><code class="xref c c-type docutils literal"><span class="pre">Py_buffer</span></code></a> 構造体の中から参照している全てのメモリはエクスポータに属し、コンシューマがいなくなるまで有効でなくてはなりません。 <a class="reference internal" href="buffer.html#c.Py_buffer.format" title="Py_buffer.format"><code class="xref c c-member docutils literal"><span class="pre">format</span></code></a> 、 <a class="reference internal" href="buffer.html#c.Py_buffer.shape" title="Py_buffer.shape"><code class="xref c c-member docutils literal"><span class="pre">shape</span></code></a> 、 <a class="reference internal" href="buffer.html#c.Py_buffer.strides" title="Py_buffer.strides"><code class="xref c c-member docutils literal"><span class="pre">strides</span></code></a> 、 <a class="reference internal" href="buffer.html#c.Py_buffer.suboffsets" title="Py_buffer.suboffsets"><code class="xref c c-member docutils literal"><span class="pre">suboffsets</span></code></a> 、 <a class="reference internal" href="buffer.html#c.Py_buffer.internal" title="Py_buffer.internal"><code class="xref c c-member docutils literal"><span class="pre">internal</span></code></a> はコンシューマからは読み取り専用です。</p>
+<p><a class="reference internal" href="buffer.html#c.PyBuffer_FillInfo" title="PyBuffer_FillInfo"><code class="xref c c-func docutils literal"><span class="pre">PyBuffer_FillInfo()</span></code></a> は、全てのリクエストタイプを正しく扱う際に、単純なバイトバッファを公開する簡単な方法を提供します。</p>
+<p><a class="reference internal" href="buffer.html#c.PyObject_GetBuffer" title="PyObject_GetBuffer"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GetBuffer()</span></code></a> は、この関数をラップするコンシューマ向けのインタフェースです。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyBufferProcs.bf_releasebuffer">
+releasebufferproc <code class="descname">PyBufferProcs.bf_releasebuffer</code><a class="headerlink" href="#c.PyBufferProcs.bf_releasebuffer" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数のシグネチャは以下の通りです:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">exporter</span><span class="p">,</span> <span class="n">Py_buffer</span> <span class="o">*</span><span class="n">view</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>バッファのリソースを開放する要求を処理します。もし開放する必要のあるリソースがない場合、 <a class="reference internal" href="#c.PyBufferProcs.bf_releasebuffer" title="PyBufferProcs.bf_releasebuffer"><code class="xref c c-member docutils literal"><span class="pre">PyBufferProcs.bf_releasebuffer</span></code></a> は <em>NULL</em> にしても構いません。そうでない場合は、この関数の標準的な実装は、以下の任意の処理手順 (optional step) を行います:</p>
+<ol class="arabic simple">
+<li><p class="first">エクスポートした回数を保持する内部カウンタをデクリメントします。</p>
+</li>
+<li><p class="first">カウンタが <code class="docutils literal"><span class="pre">0</span></code> の場合は、<em>view</em> に関連付けられた全てのメモリを解放します。</p>
+</li>
+</ol>
+<p>エクスポータは、バッファ固有のリソースを監視し続けるために <a class="reference internal" href="buffer.html#c.Py_buffer.internal" title="Py_buffer.internal"><code class="xref c c-member docutils literal"><span class="pre">internal</span></code></a> フィールドを使わなければなりません。このフィールドは、コンシューマが <em>view</em> 引数としてオリジナルのバッファのコピーを渡しているであろう間、変わらないことが保証されています。</p>
+<p>この関数は、<code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> をデクリメントしてはいけません、なぜならそれは <a class="reference internal" href="buffer.html#c.PyBuffer_Release" title="PyBuffer_Release"><code class="xref c c-func docutils literal"><span class="pre">PyBuffer_Release()</span></code></a> で自動的に行われるからです(この方式は参照の循環を防ぐのに有用です)。</p>
+<p><a class="reference internal" href="buffer.html#c.PyBuffer_Release" title="PyBuffer_Release"><code class="xref c c-func docutils literal"><span class="pre">PyBuffer_Release()</span></code></a> は、この関数をラップするコンシューマ向けのインタフェースです。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="async-object-structures">
+<span id="async-structs"></span><h1>async オブジェクト構造体<a class="headerlink" href="#async-object-structures" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
+</div>
+<dl class="type">
+<dt id="c.PyAsyncMethods">
+<code class="descname">PyAsyncMethods</code><a class="headerlink" href="#c.PyAsyncMethods" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この構造体は <a class="reference internal" href="../glossary.html#term-awaitable"><span class="xref std std-term">awaitable</span></a> オブジェクトと <a class="reference internal" href="../glossary.html#term-asynchronous-iterator"><span class="xref std std-term">asynchronous iterator</span></a> オブジェクトを実装するのに必要な関数へのポインタを保持しています。</p>
+<p>以下は構造体の定義です:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">unaryfunc</span> <span class="n">am_await</span><span class="p">;</span>
+    <span class="n">unaryfunc</span> <span class="n">am_aiter</span><span class="p">;</span>
+    <span class="n">unaryfunc</span> <span class="n">am_anext</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">PyAsyncMethods</span><span class="p">;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyAsyncMethods.am_await">
+unaryfunc <code class="descname">PyAsyncMethods.am_await</code><a class="headerlink" href="#c.PyAsyncMethods.am_await" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数のシグネチャは以下の通りです:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span><span class="n">am_await</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>返されるオブジェクトはイテレータでなければなりません。
+つまりこのオブジェクトに対して <a class="reference internal" href="iter.html#c.PyIter_Check" title="PyIter_Check"><code class="xref c c-func docutils literal"><span class="pre">PyIter_Check()</span></code></a> が <code class="docutils literal"><span class="pre">1</span></code> を返さなければなりません。</p>
+<p>オブジェクトが <a class="reference internal" href="../glossary.html#term-awaitable"><span class="xref std std-term">awaitable</span></a> でない場合、このスロットを <em>NULL</em> に設定します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyAsyncMethods.am_aiter">
+unaryfunc <code class="descname">PyAsyncMethods.am_aiter</code><a class="headerlink" href="#c.PyAsyncMethods.am_aiter" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数のシグネチャは以下の通りです:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span><span class="n">am_aiter</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../glossary.html#term-awaitable"><span class="xref std std-term">awaitable</span></a> オブジェクトを返さなければなりません。
+詳しいことは <a class="reference internal" href="../reference/datamodel.html#object.__anext__" title="object.__anext__"><code class="xref py py-meth docutils literal"><span class="pre">__anext__()</span></code></a> を参照してください。</p>
+<p>オブジェクトが非同期反復処理のプロトコルを実装していない場合、このスロットを <em>NULL</em> に設定します。</p>
+</dd></dl>
+
+<dl class="member">
+<dt id="c.PyAsyncMethods.am_anext">
+unaryfunc <code class="descname">PyAsyncMethods.am_anext</code><a class="headerlink" href="#c.PyAsyncMethods.am_anext" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>この関数のシグネチャは以下の通りです:</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span><span class="n">am_anext</span><span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="n">self</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../glossary.html#term-awaitable"><span class="xref std std-term">awaitable</span></a> オブジェクトを返さなければなりません。
+詳しいことは <a class="reference internal" href="../reference/datamodel.html#object.__anext__" title="object.__anext__"><code class="xref py py-meth docutils literal"><span class="pre">__anext__()</span></code></a> を参照してください。
+このスロットは <em>NULL</em> に設定されていることもあります。</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">型オブジェクト</a></li>
+<li><a class="reference internal" href="#number-object-structures">数値オブジェクト構造体</a></li>
+<li><a class="reference internal" href="#mapping-object-structures">マップオブジェクト構造体</a></li>
+<li><a class="reference internal" href="#sequence-object-structures">シーケンスオブジェクト構造体</a></li>
+<li><a class="reference internal" href="#buffer-object-structures">バッファオブジェクト構造体 (buffer object structure)</a></li>
+<li><a class="reference internal" href="#async-object-structures">async オブジェクト構造体</a></li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="structures.html"
+                        title="前の章へ">共通のオブジェクト構造体 (common object structure)</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="gcsupport.html"
+                        title="次の章へ">循環参照ガベージコレクションをサポートする</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/typeobj.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="gcsupport.html" title="循環参照ガベージコレクションをサポートする"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="structures.html" title="共通のオブジェクト構造体 (common object structure)"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API リファレンスマニュアル</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="objimpl.html" >オブジェクト実装サポート (object implementation support)</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

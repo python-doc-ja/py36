@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>27.2. faulthandler — Python tracebackのダンプ &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="27. デバッグとプロファイル" href="debug.html" />
+    <link rel="next" title="27.3. pdb — Python デバッガ" href="pdb.html" />
+    <link rel="prev" title="27.1. bdb — デバッガーフレームワーク" href="bdb.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/faulthandler.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/faulthandler.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="pdb.html" title="27.3. pdb — Python デバッガ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="bdb.html" title="27.1. bdb — デバッガーフレームワーク"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="debug.html" accesskey="U">27. デバッグとプロファイル</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-faulthandler">
+<span id="faulthandler-dump-the-python-traceback"></span><h1>27.2. <a class="reference internal" href="#module-faulthandler" title="faulthandler: Dump the Python traceback."><code class="xref py py-mod docutils literal"><span class="pre">faulthandler</span></code></a> &#8212; Python tracebackのダンプ<a class="headerlink" href="#module-faulthandler" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
+</div>
+<hr class="docutils" />
+<p>このモジュールは、例外発生時、タイムアウト時、ユーザシグナルの発生時などのタイミングでpython tracebackを明示的にダンプするための関数を含んでいます。これらのシグナル、<code class="xref py py-const docutils literal"><span class="pre">SIGSEGV</span></code>、<code class="xref py py-const docutils literal"><span class="pre">SIGFPE</span></code>、<code class="xref py py-const docutils literal"><span class="pre">SIGABRT</span></code>、<code class="xref py py-const docutils literal"><span class="pre">SIGBUS</span></code>、<code class="xref py py-const docutils literal"><span class="pre">SIGILL</span></code> に対するフォールトハンドラをインストールするには <a class="reference internal" href="#faulthandler.enable" title="faulthandler.enable"><code class="xref py py-func docutils literal"><span class="pre">faulthandler.enable()</span></code></a> を実行してください。python起動時に有効にするには環境変数 <span class="target" id="index-2"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONFAULTHANDLER"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONFAULTHANDLER</span></code></a> を設定するか、コマンドライン引数に <a class="reference internal" href="../using/cmdline.html#cmdoption-X"><code class="xref std std-option docutils literal"><span class="pre">-X</span></code></a> <code class="docutils literal"><span class="pre">faulthandler</span></code> を指定してください。</p>
+<p>Pythonのフォールトハンドラは、apportやWindowsのフォールトハンドラのようなシステムフォールトハンドラと互換性があります。このモジュールは <code class="xref c c-func docutils literal"><span class="pre">sigaltstack()</span></code> 関数が使用可能であればシグナルハンドラ用に代替スタックを利用します。これによってスタックオーバーフロー時にもスタックトレースを出力することができます。</p>
+<p>フォールトハンドラは絶望的なケースで呼び出されます。そのためシグナルセーフな関数しか使うことができません (例: ヒープメモリ上にメモリ確保はできません)。この制限により、tracebackのダンプ機能は通常のPythonのtracebackと比べてごく僅かなものです:</p>
+<ul class="simple">
+<li><p class="first">ASCIIのみサポートされます。エンコード時には <code class="docutils literal"><span class="pre">backslashreplace</span></code> エラーハンドラを使用します。</p>
+</li>
+<li><p class="first">すべての文字列は500文字以内に制限されています。</p>
+</li>
+<li><p class="first">ファイル名、関数名、行数のみ表示します。(ソースコードの表示はありません)</p>
+</li>
+<li><p class="first">100フレーム、100スレッドに制限されています。</p>
+</li>
+<li><p class="first">順番は保持されます: 最新の呼び出しが最初に表示されます。</p>
+</li>
+</ul>
+<p>デフォルトでは、Pythonのtracebackは <a class="reference internal" href="sys.html#sys.stderr" title="sys.stderr"><code class="xref py py-data docutils literal"><span class="pre">sys.stderr</span></code></a> に書き出されます。tracebackを見るには、対象アプリケーションはターミナル上で実行しなければなりません。 <a class="reference internal" href="#faulthandler.enable" title="faulthandler.enable"><code class="xref py py-func docutils literal"><span class="pre">faulthandler.enable()</span></code></a> に渡す引数によってログファイルを指定することができます。</p>
+<p>モジュールはC言語で実装されているので、アプリのクラッシュ時でもPythonがデッドロックした場合でもダンプができます。</p>
+<div class="section" id="dumping-the-traceback">
+<h2>27.2.1. tracebackのダンプ<a class="headerlink" href="#dumping-the-traceback" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="function">
+<dt id="faulthandler.dump_traceback">
+<code class="descclassname">faulthandler.</code><code class="descname">dump_traceback</code><span class="sig-paren">(</span><em>file=sys.stderr</em>, <em>all_threads=True</em><span class="sig-paren">)</span><a class="headerlink" href="#faulthandler.dump_traceback" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>全スレッドのtracebackを <em>file</em> へダンプします。もし <em>all_threads</em> が <code class="docutils literal"><span class="pre">False</span></code> であれば、現在のスレッドのみダンプします。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>Added support for passing file descriptor to this function.</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="fault-handler-state">
+<h2>27.2.2. フォールトハンドラの状態<a class="headerlink" href="#fault-handler-state" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="function">
+<dt id="faulthandler.enable">
+<code class="descclassname">faulthandler.</code><code class="descname">enable</code><span class="sig-paren">(</span><em>file=sys.stderr</em>, <em>all_threads=True</em><span class="sig-paren">)</span><a class="headerlink" href="#faulthandler.enable" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>フォールトハンドラを有効にします。 <code class="xref py py-const docutils literal"><span class="pre">SIGSEGV</span></code>、 <code class="xref py py-const docutils literal"><span class="pre">SIGFPE</span></code>、 <code class="xref py py-const docutils literal"><span class="pre">SIGABRT</span></code>、 <code class="xref py py-const docutils literal"><span class="pre">SIGBUS</span></code>、<code class="xref py py-const docutils literal"><span class="pre">SIGILL</span></code> シグナルに対して Pythonのtracebackをダンプするハンドラをインストールします。もし <em>all_threads</em> が <code class="docutils literal"><span class="pre">True</span></code> であれば、すべての実行中のスレッドについてtracebackをダンプします。そうでなければ現在のスレッドのみダンプします。</p>
+<p>The <em>file</em> must be kept open until the fault handler is disabled: see
+<a class="reference internal" href="#faulthandler-fd"><span class="std std-ref">issue with file descriptors</span></a>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>Added support for passing file descriptor to this function.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>On Windows, a handler for Windows exception is also installed.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="faulthandler.disable">
+<code class="descclassname">faulthandler.</code><code class="descname">disable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#faulthandler.disable" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>フォールトハンドラを無効にします: <a class="reference internal" href="#faulthandler.enable" title="faulthandler.enable"><code class="xref py py-func docutils literal"><span class="pre">enable()</span></code></a> によってインストールされたシグナルハンドラをアンインストールします。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="faulthandler.is_enabled">
+<code class="descclassname">faulthandler.</code><code class="descname">is_enabled</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#faulthandler.is_enabled" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>フォールトハンドラが有効かどうかチェックします。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="dumping-the-tracebacks-after-a-timeout">
+<h2>27.2.3. タイムアウト後にtracebackをダンプする<a class="headerlink" href="#dumping-the-tracebacks-after-a-timeout" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="function">
+<dt id="faulthandler.dump_traceback_later">
+<code class="descclassname">faulthandler.</code><code class="descname">dump_traceback_later</code><span class="sig-paren">(</span><em>timeout</em>, <em>repeat=False</em>, <em>file=sys.stderr</em>, <em>exit=False</em><span class="sig-paren">)</span><a class="headerlink" href="#faulthandler.dump_traceback_later" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>timeout</em> 秒経過後か、<em>repeat</em> が <code class="docutils literal"><span class="pre">True</span></code> の場合は <em>timeout</em> 秒おきに全スレッドの traceback をダンプします。もし <em>exit</em> が <code class="docutils literal"><span class="pre">True</span></code> であればtracebackをダンプした後、status=1で <code class="xref c c-func docutils literal"><span class="pre">_exit()</span></code> を呼び出します。(注: <code class="xref c c-func docutils literal"><span class="pre">_exit()</span></code> を呼び出すとプロセスを即座に終了します。つまりファイルバッファのクリアといった終了処理を行いません。)関数が2回呼ばれた場合、最新の呼び出しが前回の呼び出しパラメータを引き継いでタイムアウト時間をリセットします。タイマーの分解能は1秒未満です。</p>
+<p>The <em>file</em> must be kept open until the traceback is dumped or
+<a class="reference internal" href="#faulthandler.cancel_dump_traceback_later" title="faulthandler.cancel_dump_traceback_later"><code class="xref py py-func docutils literal"><span class="pre">cancel_dump_traceback_later()</span></code></a> is called: see <a class="reference internal" href="#faulthandler-fd"><span class="std std-ref">issue with file
+descriptors</span></a>.</p>
+<p>この関数は番犬(watchdog)スレッドを使って実装されているため、Pythonがスレッド無効でコンパイルされている場合は利用できません。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>Added support for passing file descriptor to this function.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="faulthandler.cancel_dump_traceback_later">
+<code class="descclassname">faulthandler.</code><code class="descname">cancel_dump_traceback_later</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#faulthandler.cancel_dump_traceback_later" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#faulthandler.dump_traceback_later" title="faulthandler.dump_traceback_later"><code class="xref py py-func docutils literal"><span class="pre">dump_traceback_later()</span></code></a> の最新の呼び出しをキャンセルします。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="dumping-the-traceback-on-a-user-signal">
+<h2>27.2.4. ユーザシグナルに対してtracebackをダンプする<a class="headerlink" href="#dumping-the-traceback-on-a-user-signal" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<dl class="function">
+<dt id="faulthandler.register">
+<code class="descclassname">faulthandler.</code><code class="descname">register</code><span class="sig-paren">(</span><em>signum</em>, <em>file=sys.stderr</em>, <em>all_threads=True</em>, <em>chain=False</em><span class="sig-paren">)</span><a class="headerlink" href="#faulthandler.register" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ユーザシグナルを登録します: すべてのスレッドでtracebackをダンプするために <em>signum</em> シグナルをインストールします。ただし <em>all_threads</em> が <code class="docutils literal"><span class="pre">False</span></code> であれば現在のスレッドのみ <em>file</em> にダンプします。もし chain が <code class="docutils literal"><span class="pre">True</span></code> であれば以前のハンドラも呼び出します。</p>
+<p>The <em>file</em> must be kept open until the signal is unregistered by
+<a class="reference internal" href="#faulthandler.unregister" title="faulthandler.unregister"><code class="xref py py-func docutils literal"><span class="pre">unregister()</span></code></a>: see <a class="reference internal" href="#faulthandler-fd"><span class="std std-ref">issue with file descriptors</span></a>.</p>
+<p>Windowsでは利用不可です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>Added support for passing file descriptor to this function.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="faulthandler.unregister">
+<code class="descclassname">faulthandler.</code><code class="descname">unregister</code><span class="sig-paren">(</span><em>signum</em><span class="sig-paren">)</span><a class="headerlink" href="#faulthandler.unregister" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ユーザシグナルを登録解除します: <a class="reference internal" href="#faulthandler.register" title="faulthandler.register"><code class="xref py py-func docutils literal"><span class="pre">register()</span></code></a> でインストールした <em>signum</em> シグナルハンドラをアンインストールします。シグナルが登録された場合は <code class="docutils literal"><span class="pre">True</span></code> を返し、そうでなければ <code class="docutils literal"><span class="pre">False</span></code> を返します。</p>
+<p>Windowsでは利用不可です。</p>
+</dd></dl>
+
+</div>
+<div class="section" id="issue-with-file-descriptors">
+<span id="faulthandler-fd"></span><h2>27.2.5. ファイル記述子の問題<a class="headerlink" href="#issue-with-file-descriptors" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p><a class="reference internal" href="#faulthandler.enable" title="faulthandler.enable"><code class="xref py py-func docutils literal"><span class="pre">enable()</span></code></a>、<a class="reference internal" href="#faulthandler.dump_traceback_later" title="faulthandler.dump_traceback_later"><code class="xref py py-func docutils literal"><span class="pre">dump_traceback_later()</span></code></a> ならびに <a class="reference internal" href="#faulthandler.register" title="faulthandler.register"><code class="xref py py-func docutils literal"><span class="pre">register()</span></code></a> は引数 <em>file</em> に渡されたファイル記述子を保持します。ファイルが閉じられファイル記述子が新しいファイルで再利用された場合や、<a class="reference internal" href="os.html#os.dup2" title="os.dup2"><code class="xref py py-func docutils literal"><span class="pre">os.dup2()</span></code></a> の使用でファイル記述子が置き換えた場合、 traceback の結果は別のファイルへ書き込まれます。ファイルが置き換えられた場合は、毎回これらの関数を呼び出しなおしてください。</p>
+</div>
+<div class="section" id="example">
+<h2>27.2.6. 使用例<a class="headerlink" href="#example" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>フォールトハンドラを有効化・無効化したときの Linuxでのセグメンテーションフォールトの例:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>$ python3 -c <span class="s2">&quot;import ctypes; ctypes.string_at(0)&quot;</span>
+Segmentation fault
+
+$ python3 -q -X faulthandler
+&gt;&gt;&gt; import ctypes
+&gt;&gt;&gt; ctypes.string_at<span class="o">(</span><span class="m">0</span><span class="o">)</span>
+Fatal Python error: Segmentation fault
+
+Current thread 0x00007fb899f39700 <span class="o">(</span>most recent call first<span class="o">)</span>:
+  File <span class="s2">&quot;/home/python/cpython/Lib/ctypes/__init__.py&quot;</span>, line <span class="m">486</span> in string_at
+  File <span class="s2">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span> in &lt;module&gt;
+Segmentation fault
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">27.2. <code class="docutils literal"><span class="pre">faulthandler</span></code> &#8212; Python tracebackのダンプ</a><ul>
+<li><a class="reference internal" href="#dumping-the-traceback">27.2.1. tracebackのダンプ</a></li>
+<li><a class="reference internal" href="#fault-handler-state">27.2.2. フォールトハンドラの状態</a></li>
+<li><a class="reference internal" href="#dumping-the-tracebacks-after-a-timeout">27.2.3. タイムアウト後にtracebackをダンプする</a></li>
+<li><a class="reference internal" href="#dumping-the-traceback-on-a-user-signal">27.2.4. ユーザシグナルに対してtracebackをダンプする</a></li>
+<li><a class="reference internal" href="#issue-with-file-descriptors">27.2.5. ファイル記述子の問題</a></li>
+<li><a class="reference internal" href="#example">27.2.6. 使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="bdb.html"
+                        title="前の章へ">27.1. <code class="docutils literal"><span class="pre">bdb</span></code> &#8212; デバッガーフレームワーク</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="pdb.html"
+                        title="次の章へ">27.3. <code class="docutils literal"><span class="pre">pdb</span></code> &#8212; Python デバッガ</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/faulthandler.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="pdb.html" title="27.3. pdb — Python デバッガ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="bdb.html" title="27.1. bdb — デバッガーフレームワーク"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="debug.html" >27. デバッグとプロファイル</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

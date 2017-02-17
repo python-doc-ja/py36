@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>29.14. fpectl — 浮動小数点例外の制御 &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="29. Python ランタイムサービス" href="python.html" />
+    <link rel="next" title="30. カスタム Python インタプリタ" href="custominterp.html" />
+    <link rel="prev" title="29.13. site — サイト固有の設定フック" href="site.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/fpectl.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/fpectl.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="custominterp.html" title="30. カスタム Python インタプリタ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="site.html" title="29.13. site — サイト固有の設定フック"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" accesskey="U">29. Python ランタイムサービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-fpectl">
+<span id="fpectl-floating-point-exception-control"></span><h1>29.14. <a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">fpectl</span></code></a> &#8212; 浮動小数点例外の制御<a class="headerlink" href="#module-fpectl" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last"><a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">fpectl</span></code></a> モジュールはデフォルトではビルドされません。このモジュールの利用は推奨されておらず、熟練者以外がこのモジュールを使うのは危険です。このモジュールの制限についての詳細は、 <a class="reference internal" href="#fpectl-limitations"><span class="std std-ref">制限と他に考慮すべきこと</span></a> 節を参照してください。</p>
+</div>
+<hr class="docutils" id="index-0" />
+<p>ほとんどのコンピュータはいわゆるIEEE-754標準に準拠した浮動小数点演算を実行します。実際のどんなコンピュータでも、浮動小数点演算が普通の浮動小数点数では表せない結果になることがあります。例えば、次を試してください</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="go">inf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="go">nan</span>
+</pre></div>
+</div>
+<p>(上の例は多くのプラットホームで動作します。DEC Alphaは例外かもしれません。) &#8220;Inf&#8221;は&#8221;infinity(無限)&#8221;を意味するIEEE-754における特殊な非数値の値で、&#8221;nan&#8221;は&#8221;not a number(数ではない)&#8221;を意味します。ここで留意すべき点は、その計算を行うようにPythonに求めたときに非数値の結果以外に特別なことは何も起きないというです。事実、それはIEEE-754標準に規定されたデフォルトのふるまいで、それで良ければここで読むのを止めてください。</p>
+<p>いくつかの環境では、誤った演算がなされたところで例外を発生し、処理を止めることがより良いでしょう。 <a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">fpectl</span></code></a> モジュールはそんな状況で使うためのものです。いくつかのハードウェア製造メーカーの浮動小数点ユニットを制御できるようにします。つまり、IEEE-754例外Division by Zero、OverflowあるいはInvalid Operationが起きたときはいつでも <code class="xref py py-const docutils literal"><span class="pre">SIGFPE</span></code> が生成させるように、ユーザが切り替えられるようにします。あなたのpythonシステムを構成しているCコードの中へ挿入される一組のラッパーマクロと協力して、 <code class="xref py py-const docutils literal"><span class="pre">SIGFPE</span></code> は捕捉され、Python <a class="reference internal" href="exceptions.html#FloatingPointError" title="FloatingPointError"><code class="xref py py-exc docutils literal"><span class="pre">FloatingPointError</span></code></a> 例外へ変換されます。</p>
+<p><a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">fpectl</span></code></a> モジュールは次の関数を定義しています。また、所定の例外を発生します:</p>
+<dl class="function">
+<dt id="fpectl.turnon_sigfpe">
+<code class="descclassname">fpectl.</code><code class="descname">turnon_sigfpe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fpectl.turnon_sigfpe" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><code class="xref py py-const docutils literal"><span class="pre">SIGFPE</span></code> を生成するように切り替え、適切なシグナルハンドラを設定します。</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="fpectl.turnoff_sigfpe">
+<code class="descclassname">fpectl.</code><code class="descname">turnoff_sigfpe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fpectl.turnoff_sigfpe" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>浮動小数点例外のデフォルトの処理に再設定します。</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="fpectl.FloatingPointError">
+<em class="property">exception </em><code class="descclassname">fpectl.</code><code class="descname">FloatingPointError</code><a class="headerlink" href="#fpectl.FloatingPointError" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><a class="reference internal" href="#fpectl.turnon_sigfpe" title="fpectl.turnon_sigfpe"><code class="xref py py-func docutils literal"><span class="pre">turnon_sigfpe()</span></code></a> が実行された後に、IEEE-754例外であるDivision by Zero、OverflowまたはInvalid operationの一つを発生する浮動小数点演算は、次にこの標準Python例外を発生します。</p>
+</dd></dl>
+
+<div class="section" id="example">
+<span id="fpectl-example"></span><h2>29.14.1. 使用例<a class="headerlink" href="#example" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>以下の例は <a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">fpectl</span></code></a> モジュールの使用を開始する方法とモジュールのテスト演算について示しています。</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">fpectl</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">fpetest</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fpectl</span><span class="o">.</span><span class="n">turnon_sigfpe</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fpetest</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
+<span class="go">overflow        PASS</span>
+<span class="go">FloatingPointError: Overflow</span>
+
+<span class="go">div by 0        PASS</span>
+<span class="go">FloatingPointError: Division by zero</span>
+<span class="go">  [ more output from test elided ]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">math</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">?</span>
+<span class="gr">FloatingPointError</span>: <span class="n">in math_1</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="limitations-and-other-considerations">
+<span id="fpectl-limitations"></span><h2>29.14.2. 制限と他に考慮すべきこと<a class="headerlink" href="#limitations-and-other-considerations" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>特定のプロセッサをIEEE-754浮動小数点エラーを捕らえるように設定することは、現在アーキテクチャごとの基準に基づきカスタムコードを必要とします。あなたの特殊なハードウェアを制御するために <a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">fpectl</span></code></a> を修正することもできます。</p>
+<p>IEEE-754例外のPython例外への変換には、ラッパーマクロ <code class="docutils literal"><span class="pre">PyFPE_START_PROTECT</span></code> と <code class="docutils literal"><span class="pre">PyFPE_END_PROTECT</span></code> があなたのコードに適切な方法で挿入されていることが必要です。Python自身は <a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">fpectl</span></code></a> モジュールをサポートするために修正されていますが、数値解析にとって興味ある多くの他のコードはそうではありません。</p>
+<p><a class="reference internal" href="#module-fpectl" title="fpectl: Provide control for floating point exception handling. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">fpectl</span></code></a> モジュールはスレッドセーフではありません。</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<p class="last">このモジュールがどのように動作するのかについてより学習するときに、ソースディストリビューションの中のいくつかのファイルは興味を引くものでしょう。インクルードファイル <code class="file docutils literal"><span class="pre">Include/pyfpe.h</span></code> では、このモジュールの実装について同じ長さで議論されています。 <code class="file docutils literal"><span class="pre">Modules/fpetestmodule.c</span></code> には、いくつかの使い方の例があります。多くの追加の例が <code class="file docutils literal"><span class="pre">Objects/floatobject.c</span></code> にあります。</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">29.14. <code class="docutils literal"><span class="pre">fpectl</span></code> &#8212; 浮動小数点例外の制御</a><ul>
+<li><a class="reference internal" href="#example">29.14.1. 使用例</a></li>
+<li><a class="reference internal" href="#limitations-and-other-considerations">29.14.2. 制限と他に考慮すべきこと</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="site.html"
+                        title="前の章へ">29.13. <code class="docutils literal"><span class="pre">site</span></code> &#8212; サイト固有の設定フック</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="custominterp.html"
+                        title="次の章へ">30. カスタム Python インタプリタ</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/fpectl.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="custominterp.html" title="30. カスタム Python インタプリタ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="site.html" title="29.13. site — サイト固有の設定フック"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" >29. Python ランタイムサービス</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

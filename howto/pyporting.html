@@ -1,0 +1,496 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Python 2 から Python 3 への移植 &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="Python HOWTO" href="index.html" />
+    <link rel="next" title="Python 3 への拡張モジュール移植" href="cporting.html" />
+    <link rel="prev" title="Python HOWTO" href="index.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/howto/pyporting.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/howto/pyporting.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="cporting.html" title="Python 3 への拡張モジュール移植"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Python HOWTO"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python HOWTO</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="porting-python-2-code-to-python-3">
+<span id="pyporting-howto"></span><h1>Python 2 から Python 3 への移植<a class="headerlink" href="#porting-python-2-code-to-python-3" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Brett Cannon</td>
+</tr>
+</tbody>
+</table>
+<div class="topic">
+<p class="topic-title first">概要</p>
+<p>現在は Python 3 が最新版の Python ですが、 Python 2 もまだ活発に利用されています。なのであなたのプロジェクトを両方のメジャーリリースにおいて動作可能にしておくのがよいでしょう。このガイドでは、 Python 2 と 3 を同時にサポートするにはどうすればよいかを解説します。</p>
+<p>もしあなたが標準 Python ライブラリではなく拡張ライブラリでの移植手段を探しているならば <a class="reference internal" href="cporting.html#cporting-howto"><span class="std std-ref">Python 3 への拡張モジュール移植</span></a> を参照してください。</p>
+<p>If you would like to read one core Python developer&#8217;s take on why Python 3
+came into existence, you can read Nick Coghlan&#8217;s <a class="reference external" href="https://ncoghlan-devs-python-notes.readthedocs.org/en/latest/python3/questions_and_answers.html">Python 3 Q &amp; A</a> or
+Brett Cannon&#8217;s <a class="reference external" href="http://www.snarky.ca/why-python-3-exists">Why Python 3 exists</a>.</p>
+<p>移植にあたって助けが必要な場合は <a class="reference external" href="https://mail.python.org/mailman/listinfo/python-porting">python-porting</a> メーリングリストに質問を投稿できます。</p>
+</div>
+<div class="section" id="the-short-explanation">
+<h2>短い説明<a class="headerlink" href="#the-short-explanation" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>あなたのプロジェクトを、単一ソースで Python 2/3 両方に対応させる基本的なステップは次のとおりです。</p>
+<ol class="arabic simple">
+<li><p class="first">Python 2.7 だけをサポートすることに気を配ってください。</p>
+</li>
+<li><p class="first">良いテストカバレッジを確保してください。 (<a class="reference external" href="https://pypi.python.org/pypi/coverage">coverage.py</a> が推奨されます; <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">coverage</span></code>)</p>
+</li>
+<li><p class="first">Python 2 と 3 の違いを学びましょう。</p>
+</li>
+<li>Use <a class="reference external" href="http://python-future.org/automatic_conversion.html">Futurize</a> (or <a class="reference external" href="https://python-modernize.readthedocs.org/en/latest/">Modernize</a>) to update your code (e.g. <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">future</span></code>)</li>
+<li><p class="first">Python 3 サポートに関してデグレを防ぐために <a class="reference external" href="https://pypi.python.org/pypi/pylint">Pylint</a> を使ってください。(<code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pylint</span></code>)</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://pypi.python.org/pypi/caniusepython3">caniusepython3</a> を使ってどの依存性があなたの Python 3 の使用を妨げているかを検出できます。 (<code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">caniusepython3</span></code>)</p>
+</li>
+<li><p class="first">依存性があなたを邪魔しなくなってさえしまえば、Python 2 &amp; 3 への互換性を保つのを保障するために、継続的インテグレーションを使いましょう (<a class="reference external" href="https://pypi.python.org/pypi/tox">tox</a> が複数バージョン Python 相手のテストの手助けをしてくれます; <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">tox</span></code>)</p>
+</li>
+<li>Consider using optional static type checking to make sure your type usage
+works in both Python 2 &amp; 3 (e.g. use <a class="reference external" href="http://mypy-lang.org/">mypy</a> to check your typing under both
+Python 2 &amp; Python 3).</li>
+</ol>
+</div>
+<div class="section" id="details">
+<h2>詳細<a class="headerlink" href="#details" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>A key point about supporting Python 2 &amp; 3 simultaneously is that you can start
+<strong>today</strong>! Even if your dependencies are not supporting Python 3 yet that does
+not mean you can&#8217;t modernize your code <strong>now</strong> to support Python 3. Most changes
+required to support Python 3 lead to cleaner code using newer practices even in
+Python 2 code.</p>
+<p>もうひとつのキーポイントは、あなたの Python 2 コードの Python 3 サポートを加える現代化は、あなたのために大部分は自動化されているということです。Python 3 によるテキストデータとバイナリデータの明確な区別のおかげで、あなたはいくつかの API に決断をしなければならないかもしれない一方で、下位レベルの仕事は今やほとんど済んでいて、それゆえに最低でもその自動化された修正からの恩恵をすぐさま受けることが出来ます。</p>
+<p>Python 2 と 3 の同時サポートのために、あなたのコードを移植するための以降の詳細を読む際には、これらのキーポイントを心に留めておいてください。</p>
+<div class="section" id="drop-support-for-python-2-6-and-older">
+<h3>Python 2.6 とそれ以前のサポートを落とす<a class="headerlink" href="#drop-support-for-python-2-6-and-older" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Python 2.5 と Python 3 で動くものは作れますが、Python 2.7 以上でのみ動くようにするほうが <strong>とてつもなく</strong> 簡単です。Python 2.5 サポートを落とせないならば、 <a class="reference external" href="https://pypi.python.org/pypi/six">six</a> プロジェクトがあなたの Python 2.5 と 3 同時サポートを手助けしてくれます (<code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">six</span></code>)。だけれども悟ってください、この HOWTO でリストしているほとんど全てのプロジェクトはいずれあなたにとって入手不可能になるであろうことを。</p>
+<p>Python 2.5 以下のサポートをスキップ出来るならば、あなたのコードに必要な変更は Python の常套句のような外観と雰囲気を壊すべきではありません。最悪の場合あるインスタンス内のメソッドの代わりに関数を使う必要があったり、ビルトインを使う代わりに関数をインポートする必要があるでしょうが、そうしないならば、全体通した変換はあなたにとって異質に感じさせないものに違いありません。</p>
+<p>But you should aim for only supporting Python 2.7. Python 2.6 is no longer
+freely supported and thus is not receiving bugfixes. This means <strong>you</strong> will have
+to work around any issues you come across with Python 2.6. There are also some
+tools mentioned in this HOWTO which do not support Python 2.6 (e.g., <a class="reference external" href="https://pypi.python.org/pypi/pylint">Pylint</a>),
+and this will become more commonplace as time goes on. It will simply be easier
+for you if you only support the versions of Python that you have to support.</p>
+</div>
+<div class="section" id="make-sure-you-specify-the-proper-version-support-in-your-setup-py-file">
+<h3>あなたの <code class="docutils literal"><span class="pre">setup.py</span></code> ファイルに、相応しいサポートバージョンを明記することを忘れないこと<a class="headerlink" href="#make-sure-you-specify-the-proper-version-support-in-your-setup-py-file" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">setup.py</span></code> ファイルに、あなたがサポートする Python バージョンを <a class="reference external" href="https://pypi.python.org/pypi?%3Aaction=list_classifiers">trove classifier</a> で正しく明記すべきです。あなたのプロジェクトはまだ Python 3 をサポートしていないので、少なくとも <code class="docutils literal"><span class="pre">Programming</span> <span class="pre">Language</span> <span class="pre">::</span> <span class="pre">Python</span> <span class="pre">::</span> <span class="pre">2</span> <span class="pre">::</span> <span class="pre">Only</span></code> と明記すべきです。理想的には Python のメジャー/マイナーバージョンも指定すべきです。例えば <code class="docutils literal"><span class="pre">Programming</span> <span class="pre">Language</span> <span class="pre">::</span> <span class="pre">Python</span> <span class="pre">::</span> <span class="pre">2.7</span></code> のように。</p>
+</div>
+<div class="section" id="have-good-test-coverage">
+<h3>良いテストカバレッジを確保する。<a class="headerlink" href="#have-good-test-coverage" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Once you have your code supporting the oldest version of Python 2 you want it
+to, you will want to make sure your test suite has good coverage. A good rule of
+thumb is that if you want to be confident enough in your test suite that any
+failures that appear after having tools rewrite your code are actual bugs in the
+tools and not in your code. If you want a number to aim for, try to get over 80%
+coverage (and don&#8217;t feel bad if you find it hard to get better than 90%
+coverage). If you don&#8217;t already have a tool to measure test coverage then
+<a class="reference external" href="https://pypi.python.org/pypi/coverage">coverage.py</a> is recommended.</p>
+</div>
+<div class="section" id="learn-the-differences-between-python-2-3">
+<h3>Python 2 と 3 の違いを学びましょう。<a class="headerlink" href="#learn-the-differences-between-python-2-3" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>十分にテスト出来たならば、いよいよ Python 3 への移植をする準備が整いました! ですが、どのようにあなたのコードを変更していけば良いのか、何に気をつけてコーディングすれば良いのかを完全に理解するために、Python 2 からの視点で Python 3 の変更点はなんなのかを学びたいでしょう。典型的には、それをするための手段として最良のものが 2 つあって、ドキュメントの、 Python 3 のそれぞれのリリースの <a class="reference external" href="https://docs.python.org/3/whatsnew/index.html">&#8220;What&#8217;s New&#8221;</a> を読むことと、 <a class="reference external" href="http://python3porting.com/">Porting to Python 3</a> (オンライン版がフリーで読めます) を読むことです。 Python-Future プロジェクトからの、手軽な <a class="reference external" href="http://python-future.org/compatible_idioms.html">cheat sheet</a> もあります。</p>
+</div>
+<div class="section" id="update-your-code">
+<h3>コードをアップデートする。<a class="headerlink" href="#update-your-code" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Once you feel like you know what is different in Python 3 compared to Python 2,
+it&#8217;s time to update your code! You have a choice between two tools in porting
+your code automatically: <a class="reference external" href="http://python-future.org/automatic_conversion.html">Futurize</a> and <a class="reference external" href="https://python-modernize.readthedocs.org/en/latest/">Modernize</a>. Which tool you choose will
+depend on how much like Python 3 you want your code to be. <a class="reference external" href="http://python-future.org/automatic_conversion.html">Futurize</a> does its
+best to make Python 3 idioms and practices exist in Python 2, e.g. backporting
+the <code class="docutils literal"><span class="pre">bytes</span></code> type from Python 3 so that you have semantic parity between the
+major versions of Python. <a class="reference external" href="https://python-modernize.readthedocs.org/en/latest/">Modernize</a>,
+on the other hand, is more conservative and targets a Python 2/3 subset of
+Python, directly relying on <a class="reference external" href="https://pypi.python.org/pypi/six">six</a> to help provide compatibility. As Python 3 is
+the future, it might be best to consider Futurize to begin adjusting to any new
+practices that Python 3 introduces which you are not accustomed to yet.</p>
+<p>どちらのツールを選ぶにせよ、それらはあなたのコードを、あなたが開始した Python 2 バージョンへの互換性を保ったままで Python 3 で動作するように書き換えます。念には念を入れたければ、まずはテストスイートに対してツールを適用して、変換が正しいものであることを確認するために差分を視覚的に点検しましょう。あなたのテストスイートを変換して、テストがそれでもまだ期待通りにパスすることが検証出来てしまえば、あなたのアプリケーションコードを、全ての失敗するテストは変換の失敗を意味することがわかる状態で変換出来ます。</p>
+<p>悪い報せ。これらツールは Python 3 であなたのコードを動作させるために、全ての自動化が出来ているわけではありませんので、Python 3 のフルサポートのためには手動で更新しなければならないわずかばかりの事項があります(必要な手作業はツールによって違います)。選んだツールのドキュメントを読んで、デフォルトでは何が修正されて、選択的に何を修正する(しない)を選べるのか、そして何を自身で修正する必要があるのかを理解してください (例えばビルトインの <code class="docutils literal"><span class="pre">open()</span></code> ではなく <code class="docutils literal"><span class="pre">io.open()</span></code> を使う修正は、Modernize ではデフォルトでオフです)。良い報せ。ですが、注意深くみなければデバッグを困難にするような大きな問題として考えられる、警戒するようなことは、2 つだけです。</p>
+<div class="section" id="division">
+<h4>除算<a class="headerlink" href="#division" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p>Python 3 では、 <code class="docutils literal"><span class="pre">5</span> <span class="pre">/</span> <span class="pre">2</span> <span class="pre">==</span> <span class="pre">2.5</span></code> であり <code class="docutils literal"><span class="pre">2</span></code> ではありません; <code class="docutils literal"><span class="pre">int</span></code> 同士の全ての除算は <code class="docutils literal"><span class="pre">float</span></code> の結果になります。この変更については実際のところ、 2002 年にリリースされた Python 2.2 から計画されました。そのようなわけで、 <code class="docutils literal"><span class="pre">/</span></code>, <code class="docutils literal"><span class="pre">//</span></code> 演算子を使うどんなファイルにも <code class="docutils literal"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span> <span class="pre">division</span></code> を追加するか、あるいはインタプリタを <code class="docutils literal"><span class="pre">-Q</span></code> フラグとともに起動することが推奨されていました。これをまだやったことがなければ、コードをくまなく調べて対象箇所を見つけ、 2 つのことをします:</p>
+<ol class="arabic simple">
+<li><p class="first"><code class="docutils literal"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span> <span class="pre">division</span></code> をあなたのファイルに追加します</p>
+</li>
+<li><p class="first">floor division (訳注: float での結果に <a class="reference internal" href="../library/math.html#math.floor" title="math.floor"><code class="xref py py-func docutils literal"><span class="pre">floor()</span></code></a> 適用したのと同じ振る舞いをする除算) に対しては <code class="docutils literal"><span class="pre">//</span></code> を、浮動小数点数の演算を期待する箇所ではそのまま <code class="docutils literal"><span class="pre">/</span></code> を使うように、除算演算子を必要に応じて変更します。</p>
+</li>
+</ol>
+<p>オブジェクトが自身の <code class="docutils literal"><span class="pre">__truediv__</span></code> メソッドを持っているのに <code class="docutils literal"><span class="pre">__floordiv__</span></code> を持っていない場合に壊れてしまうので、 <code class="docutils literal"><span class="pre">/</span></code> を <code class="docutils literal"><span class="pre">//</span></code> に単純に自動的に変換することは出来ません(例えばユーザ定義クラスで <code class="docutils literal"><span class="pre">/</span></code> を何かの演算に使っていて、 <code class="docutils literal"><span class="pre">//</span></code> は同じ事をしないか何もしないような場合)。</p>
+</div>
+<div class="section" id="text-versus-binary-data">
+<h4>テキスト対バイナリデータ<a class="headerlink" href="#text-versus-binary-data" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p>Python 2 では <code class="docutils literal"><span class="pre">str</span></code> 型をテキストとバイナリデータのどちらにも使うことが出来ていました。不幸なことにこれは、2 つの異なる概念を重ね合わせていて、両方の種類のデータに対して、時々動作して時々はそうではない、といった傷つきやすいコードに繋がりやすいものでした。人々が特定の一つの型の代わりに <code class="docutils literal"><span class="pre">str</span></code> を受け付ける何かが、それが許容するのはテキストなのかバイナリデータなのかを名言しないときの、悩ましい API を生み出してしまう要因でもありました。これはとりわけマルチリンガルをサポートするための状況を、テキストデータをサポートしていると主張しているのに明示的に <code class="docutils literal"><span class="pre">unicode</span></code> をサポートすることに注意を払わない API、という形で複雑にしていました。</p>
+<p>To make the distinction between text and binary data clearer and more
+pronounced, Python 3 did what most languages created in the age of the internet
+have done and made text and binary data distinct types that cannot blindly be
+mixed together (Python predates widespread access to the internet). For any code
+that deals only with text or only binary data, this separation doesn&#8217;t pose an
+issue. But for code that has to deal with both, it does mean you might have to
+now care about when you are using text compared to binary data, which is why
+this cannot be entirely automated.</p>
+<p>To start, you will need to decide which APIs take text and which take binary
+(it is <strong>highly</strong> recommended you don&#8217;t design APIs that can take both due to
+the difficulty of keeping the code working; as stated earlier it is difficult to
+do well). In Python 2 this means making sure the APIs that take text can work
+with <code class="docutils literal"><span class="pre">unicode</span></code> and those that work with binary data work with the
+<code class="docutils literal"><span class="pre">bytes</span></code> type from Python 3 (which is a subset of <code class="docutils literal"><span class="pre">str</span></code> in Python 2 and acts
+as an alias for <code class="docutils literal"><span class="pre">bytes</span></code> type in Python 2). Usually the biggest issue is
+realizing which methods exist on which types in Python 2 &amp; 3 simultaneously
+(for text that&#8217;s <code class="docutils literal"><span class="pre">unicode</span></code> in Python 2 and <code class="docutils literal"><span class="pre">str</span></code> in Python 3, for binary
+that&#8217;s <code class="docutils literal"><span class="pre">str</span></code>/<code class="docutils literal"><span class="pre">bytes</span></code> in Python 2 and <code class="docutils literal"><span class="pre">bytes</span></code> in Python 3). The following
+table lists the <strong>unique</strong> methods of each data type across Python 2 &amp; 3
+(e.g., the <code class="docutils literal"><span class="pre">decode()</span></code> method is usable on the equivalent binary data type in
+either Python 2 or 3, but it can&#8217;t be used by the textual data type consistently
+between Python 2 and 3 because <code class="docutils literal"><span class="pre">str</span></code> in Python 3 doesn&#8217;t have the method). Do
+note that as of Python 3.5 the <code class="docutils literal"><span class="pre">__mod__</span></code> method was added to the bytes type.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="53%" />
+<col width="47%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><p class="first last"><strong>テキストデータ</strong></p>
+</td>
+<td><p class="first last"><strong>バイナリデータ</strong></p>
+</td>
+</tr>
+<tr class="row-even"><td></td>
+<td>decode</td>
+</tr>
+<tr class="row-odd"><td>encode</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>format</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>isdecimal</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>isnumeric</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p>処理の区別を簡単にするには、バイナリデータとテキストの間のエンコードとデコードを、あなたのコードの境界で行うようにすることです。バイナリデータとしてテキストを受け取ったならば、即座にデコード。テキストをバイナリデータにして送信する必要があったら、出来るだけあとでエンコード。このようにすることで、あなたのコードは内部的にはテキストだけで動作し、ですから、今処理しているのがどの型なのかを逐一追跡しなくても良くなります。</p>
+<p>The next issue is making sure you know whether the string literals in your code
+represent text or binary data. You should add a <code class="docutils literal"><span class="pre">b</span></code> prefix to any
+literal that presents binary data. For text you should add a <code class="docutils literal"><span class="pre">u</span></code> prefix to
+the text literal. (there is a <a class="reference internal" href="../library/__future__.html#module-__future__" title="__future__: Future statement definitions"><code class="xref py py-mod docutils literal"><span class="pre">__future__</span></code></a> import to force all unspecified
+literals to be Unicode, but usage has shown it isn&#8217;t as effective as adding a
+<code class="docutils literal"><span class="pre">b</span></code> or <code class="docutils literal"><span class="pre">u</span></code> prefix to all literals explicitly)</p>
+<p>As part of this dichotomy you also need to be careful about opening files.
+Unless you have been working on Windows, there is a chance you have not always
+bothered to add the <code class="docutils literal"><span class="pre">b</span></code> mode when opening a binary file (e.g., <code class="docutils literal"><span class="pre">rb</span></code> for
+binary reading).  Under Python 3, binary files and text files are clearly
+distinct and mutually incompatible; see the <a class="reference internal" href="../library/io.html#module-io" title="io: Core tools for working with streams."><code class="xref py py-mod docutils literal"><span class="pre">io</span></code></a> module for details.
+Therefore, you <strong>must</strong> make a decision of whether a file will be used for
+binary access (allowing binary data to be read and/or written) or textual access
+(allowing text data to be read and/or written). You should also use <a class="reference internal" href="../library/io.html#io.open" title="io.open"><code class="xref py py-func docutils literal"><span class="pre">io.open()</span></code></a>
+for opening files instead of the built-in <a class="reference internal" href="../library/functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> function as the <a class="reference internal" href="../library/io.html#module-io" title="io: Core tools for working with streams."><code class="xref py py-mod docutils literal"><span class="pre">io</span></code></a>
+module is consistent from Python 2 to 3 while the built-in <a class="reference internal" href="../library/functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> function
+is not (in Python 3 it&#8217;s actually <a class="reference internal" href="../library/io.html#io.open" title="io.open"><code class="xref py py-func docutils literal"><span class="pre">io.open()</span></code></a>). Do not bother with the
+outdated practice of using <a class="reference internal" href="../library/codecs.html#codecs.open" title="codecs.open"><code class="xref py py-func docutils literal"><span class="pre">codecs.open()</span></code></a> as that&#8217;s only necessary for
+keeping compatibility with Python 2.5.</p>
+<p><code class="docutils literal"><span class="pre">str</span></code> と <code class="docutils literal"><span class="pre">bytes</span></code> の両方のコンストラクタは同じ引数を与えても Python 2 と 3 で異なる意味を持ちます。Python 2 で <code class="docutils literal"><span class="pre">bytes</span></code> に数値を与えると、整数の文字列表現を生成します: <code class="docutils literal"><span class="pre">bytes(3)</span> <span class="pre">==</span> <span class="pre">'3'</span></code> 。ですが Python 3 では、 <code class="docutils literal"><span class="pre">bytes</span></code> に整数を与えると、整数値で与えたぶんの長さの、null バイトで埋められたバイト列を生成します: <code class="docutils literal"><span class="pre">bytes(3)</span> <span class="pre">==</span> <span class="pre">b'\x00\x00\x00'</span></code> 。似たような話はバイト列オブジェクトを <code class="docutils literal"><span class="pre">str</span></code> に与える場合にも起こります。Python 2 ではバイト列が渡したものがそのまま戻ってきます: <code class="docutils literal"><span class="pre">str(b'3')</span> <span class="pre">==</span> <span class="pre">b'3'</span></code> 。対して Python 3 では、バイト列オブジェクトの文字列表現になって返ってきます: <code class="docutils literal"><span class="pre">str(b'3')</span> <span class="pre">==</span> <span class="pre">&quot;b'3'&quot;</span></code> 。</p>
+<p>最後に、バイナリデータに対するインデクシングには取り扱いに注意が必要です(スライシングには特別な取り扱いは <strong>不要</strong> です)。Python 2 では、 <code class="docutils literal"><span class="pre">b'123'[1]</span> <span class="pre">==</span> <span class="pre">b'2'</span></code> ですが、Python 3 では <code class="docutils literal"><span class="pre">b'123'[1]</span> <span class="pre">==</span> <span class="pre">50</span></code> です。バイナリデータはただのバイナリ数値の羅列ですから、Python 3 では指示した位置のバイトの整数値を返します。ですが Python 2 の場合、 <code class="docutils literal"><span class="pre">bytes</span> <span class="pre">==</span> <span class="pre">str</span></code> であるために、インデクシングは bytes の要素一つを取り出すスライスとして振舞います。 <a class="reference external" href="https://pypi.python.org/pypi/six">six</a> プロジェクトには <code class="docutils literal"><span class="pre">six.indexbytes()</span></code> と名付けられた関数があって、これは Python 3 がそうするように整数値を返します: <code class="docutils literal"><span class="pre">six.indexbytes(b'123',</span> <span class="pre">1)</span></code> 。</p>
+<p>まとめると、以下のようになります:</p>
+<ol class="arabic simple">
+<li><p class="first">どの API がテキストデータを受付け、どの API がバイナリデータを受け付けるのかを決めてください。</p>
+</li>
+<li><p class="first">あなたのコードが Python 2 で確実に、テキストで動くものは <code class="docutils literal"><span class="pre">unicode</span></code> でも動くように、バイナリデータで動くものは <code class="docutils literal"><span class="pre">bytes</span></code> でも動くようにしてください(どのメソッドがそれぞれの型で使えないのかを示した上記テーブルをみてください)。</p>
+</li>
+<li>Mark all binary literals with a <code class="docutils literal"><span class="pre">b</span></code> prefix, textual literals with a <code class="docutils literal"><span class="pre">u</span></code>
+prefix</li>
+<li><p class="first">バイナリデータをテキストにデコードするのは出来るだけ早く、テキストデータをバイナリデータにエンコードするのは出来るだけ遅く。</p>
+</li>
+<li><p class="first">ファイルは <a class="reference internal" href="../library/io.html#io.open" title="io.open"><code class="xref py py-func docutils literal"><span class="pre">io.open()</span></code></a> を使って開き、そうすべきときには必ず <code class="docutils literal"><span class="pre">b</span></code> モードを指定してください。</p>
+</li>
+<li>Be careful when indexing into binary data</li>
+</ol>
+</div>
+<div class="section" id="use-feature-detection-instead-of-version-detection">
+<h4>バージョン検出ではなく機能検出を使う<a class="headerlink" href="#use-feature-detection-instead-of-version-detection" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p>Inevitably you will have code that has to choose what to do based on what
+version of Python is running. The best way to do this is with feature detection
+of whether the version of Python you&#8217;re running under supports what you need.
+If for some reason that doesn&#8217;t work then you should make the version check be
+against Python 2 and not Python 3. To help explain this, let&#8217;s look at an
+example.</p>
+<p><a class="reference external" href="https://docs.python.org/3/library/importlib.html#module-importlib">importlib</a> の機能にアクセスする必要があるとしましょう。
+これは Python 3.3 から使える Python の標準ライブラリで、その機能は Python 2 では PyPI にある <a class="reference external" href="https://pypi.python.org/pypi/importlib2">importlib2</a> から使えます。
+例えば <code class="docutils literal"><span class="pre">importlib.abc</span></code> モジュールにアクセスするコードを書くのに、次のように書きたくなることがあるでしょう:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">importlib</span> <span class="k">import</span> <span class="n">abc</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">importlib2</span> <span class="k">import</span> <span class="n">abc</span>
+</pre></div>
+</div>
+<p>このコードの問題は、 Python 4 が出たときに起きます。
+Python 3 ではなく Python 2 を例外的なケースとして扱い、将来の Python のバージョンは Python 2 よりも Python 3 と互換性があると仮定する方が良さそうです:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">importlib</span> <span class="k">import</span> <span class="n">abc</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">importlib2</span> <span class="k">import</span> <span class="n">abc</span>
+</pre></div>
+</div>
+<p>ところが、最適解はバージョン検出を一切せずに、代わりに機能検出に頼ることです。
+機能検出を使うことで、バージョン検出が上手く行かなくなる潜在的な問題を避けられ、機能の互換性を保つ助けになります:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">importlib</span> <span class="k">import</span> <span class="n">abc</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">importlib2</span> <span class="k">import</span> <span class="n">abc</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="prevent-compatibility-regressions">
+<h3>互換性オプション<a class="headerlink" href="#prevent-compatibility-regressions" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>あなたのコードを完全に Python 3 互換に変換できたら、今度は Python 3 での動作が退化したり止まってしまうことがないようにしたいでしょう。この時点ではまだ実際に Python 3 で動作させられない阻害要因となる依存物を持っている場合に、これは特に当てはまります。</p>
+<p>互換性を保ち続けるために、あなたが作る全ての新しいモジュールは、最低でもソースコードの先頭に以下のコードブロックを持つべきです:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+</pre></div>
+</div>
+<p>実行時に種々の互換性問題を警告してもらうために Python 2 を <code class="docutils literal"><span class="pre">-3</span></code> フラグ付きで実行することも出来ます。 <code class="docutils literal"><span class="pre">-Werror</span></code> にすれば警告ではなくエラーになるので、うっかり警告を見逃すことがなくなります。</p>
+<p><a class="reference external" href="https://pypi.python.org/pypi/pylint">Pylint</a> プロジェクトとその <code class="docutils literal"><span class="pre">--py3k</span></code> フラグを使って、Python 3 互換性から乖離し始めている際の警告を受け取ることも出来ます。これにより、 <a class="reference external" href="https://python-modernize.readthedocs.org/en/latest/">Modernize</a> や <a class="reference external" href="http://python-future.org/automatic_conversion.html">Futurize</a> を普通に実行してみて互換性を失っていないかを確認する、という必要がなくなります。この場合 Python 2.7 と Python 3.4 以上だけのサポートにすることが必要になります。それが Pylint がサポートする最小の Python バージョンだからです。</p>
+</div>
+<div class="section" id="check-which-dependencies-block-your-transition">
+<h3>どの依存性があなたの移行を阻んでいるのかチェックする<a class="headerlink" href="#check-which-dependencies-block-your-transition" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p><strong>After</strong> you have made your code compatible with Python 3 you should begin to
+care about whether your dependencies have also been ported. The <a class="reference external" href="https://pypi.python.org/pypi/caniusepython3">caniusepython3</a>
+project was created to help you determine which projects
+&#8211; directly or indirectly &#8211; are blocking you from supporting Python 3. There
+is both a command-line tool as well as a web interface at
+<a class="reference external" href="https://caniusepython3.com">https://caniusepython3.com</a>.</p>
+<p>このプロジェクトは同時にあなたのテストスイートに組み込むことが出来る、もう Python 3 使用を妨げる依存物がなくなった時点で失敗するテストコードも提供しています。これにより、Python 3 での動作を開始する際に、依存物を手動でチェックすることなく即座に気付くことが出来ます。</p>
+</div>
+<div class="section" id="update-your-setup-py-file-to-denote-python-3-compatibility">
+<h3>あなたの <code class="docutils literal"><span class="pre">setup.py</span></code> ファイルを更新して Python 3 互換を謳う<a class="headerlink" href="#update-your-setup-py-file-to-denote-python-3-compatibility" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>あなたのコードが Python 3 で動作するようになったら、 <code class="docutils literal"><span class="pre">setup.py</span></code> の classifiers を <code class="docutils literal"><span class="pre">Programming</span> <span class="pre">Language</span> <span class="pre">::</span> <span class="pre">Python</span> <span class="pre">::</span> <span class="pre">3</span></code> を含めるように更新して、Python 2 だけのサポートではないことを明記すべきです。これによって、あなたのコードを利用する人はあなたが Python 2 <em>と</em> 3 をサポートすることを知ることが出来ます。理想的には、今サポートしている Python のメジャー/マイナーバージョンも classifiers に追加したいでしょう。</p>
+</div>
+<div class="section" id="use-continuous-integration-to-stay-compatible">
+<h3>継続的インテグレーションを使って互換性を維持し続ける。<a class="headerlink" href="#use-continuous-integration-to-stay-compatible" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Python 3 で完全に動作出来てしまったら、あなたのコードが Python 2、3 の両方でいつでも動くことを保障したいでしょう。おそらく、複数バージョンの Python インタプリタでテストを実施するのに最良のツールは、 <a class="reference external" href="https://pypi.python.org/pypi/tox">tox</a> です。継続的インテグレーションシステムに tox を統合して、うっかり Python 2 か 3 のサポートを壊してしまわないようにすることが出来ます。</p>
+<p>Python 3 インタプリタで <code class="docutils literal"><span class="pre">-bb</span></code> フラグを使って、 bytes と string 、もしくは bytes と int を比較したときに例外を引き起こしたいと思うでしょう (後者は Python 3.5 から使えます)。
+デフォルトでは型の異なる比較は単純に <code class="docutils literal"><span class="pre">False</span></code> を返しますが、テキスト/バイナリデータ処理の分離を誤ったり、バイト列への添え字操作を誤ると、簡単には間違いを見つけられません。
+このフラグはそれが起こった場合に例外を起こすことで、その種のケースを追跡する助けになります。</p>
+<p>そしてこれでほぼ全てです! 今の時点であなたのコードベースは Python 2 と 3 の両方に対して同時に互換です。あなたのテストは、開発時点ではどちらのバージョンでテストすることが多いのかによらずに、誤って Python 2 か 3 の互換性を破壊してしまわないようにも組み立てられるでしょう。</p>
+</div>
+<div class="section" id="consider-using-optional-static-type-checking">
+<h3>Consider using optional static type checking<a class="headerlink" href="#consider-using-optional-static-type-checking" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>Another way to help port your code is to use a static type checker like
+<a class="reference external" href="http://mypy-lang.org/">mypy</a> or <a class="reference external" href="https://github.com/google/pytype">pytype</a> on your code. These tools can be used to analyze your code as
+if it&#8217;s being run under Python 2, then you can run the tool a second time as if
+your code is running under Python 3. By running a static type checker twice like
+this you can discover if you&#8217;re e.g. misusing binary data type in one version
+of Python compared to another. If you add optional type hints to your code you
+can also explicitly state whether your APIs use textual or binary data, helping
+to make sure everything functions as expected in both versions of Python.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Python 2 から Python 3 への移植</a><ul>
+<li><a class="reference internal" href="#the-short-explanation">短い説明</a></li>
+<li><a class="reference internal" href="#details">詳細</a><ul>
+<li><a class="reference internal" href="#drop-support-for-python-2-6-and-older">Python 2.6 とそれ以前のサポートを落とす</a></li>
+<li><a class="reference internal" href="#make-sure-you-specify-the-proper-version-support-in-your-setup-py-file">あなたの <code class="docutils literal"><span class="pre">setup.py</span></code> ファイルに、相応しいサポートバージョンを明記することを忘れないこと</a></li>
+<li><a class="reference internal" href="#have-good-test-coverage">良いテストカバレッジを確保する。</a></li>
+<li><a class="reference internal" href="#learn-the-differences-between-python-2-3">Python 2 と 3 の違いを学びましょう。</a></li>
+<li><a class="reference internal" href="#update-your-code">コードをアップデートする。</a><ul>
+<li><a class="reference internal" href="#division">除算</a></li>
+<li><a class="reference internal" href="#text-versus-binary-data">テキスト対バイナリデータ</a></li>
+<li><a class="reference internal" href="#use-feature-detection-instead-of-version-detection">バージョン検出ではなく機能検出を使う</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#prevent-compatibility-regressions">互換性オプション</a></li>
+<li><a class="reference internal" href="#check-which-dependencies-block-your-transition">どの依存性があなたの移行を阻んでいるのかチェックする</a></li>
+<li><a class="reference internal" href="#update-your-setup-py-file-to-denote-python-3-compatibility">あなたの <code class="docutils literal"><span class="pre">setup.py</span></code> ファイルを更新して Python 3 互換を謳う</a></li>
+<li><a class="reference internal" href="#use-continuous-integration-to-stay-compatible">継続的インテグレーションを使って互換性を維持し続ける。</a></li>
+<li><a class="reference internal" href="#consider-using-optional-static-type-checking">Consider using optional static type checking</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="index.html"
+                        title="前の章へ">Python HOWTO</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="cporting.html"
+                        title="次の章へ">Python 3 への拡張モジュール移植</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/pyporting.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="cporting.html" title="Python 3 への拡張モジュール移植"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Python HOWTO"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python HOWTO</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>

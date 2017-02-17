@@ -1,0 +1,395 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>14.5. plistlib — Mac OS X .plist ファイルの生成と解析 &#8212; Python 3.6.0 ドキュメント</title>
+    
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.6.0 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="up" title="14. ファイルフォーマット" href="fileformats.html" />
+    <link rel="next" title="15. 暗号関連のサービス" href="crypto.html" />
+    <link rel="prev" title="14.4. xdrlib — XDR データのエンコードおよびデコード" href="xdrlib.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <link rel="canonical" href="https://docs.python.org/3/library/plistlib.html" /><script type="text/javascript">
+    $(document).ready(function() {
+      var base = 'https://docs.python.org/3.6/library/plistlib.html';
+      $('a.headerlink').each(function() {
+        var html = '<a href="' + base + $(this).attr('href') +
+                   '" title="原文へのリンク"><small>(原文)</small></a>';
+        $(this).after(html);
+      })
+    });
+    </script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+    
+    
+ 
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="crypto.html" title="15. 暗号関連のサービス"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="xdrlib.html" title="14.4. xdrlib — XDR データのエンコードおよびデコード"
+             accesskey="P">前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="fileformats.html" accesskey="U">14. ファイルフォーマット</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-plistlib">
+<span id="plistlib-generate-and-parse-mac-os-x-plist-files"></span><h1>14.5. <a class="reference internal" href="#module-plistlib" title="plistlib: Generate and parse Mac OS X plist files."><code class="xref py py-mod docutils literal"><span class="pre">plistlib</span></code></a> &#8212; Mac OS X <code class="docutils literal"><span class="pre">.plist</span></code> ファイルの生成と解析<a class="headerlink" href="#module-plistlib" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/plistlib.py">Lib/plistlib.py</a></p>
+<hr class="docutils" id="index-0" />
+<p>このモジュールは主に Mac OS X で使われる「プロパティーリスト」ファイルを読み書きするインターフェイスを提供します。バイナリと XML の plist ファイルの両方をサポートします。</p>
+<p>プロパティーリスト (<code class="docutils literal"><span class="pre">.plist</span></code>) ファイル形式は基本的型のオブジェクト、たとえば辞書やリスト、数、文字列など、に対する単純な直列化です。たいてい、トップレベルのオブジェクトは辞書です。</p>
+<p>plist ファイルを書き出したり解析したりするには <a class="reference internal" href="#plistlib.dump" title="plistlib.dump"><code class="xref py py-func docutils literal"><span class="pre">dump()</span></code></a> や <a class="reference internal" href="#plistlib.load" title="plistlib.load"><code class="xref py py-func docutils literal"><span class="pre">load()</span></code></a> 関数を利用します。</p>
+<p>バイトオブジェクトの plist データを扱うためには <a class="reference internal" href="#plistlib.dumps" title="plistlib.dumps"><code class="xref py py-func docutils literal"><span class="pre">dumps()</span></code></a> や <a class="reference internal" href="#plistlib.loads" title="plistlib.loads"><code class="xref py py-func docutils literal"><span class="pre">loads()</span></code></a> を利用します。</p>
+<p>値は文字列、整数、浮動小数点数、ブール型、タプル、リスト、辞書 (ただし文字列だけがキーになれます)、 <a class="reference internal" href="#plistlib.Data" title="plistlib.Data"><code class="xref py py-class docutils literal"><span class="pre">Data</span></code></a>、<a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a>、<code class="xref py py-class docutils literal"><span class="pre">bytesarray</span></code> または <a class="reference internal" href="datetime.html#datetime.datetime" title="datetime.datetime"><code class="xref py py-class docutils literal"><span class="pre">datetime.datetime</span></code></a> のオブジェクトです。</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.4 で変更: </span>新しい API。古い API は撤廃されました。バイナリ形式の plist がサポートされました。</p>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">参考</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man5/plist.5.html">PList マニュアルページ</a></dt>
+<dd><p class="first last">このファイル形式の Apple の文書。</p>
+</dd>
+</dl>
+</div>
+<p>このモジュールは以下の関数を定義しています:</p>
+<dl class="function">
+<dt id="plistlib.load">
+<code class="descclassname">plistlib.</code><code class="descname">load</code><span class="sig-paren">(</span><em>fp</em>, <em>*</em>, <em>fmt=None</em>, <em>use_builtin_types=True</em>, <em>dict_type=dict</em><span class="sig-paren">)</span><a class="headerlink" href="#plistlib.load" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>plist ファイルを読み込みます。<em>fp</em> は読み込み可能かつバイナリのファイルオブジェクトです。展開されたルートオブジェクト (通常は辞書です) を返します。</p>
+<p><em>fmt</em> はファイルの形式で、次の値が有効です。</p>
+<ul class="simple">
+<li><p class="first"><a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-data docutils literal"><span class="pre">None</span></code></a>: ファイル形式を自動検出します</p>
+</li>
+<li><p class="first"><a class="reference internal" href="#plistlib.FMT_XML" title="plistlib.FMT_XML"><code class="xref py py-data docutils literal"><span class="pre">FMT_XML</span></code></a>: XML ファイル形式です</p>
+</li>
+<li><p class="first"><a class="reference internal" href="#plistlib.FMT_BINARY" title="plistlib.FMT_BINARY"><code class="xref py py-data docutils literal"><span class="pre">FMT_BINARY</span></code></a>: バイナリの plist 形式です</p>
+</li>
+</ul>
+<p><em>use_builtin_types</em> が真 (デフォルト) の場合、バイナリデータが <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> のインスタンスとして返されます。偽の場合、 <a class="reference internal" href="#plistlib.Data" title="plistlib.Data"><code class="xref py py-class docutils literal"><span class="pre">Data</span></code></a> のインスタンスとして返されます。</p>
+<p><em>dict_type</em> は plist ファイルから読み出された辞書に使用される型です。<a class="reference internal" href="collections.html#collections.OrderedDict" title="collections.OrderedDict"><code class="xref py py-class docutils literal"><span class="pre">collections.OrderedDict</span></code></a> を使用すると、plist の正確な構造を復元できます (ただし、plist ファイルでキーの順序は重要ではありません)。</p>
+<p><a class="reference internal" href="#plistlib.FMT_XML" title="plistlib.FMT_XML"><code class="xref py py-data docutils literal"><span class="pre">FMT_XML</span></code></a> 形式の XML データは <a class="reference internal" href="pyexpat.html#module-xml.parsers.expat" title="xml.parsers.expat: An interface to the Expat non-validating XML parser."><code class="xref py py-mod docutils literal"><span class="pre">xml.parsers.expat</span></code></a> にある Expat パーサーを使って解析されます。不正な形式の XML に対して送出される可能性のある例外については、そちらの文書を参照してください。plist 解析器では、未知の要素は単純に無視されます。</p>
+<p>バイナリ形式のパーサーは、ファイルを解析できない場合に <code class="xref py py-exc docutils literal"><span class="pre">InvalidFileException</span></code> を送出します。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="plistlib.loads">
+<code class="descclassname">plistlib.</code><code class="descname">loads</code><span class="sig-paren">(</span><em>data</em>, <em>*</em>, <em>fmt=None</em>, <em>use_builtin_types=True</em>, <em>dict_type=dict</em><span class="sig-paren">)</span><a class="headerlink" href="#plistlib.loads" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>バイナリオブジェクトから plist をロードします。キーワード引数の説明については、 <a class="reference internal" href="#plistlib.load" title="plistlib.load"><code class="xref py py-func docutils literal"><span class="pre">load()</span></code></a> を参照してください。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="plistlib.dump">
+<code class="descclassname">plistlib.</code><code class="descname">dump</code><span class="sig-paren">(</span><em>value</em>, <em>fp</em>, <em>*</em>, <em>fmt=FMT_XML</em>, <em>sort_keys=True</em>, <em>skipkeys=False</em><span class="sig-paren">)</span><a class="headerlink" href="#plistlib.dump" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>plist ファイルに <em>value</em> を書き込みます。<em>Fp</em> は、書き込み可能なバイナリファイルオブジェクトにしてください。</p>
+<p><em>fmt</em> 引数は plist ファイルの形式を指定し、次のいずれかの値をとることができます。</p>
+<ul class="simple">
+<li><p class="first"><a class="reference internal" href="#plistlib.FMT_XML" title="plistlib.FMT_XML"><code class="xref py py-data docutils literal"><span class="pre">FMT_XML</span></code></a>: XML 形式の plist ファイルです</p>
+</li>
+<li><p class="first"><a class="reference internal" href="#plistlib.FMT_BINARY" title="plistlib.FMT_BINARY"><code class="xref py py-data docutils literal"><span class="pre">FMT_BINARY</span></code></a>: バイナリ形式の plist ファイルです</p>
+</li>
+</ul>
+<p><em>sort_keys</em> が真 (デフォルト) の場合、辞書内のキーは、plist にソートされた順序で書き込まれます。偽の場合、ディクショナリのイテレートの順序で書き込まれます。</p>
+<p><em>skipkeys</em> が偽 (デフォルト) の場合、この関数は辞書のキーが文字列でない場合に <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> を送出します。真の場合、そのようなキーは読み飛ばされます。</p>
+<p><a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> が、オブジェクトがサポート外の型のものであったりサポート外の型のオブジェクトを含むコンテナだった場合に、送出されます。</p>
+<p>(バイナリの) plist ファイル内で表現できない整数値に対しては、 <a class="reference internal" href="exceptions.html#OverflowError" title="OverflowError"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> が送出されます。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="plistlib.dumps">
+<code class="descclassname">plistlib.</code><code class="descname">dumps</code><span class="sig-paren">(</span><em>value</em>, <em>*</em>, <em>fmt=FMT_XML</em>, <em>sort_keys=True</em>, <em>skipkeys=False</em><span class="sig-paren">)</span><a class="headerlink" href="#plistlib.dumps" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>value</em> を plist 形式のバイトオブジェクトとして返します。この関数のキーワード引数の説明については、 <a class="reference internal" href="#plistlib.dump" title="plistlib.dump"><code class="xref py py-func docutils literal"><span class="pre">dump()</span></code></a> を参照してください。</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<p>以下の関数は廃止されています。</p>
+<dl class="function">
+<dt id="plistlib.readPlist">
+<code class="descclassname">plistlib.</code><code class="descname">readPlist</code><span class="sig-paren">(</span><em>pathOrFile</em><span class="sig-paren">)</span><a class="headerlink" href="#plistlib.readPlist" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>plist ファイルを読み込みます。<em>pathOrFile</em> はファイル名もしくは (読み込み可能かつバイナリの) ファイルです。展開されたルートオブジェクト (通常は辞書です) を返します。</p>
+<p>この関数は、実際の動作のために <a class="reference internal" href="#plistlib.load" title="plistlib.load"><code class="xref py py-func docutils literal"><span class="pre">load()</span></code></a> を呼び出します。キーワード引数の説明については、<a class="reference internal" href="#plistlib.load" title="plistlib.load"><code class="xref py py-func docutils literal"><span class="pre">その関数</span></code></a> のドキュメントを参照してください。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">結果の辞書の値は、<code class="docutils literal"><span class="pre">__getitem_</span></code> につながる <code class="docutils literal"><span class="pre">__getattr__</span></code> メソッドを持ちます。つまり、属性アクセスを使用して、これらの辞書の項目にアクセスすることができます。</p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified">バージョン 3.4 で撤廃: </span>代わりに <a class="reference internal" href="#plistlib.load" title="plistlib.load"><code class="xref py py-func docutils literal"><span class="pre">load()</span></code></a> を使ってください。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="plistlib.writePlist">
+<code class="descclassname">plistlib.</code><code class="descname">writePlist</code><span class="sig-paren">(</span><em>rootObject</em>, <em>pathOrFile</em><span class="sig-paren">)</span><a class="headerlink" href="#plistlib.writePlist" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>rootObject</em> を XML plist ファイルに書き込みます。 <em>pathOrFile</em> は、ファイル名もしくは (書き込み可能かつバイナリの) ファイルオブジェクトです。</p>
+<div class="deprecated">
+<p><span class="versionmodified">バージョン 3.4 で撤廃: </span>代わりに <a class="reference internal" href="#plistlib.dump" title="plistlib.dump"><code class="xref py py-func docutils literal"><span class="pre">dump()</span></code></a> を使ってください。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="plistlib.readPlistFromBytes">
+<code class="descclassname">plistlib.</code><code class="descname">readPlistFromBytes</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#plistlib.readPlistFromBytes" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>バイト列オブジェクトから plist データを読み取ります。ルートオブジェクトを返します。</p>
+<p>キーワード引数の説明については、 <a class="reference internal" href="#plistlib.load" title="plistlib.load"><code class="xref py py-func docutils literal"><span class="pre">load()</span></code></a> を参照してください。</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">結果の辞書の値は、<code class="docutils literal"><span class="pre">__getitem_</span></code> につながる <code class="docutils literal"><span class="pre">__getattr__</span></code> メソッドを持ちます。つまり、属性アクセスを使用して、これらの辞書の項目にアクセスすることができます。</p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified">バージョン 3.4 で撤廃: </span>代わりに <a class="reference internal" href="#plistlib.loads" title="plistlib.loads"><code class="xref py py-func docutils literal"><span class="pre">loads()</span></code></a> を使ってください。</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="plistlib.writePlistToBytes">
+<code class="descclassname">plistlib.</code><code class="descname">writePlistToBytes</code><span class="sig-paren">(</span><em>rootObject</em><span class="sig-paren">)</span><a class="headerlink" href="#plistlib.writePlistToBytes" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p><em>rootObject</em> を XML plist 形式のバイト列オブジェクトとして返します。</p>
+<div class="deprecated">
+<p><span class="versionmodified">バージョン 3.4 で撤廃: </span>代わりに <a class="reference internal" href="#plistlib.dumps" title="plistlib.dumps"><code class="xref py py-func docutils literal"><span class="pre">dumps()</span></code></a> を使ってください。</p>
+</div>
+</dd></dl>
+
+<p>以下のクラスが使用可能です:</p>
+<dl class="class">
+<dt>
+<code class="descname">Dict([dict]):</code></dt>
+<dd><p>辞書 <em>dict</em> と同じ値を持つ拡張マップ型オブジェクトを返します。</p>
+<p>このクラスは、 <a class="reference internal" href="stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> のサブクラスで、属性アクセスを使用して項目にアクセスできます。つまり、マッピング内の項目を取得、設定、削除する上で、 <code class="docutils literal"><span class="pre">aDict.key</span></code> は <code class="docutils literal"><span class="pre">aDict['key']</span></code> と等価です。</p>
+<div class="deprecated">
+<p><span class="versionmodified">バージョン 3.0 で撤廃.</span></p>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="plistlib.Data">
+<em class="property">class </em><code class="descclassname">plistlib.</code><code class="descname">Data</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#plistlib.Data" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>バイト列オブジェクト <em>data</em> を包むラッパオブジェクトを返します。plist 中に入れられる <code class="docutils literal"><span class="pre">&lt;data&gt;</span></code> 型を表すものとして plist への/からの変換関数で使われます。</p>
+<p>これには <code class="xref py py-attr docutils literal"><span class="pre">data</span></code> という一つの属性があり、そこに収められた Python バイト列オブジェクトを取り出すのに使えます。</p>
+<div class="deprecated">
+<p><span class="versionmodified">バージョン 3.4 で撤廃: </span>代わりに <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトを使ってください。</p>
+</div>
+</dd></dl>
+
+<p>以下の定数が利用可能です:</p>
+<dl class="data">
+<dt id="plistlib.FMT_XML">
+<code class="descclassname">plistlib.</code><code class="descname">FMT_XML</code><a class="headerlink" href="#plistlib.FMT_XML" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>plist ファイルの XML 形式です</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="plistlib.FMT_BINARY">
+<code class="descclassname">plistlib.</code><code class="descname">FMT_BINARY</code><a class="headerlink" href="#plistlib.FMT_BINARY" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>plist ファイルのバイナリ形式です</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
+<div class="section" id="examples">
+<h2>14.5.1. 使用例<a class="headerlink" href="#examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>plist を作ります:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">pl</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">aString</span> <span class="o">=</span> <span class="s2">&quot;Doodah&quot;</span><span class="p">,</span>
+    <span class="n">aList</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mf">32.1</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]],</span>
+    <span class="n">aFloat</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">anInt</span> <span class="o">=</span> <span class="mi">728</span><span class="p">,</span>
+    <span class="n">aDict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">anotherString</span> <span class="o">=</span> <span class="s2">&quot;&lt;hello &amp; hi there!&gt;&quot;</span><span class="p">,</span>
+        <span class="n">aThirdString</span> <span class="o">=</span> <span class="s2">&quot;M</span><span class="se">\xe4</span><span class="s2">ssig, Ma</span><span class="se">\xdf</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">aTrueValue</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">aFalseValue</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">someData</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&lt;binary gunk&gt;&quot;</span><span class="p">,</span>
+    <span class="n">someMoreData</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&lt;lots of binary gunk&gt;&quot;</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">aDate</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">())),</span>
+<span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+    <span class="n">dump</span><span class="p">(</span><span class="n">pl</span><span class="p">,</span> <span class="n">fp</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>plist を解析します:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+    <span class="n">pl</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pl</span><span class="p">[</span><span class="s2">&quot;aKey&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../contents.html">目次</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">14.5. <code class="docutils literal"><span class="pre">plistlib</span></code> &#8212; Mac OS X <code class="docutils literal"><span class="pre">.plist</span></code> ファイルの生成と解析</a><ul>
+<li><a class="reference internal" href="#examples">14.5.1. 使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>前のトピックへ</h4>
+  <p class="topless"><a href="xdrlib.html"
+                        title="前の章へ">14.4. <code class="docutils literal"><span class="pre">xdrlib</span></code> &#8212; XDR データのエンコードおよびデコード</a></p>
+  <h4>次のトピックへ</h4>
+  <p class="topless"><a href="crypto.html"
+                        title="次の章へ">15. 暗号関連のサービス</a></p>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">バグ報告</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/plistlib.rst"
+            rel="nofollow">ソースの表示
+        </a>
+      </li>
+    </ul>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="crypto.html" title="15. 暗号関連のサービス"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="xdrlib.html" title="14.4. xdrlib — XDR データのエンコードおよびデコード"
+             >前へ</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &#187;</li>
+        <li>
+          <span class="version_switcher_placeholder">3.6.0</span>
+          <a href="../index.html">ドキュメント</a> &#187;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="fileformats.html" >14. ファイルフォーマット</a> &#187;</li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    <br />
+    Python Software Foundation は非営利団体です。
+    <a href="https://www.python.org/psf/donations/">寄付</a>
+    <br />
+    最終更新日時: 2月 17, 2017
+    <a href="../bugs.html">バグを見つけたら</a>?
+    <br />
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    </div>
+
+  </body>
+</html>
