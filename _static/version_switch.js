@@ -2,6 +2,7 @@
   'use strict';
 
   var all_versions = {
+    '3.6': '3.6',
     '3.5': '3.5',
     '2.7': '2.7',
   };
@@ -46,7 +47,7 @@
            window.location.href = new_url;
         },
         error: function() {
-           window.location.href = 'http://docs.python.jp/' + selected;
+           window.location.href = 'https://docs.python.jp/' + selected;
         }
       });
     }
