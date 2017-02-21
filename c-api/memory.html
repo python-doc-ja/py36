@@ -125,8 +125,11 @@
 <p>とはいえ、ほとんどの状況では、メモリの操作は Python ヒープに固定して行うよう勧めます。なぜなら、Python ヒープは Python メモリマネジャの管理下にあるからです。例えば、インタプリタを C で書かれた新たなオブジェクト型で拡張する際には、ヒープでのメモリ管理が必要です。Python ヒープを使った方がよいもう一つの理由として、拡張モジュールが必要としているメモリについて Python メモリマネージャに <em>情報を提供</em> してほしいということがあります。たとえ必要なメモリが内部的かつ非常に特化した用途に対して排他的に用いられるものだとしても、全てのメモリ操作要求を Python メモリマネージャに委譲すれば、インタプリタはより正確なメモリフットプリントの全体像を把握できます。その結果、特定の状況では、Python メモリマネージャがガベージコレクションやメモリのコンパクト化、その他何らかの予防措置といった、適切な動作をトリガできることがあります。上の例で示したように C ライブラリのメモリ操作関数を使うと、I/O バッファ用に確保したメモリは Python メモリマネージャの管理から完全に外れることに注意してください。</p>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
-<p>環境変数 <span class="target" id="index-6"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONMALLOC"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONMALLOC</span></code></a> を使用して Python が利用するメモリアロケータを制御することができます。</p>
-<p class="last">環境変数 <span class="target" id="index-7"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONMALLOCSTATS"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONMALLOCSTATS</span></code></a> を使用して、新たなオブジェクトアリーナが生成される時と、シャットダウン時に <a class="reference internal" href="#pymalloc"><span class="std std-ref">pymalloc メモリアロケータ</span></a> の統計情報を表示できます。</p>
+<p>The <span class="target" id="index-1"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONMALLOC"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONMALLOC</span></code></a> environment variable can be used to configure
+the memory allocators used by Python.</p>
+<p class="last">The <span class="target" id="index-2"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONMALLOCSTATS"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONMALLOCSTATS</span></code></a> environment variable can be used to print
+statistics of the <a class="reference internal" href="#pymalloc"><span class="std std-ref">pymalloc memory allocator</span></a> every time a
+new pymalloc object arena is created, and on shutdown.</p>
 </div>
 </div>
 <div class="section" id="raw-memory-interface">
@@ -358,9 +361,10 @@ void <code class="descname">PyMem_SetAllocator</code><span class="sig-paren">(</
 <dl class="function">
 <dt id="c.PyMem_SetupDebugHooks">
 void <code class="descname">PyMem_SetupDebugHooks</code><span class="sig-paren">(</span>void<span class="sig-paren">)</span><a class="headerlink" href="#c.PyMem_SetupDebugHooks" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Python メモリアロケータ関数のバグを検出するためのフックを設定します。</p>
-<p>新たに割り当てられたメモリはバイト <code class="docutils literal"><span class="pre">0xCB</span></code> で埋められ、解放されたメモリはバイト <code class="docutils literal"><span class="pre">0xDB</span></code> で埋められます。</p>
-<p>実行時チェック:</p>
+<dd><p>Setup hooks to detect bugs in the Python memory allocator functions.</p>
+<p>Newly allocated memory is filled with the byte <code class="docutils literal"><span class="pre">0xCB</span></code>, freed memory is
+filled with the byte <code class="docutils literal"><span class="pre">0xDB</span></code>.</p>
+<p>Runtime checks:</p>
 <ul class="simple">
 <li>Detect API violations, ex: <code class="xref c c-func docutils literal"><span class="pre">PyObject_Free()</span></code> called on a buffer
 allocated by <a class="reference internal" href="#c.PyMem_Malloc" title="PyMem_Malloc"><code class="xref c c-func docutils literal"><span class="pre">PyMem_Malloc()</span></code></a></li>
