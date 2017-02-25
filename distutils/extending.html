@@ -124,7 +124,20 @@
 </pre></div>
 </div>
 <p>このアプローチは新実装をある特定のパッケージで利用したい時、そのパッケージに興味をもつ人全員がコマンドの新実装を必要とする時にもっとも価値があります。</p>
-<p>Python 2.4から、インストールされたPythonを変更せずに、既存の <code class="file docutils literal"><span class="pre">setup.py</span></code> スクリプトをサポートするための3つめの選択肢が利用できるようになりました。これは追加のパッケージングシステムのサポートを追加するサードパーティ拡張を提供することを想定していますが、これらのコマンドはdistutilsが利用されている何にでも利用可能です。新しい設定オプション <code class="docutils literal"><span class="pre">command_packages</span></code> (コマンドラインオプション <code class="xref std std-option docutils literal"><span class="pre">--command-packages</span></code>) は、コマンド実装モジュールを検索する追加のパッケージを指定するために利用できます。 distutilsの全てのオプションと同様に、このオプションもコマンドラインまたは設定ファイルで指定できます。このオプションは設定ファイル中では <code class="docutils literal"><span class="pre">[global]</span></code> セクションか、コマンドラインのコマンドより前でだけ設定できます。設定ファイル中で指定する場合、コマンドラインで上書きすることができます。空文字列を指定するとデフォルト値が使われます。これはパッケージと一緒に提供する設定ファイルでは指定しないでください。</p>
+<p>Beginning with Python 2.4, a third option is available, intended to allow new
+commands to be added which can support existing <code class="file docutils literal"><span class="pre">setup.py</span></code> scripts without
+requiring modifications to the Python installation.  This is expected to allow
+third-party extensions to provide support for additional packaging systems, but
+the commands can be used for anything distutils commands can be used for.  A new
+configuration option, <code class="docutils literal"><span class="pre">command_packages</span></code> (command-line option
+<code class="xref std std-option docutils literal"><span class="pre">--command-packages</span></code>), can be used to specify additional packages to be
+searched for modules implementing commands.  Like all distutils options, this
+can be specified on the command line or in a configuration file.  This option
+can only be set in the <code class="docutils literal"><span class="pre">[global]</span></code> section of a configuration file, or before
+any commands on the command line.  If set in a configuration file, it can be
+overridden from the command line; setting it to an empty string on the command
+line causes the default to be used.  This should never be set in a configuration
+file provided with a package.</p>
 <p>この新オプションによってコマンド実装を探すためのパッケージをいくつでも追加することができます。複数のパッケージ名はコンマで区切って指定します。指定がなければ、検索は <a class="reference internal" href="apiref.html#module-distutils.command" title="distutils.command: This subpackage contains one module for each standard Distutils command."><code class="xref py py-mod docutils literal"><span class="pre">distutils.command</span></code></a> パッケージのみで行われます。ただし <code class="file docutils literal"><span class="pre">setup.py</span></code> がオプション <code class="docutils literal"><span class="pre">--command-packages</span> <span class="pre">distcmds,buildcmds</span></code> で実行されている場合には、パッケージは <a class="reference internal" href="apiref.html#module-distutils.command" title="distutils.command: This subpackage contains one module for each standard Distutils command."><code class="xref py py-mod docutils literal"><span class="pre">distutils.command</span></code></a> 、 <code class="xref py py-mod docutils literal"><span class="pre">distcmds</span></code> 、そして <code class="xref py py-mod docutils literal"><span class="pre">buildcmds</span></code> を、この順番で検索します。新コマンドはコマンドと同じ名前のモジュールに、コマンドと同じ名前のクラスで実装されていると想定しています。上のコマドラインオプションの例では、コマンド <strong class="command">bdist_openpkg</strong> は、 <code class="xref py py-class docutils literal"><span class="pre">distcmds.bdist_openpkg.bdist_openpkg</span></code> か、 <code class="xref py py-class docutils literal"><span class="pre">buildcmds.bdist_openpkg.bdist_openpkg</span></code> で実装されるかもしれません。</p>
 </div>
 <div class="section" id="adding-new-distribution-types">
@@ -216,7 +229,7 @@
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 2月 24, 2017
+    最終更新日時: 2月 25, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
