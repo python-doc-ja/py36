@@ -174,18 +174,14 @@
 <dl class="cmdoption">
 <dt id="cmdoption-compileall-j">
 <code class="descname">-j</code><code class="descclassname"> N</code><a class="headerlink" href="#cmdoption-compileall-j" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Use <em>N</em> workers to compile the files within the given directory.
-If <code class="docutils literal"><span class="pre">0</span></code> is used, then the result of <a class="reference internal" href="os.html#os.cpu_count" title="os.cpu_count"><code class="xref py py-func docutils literal"><span class="pre">os.cpu_count()</span></code></a>
-will be used.</p>
+<dd><p>与えられたディレクトリ内のファイルを <em>N</em> ワーカでコンパイルします。<code class="docutils literal"><span class="pre">0</span></code> の場合 <a class="reference internal" href="os.html#os.cpu_count" title="os.cpu_count"><code class="xref py py-func docutils literal"><span class="pre">os.cpu_count()</span></code></a> の結果が使用されます。</p>
 </dd></dl>
 
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.2 で変更: </span><code class="docutils literal"><span class="pre">-i</span></code>, <code class="docutils literal"><span class="pre">-b</span></code>, <code class="docutils literal"><span class="pre">-h</span></code> オプションを追加。</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.5 で変更: </span>Added the  <code class="docutils literal"><span class="pre">-j</span></code>, <code class="docutils literal"><span class="pre">-r</span></code>, and <code class="docutils literal"><span class="pre">-qq</span></code> options.  <code class="docutils literal"><span class="pre">-q</span></code> option
-was changed to a multilevel value.  <code class="docutils literal"><span class="pre">-b</span></code> will always produce a
-byte-code file ending in <code class="docutils literal"><span class="pre">.pyc</span></code>, never <code class="docutils literal"><span class="pre">.pyo</span></code>.</p>
+<p><span class="versionmodified">バージョン 3.5 で変更: </span><code class="docutils literal"><span class="pre">-j</span></code>, <code class="docutils literal"><span class="pre">-r</span></code>, <code class="docutils literal"><span class="pre">-qq</span></code> オプションが追加されました。<code class="docutils literal"><span class="pre">-q</span></code> オプションが複数のレベルの値に変更されました。<code class="docutils literal"><span class="pre">-b</span></code> は常に拡張子 <code class="docutils literal"><span class="pre">.pyc</span></code> のバイトエンコーディングファイルを生成し、<code class="docutils literal"><span class="pre">.pyo</span></code> を作りません。</p>
 </div>
 <p><a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> 関数で利用される最適化レベルを制御するコマンドラインオプションはありません。 Python インタプリタ自体のオプションを使ってください: <strong class="program">python -O -m compileall</strong>.</p>
 </div>
@@ -194,62 +190,54 @@ byte-code file ending in <code class="docutils literal"><span class="pre">.pyc</
 <dl class="function">
 <dt id="compileall.compile_dir">
 <code class="descclassname">compileall.</code><code class="descname">compile_dir</code><span class="sig-paren">(</span><em>dir</em>, <em>maxlevels=10</em>, <em>ddir=None</em>, <em>force=False</em>, <em>rx=None</em>, <em>quiet=0</em>, <em>legacy=False</em>, <em>optimize=-1</em>, <em>workers=1</em><span class="sig-paren">)</span><a class="headerlink" href="#compileall.compile_dir" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Recursively descend the directory tree named by <em>dir</em>, compiling all <code class="file docutils literal"><span class="pre">.py</span></code>
-files along the way. Return a true value if all the files compiled successfully,
-and a false value otherwise.</p>
-<p><em>maxlevels</em> パラメタは、再帰する深さの限度に使われ、デフォルトは <code class="docutils literal"><span class="pre">10</span></code> です。</p>
-<p><em>ddir</em> が与えられれば、コンパイルされるそれぞれのファイルへのパスの先頭に、そのディレクトリを追加します。これはコンパイル時トレースバックに使われ、バイトコードファイルが実行される時点でソースファイルが存在しない場合に、トレースバックやその他のメッセージに使われるバイトコードファイルにもコンパイルされます。</p>
-<p><em>force</em> が真の場合、モジュールはファイルの更新日付に関わりなく再コンパイルされます。</p>
-<p><em>rx</em> が与えられれば、コンパイル候補のそれぞれのファイルのフルパスに対して検索メソッドが呼び出され、それが真値を返したら、そのファイルは除外されます。</p>
+<dd><p><em>dir</em> という名前のディレクトリーツリーをたどり、途中で見つけた全ての <code class="file docutils literal"><span class="pre">.py</span></code> をコンパイルします。全ファイルのコンパイルが成功した場合は真を、それ以外の場合は偽を返します。</p>
+<p><em>maxlevels</em> 引数で最大再帰深度を制限します。デフォルトは <code class="docutils literal"><span class="pre">10</span></code> です。</p>
+<p><em>ddir</em> が与えられた場合、コンパイルされるそれぞれのファイルへのパスの先頭に、そのディレクトリを追加します。これはコンパイル時トレースバックに使われ、バイトコードファイルが実行される時点でソースファイルが存在しない場合に、トレースバックやその他のメッセージに使われるバイトコードファイルにもコンパイルされます。</p>
+<p><em>force</em> が真の場合、タイムスタンプが最新のであってもモジュールは再コンパイルされます。</p>
+<p><em>rx</em> が与えられた場合、コンパイル候補のそれぞれのファイルのフルパスに対して検索メソッドが呼び出され、それが真値を返したら、そのファイルは除外されます。</p>
 <p><em>quiet</em> が <code class="docutils literal"><span class="pre">False</span></code> か <code class="docutils literal"><span class="pre">0</span></code> (デフォルト) の場合、ファイル名とその他の情報は標準出力に表示されます。
 <code class="docutils literal"><span class="pre">1</span></code> の場合エラーのみが表示されます。
 <code class="docutils literal"><span class="pre">2</span></code> の場合出力はすべて抑制されます。</p>
 <p><em>legacy</em> が真の時、バイトコードファイルは古い場所と名前に書かれ、他のバージョンの Python によって作られたバイトコードファイルを上書きする可能性があります。デフォルトは <span class="target" id="index-7"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3147"><strong>PEP 3147</strong></a> で決められた場所と名前を使い、複数のバージョンの Python のバイトコードファイルが共存できるようにします。</p>
-<p><em>optimize</em> はコンパイラの最適化レベルを定義します。これは組み込みの <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> 関数に渡されます。</p>
-<p>The argument <em>workers</em> specifies how many workers are used to
-compile files in parallel. The default is to not use multiple workers.
-If the platform can&#8217;t use multiple workers and <em>workers</em> argument is given,
-then sequential compilation will be used as a fallback.  If <em>workers</em> is
-lower than <code class="docutils literal"><span class="pre">0</span></code>, a <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> will be raised.</p>
+<p><em>optimize</em> でコンパイラの最適化レベルを指定します。これは組み込みの <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> 関数に渡されます。</p>
+<p>引数 <em>workers</em> でファイルを並列でコンパイルするワーカの数を指定します。デフォルトでは複数のワーカを使いません。
+複数のワーカを使えないプラットフォームで <em>workers</em> が与えられた場合、逐次コンパイルにフォールバックします。<em>workers</em> が <code class="docutils literal"><span class="pre">0</span></code> 未満の場合 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> を送出します。</p>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.2 で変更: </span><em>legacy</em> と <em>optimize</em> 引数を追加しました。</p>
+<p><span class="versionmodified">バージョン 3.2 で変更: </span><em>legacy</em> と <em>optimize</em> 引数が追加されました。</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.5 で変更: </span><code class="docutils literal"><span class="pre">workers</span></code> パラメータが追加されました。</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.5 で変更: </span><em>quiet</em> parameter was changed to a multilevel value.</p>
+<p><span class="versionmodified">バージョン 3.5 で変更: </span><em>quiet</em> 引数が複数のレベルの値に変更されました。</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.5 で変更: </span>The <em>legacy</em> parameter only writes out <code class="docutils literal"><span class="pre">.pyc</span></code> files, not <code class="docutils literal"><span class="pre">.pyo</span></code> files
-no matter what the value of <em>optimize</em> is.</p>
+<p><span class="versionmodified">バージョン 3.5 で変更: </span><em>optimize</em> の値に関わらず、<em>legacy</em> 引数は <code class="docutils literal"><span class="pre">.pyc</span></code> ファイルのみを書き出し、<code class="docutils literal"><span class="pre">.pyo</span></code> ファイルを書き出さないようになりました。</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+<p><span class="versionmodified">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け取るようになりました。</p>
 </div>
 </dd></dl>
 
 <dl class="function">
 <dt id="compileall.compile_file">
 <code class="descclassname">compileall.</code><code class="descname">compile_file</code><span class="sig-paren">(</span><em>fullname</em>, <em>ddir=None</em>, <em>force=False</em>, <em>rx=None</em>, <em>quiet=0</em>, <em>legacy=False</em>, <em>optimize=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#compileall.compile_file" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Compile the file with path <em>fullname</em>. Return a true value if the file
-compiled successfully, and a false value otherwise.</p>
-<p><em>ddir</em> が与えられれば、コンパイルされるファイルへのパスの先頭に、そのディレクトリを追加します。これはコンパイル時トレースバックに使われ、バイトコードファイルが実行される時点でソースファイルが存在しない場合に、トレースバックやその他のメッセージに使われるバイトコードファイルにもコンパイルされます。</p>
-<p><em>rx</em> が与えられれば、コンパイル候補のファイルのフルパスに対して検索メソッドが呼び出され、それが真値を返したら、ファイルはコンパイルされず、<code class="docutils literal"><span class="pre">True</span></code> が返されます。</p>
+<dd><p>パス <em>fullname</em> のファイルをコンパイルします。コンパイルが成功すれば真を、そうでなければ偽を返します。</p>
+<p><em>ddir</em> が与えられた場合、コンパイルされるファイルのパスの先頭にそのディレクトリを追加します。これはコンパイル時トレースバックに使われ、バイトコードファイルが実行される時点でソースファイルが存在しない場合に、トレースバックやその他のメッセージに使われるバイトコードファイルにもコンパイルされます。</p>
+<p><em>rx</em> が与えられた場合、コンパイル候補のファイルのフルパスに対して検索メソッドが呼び出され、それが真値を返したら、ファイルはコンパイルされず、<code class="docutils literal"><span class="pre">True</span></code> が返されます。</p>
 <p><em>quiet</em> が <code class="docutils literal"><span class="pre">False</span></code> か <code class="docutils literal"><span class="pre">0</span></code> (デフォルト) の場合、ファイル名とその他の情報は標準出力に表示されます。
 <code class="docutils literal"><span class="pre">1</span></code> の場合エラーのみが表示されます。
 <code class="docutils literal"><span class="pre">2</span></code> の場合出力はすべて抑制されます。</p>
 <p><em>legacy</em> が真の時、バイトコードファイルは古い場所と名前に書かれ、他のバージョンの Python によって作られたバイトコードファイルを上書きする可能性があります。デフォルトは <span class="target" id="index-8"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3147"><strong>PEP 3147</strong></a> で決められた場所と名前を使い、複数のバージョンの Python のバイトコードファイルが共存できるようにします。</p>
-<p><em>optimize</em> はコンパイラの最適化レベルを定義します。これは組み込みの <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> 関数に渡されます。</p>
+<p><em>optimize</em> でコンパイラの最適化レベルを指定します。これは組み込みの <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> 関数に渡されます。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.5 で変更: </span><em>quiet</em> parameter was changed to a multilevel value.</p>
+<p><span class="versionmodified">バージョン 3.5 で変更: </span><em>quiet</em> 引数が複数のレベルの値に変更されました。</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.5 で変更: </span>The <em>legacy</em> parameter only writes out <code class="docutils literal"><span class="pre">.pyc</span></code> files, not <code class="docutils literal"><span class="pre">.pyo</span></code> files
-no matter what the value of <em>optimize</em> is.</p>
+<p><span class="versionmodified">バージョン 3.5 で変更: </span><em>optimize</em> の値に関わらず、<em>legacy</em> 引数は <code class="docutils literal"><span class="pre">.pyc</span></code> ファイルのみを書き出し、<code class="docutils literal"><span class="pre">.pyo</span></code> ファイルを書き出さないようになりました。</p>
 </div>
 </dd></dl>
 
@@ -262,14 +250,13 @@ no matter what the value of <em>optimize</em> is.</p>
 それ以外のすべての引数は <a class="reference internal" href="#compileall.compile_dir" title="compileall.compile_dir"><code class="xref py py-func docutils literal"><span class="pre">compile_dir()</span></code></a> 関数に渡されます。
 その他の compile 関数群と異なり、 <code class="docutils literal"><span class="pre">maxlevels</span></code> のデフォルトが <code class="docutils literal"><span class="pre">0</span></code> になっていることに注意してください。</p>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.2 で変更: </span><em>legacy</em> と <em>optimize</em> 引数を追加しました。</p>
+<p><span class="versionmodified">バージョン 3.2 で変更: </span><em>legacy</em> と <em>optimize</em> 引数が追加されました。</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.5 で変更: </span><em>quiet</em> parameter was changed to a multilevel value.</p>
+<p><span class="versionmodified">バージョン 3.5 で変更: </span><em>quiet</em> 引数が複数のレベルの値に変更されました。</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.5 で変更: </span>The <em>legacy</em> parameter only writes out <code class="docutils literal"><span class="pre">.pyc</span></code> files, not <code class="docutils literal"><span class="pre">.pyo</span></code> files
-no matter what the value of <em>optimize</em> is.</p>
+<p><span class="versionmodified">バージョン 3.5 で変更: </span><em>optimize</em> の値に関わらず、<em>legacy</em> 引数は <code class="docutils literal"><span class="pre">.pyc</span></code> ファイルのみを書き出し、<code class="docutils literal"><span class="pre">.pyo</span></code> ファイルを書き出さないようになりました。</p>
 </div>
 </dd></dl>
 
@@ -382,7 +369,7 @@ no matter what the value of <em>optimize</em> is.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 3月 01, 2017
+    最終更新日時: 3月 02, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
