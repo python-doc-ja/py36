@@ -107,12 +107,13 @@
 <span id="reprlib-alternate-repr-implementation"></span><h1>8.12. <a class="reference internal" href="#module-reprlib" title="reprlib: Alternate repr() implementation with size limits."><code class="xref py py-mod docutils literal"><span class="pre">reprlib</span></code></a> &#8212; もう一つの <a class="reference internal" href="functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> の実装<a class="headerlink" href="#module-reprlib" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/reprlib.py">Lib/reprlib.py</a></p>
 <hr class="docutils" />
-<p><a class="reference internal" href="#module-reprlib" title="reprlib: Alternate repr() implementation with size limits."><code class="xref py py-mod docutils literal"><span class="pre">reprlib</span></code></a> モジュールは、結果として生じる文字列のサイズに対する制限付きでオブジェクト表現を生成するための手段を提供します。これは Python デバッガの中で使用されており、他の文脈でも同様に役に立つかもしれません。</p>
+<p><a class="reference internal" href="#module-reprlib" title="reprlib: Alternate repr() implementation with size limits."><code class="xref py py-mod docutils literal"><span class="pre">reprlib</span></code></a> モジュールは、結果の文字列のサイズに対する制限付きでオブジェクト表現を生成するための手段を提供します。これは Python デバッガの中で使用されており、他の文脈でも同様に役に立つかもしれません。</p>
 <p>このモジュールはクラスとインスタンス、それに関数を提供します:</p>
 <dl class="class">
 <dt id="reprlib.Repr">
 <em class="property">class </em><code class="descclassname">reprlib.</code><code class="descname">Repr</code><a class="headerlink" href="#reprlib.Repr" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>組み込みクラス <a class="reference internal" href="functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> によく似た関数を実装するために役に立つ書式化サービスを提供します。過度に長い表現を作り出さないように、異なるオブジェクト型に対する大きさの制限が追加されます。</p>
+<dd><p>組み込み関数 <a class="reference internal" href="functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> に似た関数を実装するために役に立つフォーマット用サービスを提供します。
+過度に長い表現を作り出さないようにするための大きさの制限をオブジェクト型ごとに設定できます。</p>
 </dd></dl>
 
 <dl class="data">
@@ -127,7 +128,7 @@
 <dd><p>これは <code class="docutils literal"><span class="pre">aRepr</span></code> の <a class="reference internal" href="#reprlib.Repr.repr" title="reprlib.Repr.repr"><code class="xref py py-meth docutils literal"><span class="pre">repr()</span></code></a> メソッドです。同じ名前の組み込み関数が返す文字列と似ていますが、最大サイズに制限のある文字列を返します。</p>
 </dd></dl>
 
-<p>サイズを制限するツールに加えて、このモジュールはさらに 、 <a class="reference internal" href="../reference/datamodel.html#object.__repr__" title="object.__repr__"><code class="xref py py-meth docutils literal"><span class="pre">__repr__()</span></code></a> に対する再帰呼び出しの検出とプレースホルダー文字列による置換のためのデコレータを提供します。</p>
+<p>サイズを制限するツールに加えて、このモジュールはさらに  <a class="reference internal" href="../reference/datamodel.html#object.__repr__" title="object.__repr__"><code class="xref py py-meth docutils literal"><span class="pre">__repr__()</span></code></a> に対する再帰呼び出しの検出とプレースホルダー文字列による置換のためのデコレータを提供します。</p>
 <dl class="function">
 <dt id="reprlib.recursive_repr">
 <code class="descclassname">&#64;</code><code class="descclassname">reprlib.</code><code class="descname">recursive_repr</code><span class="sig-paren">(</span><em>fillvalue=&quot;...&quot;</em><span class="sig-paren">)</span><a class="headerlink" href="#reprlib.recursive_repr" title="この定義へのパーマリンク">¶</a></dt>
@@ -151,7 +152,7 @@
 
 <div class="section" id="repr-objects">
 <span id="id1"></span><h2>8.12.1. Reprオブジェクト<a class="headerlink" href="#repr-objects" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p><a class="reference internal" href="#reprlib.Repr" title="reprlib.Repr"><code class="xref py py-class docutils literal"><span class="pre">Repr</span></code></a> インスタンスは様々なオブジェクト型の表現にサイズ制限を与えるために使えるいくつかの属性と、特定のオブジェクト型を書式化するメソッドを提供します。</p>
+<p><a class="reference internal" href="#reprlib.Repr" title="reprlib.Repr"><code class="xref py py-class docutils literal"><span class="pre">Repr</span></code></a> インスタンスはオブジェクト型毎に表現する文字列のサイズを制限するために使えるいくつかの属性と、特定のオブジェクト型をフォーマットするメソッドを提供します。</p>
 <dl class="attribute">
 <dt id="reprlib.Repr.maxlevel">
 <code class="descclassname">Repr.</code><code class="descname">maxlevel</code><a class="headerlink" href="#reprlib.Repr.maxlevel" title="この定義へのパーマリンク">¶</a></dt>
@@ -191,31 +192,34 @@
 <dl class="attribute">
 <dt id="reprlib.Repr.maxother">
 <code class="descclassname">Repr.</code><code class="descname">maxother</code><a class="headerlink" href="#reprlib.Repr.maxother" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この制限は <a class="reference internal" href="#reprlib.Repr" title="reprlib.Repr"><code class="xref py py-class docutils literal"><span class="pre">Repr</span></code></a> オブジェクトに利用できる特定の書式化メソッドがないオブジェクト型のサイズをコントロールするために使われます。 <a class="reference internal" href="#reprlib.Repr.maxstring" title="reprlib.Repr.maxstring"><code class="xref py py-attr docutils literal"><span class="pre">maxstring</span></code></a> と同じようなやり方で適用されます。デフォルトは <code class="docutils literal"><span class="pre">20</span></code> です。</p>
+<dd><p>この制限は <a class="reference internal" href="#reprlib.Repr" title="reprlib.Repr"><code class="xref py py-class docutils literal"><span class="pre">Repr</span></code></a> オブジェクトに利用できる特定のフォーマットメソッドがないオブジェクト型のサイズをコントロールするために使われます。 <a class="reference internal" href="#reprlib.Repr.maxstring" title="reprlib.Repr.maxstring"><code class="xref py py-attr docutils literal"><span class="pre">maxstring</span></code></a> と同じようなやり方で適用されます。デフォルトは <code class="docutils literal"><span class="pre">20</span></code> です。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="reprlib.Repr.repr">
 <code class="descclassname">Repr.</code><code class="descname">repr</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#reprlib.Repr.repr" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>インスタンスが強制する書式化を使う組み込み <a class="reference internal" href="functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> と等価なもの。</p>
+<dd><p>このインスタンスで設定されたフォーマットを使う、組み込み <a class="reference internal" href="functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> と等価なもの。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="reprlib.Repr.repr1">
 <code class="descclassname">Repr.</code><code class="descname">repr1</code><span class="sig-paren">(</span><em>obj</em>, <em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#reprlib.Repr.repr1" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><a class="reference internal" href="#reprlib.Repr.repr" title="reprlib.Repr.repr"><code class="xref py py-meth docutils literal"><span class="pre">repr()</span></code></a> が使う再帰的な実装。これはどの書式化メソッドを呼び出すかを決定するために <em>obj</em> の型を使い、それを <em>obj</em> と <em>level</em> に渡します。再帰呼び出しにおいて <em>level</em> の値に対して <code class="docutils literal"><span class="pre">level</span> <span class="pre">-</span> <span class="pre">1</span></code> を与える再帰的な書式化を実行するために、型に固有のメソッドは <a class="reference internal" href="#reprlib.Repr.repr1" title="reprlib.Repr.repr1"><code class="xref py py-meth docutils literal"><span class="pre">repr1()</span></code></a> を呼び出します。</p>
+<dd><p><a class="reference internal" href="#reprlib.Repr.repr" title="reprlib.Repr.repr"><code class="xref py py-meth docutils literal"><span class="pre">repr()</span></code></a> が使う再帰的な実装。
+<em>obj</em> の型を使ってどのフォーマットメソッドを呼び出すかを決定し、それに <em>obj</em> と <em>level</em> を渡します。
+再帰呼び出しにおいて <em>level</em> の値に対して <code class="docutils literal"><span class="pre">level</span> <span class="pre">-</span> <span class="pre">1</span></code> を与える再帰的なフォーマットを実行するために、型に固有のメソッドは <a class="reference internal" href="#reprlib.Repr.repr1" title="reprlib.Repr.repr1"><code class="xref py py-meth docutils literal"><span class="pre">repr1()</span></code></a> を呼び出します。</p>
 </dd></dl>
 
 <dl class="method">
 <dt>
 <code class="descclassname">Repr.</code><code class="descname">repr_TYPE</code><span class="sig-paren">(</span><em>obj</em>, <em>level</em><span class="sig-paren">)</span></dt>
-<dd><p>型名に基づく名前をもつメソッドとして、特定の型に対する書式化メソッドは実装されます。メソッド名では、 <strong>TYPE</strong> は <code class="docutils literal"><span class="pre">'_'.join(type(obj).__name__.split())</span></code> に置き換えられます。これらのメソッドへのディスパッチは <a class="reference internal" href="#reprlib.Repr.repr1" title="reprlib.Repr.repr1"><code class="xref py py-meth docutils literal"><span class="pre">repr1()</span></code></a> によって処理されます。再帰的に値の書式を整える必要がある型固有のメソッドは、 <code class="docutils literal"><span class="pre">self.repr1(subobj,</span> <span class="pre">level</span> <span class="pre">-</span> <span class="pre">1)</span></code> を呼び出します。</p>
+<dd><p>型名に基づく名前をもつメソッドとして、特定の型に対するフォーマットメソッドは実装されます。メソッド名では、 <strong>TYPE</strong> は <code class="docutils literal"><span class="pre">'_'.join(type(obj).__name__.split())</span></code> に置き換えられます。これらのメソッドへのディスパッチは <a class="reference internal" href="#reprlib.Repr.repr1" title="reprlib.Repr.repr1"><code class="xref py py-meth docutils literal"><span class="pre">repr1()</span></code></a> によって処理されます。再帰的に値をフォーマットする必要がある型固有のメソッドは、 <code class="docutils literal"><span class="pre">self.repr1(subobj,</span> <span class="pre">level</span> <span class="pre">-</span> <span class="pre">1)</span></code> を呼び出します。</p>
 </dd></dl>
 
 </div>
 <div class="section" id="subclassing-repr-objects">
 <span id="subclassing-reprs"></span><h2>8.12.2. Reprオブジェクトをサブクラス化する<a class="headerlink" href="#subclassing-repr-objects" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>更なる組み込みオブジェクト型へのサポートを追加するためや、すでにサポートされている型の扱いを変更するために、 <a class="reference internal" href="#reprlib.Repr.repr1" title="reprlib.Repr.repr1"><code class="xref py py-meth docutils literal"><span class="pre">Repr.repr1()</span></code></a> による動的なディスパッチを使って <a class="reference internal" href="#reprlib.Repr" title="reprlib.Repr"><code class="xref py py-class docutils literal"><span class="pre">Repr</span></code></a> をサブクラス化することができます。この例はファイルオブジェクトのための特別なサポートを追加する方法を示しています:</p>
+<p>更なる組み込みオブジェクト型へのサポートを追加するため、あるいはすでにサポートされている型の扱いを変更するために、 <a class="reference internal" href="#reprlib.Repr.repr1" title="reprlib.Repr.repr1"><code class="xref py py-meth docutils literal"><span class="pre">Repr.repr1()</span></code></a> による動的なディスパッチは <a class="reference internal" href="#reprlib.Repr" title="reprlib.Repr"><code class="xref py py-class docutils literal"><span class="pre">Repr</span></code></a> のサブクラス化に対応しています。
+この例はファイルオブジェクトのための特別なサポートを追加する方法を示しています:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">reprlib</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
@@ -317,7 +321,7 @@
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 3月 04, 2017
+    最終更新日時: 3月 05, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
