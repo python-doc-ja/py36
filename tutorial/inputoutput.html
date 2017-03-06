@@ -104,22 +104,20 @@
             
   <div class="section" id="input-and-output">
 <span id="tut-io"></span><h1>7. 入力と出力<a class="headerlink" href="#input-and-output" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<p>プログラムから出力を行う方法がいくつかあります。データは人間が読める形で出力することも、将来使うためにファイルに書くこともできます。この章では、こうした幾つかの出力の方法について話します。</p>
+<p>プログラムの出力方法にはいくつかの種類があります。
+データを人間が読める形で出力することもあれば、将来使うためにファイルに書くこともあります。
+この章では、こうした幾つかの出力の方法について話します。</p>
 <div class="section" id="fancier-output-formatting">
-<span id="tut-formatting"></span><h2>7.1. ファンシーな出力の書式化<a class="headerlink" href="#fancier-output-formatting" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>これまでのところ、値を出力する二つの方法: <em>式文 (expression statement)</em> と <a class="reference internal" href="../library/functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> 関数が出てきました。 (第三はファイルオブジェクトの <code class="xref py py-meth docutils literal"><span class="pre">write()</span></code> メソッドを使う方法です。標準出力を表すファイルは <code class="docutils literal"><span class="pre">sys.stdout</span></code> で参照できます。詳細はライブラリリファレンスを参照してください。)</p>
-<p>Often you&#8217;ll want more control over the formatting of your output than simply
-printing space-separated values.  There are two ways to format your output; the
-first way is to do all the string handling yourself; using string slicing and
-concatenation operations you can create any layout you can imagine.  The
-string type has some methods that perform useful operations for padding
-strings to a given column width; these will be discussed shortly.  The second
-way is to use <a class="reference internal" href="../reference/lexical_analysis.html#f-strings"><span class="std std-ref">formatted string literals</span></a>, or the
-<a class="reference internal" href="../library/stdtypes.html#str.format" title="str.format"><code class="xref py py-meth docutils literal"><span class="pre">str.format()</span></code></a> method.</p>
-<p><a class="reference internal" href="../library/string.html#module-string" title="string: Common string operations."><code class="xref py py-mod docutils literal"><span class="pre">string</span></code></a> モジュールの <a class="reference internal" href="../library/string.html#string.Template" title="string.Template"><code class="xref py py-class docutils literal"><span class="pre">Template</span></code></a> クラスは文字列中の値を置換する別の方法を提供しています。</p>
+<span id="tut-formatting"></span><h2>7.1. 出力を見やすくフォーマットする<a class="headerlink" href="#fancier-output-formatting" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>これまでに、値を出力する二つの方法: <em>式文 (expression statement)</em> と <a class="reference internal" href="../library/functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> 関数が出てきました。 (第三はファイルオブジェクトの <code class="xref py py-meth docutils literal"><span class="pre">write()</span></code> メソッドを使う方法です。標準出力を表すファイルは <code class="docutils literal"><span class="pre">sys.stdout</span></code> で参照できます。詳細はライブラリリファレンスを参照してください。)</p>
+<p>出力をフォーマットする際に、単に値をスペースで区切って出力するよりももっときめ細かな制御をしたい場合があります。
+出力をフォーマットするのには大きく分けて二つの方法があります。
+第一の方法は、全ての文字列を自分で処理するというものです。文字列のスライスや結合といった操作を使えば、思い通りのレイアウトを作成することができます。文字列オブジェクトは、文字列を指定されたカラム幅に揃えるための幾つかの便利なメソッドを提供しています。これらのメソッドについてはすぐ後で簡単に説明します。
+もうひとつの方法は <a class="reference internal" href="../reference/lexical_analysis.html#f-strings"><span class="std std-ref">フォーマット済み文字列リテラル</span></a> や <a class="reference internal" href="../library/stdtypes.html#str.format" title="str.format"><code class="xref py py-meth docutils literal"><span class="pre">str.format()</span></code></a> メソッドを利用することです。</p>
+<p><a class="reference internal" href="../library/string.html#module-string" title="string: Common string operations."><code class="xref py py-mod docutils literal"><span class="pre">string</span></code></a> モジュールの <a class="reference internal" href="../library/string.html#string.Template" title="string.Template"><code class="xref py py-class docutils literal"><span class="pre">Template</span></code></a> クラスも、文字列中の値を置換する別の方法を提供しています。</p>
 <p>もちろん、一つ問題があります。値をどうやって文字列に変換したらいいのでしょうか？幸運なことに、Python には値を文字列に変換する方法があります。値を <a class="reference internal" href="../library/functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> か <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> 関数に渡してください。</p>
 <p><a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> 関数は値の人間に読める表現を返すためのもので、 <a class="reference internal" href="../library/functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> 関数はインタープリタに読める (あるいは同値となる構文がない場合は必ず <a class="reference internal" href="../library/exceptions.html#SyntaxError" title="SyntaxError"><code class="xref py py-exc docutils literal"><span class="pre">SyntaxError</span></code></a> になるような) 表現を返すためのものです。人間が読むのに適した特定の表現を持たないオブジェクトにおいては、 <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> は <a class="reference internal" href="../library/functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> と同じ値を返します。数値や、リストや辞書を始めとするデータ構造など、多くの値がどちらの関数に対しても同じ表現を返します。一方、文字列は、2つの異なる表現を持っています。</p>
-<p>いくつかの例です:</p>
+<p>例:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;Hello, world.&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 <span class="go">&#39;Hello, world.&#39;</span>
@@ -174,8 +172,8 @@ way is to use <a class="reference internal" href="../reference/lexical_analysis.
 <span class="go">10 100 1000</span>
 </pre></div>
 </div>
-<p>(最初の例で、各カラムの間のスペース一個は <a class="reference internal" href="../library/functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> の働きで追加されていることに注意してください。 <a class="reference internal" href="../library/functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> は引数間に常に空白を追加します。)</p>
-<p>この例では、文字列の <a class="reference internal" href="../library/stdtypes.html#str.rjust" title="str.rjust"><code class="xref py py-meth docutils literal"><span class="pre">str.rjust()</span></code></a> メソッドの使い方を示しています。 <a class="reference internal" href="../library/stdtypes.html#str.rjust" title="str.rjust"><code class="xref py py-meth docutils literal"><span class="pre">str.rjust()</span></code></a> は文字列を指定された幅のフィールド内に右詰めで入るように、左に空白を追加します。同様のメソッドとして、 <a class="reference internal" href="../library/stdtypes.html#str.ljust" title="str.ljust"><code class="xref py py-meth docutils literal"><span class="pre">str.ljust()</span></code></a> と <a class="reference internal" href="../library/stdtypes.html#str.center" title="str.center"><code class="xref py py-meth docutils literal"><span class="pre">str.center()</span></code></a> があります。これらのメソッドは何か出力を行うわけではなく、ただ新しい文字列を返します。入力文字列が長すぎる場合、文字列を切り詰めることはせず、ただ値をそのまま返します。この仕様のためにカラムのレイアウトが滅茶苦茶になるかもしれませんが、嘘の値が代わりに書き出されるよりはましです。(本当に切り詰めを行いたいのなら、全てのカラムに <code class="docutils literal"><span class="pre">x.ljust(n)[:n]</span></code> のようにスライス表記を加えることもできます。)</p>
+<p>(最初の例で、各カラムの間のスペース一個は <a class="reference internal" href="../library/functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> により追加されていることに注意してください。 <a class="reference internal" href="../library/functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> は引数間に常に空白を追加します。)</p>
+<p>この例では、文字列の <a class="reference internal" href="../library/stdtypes.html#str.rjust" title="str.rjust"><code class="xref py py-meth docutils literal"><span class="pre">str.rjust()</span></code></a> メソッドの使い方を示しています。 <a class="reference internal" href="../library/stdtypes.html#str.rjust" title="str.rjust"><code class="xref py py-meth docutils literal"><span class="pre">str.rjust()</span></code></a> は文字列を指定された幅のフィールド内に右詰めで入るように、左に空白を追加します。同様のメソッドとして、 <a class="reference internal" href="../library/stdtypes.html#str.ljust" title="str.ljust"><code class="xref py py-meth docutils literal"><span class="pre">str.ljust()</span></code></a> と <a class="reference internal" href="../library/stdtypes.html#str.center" title="str.center"><code class="xref py py-meth docutils literal"><span class="pre">str.center()</span></code></a> があります。これらのメソッドは何か出力を行うわけではなく、ただ新しい文字列を返します。入力文字列が長すぎる場合、文字列を切り詰めることはせずに値をそのまま返します。この仕様のためにカラムのレイアウトが滅茶苦茶になるかもしれませんが、嘘の値が代わりに書き出されるよりはましです。(本当に切り詰めを行いたいのなら、全てのカラムに <code class="docutils literal"><span class="pre">x.ljust(n)[:n]</span></code> のようにスライス表記を加えることもできます。)</p>
 <p>もう一つのメソッド、 <a class="reference internal" href="../library/stdtypes.html#str.zfill" title="str.zfill"><code class="xref py py-meth docutils literal"><span class="pre">str.zfill()</span></code></a> は、数値文字列の左側をゼロ詰めします。このメソッドは正と負の符号を正しく扱います:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;12&#39;</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">&#39;00012&#39;</span>
@@ -381,7 +379,7 @@ way is to use <a class="reference internal" href="../reference/lexical_analysis.
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
 <li><a class="reference internal" href="#">7. 入力と出力</a><ul>
-<li><a class="reference internal" href="#fancier-output-formatting">7.1. ファンシーな出力の書式化</a><ul>
+<li><a class="reference internal" href="#fancier-output-formatting">7.1. 出力を見やすくフォーマットする</a><ul>
 <li><a class="reference internal" href="#old-string-formatting">7.1.1. 古い文字列書式設定方法</a></li>
 </ul>
 </li>
