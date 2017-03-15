@@ -139,10 +139,7 @@
 <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Usually your SQL operations will need to use values from Python variables.  You
-shouldn&#8217;t assemble your query using Python&#8217;s string operations because doing so
-is insecure; it makes your program vulnerable to an SQL injection attack
-(see <a class="reference external" href="https://xkcd.com/327/">https://xkcd.com/327/</a> for humorous example of what can go wrong).</p>
+<p>たいてい、SQL 操作では Python 変数の値を使う必要があります。この時、クエリーを Python の文字列操作を使って構築することは安全とは言えないので、すべきではありません。そのようなことをするとプログラムが SQL インジェクション攻撃に対し脆弱になります (<a class="reference external" href="https://xkcd.com/327/">https://xkcd.com/327/</a> ではどうなってしまうかをユーモラスに描いています)。</p>
 <p>代わりに、DB-API のパラメータ割り当てを使います。 <code class="docutils literal"><span class="pre">?</span></code> を変数の値を使いたいところに埋めておきます。その上で、値のタプルをカーソルの <a class="reference internal" href="#sqlite3.Cursor.execute" title="sqlite3.Cursor.execute"><code class="xref py py-meth docutils literal"><span class="pre">execute()</span></code></a> メソッドの第2引数として引き渡します。(他のデータベースモジュールでは変数の場所を示すのに <code class="docutils literal"><span class="pre">%s</span></code> や <code class="docutils literal"><span class="pre">:1</span></code> などの異なった表記を用いることがあります。) 例を示します:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Never do this -- insecure!</span>
 <span class="n">symbol</span> <span class="o">=</span> <span class="s1">&#39;RHAT&#39;</span>
@@ -337,9 +334,8 @@ be found in the <a class="reference external" href="https://www.sqlite.org/uri.h
 <dl class="method">
 <dt id="sqlite3.Connection.cursor">
 <code class="descname">cursor</code><span class="sig-paren">(</span><em>factory=Cursor</em><span class="sig-paren">)</span><a class="headerlink" href="#sqlite3.Connection.cursor" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>The cursor method accepts a single optional parameter <em>factory</em>. If
-supplied, this must be a callable returning an instance of <a class="reference internal" href="#sqlite3.Cursor" title="sqlite3.Cursor"><code class="xref py py-class docutils literal"><span class="pre">Cursor</span></code></a>
-or its subclasses.</p>
+<dd><p>cursor メソッドはオション引数 <em>factory</em> を 1 つだけ受け付けます。
+渡された場合は、 <a class="reference internal" href="#sqlite3.Cursor" title="sqlite3.Cursor"><code class="xref py py-class docutils literal"><span class="pre">Cursor</span></code></a> またはそのサブクラスのインスタンスを返す呼び出し可能オブジェクトでなければなりません。</p>
 </dd></dl>
 
 <dl class="method">
@@ -476,7 +472,7 @@ bytes, str, int, float and <code class="docutils literal"><span class="pre">None
 <span class="n">con</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>To remove a collation, call <code class="docutils literal"><span class="pre">create_collation</span></code> with <code class="docutils literal"><span class="pre">None</span></code> as callable:</p>
+<p>照合順序を取り除くには callable に <code class="docutils literal"><span class="pre">None</span></code> を指定して <code class="docutils literal"><span class="pre">create_collation</span></code> を呼び出します:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">con</span><span class="o">.</span><span class="n">create_collation</span><span class="p">(</span><span class="s2">&quot;reverse&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1194,7 +1190,7 @@ Data Modification Language (DML)  statement (i.e.
 <code class="docutils literal"><span class="pre">INSERT</span></code>/<code class="docutils literal"><span class="pre">UPDATE</span></code>/<code class="docutils literal"><span class="pre">DELETE</span></code>/<code class="docutils literal"><span class="pre">REPLACE</span></code>).</p>
 <p>そのため、トランザクション内で <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TABLE</span> <span class="pre">...</span></code>, <code class="docutils literal"><span class="pre">VACUUM</span></code>, <code class="docutils literal"><span class="pre">PRAGMA</span></code>  のようなコマンドを発行した場合、 <a class="reference internal" href="#module-sqlite3" title="sqlite3: A DB-API 2.0 implementation using SQLite 3.x."><code class="xref py py-mod docutils literal"><span class="pre">sqlite3</span></code></a> モジュールはそのコマンドを実行する前に暗黙にコミットします。これには2つの理由があります。 1番目は、これらのコマンドのうちのいくつかがトランザクション内では動かないということです。 2番目の理由は、 sqlite3 がトランザクション状態 (トランザクションがアクティブかどうか) を追跡する必要があるためです。現在のトランザクション状態は、コネクションオブジェクトの <a class="reference internal" href="#sqlite3.Connection.in_transaction" title="sqlite3.Connection.in_transaction"><code class="xref py py-attr docutils literal"><span class="pre">Connection.in_transaction</span></code></a> 属性によって露出されます。</p>
 <p>sqlite3 が暗黙のうちに実行する <code class="docutils literal"><span class="pre">BEGIN</span></code> 文の種類(またはそういうものを使わないこと)を <a class="reference internal" href="#sqlite3.connect" title="sqlite3.connect"><code class="xref py py-func docutils literal"><span class="pre">connect()</span></code></a> 呼び出しの <em>isolation_level</em> パラメータを通じて、または接続の <code class="xref py py-attr docutils literal"><span class="pre">isolation_level</span></code> プロパティを通じて、制御することができます。</p>
-<p>If you want <strong>autocommit mode</strong>, then set <code class="xref py py-attr docutils literal"><span class="pre">isolation_level</span></code> to <code class="docutils literal"><span class="pre">None</span></code>.</p>
+<p><strong>自動コミットモード</strong> を使いたい場合は、 <code class="xref py py-attr docutils literal"><span class="pre">isolation_level</span></code> は <code class="docutils literal"><span class="pre">None</span></code> にしてください。</p>
 <p>そうでなければデフォルトのまま <code class="docutils literal"><span class="pre">BEGIN</span></code> 文を使い続けるか、SQLite がサポートする分離レベル &#8220;DEFERRED&#8221;, &#8220;IMMEDIATE&#8221; または &#8220;EXCLUSIVE&#8221; を設定してください。</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.6 で変更: </span><a class="reference internal" href="#module-sqlite3" title="sqlite3: A DB-API 2.0 implementation using SQLite 3.x."><code class="xref py py-mod docutils literal"><span class="pre">sqlite3</span></code></a> used to implicitly commit an open transaction before DDL
@@ -1398,7 +1394,7 @@ statements.  This is no longer the case.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 3月 13, 2017
+    最終更新日時: 3月 16, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
