@@ -2722,8 +2722,8 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 <dt id="memoryview">
 <em class="property">class </em><code class="descname">memoryview</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#memoryview" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><em>obj</em> を参照する <a class="reference internal" href="#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> を作成します。 <em>obj</em> はバッファプロトコルをサポートしていなければなりません。バッファプロトコルをサポートする組み込みオブジェクトには、 <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> 、 <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> などがあります。</p>
-<p><a class="reference internal" href="#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> には <em>要素</em> の概念があり、それが起源のオブジェクト <em>obj</em> によって扱われる原子的なメモリの単位になります。多くの単純なオブジェクト、例えば <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> や <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> では、要素は単バイトになりますが、他の <a class="reference internal" href="array.html#array.array" title="array.array"><code class="xref py py-class docutils literal"><span class="pre">array.array</span></code></a> 等の型では、要素はより大きくなりえます。</p>
-<p><code class="docutils literal"><span class="pre">len(view)</span></code> は、<a class="reference internal" href="#memoryview.tolist" title="memoryview.tolist"><code class="xref py py-class docutils literal"><span class="pre">tolist</span></code></a> の長さと等しいです。<code class="docutils literal"><span class="pre">view.ndim</span> <span class="pre">=</span> <span class="pre">0</span></code> なら、長さは 1 です。<code class="docutils literal"><span class="pre">view.ndim</span> <span class="pre">=</span> <span class="pre">1</span></code> なら、長さはビューの要素数と等しいです。より高次元では、長さはビューのネストされたリスト表現の長さと等しいです。<a class="reference internal" href="#memoryview.itemsize" title="memoryview.itemsize"><code class="xref py py-class docutils literal"><span class="pre">itemsize</span></code></a> 属性は、要素一つごとのバイト数を与えます。</p>
+<p><a class="reference internal" href="#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> は元となるオブジェクト <em>obj</em> が扱うメモリーの最小単位を <em>要素</em> として扱います。多くの単純なオブジェクト、例えば <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> や <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> では、要素は単バイトになりますが、他の <a class="reference internal" href="array.html#array.array" title="array.array"><code class="xref py py-class docutils literal"><span class="pre">array.array</span></code></a> 等の型では、要素はより大きくなりえます。</p>
+<p>メモリビューの長さ <code class="docutils literal"><span class="pre">len(view)</span></code> は、 <a class="reference internal" href="#memoryview.tolist" title="memoryview.tolist"><code class="xref py py-class docutils literal"><span class="pre">tolist</span></code></a> で得られるリストの長さとなります。<code class="docutils literal"><span class="pre">view.ndim</span> <span class="pre">=</span> <span class="pre">0</span></code> なら、長さは 1 です。<code class="docutils literal"><span class="pre">view.ndim</span> <span class="pre">=</span> <span class="pre">1</span></code> なら、長さはビューの要素数と等しいです。より高次元では、長さはビューのネストされたリスト表現の長さと等しいです。要素一つあたりのバイト数は <a class="reference internal" href="#memoryview.itemsize" title="memoryview.itemsize"><code class="xref py py-class docutils literal"><span class="pre">itemsize</span></code></a> 属性から取得できます。</p>
 <p><a class="reference internal" href="#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> はスライスおよびインデックス指定で内容を取得できます。一次元のスライスは部分ビューになります:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="nb">memoryview</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;abcefg&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -2737,7 +2737,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 </pre></div>
 </div>
 <p>もしメモリビューの <a class="reference internal" href="#memoryview.format" title="memoryview.format"><code class="xref py py-class docutils literal"><span class="pre">format</span></code></a> が <a class="reference internal" href="struct.html#module-struct" title="struct: Interpret bytes as packed binary data."><code class="xref py py-mod docutils literal"><span class="pre">struct</span></code></a> モジュールによって定義されているネイティブのフォーマット指定子であれば、整数または整数のタプルでのインデックス指定により適切な型の <em>要素1つ</em> を得ることができます。一次元のメモリビューでは、整数または整数 1 つのタプルでインデックス指定できます。多次元のメモリビューでは、その次元数を <em>ndim</em> としたとき、ちょうど <em>ndim</em> 個の整数からなるタプルでインデックス指定できます。ゼロ次元のメモリビューでは、空のタプルでインデックス指定できます。</p>
-<p>Here is an example with a non-byte format:</p>
+<p><cite>~memoryview.format</cite> が単バイト単位ではない例を示します:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">array</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mi">11111111</span><span class="p">,</span> <span class="mi">22222222</span><span class="p">,</span> <span class="o">-</span><span class="mi">33333333</span><span class="p">,</span> <span class="mi">44444444</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="nb">memoryview</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
@@ -2749,8 +2749,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 <span class="go">[-11111111, -33333333]</span>
 </pre></div>
 </div>
-<p>If the underlying object is writable, the memoryview supports
-one-dimensional slice assignment. Resizing is not allowed:</p>
+<p>メモリビューの参照しているオブジェクトが書き込み可能であれば、一次元スライスでの代入が可能です。ただしサイズの変更はできません:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;abcefg&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="nb">memoryview</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v</span><span class="o">.</span><span class="n">readonly</span>
@@ -2789,7 +2788,7 @@ One-dimensional memoryviews with formats &#8216;B&#8217;, &#8216;b&#8217; or &#8
 <a class="reference internal" href="collections.abc.html#collections.abc.Sequence" title="collections.abc.Sequence"><code class="xref py py-class docutils literal"><span class="pre">collections.abc.Sequence</span></code></a></p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.5 で変更: </span>memoryviews can now be indexed with tuple of integers.</p>
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>メモリビューは整数のタプルでインデックス指定できるようになりました。</p>
 </div>
 <p><a class="reference internal" href="#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> にはいくつかのメソッドがあります:</p>
 <dl class="method">
@@ -2912,15 +2911,8 @@ One-dimensional memoryviews with formats &#8216;B&#8217;, &#8216;b&#8217; or &#8
 <dl class="method">
 <dt id="memoryview.cast">
 <code class="descname">cast</code><span class="sig-paren">(</span><em>format</em><span class="optional">[</span>, <em>shape</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#memoryview.cast" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Cast a memoryview to a new format or shape. <em>shape</em> defaults to
-<code class="docutils literal"><span class="pre">[byte_length//new_itemsize]</span></code>, which means that the result view
-will be one-dimensional. The return value is a new memoryview, but
-the buffer itself is not copied. Supported casts are 1D -&gt; C-<a class="reference internal" href="../glossary.html#term-contiguous"><span class="xref std std-term">contiguous</span></a>
-and C-contiguous -&gt; 1D.</p>
-<p>The destination format is restricted to a single element native format in
-<a class="reference internal" href="struct.html#module-struct" title="struct: Interpret bytes as packed binary data."><code class="xref py py-mod docutils literal"><span class="pre">struct</span></code></a> syntax. One of the formats must be a byte format
-(&#8216;B&#8217;, &#8216;b&#8217; or &#8216;c&#8217;). The byte length of the result must be the same
-as the original length.</p>
+<dd><p>memoryview を新しいフォーマットか shape にキャストします。 <em>shape</em> はデフォルトで <code class="docutils literal"><span class="pre">[byte_length//new_itemsize]</span></code> で、 1次元配列になります。戻り値は memoryview ですが、バッファー自体はコピーされません。サポートされている変換は 1次元配列 -&gt; C言語型の連続配列 と C言語型の連続配列 -&gt; 1次元配列 です（参考: <a class="reference internal" href="../glossary.html#term-contiguous"><span class="xref std std-term">contiguous</span></a>）。</p>
+<p>キャスト後のフォーマットは <a class="reference internal" href="struct.html#module-struct" title="struct: Interpret bytes as packed binary data."><code class="xref py py-mod docutils literal"><span class="pre">struct</span></code></a> 文法の単一要素ネイティブフォーマットに制限されます。フォーマットのうちの一つはバイトフォーマット (&#8216;B&#8217;, &#8216;b&#8217;, &#8216;c&#8217;) でなければなりません。結果のバイト長はオリジナルの長さと同じでなければなりません。</p>
 <p>1D/long から 1D/unsigned byte へのキャスト:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">array</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
