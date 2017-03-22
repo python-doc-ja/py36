@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>14.2. configparser — 設定ファイルのパーサー &#8212; Python 3.6.0 ドキュメント</title>
+    <title>14.2. configparser — 設定ファイルのパーサー &#8212; Python 3.6.1rc1 ドキュメント</title>
     
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.0',
+        VERSION:     '3.6.1rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,13 +26,13 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.0 ドキュメント 内を検索"
+          title="Python 3.6.1rc1 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="top" title="Python 3.6.1rc1 ドキュメント" href="../contents.html" />
     <link rel="up" title="14. ファイルフォーマット" href="fileformats.html" />
     <link rel="next" title="14.3. netrc — netrc ファイルの処理" href="netrc.html" />
     <link rel="prev" title="14.1. csv — CSV ファイルの読み書き" href="csv.html" />
@@ -74,7 +74,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.0</span>
+          <span class="version_switcher_placeholder">3.6.1rc1</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -788,7 +788,19 @@
 <dl class="method">
 <dt id="configparser.ConfigParser.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>filenames</em>, <em>encoding=None</em><span class="sig-paren">)</span><a class="headerlink" href="#configparser.ConfigParser.read" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>ファイル名のリストを読んで解析を試み、うまく解析できたファイル名のリストを返します。 <em>filenames</em> が文字列の場合、この引数は1つのファイル名として扱われます。 <em>filenames</em> 中に開けないファイルがある場合、そのファイルは無視されます。この挙動は、設定ファイルが置かれる可能性のある場所 (例えば、 カレントディレクトリ、ホームディレクトリ、システム全体の設定を行うディレクトリ) のリストを指定して、リストの中で存在する全ての設定ファイルを読むことを想定して設計されています。 どの設定ファイルも存在しなかった場合、 <a class="reference internal" href="#configparser.ConfigParser" title="configparser.ConfigParser"><code class="xref py py-class docutils literal"><span class="pre">ConfigParser</span></code></a> のインスタンスは空のデータセットを持ちます。初期値の設定ファイルを先に読み込んでおく必要があるアプリケーションでは、 オプションのファイルを読み込むための <a class="reference internal" href="#configparser.ConfigParser.read" title="configparser.ConfigParser.read"><code class="xref py py-meth docutils literal"><span class="pre">read()</span></code></a> を呼ぶ前に 、<a class="reference internal" href="#configparser.ConfigParser.read_file" title="configparser.ConfigParser.read_file"><code class="xref py py-meth docutils literal"><span class="pre">read_file()</span></code></a> を用いて必要なファイルを読み込みんでください:</p>
+<dd><p>Attempt to read and parse a list of filenames, returning a list of
+filenames which were successfully parsed.</p>
+<p>If <em>filenames</em> is a string or <a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a>, it is treated as
+a single filename.  If a file named in <em>filenames</em> cannot be opened, that
+file will be ignored.  This is designed so that you can specify a list of
+potential configuration file locations (for example, the current
+directory, the user&#8217;s home directory, and some system-wide directory),
+and all existing configuration files in the list will be read.</p>
+<p>If none of the named files exist, the <a class="reference internal" href="#configparser.ConfigParser" title="configparser.ConfigParser"><code class="xref py py-class docutils literal"><span class="pre">ConfigParser</span></code></a>
+instance will contain an empty dataset.  An application which requires
+initial values to be loaded from a file should load the required file or
+files using <a class="reference internal" href="#configparser.ConfigParser.read_file" title="configparser.ConfigParser.read_file"><code class="xref py py-meth docutils literal"><span class="pre">read_file()</span></code></a> before calling <a class="reference internal" href="#configparser.ConfigParser.read" title="configparser.ConfigParser.read"><code class="xref py py-meth docutils literal"><span class="pre">read()</span></code></a> for any
+optional files:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">configparser</span><span class="o">,</span> <span class="nn">os</span>
 
 <span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
@@ -799,6 +811,9 @@
 </div>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.2 で追加: </span><em>encoding</em> 引数。以前は、すべてのファイルが <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> のデフォルトエンコーディングを使って読まれていました。</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6.1 で追加: </span>The <em>filenames</em> parameter accepts a <a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a>.</p>
 </div>
 </dd></dl>
 
@@ -1114,7 +1129,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.0</span>
+          <span class="version_switcher_placeholder">3.6.1rc1</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 

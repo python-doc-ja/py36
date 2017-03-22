@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Unicode オブジェクトと codec &#8212; Python 3.6.0 ドキュメント</title>
+    <title>Unicode オブジェクトと codec &#8212; Python 3.6.1rc1 ドキュメント</title>
     
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.0',
+        VERSION:     '3.6.1rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,13 +26,13 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.0 ドキュメント 内を検索"
+          title="Python 3.6.1rc1 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="top" title="Python 3.6.1rc1 ドキュメント" href="../contents.html" />
     <link rel="up" title="具象オブジェクト (concrete object) レイヤ" href="concrete.html" />
     <link rel="next" title="タプルオブジェクト (tuple object)" href="tuple.html" />
     <link rel="prev" title="bytearray オブジェクト" href="bytearray.html" />
@@ -74,7 +74,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.0</span>
+          <span class="version_switcher_placeholder">3.6.1rc1</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -1372,46 +1372,71 @@ codec が例外を送出した場合には <em>NULL</em> を返します。</p>
 </div>
 <div class="section" id="character-map-codecs">
 <h3>Character Map Codecs<a class="headerlink" href="#character-map-codecs" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>この codec は、多くの様々な codec を実装する際に使われるという点で特殊な codec です (実際、 <code class="xref py py-mod docutils literal"><span class="pre">encodings</span></code> パッケージに入っている標準 codecs のほとんどは、この codec を使っています)。
-この codec は、文字のエンコードやデコードに対応表を使います。</p>
-<p>デコード用の対応表は、 string 型の文字を Unicode 型の文字、整数 (Unicode 序数として解釈されます)、 <code class="docutils literal"><span class="pre">None</span></code> (&#8220;未定義の対応付け&#8221; を意味し、エラーを引き起こします) のいずれかに対応付けなければなりません。</p>
-<p>エンコード用の対応表は、Unicode 型の文字を string 型の文字、整数 (Latin-1 序数として解釈されます)、 <code class="docutils literal"><span class="pre">None</span></code> (&#8220;未定義の対応付け&#8221; を意味し、エラーを引き起こします) のいずれかに対応付けなければなりません。</p>
-<p>対応表のオブジェクトは、 <a class="reference internal" href="../reference/datamodel.html#object.__getitem__" title="object.__getitem__"><code class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></code></a> マップ型インタフェースをサポートしなければなりません。</p>
-<p>ある文字の検索が LookupError によって失敗すると、その文字はそのままコピーされます。
-すなわち、その文字の序数値がそれぞれ Unicode または Latin-1 として解釈されます。
-このため、対応表が持つべき対応付けは、ある文字を別のコードポイントに対応付けるものだけです。</p>
+<p>This codec is special in that it can be used to implement many different codecs
+(and this is in fact what was done to obtain most of the standard codecs
+included in the <code class="xref py py-mod docutils literal"><span class="pre">encodings</span></code> package). The codec uses mapping to encode and
+decode characters.  The mapping objects provided must support the
+<a class="reference internal" href="../reference/datamodel.html#object.__getitem__" title="object.__getitem__"><code class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></code></a> mapping interface; dictionaries and sequences work well.</p>
 <p>以下は mapping codec の APIです:</p>
 <dl class="function">
 <dt id="c.PyUnicode_DecodeCharmap">
-<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyUnicode_DecodeCharmap</code><span class="sig-paren">(</span>const char<em>&nbsp;*s</em>, Py_ssize_t<em>&nbsp;size</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*mapping</em>, const char<em>&nbsp;*errors</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyUnicode_DecodeCharmap" title="この定義へのパーマリンク">¶</a></dt>
-<dd><em class="refcount">Return value: New reference.</em><p>エンコードされた <em>size</em> バイトの文字列 <em>s</em> から <em>mapping</em> に指定されたオブジェクトを使って Unicode オブジェクトを生成します。codec が例外を送出した場合には <em>NULL</em> を返します。もし、 <em>mapping</em> が <em>NULL</em> だった場合、latin-1 でデコードされます。それ以外の場合では、 <em>mapping</em> は byte に対する辞書マップ (訳注: s に含まれる文字の unsigned な値を int 型でキーとして、値として変換対象の Unicode 文字を表す Unicode 文字列になっているような辞書) か、ルックアップテーブルとして扱われる Unicode 文字列です。文字列 (訳注: mapping が Unicode 文字列として渡された場合) の長さより大きい byte 値や、(訳注: mappingにしたがって変換した結果が) U+FFFE &#8220;characters&#8221; になる Byte値は、&#8221;定義されていない対応付け (undefined mapping)&#8221; として扱われます。</p>
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyUnicode_DecodeCharmap</code><span class="sig-paren">(</span>const char<em>&nbsp;*data</em>, Py_ssize_t<em>&nbsp;size</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*mapping</em>, const char<em>&nbsp;*errors</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyUnicode_DecodeCharmap" title="この定義へのパーマリンク">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Create a Unicode object by decoding <em>size</em> bytes of the encoded string <em>s</em>
+using the given <em>mapping</em> object.  Return <em>NULL</em> if an exception was raised
+by the codec.</p>
+<p>If <em>mapping</em> is <em>NULL</em>, Latin-1 decoding will be applied.  Else
+<em>mapping</em> must map bytes ordinals (integers in the range from 0 to 255)
+to Unicode strings, integers (which are then interpreted as Unicode
+ordinals) or <code class="docutils literal"><span class="pre">None</span></code>.  Unmapped data bytes &#8211; ones which cause a
+<a class="reference internal" href="../library/exceptions.html#LookupError" title="LookupError"><code class="xref py py-exc docutils literal"><span class="pre">LookupError</span></code></a>, as well as ones which get mapped to <code class="docutils literal"><span class="pre">None</span></code>,
+<code class="docutils literal"><span class="pre">0xFFFE</span></code> or <code class="docutils literal"><span class="pre">'\ufffe'</span></code>, are treated as undefined mappings and cause
+an error.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.PyUnicode_AsCharmapString">
 <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyUnicode_AsCharmapString</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*unicode</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*mapping</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyUnicode_AsCharmapString" title="この定義へのパーマリンク">¶</a></dt>
-<dd><em class="refcount">Return value: New reference.</em><p>Unicode オブジェクトを <em>mapping</em> に指定されたオブジェクトを使ってエンコードし、結果を Python 文字列オブジェクトとして返します。エラー処理は &#8220;strict&#8221; です。 codec が例外を送出した場合には <em>NULL</em> を返します。</p>
-</dd></dl>
-
-<p>以下の codec API は Unicode から Unicode への対応付けを行う特殊なものです。</p>
-<dl class="function">
-<dt id="c.PyUnicode_TranslateCharmap">
-<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyUnicode_TranslateCharmap</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.Py_UNICODE" title="Py_UNICODE">Py_UNICODE</a><em>&nbsp;*s</em>, Py_ssize_t<em>&nbsp;size</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*table</em>, const char<em>&nbsp;*errors</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyUnicode_TranslateCharmap" title="この定義へのパーマリンク">¶</a></dt>
-<dd><em class="refcount">Return value: New reference.</em><p><em>size</em> で指定された長さを持つ <a class="reference internal" href="#c.Py_UNICODE" title="Py_UNICODE"><code class="xref c c-type docutils literal"><span class="pre">Py_UNICODE</span></code></a> バッファを、文字変換マップ <em>table</em> を適用して変換し、変換結果を Unicode オブジェクトで返します。 codec が例外を発行した場合には <em>NULL</em> を返します。</p>
-<p><em>mapping</em> テーブルは、Unicode 序数を表す整数を Unicode 序数を表す整数または <code class="docutils literal"><span class="pre">None</span></code> (その文字を削除する) に対応付けなければなりません。</p>
-<p>対応表が提供する必要があるメソッドは <a class="reference internal" href="../reference/datamodel.html#object.__getitem__" title="object.__getitem__"><code class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></code></a> インタフェースだけです; 従って、辞書やシーケンス型を使ってもうまく動作します。
-対応付けを行っていない (<a class="reference internal" href="../library/exceptions.html#LookupError" title="LookupError"><code class="xref py py-exc docutils literal"><span class="pre">LookupError</span></code></a> を起こすような) 文字序数に対しては、変換は行わず、そのままコピーします。</p>
-<div class="deprecated-removed">
-<p>バージョン 3.3 で非推奨、バージョン 4.0 で削除予定: 古いスタイルの Py_UNICODE API の一部です; PyUnicode_Translate() または <a class="reference internal" href="codec.html#codec-registry"><span class="std std-ref">汎用の codec ベースの API</span></a> を使用するように移行してください。</p>
-</div>
+<dd><em class="refcount">Return value: New reference.</em><p>Encode a Unicode object using the given <em>mapping</em> object and return the
+result as a bytes object.  Error handling is &#8220;strict&#8221;.  Return <em>NULL</em> if an
+exception was raised by the codec.</p>
+<p>The <em>mapping</em> object must map Unicode ordinal integers to bytes objects,
+integers in the range from 0 to 255 or <code class="docutils literal"><span class="pre">None</span></code>.  Unmapped character
+ordinals (ones which cause a <a class="reference internal" href="../library/exceptions.html#LookupError" title="LookupError"><code class="xref py py-exc docutils literal"><span class="pre">LookupError</span></code></a>) as well as mapped to
+<code class="docutils literal"><span class="pre">None</span></code> are treated as &#8220;undefined mapping&#8221; and cause an error.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.PyUnicode_EncodeCharmap">
 <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyUnicode_EncodeCharmap</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.Py_UNICODE" title="Py_UNICODE">Py_UNICODE</a><em>&nbsp;*s</em>, Py_ssize_t<em>&nbsp;size</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*mapping</em>, const char<em>&nbsp;*errors</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyUnicode_EncodeCharmap" title="この定義へのパーマリンク">¶</a></dt>
-<dd><em class="refcount">Return value: New reference.</em><p><em>size</em> で指定された長さを持つ <a class="reference internal" href="#c.Py_UNICODE" title="Py_UNICODE"><code class="xref c c-type docutils literal"><span class="pre">Py_UNICODE</span></code></a> 型バッファを <em>mapping</em> に指定されたオブジェクトを使ってエンコードし、 Python 文字列オブジェクトにして返します。 codec が例外を送出した場合には <em>NULL</em> を返します。</p>
+<dd><em class="refcount">Return value: New reference.</em><p>Encode the <a class="reference internal" href="#c.Py_UNICODE" title="Py_UNICODE"><code class="xref c c-type docutils literal"><span class="pre">Py_UNICODE</span></code></a> buffer of the given <em>size</em> using the given
+<em>mapping</em> object and return the result as a bytes object.  Return <em>NULL</em> if
+an exception was raised by the codec.</p>
 <div class="deprecated-removed">
 <p>バージョン 3.3 で非推奨、バージョン 4.0 で削除予定: 古いスタイルの Py_UNICODE API の一部です; PyUnicode_AsCharmapString() または PyUnicode_AsEncodedString() を使用するように移行してください。</p>
+</div>
+</dd></dl>
+
+<p>以下の codec API は Unicode から Unicode への対応付けを行う特殊なものです。</p>
+<dl class="function">
+<dt id="c.PyUnicode_Translate">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyUnicode_Translate</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*unicode</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*mapping</em>, const char<em>&nbsp;*errors</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyUnicode_Translate" title="この定義へのパーマリンク">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Translate a Unicode object using the given <em>mapping</em> object and return the
+resulting Unicode object.  Return <em>NULL</em> if an exception was raised by the
+codec.</p>
+<p>The <em>mapping</em> object must map Unicode ordinal integers to Unicode strings,
+integers (which are then interpreted as Unicode ordinals) or <code class="docutils literal"><span class="pre">None</span></code>
+(causing deletion of the character).  Unmapped character ordinals (ones
+which cause a <a class="reference internal" href="../library/exceptions.html#LookupError" title="LookupError"><code class="xref py py-exc docutils literal"><span class="pre">LookupError</span></code></a>) are left untouched and are copied as-is.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="c.PyUnicode_TranslateCharmap">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyUnicode_TranslateCharmap</code><span class="sig-paren">(</span>const <a class="reference internal" href="#c.Py_UNICODE" title="Py_UNICODE">Py_UNICODE</a><em>&nbsp;*s</em>, Py_ssize_t<em>&nbsp;size</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*mapping</em>, const char<em>&nbsp;*errors</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyUnicode_TranslateCharmap" title="この定義へのパーマリンク">¶</a></dt>
+<dd><em class="refcount">Return value: New reference.</em><p>Translate a <a class="reference internal" href="#c.Py_UNICODE" title="Py_UNICODE"><code class="xref c c-type docutils literal"><span class="pre">Py_UNICODE</span></code></a> buffer of the given <em>size</em> by applying a
+character <em>mapping</em> table to it and return the resulting Unicode object.
+Return <em>NULL</em> when an exception was raised by the codec.</p>
+<div class="deprecated-removed">
+<p>バージョン 3.3 で非推奨、バージョン 4.0 で削除予定: 古いスタイルの Py_UNICODE API の一部です; PyUnicode_Translate() または <a class="reference internal" href="codec.html#codec-registry"><span class="std std-ref">汎用の codec ベースの API</span></a> を使用するように移行してください。</p>
 </div>
 </dd></dl>
 
@@ -1488,9 +1513,9 @@ CRLF は一個の改行文字とみなします。
 </dd></dl>
 
 <dl class="function">
-<dt id="c.PyUnicode_Translate">
-<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyUnicode_Translate</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*str</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*table</em>, const char<em>&nbsp;*errors</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyUnicode_Translate" title="この定義へのパーマリンク">¶</a></dt>
-<dd><em class="refcount">Return value: New reference.</em><p>文字列に文字対応表 <em>table</em> を適用して変換し、変換結果を Unicode オブジェクトで返します。</p>
+<dt>
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyUnicode_Translate</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*str</em>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*table</em>, const char<em>&nbsp;*errors</em><span class="sig-paren">)</span></dt>
+<dd><p>文字列に文字対応表 <em>table</em> を適用して変換し、変換結果を Unicode オブジェクトで返します。</p>
 <p>対応表は、Unicode 序数を表す整数を Unicode 序数を表す整数または <code class="docutils literal"><span class="pre">None</span></code> (その文字を削除する) に対応付けなければなりません。</p>
 <p>対応表が提供する必要があるメソッドは <a class="reference internal" href="../reference/datamodel.html#object.__getitem__" title="object.__getitem__"><code class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></code></a> インタフェースだけです; 従って、辞書やシーケンス型を使ってもうまく動作します。
 対応付けを行っていない (<a class="reference internal" href="../library/exceptions.html#LookupError" title="LookupError"><code class="xref py py-exc docutils literal"><span class="pre">LookupError</span></code></a> を起こすような) 文字序数に対しては、変換は行わず、そのままコピーします。</p>
@@ -1683,7 +1708,7 @@ void <code class="descname">PyUnicode_InternInPlace</code><span class="sig-paren
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.0</span>
+          <span class="version_switcher_placeholder">3.6.1rc1</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 

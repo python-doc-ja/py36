@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>5. インポートシステム &#8212; Python 3.6.0 ドキュメント</title>
+    <title>5. インポートシステム &#8212; Python 3.6.1rc1 ドキュメント</title>
     
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.0',
+        VERSION:     '3.6.1rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,13 +26,13 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.0 ドキュメント 内を検索"
+          title="Python 3.6.1rc1 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="top" title="Python 3.6.1rc1 ドキュメント" href="../contents.html" />
     <link rel="up" title="Python 言語リファレンス" href="index.html" />
     <link rel="next" title="6. 式 (expression)" href="expressions.html" />
     <link rel="prev" title="4. 実行モデル" href="executionmodel.html" />
@@ -74,7 +74,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.0</span>
+          <span class="version_switcher_placeholder">3.6.1rc1</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -287,7 +287,7 @@ The import system passes in a target module only during reload.</p>
 <p>多くの場合、ファインダーとローダーは同じオブジェクトで構いません; そのような場合では <a class="reference internal" href="../library/importlib.html#importlib.abc.MetaPathFinder.find_spec" title="importlib.abc.MetaPathFinder.find_spec"><code class="xref py py-meth docutils literal"><span class="pre">find_spec()</span></code></a> メソッドは単に <code class="docutils literal"><span class="pre">self</span></code> (訳注: オブジェクト自身) を返すだけです。</p>
 <p>モジュールローダーは、 <a class="reference internal" href="../library/importlib.html#importlib.abc.Loader.create_module" title="importlib.abc.Loader.create_module"><code class="xref py py-meth docutils literal"><span class="pre">create_module()</span></code></a> メソッドを実装することでロード中にモジュールオブジェクトを作成することを選択できます。このメソッドは、モジュール仕様を引数に取って、ロード中に使う新しいモジュールオブジェクトを返します。 <code class="docutils literal"><span class="pre">create_module()</span></code> はモジュールオブジェクトに属性を設定する必要はありません。もしこのメソッドが <code class="docutils literal"><span class="pre">None</span></code> を返すなら、インポート機構は新しいモジュールを自身で作成します。</p>
 <div class="versionadded">
-<p><span class="versionmodified">バージョン 3.4 で追加: </span>ローダーの create_module() メソッド。</p>
+<p><span class="versionmodified">バージョン 3.4 で追加: </span>The <a class="reference internal" href="../library/importlib.html#importlib.abc.Loader.create_module" title="importlib.abc.Loader.create_module"><code class="xref py py-meth docutils literal"><span class="pre">create_module()</span></code></a> method of loaders.</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.4 で変更: </span><a class="reference internal" href="../library/importlib.html#importlib.abc.Loader.load_module" title="importlib.abc.Loader.load_module"><code class="xref py py-meth docutils literal"><span class="pre">load_module()</span></code></a> メソッドは <a class="reference internal" href="../library/importlib.html#importlib.abc.Loader.exec_module" title="importlib.abc.Loader.exec_module"><code class="xref py py-meth docutils literal"><span class="pre">exec_module()</span></code></a> によって置き換えられ、インポート機構がロードのすべての定型責任を引き受けました。</p>
@@ -305,7 +305,12 @@ The import system passes in a target module only during reload.</p>
 </div></blockquote>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.5 で変更: </span><code class="docutils literal"><span class="pre">exec_module()</span></code> が定義されていて <code class="docutils literal"><span class="pre">create_module()</span></code> が定義されていない場合、 <a class="reference internal" href="../library/exceptions.html#DeprecationWarning" title="DeprecationWarning"><code class="xref py py-exc docutils literal"><span class="pre">DeprecationWarning</span></code></a> が送出されます。 Python 3.6 からは ModuleSpec に attach されたローダーに <code class="docutils literal"><span class="pre">create_module()</span></code> が定義されていないとエラーになります。</p>
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>A <a class="reference internal" href="../library/exceptions.html#DeprecationWarning" title="DeprecationWarning"><code class="xref py py-exc docutils literal"><span class="pre">DeprecationWarning</span></code></a> is raised when <code class="docutils literal"><span class="pre">exec_module()</span></code> is defined but
+<code class="docutils literal"><span class="pre">create_module()</span></code> is not.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>An <a class="reference internal" href="../library/exceptions.html#ImportError" title="ImportError"><code class="xref py py-exc docutils literal"><span class="pre">ImportError</span></code></a> is raised when <code class="docutils literal"><span class="pre">exec_module()</span></code> is defined but
+<code class="docutils literal"><span class="pre">create_module()</span></code> is not.</p>
 </div>
 </div>
 <div class="section" id="submodules">
@@ -644,7 +649,7 @@ while raising an exception terminates it immediately.</p>
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.0</span>
+          <span class="version_switcher_placeholder">3.6.1rc1</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 

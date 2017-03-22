@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>12.6. sqlite3 — SQLite データベースに対する DB-API 2.0 インタフェース &#8212; Python 3.6.0 ドキュメント</title>
+    <title>12.6. sqlite3 — SQLite データベースに対する DB-API 2.0 インタフェース &#8212; Python 3.6.1rc1 ドキュメント</title>
     
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.0',
+        VERSION:     '3.6.1rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,13 +26,13 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.0 ドキュメント 内を検索"
+          title="Python 3.6.1rc1 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="top" title="Python 3.6.1rc1 ドキュメント" href="../contents.html" />
     <link rel="up" title="12. データの永続化" href="persistence.html" />
     <link rel="next" title="13. データ圧縮とアーカイブ" href="archiving.html" />
     <link rel="prev" title="12.5. dbm — Unix “データベース” へのインタフェース" href="dbm.html" />
@@ -74,7 +74,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.0</span>
+          <span class="version_switcher_placeholder">3.6.1rc1</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -1188,10 +1188,11 @@ specified, etc.  It is a subclass of <a class="reference internal" href="#sqlite
 <p>By default, the <a class="reference internal" href="#module-sqlite3" title="sqlite3: A DB-API 2.0 implementation using SQLite 3.x."><code class="xref py py-mod docutils literal"><span class="pre">sqlite3</span></code></a> module opens transactions implicitly before a
 Data Modification Language (DML)  statement (i.e.
 <code class="docutils literal"><span class="pre">INSERT</span></code>/<code class="docutils literal"><span class="pre">UPDATE</span></code>/<code class="docutils literal"><span class="pre">DELETE</span></code>/<code class="docutils literal"><span class="pre">REPLACE</span></code>).</p>
-<p>そのため、トランザクション内で <code class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TABLE</span> <span class="pre">...</span></code>, <code class="docutils literal"><span class="pre">VACUUM</span></code>, <code class="docutils literal"><span class="pre">PRAGMA</span></code>  のようなコマンドを発行した場合、 <a class="reference internal" href="#module-sqlite3" title="sqlite3: A DB-API 2.0 implementation using SQLite 3.x."><code class="xref py py-mod docutils literal"><span class="pre">sqlite3</span></code></a> モジュールはそのコマンドを実行する前に暗黙にコミットします。これには2つの理由があります。 1番目は、これらのコマンドのうちのいくつかがトランザクション内では動かないということです。 2番目の理由は、 sqlite3 がトランザクション状態 (トランザクションがアクティブかどうか) を追跡する必要があるためです。現在のトランザクション状態は、コネクションオブジェクトの <a class="reference internal" href="#sqlite3.Connection.in_transaction" title="sqlite3.Connection.in_transaction"><code class="xref py py-attr docutils literal"><span class="pre">Connection.in_transaction</span></code></a> 属性によって露出されます。</p>
 <p>sqlite3 が暗黙のうちに実行する <code class="docutils literal"><span class="pre">BEGIN</span></code> 文の種類(またはそういうものを使わないこと)を <a class="reference internal" href="#sqlite3.connect" title="sqlite3.connect"><code class="xref py py-func docutils literal"><span class="pre">connect()</span></code></a> 呼び出しの <em>isolation_level</em> パラメータを通じて、または接続の <code class="xref py py-attr docutils literal"><span class="pre">isolation_level</span></code> プロパティを通じて、制御することができます。</p>
 <p><strong>自動コミットモード</strong> を使いたい場合は、 <code class="xref py py-attr docutils literal"><span class="pre">isolation_level</span></code> は <code class="docutils literal"><span class="pre">None</span></code> にしてください。</p>
 <p>そうでなければデフォルトのまま <code class="docutils literal"><span class="pre">BEGIN</span></code> 文を使い続けるか、SQLite がサポートする分離レベル &#8220;DEFERRED&#8221;, &#8220;IMMEDIATE&#8221; または &#8220;EXCLUSIVE&#8221; を設定してください。</p>
+<p>The current transaction state is exposed through the
+<a class="reference internal" href="#sqlite3.Connection.in_transaction" title="sqlite3.Connection.in_transaction"><code class="xref py py-attr docutils literal"><span class="pre">Connection.in_transaction</span></code></a> attribute of the connection object.</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.6 で変更: </span><a class="reference internal" href="#module-sqlite3" title="sqlite3: A DB-API 2.0 implementation using SQLite 3.x."><code class="xref py py-mod docutils literal"><span class="pre">sqlite3</span></code></a> used to implicitly commit an open transaction before DDL
 statements.  This is no longer the case.</p>
@@ -1365,7 +1366,7 @@ statements.  This is no longer the case.</p>
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.0</span>
+          <span class="version_switcher_placeholder">3.6.1rc1</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 

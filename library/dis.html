@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>32.12. dis — Python バイトコードの逆アセンブラ &#8212; Python 3.6.0 ドキュメント</title>
+    <title>32.12. dis — Python バイトコードの逆アセンブラ &#8212; Python 3.6.1rc1 ドキュメント</title>
     
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.0',
+        VERSION:     '3.6.1rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,13 +26,13 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.0 ドキュメント 内を検索"
+          title="Python 3.6.1rc1 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="top" title="Python 3.6.1rc1 ドキュメント" href="../contents.html" />
     <link rel="up" title="32. Python言語サービス" href="language.html" />
     <link rel="next" title="32.13. pickletools — pickle 開発者のためのツール群" href="pickletools.html" />
     <link rel="prev" title="32.11. compileall — Python ライブラリをバイトコンパイル" href="compileall.html" />
@@ -74,7 +74,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.0</span>
+          <span class="version_switcher_placeholder">3.6.1rc1</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -888,7 +888,13 @@ TOS にあるイテラブルを個別の値にばらしますが、ばらした�
 <dl class="opcode">
 <dt id="opcode-BUILD_MAP">
 <code class="descname">BUILD_MAP</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BUILD_MAP" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>スタックに新しい辞書オブジェクトをプッシュします。 辞書は <em>count</em> 個のエントリを持つサイズに設定されます。</p>
+<dd><p>Pushes a new dictionary object onto the stack.  Pops <code class="docutils literal"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">count</span></code> items
+so that the dictionary holds <em>count</em> entries:
+<code class="docutils literal"><span class="pre">{...,</span> <span class="pre">TOS3:</span> <span class="pre">TOS2,</span> <span class="pre">TOS1:</span> <span class="pre">TOS}</span></code>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>The dictionary is created from stack items instead of creating an
+empty dictionary pre-sized to hold <em>count</em> items.</p>
+</div>
 </dd></dl>
 
 <dl class="opcode">
@@ -909,6 +915,76 @@ a tuple of keys.</p>
 onto the stack.</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BUILD_TUPLE_UNPACK">
+<code class="descname">BUILD_TUPLE_UNPACK</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BUILD_TUPLE_UNPACK" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Pops <em>count</em> iterables from the stack, joins them in a single tuple,
+and pushes the result.  Implements iterable unpacking in tuple
+displays <code class="docutils literal"><span class="pre">(*x,</span> <span class="pre">*y,</span> <span class="pre">*z)</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BUILD_TUPLE_UNPACK_WITH_CALL">
+<code class="descname">BUILD_TUPLE_UNPACK_WITH_CALL</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BUILD_TUPLE_UNPACK_WITH_CALL" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>This is similar to <a class="reference internal" href="#opcode-BUILD_TUPLE_UNPACK"><code class="xref std std-opcode docutils literal"><span class="pre">BUILD_TUPLE_UNPACK</span></code></a>,
+but is used for <code class="docutils literal"><span class="pre">f(*x,</span> <span class="pre">*y,</span> <span class="pre">*z)</span></code> call syntax. The stack item at position
+<code class="docutils literal"><span class="pre">count</span> <span class="pre">+</span> <span class="pre">1</span></code> should be the corresponding callable <code class="docutils literal"><span class="pre">f</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BUILD_LIST_UNPACK">
+<code class="descname">BUILD_LIST_UNPACK</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BUILD_LIST_UNPACK" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>This is similar to <a class="reference internal" href="#opcode-BUILD_TUPLE_UNPACK"><code class="xref std std-opcode docutils literal"><span class="pre">BUILD_TUPLE_UNPACK</span></code></a>, but pushes a list
+instead of tuple.  Implements iterable unpacking in list
+displays <code class="docutils literal"><span class="pre">[*x,</span> <span class="pre">*y,</span> <span class="pre">*z]</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BUILD_SET_UNPACK">
+<code class="descname">BUILD_SET_UNPACK</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BUILD_SET_UNPACK" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>This is similar to <a class="reference internal" href="#opcode-BUILD_TUPLE_UNPACK"><code class="xref std std-opcode docutils literal"><span class="pre">BUILD_TUPLE_UNPACK</span></code></a>, but pushes a set
+instead of tuple.  Implements iterable unpacking in set
+displays <code class="docutils literal"><span class="pre">{*x,</span> <span class="pre">*y,</span> <span class="pre">*z}</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BUILD_MAP_UNPACK">
+<code class="descname">BUILD_MAP_UNPACK</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BUILD_MAP_UNPACK" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Pops <em>count</em> mappings from the stack, merges them into a single dictionary,
+and pushes the result.  Implements dictionary unpacking in dictionary
+displays <code class="docutils literal"><span class="pre">{**x,</span> <span class="pre">**y,</span> <span class="pre">**z}</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
+</div>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-BUILD_MAP_UNPACK_WITH_CALL">
+<code class="descname">BUILD_MAP_UNPACK_WITH_CALL</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-BUILD_MAP_UNPACK_WITH_CALL" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>This is similar to <a class="reference internal" href="#opcode-BUILD_MAP_UNPACK"><code class="xref std std-opcode docutils literal"><span class="pre">BUILD_MAP_UNPACK</span></code></a>,
+but is used for <code class="docutils literal"><span class="pre">f(**x,</span> <span class="pre">**y,</span> <span class="pre">**z)</span></code> call syntax.  The stack item at
+position <code class="docutils literal"><span class="pre">count</span> <span class="pre">+</span> <span class="pre">2</span></code> should be the corresponding callable <code class="docutils literal"><span class="pre">f</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>The position of the callable is determined by adding 2 to the opcode
+argument instead of encoding it in the second byte of the argument.</p>
 </div>
 </dd></dl>
 
@@ -1073,7 +1149,48 @@ onto the stack.</p>
 <dl class="opcode">
 <dt id="opcode-CALL_FUNCTION">
 <code class="descname">CALL_FUNCTION</code><span class="sig-paren">(</span><em>argc</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-CALL_FUNCTION" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>関数を呼び出します。 <em>argc</em> の下位バイトは位置パラメタの数を、上位バイトはキーワードパラメタの数を示します。 スタック上では、最初にキーワードパラメタが見つかります。 それぞれのキーワード引数に対しては、値がキーより上に来ます。 スタック上のキーワードパラメタの下に位置パラメタがあり、最も右のパラメタが先頭になります。 スタック上のパラメタの下には、呼び出される関数オブジェクトが置かれます。 すべての関数引数をポップし、関数自体もスタックから取り除き、戻り値をプッシュします。</p>
+<dd><p>Calls a function.  <em>argc</em> indicates the number of positional arguments.
+The positional arguments are on the stack, with the right-most argument
+on top.  Below the arguments, the function object to call is on the stack.
+Pops all function arguments, and the function itself off the stack, and
+pushes the return value.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>This opcode is used only for calls with positional arguments.</p>
+</div>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-CALL_FUNCTION_KW">
+<code class="descname">CALL_FUNCTION_KW</code><span class="sig-paren">(</span><em>argc</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-CALL_FUNCTION_KW" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Calls a function.  <em>argc</em> indicates the number of arguments (positional
+and keyword).  The top element on the stack contains a tuple of keyword
+argument names.  Below the tuple, keyword arguments are on the stack, in
+the order corresponding to the tuple.  Below the keyword arguments, the
+positional arguments are on the stack, with the right-most parameter on
+top.  Below the arguments, the function object to call is on the stack.
+Pops all function arguments, and the function itself off the stack, and
+pushes the return value.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>Keyword arguments are packed in a tuple instead of a dictionary,
+<em>argc</em> indicates the total number of arguments</p>
+</div>
+</dd></dl>
+
+<dl class="opcode">
+<dt id="opcode-CALL_FUNCTION_EX">
+<code class="descname">CALL_FUNCTION_EX</code><span class="sig-paren">(</span><em>flags</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-CALL_FUNCTION_EX" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Calls a function. The lowest bit of <em>flags</em> indicates whether the
+var-keyword argument is placed at the top of the stack.  Below the
+var-keyword argument, the var-positional argument is on the stack.
+Below the arguments, the function object to call is placed.
+Pops all function arguments, and the function itself off the stack, and
+pushes the return value. Note that this opcode pops at most three items
+from the stack. Var-positional and var-keyword arguments are packed
+by <a class="reference internal" href="#opcode-BUILD_MAP_UNPACK_WITH_CALL"><code class="xref std std-opcode docutils literal"><span class="pre">BUILD_MAP_UNPACK_WITH_CALL</span></code></a> and
+<a class="reference internal" href="#opcode-BUILD_MAP_UNPACK_WITH_CALL"><code class="xref std std-opcode docutils literal"><span class="pre">BUILD_MAP_UNPACK_WITH_CALL</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
+</div>
 </dd></dl>
 
 <dl class="opcode">
@@ -1103,24 +1220,6 @@ stack must consist of values if the argument carries a specified flag value</p>
 <dt id="opcode-EXTENDED_ARG">
 <code class="descname">EXTENDED_ARG</code><span class="sig-paren">(</span><em>ext</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-EXTENDED_ARG" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>デフォルトの 2 バイトに収まりきらない大きな引数を持つあらゆる命令コードの前に置かれます。 <em>ext</em> は追加の 2 バイトを保持し、後続の命令コードの引数と組み合わされます。 それらは 4 バイト引数を構成し、 <em>ext</em> はその最上位バイトです。</p>
-</dd></dl>
-
-<dl class="opcode">
-<dt id="opcode-CALL_FUNCTION_VAR">
-<code class="descname">CALL_FUNCTION_VAR</code><span class="sig-paren">(</span><em>argc</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-CALL_FUNCTION_VAR" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>関数を呼び出します。 <em>argc</em> は <a class="reference internal" href="#opcode-CALL_FUNCTION"><code class="xref std std-opcode docutils literal"><span class="pre">CALL_FUNCTION</span></code></a> と同じように解釈されます。 スタックの先頭の要素は可変引数リストを含んでおり、その後にキーワード引数と位置引数が続きます。</p>
-</dd></dl>
-
-<dl class="opcode">
-<dt id="opcode-CALL_FUNCTION_KW">
-<code class="descname">CALL_FUNCTION_KW</code><span class="sig-paren">(</span><em>argc</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-CALL_FUNCTION_KW" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>関数を呼び出します。 <em>argc</em> は <a class="reference internal" href="#opcode-CALL_FUNCTION"><code class="xref std std-opcode docutils literal"><span class="pre">CALL_FUNCTION</span></code></a> と同じように解釈されます。 スタックの先頭の要素はキーワード引数辞書を含んでおり、その後に明示的なキーワード引数と位置引数が続きます。</p>
-</dd></dl>
-
-<dl class="opcode">
-<dt id="opcode-CALL_FUNCTION_VAR_KW">
-<code class="descname">CALL_FUNCTION_VAR_KW</code><span class="sig-paren">(</span><em>argc</em><span class="sig-paren">)</span><a class="headerlink" href="#opcode-CALL_FUNCTION_VAR_KW" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>関数を呼び出します。 <em>argc</em> は <a class="reference internal" href="#opcode-CALL_FUNCTION"><code class="xref std std-opcode docutils literal"><span class="pre">CALL_FUNCTION</span></code></a> と同じように解釈されます。 スタックの先頭の要素はキーワード引数辞書を含んでおり、その後に変数引数のタプルが続き、 さらに明示的なキーワード引数と位置引数が続きます。</p>
 </dd></dl>
 
 <dl class="opcode">
@@ -1278,7 +1377,7 @@ result is pushed on the stack.</p>
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.0</span>
+          <span class="version_switcher_placeholder">3.6.1rc1</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 

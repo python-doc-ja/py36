@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>26.5. unittest.mock — モックオブジェクトライブラリ &#8212; Python 3.6.0 ドキュメント</title>
+    <title>26.5. unittest.mock — モックオブジェクトライブラリ &#8212; Python 3.6.1rc1 ドキュメント</title>
     
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.0',
+        VERSION:     '3.6.1rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,13 +26,13 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.0 ドキュメント 内を検索"
+          title="Python 3.6.1rc1 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="top" title="Python 3.6.1rc1 ドキュメント" href="../contents.html" />
     <link rel="up" title="26. 開発ツール" href="development.html" />
     <link rel="next" title="26.6. unittest.mock — 入門" href="unittest.mock-examples.html" />
     <link rel="prev" title="26.4. unittest — ユニットテストフレームワーク" href="unittest.html" />
@@ -74,7 +74,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.0</span>
+          <span class="version_switcher_placeholder">3.6.1rc1</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -308,12 +308,13 @@ auto-speccing は置換するオブジェクトと同じ属性とメソッドを
 <dl class="method">
 <dt id="unittest.mock.Mock.assert_called_once_with">
 <code class="descname">assert_called_once_with</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#unittest.mock.Mock.assert_called_once_with" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>モックが特定の引数で1度だけ呼び出されたことをアサートします。</p>
+<dd><p>Assert that the mock was called exactly once and that that call was
+with the specified arguments.</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mock</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">return_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mock</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="s1">&#39;baz&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mock</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="s1">&#39;baz&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mock</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="s1">&#39;baz&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mock</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="s1">&#39;baz&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mock</span><span class="p">(</span><span class="s1">&#39;other&#39;</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="s1">&#39;values&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mock</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span><span class="s1">&#39;other&#39;</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="s1">&#39;values&#39;</span><span class="p">)</span>
 <span class="gt">Traceback (most recent call last):</span>
   <span class="c">...</span>
 <span class="gr">AssertionError</span>: <span class="n">Expected &#39;mock&#39; to be called once. Called 2 times.</span>
@@ -325,7 +326,10 @@ auto-speccing は置換するオブジェクトと同じ属性とメソッドを
 <dt id="unittest.mock.Mock.assert_any_call">
 <code class="descname">assert_any_call</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#unittest.mock.Mock.assert_any_call" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>モックが特定の引数で呼び出されたことがあるのをアサートします。</p>
-<p>モックが <em>これまでに</em> 呼び出された場合、アサートをパスします。 <a class="reference internal" href="#unittest.mock.Mock.assert_called_with" title="unittest.mock.Mock.assert_called_with"><code class="xref py py-meth docutils literal"><span class="pre">assert_called_with()</span></code></a> や <a class="reference internal" href="#unittest.mock.Mock.assert_called_once_with" title="unittest.mock.Mock.assert_called_once_with"><code class="xref py py-meth docutils literal"><span class="pre">assert_called_once_with()</span></code></a> は最近の呼び出しの場合にのみパスします。</p>
+<p>The assert passes if the mock has <em>ever</em> been called, unlike
+<a class="reference internal" href="#unittest.mock.Mock.assert_called_with" title="unittest.mock.Mock.assert_called_with"><code class="xref py py-meth docutils literal"><span class="pre">assert_called_with()</span></code></a> and <a class="reference internal" href="#unittest.mock.Mock.assert_called_once_with" title="unittest.mock.Mock.assert_called_once_with"><code class="xref py py-meth docutils literal"><span class="pre">assert_called_once_with()</span></code></a> that
+only pass if the call is the most recent one, and in the case of
+<a class="reference internal" href="#unittest.mock.Mock.assert_called_once_with" title="unittest.mock.Mock.assert_called_once_with"><code class="xref py py-meth docutils literal"><span class="pre">assert_called_once_with()</span></code></a> it must also be the only call.</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mock</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">return_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mock</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">arg</span><span class="o">=</span><span class="s1">&#39;thing&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mock</span><span class="p">(</span><span class="s1">&#39;some&#39;</span><span class="p">,</span> <span class="s1">&#39;thing&#39;</span><span class="p">,</span> <span class="s1">&#39;else&#39;</span><span class="p">)</span>
@@ -2002,7 +2006,7 @@ mock は属性を - <a class="reference internal" href="functions.html#dir" titl
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.0</span>
+          <span class="version_switcher_placeholder">3.6.1rc1</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 

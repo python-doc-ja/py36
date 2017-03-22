@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>12.4. marshal — 内部使用向けの Python オブジェクト整列化 &#8212; Python 3.6.0 ドキュメント</title>
+    <title>12.4. marshal — 内部使用向けの Python オブジェクト整列化 &#8212; Python 3.6.1rc1 ドキュメント</title>
     
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.0',
+        VERSION:     '3.6.1rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,13 +26,13 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.0 ドキュメント 内を検索"
+          title="Python 3.6.1rc1 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.0 ドキュメント" href="../contents.html" />
+    <link rel="top" title="Python 3.6.1rc1 ドキュメント" href="../contents.html" />
     <link rel="up" title="12. データの永続化" href="persistence.html" />
     <link rel="next" title="12.5. dbm — Unix “データベース” へのインタフェース" href="dbm.html" />
     <link rel="prev" title="12.3. shelve — Python オブジェクトの永続化" href="shelve.html" />
@@ -74,7 +74,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.0</span>
+          <span class="version_switcher_placeholder">3.6.1rc1</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -113,12 +113,14 @@
 <p class="last"><a class="reference internal" href="#module-marshal" title="marshal: Convert Python objects to streams of bytes and back (with different constraints)."><code class="xref py py-mod docutils literal"><span class="pre">marshal</span></code></a> モジュールは、誤ったデータや悪意を持って作成されたデータに対する安全性を考慮していません。信頼できない、もしくは認証されていない出所からのデータを非整列化してはなりません。</p>
 </div>
 <p id="index-1">すべての Python オブジェクト型がサポートされているわけではありません。一般に、このモジュールによって読み書きすることができるオブジェクトは、その値が Python の特定の起動に依存していないオブジェクトに限ります。次の型がサポートされています。真偽値、整数、浮動小数点数、複素数、文字列、 byte 、bytearray 、タプル、リスト、 set 、frozenset 、辞書、コードオブジェクト。ここで、タプル、リスト、 set 、 frozenset 、辞書は、その中に含まれる値がそれ自身サポートされる場合に限りサポートされます。シングルトン <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> 、 <a class="reference internal" href="constants.html#Ellipsis" title="Ellipsis"><code class="xref py py-const docutils literal"><span class="pre">Ellipsis</span></code></a> 、 <a class="reference internal" href="exceptions.html#StopIteration" title="StopIteration"><code class="xref py py-exc docutils literal"><span class="pre">StopIteration</span></code></a> も読み書き (marshalled and unmarshalled) できます。3 未満のフォーマット <em>version</em> では、再帰的なリスト、 set 、辞書を書き出すことはできません (下記参照)。</p>
-<p>文字列を操作する関数と同様に、ファイルの読み書きを行う関数が提供されています。</p>
+<p>There are functions that read/write files as well as functions operating on
+bytes-like objects.</p>
 <p>このモジュールでは、以下の関数が定義されています。</p>
 <dl class="function">
 <dt id="marshal.dump">
 <code class="descclassname">marshal.</code><code class="descname">dump</code><span class="sig-paren">(</span><em>value</em>, <em>file</em><span class="optional">[</span>, <em>version</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#marshal.dump" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>開かれたファイルに値を書き込みます。値はサポートされている型でなくてはなりません。ファイルは <code class="docutils literal"><span class="pre">sys.stdout</span></code> か、 <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> や <a class="reference internal" href="os.html#os.popen" title="os.popen"><code class="xref py py-func docutils literal"><span class="pre">os.popen()</span></code></a> が返すようなファイルオブジェクトでなくてはなりません。またファイルはバイナリモード (<code class="docutils literal"><span class="pre">'wb'</span></code> または <code class="docutils literal"><span class="pre">'w+b'</span></code>) で開かれていなければなりません。</p>
+<dd><p>Write the value on the open file.  The value must be a supported type.  The
+file must be a writeable <a class="reference internal" href="../glossary.html#term-binary-file"><span class="xref std std-term">binary file</span></a>.</p>
 <p>値 (または値に含まれるオブジェクト) がサポートされていない型の場合、 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> 例外が送出されます &#8212; しかし、同時にごみのデータがファイルに書き込まれます。このオブジェクトは <a class="reference internal" href="#marshal.load" title="marshal.load"><code class="xref py py-func docutils literal"><span class="pre">load()</span></code></a> で適切に読み出されることはありません。</p>
 <p><em>version</em> 引数は <code class="docutils literal"><span class="pre">dump</span></code> が使用するデータフォーマットを指定します (下記を参照してください)。</p>
 </dd></dl>
@@ -126,7 +128,10 @@
 <dl class="function">
 <dt id="marshal.load">
 <code class="descclassname">marshal.</code><code class="descname">load</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#marshal.load" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>開かれたファイルから値を一つ読んで返します。 (異なるバージョンの Python の互換性のない marshal フォーマットだったなどの理由で) 有効な値が読み出せなかった場合、 <a class="reference internal" href="exceptions.html#EOFError" title="EOFError"><code class="xref py py-exc docutils literal"><span class="pre">EOFError</span></code></a>、 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a>、または <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> を送出します。 file はバイナリモード (<code class="docutils literal"><span class="pre">'rb'</span></code> または <code class="docutils literal"><span class="pre">'r+b'</span></code>) で開かれたファイルオブジェクトでなければなりません.</p>
+<dd><p>Read one value from the open file and return it.  If no valid value is read
+(e.g. because the data has a different Python version&#8217;s incompatible marshal
+format), raise <a class="reference internal" href="exceptions.html#EOFError" title="EOFError"><code class="xref py py-exc docutils literal"><span class="pre">EOFError</span></code></a>, <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> or <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>.  The
+file must be a readable <a class="reference internal" href="../glossary.html#term-binary-file"><span class="xref std std-term">binary file</span></a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">サポートされていない型を含むオブジェクトが <a class="reference internal" href="#marshal.dump" title="marshal.dump"><code class="xref py py-func docutils literal"><span class="pre">dump()</span></code></a> で整列化されている場合、 <a class="reference internal" href="#marshal.load" title="marshal.load"><code class="xref py py-func docutils literal"><span class="pre">load()</span></code></a> は整列化不能な値を <code class="docutils literal"><span class="pre">None</span></code> で置き換えます。</p>
@@ -136,14 +141,18 @@
 <dl class="function">
 <dt id="marshal.dumps">
 <code class="descclassname">marshal.</code><code class="descname">dumps</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>version</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#marshal.dumps" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><code class="docutils literal"><span class="pre">dump(value,</span> <span class="pre">file)</span></code> でファイルに書き込まれるような文字列を返します。値はサポートされている型でなければなりません。値がサポートされていない型のオブジェクト (またはサポートされていない型のオブジェクトを含むようなオブジェクト) の場合、 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> 例外が送出されます。</p>
+<dd><p>Return the bytes object that would be written to a file by <code class="docutils literal"><span class="pre">dump(value,</span> <span class="pre">file)</span></code>.  The
+value must be a supported type.  Raise a <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> exception if value
+has (or contains an object that has) an unsupported type.</p>
 <p><em>version</em> 引数は <code class="docutils literal"><span class="pre">dumps</span></code> が使用するデータフォーマットを指定します (下記を参照してください)。</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="marshal.loads">
-<code class="descclassname">marshal.</code><code class="descname">loads</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#marshal.loads" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>データ文字列を値に変換します。有効な値が見つからなかった場合、 <a class="reference internal" href="exceptions.html#EOFError" title="EOFError"><code class="xref py py-exc docutils literal"><span class="pre">EOFError</span></code></a>、 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a>、または <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> が送出されます。文字列中の余分な文字は無視されます。</p>
+<code class="descclassname">marshal.</code><code class="descname">loads</code><span class="sig-paren">(</span><em>bytes</em><span class="sig-paren">)</span><a class="headerlink" href="#marshal.loads" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Convert the <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> to a value.  If no valid value is found, raise
+<a class="reference internal" href="exceptions.html#EOFError" title="EOFError"><code class="xref py py-exc docutils literal"><span class="pre">EOFError</span></code></a>, <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> or <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>.  Extra bytes in the
+input are ignored.</p>
 </dd></dl>
 
 <p>これに加えて、以下の定数が定義されています:</p>
@@ -209,7 +218,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.0</span>
+          <span class="version_switcher_placeholder">3.6.1rc1</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
