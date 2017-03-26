@@ -490,12 +490,7 @@ warning; the warning will be turned on by default in Python 2.3.</p>
 </div>
 <div class="section" id="unicode-changes">
 <h2>Unicode の変更<a class="headerlink" href="#unicode-changes" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>Python&#8217;s Unicode support has been enhanced a bit in 2.2.  Unicode strings are
-usually stored as UCS-2, as 16-bit unsigned integers. Python 2.2 can also be
-compiled to use UCS-4, 32-bit unsigned integers, as its internal encoding by
-supplying <code class="xref std std-option docutils literal"><span class="pre">--enable-unicode=ucs4</span></code> to the configure script.   (It&#8217;s also
-possible to specify <code class="xref std std-option docutils literal"><span class="pre">--disable-unicode</span></code> to completely disable Unicode
-support.)</p>
+<p>Python の Unicode サポートが 2.2 で少し拡張されています。Unicode 文字列は普通は 16 ビット符号なし整数としての UCS-2 で格納されます。Python 2.2 は内部エンコーディングとして 32 ビット符号なし整数の UCS-4 を使うようにもコンパイル出来ます。これは <strong class="program">configure</strong> スクリプトに <code class="xref std std-option docutils literal"><span class="pre">--enable-unicode=ucs4</span></code> オプションを与えることで行います。(<code class="xref std std-option docutils literal"><span class="pre">--disable-unicode</span></code> を与えることで完全に Unicode サポートを無効にすることも出来ます。)</p>
 <p>UCS-4 (&#8220;wide Python&#8221;) を使ってビルドすると、インタプリタは U+000000 から U+110000 までの Unicode 文字をネイティブに処理出来ますので、 <code class="xref py py-func docutils literal"><span class="pre">unichr()</span></code> 関数へのこの範囲の正当な値は適切に処理されます。UCS-2 (&#8220;narrow Python&#8221;) を用いてビルドしたインタプリタの場合は、 65535 を超える値を <code class="xref py py-func docutils literal"><span class="pre">unichr()</span></code> に与えるとこれまで通り <a class="reference internal" href="../library/exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> を投げます。この変更については <span class="target" id="index-60"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0261"><strong>PEP 261</strong></a> 「&#8217;wide&#8217; Unicode 文字のサポート」に全て記述されていますので、詳細はこれを調べてください。</p>
 <p>もう一つの変更については説明は簡単です。その導入以来 Unicode 文字列は、文字列を選択した UTF-8 や Latin-1 のようなエンコーディングで変換するための <code class="xref py py-meth docutils literal"><span class="pre">encode()</span></code> メソッドをサポートしてきました。2.2 では、対となる <code class="docutils literal"><span class="pre">decode([*encoding*])</span></code> メソッドが (Unicode 文字列ではない)  8 ビット文字列に追加されました。 <code class="xref py py-meth docutils literal"><span class="pre">decode()</span></code> は文字列が特定のエンコーディングであることを仮定してデコードを行い、コーデックにより返されるものを返します。</p>
 <p>この新たなインターフェイスに相乗りする形で、 Unicode には無関係のタスクのためのコーデックが追加されました。例えば uu エンコーディング、 MIME の base64 エンコーディング、 <a class="reference internal" href="../library/zlib.html#module-zlib" title="zlib: Low-level interface to compression and decompression routines compatible with gzip."><code class="xref py py-mod docutils literal"><span class="pre">zlib</span></code></a> モジュールでの圧縮のためのエンコーディングが追加されています:</p>
@@ -598,20 +593,13 @@ support.)</p>
 </li>
 <li><p class="first">新しい <a class="reference internal" href="../library/hmac.html#module-hmac" title="hmac: Keyed-Hashing for Message Authentication (HMAC) implementation"><code class="xref py py-mod docutils literal"><span class="pre">hmac</span></code></a> モジュールは、 <span class="target" id="index-63"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2104.html"><strong>RFC 2104</strong></a> で記述される HMAC アルゴリズムを実装します 。 (Contributed by Gerhard Häring.)</p>
 </li>
-<li><p class="first">Several functions that originally returned lengthy tuples now return
-pseudo-sequences that still behave like tuples but also have mnemonic attributes such
-as memberst_mtime or <code class="xref py py-attr docutils literal"><span class="pre">tm_year</span></code>. The enhanced functions include
-<a class="reference internal" href="../library/stat.html#module-stat" title="stat: Utilities for interpreting the results of os.stat(), os.lstat() and os.fstat()."><code class="xref py py-func docutils literal"><span class="pre">stat()</span></code></a>, <code class="xref py py-func docutils literal"><span class="pre">fstat()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">statvfs()</span></code>, and <code class="xref py py-func docutils literal"><span class="pre">fstatvfs()</span></code> in the
-<a class="reference internal" href="../library/os.html#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a> module, and <code class="xref py py-func docutils literal"><span class="pre">localtime()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">gmtime()</span></code>, and <code class="xref py py-func docutils literal"><span class="pre">strptime()</span></code> in
-the <a class="reference internal" href="../library/time.html#module-time" title="time: Time access and conversions."><code class="xref py py-mod docutils literal"><span class="pre">time</span></code></a> module.</p>
+<li><p class="first">元々が長ったらしいタプルを返していたいくつもの関数が、擬似シーケンスを返すように変更されています。変更後もそれはタプルとして振舞いますが、例えば memberst_mtime や <code class="xref py py-attr docutils literal"><span class="pre">tm_year</span></code> といった記憶しやすい属性も持ちます。この変更が行われたものには <a class="reference internal" href="../library/os.html#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a> モジュールの <a class="reference internal" href="../library/stat.html#module-stat" title="stat: Utilities for interpreting the results of os.stat(), os.lstat() and os.fstat()."><code class="xref py py-func docutils literal"><span class="pre">stat()</span></code></a>, <code class="xref py py-func docutils literal"><span class="pre">fstat()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">statvfs()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">fstatvfs()</span></code> や <a class="reference internal" href="../library/time.html#module-time" title="time: Time access and conversions."><code class="xref py py-mod docutils literal"><span class="pre">time</span></code></a> モジュールの <code class="xref py py-func docutils literal"><span class="pre">localtime()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">gmtime()</span></code>, <code class="xref py py-func docutils literal"><span class="pre">strptime()</span></code> が含まれます。</p>
 <p>例えば旧式のタプルでファイルサイズを得るには <code class="docutils literal"><span class="pre">file_size</span> <span class="pre">=</span> <span class="pre">os.stat(filename)[stat.ST_SIZE]</span></code> のように書くしかありませんでしたが、今ではもっとわかりやすい <code class="docutils literal"><span class="pre">file_size</span> <span class="pre">=</span> <span class="pre">os.stat(filename).st_size</span></code> のように書くことが出来ます。</p>
 <p>この機能のオリジナルのパッチは Nick Mathewson により寄稿されました。</p>
 </li>
 <li><p class="first">Python プロファイラが大幅に改造されて、出力の色々な間違いが修正されました。 (Contributed by Fred L. Drake, Jr. and Tim Peters.)</p>
 </li>
-<li><p class="first">The <a class="reference internal" href="../library/socket.html#module-socket" title="socket: Low-level networking interface."><code class="xref py py-mod docutils literal"><span class="pre">socket</span></code></a> module can be compiled to support IPv6; specify the
-<code class="xref std std-option docutils literal"><span class="pre">--enable-ipv6</span></code> option to Python&#8217;s configure script.  (Contributed by
-Jun-ichiro &#8220;itojun&#8221; Hagino.)</p>
+<li><p class="first"><a class="reference internal" href="../library/socket.html#module-socket" title="socket: Low-level networking interface."><code class="xref py py-mod docutils literal"><span class="pre">socket</span></code></a> モジュールを IPv6 サポート付きでコンパイル可能になりました。Python の <strong class="program">configure</strong> スクリプトに <code class="xref std std-option docutils literal"><span class="pre">--enable-ipv6</span></code> オプションを与えてください。(Contributed by Jun-ichiro &#8220;itojun&#8221; Hagino.)</p>
 </li>
 <li><p class="first"><a class="reference internal" href="../library/struct.html#module-struct" title="struct: Interpret bytes as packed binary data."><code class="xref py py-mod docutils literal"><span class="pre">struct</span></code></a> モジュールに新しく、プラットフォームの C 型 <code class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">long</span></code> をサポートする 64 ビット整数のためのフォーマット文字が追加されました。 <code class="docutils literal"><span class="pre">q</span></code> が符号付 64 ビット整数、 <code class="docutils literal"><span class="pre">Q</span></code> が符号なし 64 ビット整数のためのものです。値は Python の長整数型で返ります。 (Contributed by Tim Peters.)</p>
 </li>
@@ -840,7 +828,7 @@ Wise 5.0a, which was beginning to show its age.  (Packaged up by Tim Peters.)</p
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 3月 25, 2017
+    最終更新日時: 3月 27, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
