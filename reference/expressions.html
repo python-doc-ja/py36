@@ -709,20 +709,12 @@ customize their comparison behavior by implementing
 <p>A default order comparison (<code class="docutils literal"><span class="pre">&lt;</span></code>, <code class="docutils literal"><span class="pre">&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;=</span></code>, and <code class="docutils literal"><span class="pre">&gt;=</span></code>) is not provided;
 an attempt raises <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>.  A motivation for this default behavior is
 the lack of a similar invariant as for equality.</p>
-<p>The behavior of the default equality comparison, that instances with different
-identities are always unequal, may be in contrast to what types will need that
-have a sensible definition of object value and value-based equality.  Such
-types will need to customize their comparison behavior, and in fact, a number
-of built-in types have done that.</p>
-<p>The following list describes the comparison behavior of the most important
-built-in types.</p>
+<p>同一でないインスタンスは常に等価でないとする等価性比較のデフォルトの振る舞いは、型が必要とするオブジェクトの値や値に基づいた等価性の実用的な定義とは対照的に思えるでしょう。
+そのような型では比較の振る舞いをカスタマイズする必要が出てきて、実際にたくさんの組み込み型でそれが行われています。</p>
+<p>次のリストでは、最重要の組み込み型の比較の振る舞いを解説しています。</p>
 <ul>
-<li><p class="first">Numbers of built-in numeric types (<a class="reference internal" href="../library/stdtypes.html#typesnumeric"><span class="std std-ref">数値型 int, float, complex</span></a>) and of the standard
-library types <a class="reference internal" href="../library/fractions.html#fractions.Fraction" title="fractions.Fraction"><code class="xref py py-class docutils literal"><span class="pre">fractions.Fraction</span></code></a> and <a class="reference internal" href="../library/decimal.html#decimal.Decimal" title="decimal.Decimal"><code class="xref py py-class docutils literal"><span class="pre">decimal.Decimal</span></code></a> can be
-compared within and across their types, with the restriction that complex
-numbers do not support order comparison.  Within the limits of the types
-involved, they compare mathematically (algorithmically) correct without loss
-of precision.</p>
+<li><p class="first">いくつかの組み込みの数値型 (<a class="reference internal" href="../library/stdtypes.html#typesnumeric"><span class="std std-ref">数値型 int, float, complex</span></a>) と標準ライブラリの型 <a class="reference internal" href="../library/fractions.html#fractions.Fraction" title="fractions.Fraction"><code class="xref py py-class docutils literal"><span class="pre">fractions.Fraction</span></code></a> および <a class="reference internal" href="../library/decimal.html#decimal.Decimal" title="decimal.Decimal"><code class="xref py py-class docutils literal"><span class="pre">decimal.Decimal</span></code></a> は、同じ型や別の型どうしで比較できますが、複素数では順序比較がサポートされていないという制限があります。
+関わる型の制限の範囲内では、精度のロス無しに数学的に (アルゴリズム的に) 正しい比較が行われます。</p>
 <p>The not-a-number values <code class="xref py py-const docutils literal"><span class="pre">float('NaN')</span></code> and <code class="xref py py-const docutils literal"><span class="pre">Decimal('NaN')</span></code>
 are special.  They are identical to themselves (<code class="docutils literal"><span class="pre">x</span> <span class="pre">is</span> <span class="pre">x</span></code> is true) but
 are not equal to themselves (<code class="docutils literal"><span class="pre">x</span> <span class="pre">==</span> <span class="pre">x</span></code> is false).  Additionally,
@@ -764,12 +756,10 @@ when used in a list:</p>
 <span class="go">True                  &lt;-- list enforces reflexivity and tests identity first</span>
 </pre></div>
 </div>
-<p>Lexicographical comparison between built-in collections works as follows:</p>
+<p>組み込みのコレクションどうしの辞書式比較は次のように動作します:</p>
 <ul class="simple">
-<li>For two collections to compare equal, they must be of the same type, have
-the same length, and each pair of corresponding elements must compare
-equal (for example, <code class="docutils literal"><span class="pre">[1,2]</span> <span class="pre">==</span> <span class="pre">(1,2)</span></code> is false because the type is not the
-same).</li>
+<li><p class="first">比較の結果が等価となる2つのコレクションは、同じ型、同じ長さ、対応する要素どうしの比較の結果が等価でなければなりません (例えば、 <code class="docutils literal"><span class="pre">[1,2]</span> <span class="pre">==</span> <span class="pre">(1,2)</span></code> は型が同じでないので偽です)。</p>
+</li>
 <li>Collections that support order comparison are ordered the same as their
 first unequal elements (for example, <code class="docutils literal"><span class="pre">[1,2,x]</span> <span class="pre">&lt;=</span> <span class="pre">[1,2,y]</span></code> has the same
 value as <code class="docutils literal"><span class="pre">x</span> <span class="pre">&lt;=</span> <span class="pre">y</span></code>).  If a corresponding element does not exist, the
@@ -777,9 +767,8 @@ shorter collection is ordered first (for example, <code class="docutils literal"
 true).</li>
 </ul>
 </li>
-<li><p class="first">Mappings (instances of <a class="reference internal" href="../library/stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a>) compare equal if and only if they have
-equal <cite>(key, value)</cite> pairs. Equality comparison of the keys and elements
-enforces reflexivity.</p>
+<li><p class="first">マッピング (<a class="reference internal" href="../library/stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> のインスタンス) の比較の結果が等価となるのは、同じ <cite>(key, value)</cite> を持っているときかつそのときに限ります。
+キーと値の等価性比較では反射性が強制されます。</p>
 <p>Order comparisons (<code class="docutils literal"><span class="pre">&lt;</span></code>, <code class="docutils literal"><span class="pre">&gt;</span></code>, <code class="docutils literal"><span class="pre">&lt;=</span></code>, and <code class="docutils literal"><span class="pre">&gt;=</span></code>) raise <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>.</p>
 </li>
 <li><p class="first">Sets (instances of <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a> or <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal"><span class="pre">frozenset</span></code></a>) can be compared within
