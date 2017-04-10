@@ -151,12 +151,7 @@ Python 2 &amp; Python 3).</li>
 <h3>Python 2.6 とそれ以前のサポートを落とす<a class="headerlink" href="#drop-support-for-python-2-6-and-older" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Python 2.5 と Python 3 で動くものは作れますが、Python 2.7 以上でのみ動くようにするほうが <strong>とてつもなく</strong> 簡単です。Python 2.5 サポートを落とせないならば、 <a class="reference external" href="https://pypi.python.org/pypi/six">six</a> プロジェクトがあなたの Python 2.5 と 3 同時サポートを手助けしてくれます (<code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">six</span></code>)。だけれども悟ってください、この HOWTO でリストしているほとんど全てのプロジェクトはいずれあなたにとって入手不可能になるであろうことを。</p>
 <p>Python 2.5 以下のサポートをスキップ出来るならば、あなたのコードに必要な変更は Python の常套句のような外観と雰囲気を壊すべきではありません。最悪の場合あるインスタンス内のメソッドの代わりに関数を使う必要があったり、ビルトインを使う代わりに関数をインポートする必要があるでしょうが、そうしないならば、全体通した変換はあなたにとって異質に感じさせないものに違いありません。</p>
-<p>But you should aim for only supporting Python 2.7. Python 2.6 is no longer
-freely supported and thus is not receiving bugfixes. This means <strong>you</strong> will have
-to work around any issues you come across with Python 2.6. There are also some
-tools mentioned in this HOWTO which do not support Python 2.6 (e.g., <a class="reference external" href="https://pypi.python.org/pypi/pylint">Pylint</a>),
-and this will become more commonplace as time goes on. It will simply be easier
-for you if you only support the versions of Python that you have to support.</p>
+<p>ですが、Python 2.6 以上と言わず Python 2.7 を目標にしてください。Python 2.6 はもう積極的にはサポートされていません。これは <strong>あなたが</strong> Python 2.6 に関係するあらゆる問題に取り組まなければならないことを意味します。この HOWTO で言及しているいくつかのツールも Python 2.6 をサポートしていません (<a class="reference external" href="https://pypi.python.org/pypi/pylint">Pylint</a> など)し、時につれこのようなことはもっと当たり前になってくるでしょう。2.7 以上だけをサポートするということは、話をより簡単にしてくれます。</p>
 </div>
 <div class="section" id="make-sure-you-specify-the-proper-version-support-in-your-setup-py-file">
 <h3>あなたの <code class="docutils literal"><span class="pre">setup.py</span></code> ファイルに、相応しいサポートバージョンを明記することを忘れないこと<a class="headerlink" href="#make-sure-you-specify-the-proper-version-support-in-your-setup-py-file" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -206,14 +201,7 @@ practices that Python 3 introduces which you are not accustomed to yet.</p>
 <div class="section" id="text-versus-binary-data">
 <h4>テキスト対バイナリデータ<a class="headerlink" href="#text-versus-binary-data" title="このヘッドラインへのパーマリンク">¶</a></h4>
 <p>Python 2 では <code class="docutils literal"><span class="pre">str</span></code> 型をテキストとバイナリデータのどちらにも使うことが出来ていました。不幸なことにこれは、2 つの異なる概念を重ね合わせていて、両方の種類のデータに対して、時々動作して時々はそうではない、といった傷つきやすいコードに繋がりやすいものでした。人々が特定の一つの型の代わりに <code class="docutils literal"><span class="pre">str</span></code> を受け付ける何かが、それが許容するのはテキストなのかバイナリデータなのかを名言しないときの、悩ましい API を生み出してしまう要因でもありました。これはとりわけマルチリンガルをサポートするための状況を、テキストデータをサポートしていると主張しているのに明示的に <code class="docutils literal"><span class="pre">unicode</span></code> をサポートすることに注意を払わない API、という形で複雑にしていました。</p>
-<p>To make the distinction between text and binary data clearer and more
-pronounced, Python 3 did what most languages created in the age of the internet
-have done and made text and binary data distinct types that cannot blindly be
-mixed together (Python predates widespread access to the internet). For any code
-that deals only with text or only binary data, this separation doesn&#8217;t pose an
-issue. But for code that has to deal with both, it does mean you might have to
-now care about when you are using text compared to binary data, which is why
-this cannot be entirely automated.</p>
+<p>テキストとバイナリデータの区別をより明快に、よりはっきり宣言するために、 Python 3 はインターネット時代に作られたほとんどの言語がしたこと、すなわちテキストとバイナリデータを区別できる別々の型とし、無分別にお互い混ぜこぜには出来ないようにしました (Python はインターネットが広く普及する前からありました)。テキストのみを取り扱うコード、バイナリデータのみを扱うコードのいずれにとっても、この分離は問題を引き起こしません。ですが両方を処理するコードにとっては、それはテキストとバイナリデータの比較をする際に新たな注意点が増えたことを意味していて、これが完全には移行の自動化が出来ない理由なのです。</p>
 <p>To start, you will need to decide which APIs take text and which take binary
 (it is <strong>highly</strong> recommended you don&#8217;t design APIs that can take both due to
 the difficulty of keeping the code working; as stated earlier it is difficult to
@@ -481,7 +469,7 @@ to make sure everything functions as expected in both versions of Python.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 4月 10, 2017
+    最終更新日時: 4月 11, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
