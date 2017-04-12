@@ -388,15 +388,10 @@ to connect the socket to a remote address.  The <em>remote_host</em> and
 and flags to be passed through to <a class="reference internal" href="#asyncio.AbstractEventLoop.getaddrinfo" title="asyncio.AbstractEventLoop.getaddrinfo"><code class="xref py py-meth docutils literal"><span class="pre">getaddrinfo()</span></code></a> for <em>host</em>
 resolution. If given, these should all be integers from the
 corresponding <a class="reference internal" href="socket.html#module-socket" title="socket: Low-level networking interface."><code class="xref py py-mod docutils literal"><span class="pre">socket</span></code></a> module constants.</li>
-<li><em>reuse_address</em> tells the kernel to reuse a local socket in
-TIME_WAIT state, without waiting for its natural timeout to
-expire. If not specified will automatically be set to <code class="docutils literal"><span class="pre">True</span></code> on
-UNIX.</li>
-<li><em>reuse_port</em> tells the kernel to allow this endpoint to be bound to the
-same port as other existing endpoints are bound to, so long as they all
-set this flag when being created. This option is not supported on Windows
-and some UNIX&#8217;s. If the <code class="xref py py-data docutils literal"><span class="pre">SO_REUSEPORT</span></code> constant is not
-defined then this capability is unsupported.</li>
+<li><p class="first"><em>reuse_address</em> は、 TIME_WAIT 状態にあるローカルソケットを、その状態が自然にタイムアウトするのを待つことなく再利用するようカーネルに指示します（訳註: ソケットのオプション SO_REUSEADDR を使用します）。指定しない場合、UNIX では自動的に <code class="docutils literal"><span class="pre">True</span></code> が設定されます。</p>
+</li>
+<li><p class="first"><em>reuse_port</em> は、同じポートにバインドされた既存の端点すべてがこのフラグを設定して生成されている場合に限り、この端点を既存の端点と同じポートにバインドすることをカーネルに許可します（訳註: ソケットのオプション SO_REUSEPORT を使用します）。このオプションは、Windows やいくつかの UNIX システムではサポートされません。もし定数 <code class="xref py py-data docutils literal"><span class="pre">SO_REUSEPORT</span></code> が定義されていなければ、この機能はサポートされません。</p>
+</li>
 <li><em>allow_broadcast</em> tells the kernel to allow this endpoint to send
 messages to the broadcast address.</li>
 <li><em>sock</em> can optionally be specified in order to use a preexisting,
@@ -413,9 +408,7 @@ transport. If specified, <em>local_addr</em> and <em>remote_addr</em> should be 
 <em class="property">coroutine </em><code class="descclassname">AbstractEventLoop.</code><code class="descname">create_unix_connection</code><span class="sig-paren">(</span><em>protocol_factory</em>, <em>path</em>, <em>*</em>, <em>ssl=None</em>, <em>sock=None</em>, <em>server_hostname=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.AbstractEventLoop.create_unix_connection" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>UNIX コネクションを作成します: ソケットファミリは <a class="reference internal" href="socket.html#socket.AF_UNIX" title="socket.AF_UNIX"><code class="xref py py-data docutils literal"><span class="pre">AF_UNIX</span></code></a>、ソケットタイプは <a class="reference internal" href="socket.html#socket.SOCK_STREAM" title="socket.SOCK_STREAM"><code class="xref py py-data docutils literal"><span class="pre">SOCK_STREAM</span></code></a> になります。<a class="reference internal" href="socket.html#socket.AF_UNIX" title="socket.AF_UNIX"><code class="xref py py-data docutils literal"><span class="pre">AF_UNIX</span></code></a> ソケットファミリは同一マシン上のプロセス間で効率的に通信するために使用されます。</p>
 <p>このメソッドはバックグラウンドでコネクションの確立を試みる <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。成功すると、コルーチンは <code class="docutils literal"><span class="pre">(トランスポート,</span> <span class="pre">プロトコル)</span></code> のペアを返します。</p>
-<p><em>path</em> is the name of a UNIX domain socket, and is required unless a <em>sock</em>
-parameter is specified.  Abstract UNIX sockets, <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>, and
-<a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> paths are supported.</p>
+<p><em>path</em> は UNIX ドメインソケットの名前で、 <em>sock</em> パラメータが指定されない限り指定する必要があります。抽象化された UNIX ソケット、 <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> 、そして <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> のパスを指定できます。</p>
 <p>引数については <a class="reference internal" href="#asyncio.AbstractEventLoop.create_connection" title="asyncio.AbstractEventLoop.create_connection"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_connection()</span></code></a> メソッドを参照してください。</p>
 <p>利用できる環境: UNIX。</p>
 </dd></dl>
@@ -446,10 +439,8 @@ parameter is specified.  Abstract UNIX sockets, <a class="reference internal" hr
 </li>
 <li><p class="first"><em>ssl</em> には <a class="reference internal" href="ssl.html#ssl.SSLContext" title="ssl.SSLContext"><code class="xref py py-class docutils literal"><span class="pre">SSLContext</span></code></a> を指定できます。指定すると、受け付けたコネクション上での SSL を有効にします。</p>
 </li>
-<li><em>reuse_address</em> tells the kernel to reuse a local socket in
-TIME_WAIT state, without waiting for its natural timeout to
-expire. If not specified will automatically be set to <code class="docutils literal"><span class="pre">True</span></code> on
-UNIX.</li>
+<li><p class="first"><em>reuse_address</em> は、 TIME_WAIT 状態にあるローカルソケットを、その状態が自然にタイムアウトするのを待つことなく再利用するようカーネルに指示します（訳註: ソケットのオプション SO_REUSEADDR を使用します）。指定しない場合、UNIX では自動的に <code class="docutils literal"><span class="pre">True</span></code> が設定されます。</p>
+</li>
 <li><em>reuse_port</em> tells the kernel to allow this endpoint to be bound to the
 same port as other existing endpoints are bound to, so long as they all
 set this flag when being created. This option is not supported on
@@ -1050,7 +1041,7 @@ the <a class="reference internal" href="#asyncio.AbstractEventLoop.add_signal_ha
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 4月 12, 2017
+    最終更新日時: 4月 13, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
