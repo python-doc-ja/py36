@@ -187,24 +187,8 @@
 <dl class="function">
 <dt id="logging.config.listen">
 <code class="descclassname">logging.config.</code><code class="descname">listen</code><span class="sig-paren">(</span><em>port=DEFAULT_LOGGING_CONFIG_PORT</em>, <em>verify=None</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.config.listen" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Starts up a socket server on the specified port, and listens for new
-configurations. If no port is specified, the module&#8217;s default
-<code class="xref py py-const docutils literal"><span class="pre">DEFAULT_LOGGING_CONFIG_PORT</span></code> is used. Logging configurations will be
-sent as a file suitable for processing by <a class="reference internal" href="#logging.config.dictConfig" title="logging.config.dictConfig"><code class="xref py py-func docutils literal"><span class="pre">dictConfig()</span></code></a> or
-<a class="reference internal" href="#logging.config.fileConfig" title="logging.config.fileConfig"><code class="xref py py-func docutils literal"><span class="pre">fileConfig()</span></code></a>. Returns a <a class="reference internal" href="threading.html#threading.Thread" title="threading.Thread"><code class="xref py py-class docutils literal"><span class="pre">Thread</span></code></a> instance on which
-you can call <a class="reference internal" href="threading.html#threading.Thread.start" title="threading.Thread.start"><code class="xref py py-meth docutils literal"><span class="pre">start()</span></code></a> to start the server, and which
-you can <a class="reference internal" href="threading.html#threading.Thread.join" title="threading.Thread.join"><code class="xref py py-meth docutils literal"><span class="pre">join()</span></code></a> when appropriate. To stop the server,
-call <a class="reference internal" href="#logging.config.stopListening" title="logging.config.stopListening"><code class="xref py py-func docutils literal"><span class="pre">stopListening()</span></code></a>.</p>
-<p>The <code class="docutils literal"><span class="pre">verify</span></code> argument, if specified, should be a callable which should
-verify whether bytes received across the socket are valid and should be
-processed. This could be done by encrypting and/or signing what is sent
-across the socket, such that the <code class="docutils literal"><span class="pre">verify</span></code> callable can perform
-signature verification and/or decryption. The <code class="docutils literal"><span class="pre">verify</span></code> callable is called
-with a single argument - the bytes received across the socket - and should
-return the bytes to be processed, or <code class="docutils literal"><span class="pre">None</span></code> to indicate that the bytes should
-be discarded. The returned bytes could be the same as the passed in bytes
-(e.g. when only verification is done), or they could be completely different
-(perhaps if decryption were performed).</p>
+<dd><p>指定されたポートでソケットサーバを起動し、新しい設定を待ち受けます。ポートが指定されなかった場合は、モジュールのデフォルトの <code class="xref py py-const docutils literal"><span class="pre">DEFAULT_LOGGING_CONFIG_PORT</span></code> が使用されます。ロギング設定は <a class="reference internal" href="#logging.config.dictConfig" title="logging.config.dictConfig"><code class="xref py py-func docutils literal"><span class="pre">dictConfig()</span></code></a> あるいは <a class="reference internal" href="#logging.config.fileConfig" title="logging.config.fileConfig"><code class="xref py py-func docutils literal"><span class="pre">fileConfig()</span></code></a> で処理できるファイルとして送信されます。 <a class="reference internal" href="threading.html#threading.Thread" title="threading.Thread"><code class="xref py py-class docutils literal"><span class="pre">Thread</span></code></a> インスタンスを返し、このインスタンスの <a class="reference internal" href="threading.html#threading.Thread.start" title="threading.Thread.start"><code class="xref py py-meth docutils literal"><span class="pre">start()</span></code></a> を呼び出してサーバを起動し、適切なところで <a class="reference internal" href="threading.html#threading.Thread.join" title="threading.Thread.join"><code class="xref py py-meth docutils literal"><span class="pre">join()</span></code></a> を呼び出すことができます。サーバを停止するには、 <a class="reference internal" href="#logging.config.stopListening" title="logging.config.stopListening"><code class="xref py py-func docutils literal"><span class="pre">stopListening()</span></code></a> を呼び出します。</p>
+<p><code class="docutils literal"><span class="pre">verify</span></code> 引数を指定する場合は、これはソケットを通して受け取ったバイト文字列が妥当であるか、処理すべきであるかどうかを検査する callable である必要があります。ソケットを通じて、暗号化または署名あるいはその両方を受け取ることがあります。そのような場合に、 <code class="docutils literal"><span class="pre">verify</span></code> callable が署名の正当性検査または暗号化の復号あるいはその両方を実施することが出来ます。 <code class="docutils literal"><span class="pre">verify</span></code> callable は単一引数で呼び出されます - ソケットを通じて受け取ったバイト文字列です - そして処理すべきバイト文字列、または捨て去られるべきであることを示すための <code class="docutils literal"><span class="pre">None</span></code> を返す必要があります。返却されるバイト文字列は(たとえば正当性検査だけが行われて)渡されたものと同じかもしれませんし、あるいは(おそらく暗号化の復号が行われて)まったく異なるものかもしれません。</p>
 <p>ソケットに設定を送るには、まず設定ファイルを読み、それを <code class="docutils literal"><span class="pre">struct.pack('&gt;L',</span> <span class="pre">n)</span></code> を使って長さ 4 バイトのバイナリにパックしたものを前に付けたバイト列としてソケットに送ります。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
@@ -641,7 +625,7 @@ This method allows you to specify <code class="docutils literal"><span class="pr
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 4月 15, 2017
+    最終更新日時: 4月 16, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。

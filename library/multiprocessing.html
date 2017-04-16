@@ -574,12 +574,7 @@
 <h3>17.2.2.2. パイプ (Pipe) とキュー (Queue)<a class="headerlink" href="#pipes-and-queues" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>複数のプロセスを使う場合、一般的にはメッセージパッシングをプロセス間通信に使用し、ロックのような同期プリミティブを使用しないようにします。</p>
 <p>メッセージのやりとりのために <a class="reference internal" href="#multiprocessing.Pipe" title="multiprocessing.Pipe"><code class="xref py py-func docutils literal"><span class="pre">Pipe()</span></code></a> (2つのプロセス間の通信用)、もしくはキュー (複数のメッセージ生成プロセス (producer)、消費プロセス (consumer) の実現用) を使うことができます。</p>
-<p>The <a class="reference internal" href="#multiprocessing.Queue" title="multiprocessing.Queue"><code class="xref py py-class docutils literal"><span class="pre">Queue</span></code></a>, <a class="reference internal" href="#multiprocessing.SimpleQueue" title="multiprocessing.SimpleQueue"><code class="xref py py-class docutils literal"><span class="pre">SimpleQueue</span></code></a> and <a class="reference internal" href="#multiprocessing.JoinableQueue" title="multiprocessing.JoinableQueue"><code class="xref py py-class docutils literal"><span class="pre">JoinableQueue</span></code></a> types
-are multi-producer, multi-consumer <abbr title="first-in, first-out">FIFO</abbr>
-queues modelled on the <a class="reference internal" href="queue.html#queue.Queue" title="queue.Queue"><code class="xref py py-class docutils literal"><span class="pre">queue.Queue</span></code></a> class in the
-standard library.  They differ in that <a class="reference internal" href="#multiprocessing.Queue" title="multiprocessing.Queue"><code class="xref py py-class docutils literal"><span class="pre">Queue</span></code></a> lacks the
-<a class="reference internal" href="queue.html#queue.Queue.task_done" title="queue.Queue.task_done"><code class="xref py py-meth docutils literal"><span class="pre">task_done()</span></code></a> and <a class="reference internal" href="queue.html#queue.Queue.join" title="queue.Queue.join"><code class="xref py py-meth docutils literal"><span class="pre">join()</span></code></a> methods introduced
-into Python 2.5&#8217;s <a class="reference internal" href="queue.html#queue.Queue" title="queue.Queue"><code class="xref py py-class docutils literal"><span class="pre">queue.Queue</span></code></a> class.</p>
+<p><a class="reference internal" href="#multiprocessing.Queue" title="multiprocessing.Queue"><code class="xref py py-class docutils literal"><span class="pre">Queue</span></code></a>, <a class="reference internal" href="#multiprocessing.SimpleQueue" title="multiprocessing.SimpleQueue"><code class="xref py py-class docutils literal"><span class="pre">SimpleQueue</span></code></a> と <a class="reference internal" href="#multiprocessing.JoinableQueue" title="multiprocessing.JoinableQueue"><code class="xref py py-class docutils literal"><span class="pre">JoinableQueue</span></code></a> 型は複数プロセスから生成/消費を行う <abbr title="first-in, first-out, 先入れ先出し">FIFO</abbr> キューです。これらのキューは標準ライブラリの <a class="reference internal" href="queue.html#queue.Queue" title="queue.Queue"><code class="xref py py-class docutils literal"><span class="pre">queue.Queue</span></code></a> を模倣しています。 <a class="reference internal" href="#multiprocessing.Queue" title="multiprocessing.Queue"><code class="xref py py-class docutils literal"><span class="pre">Queue</span></code></a> には Python 2.5 の <a class="reference internal" href="queue.html#queue.Queue" title="queue.Queue"><code class="xref py py-class docutils literal"><span class="pre">queue.Queue</span></code></a> クラスで導入された <a class="reference internal" href="queue.html#queue.Queue.task_done" title="queue.Queue.task_done"><code class="xref py py-meth docutils literal"><span class="pre">task_done()</span></code></a> と <a class="reference internal" href="queue.html#queue.Queue.join" title="queue.Queue.join"><code class="xref py py-meth docutils literal"><span class="pre">join()</span></code></a> メソッドがないことが違う点です。</p>
 <p>もし <a class="reference internal" href="#multiprocessing.JoinableQueue" title="multiprocessing.JoinableQueue"><code class="xref py py-class docutils literal"><span class="pre">JoinableQueue</span></code></a> を使用するなら、キューから削除される各タスクのために <a class="reference internal" href="#multiprocessing.JoinableQueue.task_done" title="multiprocessing.JoinableQueue.task_done"><code class="xref py py-meth docutils literal"><span class="pre">JoinableQueue.task_done()</span></code></a> を呼び出さなければ <strong>なりません</strong> 。さもないと、いつか完了していないタスクを数えるためのセマフォがオーバーフローし、例外を発生させるでしょう。</p>
 <p>管理オブジェクトを使用することで共有キューを作成できることも覚えておいてください。詳細は <a class="reference internal" href="#multiprocessing-managers"><span class="std std-ref">マネージャー</span></a> を参照してください。</p>
 <div class="admonition note">
@@ -748,11 +743,10 @@ into Python 2.5&#8217;s <a class="reference internal" href="queue.html#queue.Que
 <dl class="function">
 <dt id="multiprocessing.cpu_count">
 <code class="descclassname">multiprocessing.</code><code class="descname">cpu_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocessing.cpu_count" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Return the number of CPUs in the system.</p>
-<p>This number is not equivalent to the number of CPUs the current process can
-use.  The number of usable CPUs can be obtained with
-<code class="docutils literal"><span class="pre">len(os.sched_getaffinity(0))</span></code></p>
-<p>May raise <a class="reference internal" href="exceptions.html#NotImplementedError" title="NotImplementedError"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code></a>.</p>
+<dd><p>システムの CPU 数を返します。</p>
+<p>この数は現在のプロセスが使える CPU 数と同じものではありません。
+使用可能な CPU 数は <code class="docutils literal"><span class="pre">len(os.sched_getaffinity(0))</span></code> で取得できます。</p>
+<p><a class="reference internal" href="exceptions.html#NotImplementedError" title="NotImplementedError"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code></a> を送出するかもしれません。</p>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <p class="last"><a class="reference internal" href="os.html#os.cpu_count" title="os.cpu_count"><code class="xref py py-func docutils literal"><span class="pre">os.cpu_count()</span></code></a></p>
@@ -1386,7 +1380,7 @@ This notably includes shared lists and dictionaries.</p>
 <code class="descname">dict</code><span class="sig-paren">(</span><em>mapping</em><span class="sig-paren">)</span></dt>
 <dt>
 <code class="descname">dict</code><span class="sig-paren">(</span><em>sequence</em><span class="sig-paren">)</span></dt>
-<dd><p>Create a shared <a class="reference internal" href="stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> object and return a proxy for it.</p>
+<dd><p>共有 <a class="reference internal" href="stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> オブジェクトを作成して、そのプロキシを返します。</p>
 </dd></dl>
 
 <dl class="method">
@@ -1394,13 +1388,12 @@ This notably includes shared lists and dictionaries.</p>
 <code class="descname">list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocessing.managers.SyncManager.list" title="この定義へのパーマリンク">¶</a></dt>
 <dt>
 <code class="descname">list</code><span class="sig-paren">(</span><em>sequence</em><span class="sig-paren">)</span></dt>
-<dd><p>Create a shared <a class="reference internal" href="stdtypes.html#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> object and return a proxy for it.</p>
+<dd><p>共有 <a class="reference internal" href="stdtypes.html#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> オブジェクトを作成して、そのプロキシを返します。</p>
 </dd></dl>
 
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.6 で変更: </span>Shared objects are capable of being nested.  For example, a shared
-container object such as a shared list can contain other shared objects
-which will all be managed and synchronized by the <a class="reference internal" href="#multiprocessing.managers.SyncManager" title="multiprocessing.managers.SyncManager"><code class="xref py py-class docutils literal"><span class="pre">SyncManager</span></code></a>.</p>
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>共有オブジェクトは入れ子もできます。
+例えば、共有リストのような共有コンテナオブジェクトは、 <a class="reference internal" href="#multiprocessing.managers.SyncManager" title="multiprocessing.managers.SyncManager"><code class="xref py py-class docutils literal"><span class="pre">SyncManager</span></code></a> がまとめて管理し同期を取っている他の共有オブジェクトを保持できます。</p>
 </div>
 </dd></dl>
 
@@ -2637,7 +2630,7 @@ demonstrates a level of control over the synchronization.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 4月 15, 2017
+    最終更新日時: 4月 16, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
