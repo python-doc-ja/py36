@@ -1499,9 +1499,8 @@ This notably includes shared lists and dictionaries.</p>
 <div class="section" id="proxy-objects">
 <span id="multiprocessing-proxy-objects"></span><h3>17.2.2.8. Proxy オブジェクト<a class="headerlink" href="#proxy-objects" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>プロキシは別のプロセスで(おそらく)有効な共有オブジェクトを <em>参照する</em> オブジェクトです。共有オブジェクトはプロキシの <em>参照対象</em> になるということができます。複数のプロキシオブジェクトが同じ参照対象を持つ可能性もあります。</p>
-<p>A proxy object has methods which invoke corresponding methods of its referent
-(although not every method of the referent will necessarily be available through
-the proxy).  In this way, a proxy can be used just like its referent can:</p>
+<p>プロキシオブジェクトはその参照対象の対応するメソッドを呼び出すメソッドを持ちます (そうは言っても、参照対象のすべてのメソッドが必ずしもプロキシ経由で利用可能なわけではありません)。
+この方法で、プロキシオブジェクトはまるでその参照先と同じように使えます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="k">import</span> <span class="n">Manager</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">Manager</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list</span><span class="p">([</span><span class="n">i</span><span class="o">*</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)])</span>
@@ -1516,10 +1515,9 @@ the proxy).  In this way, a proxy can be used just like its referent can:</p>
 </pre></div>
 </div>
 <p>プロキシに <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> を適用すると参照対象のオブジェクト表現を返すのに対して、 <a class="reference internal" href="functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> を適用するとプロキシのオブジェクト表現を返すことに注意してください。</p>
-<p>An important feature of proxy objects is that they are picklable so they can be
-passed between processes.  As such, a referent can contain
-<a class="reference internal" href="#multiprocessing-proxy-objects"><span class="std std-ref">Proxy オブジェクト</span></a>.  This permits nesting of these managed
-lists, dicts, and other <a class="reference internal" href="#multiprocessing-proxy-objects"><span class="std std-ref">Proxy オブジェクト</span></a>:</p>
+<p>プロキシオブジェクトの重要な機能は pickle 化ができることで、これによりプロセス間での受け渡しができます。
+そのため、参照対象が <a class="reference internal" href="#multiprocessing-proxy-objects"><span class="std std-ref">Proxy オブジェクト</span></a> を持てます。
+これによって管理されたリスト、辞書、その他 <a class="reference internal" href="#multiprocessing-proxy-objects"><span class="std std-ref">Proxy オブジェクト</span></a> をネストできます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>         <span class="c1"># referent of a now contains referent of b</span>
@@ -1530,7 +1528,7 @@ lists, dicts, and other <a class="reference internal" href="#multiprocessing-pro
 <span class="go">[&#39;hello&#39;] [&#39;hello&#39;]</span>
 </pre></div>
 </div>
-<p>Similarly, dict and list proxies may be nested inside one another:</p>
+<p>同様に、辞書とリストのプロキシも他のプロキシの内部に入れてネストできます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l_outer</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list</span><span class="p">([</span> <span class="n">manager</span><span class="o">.</span><span class="n">dict</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d_first_inner</span> <span class="o">=</span> <span class="n">l_outer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d_first_inner</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
@@ -1543,13 +1541,9 @@ lists, dicts, and other <a class="reference internal" href="#multiprocessing-pro
 <span class="go">{&#39;c&#39;: 3, &#39;z&#39;: 26}</span>
 </pre></div>
 </div>
-<p>If standard (non-proxy) <a class="reference internal" href="stdtypes.html#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> or <a class="reference internal" href="stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> objects are contained
-in a referent, modifications to those mutable values will not be propagated
-through the manager because the proxy has no way of knowing when the values
-contained within are modified.  However, storing a value in a container proxy
-(which triggers a <code class="docutils literal"><span class="pre">__setitem__</span></code> on the proxy object) does propagate through
-the manager and so to effectively modify such an item, one could re-assign the
-modified value to the container proxy:</p>
+<p>(プロキシでない) 標準の <a class="reference internal" href="stdtypes.html#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> オブジェクトや <a class="reference internal" href="stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> オブジェクトが参照対象に含まれていた場合、それらの可変な値の変更はマネージャーからは伝搬されません。
+というのも、プロキシには参照対象の中に含まれる値がいつ変更されたかを知る術が無いのです。
+しかし、コンテナプロキシに値を保存する (これはプロキシオブジェクトの <code class="docutils literal"><span class="pre">__setitem__</span></code> を起動します) 場合はマネージャーを通して変更が伝搬され、その要素を実際に変更するために、コンテナプロキシに変更後の値が再代入されます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># create a list proxy and append a mutable object (a dictionary)</span>
 <span class="n">lproxy</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 <span class="n">lproxy</span><span class="o">.</span><span class="n">append</span><span class="p">({})</span>
