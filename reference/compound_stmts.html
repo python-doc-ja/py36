@@ -329,16 +329,13 @@
     <span class="k">return</span> <span class="n">penguin</span>
 </pre></div>
 </div>
-<p id="index-22">Function call semantics are described in more detail in section <a class="reference internal" href="expressions.html#calls"><span class="std std-ref">呼び出し (call)</span></a>. A
-function call always assigns values to all parameters mentioned in the parameter
-list, either from position arguments, from keyword arguments, or from default
-values.  If the form &#8220;<code class="docutils literal"><span class="pre">*identifier</span></code>&#8221; is present, it is initialized to a tuple
-receiving any excess positional parameters, defaulting to the empty tuple.
-If the form &#8220;<code class="docutils literal"><span class="pre">**identifier</span></code>&#8221; is present, it is initialized to a new
-ordered mapping receiving any excess keyword arguments, defaulting to a
-new empty mapping of the same type.  Parameters after &#8220;<code class="docutils literal"><span class="pre">*</span></code>&#8221; or
-&#8220;<code class="docutils literal"><span class="pre">*identifier</span></code>&#8221; are keyword-only parameters and may only be passed
-used keyword arguments.</p>
+<p id="index-22">関数呼び出しの意味付けに関する詳細は、 <a class="reference internal" href="expressions.html#calls"><span class="std std-ref">呼び出し (call)</span></a> 節で述べられています。
+関数呼び出しを行うと、パラメタリストに記述された全てのパラメタに、固定引数、キーワード引数、デフォルト値のいずれかから値が代入されます。
+&#8220;<code class="docutils literal"><span class="pre">*identifier</span></code>&#8221; 形式が存在すれば、余ったすべての固定引数を受け取ったタプルに初期化されます。
+このデフォルト値は空のタプルです。
+&#8220;<code class="docutils literal"><span class="pre">**identifier</span></code>&#8221; 形式が存在すれば、余ったすべてのキーワード引数を受け取った順序付きのマッピングオブジェクトに初期化されます。
+このデフォルト値は同じ型の空のマッピングオブジェクトです。
+&#8220;<code class="docutils literal"><span class="pre">*</span></code>&#8221; や &#8220;<code class="docutils literal"><span class="pre">*identifier</span></code>&#8221; の後のパラメタはキーワード専用パラメータで、キーワード引数を使ってのみ渡されます。</p>
 <p id="index-23">引数には、引数名に続けて &#8220;<code class="docutils literal"><span class="pre">:</span> <span class="pre">expression</span></code>&#8221; 形式のアノテーションを付けられます。<code class="docutils literal"><span class="pre">*identifier</span></code> や <code class="docutils literal"><span class="pre">**identifier</span></code> の形式でも、すべての引数にはアノテーションをつけられます。関数には、引数リストの後に &#8220;<code class="docutils literal"><span class="pre">-&gt;</span> <span class="pre">expression</span></code>&#8221; 形式の &#8220;return&#8221; アノテーションをつけられます。これらのアノテーションは、任意の有効な Python の式にでき、関数定義が実行されるときに評価されます。アノテーションは、ソースコードにあるときとは別の順序で評価されることがあります。アノテーションがあっても、関数の意味づけは変わりません。アノテーションの値は、関数オブジェクトの <code class="xref py py-attr docutils literal"><span class="pre">__annotations__</span></code> 属性の、引数名をキーとする値として利用できます。</p>
 <p id="index-24">式を即時に使用するために、無名関数 (名前に束縛されていない関数) を作成することもできます。これは <a class="reference internal" href="expressions.html#lambda"><span class="std std-ref">ラムダ (lambda)</span></a> の節で解説されているラムダ式を使います。ラムダ式は簡略化された関数定義の省略表現に過ぎないことに注意してください;  &#8220;<a class="reference internal" href="#def"><code class="xref std std-keyword docutils literal"><span class="pre">def</span></code></a>&#8221; 文で定義された関数もラムダ式で作成された関数のように、引数として渡せたり、他の名前に割り当てることができます。複数の式とアノテーションが実行できるので、 &#8220;<a class="reference internal" href="#def"><code class="xref std std-keyword docutils literal"><span class="pre">def</span></code></a>&#8221; 形式の方がより強力です。</p>
 <p><strong>プログラマへのメモ:</strong> 関数は第一級オブジェクトです。関数定義内で実行された &#8220;<code class="docutils literal"><span class="pre">def</span></code>&#8221; 文は、返り値や引数として渡せるローカル関数を定義します。ネストした関数内で使われる自由変数は、 def を含んでいる関数のローカル変数にアクセスできます。詳細は <a class="reference internal" href="executionmodel.html#naming"><span class="std std-ref">名前づけと束縛 (naming and binding)</span></a> 節を参照してください。</p>
@@ -370,10 +367,8 @@ used keyword arguments.</p>
 </pre></div>
 </div>
 <p>次にクラスのスイートが、新たな実行フレーム (<a class="reference internal" href="executionmodel.html#naming"><span class="std std-ref">名前づけと束縛 (naming and binding)</span></a> を参照してください) 内で、新たに作られたローカル名前空間と元々のグローバル名前空間を使って実行されます (通常、このスイートには主に関数定義が含まれます)。クラスのスイートが実行し終えると、実行フレームは破棄されますが、ローカルな名前空間は保存されます。<a class="footnote-reference" href="#id8" id="id4">[4]</a> 次に、継承リストを基底クラスに、保存されたローカル名前空間を属性値辞書に、それぞれ使ってクラスオブジェクトが生成されます。最後に、もとのローカル名前空間において、クラス名がこのクラスオブジェクトに束縛されます。</p>
-<p>The order in which attributes are defined in the class body is preserved
-in the new class&#8217;s <code class="docutils literal"><span class="pre">__dict__</span></code>.  Note that this is reliable only right
-after the class is created and only for classes that were defined using
-the definition syntax.</p>
+<p>クラス本体で属性が定義された順序は新しいクラスの <code class="docutils literal"><span class="pre">__dict__</span></code> に保持されます。
+この性質が期待できるのは、クラスが作られた直後かつ定義構文を使って定義されたクラスであるときのみです。</p>
 <p>クラス作成は、 <a class="reference internal" href="datamodel.html#metaclasses"><span class="std std-ref">メタクラス</span></a> を利用して大幅にカスタマイズできます。</p>
 <p>関数をデコレートするのと同じように、クラスもデコレートすることが出来ます、</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="nd">@f1</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span>
@@ -409,8 +404,7 @@ the definition syntax.</p>
 <a class="reference internal" href="expressions.html#await"><code class="xref std std-keyword docutils literal"><span class="pre">await</span></code></a> 式である <a class="reference internal" href="#async-for"><code class="xref std std-keyword docutils literal"><span class="pre">async</span> <span class="pre">for</span></code></a> と <a class="reference internal" href="#async-with"><code class="xref std std-keyword docutils literal"><span class="pre">async</span> <span class="pre">with</span></code></a> はコルーチンの本体でしか使えません。</p>
 <p>Functions defined with <code class="docutils literal"><span class="pre">async</span> <span class="pre">def</span></code> syntax are always coroutine functions,
 even if they do not contain <code class="docutils literal"><span class="pre">await</span></code> or <code class="docutils literal"><span class="pre">async</span></code> keywords.</p>
-<p>It is a <a class="reference internal" href="../library/exceptions.html#SyntaxError" title="SyntaxError"><code class="xref py py-exc docutils literal"><span class="pre">SyntaxError</span></code></a> to use <code class="docutils literal"><span class="pre">yield</span> <span class="pre">from</span></code> expressions in
-<code class="docutils literal"><span class="pre">async</span> <span class="pre">def</span></code> coroutines.</p>
+<p><code class="docutils literal"><span class="pre">async</span> <span class="pre">def</span></code> コルーチン内で <code class="docutils literal"><span class="pre">yield</span> <span class="pre">from</span></code> 式を使用すると <a class="reference internal" href="../library/exceptions.html#SyntaxError" title="SyntaxError"><code class="xref py py-exc docutils literal"><span class="pre">SyntaxError</span></code></a> になります。</p>
 <p>コルーチン関数の例:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">):</span>
     <span class="n">do_stuff</span><span class="p">()</span>
@@ -610,7 +604,7 @@ even if they do not contain <code class="docutils literal"><span class="pre">awa
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 4月 17, 2017
+    最終更新日時: 4月 19, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
