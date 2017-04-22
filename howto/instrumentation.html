@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Instrumenting CPython with DTrace and SystemTap &#8212; Python 3.6.1 ドキュメント</title>
+    <title>DTrace と SystemTap で CPython を測定する &#8212; Python 3.6.1 ドキュメント</title>
     
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -103,7 +103,7 @@
           <div class="body" role="main">
             
   <div class="section" id="instrumenting-cpython-with-dtrace-and-systemtap">
-<span id="instrumentation"></span><h1>Instrumenting CPython with DTrace and SystemTap<a class="headerlink" href="#instrumenting-cpython-with-dtrace-and-systemtap" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="instrumentation"></span><h1>DTrace と SystemTap で CPython を測定する<a class="headerlink" href="#instrumenting-cpython-with-dtrace-and-systemtap" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -114,32 +114,30 @@
 </tr>
 </tbody>
 </table>
-<p>DTrace and SystemTap are monitoring tools, each providing a way to inspect
-what the processes on a computer system are doing.  They both use
-domain-specific languages allowing a user to write scripts which:</p>
+<p>Dtrace と SystemTap はモニタリングツールで、コンピュータシステムのプロセスが何をしているかを調べる方法を提供します。
+どちらもドメイン固有言語 (domain-specific language) を使用して、次のことができるスクリプトをユーザが書けます:</p>
 <blockquote>
 <div><ul class="simple">
-<li>filter which processes are to be observed</li>
-<li>gather data from the processes of interest</li>
-<li>generate reports on the data</li>
+<li><p class="first">観測対象のプロセスを絞り込む</p>
+</li>
+<li><p class="first">関心のあるプロセスからデータを収集する</p>
+</li>
+<li><p class="first">収集したデータからレポートを生成する</p>
+</li>
 </ul>
 </div></blockquote>
-<p>As of Python 3.6, CPython can be built with embedded &#8220;markers&#8221;, also
-known as &#8220;probes&#8221;, that can be observed by a DTrace or SystemTap script,
-making it easier to monitor what the CPython processes on a system are
-doing.</p>
+<p>Python 3.6 では、 CPython は &#8220;プローブ&#8221; としても知られる &#8220;マーカー&#8221; を埋め込んだビルドが行えます。
+マーカーは DTrace や SystemTap のスクリプトから観測でき、システムの CPython プロセスが何をしているかを観察するのが簡単になります。</p>
 <div class="impl-detail compound">
-<p><strong>CPython 実装の詳細:</strong> DTrace markers are implementation details of the CPython interpreter.
-No guarantees are made about probe compatibility between versions of
-CPython. DTrace scripts can stop working or work incorrectly without
-warning when changing CPython versions.</p>
+<p><strong>CPython 実装の詳細:</strong> DTrace マーカーは CPython インタプリタの実装詳細です。
+CPython のバージョン間でプローブの互換性があるという保証はありません。
+CPython のバージョンを変えると、 DTrace スクリプトは警告無しに動作しなくなったり、おかしな動作をする可能性があります。</p>
 </div>
 <div class="section" id="enabling-the-static-markers">
-<h2>Enabling the static markers<a class="headerlink" href="#enabling-the-static-markers" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>macOS comes with built-in support for DTrace.  On Linux, in order to
-build CPython with the embedded markers for SystemTap, the SystemTap
-development tools must be installed.</p>
-<p>On a Linux machine, this can be done via:</p>
+<h2>静的マーカーの有効化<a class="headerlink" href="#enabling-the-static-markers" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>macOS には組み込みの DTrace サポートが備わっています。
+Linux では SystemTap 用のマーカーを埋め込んで CPython をビルドするためには、 SystemTap 開発ツールをインストールしなければなりません。</p>
+<p>Linux マシンでは、 SystemTap 開発ツールのインストールは次のように行えます:</p>
 <div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> yum install systemtap-sdt-devel
 </pre></div>
 </div>
@@ -147,7 +145,7 @@ development tools must be installed.</p>
 <div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt-get install systemtap-sdt-dev
 </pre></div>
 </div>
-<p>CPython must then be configured <code class="docutils literal"><span class="pre">--with-dtrace</span></code>:</p>
+<p>次に CPython のビルドでは <code class="docutils literal"><span class="pre">--with-dtrace</span></code> を設定しなければなりません:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>checking for --with-dtrace... yes
 </pre></div>
 </div>
@@ -499,8 +497,8 @@ probe timer.ms(1000) {
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Instrumenting CPython with DTrace and SystemTap</a><ul>
-<li><a class="reference internal" href="#enabling-the-static-markers">Enabling the static markers</a></li>
+<li><a class="reference internal" href="#">DTrace と SystemTap で CPython を測定する</a><ul>
+<li><a class="reference internal" href="#enabling-the-static-markers">静的マーカーの有効化</a></li>
 <li><a class="reference internal" href="#static-dtrace-probes">Static DTrace probes</a></li>
 <li><a class="reference internal" href="#static-systemtap-markers">Static SystemTap markers</a></li>
 <li><a class="reference internal" href="#available-static-markers">Available static markers</a></li>
@@ -578,7 +576,7 @@ probe timer.ms(1000) {
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 4月 21, 2017
+    最終更新日時: 4月 22, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
