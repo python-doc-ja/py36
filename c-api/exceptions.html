@@ -317,7 +317,11 @@ Python の <a class="reference internal" href="../library/warnings.html#module-w
 <dt id="c.PyErr_WarnEx">
 int <code class="descname">PyErr_WarnEx</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*category</em>, const char<em>&nbsp;*message</em>, Py_ssize_t<em>&nbsp;stack_level</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyErr_WarnEx" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>警告メッセージを発行します。 <em>category</em> 引数は警告カテゴリ(以下を参照) かまたは <em>NULL</em> で、 <em>message</em> 引数は UTF-8 エンコードされた文字列です。 <em>stacklevel</em> はスタックフレームの数を示す正の整数です; 警告はそのスタックフレームの中の実行している行から発行されます。 <em>stacklevel</em> が 1 だと <a class="reference internal" href="#c.PyErr_WarnEx" title="PyErr_WarnEx"><code class="xref c c-func docutils literal"><span class="pre">PyErr_WarnEx()</span></code></a> を呼び出している関数が、2 だとその上の関数が Warning の発行元になります。</p>
-<p>警告カテゴリは <code class="xref c c-data docutils literal"><span class="pre">Warning</span></code> のサブクラスでなければならない。デフォルト警告カテゴリは <code class="xref c c-data docutils literal"><span class="pre">RuntimeWarning</span></code> です。標準Python警告カテゴリは <code class="docutils literal"><span class="pre">PyExc_</span></code> にPython例外名が続く名前のグローバル変数を用いて変更できます。これらは型 <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject*</span></code></a> を持ち、すべてクラスオブジェクトです。それらの名前は <code class="xref c c-data docutils literal"><span class="pre">PyExc_Warning</span></code>, <code class="xref c c-data docutils literal"><span class="pre">PyExc_UserWarning</span></code>, <code class="xref c c-data docutils literal"><span class="pre">PyExc_UnicodeWarning</span></code>, <code class="xref c c-data docutils literal"><span class="pre">PyExc_DeprecationWarning</span></code>, <code class="xref c c-data docutils literal"><span class="pre">PyExc_SyntaxWarning</span></code>, <code class="xref c c-data docutils literal"><span class="pre">PyExc_RuntimeWarning</span></code>, <code class="xref c c-data docutils literal"><span class="pre">PyExc_FutureWarning</span></code> です。 <code class="xref c c-data docutils literal"><span class="pre">PyExc_Warning</span></code> は <code class="xref c c-data docutils literal"><span class="pre">PyExc_Exception</span></code> のサブクラスです。その他の警告カテゴリは <code class="xref c c-data docutils literal"><span class="pre">PyExc_Warning</span></code> のサブクラスです。</p>
+<p>Warning categories must be subclasses of <code class="xref c c-data docutils literal"><span class="pre">PyExc_Warning</span></code>;
+<code class="xref c c-data docutils literal"><span class="pre">PyExc_Warning</span></code> is a subclass of <code class="xref c c-data docutils literal"><span class="pre">PyExc_Exception</span></code>;
+the default warning category is <code class="xref c c-data docutils literal"><span class="pre">PyExc_RuntimeWarning</span></code>. The standard
+Python warning categories are available as global variables whose names are
+enumerated at <a class="reference internal" href="#standarwarningcategories"><span class="std std-ref">Standard Warning Categories</span></a>.</p>
 <p>警告をコントロールするための情報については、 <a class="reference internal" href="../library/warnings.html#module-warnings" title="warnings: Issue warning messages and control their disposition."><code class="xref py py-mod docutils literal"><span class="pre">warnings</span></code></a> モジュールのドキュメンテーションとコマンドライン・ドキュメンテーションの <a class="reference internal" href="../using/cmdline.html#cmdoption-W"><code class="xref std std-option docutils literal"><span class="pre">-W</span></code></a> オプションを参照してください。警告コントロールのためのC APIはありません。</p>
 </dd></dl>
 
@@ -703,7 +707,7 @@ void <code class="descname">Py_ReprLeave</code><span class="sig-paren">(</span><
 <div class="section" id="standard-exceptions">
 <span id="standardexceptions"></span><h2>標準例外<a class="headerlink" href="#standard-exceptions" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><code class="docutils literal"><span class="pre">PyExc_</span></code> の後ろにPythonの例外名が続く名前をもつグローバル変数として、すべての標準Python例外が利用可能です。これらは型 <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject*</span></code></a> を持ち、すべてクラスオブジェクトです。完璧を期するために、すべての変数を以下に列挙します:</p>
-<table border="1" class="docutils">
+<table border="1" class="docutils" id="index-3">
 <colgroup>
 <col width="49%" />
 <col width="39%" />
@@ -731,36 +735,36 @@ void <code class="descname">Py_ReprLeave</code><span class="sig-paren">(</span><
 <td><a class="reference internal" href="../library/exceptions.html#ArithmeticError" title="ArithmeticError"><code class="xref py py-exc docutils literal"><span class="pre">ArithmeticError</span></code></a></td>
 <td>(1)</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_LookupError</span></code></td>
-<td><a class="reference internal" href="../library/exceptions.html#LookupError" title="LookupError"><code class="xref py py-exc docutils literal"><span class="pre">LookupError</span></code></a></td>
-<td>(1)</td>
-</tr>
-<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_AssertionError</span></code></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_AssertionError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#AssertionError" title="AssertionError"><code class="xref py py-exc docutils literal"><span class="pre">AssertionError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_AttributeError</span></code></td>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_AttributeError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#AttributeError" title="AttributeError"><code class="xref py py-exc docutils literal"><span class="pre">AttributeError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_BlockingIOError</span></code></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_BlockingIOError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#BlockingIOError" title="BlockingIOError"><code class="xref py py-exc docutils literal"><span class="pre">BlockingIOError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_BrokenPipeError</span></code></td>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_BrokenPipeError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#BrokenPipeError" title="BrokenPipeError"><code class="xref py py-exc docutils literal"><span class="pre">BrokenPipeError</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_BufferError</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#BufferError" title="BufferError"><code class="xref py py-exc docutils literal"><span class="pre">BufferError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
 <tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ChildProcessError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#ChildProcessError" title="ChildProcessError"><code class="xref py py-exc docutils literal"><span class="pre">ChildProcessError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ConnectionError</span></code></td>
-<td><a class="reference internal" href="../library/exceptions.html#ConnectionError" title="ConnectionError"><code class="xref py py-exc docutils literal"><span class="pre">ConnectionError</span></code></a></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ConnectionAbortedError</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#ConnectionAbortedError" title="ConnectionAbortedError"><code class="xref py py-exc docutils literal"><span class="pre">ConnectionAbortedError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ConnectionAbortedError</span></code></td>
-<td><a class="reference internal" href="../library/exceptions.html#ConnectionAbortedError" title="ConnectionAbortedError"><code class="xref py py-exc docutils literal"><span class="pre">ConnectionAbortedError</span></code></a></td>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ConnectionError</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#ConnectionError" title="ConnectionError"><code class="xref py py-exc docutils literal"><span class="pre">ConnectionError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
 <tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ConnectionRefusedError</span></code></td>
@@ -771,132 +775,179 @@ void <code class="descname">Py_ReprLeave</code><span class="sig-paren">(</span><
 <td><a class="reference internal" href="../library/exceptions.html#ConnectionResetError" title="ConnectionResetError"><code class="xref py py-exc docutils literal"><span class="pre">ConnectionResetError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_FileExistsError</span></code></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_EOFError</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#EOFError" title="EOFError"><code class="xref py py-exc docutils literal"><span class="pre">EOFError</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_FileExistsError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#FileExistsError" title="FileExistsError"><code class="xref py py-exc docutils literal"><span class="pre">FileExistsError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_FileNotFoundError</span></code></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_FileNotFoundError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#FileNotFoundError" title="FileNotFoundError"><code class="xref py py-exc docutils literal"><span class="pre">FileNotFoundError</span></code></a></td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_EOFError</span></code></td>
-<td><a class="reference internal" href="../library/exceptions.html#EOFError" title="EOFError"><code class="xref py py-exc docutils literal"><span class="pre">EOFError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
 <tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_FloatingPointError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#FloatingPointError" title="FloatingPointError"><code class="xref py py-exc docutils literal"><span class="pre">FloatingPointError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ImportError</span></code></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_GeneratorExit</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#GeneratorExit" title="GeneratorExit"><code class="xref py py-exc docutils literal"><span class="pre">GeneratorExit</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ImportError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#ImportError" title="ImportError"><code class="xref py py-exc docutils literal"><span class="pre">ImportError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ModuleNotFoundError</span></code></td>
-<td><a class="reference internal" href="../library/exceptions.html#ModuleNotFoundError" title="ModuleNotFoundError"><code class="xref py py-exc docutils literal"><span class="pre">ModuleNotFoundError</span></code></a></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_IndentationError</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#IndentationError" title="IndentationError"><code class="xref py py-exc docutils literal"><span class="pre">IndentationError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_IndexError</span></code></td>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_IndexError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#IndexError" title="IndexError"><code class="xref py py-exc docutils literal"><span class="pre">IndexError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_InterruptedError</span></code></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_InterruptedError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_IsADirectoryError</span></code></td>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_IsADirectoryError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#IsADirectoryError" title="IsADirectoryError"><code class="xref py py-exc docutils literal"><span class="pre">IsADirectoryError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_KeyError</span></code></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_KeyError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#KeyError" title="KeyError"><code class="xref py py-exc docutils literal"><span class="pre">KeyError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_KeyboardInterrupt</span></code></td>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_KeyboardInterrupt</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#KeyboardInterrupt" title="KeyboardInterrupt"><code class="xref py py-exc docutils literal"><span class="pre">KeyboardInterrupt</span></code></a></td>
 <td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_LookupError</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#LookupError" title="LookupError"><code class="xref py py-exc docutils literal"><span class="pre">LookupError</span></code></a></td>
+<td>(1)</td>
 </tr>
 <tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_MemoryError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#MemoryError" title="MemoryError"><code class="xref py py-exc docutils literal"><span class="pre">MemoryError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_NameError</span></code></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ModuleNotFoundError</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#ModuleNotFoundError" title="ModuleNotFoundError"><code class="xref py py-exc docutils literal"><span class="pre">ModuleNotFoundError</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_NameError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#NameError" title="NameError"><code class="xref py py-exc docutils literal"><span class="pre">NameError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_NotADirectoryError</span></code></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_NotADirectoryError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#NotADirectoryError" title="NotADirectoryError"><code class="xref py py-exc docutils literal"><span class="pre">NotADirectoryError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_NotImplementedError</span></code></td>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_NotImplementedError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#NotImplementedError" title="NotImplementedError"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_OSError</span></code></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_OSError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a></td>
 <td>(1)</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_OverflowError</span></code></td>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_OverflowError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#OverflowError" title="OverflowError"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_PermissionError</span></code></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_PermissionError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#PermissionError" title="PermissionError"><code class="xref py py-exc docutils literal"><span class="pre">PermissionError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ProcessLookupError</span></code></td>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ProcessLookupError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#ProcessLookupError" title="ProcessLookupError"><code class="xref py py-exc docutils literal"><span class="pre">ProcessLookupError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_RecursionError</span></code></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_RecursionError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#RecursionError" title="RecursionError"><code class="xref py py-exc docutils literal"><span class="pre">RecursionError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ReferenceError</span></code></td>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ReferenceError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#ReferenceError" title="ReferenceError"><code class="xref py py-exc docutils literal"><span class="pre">ReferenceError</span></code></a></td>
 <td>(2)</td>
 </tr>
-<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_RuntimeError</span></code></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_RuntimeError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_SyntaxError</span></code></td>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_StopAsyncIteration</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#StopAsyncIteration" title="StopAsyncIteration"><code class="xref py py-exc docutils literal"><span class="pre">StopAsyncIteration</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_StopIteration</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#StopIteration" title="StopIteration"><code class="xref py py-exc docutils literal"><span class="pre">StopIteration</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_SyntaxError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#SyntaxError" title="SyntaxError"><code class="xref py py-exc docutils literal"><span class="pre">SyntaxError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_SystemError</span></code></td>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_SystemError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#SystemError" title="SystemError"><code class="xref py py-exc docutils literal"><span class="pre">SystemError</span></code></a></td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_TimeoutError</span></code></td>
-<td><a class="reference internal" href="../library/exceptions.html#TimeoutError" title="TimeoutError"><code class="xref py py-exc docutils literal"><span class="pre">TimeoutError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
 <tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_SystemExit</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#SystemExit" title="SystemExit"><code class="xref py py-exc docutils literal"><span class="pre">SystemExit</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_TabError</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#TabError" title="TabError"><code class="xref py py-exc docutils literal"><span class="pre">TabError</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_TimeoutError</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#TimeoutError" title="TimeoutError"><code class="xref py py-exc docutils literal"><span class="pre">TimeoutError</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
 <tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_TypeError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ValueError</span></code></td>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_UnboundLocalError</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#UnboundLocalError" title="UnboundLocalError"><code class="xref py py-exc docutils literal"><span class="pre">UnboundLocalError</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_UnicodeDecodeError</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#UnicodeDecodeError" title="UnicodeDecodeError"><code class="xref py py-exc docutils literal"><span class="pre">UnicodeDecodeError</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_UnicodeEncodeError</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#UnicodeEncodeError" title="UnicodeEncodeError"><code class="xref py py-exc docutils literal"><span class="pre">UnicodeEncodeError</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_UnicodeError</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#UnicodeError" title="UnicodeError"><code class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_UnicodeTranslateError</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#UnicodeTranslateError" title="UnicodeTranslateError"><code class="xref py py-exc docutils literal"><span class="pre">UnicodeTranslateError</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ValueError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ZeroDivisionError</span></code></td>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ZeroDivisionError</span></code></td>
 <td><a class="reference internal" href="../library/exceptions.html#ZeroDivisionError" title="ZeroDivisionError"><code class="xref py py-exc docutils literal"><span class="pre">ZeroDivisionError</span></code></a></td>
 <td>&nbsp;</td>
 </tr>
 </tbody>
 </table>
 <div class="versionadded">
-<p><span class="versionmodified">バージョン 3.3 で追加: </span><code class="xref c c-data docutils literal"><span class="pre">PyExc_BlockingIOError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_BrokenPipeError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_ChildProcessError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_ConnectionError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_ConnectionAbortedError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_ConnectionRefusedError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_ConnectionResetError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_FileExistsError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_FileNotFoundError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_InterruptedError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_IsADirectoryError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_NotADirectoryError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_PermissionError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_ProcessLookupError</span></code>  、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_TimeoutError</span></code> は <span class="target" id="index-6"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3151"><strong>PEP 3151</strong></a> により導入されました。</p>
+<p><span class="versionmodified">バージョン 3.3 で追加: </span><code class="xref c c-data docutils literal"><span class="pre">PyExc_BlockingIOError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_BrokenPipeError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_ChildProcessError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_ConnectionError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_ConnectionAbortedError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_ConnectionRefusedError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_ConnectionResetError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_FileExistsError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_FileNotFoundError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_InterruptedError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_IsADirectoryError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_NotADirectoryError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_PermissionError</span></code> 、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_ProcessLookupError</span></code>  、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_TimeoutError</span></code> は <span class="target" id="index-8"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3151"><strong>PEP 3151</strong></a> により導入されました。</p>
 </div>
 <div class="versionadded">
-<p><span class="versionmodified">バージョン 3.5 で追加: </span><code class="xref c c-data docutils literal"><span class="pre">PyExc_RecursionError</span></code>.</p>
+<p><span class="versionmodified">バージョン 3.5 で追加: </span><code class="xref c c-data docutils literal"><span class="pre">PyExc_StopAsyncIteration</span></code> and <code class="xref c c-data docutils literal"><span class="pre">PyExc_RecursionError</span></code>.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.6 で追加: </span><code class="xref c c-data docutils literal"><span class="pre">PyExc_ModuleNotFoundError</span></code>.</p>
 </div>
 <p>これらは互換性のある <code class="xref c c-data docutils literal"><span class="pre">PyExc_OSError</span></code> のエイリアスです:</p>
-<table border="1" class="docutils">
+<table border="1" class="docutils" id="index-5">
 <colgroup>
 <col width="79%" />
 <col width="21%" />
@@ -923,7 +974,7 @@ void <code class="descname">Py_ReprLeave</code><span class="sig-paren">(</span><
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.3 で変更: </span>これらのエイリアスは例外の種類を分けるために使われます。</p>
 </div>
-<p id="index-4">注釈:</p>
+<p>注釈:</p>
 <ol class="arabic simple">
 <li><p class="first">これは別の標準例外のためのベースクラスです。</p>
 </li>
@@ -931,6 +982,82 @@ void <code class="descname">Py_ReprLeave</code><span class="sig-paren">(</span><
 </li>
 <li><p class="first">Windowsでのみ定義されています。プリプロセッサマクロ <code class="docutils literal"><span class="pre">MS_WINDOWS</span></code> が定義されているかテストすることで、これを使うコードを保護してください。</p>
 </li>
+</ol>
+</div>
+<div class="section" id="standard-warning-categories">
+<span id="standarwarningcategories"></span><h2>Standard Warning Categories<a class="headerlink" href="#standard-warning-categories" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>All standard Python warning categories are available as global variables whose
+names are <code class="docutils literal"><span class="pre">PyExc_</span></code> followed by the Python exception name. These have the type
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject*</span></code></a>; they are all class objects. For completeness, here are all
+the variables:</p>
+<table border="1" class="docutils" id="index-6">
+<colgroup>
+<col width="49%" />
+<col width="39%" />
+<col width="12%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><p class="first last">C名</p>
+</th>
+<th class="head"><p class="first last">Python名</p>
+</th>
+<th class="head"><p class="first last">注釈</p>
+</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_Warning</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#Warning" title="Warning"><code class="xref py py-exc docutils literal"><span class="pre">Warning</span></code></a></td>
+<td>(1)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_BytesWarning</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#BytesWarning" title="BytesWarning"><code class="xref py py-exc docutils literal"><span class="pre">BytesWarning</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_DeprecationWarning</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#DeprecationWarning" title="DeprecationWarning"><code class="xref py py-exc docutils literal"><span class="pre">DeprecationWarning</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_FutureWarning</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#FutureWarning" title="FutureWarning"><code class="xref py py-exc docutils literal"><span class="pre">FutureWarning</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ImportWarning</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#ImportWarning" title="ImportWarning"><code class="xref py py-exc docutils literal"><span class="pre">ImportWarning</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_PendingDepricationWarning</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#PendingDeprecationWarning" title="PendingDeprecationWarning"><code class="xref py py-exc docutils literal"><span class="pre">PendingDeprecationWarning</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_ResourceWarning</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#ResourceWarning" title="ResourceWarning"><code class="xref py py-exc docutils literal"><span class="pre">ResourceWarning</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_RuntimeWarning</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#RuntimeWarning" title="RuntimeWarning"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeWarning</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_SyntaxWarning</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#SyntaxWarning" title="SyntaxWarning"><code class="xref py py-exc docutils literal"><span class="pre">SyntaxWarning</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_UnicodeWarning</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#UnicodeWarning" title="UnicodeWarning"><code class="xref py py-exc docutils literal"><span class="pre">UnicodeWarning</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="xref c c-data docutils literal"><span class="pre">PyExc_UserWarning</span></code></td>
+<td><a class="reference internal" href="../library/exceptions.html#UserWarning" title="UserWarning"><code class="xref py py-exc docutils literal"><span class="pre">UserWarning</span></code></a></td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.2 で追加: </span><code class="xref c c-data docutils literal"><span class="pre">PyExc_ResourceWarning</span></code>.</p>
+</div>
+<p>注釈:</p>
+<ol class="arabic simple">
+<li>This is a base class for other standard warning categories.</li>
 </ol>
 </div>
 </div>
@@ -954,6 +1081,7 @@ void <code class="descname">Py_ReprLeave</code><span class="sig-paren">(</span><
 <li><a class="reference internal" href="#unicode-exception-objects">Unicode 例外オブジェクト</a></li>
 <li><a class="reference internal" href="#recursion-control">再帰の管理</a></li>
 <li><a class="reference internal" href="#standard-exceptions">標準例外</a></li>
+<li><a class="reference internal" href="#standard-warning-categories">Standard Warning Categories</a></li>
 </ul>
 </li>
 </ul>

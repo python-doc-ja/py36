@@ -556,7 +556,9 @@
 </div></blockquote>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last">独自の <a class="reference internal" href="../reference/datamodel.html#object.__hash__" title="object.__hash__"><code class="xref py py-meth docutils literal"><span class="pre">__hash__()</span></code></a> メソッドを実装したオブジェクトを使う場合、<a class="reference internal" href="#hash" title="hash"><code class="xref py py-func docutils literal"><span class="pre">hash()</span></code></a> が実行するマシンのビット幅に合わせて戻り値を切り捨てることに注意してください。詳しくは <a class="reference internal" href="../reference/datamodel.html#object.__hash__" title="object.__hash__"><code class="xref py py-meth docutils literal"><span class="pre">__hash__()</span></code></a> を参照してください。</p>
+<p class="last">For objects with custom <a class="reference internal" href="../reference/datamodel.html#object.__hash__" title="object.__hash__"><code class="xref py py-meth docutils literal"><span class="pre">__hash__()</span></code></a> methods, note that <a class="reference internal" href="#hash" title="hash"><code class="xref py py-func docutils literal"><span class="pre">hash()</span></code></a>
+truncates the return value based on the bit width of the host machine.
+See <a class="reference internal" href="../reference/datamodel.html#object.__hash__" title="object.__hash__"><code class="xref py py-meth docutils literal"><span class="pre">__hash__()</span></code></a> for details.</p>
 </div>
 </dd></dl>
 
@@ -878,8 +880,8 @@
 </li>
 <li><p class="first">以前は <a class="reference internal" href="exceptions.html#IOError" title="IOError"><code class="xref py py-exc docutils literal"><span class="pre">IOError</span></code></a> が送出されていました、それは現在 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> のエイリアスになりました。</p>
 </li>
-<li><a class="reference internal" href="exceptions.html#FileExistsError" title="FileExistsError"><code class="xref py py-exc docutils literal"><span class="pre">FileExistsError</span></code></a> is now raised if the file opened in exclusive</li>
-<li>creation mode (<code class="docutils literal"><span class="pre">'x'</span></code>) already exists.</li>
+<li><p class="first">既存のファイルを 排他的生成モード(<code class="docutils literal"><span class="pre">'x'</span></code>)で開いた場合、 <a class="reference internal" href="exceptions.html#FileExistsError" title="FileExistsError"><code class="xref py py-exc docutils literal"><span class="pre">FileExistsError</span></code></a> を送出するようになりました。</p>
+</li>
 </ul>
 </div></blockquote>
 </div>
@@ -932,7 +934,9 @@
 <dl class="function">
 <dt id="print">
 <code class="descname">print</code><span class="sig-paren">(</span><em>*objects</em>, <em>sep=' '</em>, <em>end='\n'</em>, <em>file=sys.stdout</em>, <em>flush=False</em><span class="sig-paren">)</span><a class="headerlink" href="#print" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><em>objects</em> (単数でも複数でも可) を <em>sep</em> で区切りながらテキストストリーム <em>file</em> に表示し、最後に <em>end</em> を表示します。<em>sep</em>、<em>end</em>、<em>file</em> を与える場合、キーワード引数として与える必要があります。</p>
+<dd><p>Print <em>objects</em> to the text stream <em>file</em>, separated by <em>sep</em> and followed
+by <em>end</em>.  <em>sep</em>, <em>end</em>, <em>file</em> and <em>flush</em>, if present, must be given as keyword
+arguments.</p>
 <p>キーワードなしの引数はすべて、 <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> がするように文字列に変換され、 <em>sep</em> で区切られながらストリームに書き出され、最後に <em>end</em> が続きます。 <em>sep</em> と <em>end</em> の両方とも、文字列でなければなりません。これらを <code class="docutils literal"><span class="pre">None</span></code> にすると、デフォルトの値が使われます。 <em>objects</em> が与えられなければ、 <a class="reference internal" href="#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> は <em>end</em> だけを書き出します。</p>
 <p><em>file</em> 引数は、 <code class="docutils literal"><span class="pre">write(string)</span></code> メソッドを持つオブジェクトでなければなりません。指定されないか、 <code class="docutils literal"><span class="pre">None</span></code> である場合、 <a class="reference internal" href="sys.html#sys.stdout" title="sys.stdout"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a> が使われます。表示される引数は全てテキスト文字列に変換されますから、 <a class="reference internal" href="#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> はバイナリモードファイルオブジェクトには使用できません。代わりに <code class="docutils literal"><span class="pre">file.write(...)</span></code> を使ってください。</p>
 <p>出力がバッファ化されるかどうかは通常 <em>file</em> で決まりますが、<em>flush</em> キーワード引数が真ならストリームは強制的にフラッシュされます。</p>
@@ -1025,15 +1029,9 @@
 <dl class="function">
 <dt id="round">
 <code class="descname">round</code><span class="sig-paren">(</span><em>number</em><span class="optional">[</span>, <em>ndigits</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#round" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Return the floating point value <em>number</em> rounded to <em>ndigits</em> digits after
-the decimal point.  If <em>ndigits</em> is omitted or is <code class="docutils literal"><span class="pre">None</span></code>, it returns the
-nearest integer to its input.  Delegates to <code class="docutils literal"><span class="pre">number.__round__(ndigits)</span></code>.</p>
-<p>For the built-in types supporting <a class="reference internal" href="#round" title="round"><code class="xref py py-func docutils literal"><span class="pre">round()</span></code></a>, values are rounded to the
-closest multiple of 10 to the power minus <em>ndigits</em>; if two multiples are
-equally close, rounding is done toward the even choice (so, for example,
-both <code class="docutils literal"><span class="pre">round(0.5)</span></code> and <code class="docutils literal"><span class="pre">round(-0.5)</span></code> are <code class="docutils literal"><span class="pre">0</span></code>, and <code class="docutils literal"><span class="pre">round(1.5)</span></code> is
-<code class="docutils literal"><span class="pre">2</span></code>).  The return value is an integer if called with one argument,
-otherwise of the same type as <em>number</em>.</p>
+<dd><p><em>number</em> の小数部を <em>ndigists</em> 桁に丸めた値を返します。<em>ndigits</em> が省略されたり、<code class="docutils literal"><span class="pre">None</span></code> だった場合、入力値に最も近い整数を返します。</p>
+<p><a class="reference internal" href="#round" title="round"><code class="xref py py-func docutils literal"><span class="pre">round()</span></code></a> をサポートする組み込み型では、値は 10 のマイナス <em>ndigits</em> 乗の倍数の中で最も近いものに丸められます; 二つの倍数が同じだけ近いなら、偶数を選ぶ方に (ですから例えば、 <code class="docutils literal"><span class="pre">round(0.5)</span></code> と <code class="docutils literal"><span class="pre">round(-0.5)</span></code> は両方とも <code class="docutils literal"><span class="pre">0</span></code> に、 <code class="docutils literal"><span class="pre">round(1.5)</span></code> は <code class="docutils literal"><span class="pre">2</span></code> に) 丸められます。 <em>ndigits</em> には任意の整数値が有効となります (正の整数、ゼロ、負の整数)。返り値は 1 引数で呼ばれたなら整数、そうでなければ <em>number</em> と同じ型です。</p>
+<p>一般の Python オブジェクト <code class="docutils literal"><span class="pre">number</span></code> に対して、<code class="docutils literal"><span class="pre">round(number,</span> <span class="pre">ndigits)</span></code> は <code class="docutils literal"><span class="pre">number.__round__(ndigits)</span></code> に移譲します。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">浮動小数点数に対する <a class="reference internal" href="#round" title="round"><code class="xref py py-func docutils literal"><span class="pre">round()</span></code></a> の振る舞いは意外なものかもしれません: 例えば、 <code class="docutils literal"><span class="pre">round(2.675,</span> <span class="pre">2)</span></code> は予想通りの <code class="docutils literal"><span class="pre">2.68</span></code> ではなく <code class="docutils literal"><span class="pre">2.67</span></code> を与えます。これはバグではありません: これはほとんどの小数が浮動小数点数で正確に表せないことの結果です。詳しくは <a class="reference internal" href="../tutorial/floatingpoint.html#tut-fp-issues"><span class="std std-ref">浮動小数点演算、その問題と制限</span></a> を参照してください。</p>

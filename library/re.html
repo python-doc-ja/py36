@@ -613,8 +613,22 @@ a deprecation warning and will be forbidden in Python 3.7.</p>
 
 <dl class="function">
 <dt id="re.escape">
-<code class="descclassname">re.</code><code class="descname">escape</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#re.escape" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>パターン内の、ASCII 文字、数字、および <code class="docutils literal"><span class="pre">'_'</span></code> を除くすべての文字をエスケープします。これは、もしその中に正規表現のメタ文字を持つかもしれない任意のリテラル文字列とマッチしたい時に役立ちます。</p>
+<code class="descclassname">re.</code><code class="descname">escape</code><span class="sig-paren">(</span><em>pattern</em><span class="sig-paren">)</span><a class="headerlink" href="#re.escape" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Escape all the characters in <em>pattern</em> except ASCII letters, numbers and <code class="docutils literal"><span class="pre">'_'</span></code>.
+This is useful if you want to match an arbitrary literal string that may
+have regular expression metacharacters in it.  For example:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="s1">&#39;python.exe&#39;</span><span class="p">))</span>
+<span class="go">python\.exe</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">legal_chars</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span> <span class="o">+</span> <span class="s2">&quot;!#$%&amp;&#39;*+-.^_`|~:&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[</span><span class="si">%s</span><span class="s1">]+&#39;</span> <span class="o">%</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">legal_chars</span><span class="p">))</span>
+<span class="go">[abcdefghijklmnopqrstuvwxyz0123456789\!\#\$\%\&amp;\&#39;\*\+\-\.\^_\`\|\~\:]+</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">operators</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;**&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">operators</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">))))</span>
+<span class="go">\/|\-|\+|\*\*|\*</span>
+</pre></div>
+</div>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.3 で変更: </span><code class="docutils literal"><span class="pre">'_'</span></code> 文字がエスケープされなくなりました。</p>
 </div>

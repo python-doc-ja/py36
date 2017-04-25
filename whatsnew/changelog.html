@@ -166,6 +166,12 @@
 <div class="section" id="core-and-builtins">
 <h3>Core and Builtins<a class="headerlink" href="#core-and-builtins" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
+<li><a class="reference external" href="https://bugs.python.org/issue12414">bpo-12414</a>: sys.getsizeof() on a code object now returns the sizes 
+which includes the code struct and sizes of objects which it references.
+Patch by Dong-hee Na.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue29949">bpo-29949</a>: Fix memory usage regression of set and frozenset object.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue29935">bpo-29935</a>: Fixed error messages in the index() method of tuple, list and deque
+when pass indices of wrong type.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue29859">bpo-29859</a>: Show correct error messages when any of the pthread_* calls in
 thread_pthread.h fails.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28876">bpo-28876</a>: <code class="docutils literal"><span class="pre">bool(range)</span></code> works even if <code class="docutils literal"><span class="pre">len(range)</span></code>
@@ -180,6 +186,36 @@ bytes inside.</li>
 <div class="section" id="library">
 <h3>ライブラリ<a class="headerlink" href="#library" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
+<li><a class="reference external" href="https://bugs.python.org/issue30070">bpo-30070</a>: Fixed leaks and crashes in errors handling in the parser module.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue30061">bpo-30061</a>: Fixed crashes in IOBase methods __next__() and readlines() when
+readline() or __next__() respectively return non-sizeable object.
+Fixed possible other errors caused by not checking results of PyObject_Size(),
+PySequence_Size(), or PyMapping_Size().</li>
+<li><a class="reference external" href="https://bugs.python.org/issue30017">bpo-30017</a>: Allowed calling the close() method of the zip entry writer object
+multiple times.  Writing to a closed writer now always produces a ValueError.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue30068">bpo-30068</a>: _io._IOBase.readlines will check if it&#8217;s closed first when
+hint is present.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue29694">bpo-29694</a>: Fixed race condition in pathlib mkdir with flags
+parents=True.  Patch by Armin Rigo.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue29692">bpo-29692</a>: Fixed arbitrary unchaining of RuntimeError exceptions in
+contextlib.contextmanager.  Patch by Siddharth Velankar.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue29998">bpo-29998</a>: Pickling and copying ImportError now preserves name and path
+attributes.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue29953">bpo-29953</a>: Fixed memory leaks in the replace() method of datetime and time
+objects when pass out of bound fold argument.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue29942">bpo-29942</a>: Fix a crash in itertools.chain.from_iterable when encountering
+long runs of empty iterables.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue27863">bpo-27863</a>: Fixed multiple crashes in ElementTree caused by race conditions
+and wrong types.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue28699">bpo-28699</a>: Fixed a bug in pools in multiprocessing.pool that raising an
+exception at the very first of an iterable may swallow the exception or
+make the program hang. Patch by Davin Potts and Xiang Zhang.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue25803">bpo-25803</a>: Avoid incorrect errors raised by Path.mkdir(exist_ok=True)
+when the OS gives priority to errors such as EACCES over EEXIST.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue29861">bpo-29861</a>: Release references to tasks, their arguments and their results
+as soon as they are finished in multiprocessing.Pool.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue29884">bpo-29884</a>: faulthandler: Restore the old sigaltstack during teardown.
+Patch by Christophe Zeitouny.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue25455">bpo-25455</a>: Fixed crashes in repr of recursive buffered file-like objects.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue29800">bpo-29800</a>: Fix crashes in partial.__repr__ if the keys of partial.keywords
 are not strings.  Patch by Michael Seifert.</li>
@@ -198,6 +234,18 @@ exception) to exception(s) raised in the dispatched methods.
 Patch by Petr Motejlek.</li>
 </ul>
 </div>
+<div class="section" id="build">
+<h3>ビルド<a class="headerlink" href="#build" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://bugs.python.org/issue29643">bpo-29643</a>: Fix <code class="docutils literal"><span class="pre">--enable-optimization</span></code> didn&#8217;t work.</li>
+</ul>
+</div>
+<div class="section" id="documentation">
+<h3>ドキュメント<a class="headerlink" href="#documentation" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="https://bugs.python.org/issue26985">bpo-26985</a>: Add missing info of code object in inspect documentation.</li>
+</ul>
+</div>
 </div>
 <div class="section" id="python-3-6-1">
 <h2>Python 3.6.1<a class="headerlink" href="#python-3-6-1" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -214,8 +262,8 @@ are inadvertently modified when inserting the import location named on the
 command line.</li>
 </ul>
 </div>
-<div class="section" id="build">
-<h3>ビルド<a class="headerlink" href="#build" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id3">
+<h3>ビルド<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27593">bpo-27593</a>: fix format of git information used in sys.version</li>
 <li>Fix incompatible comment in python.h</li>
@@ -225,8 +273,8 @@ command line.</li>
 <div class="section" id="python-3-6-1-release-candidate-1">
 <h2>Python 3.6.1 release candidate 1<a class="headerlink" href="#python-3-6-1-release-candidate-1" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><em>Release date: 2017-03-04</em></p>
-<div class="section" id="id3">
-<h3>Core and Builtins<a class="headerlink" href="#id3" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id4">
+<h3>Core and Builtins<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28893">bpo-28893</a>: Set correct __cause__ for errors about invalid awaitables
 returned from __aiter__ and __anext__.</li>
@@ -278,8 +326,8 @@ Improve speed of dict literal with constant keys up to 30%.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue29169">bpo-29169</a>: Update zlib to 1.2.11.</li>
 </ul>
 </div>
-<div class="section" id="id4">
-<h3>ライブラリ<a class="headerlink" href="#id4" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id5">
+<h3>ライブラリ<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue29623">bpo-29623</a>: Allow use of path-like object as a single argument in
 ConfigParser.read().  Patch by David Ellis.</li>
@@ -349,7 +397,7 @@ Contributed by Andra Bogildea.</li>
 integers.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28427">bpo-28427</a>: old keys should not remove new values from
 WeakValueDictionary when collecting from another thread.</li>
-<li>Issue 28923: Remove editor artifacts from Tix.py.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue28923">bpo-28923</a>: Remove editor artifacts from Tix.py.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue29055">bpo-29055</a>:  Neaten-up empty population error on random.choice()
 by suppressing the upstream exception.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28871">bpo-28871</a>: Fixed a crash when deallocate deep ElementTree.</li>
@@ -396,8 +444,8 @@ available only when Py_LIMITED_API is set to the PY_VERSION_HEX value of
 the minimum Python version supporting this API.</li>
 </ul>
 </div>
-<div class="section" id="documentation">
-<h3>ドキュメント<a class="headerlink" href="#documentation" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id6">
+<h3>ドキュメント<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28929">bpo-28929</a>: Link the documentation to its source file on GitHub.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue25008">bpo-25008</a>: Document smtpd.py as effectively deprecated and add a pointer to
@@ -425,8 +473,8 @@ PermissionError on Android for a non-root user.</li>
 test_functools hanging on the Android armv7 qemu emulator.</li>
 </ul>
 </div>
-<div class="section" id="id5">
-<h3>ビルド<a class="headerlink" href="#id5" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id7">
+<h3>ビルド<a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27593">bpo-27593</a>: sys.version and the platform module python_build(),
 python_branch(), and python_revision() functions now use
@@ -459,8 +507,8 @@ search paths. Original patch by Thomas Petazzoni.</li>
 <div class="section" id="python-3-6-0-release-candidate-2">
 <h2>Python 3.6.0 release candidate 2<a class="headerlink" href="#python-3-6-0-release-candidate-2" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><em>Release date: 2016-12-16</em></p>
-<div class="section" id="id6">
-<h3>Core and Builtins<a class="headerlink" href="#id6" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id8">
+<h3>Core and Builtins<a class="headerlink" href="#id8" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28147">bpo-28147</a>: Fix a memory leak in split-table dictionaries: setattr()
 must not convert combined table into split table. Patch written by INADA
@@ -475,14 +523,14 @@ handshake is completed. (Patch by HoHo-Ho)</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28770">bpo-28770</a>: Fix python-gdb.py for fastcalls.</li>
 </ul>
 </div>
-<div class="section" id="id7">
-<h3>Windows<a class="headerlink" href="#id7" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id9">
+<h3>Windows<a class="headerlink" href="#id9" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28896">bpo-28896</a>: Deprecate WindowsRegistryFinder.</li>
 </ul>
 </div>
-<div class="section" id="id8">
-<h3>ビルド<a class="headerlink" href="#id8" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id10">
+<h3>ビルド<a class="headerlink" href="#id10" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28898">bpo-28898</a>: Prevent gdb build errors due to HAVE_LONG_LONG redefinition.</li>
 </ul>
@@ -491,8 +539,8 @@ handshake is completed. (Patch by HoHo-Ho)</li>
 <div class="section" id="python-3-6-0-release-candidate-1">
 <h2>Python 3.6.0 release candidate 1<a class="headerlink" href="#python-3-6-0-release-candidate-1" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><em>Release date: 2016-12-06</em></p>
-<div class="section" id="id9">
-<h3>Core and Builtins<a class="headerlink" href="#id9" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id11">
+<h3>Core and Builtins<a class="headerlink" href="#id11" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23722">bpo-23722</a>: Rather than silently producing a class that doesn&#8217;t support
 zero-argument <code class="docutils literal"><span class="pre">super()</span></code> in methods, failing to pass the new
@@ -506,8 +554,8 @@ if the next instruction is YIELD_FROM. Regression introduced by WORDCODE
 (<a class="reference external" href="https://bugs.python.org/issue26647">bpo-26647</a>).</li>
 </ul>
 </div>
-<div class="section" id="id10">
-<h3>ライブラリ<a class="headerlink" href="#id10" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id12">
+<h3>ライブラリ<a class="headerlink" href="#id12" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27030">bpo-27030</a>: Unknown escapes in re.sub() replacement template are allowed
 again.  But they still are deprecated and will be disabled in 3.7.</li>
@@ -525,22 +573,22 @@ invalid state.  Original patch by Florian Höch.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28843">bpo-28843</a>: Fix asyncio C Task to handle exceptions __traceback__.</li>
 </ul>
 </div>
-<div class="section" id="id11">
-<h3>C API<a class="headerlink" href="#id11" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id13">
+<h3>C API<a class="headerlink" href="#id13" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28808">bpo-28808</a>: PyUnicode_CompareWithASCIIString() now never raises exceptions.</li>
 </ul>
 </div>
-<div class="section" id="id12">
-<h3>ドキュメント<a class="headerlink" href="#id12" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id14">
+<h3>ドキュメント<a class="headerlink" href="#id14" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23722">bpo-23722</a>: The data model reference and the porting section in the What&#8217;s
 New guide now cover the additional <code class="docutils literal"><span class="pre">__classcell__</span></code> handling needed for
 custom metaclasses to fully support PEP 487 and zero-argument <code class="docutils literal"><span class="pre">super()</span></code>.</li>
 </ul>
 </div>
-<div class="section" id="id13">
-<h3>Tools/Demos<a class="headerlink" href="#id13" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id15">
+<h3>Tools/Demos<a class="headerlink" href="#id15" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28023">bpo-28023</a>: Fix python-gdb.py didn&#8217;t support new dict implementation.</li>
 </ul>
@@ -549,8 +597,8 @@ custom metaclasses to fully support PEP 487 and zero-argument <code class="docut
 <div class="section" id="python-3-6-0-beta-4">
 <h2>Python 3.6.0 beta 4<a class="headerlink" href="#python-3-6-0-beta-4" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><em>Release date: 2016-11-21</em></p>
-<div class="section" id="id14">
-<h3>Core and Builtins<a class="headerlink" href="#id14" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id16">
+<h3>Core and Builtins<a class="headerlink" href="#id16" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28532">bpo-28532</a>: Show sys.version when -V option is supplied twice.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27100">bpo-27100</a>: The with-statement now checks for __enter__ before it
@@ -576,8 +624,8 @@ DeprecationWarning in 3.6.</li>
 handle StopAsyncIteration propagation properly.</li>
 </ul>
 </div>
-<div class="section" id="id15">
-<h3>ライブラリ<a class="headerlink" href="#id15" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id17">
+<h3>ライブラリ<a class="headerlink" href="#id17" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28752">bpo-28752</a>: Restored the __reduce__() methods of datetime objects.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28727">bpo-28727</a>: Regular expression patterns, _sre.SRE_Pattern objects created
@@ -611,22 +659,22 @@ Patch by Justin Mayfield.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28720">bpo-28720</a>: Add collections.abc.AsyncGenerator.</li>
 </ul>
 </div>
-<div class="section" id="id16">
-<h3>ドキュメント<a class="headerlink" href="#id16" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id18">
+<h3>ドキュメント<a class="headerlink" href="#id18" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28513">bpo-28513</a>: Documented command-line interface of zipfile.</li>
 </ul>
 </div>
-<div class="section" id="id17">
-<h3>テスト<a class="headerlink" href="#id17" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id19">
+<h3>テスト<a class="headerlink" href="#id19" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28666">bpo-28666</a>: Now test.support.rmtree is able to remove unwritable or
 unreadable directories.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue23839">bpo-23839</a>: Various caches now are cleared before running every test file.</li>
 </ul>
 </div>
-<div class="section" id="id18">
-<h3>ビルド<a class="headerlink" href="#id18" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id20">
+<h3>ビルド<a class="headerlink" href="#id20" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue10656">bpo-10656</a>: Fix out-of-tree building on AIX.  Patch by Tristan Carel and
 Michael Haubenwallner.</li>
@@ -639,8 +687,8 @@ Patch by Gareth Rees.</li>
 <div class="section" id="python-3-6-0-beta-3">
 <h2>Python 3.6.0 beta 3<a class="headerlink" href="#python-3-6-0-beta-3" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><em>Release date: 2016-10-31</em></p>
-<div class="section" id="id19">
-<h3>Core and Builtins<a class="headerlink" href="#id19" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id21">
+<h3>Core and Builtins<a class="headerlink" href="#id21" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28128">bpo-28128</a>: Deprecation warning for invalid str and byte escape
 sequences now prints better information about where the error
@@ -658,8 +706,8 @@ loss in PyTraceBack_Here().</li>
 crash in socket.setblocking.</li>
 </ul>
 </div>
-<div class="section" id="id20">
-<h3>ライブラリ<a class="headerlink" href="#id20" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id22">
+<h3>ライブラリ<a class="headerlink" href="#id22" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27517">bpo-27517</a>: LZMA compressor and decompressor no longer raise exceptions if
 given empty data twice.  Patch by Benjamin Fogle.</li>
@@ -711,22 +759,22 @@ Initial patch by Hans Lawrenz.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28544">bpo-28544</a>: Implement asyncio.Task in C.</li>
 </ul>
 </div>
-<div class="section" id="id21">
-<h3>Windows<a class="headerlink" href="#id21" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id23">
+<h3>Windows<a class="headerlink" href="#id23" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28522">bpo-28522</a>: Fixes mishandled buffer reallocation in getpathp.c</li>
 </ul>
 </div>
-<div class="section" id="id22">
-<h3>ビルド<a class="headerlink" href="#id22" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id24">
+<h3>ビルド<a class="headerlink" href="#id24" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28444">bpo-28444</a>: Fix missing extensions modules when cross compiling.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28208">bpo-28208</a>: Update Windows build and OS X installers to use SQLite 3.14.2.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28248">bpo-28248</a>: Update Windows build and OS X installers to use OpenSSL 1.0.2j.</li>
 </ul>
 </div>
-<div class="section" id="id23">
-<h3>テスト<a class="headerlink" href="#id23" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id25">
+<h3>テスト<a class="headerlink" href="#id25" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue26944">bpo-26944</a>: Fix test_posix for Android where &#8216;id -G&#8217; is entirely wrong or
 missing the effective gid.</li>
@@ -737,8 +785,8 @@ missing the effective gid.</li>
 <div class="section" id="python-3-6-0-beta-2">
 <h2>Python 3.6.0 beta 2<a class="headerlink" href="#python-3-6-0-beta-2" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><em>Release date: 2016-10-10</em></p>
-<div class="section" id="id24">
-<h3>Core and Builtins<a class="headerlink" href="#id24" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id26">
+<h3>Core and Builtins<a class="headerlink" href="#id26" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28183">bpo-28183</a>: Optimize and cleanup dict iteration.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue26081">bpo-26081</a>: Added C implementation of asyncio.Future.
@@ -784,8 +832,8 @@ optimize memcpy().</li>
 used as variable/attribute/class/function name.</li>
 </ul>
 </div>
-<div class="section" id="id25">
-<h3>ライブラリ<a class="headerlink" href="#id25" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id27">
+<h3>ライブラリ<a class="headerlink" href="#id27" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue27998">bpo-27998</a>: Fixed bytes path support in os.scandir() on Windows.
 Patch by Eryk Sun.</p>
@@ -931,8 +979,8 @@ Patch by Коренберг Марк.</p>
 </li>
 </ul>
 </div>
-<div class="section" id="id26">
-<h3>Windows<a class="headerlink" href="#id26" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id28">
+<h3>Windows<a class="headerlink" href="#id28" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28402">bpo-28402</a>: Adds signed catalog files for stdlib on Windows.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28333">bpo-28333</a>: Enables Unicode for ps1/ps2 and input() prompts. (Patch by
@@ -950,16 +998,16 @@ _open_osfhandle</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28138">bpo-28138</a>: Windows ._pth file should allow import site</li>
 </ul>
 </div>
-<div class="section" id="id27">
-<h3>C API<a class="headerlink" href="#id27" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id29">
+<h3>C API<a class="headerlink" href="#id29" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28426">bpo-28426</a>: Deprecated undocumented functions PyUnicode_AsEncodedObject(),
 PyUnicode_AsDecodedObject(), PyUnicode_AsDecodedUnicode() and
 PyUnicode_AsEncodedUnicode().</li>
 </ul>
 </div>
-<div class="section" id="id28">
-<h3>ビルド<a class="headerlink" href="#id28" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id30">
+<h3>ビルド<a class="headerlink" href="#id30" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28258">bpo-28258</a>: Fixed build with Estonian locale (python-config and distclean
 targets in Makefile).  Patch by Arfrever Frehtes Taifersar Arahesis.</li>
@@ -968,8 +1016,8 @@ targets in Makefile).  Patch by Arfrever Frehtes Taifersar Arahesis.</li>
 outside the source tree.</li>
 </ul>
 </div>
-<div class="section" id="id29">
-<h3>テスト<a class="headerlink" href="#id29" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id31">
+<h3>テスト<a class="headerlink" href="#id31" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28217">bpo-28217</a>: Adds _testconsole module to test console input.</li>
 </ul>
@@ -978,8 +1026,8 @@ outside the source tree.</li>
 <div class="section" id="python-3-6-0-beta-1">
 <h2>Python 3.6.0 beta 1<a class="headerlink" href="#python-3-6-0-beta-1" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><em>Release date: 2016-09-12</em></p>
-<div class="section" id="id30">
-<h3>Core and Builtins<a class="headerlink" href="#id30" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id32">
+<h3>Core and Builtins<a class="headerlink" href="#id32" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23722">bpo-23722</a>: The __class__ cell used by zero-argument super() is now
 initialized from type.__new__ rather than __build_class__, so class methods
@@ -996,7 +1044,7 @@ Patch by Jason Fried.</li>
 alpha releases, where backslashes are allowed anywhere in an
 f-string.  Also, require that expressions inside f-strings be
 enclosed within literal braces, and not escapes like
-f&#8217;x7b&#8221;hi&#8221;x7d&#8217;.</li>
+<code class="docutils literal"><span class="pre">f'\x7b&quot;hi&quot;\x7d'</span></code>.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28046">bpo-28046</a>: Remove platform-specific directories from sys.path.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28071">bpo-28071</a>: Add early-out for differencing from an empty set.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue25758">bpo-25758</a>: Prevents zipimport from unnecessarily encoding a filename
@@ -1075,8 +1123,8 @@ exception to reraise. Patch written by Xiang Zhang.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27942">bpo-27942</a>: Fix memory leak in codeobject.c</li>
 </ul>
 </div>
-<div class="section" id="id31">
-<h3>ライブラリ<a class="headerlink" href="#id31" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id33">
+<h3>ライブラリ<a class="headerlink" href="#id33" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28732">bpo-28732</a>: Fix crash in os.spawnv() with no elements in args</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28485">bpo-28485</a>: Always raise ValueError for negative
@@ -1145,7 +1193,7 @@ DLFCN, TYPES, CDIO, and STROPTS.</li>
 Patch by Claude Paroz.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue24277">bpo-24277</a>: The new email API is no longer provisional, and the docs
 have been reorganized and rewritten to emphasize the new API.</li>
-<li><a class="reference external" href="https://bugs.python.org/issue22450">bpo-22450</a>: urllib now includes an &#8220;Accept: <em>/</em>&#8221; header among the
+<li><a class="reference external" href="https://bugs.python.org/issue22450">bpo-22450</a>: urllib now includes an <code class="docutils literal"><span class="pre">Accept:</span> <span class="pre">*/*</span></code> header among the
 default headers.  This makes the results of REST API requests more
 consistent and predictable especially when proxy servers are involved.</li>
 <li>lib2to3.pgen3.driver.load_grammar() now creates a stable cache file
@@ -1158,8 +1206,8 @@ pointers in the &#8220;ctypes&#8221; and &#8220;array&#8221; modules.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue22233">bpo-22233</a>: Break email header lines <em>only</em> on the RFC specified CR and LF
 characters, not on arbitrary unicode line breaks.  This also fixes a bug in
 HTTP header parsing.</li>
-<li>Issue 27331: The email.mime classes now all accept an optional policy keyword.</li>
-<li>Issue 27988: Fix email iter_attachments incorrect mutation of payload list.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue27331">bpo-27331</a>: The email.mime classes now all accept an optional policy keyword.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue27988">bpo-27988</a>: Fix email iter_attachments incorrect mutation of payload list.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue16113">bpo-16113</a>: Add SHA-3 and SHAKE support to hashlib module.</li>
 <li>Eliminate a tautological-pointer-compare warning in _scproxy.c.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27776">bpo-27776</a>: The <a class="reference internal" href="../library/os.html#os.urandom" title="os.urandom"><code class="xref py py-func docutils literal"><span class="pre">os.urandom()</span></code></a> function does now block on Linux 3.17
@@ -1262,16 +1310,16 @@ using exec means that __builtins__ is defined for each statement.</li>
 from being selected when no custom theme was defined.</li>
 </ul>
 </div>
-<div class="section" id="id32">
-<h3>C API<a class="headerlink" href="#id32" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id34">
+<h3>C API<a class="headerlink" href="#id34" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue26900">bpo-26900</a>: Excluded underscored names and other private API from limited API.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue26027">bpo-26027</a>: Add support for path-like objects in PyUnicode_FSConverter() &amp;
 PyUnicode_FSDecoder().</li>
 </ul>
 </div>
-<div class="section" id="id33">
-<h3>テスト<a class="headerlink" href="#id33" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id35">
+<h3>テスト<a class="headerlink" href="#id35" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27427">bpo-27427</a>: Additional tests for the math module. Patch by Francisco Couzo.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27953">bpo-27953</a>: Skip math and cmath tests that fail on OS X 10.4 due to a
@@ -1282,8 +1330,8 @@ Jeff Allen.</li>
 threads&#8221;, since the dangling threads are weak references.</li>
 </ul>
 </div>
-<div class="section" id="id34">
-<h3>ビルド<a class="headerlink" href="#id34" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id36">
+<h3>ビルド<a class="headerlink" href="#id36" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27566">bpo-27566</a>: Fix clean target in freeze makefile (patch by Lisa Roach)</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27705">bpo-27705</a>: Update message in validate_ucrtbase.py</li>
@@ -1307,16 +1355,16 @@ Also provide a sample Install Certificates command script to install a
 set of root certificates from the third-party certifi module.</li>
 </ul>
 </div>
-<div class="section" id="id35">
-<h3>Tools/Demos<a class="headerlink" href="#id35" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id37">
+<h3>Tools/Demos<a class="headerlink" href="#id37" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27952">bpo-27952</a>: Get Tools/scripts/fixcid.py working with Python 3 and the
 current &#8220;re&#8221; module, avoid invalid Python backslash escapes, and fix a bug
 parsing escaped C quote signs.</li>
 </ul>
 </div>
-<div class="section" id="id36">
-<h3>Windows<a class="headerlink" href="#id36" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id38">
+<h3>Windows<a class="headerlink" href="#id38" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28065">bpo-28065</a>: Update xz dependency to 5.2.2 and build it from source.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue25144">bpo-25144</a>: Ensures TargetDir is set before continuing with custom
@@ -1339,8 +1387,8 @@ Designs by Cherry Wang.</li>
 <div class="section" id="python-3-6-0-alpha-4">
 <h2>Python 3.6.0 alpha 4<a class="headerlink" href="#python-3-6-0-alpha-4" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><em>Release date: 2016-08-15</em></p>
-<div class="section" id="id37">
-<h3>Core and Builtins<a class="headerlink" href="#id37" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id39">
+<h3>Core and Builtins<a class="headerlink" href="#id39" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27704">bpo-27704</a>: Optimized creating bytes and bytearray from byte-like objects
 and iterables.  Speed up to 3 times for short objects.  Original patch by
@@ -1373,8 +1421,8 @@ Upon subclassing, the __init_subclass__ classmethod is called on the base
 class. Descriptors are initialized with __set_name__ after class creation.</li>
 </ul>
 </div>
-<div class="section" id="id38">
-<h3>ライブラリ<a class="headerlink" href="#id38" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id40">
+<h3>ライブラリ<a class="headerlink" href="#id40" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue26027">bpo-26027</a>, #27524: Add PEP 519/__fspath__() support to the os and os.path
 modules. Includes code from Jelle Zijlstra.</li>
@@ -1448,8 +1496,8 @@ Original patch by Alexandre Vassalotti.</li>
 that raised an exception. Patch by Xiang Zhang.</li>
 </ul>
 </div>
-<div class="section" id="id39">
-<h3>IDLE<a class="headerlink" href="#id39" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id41">
+<h3>IDLE<a class="headerlink" href="#id41" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27714">bpo-27714</a>: text_textview and test_autocomplete now pass when re-run
 in the same process.  This occurs when test_idle fails when run with the
@@ -1471,8 +1519,8 @@ Add tests for the changes to the config module.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27452">bpo-27452</a>: add line counter and crc to IDLE configHandler test dump.</li>
 </ul>
 </div>
-<div class="section" id="id40">
-<h3>テスト<a class="headerlink" href="#id40" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id42">
+<h3>テスト<a class="headerlink" href="#id42" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue25805">bpo-25805</a>: Skip a test in test_pkgutil as needed that doesn&#8217;t work when
 <code class="docutils literal"><span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">__main__</span></code>. Patch by SilentGhost.</li>
@@ -1484,8 +1532,8 @@ enabled: ensure code object has a valid first line number.
 Patch suggested by Ivan Levkivskyi.</li>
 </ul>
 </div>
-<div class="section" id="id41">
-<h3>Windows<a class="headerlink" href="#id41" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id43">
+<h3>Windows<a class="headerlink" href="#id43" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27647">bpo-27647</a>: Update bundled Tcl/Tk to 8.6.6.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27610">bpo-27610</a>: Adds PEP 514 metadata to Windows installer</li>
@@ -1494,8 +1542,8 @@ works correctly.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27309">bpo-27309</a>: Enables proper Windows styles in python[w].exe manifest.</li>
 </ul>
 </div>
-<div class="section" id="id42">
-<h3>ビルド<a class="headerlink" href="#id42" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id44">
+<h3>ビルド<a class="headerlink" href="#id44" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27713">bpo-27713</a>: Suppress spurious build warnings when updating importlib&#8217;s
 bootstrap files.  Patch by Xiang Zhang</li>
@@ -1516,8 +1564,8 @@ Also update FreedBSD version checks for the original ctype UTF-8 workaround.</li
 <div class="section" id="python-3-6-0-alpha-3">
 <h2>Python 3.6.0 alpha 3<a class="headerlink" href="#python-3-6-0-alpha-3" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><em>Release date: 2016-07-11</em></p>
-<div class="section" id="id43">
-<h3>Core and Builtins<a class="headerlink" href="#id43" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id45">
+<h3>Core and Builtins<a class="headerlink" href="#id45" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27473">bpo-27473</a>: Fixed possible integer overflow in bytes and bytearray
 concatenations.  Patch by Xiang Zhang.</li>
@@ -1531,8 +1579,8 @@ negative integer for a resized bytearray.</li>
 now return an instance of corresponding subclass.</li>
 </ul>
 </div>
-<div class="section" id="id44">
-<h3>ライブラリ<a class="headerlink" href="#id44" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id46">
+<h3>ライブラリ<a class="headerlink" href="#id46" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue26844">bpo-26844</a>: Fix error message for imp.find_module() to refer to &#8216;path&#8217;
 instead of &#8216;name&#8217;. Patch by Lev Maximov.</li>
@@ -1604,8 +1652,8 @@ indexes.</li>
 Patch by Jim Fulton.</li>
 </ul>
 </div>
-<div class="section" id="id45">
-<h3>IDLE<a class="headerlink" href="#id45" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id47">
+<h3>IDLE<a class="headerlink" href="#id47" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27477">bpo-27477</a>: IDLE search dialogs now use ttk widgets.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27173">bpo-27173</a>: Add &#8216;IDLE Modern Unix&#8217; to the built-in key sets.
@@ -1631,15 +1679,15 @@ not create a second and redundant root and mainloop.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27310">bpo-27310</a>: Fix IDLE.app failure to launch on OS X due to vestigial import.</li>
 </ul>
 </div>
-<div class="section" id="id46">
-<h3>C API<a class="headerlink" href="#id46" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id48">
+<h3>C API<a class="headerlink" href="#id48" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue26754">bpo-26754</a>: PyUnicode_FSDecoder() accepted a filename argument encoded as
 an iterable of integers. Now only strings and byte-like objects are accepted.</li>
 </ul>
 </div>
-<div class="section" id="id47">
-<h3>ビルド<a class="headerlink" href="#id47" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id49">
+<h3>ビルド<a class="headerlink" href="#id49" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28066">bpo-28066</a>: Fix the logic that searches build directories for generated
 include files when building outside the source tree.</li>
@@ -1657,16 +1705,16 @@ directory and rename it to include the ABIFLAGS.</li>
 <li>Don&#8217;t use largefile support for GNU/Hurd.</li>
 </ul>
 </div>
-<div class="section" id="id48">
-<h3>Tools/Demos<a class="headerlink" href="#id48" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id50">
+<h3>Tools/Demos<a class="headerlink" href="#id50" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27332">bpo-27332</a>: Fixed the type of the first argument of module-level functions
 generated by Argument Clinic.  Patch by Petr Viktorin.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27418">bpo-27418</a>: Fixed Tools/importbench/importbench.py.</li>
 </ul>
 </div>
-<div class="section" id="id49">
-<h3>ドキュメント<a class="headerlink" href="#id49" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id51">
+<h3>ドキュメント<a class="headerlink" href="#id51" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue19489">bpo-19489</a>: Moved the search box from the sidebar to the header and footer
 of each page.  Patch by Ammar Askar.</li>
@@ -1674,8 +1722,8 @@ of each page.  Patch by Ammar Askar.</li>
 and normalize on the term &#8220;virtual environment&#8221;. Patch by Steve Piercy.</li>
 </ul>
 </div>
-<div class="section" id="id50">
-<h3>テスト<a class="headerlink" href="#id50" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id52">
+<h3>テスト<a class="headerlink" href="#id52" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27027">bpo-27027</a>: Added test.support.is_android that is True when this is an
 Android build.</li>
@@ -1685,8 +1733,8 @@ Android build.</li>
 <div class="section" id="python-3-6-0-alpha-2">
 <h2>Python 3.6.0 alpha 2<a class="headerlink" href="#python-3-6-0-alpha-2" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><em>Release date: 2016-06-13</em></p>
-<div class="section" id="id51">
-<h3>Core and Builtins<a class="headerlink" href="#id51" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id53">
+<h3>Core and Builtins<a class="headerlink" href="#id53" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27095">bpo-27095</a>: Simplified MAKE_FUNCTION and removed MAKE_CLOSURE opcodes.
 Patch by Demur Rumed.</li>
@@ -1715,8 +1763,8 @@ iterator should be returned directly.  Doing the former will trigger a
 PendingDeprecationWarning.</li>
 </ul>
 </div>
-<div class="section" id="id52">
-<h3>ライブラリ<a class="headerlink" href="#id52" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id54">
+<h3>ライブラリ<a class="headerlink" href="#id54" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li>Comment out socket (SO_REUSEPORT) and posix (O_SHLOCK, O_EXLOCK) constants
 exposed on the API which are not implemented on GNU/Hurd. They would not
@@ -1806,8 +1854,8 @@ to deserialize a lot of small objects.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue21271">bpo-21271</a>: New keyword only parameters in reset_mock call.</li>
 </ul>
 </div>
-<div class="section" id="id53">
-<h3>IDLE<a class="headerlink" href="#id53" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id55">
+<h3>IDLE<a class="headerlink" href="#id55" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue5124">bpo-5124</a>: Paste with text selected now replaces the selection on X11.
 This matches how paste works on Windows, Mac, most modern Linux apps,
@@ -1857,8 +1905,8 @@ Saimadhav Heblikar .</li>
 <li><a class="reference external" href="https://bugs.python.org/issue23977">bpo-23977</a>: Add more asserts to test_delegator.</li>
 </ul>
 </div>
-<div class="section" id="id54">
-<h3>ドキュメント<a class="headerlink" href="#id54" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id56">
+<h3>ドキュメント<a class="headerlink" href="#id56" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue16484">bpo-16484</a>: Change the default PYTHONDOCS URL to &#8220;https:&#8221;, and fix the
 resulting links to use lowercase.  Patch by Sean Rodman, test by Kaushik
@@ -1868,8 +1916,8 @@ Nadikuditi.</li>
 Patch by Yoni Lavi.</li>
 </ul>
 </div>
-<div class="section" id="id55">
-<h3>テスト<a class="headerlink" href="#id55" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id57">
+<h3>テスト<a class="headerlink" href="#id57" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue25285">bpo-25285</a>: regrtest now uses subprocesses when the -j1 command line option
 is used: each test file runs in a fresh child process. Before, the -j1 option
@@ -1878,16 +1926,16 @@ was ignored.</li>
 each test file in fresh child process.</li>
 </ul>
 </div>
-<div class="section" id="id56">
-<h3>Windows<a class="headerlink" href="#id56" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id58">
+<h3>Windows<a class="headerlink" href="#id58" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27064">bpo-27064</a>: The py.exe launcher now defaults to Python 3.
 The Windows launcher <code class="docutils literal"><span class="pre">py.exe</span></code> no longer prefers an installed
 Python 2 version over Python 3 by default when used interactively.</li>
 </ul>
 </div>
-<div class="section" id="id57">
-<h3>ビルド<a class="headerlink" href="#id57" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id59">
+<h3>ビルド<a class="headerlink" href="#id59" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27229">bpo-27229</a>: Fix the cross-compiling pgen rule for in-tree builds.  Patch
 by Xavier de Gaye.</li>
@@ -1902,16 +1950,16 @@ and link with OpenSSL 1.0.2h.</li>
 unused and outdated icons.</li>
 </ul>
 </div>
-<div class="section" id="id58">
-<h3>C API<a class="headerlink" href="#id58" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id60">
+<h3>C API<a class="headerlink" href="#id60" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27186">bpo-27186</a>: Add the PyOS_FSPath() function (part of PEP 519).</li>
 <li><a class="reference external" href="https://bugs.python.org/issue26282">bpo-26282</a>: PyArg_ParseTupleAndKeywords() now supports positional-only
 parameters.</li>
 </ul>
 </div>
-<div class="section" id="id59">
-<h3>Tools/Demos<a class="headerlink" href="#id59" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id61">
+<h3>Tools/Demos<a class="headerlink" href="#id61" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue26282">bpo-26282</a>: Argument Clinic now supports positional-only and keyword
 parameters in the same function.</li>
@@ -1921,8 +1969,8 @@ parameters in the same function.</li>
 <div class="section" id="python-3-6-0-alpha-1">
 <h2>Python 3.6.0 alpha 1<a class="headerlink" href="#python-3-6-0-alpha-1" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2016-05-16</p>
-<div class="section" id="id60">
-<h3>Core and Builtins<a class="headerlink" href="#id60" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id62">
+<h3>Core and Builtins<a class="headerlink" href="#id62" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue20041">bpo-20041</a>: Fixed TypeError when frame.f_trace is set to None.
 Patch by Xavier de Gaye.</li>
@@ -2004,7 +2052,7 @@ int, float, complex, name constants (None, False, True), Ellipsis
 and ast.Constant; not only str and int. For example, <code class="docutils literal"><span class="pre">1.0</span></code> is now ignored
 in <code class="docutils literal"><span class="pre">def</span> <span class="pre">f():</span> <span class="pre">1.0</span></code>.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue4806">bpo-4806</a>: Avoid masking the original TypeError exception when using star
-(*) unpacking in function calls.  Based on patch by Hagen Fürstenau and
+(<code class="docutils literal"><span class="pre">*</span></code>) unpacking in function calls.  Based on patch by Hagen Fürstenau and
 Daniel Urban.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue26146">bpo-26146</a>: Add a new kind of AST node: <code class="docutils literal"><span class="pre">ast.Constant</span></code>. It can be used
 by external AST optimizers, but the compiler does not emit directly such
@@ -2124,8 +2172,8 @@ single-digit longs.  Microbenchmarks show 2-2.5x improvement.  Built-in
 more than once.</li>
 </ul>
 </div>
-<div class="section" id="id61">
-<h3>ライブラリ<a class="headerlink" href="#id61" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id63">
+<h3>ライブラリ<a class="headerlink" href="#id63" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue27057">bpo-27057</a>: Fix os.set_inheritable() on Android, ioctl() is blocked by
 SELinux and fails with EACCESS. The function now falls back to fcntl().
@@ -2513,7 +2561,7 @@ original values after patching. Patch contributed by Sean McCully.</p>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue25672">bpo-25672</a>: In the ssl module, enable the SSL_MODE_RELEASE_BUFFERS mode
 option if it is safe to do so.</p>
 </li>
-<li><p class="first"><a class="reference external" href="https://bugs.python.org/issue26012">bpo-26012</a>: Don&#8217;t traverse into symlinks for ** pattern in
+<li><p class="first"><a class="reference external" href="https://bugs.python.org/issue26012">bpo-26012</a>: Don&#8217;t traverse into symlinks for <code class="docutils literal"><span class="pre">**</span></code> pattern in
 pathlib.Path.[r]glob().</p>
 </li>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue24120">bpo-24120</a>: Ignore PermissionError when traversing a tree with
@@ -2649,7 +2697,7 @@ on patch by Eryksun.</p>
 </li>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue25584">bpo-25584</a>: Added &#8220;escape&#8221; to the __all__ list in the glob module.</p>
 </li>
-<li><p class="first"><a class="reference external" href="https://bugs.python.org/issue25584">bpo-25584</a>: Fixed recursive glob() with patterns starting with &#8216;**&#8217;.</p>
+<li><p class="first"><a class="reference external" href="https://bugs.python.org/issue25584">bpo-25584</a>: Fixed recursive glob() with patterns starting with <code class="docutils literal"><span class="pre">**</span></code>.</p>
 </li>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue25446">bpo-25446</a>: Fix regression in smtplib&#8217;s AUTH LOGIN support.</p>
 </li>
@@ -2835,8 +2883,8 @@ Patch by Jack O&#8217;Connor.</p>
 </li>
 </ul>
 </div>
-<div class="section" id="id62">
-<h3>IDLE<a class="headerlink" href="#id62" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id64">
+<h3>IDLE<a class="headerlink" href="#id64" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue20640">bpo-20640</a>: Add tests for idlelib.configHelpSourceEdit.
 Patch by Saimadhav Heblikar.</li>
@@ -2917,8 +2965,8 @@ The now unused EditorWindow.HelpDialog class and helt.txt file are deprecated.</
 <li><a class="reference external" href="https://bugs.python.org/issue24790">bpo-24790</a>: Remove extraneous code (which also create 2 &amp; 3 conflicts).</li>
 </ul>
 </div>
-<div class="section" id="id63">
-<h3>ドキュメント<a class="headerlink" href="#id63" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id65">
+<h3>ドキュメント<a class="headerlink" href="#id65" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue26736">bpo-26736</a>: Used HTTPS for external links in the documentation if possible.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue6953">bpo-6953</a>: Rework the Readline module documentation to group related
@@ -2932,8 +2980,8 @@ the &#8220;threading&#8221; and &#8220;_thread&#8221; modules. Patch from Mattip
 * links to setuptools documentation have been updated</li>
 </ul>
 </div>
-<div class="section" id="id64">
-<h3>テスト<a class="headerlink" href="#id64" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id66">
+<h3>テスト<a class="headerlink" href="#id66" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue21916">bpo-21916</a>: Added tests for the turtle module.  Patch by ingrid,
 Gregory Loyse and Jelle Zijlstra.</li>
@@ -2963,8 +3011,8 @@ to regrtest.py.  Previously there was a limit of 9.</li>
 files cannot be written.</li>
 </ul>
 </div>
-<div class="section" id="id65">
-<h3>ビルド<a class="headerlink" href="#id65" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id67">
+<h3>ビルド<a class="headerlink" href="#id67" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue21277">bpo-21277</a>: Don&#8217;t try to link _ctypes with a ffi_convenience library.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue26884">bpo-26884</a>: Fix linking extension modules for cross builds.
@@ -3009,8 +3057,8 @@ gcc as the option does not work correctly in older versions of gcc
 and has been silently removed as of gcc-4.5.</li>
 </ul>
 </div>
-<div class="section" id="id66">
-<h3>Windows<a class="headerlink" href="#id66" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id68">
+<h3>Windows<a class="headerlink" href="#id68" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27053">bpo-27053</a>: Updates make_zip.py to correctly generate library ZIP file.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue26268">bpo-26268</a>: Update the prepare_ssl.py script to handle OpenSSL releases
@@ -3024,8 +3072,8 @@ distro.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue25022">bpo-25022</a>: Removed very outdated PC/example_nt/ directory.</li>
 </ul>
 </div>
-<div class="section" id="id67">
-<h3>Tools/Demos<a class="headerlink" href="#id67" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id69">
+<h3>Tools/Demos<a class="headerlink" href="#id69" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue26799">bpo-26799</a>: Fix python-gdb.py: don&#8217;t get C types once when the Python code
 is loaded, but get C types on demand. The C types can change if
@@ -3041,8 +3089,8 @@ Patch by Guo Ci Teo.</li>
 <code class="xref py py-obj docutils literal"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">venv</span></code>.</li>
 </ul>
 </div>
-<div class="section" id="id68">
-<h3>C API<a class="headerlink" href="#id68" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id70">
+<h3>C API<a class="headerlink" href="#id70" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue26312">bpo-26312</a>: SystemError is now raised in all programming bugs with using
 PyArg_ParseTupleAndKeywords().  RuntimeError did raised before in some
@@ -3061,8 +3109,8 @@ instead of TypeError on programmical error in parsing format string.</li>
 <div class="section" id="python-3-5-3-release-candidate-1">
 <h2>Python 3.5.3 release candidate 1<a class="headerlink" href="#python-3-5-3-release-candidate-1" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2017-01-02</p>
-<div class="section" id="id69">
-<h3>Core and Builtins<a class="headerlink" href="#id69" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id71">
+<h3>Core and Builtins<a class="headerlink" href="#id71" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue29073">bpo-29073</a>: bytearray formatting no longer truncates on first null byte.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28932">bpo-28932</a>: Do not include &lt;sys/random.h&gt; if it does not exist.</li>
@@ -3150,8 +3198,8 @@ negative integer for a resized bytearray.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27942">bpo-27942</a>: Fix memory leak in codeobject.c</li>
 </ul>
 </div>
-<div class="section" id="id70">
-<h3>ライブラリ<a class="headerlink" href="#id70" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id72">
+<h3>ライブラリ<a class="headerlink" href="#id72" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue15812">bpo-15812</a>: inspect.getframeinfo() now correctly shows the first line of
 a context.  Patch by Sam Breese.</p>
@@ -3172,7 +3220,7 @@ integers.</p>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue28427">bpo-28427</a>: old keys should not remove new values from
 WeakValueDictionary when collecting from another thread.</p>
 </li>
-<li><p class="first">Issue 28923: Remove editor artifacts from Tix.py.</p>
+<li><p class="first"><a class="reference external" href="https://bugs.python.org/issue28923">bpo-28923</a>: Remove editor artifacts from Tix.py.</p>
 </li>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue28871">bpo-28871</a>: Fixed a crash when deallocate deep ElementTree.</p>
 </li>
@@ -3294,7 +3342,7 @@ Patch by Gergely Imreh and Markus Holtermann.</p>
 </li>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue27599">bpo-27599</a>: Fixed buffer overrun in binascii.b2a_qp() and binascii.a2b_qp().</p>
 </li>
-<li><p class="first"><a class="reference external" href="https://bugs.python.org/issue19003">bpo-19003</a>:m email.generator now replaces only r and/or n line
+<li><p class="first"><a class="reference external" href="https://bugs.python.org/issue19003">bpo-19003</a>:m email.generator now replaces only <code class="docutils literal"><span class="pre">\r</span></code> and/or <code class="docutils literal"><span class="pre">\n</span></code> line
 endings, per the RFC, instead of all unicode line endings.</p>
 </li>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue28019">bpo-28019</a>: itertools.count() no longer rounds non-integer step in range
@@ -3317,7 +3365,7 @@ in the new email policies.</p>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue27445">bpo-27445</a>: Don&#8217;t pass str(_charset) to MIMEText.set_payload().
 Patch by Claude Paroz.</p>
 </li>
-<li><p class="first"><a class="reference external" href="https://bugs.python.org/issue22450">bpo-22450</a>: urllib now includes an &#8220;Accept: <em>/</em>&#8221; header among the
+<li><p class="first"><a class="reference external" href="https://bugs.python.org/issue22450">bpo-22450</a>: urllib now includes an <code class="docutils literal"><span class="pre">Accept:</span> <span class="pre">*/*</span></code> header among the
 default headers.  This makes the results of REST API requests more
 consistent and predictable especially when proxy servers are involved.</p>
 </li>
@@ -3332,7 +3380,7 @@ pointers in the &#8220;ctypes&#8221; and &#8220;array&#8221; modules.</p>
 characters, not on arbitrary unicode line breaks.  This also fixes a bug in
 HTTP header parsing.</p>
 </li>
-<li><p class="first">Issue 27988: Fix email iter_attachments incorrect mutation of payload list.</p>
+<li><p class="first"><a class="reference external" href="https://bugs.python.org/issue27988">bpo-27988</a>: Fix email iter_attachments incorrect mutation of payload list.</p>
 </li>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue27691">bpo-27691</a>: Fix ssl module&#8217;s parsing of GEN_RID subject alternative name
 fields in X.509 certs.</p>
@@ -3549,8 +3597,8 @@ completed.
 </li>
 </ul>
 </div>
-<div class="section" id="id71">
-<h3>IDLE<a class="headerlink" href="#id71" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id73">
+<h3>IDLE<a class="headerlink" href="#id73" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue15308">bpo-15308</a>: Add &#8216;interrupt execution&#8217; (^C) to Shell menu.
 Patch by Roger Serwy, updated by Bayard Randel.</li>
@@ -3570,22 +3618,22 @@ Previously, when IDLE was started from a console or by import, a cascade
 of warnings was emitted.  Patch by Serhiy Storchaka.</li>
 </ul>
 </div>
-<div class="section" id="id72">
-<h3>C API<a class="headerlink" href="#id72" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id74">
+<h3>C API<a class="headerlink" href="#id74" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28808">bpo-28808</a>: PyUnicode_CompareWithASCIIString() now never raises exceptions.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue26754">bpo-26754</a>: PyUnicode_FSDecoder() accepted a filename argument encoded as
 an iterable of integers. Now only strings and bytes-like objects are accepted.</li>
 </ul>
 </div>
-<div class="section" id="id73">
-<h3>ドキュメント<a class="headerlink" href="#id73" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id75">
+<h3>ドキュメント<a class="headerlink" href="#id75" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28513">bpo-28513</a>: Documented command-line interface of zipfile.</li>
 </ul>
 </div>
-<div class="section" id="id74">
-<h3>テスト<a class="headerlink" href="#id74" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id76">
+<h3>テスト<a class="headerlink" href="#id76" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28950">bpo-28950</a>: Disallow -j0 to be combined with -T/-l/-M in regrtest
 command line arguments.</li>
@@ -3599,8 +3647,8 @@ threads&#8221;, since the dangling threads are weak references.</li>
 changed in Expat 2.2.0.</li>
 </ul>
 </div>
-<div class="section" id="id75">
-<h3>Tools/Demos<a class="headerlink" href="#id75" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id77">
+<h3>Tools/Demos<a class="headerlink" href="#id77" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27952">bpo-27952</a>: Get Tools/scripts/fixcid.py working with Python 3 and the
 current &#8220;re&#8221; module, avoid invalid Python backslash escapes, and fix a bug
@@ -3610,8 +3658,8 @@ generated by Argument Clinic.  Patch by Petr Viktorin.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27418">bpo-27418</a>: Fixed Tools/importbench/importbench.py.</li>
 </ul>
 </div>
-<div class="section" id="id76">
-<h3>Windows<a class="headerlink" href="#id76" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id78">
+<h3>Windows<a class="headerlink" href="#id78" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue28251">bpo-28251</a>: Improvements to help manuals on Windows.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue28110">bpo-28110</a>: launcher.msi has different product codes between 32-bit and
@@ -3623,8 +3671,8 @@ works correctly.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27309">bpo-27309</a>: Enabled proper Windows styles in python[w].exe manifest.</li>
 </ul>
 </div>
-<div class="section" id="id77">
-<h3>ビルド<a class="headerlink" href="#id77" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id79">
+<h3>ビルド<a class="headerlink" href="#id79" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue29080">bpo-29080</a>: Removes hard dependency on hg.exe from PCBuild/build.bat</li>
 <li><a class="reference external" href="https://bugs.python.org/issue23903">bpo-23903</a>: Added missed names to PC/python3.def.</li>
@@ -3671,20 +3719,20 @@ Patch by Gareth Rees.</li>
 <div class="section" id="python-3-5-2">
 <h2>Python 3.5.2<a class="headerlink" href="#python-3-5-2" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2016-06-26</p>
-<div class="section" id="id78">
-<h3>Core and Builtins<a class="headerlink" href="#id78" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id80">
+<h3>Core and Builtins<a class="headerlink" href="#id80" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue26930">bpo-26930</a>: Update Windows builds to use OpenSSL 1.0.2h.</li>
 </ul>
 </div>
-<div class="section" id="id79">
-<h3>テスト<a class="headerlink" href="#id79" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id81">
+<h3>テスト<a class="headerlink" href="#id81" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue26867">bpo-26867</a>: Ubuntu&#8217;s openssl OP_NO_SSLv3 is forced on by default; fix test.</li>
 </ul>
 </div>
-<div class="section" id="id80">
-<h3>IDLE<a class="headerlink" href="#id80" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id82">
+<h3>IDLE<a class="headerlink" href="#id82" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27365">bpo-27365</a>: Allow non-ascii in idlelib/NEWS.txt - minimal part for 3.5.2.</li>
 </ul>
@@ -3693,8 +3741,8 @@ Patch by Gareth Rees.</li>
 <div class="section" id="python-3-5-2-release-candidate-1">
 <h2>Python 3.5.2 リリース候補 1<a class="headerlink" href="#python-3-5-2-release-candidate-1" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2016-06-12</p>
-<div class="section" id="id81">
-<h3>Core and Builtins<a class="headerlink" href="#id81" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id83">
+<h3>Core and Builtins<a class="headerlink" href="#id83" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27066">bpo-27066</a>: Fixed SystemError if a custom opener (for open()) returns a
 negative number without setting an exception.</li>
@@ -3734,7 +3782,7 @@ sys.__excepthook__() and when __del__() raises an exception.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue26302">bpo-26302</a>: Correct behavior to reject comma as a legal character for
 cookie names.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue4806">bpo-4806</a>: Avoid masking the original TypeError exception when using star
-(*) unpacking in function calls.  Based on patch by Hagen Fürstenau and
+(<code class="docutils literal"><span class="pre">*</span></code>) unpacking in function calls.  Based on patch by Hagen Fürstenau and
 Daniel Urban.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue27138">bpo-27138</a>: Fix the doc comment for FileFinder.find_spec().</li>
 <li><a class="reference external" href="https://bugs.python.org/issue26154">bpo-26154</a>: Add a new private _PyThreadState_UncheckedGet() function to get
@@ -3787,8 +3835,8 @@ iterator should be returned directly.  Doing the former will trigger a
 PendingDeprecationWarning.</li>
 </ul>
 </div>
-<div class="section" id="id82">
-<h3>ライブラリ<a class="headerlink" href="#id82" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id84">
+<h3>ライブラリ<a class="headerlink" href="#id84" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul>
 <li><p class="first">[Security] <a class="reference external" href="https://bugs.python.org/issue26556">bpo-26556</a>: Update expat to 2.1.1, fixes CVE-2015-1283.</p>
 </li>
@@ -4093,7 +4141,7 @@ original values after patching. Patch contributed by Sean McCully.</p>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue25672">bpo-25672</a>: In the ssl module, enable the SSL_MODE_RELEASE_BUFFERS mode
 option if it is safe to do so.</p>
 </li>
-<li><p class="first"><a class="reference external" href="https://bugs.python.org/issue26012">bpo-26012</a>: Don&#8217;t traverse into symlinks for ** pattern in
+<li><p class="first"><a class="reference external" href="https://bugs.python.org/issue26012">bpo-26012</a>: Don&#8217;t traverse into symlinks for <code class="docutils literal"><span class="pre">**</span></code> pattern in
 pathlib.Path.[r]glob().</p>
 </li>
 <li><p class="first"><a class="reference external" href="https://bugs.python.org/issue24120">bpo-24120</a>: Ignore PermissionError when traversing a tree with
@@ -4190,8 +4238,8 @@ Patch by David Coles.</p>
 </li>
 </ul>
 </div>
-<div class="section" id="id83">
-<h3>IDLE<a class="headerlink" href="#id83" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id85">
+<h3>IDLE<a class="headerlink" href="#id85" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue5124">bpo-5124</a>: Paste with text selected now replaces the selection on X11.
 This matches how paste works on Windows, Mac, most modern Linux apps,
@@ -4229,8 +4277,8 @@ MARK in README.txt and open this and NEWS.txt with &#8216;ascii&#8217;.
 Re-encode CREDITS.txt to utf-8 and open it with &#8216;utf-8&#8217;.</li>
 </ul>
 </div>
-<div class="section" id="id84">
-<h3>ドキュメント<a class="headerlink" href="#id84" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id86">
+<h3>ドキュメント<a class="headerlink" href="#id86" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue19489">bpo-19489</a>: Moved the search box from the sidebar to the header and footer
 of each page.  Patch by Ammar Askar.</li>
@@ -4247,8 +4295,8 @@ in the global scope.</li>
 * links to setuptools documentation have been updated</li>
 </ul>
 </div>
-<div class="section" id="id85">
-<h3>テスト<a class="headerlink" href="#id85" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id87">
+<h3>テスト<a class="headerlink" href="#id87" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue21916">bpo-21916</a>: Added tests for the turtle module.  Patch by ingrid,
 Gregory Loyse and Jelle Zijlstra.</li>
@@ -4265,8 +4313,8 @@ into separate file test_ordered_dict.</li>
 files cannot be written.</li>
 </ul>
 </div>
-<div class="section" id="id86">
-<h3>ビルド<a class="headerlink" href="#id86" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id88">
+<h3>ビルド<a class="headerlink" href="#id88" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue26884">bpo-26884</a>: Fix linking extension modules for cross builds.
 Patch by Xavier de Gaye.</li>
@@ -4309,8 +4357,8 @@ gcc as the option does not work correctly in older versions of gcc
 and has been silently removed as of gcc-4.5.</li>
 </ul>
 </div>
-<div class="section" id="id87">
-<h3>Windows<a class="headerlink" href="#id87" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id89">
+<h3>Windows<a class="headerlink" href="#id89" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue27053">bpo-27053</a>: Updates make_zip.py to correctly generate library ZIP file.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue26268">bpo-26268</a>: Update the prepare_ssl.py script to handle OpenSSL releases
@@ -4323,8 +4371,8 @@ and later).</li>
 distro.</li>
 </ul>
 </div>
-<div class="section" id="id88">
-<h3>Tools/Demos<a class="headerlink" href="#id88" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id90">
+<h3>Tools/Demos<a class="headerlink" href="#id90" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue26799">bpo-26799</a>: Fix python-gdb.py: don&#8217;t get C types once when the Python code
 is loaded, but get C types on demand. The C types can change if
@@ -4337,8 +4385,8 @@ Patch by Guo Ci Teo.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue26316">bpo-26316</a>: Fix variable name typo in Argument Clinic.</li>
 </ul>
 </div>
-<div class="section" id="id89">
-<h3>Misc<a class="headerlink" href="#id89" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id91">
+<h3>Misc<a class="headerlink" href="#id91" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue17500">bpo-17500</a>, and <a class="reference external" href="https://github.com/python/pythondotorg/issues/945">https://github.com/python/pythondotorg/issues/945</a>: Remove
 unused and outdated icons.</li>
@@ -4348,15 +4396,15 @@ unused and outdated icons.</li>
 <div class="section" id="python-3-5-1-final">
 <h2>Python 3.5.1 最終版<a class="headerlink" href="#python-3-5-1-final" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-12-06</p>
-<div class="section" id="id90">
-<h3>Core and Builtins<a class="headerlink" href="#id90" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id92">
+<h3>Core and Builtins<a class="headerlink" href="#id92" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue25709">bpo-25709</a>: Fixed problem with in-place string concatenation and
 utf-8 cache.</li>
 </ul>
 </div>
-<div class="section" id="id91">
-<h3>Windows<a class="headerlink" href="#id91" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id93">
+<h3>Windows<a class="headerlink" href="#id93" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue25715">bpo-25715</a>: Python 3.5.1 installer shows wrong upgrade path and incorrect
 logic for launcher detection.</li>
@@ -4366,8 +4414,8 @@ logic for launcher detection.</li>
 <div class="section" id="python-3-5-1-release-candidate-1">
 <h2>Python 3.5.1 release candidate 1<a class="headerlink" href="#python-3-5-1-release-candidate-1" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-11-22</p>
-<div class="section" id="id92">
-<h3>Core and Builtins<a class="headerlink" href="#id92" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id94">
+<h3>Core and Builtins<a class="headerlink" href="#id94" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue25630">bpo-25630</a>: Fix a possible segfault during argument parsing in functions
 that accept filesystem paths.</li>
@@ -4415,8 +4463,8 @@ Python.h header to fix a compilation error with OpenMP. PyThreadState_GET()
 becomes an alias to PyThreadState_Get() to avoid ABI incompatibilies.</li>
 </ul>
 </div>
-<div class="section" id="id93">
-<h3>ライブラリ<a class="headerlink" href="#id93" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id95">
+<h3>ライブラリ<a class="headerlink" href="#id95" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue25626">bpo-25626</a>: Change three zlib functions to accept sizes that fit in
 Py_ssize_t, but internally cap those sizes to UINT_MAX.  This resolves a
@@ -4436,7 +4484,7 @@ attribute.</li>
 by wrapping a memoryview.  This was a regression made in 3.5a1.  Based
 on patch by Eryksun.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue25584">bpo-25584</a>: Added &#8220;escape&#8221; to the __all__ list in the glob module.</li>
-<li><a class="reference external" href="https://bugs.python.org/issue25584">bpo-25584</a>: Fixed recursive glob() with patterns starting with &#8216;**&#8217;.</li>
+<li><a class="reference external" href="https://bugs.python.org/issue25584">bpo-25584</a>: Fixed recursive glob() with patterns starting with <code class="docutils literal"><span class="pre">**</span></code>.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue25446">bpo-25446</a>: Fix regression in smtplib&#8217;s AUTH LOGIN support.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue18010">bpo-18010</a>: Fix the pydoc web server&#8217;s module search function to handle
 exceptions from importing packages.</li>
@@ -4575,8 +4623,8 @@ metaclasses.  Patch by Ethan Furman.</li>
 <li>asyncio: ensure_future() now accepts awaitable objects.</li>
 </ul>
 </div>
-<div class="section" id="id94">
-<h3>IDLE<a class="headerlink" href="#id94" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id96">
+<h3>IDLE<a class="headerlink" href="#id96" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue15348">bpo-15348</a>: Stop the debugger engine (normally in a user process)
 before closing the debugger window (running in the IDLE process).
@@ -4648,8 +4696,8 @@ The now unused EditorWindow.HelpDialog class and helt.txt file are deprecated.</
 <li><a class="reference external" href="https://bugs.python.org/issue24790">bpo-24790</a>: Remove extraneous code (which also create 2 &amp; 3 conflicts).</li>
 </ul>
 </div>
-<div class="section" id="id95">
-<h3>ドキュメント<a class="headerlink" href="#id95" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id97">
+<h3>ドキュメント<a class="headerlink" href="#id97" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue22558">bpo-22558</a>: Add remaining doc links to source code for Python-coded modules.
 Patch by Yoni Lavi.</li>
@@ -4669,8 +4717,8 @@ Joseph Weston.</li>
 Patch from Pam McA&#8217;Nulty.</li>
 </ul>
 </div>
-<div class="section" id="id96">
-<h3>テスト<a class="headerlink" href="#id96" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id98">
+<h3>テスト<a class="headerlink" href="#id98" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue25449">bpo-25449</a>: Added tests for OrderedDict subclasses.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue25099">bpo-25099</a>: Make test_compileall not fail when an entry on sys.path cannot
@@ -4680,8 +4728,8 @@ be written to (commonly seen in administrative installs on Windows).</li>
 to regrtest.py.  Previously there was a limit of 9.</li>
 </ul>
 </div>
-<div class="section" id="id97">
-<h3>ビルド<a class="headerlink" href="#id97" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id99">
+<h3>ビルド<a class="headerlink" href="#id99" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24915">bpo-24915</a>: Add LLVM support for PGO builds and use the test suite to
 generate the profile data. Initial patch by Alecsandru Patrascu of Intel.</li>
@@ -4690,8 +4738,8 @@ generate the profile data. Initial patch by Alecsandru Patrascu of Intel.</li>
 when external libraries are not available.</li>
 </ul>
 </div>
-<div class="section" id="id98">
-<h3>Windows<a class="headerlink" href="#id98" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id100">
+<h3>Windows<a class="headerlink" href="#id100" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue25450">bpo-25450</a>: Updates shortcuts to start Python in installation directory.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue25164">bpo-25164</a>: Changes default all-users install directory to match per-user
@@ -4716,8 +4764,8 @@ UAC virtualization.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue25022">bpo-25022</a>: Removed very outdated PC/example_nt/ directory.</li>
 </ul>
 </div>
-<div class="section" id="id99">
-<h3>Tools/Demos<a class="headerlink" href="#id99" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id101">
+<h3>Tools/Demos<a class="headerlink" href="#id101" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue25440">bpo-25440</a>: Fix output of python-config &#8211;extension-suffix.</li>
 </ul>
@@ -4726,8 +4774,8 @@ UAC virtualization.</li>
 <div class="section" id="python-3-5-0-final">
 <h2>Python 3.5.0 final<a class="headerlink" href="#python-3-5-0-final" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-09-13</p>
-<div class="section" id="id100">
-<h3>ビルド<a class="headerlink" href="#id100" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id102">
+<h3>ビルド<a class="headerlink" href="#id102" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue25071">bpo-25071</a>: Windows installer should not require TargetDir
 parameter when installing quietly.</li>
@@ -4737,14 +4785,14 @@ parameter when installing quietly.</li>
 <div class="section" id="python-3-5-0-release-candidate-4">
 <h2>Python 3.5.0 release candidate 4<a class="headerlink" href="#python-3-5-0-release-candidate-4" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-09-09</p>
-<div class="section" id="id101">
-<h3>ライブラリ<a class="headerlink" href="#id101" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id103">
+<h3>ライブラリ<a class="headerlink" href="#id103" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue25029">bpo-25029</a>: Fixes MemoryError in test_strptime.</li>
 </ul>
 </div>
-<div class="section" id="id102">
-<h3>ビルド<a class="headerlink" href="#id102" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id104">
+<h3>ビルド<a class="headerlink" href="#id104" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue25027">bpo-25027</a>: Reverts partial-static build options and adds
 vcruntime140.dll to Windows installation.</li>
@@ -4754,8 +4802,8 @@ vcruntime140.dll to Windows installation.</li>
 <div class="section" id="python-3-5-0-release-candidate-3">
 <h2>Python 3.5.0 release candidate 3<a class="headerlink" href="#python-3-5-0-release-candidate-3" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-09-07</p>
-<div class="section" id="id103">
-<h3>Core and Builtins<a class="headerlink" href="#id103" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id105">
+<h3>Core and Builtins<a class="headerlink" href="#id105" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24305">bpo-24305</a>: Prevent import subsystem stack frames from being counted
 by the warnings.warn(stacklevel=) parameter.</li>
@@ -4763,8 +4811,8 @@ by the warnings.warn(stacklevel=) parameter.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue24975">bpo-24975</a>: Fix AST compilation for PEP 448 syntax.</li>
 </ul>
 </div>
-<div class="section" id="id104">
-<h3>ライブラリ<a class="headerlink" href="#id104" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id106">
+<h3>ライブラリ<a class="headerlink" href="#id106" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24917">bpo-24917</a>: time_strftime() buffer over-read.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue24748">bpo-24748</a>: To resolve a compatibility problem found with py2exe and
@@ -4783,8 +4831,8 @@ Found by John Leitch and Bryce Darling.</li>
 <div class="section" id="python-3-5-0-release-candidate-2">
 <h2>Python 3.5.0 release candidate 2<a class="headerlink" href="#python-3-5-0-release-candidate-2" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-08-25</p>
-<div class="section" id="id105">
-<h3>Core and Builtins<a class="headerlink" href="#id105" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id107">
+<h3>Core and Builtins<a class="headerlink" href="#id107" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24769">bpo-24769</a>: Interpreter now starts properly when dynamic loading
 is disabled.  Patch by Petr Viktorin.</li>
@@ -4795,8 +4843,8 @@ a <code class="docutils literal"><span class="pre">from</span> <span class="pre"
 AttributeError.</li>
 </ul>
 </div>
-<div class="section" id="id106">
-<h3>ライブラリ<a class="headerlink" href="#id106" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id108">
+<h3>ライブラリ<a class="headerlink" href="#id108" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24847">bpo-24847</a>: Removes vcruntime140.dll dependency from Tcl/Tk.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue24839">bpo-24839</a>: platform._syscmd_ver raises DeprecationWarning</li>
@@ -4807,14 +4855,14 @@ AttributeError.</li>
 <div class="section" id="python-3-5-0-release-candidate-1">
 <h2>Python 3.5.0 release candidate 1<a class="headerlink" href="#python-3-5-0-release-candidate-1" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-08-09</p>
-<div class="section" id="id107">
-<h3>Core and Builtins<a class="headerlink" href="#id107" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id109">
+<h3>Core and Builtins<a class="headerlink" href="#id109" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24667">bpo-24667</a>: Resize odict in all cases that the underlying dict resizes.</li>
 </ul>
 </div>
-<div class="section" id="id108">
-<h3>ライブラリ<a class="headerlink" href="#id108" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id110">
+<h3>ライブラリ<a class="headerlink" href="#id110" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24824">bpo-24824</a>: Signatures of codecs.encode() and codecs.decode() now are
 compatible with pydoc.</li>
@@ -4842,8 +4890,8 @@ Patch from Martin Panter.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue24791">bpo-24791</a>: Fix grammar regression for call syntax: &#8216;g(*a or b)&#8217;.</li>
 </ul>
 </div>
-<div class="section" id="id109">
-<h3>IDLE<a class="headerlink" href="#id109" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id111">
+<h3>IDLE<a class="headerlink" href="#id111" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23672">bpo-23672</a>: Allow Idle to edit and run files with astral chars in name.
 Patch by Mohd Sanad Zaki Rizvi.</li>
@@ -4856,8 +4904,8 @@ Do not print false prompts. Original patch by Adnan Umer.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue13884">bpo-13884</a>: Idle menus. Remove tearoff lines. Patch by Roger Serwy.</li>
 </ul>
 </div>
-<div class="section" id="id110">
-<h3>ドキュメント<a class="headerlink" href="#id110" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id112">
+<h3>ドキュメント<a class="headerlink" href="#id112" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24129">bpo-24129</a>: Clarify the reference documentation for name resolution.
 This includes removing the assumption that readers will be familiar with the
@@ -4869,8 +4917,8 @@ scoping for function namespaces. Patch by Ivan Levkivskyi.</li>
 encoding parameter to open function.</li>
 </ul>
 </div>
-<div class="section" id="id111">
-<h3>テスト<a class="headerlink" href="#id111" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id113">
+<h3>テスト<a class="headerlink" href="#id113" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24751">bpo-24751</a>: When running regrtest with the <code class="docutils literal"><span class="pre">-w</span></code> command line option,
 a test run is no longer marked as a failure if all tests succeed when
@@ -4881,8 +4929,8 @@ re-run.</li>
 <div class="section" id="python-3-5-0-beta-4">
 <h2>Python 3.5.0 beta 4<a class="headerlink" href="#python-3-5-0-beta-4" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-07-26</p>
-<div class="section" id="id112">
-<h3>Core and Builtins<a class="headerlink" href="#id112" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id114">
+<h3>Core and Builtins<a class="headerlink" href="#id114" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23573">bpo-23573</a>: Restored optimization of bytes.rfind() and bytearray.rfind()
 for single-byte argument on Linux.</li>
@@ -4897,8 +4945,8 @@ annotations.</li>
 Patch by Martin Panter.</li>
 </ul>
 </div>
-<div class="section" id="id113">
-<h3>ライブラリ<a class="headerlink" href="#id113" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id115">
+<h3>ライブラリ<a class="headerlink" href="#id115" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23441">bpo-23441</a>: rcompleter now prints a tab character instead of displaying
 possible completions for an empty word.  Initial patch by Martin Sekera.</li>
@@ -4934,8 +4982,8 @@ Patch by Kai Groner.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue24688">bpo-24688</a>: ast.get_docstring() for &#8216;async def&#8217; functions.</li>
 </ul>
 </div>
-<div class="section" id="id114">
-<h3>ビルド<a class="headerlink" href="#id114" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id116">
+<h3>ビルド<a class="headerlink" href="#id116" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24603">bpo-24603</a>: Update Windows builds and OS X 10.5 installer to use OpenSSL
 1.0.2d.</li>
@@ -4945,8 +4993,8 @@ Patch by Kai Groner.</li>
 <div class="section" id="python-3-5-0-beta-3">
 <h2>Python 3.5.0 beta 3<a class="headerlink" href="#python-3-5-0-beta-3" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-07-05</p>
-<div class="section" id="id115">
-<h3>Core and Builtins<a class="headerlink" href="#id115" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id117">
+<h3>Core and Builtins<a class="headerlink" href="#id117" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24467">bpo-24467</a>: Fixed possible buffer over-read in bytearray. The bytearray
 object now always allocates place for trailing null byte and it&#8217;s buffer now
@@ -4968,8 +5016,8 @@ Contributed by Benno Leslie and Yury Selivanov.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue19235">bpo-19235</a>: Add new RecursionError exception. Patch by Georg Brandl.</li>
 </ul>
 </div>
-<div class="section" id="id116">
-<h3>ライブラリ<a class="headerlink" href="#id116" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id118">
+<h3>ライブラリ<a class="headerlink" href="#id118" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue21750">bpo-21750</a>: mock_open.read_data can now be read from each instance, as it
 could in Python 3.3.</li>
@@ -5002,16 +5050,16 @@ methods.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue24369">bpo-24369</a>: Defend against key-changes during iteration.</li>
 </ul>
 </div>
-<div class="section" id="id117">
-<h3>テスト<a class="headerlink" href="#id117" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id119">
+<h3>テスト<a class="headerlink" href="#id119" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24373">bpo-24373</a>: _testmultiphase and xxlimited now use tp_traverse and
 tp_finalize to avoid reference leaks encountered when combining tp_dealloc
 with PyType_FromSpec (see <a class="reference external" href="https://bugs.python.org/issue16690">bpo-16690</a> for details)</li>
 </ul>
 </div>
-<div class="section" id="id118">
-<h3>ドキュメント<a class="headerlink" href="#id118" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id120">
+<h3>ドキュメント<a class="headerlink" href="#id120" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24458">bpo-24458</a>: Update documentation to cover multi-phase initialization for
 extension modules (PEP 489). Patch by Petr Viktorin.</li>
@@ -5019,8 +5067,8 @@ extension modules (PEP 489). Patch by Petr Viktorin.</li>
 string.Template instances.</li>
 </ul>
 </div>
-<div class="section" id="id119">
-<h3>ビルド<a class="headerlink" href="#id119" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id121">
+<h3>ビルド<a class="headerlink" href="#id121" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24432">bpo-24432</a>: Update Windows builds and OS X 10.5 installer to use OpenSSL
 1.0.2c.</li>
@@ -5030,8 +5078,8 @@ string.Template instances.</li>
 <div class="section" id="python-3-5-0-beta-2">
 <h2>Python 3.5.0 beta 2<a class="headerlink" href="#python-3-5-0-beta-2" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-05-31</p>
-<div class="section" id="id120">
-<h3>Core and Builtins<a class="headerlink" href="#id120" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id122">
+<h3>Core and Builtins<a class="headerlink" href="#id122" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24284">bpo-24284</a>: The startswith and endswith methods of the str class no longer
 return True when finding the empty string and the indexes are completely out
@@ -5045,8 +5093,8 @@ to check for and handle errors correctly.</li>
 from inside packages. Patch by Petr Viktorin.</li>
 </ul>
 </div>
-<div class="section" id="id121">
-<h3>ライブラリ<a class="headerlink" href="#id121" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id123">
+<h3>ライブラリ<a class="headerlink" href="#id123" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23247">bpo-23247</a>: Fix a crash in the StreamWriter.reset() of CJK codecs.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue24270">bpo-24270</a>: Add math.isclose() and cmath.isclose() functions as per PEP 485.
@@ -5063,8 +5111,8 @@ lacking signature information.  Initial patch by James Powell.</li>
 <div class="section" id="python-3-5-0-beta-1">
 <h2>Python 3.5.0 beta 1<a class="headerlink" href="#python-3-5-0-beta-1" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-05-24</p>
-<div class="section" id="id122">
-<h3>Core and Builtins<a class="headerlink" href="#id122" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id124">
+<h3>Core and Builtins<a class="headerlink" href="#id124" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24276">bpo-24276</a>: Fixed optimization of property descriptor getter.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue24268">bpo-24268</a>: PEP 489: Multi-phase extension module initialization.
@@ -5096,8 +5144,8 @@ frozen module.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue24017">bpo-24017</a>: PEP 492: Coroutines with async and await syntax.</li>
 </ul>
 </div>
-<div class="section" id="id123">
-<h3>ライブラリ<a class="headerlink" href="#id123" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id125">
+<h3>ライブラリ<a class="headerlink" href="#id125" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue14373">bpo-14373</a>: Added C implementation of functools.lru_cache().  Based on
 patches by Matt Joiner and Alexey Kachayev.</li>
@@ -5218,15 +5266,15 @@ with overloaded __eq__ and __bool__.  Patch by Mike Bayer.</li>
 around bound methods.</li>
 </ul>
 </div>
-<div class="section" id="id124">
-<h3>IDLE<a class="headerlink" href="#id124" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id126">
+<h3>IDLE<a class="headerlink" href="#id126" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23184">bpo-23184</a>: remove unused names and imports in idlelib.
 Initial patch by Al Sweigart.</li>
 </ul>
 </div>
-<div class="section" id="id125">
-<h3>テスト<a class="headerlink" href="#id125" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id127">
+<h3>テスト<a class="headerlink" href="#id127" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue21520">bpo-21520</a>: test_zipfile no longer fails if the word &#8216;bad&#8217; appears
 anywhere in the name of the current directory.</li>
@@ -5234,8 +5282,8 @@ anywhere in the name of the current directory.</li>
 Patch by Christie Wilson.</li>
 </ul>
 </div>
-<div class="section" id="id126">
-<h3>ドキュメント<a class="headerlink" href="#id126" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id128">
+<h3>ドキュメント<a class="headerlink" href="#id128" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue22155">bpo-22155</a>: Add File Handlers subsection with createfilehandler to tkinter
 doc.  Remove obsolete example from FAQ.  Patch by Martin Panter.</li>
@@ -5243,8 +5291,8 @@ doc.  Remove obsolete example from FAQ.  Patch by Martin Panter.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue24077">bpo-24077</a>: Fix typo in man page for -I command option: -s, not -S</li>
 </ul>
 </div>
-<div class="section" id="id127">
-<h3>Tools/Demos<a class="headerlink" href="#id127" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id129">
+<h3>Tools/Demos<a class="headerlink" href="#id129" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue24000">bpo-24000</a>: Improved Argument Clinic&#8217;s mapping of converters to legacy
 &#8220;format units&#8221;.  Updated the documentation to match.</li>
@@ -5258,8 +5306,8 @@ instead of types={&#8216;type&#8217;} to specify the types the converter accepts
 <div class="section" id="python-3-5-0-alpha-4">
 <h2>Python 3.5.0 alpha 4<a class="headerlink" href="#python-3-5-0-alpha-4" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-04-19</p>
-<div class="section" id="id128">
-<h3>Core and Builtins<a class="headerlink" href="#id128" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id130">
+<h3>Core and Builtins<a class="headerlink" href="#id130" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue22980">bpo-22980</a>: Under Linux, GNU/KFreeBSD and the Hurd, C extensions now include
 the architecture triplet in the extension name, to make it easy to test builds
@@ -5283,8 +5331,8 @@ memory conditions.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue21354">bpo-21354</a>: PyCFunction_New function is exposed by python DLL again.</li>
 </ul>
 </div>
-<div class="section" id="id129">
-<h3>ライブラリ<a class="headerlink" href="#id129" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id131">
+<h3>ライブラリ<a class="headerlink" href="#id131" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23840">bpo-23840</a>: tokenize.open() now closes the temporary binary file on error
 to fix a resource warning.</li>
@@ -5386,16 +5434,16 @@ infinity (-inf) instead of rounding towards zero.</li>
 like configure_mock().  Patch by Kasia Jachim.</li>
 </ul>
 </div>
-<div class="section" id="id130">
-<h3>ビルド<a class="headerlink" href="#id130" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id132">
+<h3>ビルド<a class="headerlink" href="#id132" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23817">bpo-23817</a>: FreeBSD now uses &#8220;1.0&#8221; in the SOVERSION as other operating
 systems, instead of just &#8220;1&#8221;.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue23501">bpo-23501</a>: Argument Clinic now generates code into separate files by default.</li>
 </ul>
 </div>
-<div class="section" id="id131">
-<h3>テスト<a class="headerlink" href="#id131" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id133">
+<h3>テスト<a class="headerlink" href="#id133" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23799">bpo-23799</a>: Added test.support.start_threads() for running and
 cleaning up multiple threads.</li>
@@ -5403,8 +5451,8 @@ cleaning up multiple threads.</li>
 directories are left after running a test.</li>
 </ul>
 </div>
-<div class="section" id="id132">
-<h3>Tools/Demos<a class="headerlink" href="#id132" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id134">
+<h3>Tools/Demos<a class="headerlink" href="#id134" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue18128">bpo-18128</a>: pygettext now uses standard +NNNN format in the
 POT-Creation-Date header.</li>
@@ -5422,8 +5470,8 @@ if Argument Clinic processes the same symbol multiple times, and it&#8217;s emit
 at the end of all processing rather than immediately after the first use.</li>
 </ul>
 </div>
-<div class="section" id="id133">
-<h3>C API<a class="headerlink" href="#id133" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id135">
+<h3>C API<a class="headerlink" href="#id135" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23998">bpo-23998</a>: PyImport_ReInitLock() now checks for lock allocation error</li>
 </ul>
@@ -5432,8 +5480,8 @@ at the end of all processing rather than immediately after the first use.</li>
 <div class="section" id="python-3-5-0-alpha-3">
 <h2>Python 3.5.0 alpha 3<a class="headerlink" href="#python-3-5-0-alpha-3" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-03-28</p>
-<div class="section" id="id134">
-<h3>Core and Builtins<a class="headerlink" href="#id134" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id136">
+<h3>Core and Builtins<a class="headerlink" href="#id136" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23573">bpo-23573</a>: Increased performance of string search operations (str.find,
 str.index, str.count, the in operator, str.split, str.partition) with
@@ -5448,8 +5496,8 @@ multi-dimensional memoryviews).</li>
 objects.</li>
 </ul>
 </div>
-<div class="section" id="id135">
-<h3>ライブラリ<a class="headerlink" href="#id135" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id137">
+<h3>ライブラリ<a class="headerlink" href="#id137" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue14260">bpo-14260</a>: The groupindex attribute of regular expression pattern object
 now is non-modifiable mapping.</li>
@@ -5549,21 +5597,21 @@ The usage of os.scandir() reduces the number of calls to os.stat().
 Initial patch written by Ben Hoyt.</li>
 </ul>
 </div>
-<div class="section" id="id136">
-<h3>ビルド<a class="headerlink" href="#id136" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id138">
+<h3>ビルド<a class="headerlink" href="#id138" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23585">bpo-23585</a>: make patchcheck will ensure the interpreter is built.</li>
 </ul>
 </div>
-<div class="section" id="id137">
-<h3>テスト<a class="headerlink" href="#id137" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id139">
+<h3>テスト<a class="headerlink" href="#id139" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23583">bpo-23583</a>: Added tests for standard IO streams in IDLE.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue22289">bpo-22289</a>: Prevent test_urllib2net failures due to ftp connection timeout.</li>
 </ul>
 </div>
-<div class="section" id="id138">
-<h3>Tools/Demos<a class="headerlink" href="#id138" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id140">
+<h3>Tools/Demos<a class="headerlink" href="#id140" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue22826">bpo-22826</a>: The result of open() in Tools/freeze/bkfile.py is now better
 compatible with regular files (in particular it now supports the context
@@ -5574,16 +5622,16 @@ management protocol).</li>
 <div class="section" id="python-3-5-alpha-2">
 <h2>Python 3.5 alpha 2<a class="headerlink" href="#python-3-5-alpha-2" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-03-09</p>
-<div class="section" id="id139">
-<h3>Core and Builtins<a class="headerlink" href="#id139" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id141">
+<h3>Core and Builtins<a class="headerlink" href="#id141" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23571">bpo-23571</a>: PyObject_Call() and PyCFunction_Call() now raise a SystemError
 if a function returns a result and raises an exception. The SystemError is
 chained to the previous exception.</li>
 </ul>
 </div>
-<div class="section" id="id140">
-<h3>ライブラリ<a class="headerlink" href="#id140" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id142">
+<h3>ライブラリ<a class="headerlink" href="#id142" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue22524">bpo-22524</a>: New os.scandir() function, part of the PEP 471: &#8220;os.scandir()
 function &#8211; a better and faster directory iterator&#8221;. Patch written by Ben
@@ -5606,7 +5654,7 @@ Original patch by Mark Lawrence.</li>
 </ul>
 <blockquote>
 <div><ul class="simple">
-<li>Eliminated OverflowError from timedelta * float for some floats;</li>
+<li>Eliminated OverflowError from <code class="docutils literal"><span class="pre">timedelta</span> <span class="pre">*</span> <span class="pre">float</span></code> for some floats;</li>
 <li>Corrected rounding in timedlta true division.</li>
 </ul>
 </div></blockquote>
@@ -5657,23 +5705,23 @@ patch from Jason Yeo.</li>
 entire preamble to a multipart body.</li>
 </ul>
 </div>
-<div class="section" id="id141">
-<h3>ビルド<a class="headerlink" href="#id141" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id143">
+<h3>ビルド<a class="headerlink" href="#id143" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23445">bpo-23445</a>: pydebug builds now use &#8220;gcc -Og&#8221; where possible, to make
 the resulting executable faster.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue23686">bpo-23686</a>: Update OS X 10.5 installer build to use OpenSSL 1.0.2a.</li>
 </ul>
 </div>
-<div class="section" id="id142">
-<h3>C API<a class="headerlink" href="#id142" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id144">
+<h3>C API<a class="headerlink" href="#id144" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue20204">bpo-20204</a>: Deprecation warning is now raised for builtin types without the
 __module__ attribute.</li>
 </ul>
 </div>
-<div class="section" id="id143">
-<h3>Windows<a class="headerlink" href="#id143" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id145">
+<h3>Windows<a class="headerlink" href="#id145" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23465">bpo-23465</a>: Implement PEP 486 - Make the Python Launcher aware of virtual
 environments. Patch by Paul Moore.</li>
@@ -5685,8 +5733,8 @@ Moore.</li>
 <div class="section" id="python-3-5-alpha-1">
 <h2>Python 3.5 alpha 1<a class="headerlink" href="#python-3-5-alpha-1" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Release date: 2015-02-08</p>
-<div class="section" id="id144">
-<h3>Core and Builtins<a class="headerlink" href="#id144" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id146">
+<h3>Core and Builtins<a class="headerlink" href="#id146" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23285">bpo-23285</a>: PEP 475 - EINTR handling.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue22735">bpo-22735</a>: Fix many edge cases (including crashes) involving custom mro()
@@ -5841,8 +5889,8 @@ specifying it is an error.  Patch by Torsten Landschoff.</li>
 _Py_char2wchar function.</li>
 </ul>
 </div>
-<div class="section" id="id145">
-<h3>ライブラリ<a class="headerlink" href="#id145" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id147">
+<h3>ライブラリ<a class="headerlink" href="#id147" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23399">bpo-23399</a>: pyvenv creates relative symlinks where possible.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue20289">bpo-20289</a>: cgi.FieldStorage() now supports the context management
@@ -6151,7 +6199,7 @@ when it is run with pythonw.exe.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue21147">bpo-21147</a>: sqlite3 now raises an exception if the request contains a null
 character instead of truncating it.  Based on patch by Victor Stinner.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue13968">bpo-13968</a>: The glob module now supports recursive search in
-subdirectories using the &#8220;**&#8221; pattern.</li>
+subdirectories using the <code class="docutils literal"><span class="pre">**</span></code> pattern.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue21951">bpo-21951</a>: Fixed a crash in Tkinter on AIX when called Tcl command with
 empty string or tuple argument.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue21951">bpo-21951</a>: Tkinter now most likely raises MemoryError instead of crash
@@ -6635,8 +6683,8 @@ Removed use of hard-coded MSS as it&#8217;s an optimization that&#8217;s no long
 with Nagle disabled.</li>
 </ul>
 </div>
-<div class="section" id="id146">
-<h3>IDLE<a class="headerlink" href="#id146" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id148">
+<h3>IDLE<a class="headerlink" href="#id148" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue20577">bpo-20577</a>: Configuration of the max line length for the FormatParagraph
 extension has been moved from the General tab of the Idle preferences dialog
@@ -6691,8 +6739,8 @@ non-framework builds and for all variants of Tk.</li>
 Patch by Al Sweigart.</li>
 </ul>
 </div>
-<div class="section" id="id147">
-<h3>ビルド<a class="headerlink" href="#id147" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id149">
+<h3>ビルド<a class="headerlink" href="#id149" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue15506">bpo-15506</a>: Use standard PKG_PROG_PKG_CONFIG autoconf macro in the configure
 script.</li>
@@ -6747,8 +6795,8 @@ which will be used for the official release.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue17128">bpo-17128</a>: Use private version of OpenSSL for OS X 10.5+ installer.</li>
 </ul>
 </div>
-<div class="section" id="id148">
-<h3>C API<a class="headerlink" href="#id148" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id150">
+<h3>C API<a class="headerlink" href="#id150" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue14203">bpo-14203</a>: Remove obsolete support for view==NULL in PyBuffer_FillInfo(),
 bytearray_getbuffer(), bytesiobuf_getbuffer() and array_buffer_getbuf().
@@ -6771,8 +6819,8 @@ match what importlib does; this affects _frozen_importlib as well as any
 module loaded using imp.init_frozen().</li>
 </ul>
 </div>
-<div class="section" id="id149">
-<h3>ドキュメント<a class="headerlink" href="#id149" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id151">
+<h3>ドキュメント<a class="headerlink" href="#id151" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue19548">bpo-19548</a>: Update the codecs module documentation to better cover the
 distinction between text encodings and other codecs, together with other
@@ -6802,8 +6850,8 @@ anywhere else.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue19697">bpo-19697</a>: Document cases where __main__.__spec__ is None.</li>
 </ul>
 </div>
-<div class="section" id="id150">
-<h3>テスト<a class="headerlink" href="#id150" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id152">
+<h3>テスト<a class="headerlink" href="#id152" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue18982">bpo-18982</a>: Add tests for CLI of the calendar module.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue19548">bpo-19548</a>: Added some additional checks to test_codecs to ensure that
@@ -6872,8 +6920,8 @@ copy of libz exists in $HOME/lib or /usr/local/lib.</li>
 values (like 0.9.8zc).</li>
 </ul>
 </div>
-<div class="section" id="id151">
-<h3>Tools/Demos<a class="headerlink" href="#id151" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id153">
+<h3>Tools/Demos<a class="headerlink" href="#id153" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue22314">bpo-22314</a>: pydoc now works when the LINES environment variable is set.</li>
 <li><a class="reference external" href="https://bugs.python.org/issue22615">bpo-22615</a>: Argument Clinic now supports the &#8220;type&#8221; argument for the
@@ -6900,8 +6948,8 @@ Patch by Meador Inge.</li>
 Patch by Arfrever Frehtes Taifersar Arahesis.</li>
 </ul>
 </div>
-<div class="section" id="id152">
-<h3>Windows<a class="headerlink" href="#id152" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<div class="section" id="id154">
+<h3>Windows<a class="headerlink" href="#id154" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://bugs.python.org/issue23260">bpo-23260</a>: Update Windows installer</li>
 <li>The bundled version of Tcl/Tk has been updated to 8.6.3.  The most visible
@@ -6936,258 +6984,260 @@ Patch by Olive Kilburn.</li>
 <li><a class="reference internal" href="#python-3-6-2-release-candidate-1">Python 3.6.2 release candidate 1</a><ul>
 <li><a class="reference internal" href="#core-and-builtins">Core and Builtins</a></li>
 <li><a class="reference internal" href="#library">ライブラリ</a></li>
+<li><a class="reference internal" href="#build">ビルド</a></li>
+<li><a class="reference internal" href="#documentation">ドキュメント</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-6-1">Python 3.6.1</a><ul>
 <li><a class="reference internal" href="#id2">Core and Builtins</a></li>
-<li><a class="reference internal" href="#build">ビルド</a></li>
+<li><a class="reference internal" href="#id3">ビルド</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-6-1-release-candidate-1">Python 3.6.1 release candidate 1</a><ul>
-<li><a class="reference internal" href="#id3">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id4">Core and Builtins</a></li>
 <li><a class="reference internal" href="#extension-modules">拡張モジュール</a></li>
-<li><a class="reference internal" href="#id4">ライブラリ</a></li>
+<li><a class="reference internal" href="#id5">ライブラリ</a></li>
 <li><a class="reference internal" href="#windows">Windows</a></li>
 <li><a class="reference internal" href="#c-api">C API</a></li>
-<li><a class="reference internal" href="#documentation">ドキュメント</a></li>
+<li><a class="reference internal" href="#id6">ドキュメント</a></li>
 <li><a class="reference internal" href="#tests">テスト</a></li>
-<li><a class="reference internal" href="#id5">ビルド</a></li>
+<li><a class="reference internal" href="#id7">ビルド</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-6-0">Python 3.6.0</a></li>
 <li><a class="reference internal" href="#python-3-6-0-release-candidate-2">Python 3.6.0 release candidate 2</a><ul>
-<li><a class="reference internal" href="#id6">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id8">Core and Builtins</a></li>
 <li><a class="reference internal" href="#tools-demos">Tools/Demos</a></li>
-<li><a class="reference internal" href="#id7">Windows</a></li>
-<li><a class="reference internal" href="#id8">ビルド</a></li>
+<li><a class="reference internal" href="#id9">Windows</a></li>
+<li><a class="reference internal" href="#id10">ビルド</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-6-0-release-candidate-1">Python 3.6.0 release candidate 1</a><ul>
-<li><a class="reference internal" href="#id9">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id10">ライブラリ</a></li>
-<li><a class="reference internal" href="#id11">C API</a></li>
-<li><a class="reference internal" href="#id12">ドキュメント</a></li>
-<li><a class="reference internal" href="#id13">Tools/Demos</a></li>
+<li><a class="reference internal" href="#id11">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id12">ライブラリ</a></li>
+<li><a class="reference internal" href="#id13">C API</a></li>
+<li><a class="reference internal" href="#id14">ドキュメント</a></li>
+<li><a class="reference internal" href="#id15">Tools/Demos</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-6-0-beta-4">Python 3.6.0 beta 4</a><ul>
-<li><a class="reference internal" href="#id14">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id15">ライブラリ</a></li>
-<li><a class="reference internal" href="#id16">ドキュメント</a></li>
-<li><a class="reference internal" href="#id17">テスト</a></li>
-<li><a class="reference internal" href="#id18">ビルド</a></li>
+<li><a class="reference internal" href="#id16">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id17">ライブラリ</a></li>
+<li><a class="reference internal" href="#id18">ドキュメント</a></li>
+<li><a class="reference internal" href="#id19">テスト</a></li>
+<li><a class="reference internal" href="#id20">ビルド</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-6-0-beta-3">Python 3.6.0 beta 3</a><ul>
-<li><a class="reference internal" href="#id19">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id20">ライブラリ</a></li>
-<li><a class="reference internal" href="#id21">Windows</a></li>
-<li><a class="reference internal" href="#id22">ビルド</a></li>
-<li><a class="reference internal" href="#id23">テスト</a></li>
+<li><a class="reference internal" href="#id21">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id22">ライブラリ</a></li>
+<li><a class="reference internal" href="#id23">Windows</a></li>
+<li><a class="reference internal" href="#id24">ビルド</a></li>
+<li><a class="reference internal" href="#id25">テスト</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-6-0-beta-2">Python 3.6.0 beta 2</a><ul>
-<li><a class="reference internal" href="#id24">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id25">ライブラリ</a></li>
-<li><a class="reference internal" href="#id26">Windows</a></li>
-<li><a class="reference internal" href="#id27">C API</a></li>
-<li><a class="reference internal" href="#id28">ビルド</a></li>
-<li><a class="reference internal" href="#id29">テスト</a></li>
+<li><a class="reference internal" href="#id26">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id27">ライブラリ</a></li>
+<li><a class="reference internal" href="#id28">Windows</a></li>
+<li><a class="reference internal" href="#id29">C API</a></li>
+<li><a class="reference internal" href="#id30">ビルド</a></li>
+<li><a class="reference internal" href="#id31">テスト</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-6-0-beta-1">Python 3.6.0 beta 1</a><ul>
-<li><a class="reference internal" href="#id30">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id31">ライブラリ</a></li>
+<li><a class="reference internal" href="#id32">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id33">ライブラリ</a></li>
 <li><a class="reference internal" href="#idle">IDLE</a></li>
-<li><a class="reference internal" href="#id32">C API</a></li>
-<li><a class="reference internal" href="#id33">テスト</a></li>
-<li><a class="reference internal" href="#id34">ビルド</a></li>
-<li><a class="reference internal" href="#id35">Tools/Demos</a></li>
-<li><a class="reference internal" href="#id36">Windows</a></li>
+<li><a class="reference internal" href="#id34">C API</a></li>
+<li><a class="reference internal" href="#id35">テスト</a></li>
+<li><a class="reference internal" href="#id36">ビルド</a></li>
+<li><a class="reference internal" href="#id37">Tools/Demos</a></li>
+<li><a class="reference internal" href="#id38">Windows</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-6-0-alpha-4">Python 3.6.0 alpha 4</a><ul>
-<li><a class="reference internal" href="#id37">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id38">ライブラリ</a></li>
-<li><a class="reference internal" href="#id39">IDLE</a></li>
-<li><a class="reference internal" href="#id40">テスト</a></li>
-<li><a class="reference internal" href="#id41">Windows</a></li>
-<li><a class="reference internal" href="#id42">ビルド</a></li>
+<li><a class="reference internal" href="#id39">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id40">ライブラリ</a></li>
+<li><a class="reference internal" href="#id41">IDLE</a></li>
+<li><a class="reference internal" href="#id42">テスト</a></li>
+<li><a class="reference internal" href="#id43">Windows</a></li>
+<li><a class="reference internal" href="#id44">ビルド</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-6-0-alpha-3">Python 3.6.0 alpha 3</a><ul>
-<li><a class="reference internal" href="#id43">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id44">ライブラリ</a></li>
-<li><a class="reference internal" href="#id45">IDLE</a></li>
-<li><a class="reference internal" href="#id46">C API</a></li>
-<li><a class="reference internal" href="#id47">ビルド</a></li>
-<li><a class="reference internal" href="#id48">Tools/Demos</a></li>
-<li><a class="reference internal" href="#id49">ドキュメント</a></li>
-<li><a class="reference internal" href="#id50">テスト</a></li>
+<li><a class="reference internal" href="#id45">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id46">ライブラリ</a></li>
+<li><a class="reference internal" href="#id47">IDLE</a></li>
+<li><a class="reference internal" href="#id48">C API</a></li>
+<li><a class="reference internal" href="#id49">ビルド</a></li>
+<li><a class="reference internal" href="#id50">Tools/Demos</a></li>
+<li><a class="reference internal" href="#id51">ドキュメント</a></li>
+<li><a class="reference internal" href="#id52">テスト</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-6-0-alpha-2">Python 3.6.0 alpha 2</a><ul>
-<li><a class="reference internal" href="#id51">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id52">ライブラリ</a></li>
-<li><a class="reference internal" href="#id53">IDLE</a></li>
-<li><a class="reference internal" href="#id54">ドキュメント</a></li>
-<li><a class="reference internal" href="#id55">テスト</a></li>
-<li><a class="reference internal" href="#id56">Windows</a></li>
-<li><a class="reference internal" href="#id57">ビルド</a></li>
+<li><a class="reference internal" href="#id53">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id54">ライブラリ</a></li>
+<li><a class="reference internal" href="#id55">IDLE</a></li>
+<li><a class="reference internal" href="#id56">ドキュメント</a></li>
+<li><a class="reference internal" href="#id57">テスト</a></li>
+<li><a class="reference internal" href="#id58">Windows</a></li>
+<li><a class="reference internal" href="#id59">ビルド</a></li>
 <li><a class="reference internal" href="#misc">Misc</a></li>
-<li><a class="reference internal" href="#id58">C API</a></li>
-<li><a class="reference internal" href="#id59">Tools/Demos</a></li>
+<li><a class="reference internal" href="#id60">C API</a></li>
+<li><a class="reference internal" href="#id61">Tools/Demos</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-6-0-alpha-1">Python 3.6.0 alpha 1</a><ul>
-<li><a class="reference internal" href="#id60">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id61">ライブラリ</a></li>
-<li><a class="reference internal" href="#id62">IDLE</a></li>
-<li><a class="reference internal" href="#id63">ドキュメント</a></li>
-<li><a class="reference internal" href="#id64">テスト</a></li>
-<li><a class="reference internal" href="#id65">ビルド</a></li>
-<li><a class="reference internal" href="#id66">Windows</a></li>
-<li><a class="reference internal" href="#id67">Tools/Demos</a></li>
-<li><a class="reference internal" href="#id68">C API</a></li>
+<li><a class="reference internal" href="#id62">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id63">ライブラリ</a></li>
+<li><a class="reference internal" href="#id64">IDLE</a></li>
+<li><a class="reference internal" href="#id65">ドキュメント</a></li>
+<li><a class="reference internal" href="#id66">テスト</a></li>
+<li><a class="reference internal" href="#id67">ビルド</a></li>
+<li><a class="reference internal" href="#id68">Windows</a></li>
+<li><a class="reference internal" href="#id69">Tools/Demos</a></li>
+<li><a class="reference internal" href="#id70">C API</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-5-3">Python 3.5.3</a></li>
 <li><a class="reference internal" href="#python-3-5-3-release-candidate-1">Python 3.5.3 release candidate 1</a><ul>
-<li><a class="reference internal" href="#id69">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id70">ライブラリ</a></li>
-<li><a class="reference internal" href="#id71">IDLE</a></li>
-<li><a class="reference internal" href="#id72">C API</a></li>
-<li><a class="reference internal" href="#id73">ドキュメント</a></li>
-<li><a class="reference internal" href="#id74">テスト</a></li>
-<li><a class="reference internal" href="#id75">Tools/Demos</a></li>
-<li><a class="reference internal" href="#id76">Windows</a></li>
-<li><a class="reference internal" href="#id77">ビルド</a></li>
+<li><a class="reference internal" href="#id71">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id72">ライブラリ</a></li>
+<li><a class="reference internal" href="#id73">IDLE</a></li>
+<li><a class="reference internal" href="#id74">C API</a></li>
+<li><a class="reference internal" href="#id75">ドキュメント</a></li>
+<li><a class="reference internal" href="#id76">テスト</a></li>
+<li><a class="reference internal" href="#id77">Tools/Demos</a></li>
+<li><a class="reference internal" href="#id78">Windows</a></li>
+<li><a class="reference internal" href="#id79">ビルド</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-5-2">Python 3.5.2</a><ul>
-<li><a class="reference internal" href="#id78">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id79">テスト</a></li>
-<li><a class="reference internal" href="#id80">IDLE</a></li>
+<li><a class="reference internal" href="#id80">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id81">テスト</a></li>
+<li><a class="reference internal" href="#id82">IDLE</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-5-2-release-candidate-1">Python 3.5.2 リリース候補 1</a><ul>
-<li><a class="reference internal" href="#id81">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id82">ライブラリ</a></li>
-<li><a class="reference internal" href="#id83">IDLE</a></li>
-<li><a class="reference internal" href="#id84">ドキュメント</a></li>
-<li><a class="reference internal" href="#id85">テスト</a></li>
-<li><a class="reference internal" href="#id86">ビルド</a></li>
-<li><a class="reference internal" href="#id87">Windows</a></li>
-<li><a class="reference internal" href="#id88">Tools/Demos</a></li>
-<li><a class="reference internal" href="#id89">Misc</a></li>
+<li><a class="reference internal" href="#id83">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id84">ライブラリ</a></li>
+<li><a class="reference internal" href="#id85">IDLE</a></li>
+<li><a class="reference internal" href="#id86">ドキュメント</a></li>
+<li><a class="reference internal" href="#id87">テスト</a></li>
+<li><a class="reference internal" href="#id88">ビルド</a></li>
+<li><a class="reference internal" href="#id89">Windows</a></li>
+<li><a class="reference internal" href="#id90">Tools/Demos</a></li>
+<li><a class="reference internal" href="#id91">Misc</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-5-1-final">Python 3.5.1 最終版</a><ul>
-<li><a class="reference internal" href="#id90">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id91">Windows</a></li>
+<li><a class="reference internal" href="#id92">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id93">Windows</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-5-1-release-candidate-1">Python 3.5.1 release candidate 1</a><ul>
-<li><a class="reference internal" href="#id92">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id93">ライブラリ</a></li>
-<li><a class="reference internal" href="#id94">IDLE</a></li>
-<li><a class="reference internal" href="#id95">ドキュメント</a></li>
-<li><a class="reference internal" href="#id96">テスト</a></li>
-<li><a class="reference internal" href="#id97">ビルド</a></li>
-<li><a class="reference internal" href="#id98">Windows</a></li>
-<li><a class="reference internal" href="#id99">Tools/Demos</a></li>
+<li><a class="reference internal" href="#id94">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id95">ライブラリ</a></li>
+<li><a class="reference internal" href="#id96">IDLE</a></li>
+<li><a class="reference internal" href="#id97">ドキュメント</a></li>
+<li><a class="reference internal" href="#id98">テスト</a></li>
+<li><a class="reference internal" href="#id99">ビルド</a></li>
+<li><a class="reference internal" href="#id100">Windows</a></li>
+<li><a class="reference internal" href="#id101">Tools/Demos</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-5-0-final">Python 3.5.0 final</a><ul>
-<li><a class="reference internal" href="#id100">ビルド</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#python-3-5-0-release-candidate-4">Python 3.5.0 release candidate 4</a><ul>
-<li><a class="reference internal" href="#id101">ライブラリ</a></li>
 <li><a class="reference internal" href="#id102">ビルド</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#python-3-5-0-release-candidate-3">Python 3.5.0 release candidate 3</a><ul>
-<li><a class="reference internal" href="#id103">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id104">ライブラリ</a></li>
+<li><a class="reference internal" href="#python-3-5-0-release-candidate-4">Python 3.5.0 release candidate 4</a><ul>
+<li><a class="reference internal" href="#id103">ライブラリ</a></li>
+<li><a class="reference internal" href="#id104">ビルド</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#python-3-5-0-release-candidate-2">Python 3.5.0 release candidate 2</a><ul>
+<li><a class="reference internal" href="#python-3-5-0-release-candidate-3">Python 3.5.0 release candidate 3</a><ul>
 <li><a class="reference internal" href="#id105">Core and Builtins</a></li>
 <li><a class="reference internal" href="#id106">ライブラリ</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#python-3-5-0-release-candidate-1">Python 3.5.0 release candidate 1</a><ul>
+<li><a class="reference internal" href="#python-3-5-0-release-candidate-2">Python 3.5.0 release candidate 2</a><ul>
 <li><a class="reference internal" href="#id107">Core and Builtins</a></li>
 <li><a class="reference internal" href="#id108">ライブラリ</a></li>
-<li><a class="reference internal" href="#id109">IDLE</a></li>
-<li><a class="reference internal" href="#id110">ドキュメント</a></li>
-<li><a class="reference internal" href="#id111">テスト</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#python-3-5-0-release-candidate-1">Python 3.5.0 release candidate 1</a><ul>
+<li><a class="reference internal" href="#id109">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id110">ライブラリ</a></li>
+<li><a class="reference internal" href="#id111">IDLE</a></li>
+<li><a class="reference internal" href="#id112">ドキュメント</a></li>
+<li><a class="reference internal" href="#id113">テスト</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-5-0-beta-4">Python 3.5.0 beta 4</a><ul>
-<li><a class="reference internal" href="#id112">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id113">ライブラリ</a></li>
-<li><a class="reference internal" href="#id114">ビルド</a></li>
+<li><a class="reference internal" href="#id114">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id115">ライブラリ</a></li>
+<li><a class="reference internal" href="#id116">ビルド</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-5-0-beta-3">Python 3.5.0 beta 3</a><ul>
-<li><a class="reference internal" href="#id115">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id116">ライブラリ</a></li>
-<li><a class="reference internal" href="#id117">テスト</a></li>
-<li><a class="reference internal" href="#id118">ドキュメント</a></li>
-<li><a class="reference internal" href="#id119">ビルド</a></li>
+<li><a class="reference internal" href="#id117">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id118">ライブラリ</a></li>
+<li><a class="reference internal" href="#id119">テスト</a></li>
+<li><a class="reference internal" href="#id120">ドキュメント</a></li>
+<li><a class="reference internal" href="#id121">ビルド</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-5-0-beta-2">Python 3.5.0 beta 2</a><ul>
-<li><a class="reference internal" href="#id120">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id121">ライブラリ</a></li>
+<li><a class="reference internal" href="#id122">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id123">ライブラリ</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-5-0-beta-1">Python 3.5.0 beta 1</a><ul>
-<li><a class="reference internal" href="#id122">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id123">ライブラリ</a></li>
-<li><a class="reference internal" href="#id124">IDLE</a></li>
-<li><a class="reference internal" href="#id125">テスト</a></li>
-<li><a class="reference internal" href="#id126">ドキュメント</a></li>
-<li><a class="reference internal" href="#id127">Tools/Demos</a></li>
+<li><a class="reference internal" href="#id124">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id125">ライブラリ</a></li>
+<li><a class="reference internal" href="#id126">IDLE</a></li>
+<li><a class="reference internal" href="#id127">テスト</a></li>
+<li><a class="reference internal" href="#id128">ドキュメント</a></li>
+<li><a class="reference internal" href="#id129">Tools/Demos</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-5-0-alpha-4">Python 3.5.0 alpha 4</a><ul>
-<li><a class="reference internal" href="#id128">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id129">ライブラリ</a></li>
-<li><a class="reference internal" href="#id130">ビルド</a></li>
-<li><a class="reference internal" href="#id131">テスト</a></li>
-<li><a class="reference internal" href="#id132">Tools/Demos</a></li>
-<li><a class="reference internal" href="#id133">C API</a></li>
+<li><a class="reference internal" href="#id130">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id131">ライブラリ</a></li>
+<li><a class="reference internal" href="#id132">ビルド</a></li>
+<li><a class="reference internal" href="#id133">テスト</a></li>
+<li><a class="reference internal" href="#id134">Tools/Demos</a></li>
+<li><a class="reference internal" href="#id135">C API</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-5-0-alpha-3">Python 3.5.0 alpha 3</a><ul>
-<li><a class="reference internal" href="#id134">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id135">ライブラリ</a></li>
-<li><a class="reference internal" href="#id136">ビルド</a></li>
-<li><a class="reference internal" href="#id137">テスト</a></li>
-<li><a class="reference internal" href="#id138">Tools/Demos</a></li>
+<li><a class="reference internal" href="#id136">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id137">ライブラリ</a></li>
+<li><a class="reference internal" href="#id138">ビルド</a></li>
+<li><a class="reference internal" href="#id139">テスト</a></li>
+<li><a class="reference internal" href="#id140">Tools/Demos</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-5-alpha-2">Python 3.5 alpha 2</a><ul>
-<li><a class="reference internal" href="#id139">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id140">ライブラリ</a></li>
-<li><a class="reference internal" href="#id141">ビルド</a></li>
-<li><a class="reference internal" href="#id142">C API</a></li>
-<li><a class="reference internal" href="#id143">Windows</a></li>
+<li><a class="reference internal" href="#id141">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id142">ライブラリ</a></li>
+<li><a class="reference internal" href="#id143">ビルド</a></li>
+<li><a class="reference internal" href="#id144">C API</a></li>
+<li><a class="reference internal" href="#id145">Windows</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#python-3-5-alpha-1">Python 3.5 alpha 1</a><ul>
-<li><a class="reference internal" href="#id144">Core and Builtins</a></li>
-<li><a class="reference internal" href="#id145">ライブラリ</a></li>
-<li><a class="reference internal" href="#id146">IDLE</a></li>
-<li><a class="reference internal" href="#id147">ビルド</a></li>
-<li><a class="reference internal" href="#id148">C API</a></li>
-<li><a class="reference internal" href="#id149">ドキュメント</a></li>
-<li><a class="reference internal" href="#id150">テスト</a></li>
-<li><a class="reference internal" href="#id151">Tools/Demos</a></li>
-<li><a class="reference internal" href="#id152">Windows</a></li>
+<li><a class="reference internal" href="#id146">Core and Builtins</a></li>
+<li><a class="reference internal" href="#id147">ライブラリ</a></li>
+<li><a class="reference internal" href="#id148">IDLE</a></li>
+<li><a class="reference internal" href="#id149">ビルド</a></li>
+<li><a class="reference internal" href="#id150">C API</a></li>
+<li><a class="reference internal" href="#id151">ドキュメント</a></li>
+<li><a class="reference internal" href="#id152">テスト</a></li>
+<li><a class="reference internal" href="#id153">Tools/Demos</a></li>
+<li><a class="reference internal" href="#id154">Windows</a></li>
 </ul>
 </li>
 </ul>
