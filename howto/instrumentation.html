@@ -220,7 +220,7 @@ can patch strategically-placed machine code instructions to enable the
 tracing hooks used by a SystemTap script.</p>
 </div>
 <div class="section" id="static-dtrace-probes">
-<h2>Static DTrace probes<a class="headerlink" href="#static-dtrace-probes" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>静的 DTrace プローブ<a class="headerlink" href="#static-dtrace-probes" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>The following example DTrace script can be used to show the call/return
 hierarchy of a Python script, only tracing within the invocation of
 a function called &#8220;start&#8221;. In other words, import-time function
@@ -258,11 +258,11 @@ python$target:::function-return
 }
 </pre></div>
 </div>
-<p>It can be invoked like this:</p>
+<p>この例は次のように実行できます:</p>
 <div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo dtrace -q -s call_stack.d -c <span class="s2">&quot;python3.6 script.py&quot;</span>
 </pre></div>
 </div>
-<p>The output looks like this:</p>
+<p>出力はこのようになります:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>156641360502280  function-entry:call_stack.py:start:23
 156641360518804  function-entry: call_stack.py:function_1:1
 156641360532797  function-entry:  call_stack.py:function_3:9
@@ -285,12 +285,11 @@ python$target:::function-return
 </div>
 </div>
 <div class="section" id="static-systemtap-markers">
-<h2>Static SystemTap markers<a class="headerlink" href="#static-systemtap-markers" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>静的 SystemTap マーカー<a class="headerlink" href="#static-systemtap-markers" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>The low-level way to use the SystemTap integration is to use the static
 markers directly.  This requires you to explicitly state the binary file
 containing them.</p>
-<p>For example, this SystemTap script can be used to show the call/return
-hierarchy of a Python script:</p>
+<p>例えば、この SystemTap スクリプトは Python の呼び出し/返却 (call/return) 階層を表示するのに使えます:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>probe process(&quot;python&quot;).mark(&quot;function__entry&quot;) {
      filename = user_string($arg1);
      funcname = user_string($arg2);
@@ -310,13 +309,13 @@ probe process(&quot;python&quot;).mark(&quot;function__return&quot;) {
 }
 </pre></div>
 </div>
-<p>It can be invoked like this:</p>
+<p>この例は次のように実行できます:</p>
 <div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> stap <span class="se">\</span>
   show-call-hierarchy.stp <span class="se">\</span>
   -c <span class="s2">&quot;./python test.py&quot;</span>
 </pre></div>
 </div>
-<p>The output looks like this:</p>
+<p>出力はこのようになります:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>11408 python(8274):        =&gt; __contains__ in Lib/_abcoll.py:362
 11414 python(8274):         =&gt; __getitem__ in Lib/os.py:425
 11418 python(8274):          =&gt; encode in Lib/os.py:490
@@ -325,15 +324,18 @@ probe process(&quot;python&quot;).mark(&quot;function__return&quot;) {
 11433 python(8274):        &lt;= __contains__ in Lib/_abcoll.py:366
 </pre></div>
 </div>
-<p>where the columns are:</p>
+<p>それぞれの列の内容は次の通りです:</p>
 <blockquote>
 <div><ul class="simple">
-<li>time in microseconds since start of script</li>
-<li>name of executable</li>
-<li>PID of process</li>
+<li><p class="first">スクリプトを起動してからのマイクロ秒単位の時間</p>
+</li>
+<li><p class="first">実行可能ファイルの名前</p>
+</li>
+<li><p class="first">プロセスの PID</p>
+</li>
 </ul>
 </div></blockquote>
-<p>and the remainder indicates the call/return hierarchy as the script executes.</p>
+<p>そして、残りの部分はスクリプトが実行していた呼び出し/返却階層を表示しています。</p>
 <p>For a <cite>&#8211;enable-shared</cite> build of CPython, the markers are contained within the
 libpython shared library, and the probe&#8217;s dotted path needs to reflect this. For
 example, this line from the above example:</p>
@@ -499,8 +501,8 @@ probe timer.ms(1000) {
   <ul>
 <li><a class="reference internal" href="#">DTrace と SystemTap で CPython を測定する</a><ul>
 <li><a class="reference internal" href="#enabling-the-static-markers">静的マーカーの有効化</a></li>
-<li><a class="reference internal" href="#static-dtrace-probes">Static DTrace probes</a></li>
-<li><a class="reference internal" href="#static-systemtap-markers">Static SystemTap markers</a></li>
+<li><a class="reference internal" href="#static-dtrace-probes">静的 DTrace プローブ</a></li>
+<li><a class="reference internal" href="#static-systemtap-markers">静的 SystemTap マーカー</a></li>
 <li><a class="reference internal" href="#available-static-markers">Available static markers</a></li>
 <li><a class="reference internal" href="#systemtap-tapsets">SystemTap Tapsets</a></li>
 <li><a class="reference internal" href="#examples">使用例</a></li>
@@ -576,7 +578,7 @@ probe timer.ms(1000) {
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 4月 26, 2017
+    最終更新日時: 4月 28, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
