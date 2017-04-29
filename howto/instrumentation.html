@@ -336,33 +336,31 @@ probe process(&quot;python&quot;).mark(&quot;function__return&quot;) {
 </ul>
 </div></blockquote>
 <p>そして、残りの部分はスクリプトが実行していた呼び出し/返却階層を表示しています。</p>
-<p>For a <cite>&#8211;enable-shared</cite> build of CPython, the markers are contained within the
-libpython shared library, and the probe&#8217;s dotted path needs to reflect this. For
-example, this line from the above example:</p>
+<p><cite>&#8211;enable-shared</cite> を付けてビルドした CPython ではマーカーは共有ライブラリ libpython に含まれていて、プローブを付けるパスはそれを反映する必要があります。
+例えば、上の例のこの行は:</p>
 <div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="go">probe process(&quot;python&quot;).mark(&quot;function__entry&quot;) {</span>
 </pre></div>
 </div>
-<p>should instead read:</p>
+<p>次のように読み替える必要があります:</p>
 <div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="go">probe process(&quot;python&quot;).library(&quot;libpython3.6dm.so.1.0&quot;).mark(&quot;function__entry&quot;) {</span>
 </pre></div>
 </div>
-<p>(assuming a debug build of CPython 3.6)</p>
+<p>(CPython 3.6 のデバッグビルドと仮定しています)</p>
 </div>
 <div class="section" id="available-static-markers">
-<h2>Available static markers<a class="headerlink" href="#available-static-markers" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<h2>利用可能な静的マーカー<a class="headerlink" href="#available-static-markers" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <dl class="function">
 <dt id="c.function__entry">
 <code class="descname">function__entry</code><span class="sig-paren">(</span>str<em>&nbsp;filename</em>, str<em>&nbsp;funcname</em>, int<em>&nbsp;lineno</em><span class="sig-paren">)</span><a class="headerlink" href="#c.function__entry" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>This marker indicates that execution of a Python function has begun.
-It is only triggered for pure-Python (bytecode) functions.</p>
-<p>The filename, function name, and line number are provided back to the
-tracing script as positional arguments, which must be accessed using
-<code class="docutils literal"><span class="pre">$arg1</span></code>, <code class="docutils literal"><span class="pre">$arg2</span></code>, <code class="docutils literal"><span class="pre">$arg3</span></code>:</p>
+<dd><p>このマーカーは Python の関数の実行が開始されたことを示しています。
+このマーカーは、ピュア Python (バイトコード) の関数でしか起動されません。</p>
+<p>トレーススクリプトには位置引数として、ファイル名、関数名、行番号が渡され、必ず <code class="docutils literal"><span class="pre">$arg1</span></code>, <code class="docutils literal"><span class="pre">$arg2</span></code>, <code class="docutils literal"><span class="pre">$arg3</span></code> で渡されます:</p>
 <blockquote>
 <div><ul class="simple">
-<li><code class="docutils literal"><span class="pre">$arg1</span></code> : <code class="docutils literal"><span class="pre">(const</span> <span class="pre">char</span> <span class="pre">*)</span></code> filename, accessible using <code class="docutils literal"><span class="pre">user_string($arg1)</span></code></li>
-<li><code class="docutils literal"><span class="pre">$arg2</span></code> : <code class="docutils literal"><span class="pre">(const</span> <span class="pre">char</span> <span class="pre">*)</span></code> function name, accessible using
-<code class="docutils literal"><span class="pre">user_string($arg2)</span></code></li>
+<li><p class="first"><code class="docutils literal"><span class="pre">$arg1</span></code> : <code class="docutils literal"><span class="pre">(const</span> <span class="pre">char</span> <span class="pre">*)</span></code> ファイル名、 <code class="docutils literal"><span class="pre">user_string($arg1)</span></code> でアクセスできます</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">$arg2</span></code> : <code class="docutils literal"><span class="pre">(const</span> <span class="pre">char</span> <span class="pre">*)</span></code> 関数名、 <code class="docutils literal"><span class="pre">user_string($arg2)</span></code> でアクセスできます</p>
+</li>
 <li><code class="docutils literal"><span class="pre">$arg3</span></code> : <code class="docutils literal"><span class="pre">int</span></code> line number</li>
 </ul>
 </div></blockquote>
@@ -503,7 +501,7 @@ probe timer.ms(1000) {
 <li><a class="reference internal" href="#enabling-the-static-markers">静的マーカーの有効化</a></li>
 <li><a class="reference internal" href="#static-dtrace-probes">静的 DTrace プローブ</a></li>
 <li><a class="reference internal" href="#static-systemtap-markers">静的 SystemTap マーカー</a></li>
-<li><a class="reference internal" href="#available-static-markers">Available static markers</a></li>
+<li><a class="reference internal" href="#available-static-markers">利用可能な静的マーカー</a></li>
 <li><a class="reference internal" href="#systemtap-tapsets">SystemTap Tapsets</a></li>
 <li><a class="reference internal" href="#examples">使用例</a></li>
 </ul>
@@ -578,7 +576,7 @@ probe timer.ms(1000) {
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 4月 28, 2017
+    最終更新日時: 4月 29, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
