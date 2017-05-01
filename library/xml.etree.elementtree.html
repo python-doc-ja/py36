@@ -184,30 +184,13 @@
 </div>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last">Not all elements of the XML input will end up as elements of the
-parsed tree. Currently, this module skips over any XML comments,
-processing instructions, and document type declarations in the
-input. Nevertheless, trees built using this module&#8217;s API rather
-than parsing from XML text can have comments and processing
-instructions in them; they will be included when generating XML
-output. A document type declaration may be accessed by passing a
-custom <a class="reference internal" href="#xml.etree.ElementTree.TreeBuilder" title="xml.etree.ElementTree.TreeBuilder"><code class="xref py py-class docutils literal"><span class="pre">TreeBuilder</span></code></a> instance to the <a class="reference internal" href="#xml.etree.ElementTree.XMLParser" title="xml.etree.ElementTree.XMLParser"><code class="xref py py-class docutils literal"><span class="pre">XMLParser</span></code></a>
-constructor.</p>
+<p class="last">XML 入力の全ての要素が、パース後の木に要素として含まれる訳ではありません。現在、このモジュールは入力中のいかなる XML コメント、処理指示、ドキュメントタイプ宣言も読み飛ばします。しかし、XML テキストからのパースではなく、このモジュールの API を使用して構築された木には、コメントや処理指示を含むことができ、それらは XML 出力の生成時に含まれます。ドキュメントタイプ宣言は、 <a class="reference internal" href="#xml.etree.ElementTree.XMLParser" title="xml.etree.ElementTree.XMLParser"><code class="xref py py-class docutils literal"><span class="pre">XMLParser</span></code></a> コンストラクタにカスタムの <a class="reference internal" href="#xml.etree.ElementTree.TreeBuilder" title="xml.etree.ElementTree.TreeBuilder"><code class="xref py py-class docutils literal"><span class="pre">TreeBuilder</span></code></a> インスタンスを渡すことで、アクセスすることができます。</p>
 </div>
 </div>
 <div class="section" id="pull-api-for-non-blocking-parsing">
-<span id="elementtree-pull-parsing"></span><h3>20.5.1.3. Pull API for non-blocking parsing<a class="headerlink" href="#pull-api-for-non-blocking-parsing" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>Most parsing functions provided by this module require the whole document
-to be read at once before returning any result.  It is possible to use an
-<a class="reference internal" href="#xml.etree.ElementTree.XMLParser" title="xml.etree.ElementTree.XMLParser"><code class="xref py py-class docutils literal"><span class="pre">XMLParser</span></code></a> and feed data into it incrementally, but it is a push API that
-calls methods on a callback target, which is too low-level and inconvenient for
-most needs.  Sometimes what the user really wants is to be able to parse XML
-incrementally, without blocking operations, while enjoying the convenience of
-fully constructed <a class="reference internal" href="#xml.etree.ElementTree.Element" title="xml.etree.ElementTree.Element"><code class="xref py py-class docutils literal"><span class="pre">Element</span></code></a> objects.</p>
-<p>The most powerful tool for doing this is <a class="reference internal" href="#xml.etree.ElementTree.XMLPullParser" title="xml.etree.ElementTree.XMLPullParser"><code class="xref py py-class docutils literal"><span class="pre">XMLPullParser</span></code></a>.  It does not
-require a blocking read to obtain the XML data, and is instead fed with data
-incrementally with <a class="reference internal" href="#xml.etree.ElementTree.XMLPullParser.feed" title="xml.etree.ElementTree.XMLPullParser.feed"><code class="xref py py-meth docutils literal"><span class="pre">XMLPullParser.feed()</span></code></a> calls.  To get the parsed XML
-elements, call <a class="reference internal" href="#xml.etree.ElementTree.XMLPullParser.read_events" title="xml.etree.ElementTree.XMLPullParser.read_events"><code class="xref py py-meth docutils literal"><span class="pre">XMLPullParser.read_events()</span></code></a>.  Here is an example:</p>
+<span id="elementtree-pull-parsing"></span><h3>20.5.1.3. 非ブロックパースのためのプル API<a class="headerlink" href="#pull-api-for-non-blocking-parsing" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>このモジュールが提供するパース関数のほとんどは、結果を返す前に、ドキュメント全体を読む必要があります。 <a class="reference internal" href="#xml.etree.ElementTree.XMLParser" title="xml.etree.ElementTree.XMLParser"><code class="xref py py-class docutils literal"><span class="pre">XMLParser</span></code></a> を使用して、インクリメンタルにデータを渡すことは可能ではありますが、それはコールバック対象のメソッドを呼ぶプッシュ API であり、多くの場合、低水準すぎて不便です。ユーザーが望むのは、完全に出来上がった <a class="reference internal" href="#xml.etree.ElementTree.Element" title="xml.etree.ElementTree.Element"><code class="xref py py-class docutils literal"><span class="pre">Element</span></code></a> オブジェクトを便利に使いながら、操作をブロックすることなく XML のパースをインクリメンタルに行えることです。</p>
+<p>これを行うための最も強力なツールは、 <a class="reference internal" href="#xml.etree.ElementTree.XMLPullParser" title="xml.etree.ElementTree.XMLPullParser"><code class="xref py py-class docutils literal"><span class="pre">XMLPullParser</span></code></a> です。XML データを取得するためにブロックするような読み込みは必要なく、 <a class="reference internal" href="#xml.etree.ElementTree.XMLPullParser.feed" title="xml.etree.ElementTree.XMLPullParser.feed"><code class="xref py py-meth docutils literal"><span class="pre">XMLPullParser.feed()</span></code></a> を呼び出して、インクリメンタルにデータを読みます。パースされた XML 要素を取得するには、<a class="reference internal" href="#xml.etree.ElementTree.XMLPullParser.read_events" title="xml.etree.ElementTree.XMLPullParser.read_events"><code class="xref py py-meth docutils literal"><span class="pre">XMLPullParser.read_events()</span></code></a> を呼び出します。以下に、例を示します。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">XMLPullParser</span><span class="p">([</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;end&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">parser</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="s1">&#39;&lt;mytag&gt;sometext&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">read_events</span><span class="p">())</span>
@@ -220,14 +203,8 @@ elements, call <a class="reference internal" href="#xml.etree.ElementTree.XMLPul
 <span class="go">end</span>
 </pre></div>
 </div>
-<p>The obvious use case is applications that operate in a non-blocking fashion
-where the XML data is being received from a socket or read incrementally from
-some storage device.  In such cases, blocking reads are unacceptable.</p>
-<p>Because it&#8217;s so flexible, <a class="reference internal" href="#xml.etree.ElementTree.XMLPullParser" title="xml.etree.ElementTree.XMLPullParser"><code class="xref py py-class docutils literal"><span class="pre">XMLPullParser</span></code></a> can be inconvenient to use for
-simpler use-cases.  If you don&#8217;t mind your application blocking on reading XML
-data but would still like to have incremental parsing capabilities, take a look
-at <a class="reference internal" href="#xml.etree.ElementTree.iterparse" title="xml.etree.ElementTree.iterparse"><code class="xref py py-func docutils literal"><span class="pre">iterparse()</span></code></a>.  It can be useful when you&#8217;re reading a large XML document
-and don&#8217;t want to hold it wholly in memory.</p>
+<p>これの分かりやすい用途は、XML データをソケットから受信したり、ストレージデバイスからインクリメンタルに読み出したりするような、非ブロック式に動作するアプリケーションです。このような場合、ブロッキング読み出しは使用できません。</p>
+<p><a class="reference internal" href="#xml.etree.ElementTree.XMLPullParser" title="xml.etree.ElementTree.XMLPullParser"><code class="xref py py-class docutils literal"><span class="pre">XMLPullParser</span></code></a> は柔軟性が非常に高いため、単純に使用したいユーザーにとっては不便かもしれません。アプリケーションにおいて、XML データの読み取り時にブロックすることに支障がないが、インクリメンタルにパースする能力が欲しい場合、<a class="reference internal" href="#xml.etree.ElementTree.iterparse" title="xml.etree.ElementTree.iterparse"><code class="xref py py-func docutils literal"><span class="pre">iterparse()</span></code></a> を参照してください。大きな XML ドキュメントを読んでいて、全てメモリ上にあるという状態にしたくない場合に有用です。</p>
 </div>
 <div class="section" id="finding-interesting-elements">
 <h3>20.5.1.4. 関心ある要素の検索<a class="headerlink" href="#finding-interesting-elements" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -253,7 +230,7 @@ and don&#8217;t want to hold it wholly in memory.</p>
 <span class="go">Panama 68</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="#elementtree-xpath"><span class="std std-ref">XPath</span></a> の使用は、検索したい要素を指定するより洗練された方法です。</p>
+<p><a class="reference internal" href="#elementtree-xpath"><span class="std std-ref">XPath</span></a> を使用すると、より洗練された方法で、検索したい要素を指定することができます。</p>
 </div>
 <div class="section" id="modifying-an-xml-file">
 <h3>20.5.1.5. XML ファイルの編集<a class="headerlink" href="#modifying-an-xml-file" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -356,7 +333,7 @@ and don&#8217;t want to hold it wholly in memory.</p>
 <span class="nt">&lt;/actors&gt;</span>
 </pre></div>
 </div>
-<p>この XML の例を、検索し、渡り歩くためのひとつの方法としては、 <a class="reference internal" href="#xml.etree.ElementTree.Element.find" title="xml.etree.ElementTree.Element.find"><code class="xref py py-meth docutils literal"><span class="pre">find()</span></code></a> や <a class="reference internal" href="#xml.etree.ElementTree.Element.findall" title="xml.etree.ElementTree.Element.findall"><code class="xref py py-meth docutils literal"><span class="pre">findall()</span></code></a> に渡す xpath では全てのタグや属性に手作業で URI を付けてまわる手があります:</p>
+<p>この XML の例を、検索し、渡り歩くためのひとつの方法としては、 <a class="reference internal" href="#xml.etree.ElementTree.Element.find" title="xml.etree.ElementTree.Element.find"><code class="xref py py-meth docutils literal"><span class="pre">find()</span></code></a> や <a class="reference internal" href="#xml.etree.ElementTree.Element.findall" title="xml.etree.ElementTree.Element.findall"><code class="xref py py-meth docutils literal"><span class="pre">findall()</span></code></a> に渡す xpath で全てのタグや属性に手作業で URI を付けてまわる手があります:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">root</span> <span class="o">=</span> <span class="n">fromstring</span><span class="p">(</span><span class="n">xml_text</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">actor</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;{http://people.example.com}actor&#39;</span><span class="p">):</span>
     <span class="n">name</span> <span class="o">=</span> <span class="n">actor</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;{http://people.example.com}name&#39;</span><span class="p">)</span>
@@ -488,10 +465,7 @@ and don&#8217;t want to hold it wholly in memory.</p>
 <dt id="xml.etree.ElementTree.Comment">
 <code class="descclassname">xml.etree.ElementTree.</code><code class="descname">Comment</code><span class="sig-paren">(</span><em>text=None</em><span class="sig-paren">)</span><a class="headerlink" href="#xml.etree.ElementTree.Comment" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>コメント要素のファクトリです。このファクトリ関数は、標準のシリアライザでは XML コメントにシリアライズされる特別な要素を作ります。コメント文字列はバイト文字列でも Unicode 文字列でも構いません。<em>text</em> はそのコメント文字列を含んだ文字列です。コメントを表わす要素のインスタンスを返します。</p>
-<p>Note that <a class="reference internal" href="#xml.etree.ElementTree.XMLParser" title="xml.etree.ElementTree.XMLParser"><code class="xref py py-class docutils literal"><span class="pre">XMLParser</span></code></a> skips over comments in the input
-instead of creating comment objects for them. An <a class="reference internal" href="#xml.etree.ElementTree.ElementTree" title="xml.etree.ElementTree.ElementTree"><code class="xref py py-class docutils literal"><span class="pre">ElementTree</span></code></a> will
-only contain comment nodes if they have been inserted into to
-the tree using one of the <a class="reference internal" href="#xml.etree.ElementTree.Element" title="xml.etree.ElementTree.Element"><code class="xref py py-class docutils literal"><span class="pre">Element</span></code></a> methods.</p>
+<p><a class="reference internal" href="#xml.etree.ElementTree.XMLParser" title="xml.etree.ElementTree.XMLParser"><code class="xref py py-class docutils literal"><span class="pre">XMLParser</span></code></a> は、入力に含まれるコメントを読み飛ばし、コメントオブジェクトは作成しません。<a class="reference internal" href="#xml.etree.ElementTree.ElementTree" title="xml.etree.ElementTree.ElementTree"><code class="xref py py-class docutils literal"><span class="pre">ElementTree</span></code></a> は、<a class="reference internal" href="#xml.etree.ElementTree.Element" title="xml.etree.ElementTree.Element"><code class="xref py py-class docutils literal"><span class="pre">Element</span></code></a> メソッドの 1 つを使用して木内に挿入されたコメントノードのみを含みます。</p>
 </dd></dl>
 
 <dl class="function">
@@ -526,20 +500,8 @@ the tree using one of the <a class="reference internal" href="#xml.etree.Element
 <dl class="function">
 <dt id="xml.etree.ElementTree.iterparse">
 <code class="descclassname">xml.etree.ElementTree.</code><code class="descname">iterparse</code><span class="sig-paren">(</span><em>source</em>, <em>events=None</em>, <em>parser=None</em><span class="sig-paren">)</span><a class="headerlink" href="#xml.etree.ElementTree.iterparse" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Parses an XML section into an element tree incrementally, and reports what&#8217;s
-going on to the user.  <em>source</em> is a filename or <a class="reference internal" href="../glossary.html#term-file-object"><span class="xref std std-term">file object</span></a>
-containing XML data.  <em>events</em> is a sequence of events to report back.  The
-supported events are the strings <code class="docutils literal"><span class="pre">&quot;start&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;end&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;start-ns&quot;</span></code> and
-<code class="docutils literal"><span class="pre">&quot;end-ns&quot;</span></code> (the &#8220;ns&#8221; events are used to get detailed namespace
-information).  If <em>events</em> is omitted, only <code class="docutils literal"><span class="pre">&quot;end&quot;</span></code> events are reported.
-<em>parser</em> is an optional parser instance.  If not given, the standard
-<a class="reference internal" href="#xml.etree.ElementTree.XMLParser" title="xml.etree.ElementTree.XMLParser"><code class="xref py py-class docutils literal"><span class="pre">XMLParser</span></code></a> parser is used.  <em>parser</em> must be a subclass of
-<a class="reference internal" href="#xml.etree.ElementTree.XMLParser" title="xml.etree.ElementTree.XMLParser"><code class="xref py py-class docutils literal"><span class="pre">XMLParser</span></code></a> and can only use the default <a class="reference internal" href="#xml.etree.ElementTree.TreeBuilder" title="xml.etree.ElementTree.TreeBuilder"><code class="xref py py-class docutils literal"><span class="pre">TreeBuilder</span></code></a> as a
-target.  Returns an <a class="reference internal" href="../glossary.html#term-iterator"><span class="xref std std-term">iterator</span></a> providing <code class="docutils literal"><span class="pre">(event,</span> <span class="pre">elem)</span></code> pairs.</p>
-<p>Note that while <a class="reference internal" href="#xml.etree.ElementTree.iterparse" title="xml.etree.ElementTree.iterparse"><code class="xref py py-func docutils literal"><span class="pre">iterparse()</span></code></a> builds the tree incrementally, it issues
-blocking reads on <em>source</em> (or the file it names).  As such, it&#8217;s unsuitable
-for applications where blocking reads can&#8217;t be made.  For fully non-blocking
-parsing, see <a class="reference internal" href="#xml.etree.ElementTree.XMLPullParser" title="xml.etree.ElementTree.XMLPullParser"><code class="xref py py-class docutils literal"><span class="pre">XMLPullParser</span></code></a>.</p>
+<dd><p>XML セクションを構文解析して要素の木を漸増的に作っていき、その間進行状況をユーザーに報告します。 <em>source</em> は XML データを含むファイル名またはファイル風オブジェクト (<a class="reference internal" href="../glossary.html#term-file-object"><span class="xref std std-term">file object</span></a>) です。 <em>events</em> は報告すべきイベントのシーケンスです。サポートされているイベントは、文字列の <code class="docutils literal"><span class="pre">&quot;start&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;end&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;start-ns&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;end-ns&quot;</span></code> です (&#8220;ns&#8221; イベントは、名前空間についての詳細情報を取得するために使用)。<em>events</em> が省略された場合は <code class="docutils literal"><span class="pre">&quot;end&quot;</span></code> イベントだけが報告されます。 <em>parser</em> はオプションの引数で、パーサーのインスタンスです。指定されなかった場合は標準の <a class="reference internal" href="#xml.etree.ElementTree.XMLParser" title="xml.etree.ElementTree.XMLParser"><code class="xref py py-class docutils literal"><span class="pre">XMLParser</span></code></a> が利用されます。<em>parser</em> は <a class="reference internal" href="#xml.etree.ElementTree.XMLParser" title="xml.etree.ElementTree.XMLParser"><code class="xref py py-class docutils literal"><span class="pre">XMLParser</span></code></a> のサブクラスでなくてはならず、ターゲットとして既定の <a class="reference internal" href="#xml.etree.ElementTree.TreeBuilder" title="xml.etree.ElementTree.TreeBuilder"><code class="xref py py-class docutils literal"><span class="pre">TreeBuilder</span></code></a> のみしか使用できません。<code class="docutils literal"><span class="pre">(event,</span> <span class="pre">elem)</span></code> ペアを提供するイテレータ (<a class="reference internal" href="../glossary.html#term-iterator"><span class="xref std std-term">iterator</span></a>) を返します。</p>
+<p><a class="reference internal" href="#xml.etree.ElementTree.iterparse" title="xml.etree.ElementTree.iterparse"><code class="xref py py-func docutils literal"><span class="pre">iterparse()</span></code></a> は木をインクリメンタルに構築しますが、<em>source</em> (または指定のファイル) でのブロッキング読みを起こします。したがって、ブロッキング読みが許可されないアプリケーションには適しません。完全に非ブロックのパースのためには、<a class="reference internal" href="#xml.etree.ElementTree.XMLPullParser" title="xml.etree.ElementTree.XMLPullParser"><code class="xref py py-class docutils literal"><span class="pre">XMLPullParser</span></code></a> を参照してください。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p><a class="reference internal" href="#xml.etree.ElementTree.iterparse" title="xml.etree.ElementTree.iterparse"><code class="xref py py-func docutils literal"><span class="pre">iterparse()</span></code></a> は &#8220;start&#8221; イベントを発行した時に開始タグの文字 &#8220;&gt;&#8221; が現れたことだけを保証します。そのため、属性は定義されますが、その時点ではテキストの内容も tail 属性も定義されていません。同じことは子要素にも言えて、その時点ではあるともないとも言えません。</p>
@@ -560,11 +522,7 @@ parsing, see <a class="reference internal" href="#xml.etree.ElementTree.XMLPullP
 <dt id="xml.etree.ElementTree.ProcessingInstruction">
 <code class="descclassname">xml.etree.ElementTree.</code><code class="descname">ProcessingInstruction</code><span class="sig-paren">(</span><em>target</em>, <em>text=None</em><span class="sig-paren">)</span><a class="headerlink" href="#xml.etree.ElementTree.ProcessingInstruction" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>PI 要素のファクトリです。このファクトリ関数は XML の処理命令としてシリアライズされた特別な要素を作成します。<em>target</em> は PI ターゲットを含んだ文字列です。<em>text</em> を指定する場合は PI コンテンツを含む文字列にします。PI を表わす要素インスタンスを返します。</p>
-<p>Note that <a class="reference internal" href="#xml.etree.ElementTree.XMLParser" title="xml.etree.ElementTree.XMLParser"><code class="xref py py-class docutils literal"><span class="pre">XMLParser</span></code></a> skips over processing instructions
-in the input instead of creating comment objects for them. An
-<a class="reference internal" href="#xml.etree.ElementTree.ElementTree" title="xml.etree.ElementTree.ElementTree"><code class="xref py py-class docutils literal"><span class="pre">ElementTree</span></code></a> will only contain processing instruction nodes if
-they have been inserted into to the tree using one of the
-<a class="reference internal" href="#xml.etree.ElementTree.Element" title="xml.etree.ElementTree.Element"><code class="xref py py-class docutils literal"><span class="pre">Element</span></code></a> methods.</p>
+<p><a class="reference internal" href="#xml.etree.ElementTree.XMLParser" title="xml.etree.ElementTree.XMLParser"><code class="xref py py-class docutils literal"><span class="pre">XMLParser</span></code></a> は、入力に含まれる処理指示を読み飛ばし、コメントオブジェクトは作成しません。<a class="reference internal" href="#xml.etree.ElementTree.ElementTree" title="xml.etree.ElementTree.ElementTree"><code class="xref py py-class docutils literal"><span class="pre">ElementTree</span></code></a> は、<a class="reference internal" href="#xml.etree.ElementTree.Element" title="xml.etree.ElementTree.Element"><code class="xref py py-class docutils literal"><span class="pre">Element</span></code></a> メソッドの 1 つを使用して木内に挿入された処理指示ノードのみを含みます。</p>
 </dd></dl>
 
 <dl class="function">
@@ -586,13 +544,7 @@ they have been inserted into to the tree using one of the
 <dl class="function">
 <dt id="xml.etree.ElementTree.tostring">
 <code class="descclassname">xml.etree.ElementTree.</code><code class="descname">tostring</code><span class="sig-paren">(</span><em>element</em>, <em>encoding=&quot;us-ascii&quot;</em>, <em>method=&quot;xml&quot;</em>, <em>*</em>, <em>short_empty_elements=True</em><span class="sig-paren">)</span><a class="headerlink" href="#xml.etree.ElementTree.tostring" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Generates a string representation of an XML element, including all
-subelements.  <em>element</em> is an <a class="reference internal" href="#xml.etree.ElementTree.Element" title="xml.etree.ElementTree.Element"><code class="xref py py-class docutils literal"><span class="pre">Element</span></code></a> instance.  <em>encoding</em> <a class="footnote-reference" href="#id5" id="id1">[1]</a> is
-the output encoding (default is US-ASCII).  Use <code class="docutils literal"><span class="pre">encoding=&quot;unicode&quot;</span></code> to
-generate a Unicode string (otherwise, a bytestring is generated).  <em>method</em>
-is either <code class="docutils literal"><span class="pre">&quot;xml&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;html&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;text&quot;</span></code> (default is <code class="docutils literal"><span class="pre">&quot;xml&quot;</span></code>).
-<em>short_empty_elements</em> has the same meaning as in <a class="reference internal" href="#xml.etree.ElementTree.ElementTree.write" title="xml.etree.ElementTree.ElementTree.write"><code class="xref py py-meth docutils literal"><span class="pre">ElementTree.write()</span></code></a>.
-Returns an (optionally) encoded string containing the XML data.</p>
+<dd><p>XML 要素を全ての子要素を含めて表現する文字列を生成します。 <em>element</em> は <a class="reference internal" href="#xml.etree.ElementTree.Element" title="xml.etree.ElementTree.Element"><code class="xref py py-class docutils literal"><span class="pre">Element</span></code></a> のインスタンスです。 <em>encoding</em> <a class="footnote-reference" href="#id5" id="id1">[1]</a> は出力エンコーディング(デフォルトは US-ASCII)です。Unicode 文字列を生成するには、<code class="docutils literal"><span class="pre">encoding=&quot;unicode&quot;</span></code> を使用してください。 <em>method</em> は <code class="docutils literal"><span class="pre">&quot;xml&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;html&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;text&quot;</span></code> のいずれか(デフォルトは <code class="docutils literal"><span class="pre">&quot;xml&quot;</span></code>) です。<em>short_empty_elements</em> は、 <a class="reference internal" href="#xml.etree.ElementTree.ElementTree.write" title="xml.etree.ElementTree.ElementTree.write"><code class="xref py py-meth docutils literal"><span class="pre">ElementTree.write()</span></code></a> での意味と同じ意味を持ちます。 XML データを含んだ (オプションで) エンコードされた文字列を返します。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.4 で追加: </span><em>short_empty_elements</em> 引数。</p>
 </div>
@@ -601,15 +553,7 @@ Returns an (optionally) encoded string containing the XML data.</p>
 <dl class="function">
 <dt id="xml.etree.ElementTree.tostringlist">
 <code class="descclassname">xml.etree.ElementTree.</code><code class="descname">tostringlist</code><span class="sig-paren">(</span><em>element</em>, <em>encoding=&quot;us-ascii&quot;</em>, <em>method=&quot;xml&quot;</em>, <em>*</em>, <em>short_empty_elements=True</em><span class="sig-paren">)</span><a class="headerlink" href="#xml.etree.ElementTree.tostringlist" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Generates a string representation of an XML element, including all
-subelements.  <em>element</em> is an <a class="reference internal" href="#xml.etree.ElementTree.Element" title="xml.etree.ElementTree.Element"><code class="xref py py-class docutils literal"><span class="pre">Element</span></code></a> instance.  <em>encoding</em> <a class="footnote-reference" href="#id5" id="id2">[1]</a> is
-the output encoding (default is US-ASCII).  Use <code class="docutils literal"><span class="pre">encoding=&quot;unicode&quot;</span></code> to
-generate a Unicode string (otherwise, a bytestring is generated).  <em>method</em>
-is either <code class="docutils literal"><span class="pre">&quot;xml&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;html&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;text&quot;</span></code> (default is <code class="docutils literal"><span class="pre">&quot;xml&quot;</span></code>).
-<em>short_empty_elements</em> has the same meaning as in <a class="reference internal" href="#xml.etree.ElementTree.ElementTree.write" title="xml.etree.ElementTree.ElementTree.write"><code class="xref py py-meth docutils literal"><span class="pre">ElementTree.write()</span></code></a>.
-Returns a list of (optionally) encoded strings containing the XML data.
-It does not guarantee any specific sequence, except that
-<code class="docutils literal"><span class="pre">b&quot;&quot;.join(tostringlist(element))</span> <span class="pre">==</span> <span class="pre">tostring(element)</span></code>.</p>
+<dd><p>XML 要素を全ての子要素を含めて表現する文字列を生成します。 <em>element</em> は <a class="reference internal" href="#xml.etree.ElementTree.Element" title="xml.etree.ElementTree.Element"><code class="xref py py-class docutils literal"><span class="pre">Element</span></code></a> のインスタンスです。 <em>encoding</em> <a class="footnote-reference" href="#id5" id="id2">[1]</a> は出力エンコーディング(デフォルトは US-ASCII)です。Unicode 文字列を生成するには、<code class="docutils literal"><span class="pre">encoding=&quot;unicode&quot;</span></code> を使用してください。 <em>method</em> は <code class="docutils literal"><span class="pre">&quot;xml&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;html&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;text&quot;</span></code> のいずれか(デフォルトは <code class="docutils literal"><span class="pre">&quot;xml&quot;</span></code>) です。<em>short_empty_elements</em> は、 <a class="reference internal" href="#xml.etree.ElementTree.ElementTree.write" title="xml.etree.ElementTree.ElementTree.write"><code class="xref py py-meth docutils literal"><span class="pre">ElementTree.write()</span></code></a> での意味と同じ意味を持ちます。 XML データを含んだ (オプションで) エンコードされた文字列のリストを返します。<code class="docutils literal"><span class="pre">b&quot;&quot;.join(tostringlist(element))</span> <span class="pre">==</span> <span class="pre">tostring(element)</span></code> となること以外、特定の順序になる保証はありません。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
 </div>
@@ -811,7 +755,7 @@ It does not guarantee any specific sequence, except that
 <dt id="xml.etree.ElementTree.ElementTree">
 <em class="property">class </em><code class="descclassname">xml.etree.ElementTree.</code><code class="descname">ElementTree</code><span class="sig-paren">(</span><em>element=None</em>, <em>file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#xml.etree.ElementTree.ElementTree" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>ElementTree ラッパークラスです。このクラスは要素の全階層を表現し、さらに標準 XML との相互変換を追加しています。</p>
-<p><em>element</em> は根要素です。木は <em>file</em> が与えられればその XML の内容により初期化されます。</p>
+<p><em>element</em> は根要素です。<em>file</em> が指定されている場合、その XML ファイルの内容により木は初期化されます。</p>
 <dl class="method">
 <dt id="xml.etree.ElementTree.ElementTree._setroot">
 <code class="descname">_setroot</code><span class="sig-paren">(</span><em>element</em><span class="sig-paren">)</span><a class="headerlink" href="#xml.etree.ElementTree.ElementTree._setroot" title="この定義へのパーマリンク">¶</a></dt>
@@ -874,19 +818,7 @@ It does not guarantee any specific sequence, except that
 <dl class="method">
 <dt id="xml.etree.ElementTree.ElementTree.write">
 <code class="descname">write</code><span class="sig-paren">(</span><em>file</em>, <em>encoding=&quot;us-ascii&quot;</em>, <em>xml_declaration=None</em>, <em>default_namespace=None</em>, <em>method=&quot;xml&quot;</em>, <em>*</em>, <em>short_empty_elements=True</em><span class="sig-paren">)</span><a class="headerlink" href="#xml.etree.ElementTree.ElementTree.write" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Writes the element tree to a file, as XML.  <em>file</em> is a file name, or a
-<a class="reference internal" href="../glossary.html#term-file-object"><span class="xref std std-term">file object</span></a> opened for writing.  <em>encoding</em> <a class="footnote-reference" href="#id5" id="id3">[1]</a> is the output
-encoding (default is US-ASCII).
-<em>xml_declaration</em> controls if an XML declaration should be added to the
-file.  Use <code class="docutils literal"><span class="pre">False</span></code> for never, <code class="docutils literal"><span class="pre">True</span></code> for always, <code class="docutils literal"><span class="pre">None</span></code>
-for only if not US-ASCII or UTF-8 or Unicode (default is <code class="docutils literal"><span class="pre">None</span></code>).
-<em>default_namespace</em> sets the default XML namespace (for &#8220;xmlns&#8221;).
-<em>method</em> is either <code class="docutils literal"><span class="pre">&quot;xml&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;html&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;text&quot;</span></code> (default is
-<code class="docutils literal"><span class="pre">&quot;xml&quot;</span></code>).
-The keyword-only <em>short_empty_elements</em> parameter controls the formatting
-of elements that contain no content.  If <code class="docutils literal"><span class="pre">True</span></code> (the default), they are
-emitted as a single self-closed tag, otherwise they are emitted as a pair
-of start/end tags.</p>
+<dd><p>要素の木をファイルに XML として書き込みます。 <em>file</em> は、書き込み用に開かれたファイル名またはファイル風オブジェクト (<a class="reference internal" href="../glossary.html#term-file-object"><span class="xref std std-term">file object</span></a>) です。 <em>encoding</em> <a class="footnote-reference" href="#id5" id="id3">[1]</a> は出力エンコーディング(デフォルトは US-ASCII)です。 <em>xml_declaration</em> は、 XML 宣言がファイルに書かれるかどうかを制御します。 <code class="docutils literal"><span class="pre">False</span></code> の場合は常に書かれず、 <code class="docutils literal"><span class="pre">True</span></code> の場合は常に書かれ、 <code class="docutils literal"><span class="pre">None</span></code> の場合は US-ASCII 、 UTF-8 、 Unicode 以外の場合に書かれます (デフォルトは <code class="docutils literal"><span class="pre">None</span></code> です)。 <em>default_namespace</em> でデフォルトの XML 名前空間 (&#8220;xmlns&#8221; 用) を指定します。 <em>method</em> は <code class="docutils literal"><span class="pre">&quot;xml&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;html&quot;</span></code>, <code class="docutils literal"><span class="pre">&quot;text&quot;</span></code> のいずれかです (デフォルトは <code class="docutils literal"><span class="pre">&quot;xml&quot;</span></code> です)。キーワード専用引数の <em>short_empty_elements</em> は、内容がない属性のフォーマットを制御します。<code class="docutils literal"><span class="pre">True</span></code> (既定) の場合、単一の空要素タグとして書かれ、<code class="docutils literal"><span class="pre">False</span></code> の場合、開始タグと終了タグのペアとしてかかれます。</p>
 <p>出力は引数 <em>encoding</em> によって、文字列 (<a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>) かバイト列 (<a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a>) になります。<em>encoding</em> が <code class="docutils literal"><span class="pre">&quot;unicode&quot;</span></code> の場合、出力は文字列になり、それ以外ではバイト列になります。<em>file</em> が <a class="reference internal" href="../glossary.html#term-file-object"><span class="xref std std-term">ファイルオブジェクト</span></a> の場合、型が衝突する場合があります。文字列をバイト列ファイルへ書き込んだり、その逆を行わないよう注意してください。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.4 で追加: </span><em>short_empty_elements</em> 引数。</p>
@@ -1159,7 +1091,7 @@ unpredictable results.</p>
 <li><a class="reference internal" href="#tutorial">20.5.1. チュートリアル</a><ul>
 <li><a class="reference internal" href="#xml-tree-and-elements">20.5.1.1. XML 木構造と要素</a></li>
 <li><a class="reference internal" href="#parsing-xml">20.5.1.2. XML の解析</a></li>
-<li><a class="reference internal" href="#pull-api-for-non-blocking-parsing">20.5.1.3. Pull API for non-blocking parsing</a></li>
+<li><a class="reference internal" href="#pull-api-for-non-blocking-parsing">20.5.1.3. 非ブロックパースのためのプル API</a></li>
 <li><a class="reference internal" href="#finding-interesting-elements">20.5.1.4. 関心ある要素の検索</a></li>
 <li><a class="reference internal" href="#modifying-an-xml-file">20.5.1.5. XML ファイルの編集</a></li>
 <li><a class="reference internal" href="#building-xml-documents">20.5.1.6. XML 文書の構築</a></li>
@@ -1256,7 +1188,7 @@ unpredictable results.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 4月 29, 2017
+    最終更新日時: 5月 01, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
