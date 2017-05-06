@@ -107,7 +107,7 @@
 <span id="xml-sax-handler-base-classes-for-sax-handlers"></span><h1>20.10. <a class="reference internal" href="#module-xml.sax.handler" title="xml.sax.handler: Base classes for SAX event handlers."><code class="xref py py-mod docutils literal"><span class="pre">xml.sax.handler</span></code></a> &#8212; SAX ハンドラの基底クラス<a class="headerlink" href="#module-xml.sax.handler" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/xml/sax/handler.py">Lib/xml/sax/handler.py</a></p>
 <hr class="docutils" />
-<p>SAX API はコンテント・ハンドラ、DTD ハンドラ、エラー・ハンドラ、エンティティ・リゾルバという4つのハンドラを規定しています。通常アプリケーション側で実装する必要があるのは、これらのハンドラが発生させるイベントのうち、処理したいものへのインターフェースだけです。インターフェースは1つのオブジェクトにまとめることも、複数のオブジェクトに分けることも可能です。ハンドラはすべてのメソッドがデフォルトで実装されるように、 <a class="reference internal" href="#module-xml.sax.handler" title="xml.sax.handler: Base classes for SAX event handlers."><code class="xref py py-mod docutils literal"><span class="pre">xml.sax.handler</span></code></a> で提供される基底クラスを継承しなくてはなりません。</p>
+<p>SAX API はコンテント・ハンドラ、DTD ハンドラ、エラー・ハンドラ、エンティティ・リゾルバという4種類のハンドラを定義しています。通常アプリケーション側で実装する必要があるインターフェースは、使用したいイベントを発生させるものだけです。インターフェースは1つのオブジェクトにまとめることも、複数のオブジェクトに分けることも可能です。ハンドラの実装は、 <a class="reference internal" href="#module-xml.sax.handler" title="xml.sax.handler: Base classes for SAX event handlers."><code class="xref py py-mod docutils literal"><span class="pre">xml.sax.handler</span></code></a> で提供される基底クラスを継承して、すべてのメソッドがデフォルトで実装されるようにしてください。</p>
 <dl class="class">
 <dt id="xml.sax.handler.ContentHandler">
 <em class="property">class </em><code class="descclassname">xml.sax.handler.</code><code class="descname">ContentHandler</code><a class="headerlink" href="#xml.sax.handler.ContentHandler" title="この定義へのパーマリンク">¶</a></dt>
@@ -172,7 +172,7 @@
 <code class="descclassname">xml.sax.handler.</code><code class="descname">feature_validation</code><a class="headerlink" href="#xml.sax.handler.feature_validation" title="この定義へのパーマリンク">¶</a></dt>
 <dd><div class="line-block">
 <div class="line">値: <code class="docutils literal"><span class="pre">&quot;http://xml.org/sax/features/validation&quot;</span></code></div>
-<div class="line">真: 全ての妥当性検査エラーを報告します (外部一般エンティティと外部変数エンティティが暗示します)。</div>
+<div class="line">真: 全ての妥当性検査エラーを報告します (外部一般エンティティと外部変数エンティティが暗示されます)。</div>
 <div class="line">偽: 妥当性検査エラーを報告しません。</div>
 <div class="line">アクセス: (パース時) 読み込み専用; (パース時以外) 読み書き可</div>
 </div>
@@ -354,7 +354,7 @@
 <code class="descclassname">ContentHandler.</code><code class="descname">ignorableWhitespace</code><span class="sig-paren">(</span><em>whitespace</em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ContentHandler.ignorableWhitespace" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>要素内容中の無視できる空白文字の通知を受け取ります。</p>
 <p>妥当性検査を行うパーサはこのメソッドを使って、無視できる空白文字 (W3C XML 1.0 勧告の 2.10 節参照) の各チャンクを報告しなければなりません。妥当性検査をしないパーサもコンテンツモデルの利用とパースが可能な場合、このメソッドを利用することが可能です。</p>
-<p>SAX パーサは一連の空白文字を単一のチャンクとして返す場合と複数のチャンクに分けて返す場合がありますが、ロケータの情報が正しく保たれるように、一つのイベントの文字データは常に同じ外部エンティティのものでなければなりません。</p>
+<p>SAX パーサは連続する複数の空白文字を単一のチャンクとして返す場合と複数のチャンクに分けて返す場合があります。しかし、ロケータが有用な情報を提供できるように、単一のイベント中のすべての文字は同じ外部エンティティからのものでなければなりません。</p>
 </dd></dl>
 
 <dl class="method">
@@ -401,10 +401,10 @@
 <div class="section" id="errorhandler-objects">
 <span id="sax-error-handler"></span><h2>20.10.4. ErrorHandler オブジェクト<a class="headerlink" href="#errorhandler-objects" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>このインターフェイスのあるオブジェクトを使って <a class="reference internal" href="xml.sax.reader.html#xml.sax.xmlreader.XMLReader" title="xml.sax.xmlreader.XMLReader"><code class="xref py py-class docutils literal"><span class="pre">XMLReader</span></code></a> からエラーと警告情報を受け取ります。
-このインターフェイスを実装しているオブジェクトを作った場合、それを <a class="reference internal" href="xml.sax.reader.html#xml.sax.xmlreader.XMLReader" title="xml.sax.xmlreader.XMLReader"><code class="xref py py-class docutils literal"><span class="pre">XMLReader</span></code></a> に登録して、パーサはオブジェクトのメソッドを呼んで全警告とエラーを報告します。
-エラーには利用可能な3つのレベルがあります: 警告、(おそらく) 回復可能なエラー、回復不能なエラーです。
-全てのメソッドは <code class="xref py py-exc docutils literal"><span class="pre">SAXParseException</span></code> を引数としてのみ受け取ります。
-警告とエラーは渡された例外オブジェクトによって例外に変換されるかもしれません。</p>
+このインターフェイスを実装しているオブジェクトを作った場合、それを <a class="reference internal" href="xml.sax.reader.html#xml.sax.xmlreader.XMLReader" title="xml.sax.xmlreader.XMLReader"><code class="xref py py-class docutils literal"><span class="pre">XMLReader</span></code></a> に登録します。そうすると、パーサはすべての警告とエラーを報告するためにオブジェクトのメソッドを呼びます。
+利用可能なエラーには、次の3つのレベルがあります: 警告、(おそらく) 回復可能なエラー、回復不能なエラーです。
+全てのメソッドは唯一の引数として <code class="xref py py-exc docutils literal"><span class="pre">SAXParseException</span></code> を受け取ります。
+警告とエラーは、渡された例外オブジェクトを送出することにより、例外に変換される場合があります。</p>
 <dl class="method">
 <dt id="xml.sax.handler.ErrorHandler.error">
 <code class="descclassname">ErrorHandler.</code><code class="descname">error</code><span class="sig-paren">(</span><em>exception</em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ErrorHandler.error" title="この定義へのパーマリンク">¶</a></dt>
@@ -512,7 +512,7 @@
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 5月 03, 2017
+    最終更新日時: 5月 06, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
