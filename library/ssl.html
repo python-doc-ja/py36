@@ -116,7 +116,7 @@
 <p class="first admonition-title">警告</p>
 <p class="last"><a class="reference internal" href="#ssl-security"><span class="std std-ref">セキュリティで考慮すべき点</span></a> を読まずにこのモジュールを使用しないでください。SSL のデフォルト設定はアプリケーションに十分ではないので、読まない場合はセキュリティに誤った意識を持ってしまうかもしれません。</p>
 </div>
-<p>このセクションでは、 <code class="docutils literal"><span class="pre">ssl</span></code> モジュールのオブジェクトと関数を解説します。 TLS, SSL, certificates に関するより一般的な情報は、末尾にある &#8220;See Also&#8221; のセクションを参照してください。</p>
+<p>このセクションでは、 <code class="docutils literal"><span class="pre">ssl</span></code> モジュールのオブジェクトと関数を解説します。 TLS, SSL, 証明書に関するより一般的な情報は、末尾にある &#8220;See Also&#8221; のセクションを参照してください。</p>
 <p>このモジュールは <a class="reference internal" href="#ssl.SSLSocket" title="ssl.SSLSocket"><code class="xref py py-class docutils literal"><span class="pre">ssl.SSLSocket</span></code></a> クラスを提供します。このクラスは <a class="reference internal" href="socket.html#socket.socket" title="socket.socket"><code class="xref py py-class docutils literal"><span class="pre">socket.socket</span></code></a> クラスを継承していて、ソケットで通信されるデータをSSLで暗号化・復号するソケットに似たラッパーになります。また、このクラスは、接続の相手側からの証明書を取得する <code class="xref py py-meth docutils literal"><span class="pre">getpeercert()</span></code> メソッドや、セキュア接続で使うための暗号方式を取得する <code class="xref py py-meth docutils literal"><span class="pre">cipher()</span></code> メソッドのような追加のメソッドをサポートしています。</p>
 <p>より洗練されたアプリケーションのために、 <a class="reference internal" href="#ssl.SSLContext" title="ssl.SSLContext"><code class="xref py py-class docutils literal"><span class="pre">ssl.SSLContext</span></code></a> クラスが設定と証明書の管理の助けとなるでしょう。それは <a class="reference internal" href="#ssl.SSLContext.wrap_socket" title="ssl.SSLContext.wrap_socket"><code class="xref py py-meth docutils literal"><span class="pre">SSLContext.wrap_socket()</span></code></a> メソッドを通して SSL ソケットを作成することで引き継がれます。</p>
 <div class="versionchanged">
@@ -212,7 +212,7 @@
 <p>クライアントサイドソケットにおいて、コンテキストの生成は遅延されます。つまり、低レイヤのソケットがまだ接続されていない場合、コンテキストの生成はそのソケットの <code class="xref py py-meth docutils literal"><span class="pre">connect()</span></code> メソッドが呼ばれた後に行われます。サーバーサイドソケットの場合、そのソケットに接続先が居なければそれは listen 用ソケットだと判断されます。 <code class="xref py py-meth docutils literal"><span class="pre">accept()</span></code> メソッドで生成されるクライアント接続に対してのサーバーサイド SSLラップは自動的に行われます。 <a class="reference internal" href="#ssl.wrap_socket" title="ssl.wrap_socket"><code class="xref py py-func docutils literal"><span class="pre">wrap_socket()</span></code></a> は <a class="reference internal" href="#ssl.SSLError" title="ssl.SSLError"><code class="xref py py-exc docutils literal"><span class="pre">SSLError</span></code></a> を送出することがあります。</p>
 <p>オプションの <code class="docutils literal"><span class="pre">keyfile</span></code> と <code class="docutils literal"><span class="pre">certfile</span></code> 引数は、接続のこちら側を識別するために利用される証明書を含むファイルを指定します。証明書がどのように <code class="docutils literal"><span class="pre">certfile</span></code> に格納されるかについてのより詳しい情報は、 <a class="reference internal" href="#ssl-certificates"><span class="std std-ref">証明書</span></a> を参照してください。</p>
 <p><code class="docutils literal"><span class="pre">server_side</span></code> 引数は真偽値で、このソケットがサーバーサイドとクライアントサイドのどちらの動作をするのかを指定します。</p>
-<p><code class="docutils literal"><span class="pre">cert_reqs</span></code> 引数は、接続の相手側からの証明書を必要とするかどうかと、それを検証(validate)するかどうかを指定します。これは次の3つの定数のどれかで無ければなりません: <a class="reference internal" href="#ssl.CERT_NONE" title="ssl.CERT_NONE"><code class="xref py py-const docutils literal"><span class="pre">CERT_NONE</span></code></a> (証明書は無視されます), <a class="reference internal" href="#ssl.CERT_OPTIONAL" title="ssl.CERT_OPTIONAL"><code class="xref py py-const docutils literal"><span class="pre">CERT_OPTIONAL</span></code></a> (必要としないが、提供された場合は検証する), <a class="reference internal" href="#ssl.CERT_REQUIRED" title="ssl.CERT_REQUIRED"><code class="xref py py-const docutils literal"><span class="pre">CERT_REQUIRED</span></code></a> (証明書を必要とし、検証する)。もしこの引数が <a class="reference internal" href="#ssl.CERT_NONE" title="ssl.CERT_NONE"><code class="xref py py-const docutils literal"><span class="pre">CERT_NONE</span></code></a> 以外だった場合、 <code class="docutils literal"><span class="pre">ca_certs</span></code> 引数はCA証明書ファイルを指定していなければなりません。</p>
+<p><code class="docutils literal"><span class="pre">cert_reqs</span></code> 引数は、接続の相手側からの証明書を必要とするかどうかと、証明書が提供された場合にそれを検証(validate)するかどうかを指定します。これは次の3つの定数のどれかで無ければなりません: <a class="reference internal" href="#ssl.CERT_NONE" title="ssl.CERT_NONE"><code class="xref py py-const docutils literal"><span class="pre">CERT_NONE</span></code></a> (証明書は無視されます), <a class="reference internal" href="#ssl.CERT_OPTIONAL" title="ssl.CERT_OPTIONAL"><code class="xref py py-const docutils literal"><span class="pre">CERT_OPTIONAL</span></code></a> (必要としないが、提供された場合は検証します), <a class="reference internal" href="#ssl.CERT_REQUIRED" title="ssl.CERT_REQUIRED"><code class="xref py py-const docutils literal"><span class="pre">CERT_REQUIRED</span></code></a> (証明書を必要とし、検証します)。この引数が <a class="reference internal" href="#ssl.CERT_NONE" title="ssl.CERT_NONE"><code class="xref py py-const docutils literal"><span class="pre">CERT_NONE</span></code></a> 以外だった場合、 <code class="docutils literal"><span class="pre">ca_certs</span></code> 引数は CA 証明書ファイルを指定していなければなりません。</p>
 <p><code class="docutils literal"><span class="pre">ca_certs</span></code> ファイルは、接続の相手側から渡された証明書を検証するために使う、一連のCA証明書を結合したものを含んでいます。このファイル内にどう証明書を並べるかについての詳しい情報は <a class="reference internal" href="#ssl-certificates"><span class="std std-ref">証明書</span></a> を参照してください。</p>
 <p><code class="docutils literal"><span class="pre">ssl_version</span></code> 引数は、使用するSSLプロトコルのバージョンを指定します。通常、サーバー側が特定のプロトコルバージョンを選択し、クライアント側はサーバーの選択したプロトコルを受け入れなければなりません。ほとんどのバージョンは他のバージョンと互換性がありません。この引数が指定されない場合、デフォルトは <a class="reference internal" href="#ssl.PROTOCOL_TLS" title="ssl.PROTOCOL_TLS"><code class="xref py py-data docutils literal"><span class="pre">PROTOCOL_TLS</span></code></a> になります。これは、他のバージョンとの互換性が最も高いバージョンです。</p>
 <p>次のテーブルは、どのクライアント側のバージョンがどのサーバー側のバージョンに接続できるかを示しています:</p>
@@ -630,10 +630,7 @@
 <dl class="data">
 <dt id="ssl.PROTOCOL_TLS_CLIENT">
 <code class="descclassname">ssl.</code><code class="descname">PROTOCOL_TLS_CLIENT</code><a class="headerlink" href="#ssl.PROTOCOL_TLS_CLIENT" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Auto-negotiate the highest protocol version like <a class="reference internal" href="#ssl.PROTOCOL_SSLv23" title="ssl.PROTOCOL_SSLv23"><code class="xref py py-data docutils literal"><span class="pre">PROTOCOL_SSLv23</span></code></a>,
-but only support client-side <a class="reference internal" href="#ssl.SSLSocket" title="ssl.SSLSocket"><code class="xref py py-class docutils literal"><span class="pre">SSLSocket</span></code></a> connections. The protocol
-enables <a class="reference internal" href="#ssl.CERT_REQUIRED" title="ssl.CERT_REQUIRED"><code class="xref py py-data docutils literal"><span class="pre">CERT_REQUIRED</span></code></a> and <a class="reference internal" href="#ssl.SSLContext.check_hostname" title="ssl.SSLContext.check_hostname"><code class="xref py py-attr docutils literal"><span class="pre">check_hostname</span></code></a> by
-default.</p>
+<dd><p><a class="reference internal" href="#ssl.PROTOCOL_SSLv23" title="ssl.PROTOCOL_SSLv23"><code class="xref py py-data docutils literal"><span class="pre">PROTOCOL_SSLv23</span></code></a> のような最高のプロトコルバージョンを自動的にネゴシエートしますが、クライアント側の <a class="reference internal" href="#ssl.SSLSocket" title="ssl.SSLSocket"><code class="xref py py-class docutils literal"><span class="pre">SSLSocket</span></code></a> 接続しかサポートしません。このプロトコルでは、デフォルトで <a class="reference internal" href="#ssl.CERT_REQUIRED" title="ssl.CERT_REQUIRED"><code class="xref py py-data docutils literal"><span class="pre">CERT_REQUIRED</span></code></a> と <a class="reference internal" href="#ssl.SSLContext.check_hostname" title="ssl.SSLContext.check_hostname"><code class="xref py py-attr docutils literal"><span class="pre">check_hostname</span></code></a> が有効になっています。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
 </div>
@@ -642,8 +639,7 @@ default.</p>
 <dl class="data">
 <dt id="ssl.PROTOCOL_TLS_SERVER">
 <code class="descclassname">ssl.</code><code class="descname">PROTOCOL_TLS_SERVER</code><a class="headerlink" href="#ssl.PROTOCOL_TLS_SERVER" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Auto-negotiate the highest protocol version like <a class="reference internal" href="#ssl.PROTOCOL_SSLv23" title="ssl.PROTOCOL_SSLv23"><code class="xref py py-data docutils literal"><span class="pre">PROTOCOL_SSLv23</span></code></a>,
-but only support server-side <a class="reference internal" href="#ssl.SSLSocket" title="ssl.SSLSocket"><code class="xref py py-class docutils literal"><span class="pre">SSLSocket</span></code></a> connections.</p>
+<dd><p><a class="reference internal" href="#ssl.PROTOCOL_SSLv23" title="ssl.PROTOCOL_SSLv23"><code class="xref py py-data docutils literal"><span class="pre">PROTOCOL_SSLv23</span></code></a> のような最高のプロトコルバージョンを自動的にネゴシエートしますが、サーバ側の <a class="reference internal" href="#ssl.SSLSocket" title="ssl.SSLSocket"><code class="xref py py-class docutils literal"><span class="pre">SSLSocket</span></code></a> 接続しかサポートしません。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
 </div>
@@ -2221,7 +2217,7 @@ system.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 6月 20, 2017
+    最終更新日時: 6月 21, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
