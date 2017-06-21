@@ -326,8 +326,8 @@
 <p>設定は、 <a class="reference internal" href="#ssl.PROTOCOL_TLS" title="ssl.PROTOCOL_TLS"><code class="xref py py-data docutils literal"><span class="pre">PROTOCOL_TLS</span></code></a>, <a class="reference internal" href="#ssl.OP_NO_SSLv2" title="ssl.OP_NO_SSLv2"><code class="xref py py-data docutils literal"><span class="pre">OP_NO_SSLv2</span></code></a>, RC4 と非認証暗号化スイート以外の、高度暗号化スイートを利用した <a class="reference internal" href="#ssl.OP_NO_SSLv3" title="ssl.OP_NO_SSLv3"><code class="xref py py-data docutils literal"><span class="pre">OP_NO_SSLv3</span></code></a> です。<a class="reference internal" href="#ssl.Purpose.SERVER_AUTH" title="ssl.Purpose.SERVER_AUTH"><code class="xref py py-data docutils literal"><span class="pre">SERVER_AUTH</span></code></a> を <em>purpose</em> として渡すと、<a class="reference internal" href="#ssl.SSLContext.verify_mode" title="ssl.SSLContext.verify_mode"><code class="xref py py-data docutils literal"><span class="pre">verify_mode</span></code></a> を <a class="reference internal" href="#ssl.CERT_REQUIRED" title="ssl.CERT_REQUIRED"><code class="xref py py-data docutils literal"><span class="pre">CERT_REQUIRED</span></code></a> に設定し、 CA 証明書をロードする (<em>cafile</em>, <em>capath</em>, <em>cadata</em> の少なくとも1つが与えられている場合) か、<a class="reference internal" href="#ssl.SSLContext.load_default_certs" title="ssl.SSLContext.load_default_certs"><code class="xref py py-meth docutils literal"><span class="pre">SSLContext.load_default_certs()</span></code></a> を使用してデフォルトの CA 証明書をロードします。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p>プロトコル、オプション、暗号その他設定はもっと制限された、過去の廃れたものを含まない値にいつでもできるでしょう。この値は互換性と安全性の公平なバランスを表明しています。</p>
-<p class="last">もしもあなたのアプリケーションがそのような設定を必要とするのであれば、 <a class="reference internal" href="#ssl.SSLContext" title="ssl.SSLContext"><code class="xref py py-class docutils literal"><span class="pre">SSLContext</span></code></a> を作ってあなた自身の設定を適用すべきです。</p>
+<p>プロトコル、オプション、暗号方式その他の設定は、事前に非推奨の状態にすることなく、もっと制限の強い値に変更される場合があります。これらの値は、互換性と安全性との妥当なバランスをとって決められます。</p>
+<p class="last">もしもあなたのアプリケーションが特定の設定を必要とする場合、 <a class="reference internal" href="#ssl.SSLContext" title="ssl.SSLContext"><code class="xref py py-class docutils literal"><span class="pre">SSLContext</span></code></a> を作って自分自身で設定を適用すべきです。</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
@@ -454,7 +454,7 @@
 <code class="descclassname">ssl.</code><code class="descname">get_server_certificate</code><span class="sig-paren">(</span><em>addr</em>, <em>ssl_version=PROTOCOL_TLS</em>, <em>ca_certs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ssl.get_server_certificate" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>SSLで保護されたサーバーのアドレス <code class="docutils literal"><span class="pre">addr</span></code> を (<em>hostname</em>, <em>port-number</em>) の形で受け取り、そのサーバーから証明書を取得し、それを PEMエンコードされた文字列として返します。 <code class="docutils literal"><span class="pre">ssl_version</span></code> が指定された場合は、サーバーに接続を試みるときにそのバージョンのSSLプロトコルを利用します。 <code class="docutils literal"><span class="pre">ca_certs</span></code> が指定された場合、それは <a class="reference internal" href="#ssl.wrap_socket" title="ssl.wrap_socket"><code class="xref py py-func docutils literal"><span class="pre">wrap_socket()</span></code></a> の同名の引数と同じフォーマットで、ルート証明書のリストを含むファイルでなければなりません。この関数はサーバー証明書をルート証明書リストに対して認証し、認証が失敗した場合にこの関数も失敗します。</p>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.3 で変更: </span>この関数は現在IPv6互換です。</p>
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>この関数はIPv6互換になりました。</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.5 で変更: </span><em>ssl_version</em> のデフォルトが、最近のサーバへの最大限の互換性のために <a class="reference internal" href="#ssl.PROTOCOL_SSLv3" title="ssl.PROTOCOL_SSLv3"><code class="xref py py-data docutils literal"><span class="pre">PROTOCOL_SSLv3</span></code></a> から <a class="reference internal" href="#ssl.PROTOCOL_TLS" title="ssl.PROTOCOL_TLS"><code class="xref py py-data docutils literal"><span class="pre">PROTOCOL_TLS</span></code></a> に変更されました。</p>
@@ -621,7 +621,7 @@
 <dl class="data">
 <dt id="ssl.PROTOCOL_TLS">
 <code class="descclassname">ssl.</code><code class="descname">PROTOCOL_TLS</code><a class="headerlink" href="#ssl.PROTOCOL_TLS" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>チャンネル暗号化プロトコルとして、クライアントとサーバの両方がサポートする中の、プロトコルバージョンが最も大きなものを選択します。その名前にも関わらず、このオプションは &#8220;SSL&#8221; とともに &#8220;TLS&#8221; プロトコルも選択できます。</p>
+<dd><p>クライアントとサーバの両方がサポートするプロトコルバージョンのうち、最も大きなものを選択します。名前に反して、このオプションは &#8220;SSL&#8221; と &#8220;TLS&#8221; プロトコルのいずれも選択する場合があります。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.6 で追加.</span></p>
 </div>
@@ -988,24 +988,20 @@
 </li>
 <li><p class="first"><a class="reference internal" href="socket.html#socket.socket.send" title="socket.socket.send"><code class="xref py py-meth docutils literal"><span class="pre">send()</span></code></a>, <a class="reference internal" href="socket.html#socket.socket.sendall" title="socket.socket.sendall"><code class="xref py py-meth docutils literal"><span class="pre">sendall()</span></code></a> (非ゼロの <code class="docutils literal"><span class="pre">flags</span></code> は渡せません)</p>
 </li>
-<li><a class="reference internal" href="socket.html#socket.socket.sendfile" title="socket.socket.sendfile"><code class="xref py py-meth docutils literal"><span class="pre">sendfile()</span></code></a> (but <a class="reference internal" href="os.html#os.sendfile" title="os.sendfile"><code class="xref py py-mod docutils literal"><span class="pre">os.sendfile</span></code></a> will be used
-for plain-text sockets only, else <a class="reference internal" href="socket.html#socket.socket.send" title="socket.socket.send"><code class="xref py py-meth docutils literal"><span class="pre">send()</span></code></a> will be used)</li>
+<li><p class="first"><a class="reference internal" href="socket.html#socket.socket.sendfile" title="socket.socket.sendfile"><code class="xref py py-meth docutils literal"><span class="pre">sendfile()</span></code></a> (ただし、 <a class="reference internal" href="os.html#os.sendfile" title="os.sendfile"><code class="xref py py-mod docutils literal"><span class="pre">os.sendfile</span></code></a> は平文ソケットにのみ使用されます。それ以外の場合には、 <a class="reference internal" href="socket.html#socket.socket.send" title="socket.socket.send"><code class="xref py py-meth docutils literal"><span class="pre">send()</span></code></a> が使用されます。)</p>
+</li>
 <li><a class="reference internal" href="socket.html#socket.socket.shutdown" title="socket.socket.shutdown"><code class="xref py py-meth docutils literal"><span class="pre">shutdown()</span></code></a></li>
 </ul>
 <p>SSL(およびTLS)プロトコルは TCP の上に独自の枠組みを持っているので、SSLソケットの抽象化は、いくつかの点で通常の OSレベルのソケットの仕様から逸脱することがあります。特に <a class="reference internal" href="#ssl-nonblocking"><span class="std std-ref">ノンブロッキングソケットについての注釈</span></a> を参照してください。</p>
-<p>Usually, <a class="reference internal" href="#ssl.SSLSocket" title="ssl.SSLSocket"><code class="xref py py-class docutils literal"><span class="pre">SSLSocket</span></code></a> are not created directly, but using the
-<a class="reference internal" href="#ssl.SSLContext.wrap_socket" title="ssl.SSLContext.wrap_socket"><code class="xref py py-meth docutils literal"><span class="pre">SSLContext.wrap_socket()</span></code></a> method.</p>
+<p>通常、 <a class="reference internal" href="#ssl.SSLSocket" title="ssl.SSLSocket"><code class="xref py py-class docutils literal"><span class="pre">SSLSocket</span></code></a> は直接作成されるのではなく、 <a class="reference internal" href="#ssl.SSLContext.wrap_socket" title="ssl.SSLContext.wrap_socket"><code class="xref py py-meth docutils literal"><span class="pre">SSLContext.wrap_socket()</span></code></a> メソッドを使用して作成されます。</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.5 で変更: </span><code class="xref py py-meth docutils literal"><span class="pre">sendfile()</span></code> メソッドが追加されました。</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.5 で変更: </span>The <code class="xref py py-meth docutils literal"><span class="pre">shutdown()</span></code> does not reset the socket timeout each time bytes
-are received or sent. The socket timeout is now to maximum total duration
-of the shutdown.</p>
+<p><span class="versionmodified">バージョン 3.5 で変更: </span><code class="xref py py-meth docutils literal"><span class="pre">shutdown()</span></code> は、バイトが送受信されるたびにソケットのタイムアウトをリセットしません。ソケットのタイムアウトは、シャットダウンの最大合計時間になりました。</p>
 </div>
 <div class="deprecated">
-<p><span class="versionmodified">バージョン 3.6 で撤廃: </span>It is deprecated to create a <a class="reference internal" href="#ssl.SSLSocket" title="ssl.SSLSocket"><code class="xref py py-class docutils literal"><span class="pre">SSLSocket</span></code></a> instance directly, use
-<a class="reference internal" href="#ssl.SSLContext.wrap_socket" title="ssl.SSLContext.wrap_socket"><code class="xref py py-meth docutils literal"><span class="pre">SSLContext.wrap_socket()</span></code></a> to wrap a socket.</p>
+<p><span class="versionmodified">バージョン 3.6 で撤廃: </span><a class="reference internal" href="#ssl.SSLSocket" title="ssl.SSLSocket"><code class="xref py py-class docutils literal"><span class="pre">SSLSocket</span></code></a> インスタンスを直接作成することは非推奨です。ソケットをラップするために <a class="reference internal" href="#ssl.SSLContext.wrap_socket" title="ssl.SSLContext.wrap_socket"><code class="xref py py-meth docutils literal"><span class="pre">SSLContext.wrap_socket()</span></code></a> を使用してください。</p>
 </div>
 </dd></dl>
 
@@ -1017,9 +1013,7 @@ of the shutdown.</p>
 <p>ソケットが <a class="reference internal" href="#ssl-nonblocking"><span class="std std-ref">non-blocking</span></a> で読み出しがブロックすると、 <a class="reference internal" href="#ssl.SSLWantReadError" title="ssl.SSLWantReadError"><code class="xref py py-exc docutils literal"><span class="pre">SSLWantReadError</span></code></a> もしくは <a class="reference internal" href="#ssl.SSLWantWriteError" title="ssl.SSLWantWriteError"><code class="xref py py-exc docutils literal"><span class="pre">SSLWantWriteError</span></code></a> が送出されます。</p>
 <p>再ネゴシエーションがいつでも可能なので、 <a class="reference internal" href="#ssl.SSLSocket.read" title="ssl.SSLSocket.read"><code class="xref py py-meth docutils literal"><span class="pre">read()</span></code></a>  の呼び出しは書き込み操作も引き起こしえます。</p>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.5 で変更: </span>The socket timeout is no more reset each time bytes are received or sent.
-The socket timeout is now to maximum total duration to read up to <em>len</em>
-bytes.</p>
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>ソケットのタイムアウトは、バイトが送受信されるたびにリセットされません。ソケットのタイムアウトは、最大 <em>len</em> バイトを読むのにかかる最大合計時間になりました。</p>
 </div>
 <div class="deprecated">
 <p><span class="versionmodified">バージョン 3.6 で撤廃: </span><a class="reference internal" href="#ssl.SSLSocket.read" title="ssl.SSLSocket.read"><code class="xref py py-meth docutils literal"><span class="pre">read()</span></code></a> の代わりに <code class="xref py py-meth docutils literal"><span class="pre">recv()</span></code> を使用してください。</p>
@@ -1033,8 +1027,7 @@ bytes.</p>
 <p>ソケットが <a class="reference internal" href="#ssl-nonblocking"><span class="std std-ref">non-blocking</span></a> で書き込みがブロックすると、 <a class="reference internal" href="#ssl.SSLWantReadError" title="ssl.SSLWantReadError"><code class="xref py py-exc docutils literal"><span class="pre">SSLWantReadError</span></code></a> もしくは <a class="reference internal" href="#ssl.SSLWantWriteError" title="ssl.SSLWantWriteError"><code class="xref py py-exc docutils literal"><span class="pre">SSLWantWriteError</span></code></a> が送出されます。</p>
 <p>再ネゴシエーションがいつでも可能なので、 <a class="reference internal" href="#ssl.SSLSocket.write" title="ssl.SSLSocket.write"><code class="xref py py-meth docutils literal"><span class="pre">write()</span></code></a>  の呼び出しは読み出し操作も引き起こしえます。</p>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.5 で変更: </span>The socket timeout is no more reset each time bytes are received or sent.
-The socket timeout is now to maximum total duration to write <em>buf</em>.</p>
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>ソケットのタイムアウトは、バイトが送受信されるたびにリセットされません。ソケットのタイムアウトは、<em>buf</em> を書き込むのにかかる最大合計時間になりました。</p>
 </div>
 <div class="deprecated">
 <p><span class="versionmodified">バージョン 3.6 で撤廃: </span><a class="reference internal" href="#ssl.SSLSocket.write" title="ssl.SSLSocket.write"><code class="xref py py-meth docutils literal"><span class="pre">write()</span></code></a> の代わりに <code class="xref py py-meth docutils literal"><span class="pre">send()</span></code> を使用してください。</p>
@@ -1054,8 +1047,7 @@ The socket timeout is now to maximum total duration to write <em>buf</em>.</p>
 <p><span class="versionmodified">バージョン 3.4 で変更: </span>ソケットの <a class="reference internal" href="#ssl.SSLSocket.context" title="ssl.SSLSocket.context"><code class="xref py py-attr docutils literal"><span class="pre">context</span></code></a> の属性 <a class="reference internal" href="#ssl.SSLContext.check_hostname" title="ssl.SSLContext.check_hostname"><code class="xref py py-attr docutils literal"><span class="pre">check_hostname</span></code></a> が真の場合に、ハンドシェイクメソッドが <a class="reference internal" href="#ssl.match_hostname" title="ssl.match_hostname"><code class="xref py py-func docutils literal"><span class="pre">match_hostname()</span></code></a> を実行するようになりました。</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.5 で変更: </span>The socket timeout is no more reset each time bytes are received or sent.
-The socket timeout is now to maximum total duration of the handshake.</p>
+<p><span class="versionmodified">バージョン 3.5 で変更: </span>ソケットのタイムアウトは、バイトが送受信されるたびにリセットされません。ソケットのタイムアウトは、ハンドシェイクにかかる最大合計時間になりました。</p>
 </div>
 </dd></dl>
 
@@ -1240,10 +1232,7 @@ performed. For client sockets the session can be set before
 <dl class="class">
 <dt id="ssl.SSLContext">
 <em class="property">class </em><code class="descclassname">ssl.</code><code class="descname">SSLContext</code><span class="sig-paren">(</span><em>protocol=PROTOCOL_TLS</em><span class="sig-paren">)</span><a class="headerlink" href="#ssl.SSLContext" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Create a new SSL context.  You may pass <em>protocol</em> which must be one
-of the <code class="docutils literal"><span class="pre">PROTOCOL_*</span></code> constants defined in this module.
-<a class="reference internal" href="#ssl.PROTOCOL_TLS" title="ssl.PROTOCOL_TLS"><code class="xref py py-data docutils literal"><span class="pre">PROTOCOL_TLS</span></code></a> is currently recommended for maximum
-interoperability and default value.</p>
+<dd><p>新しい SSL コンテキストを作成します。 <em>protocol</em> にはこのモジュールで定義されている <code class="docutils literal"><span class="pre">PROTOCOL_*</span></code> 定数のうち一つを指定しなければなりません。最大限の互換性とデフォルト値のためには、現時点での推奨は <a class="reference internal" href="#ssl.PROTOCOL_TLS" title="ssl.PROTOCOL_TLS"><code class="xref py py-data docutils literal"><span class="pre">PROTOCOL_TLS</span></code></a> です。</p>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <p class="last"><a class="reference internal" href="#ssl.create_default_context" title="ssl.create_default_context"><code class="xref py py-func docutils literal"><span class="pre">create_default_context()</span></code></a> は <a class="reference internal" href="#module-ssl" title="ssl: TLS/SSL wrapper for socket objects"><code class="xref py py-mod docutils literal"><span class="pre">ssl</span></code></a> モジュールに、目的に合ったセキュリティ設定を選ばせます。</p>
@@ -1894,11 +1883,10 @@ BIO is used to pass data from Python to the SSL protocol instance, while the
 <li><a class="reference internal" href="#ssl.SSLSocket.unwrap" title="ssl.SSLSocket.unwrap"><code class="xref py py-meth docutils literal"><span class="pre">unwrap()</span></code></a></li>
 <li><a class="reference internal" href="#ssl.SSLSocket.get_channel_binding" title="ssl.SSLSocket.get_channel_binding"><code class="xref py py-meth docutils literal"><span class="pre">get_channel_binding()</span></code></a></li>
 </ul>
-<p>When compared to <a class="reference internal" href="#ssl.SSLSocket" title="ssl.SSLSocket"><code class="xref py py-class docutils literal"><span class="pre">SSLSocket</span></code></a>, this object lacks the following
-features:</p>
+<p><a class="reference internal" href="#ssl.SSLSocket" title="ssl.SSLSocket"><code class="xref py py-class docutils literal"><span class="pre">SSLSocket</span></code></a> と比較すると、このオブジェクトでは以下の機能が不足しています。</p>
 <ul class="simple">
-<li>Any form of network IO incluging methods such as <code class="docutils literal"><span class="pre">recv()</span></code> and
-<code class="docutils literal"><span class="pre">send()</span></code>.</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">recv()</span></code> や <code class="docutils literal"><span class="pre">send()</span></code> などのメソッドを含む、あらゆるネットワーク IO。</p>
+</li>
 <li>There is no <em>do_handshake_on_connect</em> machinery. You must always manually
 call <a class="reference internal" href="#ssl.SSLSocket.do_handshake" title="ssl.SSLSocket.do_handshake"><code class="xref py py-meth docutils literal"><span class="pre">do_handshake()</span></code></a> to start the handshake.</li>
 <li>There is no handling of <em>suppress_ragged_eofs</em>. All end-of-file conditions
@@ -1928,26 +1916,23 @@ purpose.  It wraps an OpenSSL memory BIO (Basic IO) object:</p>
 <dl class="class">
 <dt id="ssl.MemoryBIO">
 <em class="property">class </em><code class="descclassname">ssl.</code><code class="descname">MemoryBIO</code><a class="headerlink" href="#ssl.MemoryBIO" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>A memory buffer that can be used to pass data between Python and an SSL
-protocol instance.</p>
+<dd><p>Python と SSL プロトコルインスタンス間でデータをやり取りするために使用できるメモリバッファ。</p>
 <dl class="attribute">
 <dt id="ssl.MemoryBIO.pending">
 <code class="descname">pending</code><a class="headerlink" href="#ssl.MemoryBIO.pending" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Return the number of bytes currently in the memory buffer.</p>
+<dd><p>現在メモリバッファ中にあるバイト数を返します。</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="ssl.MemoryBIO.eof">
 <code class="descname">eof</code><a class="headerlink" href="#ssl.MemoryBIO.eof" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>A boolean indicating whether the memory BIO is current at the end-of-file
-position.</p>
+<dd><p>メモリ BIOが現在ファイルの末尾にあるかを表す真偽値です。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="ssl.MemoryBIO.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>n=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#ssl.MemoryBIO.read" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Read up to <em>n</em> bytes from the memory buffer. If <em>n</em> is not specified or
-negative, all bytes are returned.</p>
+<dd><p>メモリバッファから最大 <em>n</em> 読み取ります。<em>n</em>&nbsp;が指定されていないか、負値の場合、すべてのバイトが返されます。</p>
 </dd></dl>
 
 <dl class="method">
@@ -2055,15 +2040,7 @@ load certificates into the context.</p>
 </div>
 <div class="section" id="cipher-selection">
 <h4>18.2.9.2.3. 暗号の選択<a class="headerlink" href="#cipher-selection" title="このヘッドラインへのパーマリンク">¶</a></h4>
-<p>If you have advanced security requirements, fine-tuning of the ciphers
-enabled when negotiating a SSL session is possible through the
-<a class="reference internal" href="#ssl.SSLContext.set_ciphers" title="ssl.SSLContext.set_ciphers"><code class="xref py py-meth docutils literal"><span class="pre">SSLContext.set_ciphers()</span></code></a> method.  Starting from Python 3.2.3, the
-ssl module disables certain weak ciphers by default, but you may want
-to further restrict the cipher choice. Be sure to read OpenSSL&#8217;s documentation
-about the <a class="reference external" href="https://www.openssl.org/docs/apps/ciphers.html#CIPHER-LIST-FORMAT">cipher list format</a>.
-If you want to check which ciphers are enabled by a given cipher list, use
-<a class="reference internal" href="#ssl.SSLContext.get_ciphers" title="ssl.SSLContext.get_ciphers"><code class="xref py py-meth docutils literal"><span class="pre">SSLContext.get_ciphers()</span></code></a> or the <code class="docutils literal"><span class="pre">openssl</span> <span class="pre">ciphers</span></code> command on your
-system.</p>
+<p>高度なセキュリティが要求されている場合、SSL セッションのネゴシエーションで有効になる暗号の微調整が <a class="reference internal" href="#ssl.SSLContext.set_ciphers" title="ssl.SSLContext.set_ciphers"><code class="xref py py-meth docutils literal"><span class="pre">SSLContext.set_ciphers()</span></code></a> によって可能です。Python 3.2.3 以降、 ssl モジュールではデフォルトで特定の弱い暗号化が無効になっていますが、暗号方式の選択をさらに厳しく制限したい場合もあるでしょう。OpenSSL ドキュメントの <a class="reference external" href="https://www.openssl.org/docs/apps/ciphers.html#CIPHER-LIST-FORMAT">cipher list format</a> を注意深く読んでください。与えられた暗号方式リストによって有効になる暗号方式をチェックするには、<a class="reference internal" href="#ssl.SSLContext.get_ciphers" title="ssl.SSLContext.get_ciphers"><code class="xref py py-meth docutils literal"><span class="pre">SSLContext.get_ciphers()</span></code></a> メソッドまたは <code class="docutils literal"><span class="pre">openssl</span> <span class="pre">ciphers</span></code> コマンドをシステム上で実行してください。</p>
 </div>
 </div>
 <div class="section" id="multi-processing">
