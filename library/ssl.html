@@ -1252,7 +1252,7 @@
 <dl class="method">
 <dt id="ssl.SSLContext.load_cert_chain">
 <code class="descclassname">SSLContext.</code><code class="descname">load_cert_chain</code><span class="sig-paren">(</span><em>certfile</em>, <em>keyfile=None</em>, <em>password=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ssl.SSLContext.load_cert_chain" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>秘密鍵と対応する証明書をロードします。 <em>certfile</em> は、証明書と、証明書認証で必要とされる任意の数の CA 証明書を含む、PEM フォーマットの単一ファイルへのパスでなければなりません。 <em>keyfile</em> を指定する場合は、秘密鍵が含まれるファイルを指さなければなりません。そうでなければ秘密鍵も <em>certfile</em> から取られます。 <em>certfile</em> に証明書をどのように格納すれば良いかについての詳しい情報は、 <a class="reference internal" href="#ssl-certificates"><span class="std std-ref">証明書</span></a> の議論を参照してください。</p>
+<dd><p>秘密鍵と対応する証明書をロードします。 <em>certfile</em> は、証明書と、証明書認証で必要とされる任意の数の CA 証明書を含む、PEM フォーマットの単一ファイルへのパスでなければなりません。 <em>keyfile</em> 文字列を指定する場合、秘密鍵が含まれるファイルを指すものでなければなりません。指定しない場合、秘密鍵も <em>certfile</em> から取得されます。 <em>certfile</em> への証明書の格納についての詳細は、 <a class="reference internal" href="#ssl-certificates"><span class="std std-ref">証明書</span></a> の議論を参照してください。</p>
 <p><em>password</em> 引数に、秘密鍵を復号するためのパスワードを返す関数を与えることができます。その関数は秘密鍵が暗号化されていて、なおかつパスワードが必要な場合にのみ呼び出されます。その関数は引数なしで呼び出され、string, bytes, または bytearray を返さなければなりません。戻り値が string の場合は鍵を復号化するのに使う前に UTF-8 でエンコードされます。string の代わりに bytes や bytearray を返した場合は <em>password</em> 引数に直接供給されます。秘密鍵が暗号化されていなかったりパスワードを必要としない場合は、指定は無視されます。</p>
 <p><em>password</em> が与えられず、そしてパスワードが必要な場合には、OpenSSL 組み込みのパスワード問い合わせメカニズムが、ユーザに対話的にパスワードを問い合わせます。</p>
 <p>秘密鍵が証明書に合致しなければ、 <a class="reference internal" href="#ssl.SSLError" title="ssl.SSLError"><code class="xref py py-class docutils literal"><span class="pre">SSLError</span></code></a> が送出されます。</p>
@@ -1287,7 +1287,7 @@
 <dl class="method">
 <dt id="ssl.SSLContext.get_ca_certs">
 <code class="descclassname">SSLContext.</code><code class="descname">get_ca_certs</code><span class="sig-paren">(</span><em>binary_form=False</em><span class="sig-paren">)</span><a class="headerlink" href="#ssl.SSLContext.get_ca_certs" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>ロードされた &#8220;認証局&#8221; (CA=certification authority) 証明書のリストを取得します。 <code class="docutils literal"><span class="pre">binary_form</span></code> パラメータが <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal"><span class="pre">False</span></code></a> であれば、リストのそれぞれのエントリは <a class="reference internal" href="#ssl.SSLSocket.getpeercert" title="ssl.SSLSocket.getpeercert"><code class="xref py py-meth docutils literal"><span class="pre">SSLSocket.getpeercert()</span></code></a> が出力するような辞書になります。そうでない場合このメソッドは、DER エンコード形式の証明書のリストで返します。返却されるリストには、 SSL 接続によって要求されてロードされない限りは <em>capath</em> からの証明書は含みません。</p>
+<dd><p>ロードされた &#8220;認証局&#8221; (CA=certification authority) 証明書のリストを取得します。 <code class="docutils literal"><span class="pre">binary_form</span></code> 引数が <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal"><span class="pre">False</span></code></a> である場合、リストのそれぞれのエントリは <a class="reference internal" href="#ssl.SSLSocket.getpeercert" title="ssl.SSLSocket.getpeercert"><code class="xref py py-meth docutils literal"><span class="pre">SSLSocket.getpeercert()</span></code></a> が出力するような辞書になります。True である場合、このメソッドは、DER エンコード形式の証明書のリストを返します。返却されるリストには、 SSL 接続によって証明書がリクエストおよびロードされない限り、 <em>capath</em> からの証明書は含まれません。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">capath ディレクトリ内の証明書は一度でも使われない限りはロードされません。</p>
@@ -1586,7 +1586,7 @@
 <p>もし相手から送られてきた証明書の認証をしたい場合、信頼している各発行者の証明書チェインが入った &#8220;CA certs&#8221; ファイルを提供する必要があります。繰り返しますが、このファイルは単純に、各チェインを結合しただけのものです。認証のために、Pythonはそのファイルの中の最初にマッチしたチェインを利用します。<a class="reference internal" href="#ssl.SSLContext.load_default_certs" title="ssl.SSLContext.load_default_certs"><code class="xref py py-meth docutils literal"><span class="pre">SSLContext.load_default_certs()</span></code></a> を呼び出すことでプラットフォームの証明書ファイルも使われますが、これは <a class="reference internal" href="#ssl.create_default_context" title="ssl.create_default_context"><code class="xref py py-func docutils literal"><span class="pre">create_default_context()</span></code></a> によって自動的に行われます。</p>
 </div>
 <div class="section" id="combined-key-and-certificate">
-<h3>18.2.4.3. 秘密鍵と証明書を一緒にする<a class="headerlink" href="#combined-key-and-certificate" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<h3>18.2.4.3. 秘密鍵と証明書の組み合わせ<a class="headerlink" href="#combined-key-and-certificate" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>多くの場合、証明書と同じファイルに秘密鍵も格納されています。この場合、 <a class="reference internal" href="#ssl.SSLContext.load_cert_chain" title="ssl.SSLContext.load_cert_chain"><code class="xref py py-meth docutils literal"><span class="pre">SSLContext.load_cert_chain()</span></code></a>, <a class="reference internal" href="#ssl.wrap_socket" title="ssl.wrap_socket"><code class="xref py py-func docutils literal"><span class="pre">wrap_socket()</span></code></a> には <code class="docutils literal"><span class="pre">certfile</span></code> 引数だけが必要とされます。秘密鍵が証明書ファイルに格納されている場合、秘密鍵は証明書チェインの最初の証明書よりも先にないといけません。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="o">-----</span><span class="n">BEGIN</span> <span class="n">RSA</span> <span class="n">PRIVATE</span> <span class="n">KEY</span><span class="o">-----</span>
 <span class="o">...</span> <span class="p">(</span><span class="n">private</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">base64</span> <span class="n">encoding</span><span class="p">)</span> <span class="o">...</span>
@@ -1781,7 +1781,7 @@
 </li>
 <li><p class="first"><a class="reference internal" href="select.html#select.select" title="select.select"><code class="xref py py-func docutils literal"><span class="pre">select()</span></code></a> 呼び出しは OS レベルでのソケットが読み出し可能(または書き込み可能)になったことを教えてくれますが、上位の SSL レイヤーでの十分なデータがあることを意味するわけではありません。例えば、SSL フレームの一部が届いただけかもしれません。ですから、 <code class="xref py py-meth docutils literal"><span class="pre">SSLSocket.recv()</span></code> と <code class="xref py py-meth docutils literal"><span class="pre">SSLSocket.send()</span></code> の失敗を処理することに備え、ほかの <a class="reference internal" href="select.html#select.select" title="select.select"><code class="xref py py-func docutils literal"><span class="pre">select()</span></code></a> 呼び出し後にリトライしなければなりません。</p>
 </li>
-<li><p class="first">反対に、SSL レイヤーは自身で独自の枠組みを持っているために、読み出せるけれども <a class="reference internal" href="select.html#select.select" title="select.select"><code class="xref py py-func docutils literal"><span class="pre">select()</span></code></a> が気付くことのないデータを SSL ソケットが持っていることがあります。ですので、潜在的に入手可能なデータを飲み干すために最初に <code class="xref py py-meth docutils literal"><span class="pre">SSLSocket.recv()</span></code> を呼び出すべきであり、そののちでそれでもまだ必要な場合にだけ <a class="reference internal" href="select.html#select.select" title="select.select"><code class="xref py py-func docutils literal"><span class="pre">select()</span></code></a> でブロックすべきです。</p>
+<li><p class="first">反対に、SSL レイヤーは独自の枠組みを持っているため、<a class="reference internal" href="select.html#select.select" title="select.select"><code class="xref py py-func docutils literal"><span class="pre">select()</span></code></a> が気付かない読み出し可能なデータを SSL ソケットが持っている場合があります。したがって、入手可能な可能性のあるデータをすべて引き出すために最初に <code class="xref py py-meth docutils literal"><span class="pre">SSLSocket.recv()</span></code> を呼び出し、次にそれでもまだ必要な場合にだけ <a class="reference internal" href="select.html#select.select" title="select.select"><code class="xref py py-func docutils literal"><span class="pre">select()</span></code></a> 呼び出しでブロックすべきです。</p>
 <p>(当然のことながら、ほかのプリミティブ、例えば <a class="reference internal" href="select.html#select.poll" title="select.poll"><code class="xref py py-func docutils literal"><span class="pre">poll()</span></code></a> や <a class="reference internal" href="selectors.html#module-selectors" title="selectors: High-level I/O multiplexing."><code class="xref py py-mod docutils literal"><span class="pre">selectors</span></code></a> モジュール内のものを使う際にも似た但し書きが付きます)</p>
 </li>
 <li><p class="first">SSL ハンドシェイクそのものがノンブロッキングになります: <a class="reference internal" href="#ssl.SSLSocket.do_handshake" title="ssl.SSLSocket.do_handshake"><code class="xref py py-meth docutils literal"><span class="pre">SSLSocket.do_handshake()</span></code></a> メソッドは成功するまでリトライしなければなりません。 <a class="reference internal" href="select.html#select.select" title="select.select"><code class="xref py py-func docutils literal"><span class="pre">select()</span></code></a> を用いてソケットの準備が整うのを待つためには、およそ以下のようにします:</p>
@@ -2037,7 +2037,7 @@
 <li><a class="reference internal" href="#certificates">18.2.4. 証明書</a><ul>
 <li><a class="reference internal" href="#certificate-chains">18.2.4.1. 証明書チェイン</a></li>
 <li><a class="reference internal" href="#ca-certificates">18.2.4.2. CA 証明書</a></li>
-<li><a class="reference internal" href="#combined-key-and-certificate">18.2.4.3. 秘密鍵と証明書を一緒にする</a></li>
+<li><a class="reference internal" href="#combined-key-and-certificate">18.2.4.3. 秘密鍵と証明書の組み合わせ</a></li>
 <li><a class="reference internal" href="#self-signed-certificates">18.2.4.4. 自己署名証明書</a></li>
 </ul>
 </li>
@@ -2134,7 +2134,7 @@
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 6月 21, 2017
+    最終更新日時: 6月 22, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
