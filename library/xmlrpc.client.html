@@ -283,7 +283,7 @@ grouped under the reserved <code class="xref py py-attr docutils literal"><span 
 <p><span class="versionmodified">バージョン 3.5 で変更: </span>Instances of <a class="reference internal" href="#xmlrpc.client.ServerProxy" title="xmlrpc.client.ServerProxy"><code class="xref py py-class docutils literal"><span class="pre">ServerProxy</span></code></a> support the <a class="reference internal" href="../glossary.html#term-context-manager"><span class="xref std std-term">context manager</span></a> protocol
 for closing the underlying transport.</p>
 </div>
-<p>動作する例です。サーバー側:</p>
+<p>以下は、動作する例です。サーバ側のコード:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xmlrpc.server</span> <span class="k">import</span> <span class="n">SimpleXMLRPCServer</span>
 
 <span class="k">def</span> <span class="nf">is_even</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
@@ -295,7 +295,7 @@ for closing the underlying transport.</p>
 <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>上記のサーバーに対するクライアント側:</p>
+<p>上記のサーバーに対するクライアントコード:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xmlrpc.client</span>
 
 <span class="k">with</span> <span class="n">xmlrpc</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">ServerProxy</span><span class="p">(</span><span class="s2">&quot;http://localhost:8000/&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">proxy</span><span class="p">:</span>
@@ -325,7 +325,7 @@ for closing the underlying transport.</p>
 <p>また、比較と <a class="reference internal" href="../reference/datamodel.html#object.__repr__" title="object.__repr__"><code class="xref py py-meth docutils literal"><span class="pre">__repr__()</span></code></a> で定義される演算子を使用することができます。</p>
 </dd></dl>
 
-<p>動作する例です。サーバー側:</p>
+<p>以下は、動作する例です。サーバ側のコード:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">from</span> <span class="nn">xmlrpc.server</span> <span class="k">import</span> <span class="n">SimpleXMLRPCServer</span>
 <span class="kn">import</span> <span class="nn">xmlrpc.client</span>
@@ -340,7 +340,7 @@ for closing the underlying transport.</p>
 <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>上記のサーバーに対するクライアント側:</p>
+<p>上記のサーバーに対するクライアントコード:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xmlrpc.client</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
@@ -400,7 +400,7 @@ XML-RPC spec was written.</p>
 <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>クライアント側は画像を取得して、ファイルに保存します。</p>
+<p>クライアントは画像を取得して、ファイルに保存します。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xmlrpc.client</span>
 
 <span class="n">proxy</span> <span class="o">=</span> <span class="n">xmlrpc</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">ServerProxy</span><span class="p">(</span><span class="s2">&quot;http://localhost:8000/&quot;</span><span class="p">)</span>
@@ -444,7 +444,7 @@ XML-RPC spec was written.</p>
 <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>上記のサーバーに対するクライアント側:</p>
+<p>上記のサーバーに対するクライアントコード:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xmlrpc.client</span>
 
 <span class="n">proxy</span> <span class="o">=</span> <span class="n">xmlrpc</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">ServerProxy</span><span class="p">(</span><span class="s2">&quot;http://localhost:8000/&quot;</span><span class="p">)</span>
@@ -515,7 +515,7 @@ XML-RPC spec was written.</p>
 <dd><p>巨大な (boxcar) メソッド呼び出しに使えるオブジェクトを作成します。 <em>server</em> には最終的に呼び出しを行う対象を指定します。作成した MultiCall オブジェクトを使って呼び出しを行うと、即座に <code class="docutils literal"><span class="pre">None</span></code> を返し、呼び出したい手続き名とパラメタを <a class="reference internal" href="#xmlrpc.client.MultiCall" title="xmlrpc.client.MultiCall"><code class="xref py py-class docutils literal"><span class="pre">MultiCall</span></code></a> オブジェクトに保存するだけに留まります。オブジェクト自体を呼び出すと、それまでに保存しておいたすべての呼び出しを単一の <code class="docutils literal"><span class="pre">system.multicall</span></code> リクエストの形で伝送します。呼び出し結果はジェネレータ(<a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">generator</span></a>)になります。このジェネレータにわたってイテレーションを行うと、個々の呼び出し結果を返します。</p>
 </dd></dl>
 
-<p>このクラスの使用例です。サーバー側:</p>
+<p>以下は、このクラスの使用例です。サーバ側のコード:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">xmlrpc.server</span> <span class="k">import</span> <span class="n">SimpleXMLRPCServer</span>
 
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -541,7 +541,7 @@ XML-RPC spec was written.</p>
 <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>上記のサーバーに対するクライアント側:</p>
+<p>上記のサーバーに対するクライアントコード:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">xmlrpc.client</span>
 
 <span class="n">proxy</span> <span class="o">=</span> <span class="n">xmlrpc</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">ServerProxy</span><span class="p">(</span><span class="s2">&quot;http://localhost:8000/&quot;</span><span class="p">)</span>
