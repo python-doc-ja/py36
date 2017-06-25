@@ -109,19 +109,15 @@
 <p>非同期プログラミングは古典的な &#8220;逐次&#8221; プログラミングとは異なります。このページでは非同期プログラミングで陥りやすい落とし穴の一覧とその回避方法について説明しています。</p>
 <div class="section" id="debug-mode-of-asyncio">
 <span id="asyncio-debug-mode"></span><h2>18.5.9.1. asyncio のデバッグモード<a class="headerlink" href="#debug-mode-of-asyncio" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>The implementation of <a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> has been written for performance.
-In order to ease the development of asynchronous code, you may wish to
-enable <em>debug mode</em>.</p>
+<p><a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> の実装では、パフォーマンスが重視されています。非同期コードの開発を行いやすくするには、 <em>デバッグモード</em>  を有効にするとよいかもしれません。</p>
 <p>アプリケーションで全てのデバッグチェックを有効にするには:</p>
 <ul class="simple">
-<li>Enable the asyncio debug mode globally by setting the environment variable
-<span class="target" id="index-0"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONASYNCIODEBUG"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONASYNCIODEBUG</span></code></a> to <code class="docutils literal"><span class="pre">1</span></code>, or by calling <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.set_debug" title="asyncio.AbstractEventLoop.set_debug"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.set_debug()</span></code></a>.</li>
-<li>Set the log level of the <a class="reference internal" href="#asyncio-logger"><span class="std std-ref">asyncio logger</span></a> to
-<code class="xref py py-data docutils literal"><span class="pre">logging.DEBUG</span></code>. For example, call
-<code class="docutils literal"><span class="pre">logging.basicConfig(level=logging.DEBUG)</span></code> at startup.</li>
-<li>Configure the <a class="reference internal" href="warnings.html#module-warnings" title="warnings: Issue warning messages and control their disposition."><code class="xref py py-mod docutils literal"><span class="pre">warnings</span></code></a> module to display <a class="reference internal" href="exceptions.html#ResourceWarning" title="ResourceWarning"><code class="xref py py-exc docutils literal"><span class="pre">ResourceWarning</span></code></a>
-warnings. For example, use the <code class="docutils literal"><span class="pre">-Wdefault</span></code> command line option of Python to
-display them.</li>
+<li><p class="first">環境変数 <span class="target" id="index-2"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONASYNCIODEBUG"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONASYNCIODEBUG</span></code></a> を <code class="docutils literal"><span class="pre">1</span></code> に設定するか、 <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.set_debug" title="asyncio.AbstractEventLoop.set_debug"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.set_debug()</span></code></a> を呼び出すと、asyncio&nbsp; デバッグモードがグローバルに有効になります。</p>
+</li>
+<li><p class="first"><a class="reference internal" href="#asyncio-logger"><span class="std std-ref">asyncio logger</span></a> のトップレベルを <code class="xref py py-data docutils literal"><span class="pre">logging.DEBUG</span></code> に設定します。例えば、起動時に <code class="docutils literal"><span class="pre">logging.basicConfig(level=logging.DEBUG)</span></code> を呼び出します。</p>
+</li>
+<li><p class="first"><a class="reference internal" href="warnings.html#module-warnings" title="warnings: Issue warning messages and control their disposition."><code class="xref py py-mod docutils literal"><span class="pre">warnings</span></code></a> モジュールを構成して、 <a class="reference internal" href="exceptions.html#ResourceWarning" title="ResourceWarning"><code class="xref py py-exc docutils literal"><span class="pre">ResourceWarning</span></code></a> 警告が表示されるようにします。例えば、Python の <code class="docutils literal"><span class="pre">-Wdefault</span></code> コマンドラインオプションを使用して、それらを表示します。</p>
+</li>
 </ul>
 <p>デバッグチェックの例:</p>
 <ul class="simple">
@@ -143,25 +139,15 @@ display them.</li>
 </div>
 <div class="section" id="cancellation">
 <h2>18.5.9.2. 取り消し<a class="headerlink" href="#cancellation" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>Cancellation of tasks is not common in classic programming. In asynchronous
-programming, not only it is something common, but you have to prepare your
-code to handle it.</p>
-<p>Futures and tasks can be cancelled explicitly with their <a class="reference internal" href="asyncio-task.html#asyncio.Future.cancel" title="asyncio.Future.cancel"><code class="xref py py-meth docutils literal"><span class="pre">Future.cancel()</span></code></a>
-method. The <a class="reference internal" href="asyncio-task.html#asyncio.wait_for" title="asyncio.wait_for"><code class="xref py py-func docutils literal"><span class="pre">wait_for()</span></code></a> function cancels the waited task when the timeout
-occurs. There are many other cases where a task can be cancelled indirectly.</p>
-<p>Don&#8217;t call <a class="reference internal" href="asyncio-task.html#asyncio.Future.set_result" title="asyncio.Future.set_result"><code class="xref py py-meth docutils literal"><span class="pre">set_result()</span></code></a> or <a class="reference internal" href="asyncio-task.html#asyncio.Future.set_exception" title="asyncio.Future.set_exception"><code class="xref py py-meth docutils literal"><span class="pre">set_exception()</span></code></a> method
-of <a class="reference internal" href="asyncio-task.html#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">Future</span></code></a> if the future is cancelled: it would fail with an exception.
-For example, write:</p>
+<p>古典的なプログラミングでは、タスクのキャンセルは一般的ではありません。非同期プログラミングでは、それは一般的であるどころか、それを処理するためのコードを用意する必要があります。</p>
+<p>Future おびタスクは、それらの <a class="reference internal" href="asyncio-task.html#asyncio.Future.cancel" title="asyncio.Future.cancel"><code class="xref py py-meth docutils literal"><span class="pre">Future.cancel()</span></code></a> メソッドを呼び出すことで、明示的にキャンセルすることができます。<a class="reference internal" href="asyncio-task.html#asyncio.wait_for" title="asyncio.wait_for"><code class="xref py py-func docutils literal"><span class="pre">wait_for()</span></code></a> 関数は、タイムアウト発生時に、待機中のタスクをキャンセルします。タスクを間接的にキャンセルすることができる使用例は、他にも数多くあります。</p>
+<p>Future がキャンセルされた場合、<a class="reference internal" href="asyncio-task.html#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">Future</span></code></a> の <a class="reference internal" href="asyncio-task.html#asyncio.Future.set_result" title="asyncio.Future.set_result"><code class="xref py py-meth docutils literal"><span class="pre">set_result()</span></code></a> または <a class="reference internal" href="asyncio-task.html#asyncio.Future.set_exception" title="asyncio.Future.set_exception"><code class="xref py py-meth docutils literal"><span class="pre">set_exception()</span></code></a> メソッドは呼び出さないでください。例外を送出して、失敗してしまいます。例えば、以下のように書いてください。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">fut</span><span class="o">.</span><span class="n">cancelled</span><span class="p">():</span>
     <span class="n">fut</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Don&#8217;t schedule directly a call to the <a class="reference internal" href="asyncio-task.html#asyncio.Future.set_result" title="asyncio.Future.set_result"><code class="xref py py-meth docutils literal"><span class="pre">set_result()</span></code></a> or the
-<a class="reference internal" href="asyncio-task.html#asyncio.Future.set_exception" title="asyncio.Future.set_exception"><code class="xref py py-meth docutils literal"><span class="pre">set_exception()</span></code></a> method of a future with
-<a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.call_soon" title="asyncio.AbstractEventLoop.call_soon"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.call_soon()</span></code></a>: the future can be cancelled before its method
-is called.</p>
-<p>If you wait for a future, you should check early if the future was cancelled to
-avoid useless operations. Example:</p>
+<p><a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.call_soon" title="asyncio.AbstractEventLoop.call_soon"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.call_soon()</span></code></a> で、Future の <a class="reference internal" href="asyncio-task.html#asyncio.Future.set_result" title="asyncio.Future.set_result"><code class="xref py py-meth docutils literal"><span class="pre">set_result()</span></code></a> メソッドまたは <a class="reference internal" href="asyncio-task.html#asyncio.Future.set_exception" title="asyncio.Future.set_exception"><code class="xref py py-meth docutils literal"><span class="pre">set_exception()</span></code></a> メソッドの呼び出しを直接スケジュールしないでください。Future は、そのメソッドが呼び出される前にキャンセルされる場合があります。</p>
+<p>Future を待機する場合、Future がキャンセルされているかどうかを早い段階で確認し、無駄な操作を防いでください。以下に例を示します。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="nd">@coroutine</span>
 <span class="k">def</span> <span class="nf">slow_operation</span><span class="p">(</span><span class="n">fut</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">fut</span><span class="o">.</span><span class="n">cancelled</span><span class="p">():</span>
@@ -171,7 +157,7 @@ avoid useless operations. Example:</p>
     <span class="c1"># ...</span>
 </pre></div>
 </div>
-<p>The <a class="reference internal" href="asyncio-task.html#asyncio.shield" title="asyncio.shield"><code class="xref py py-func docutils literal"><span class="pre">shield()</span></code></a> function can also be used to ignore cancellation.</p>
+<p><a class="reference internal" href="asyncio-task.html#asyncio.shield" title="asyncio.shield"><code class="xref py py-func docutils literal"><span class="pre">shield()</span></code></a> 関数も、キャンセルを無視するために使用できます。</p>
 </div>
 <div class="section" id="concurrency-and-multithreading">
 <span id="asyncio-multithreading"></span><h2>18.5.9.3. 並行処理とマルチスレッド処理<a class="headerlink" href="#concurrency-and-multithreading" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -211,9 +197,7 @@ avoid useless operations. Example:</p>
 <div class="section" id="logging">
 <span id="asyncio-logger"></span><h2>18.5.9.5. ログ記録<a class="headerlink" href="#logging" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> モジュールは <a class="reference internal" href="logging.html#module-logging" title="logging: Flexible event logging system for applications."><code class="xref py py-mod docutils literal"><span class="pre">logging</span></code></a> モジュールとともにロガー <code class="docutils literal"><span class="pre">'asyncio'</span></code> の情報のログを記録します。</p>
-<p>The default log level for the <a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> module is <code class="xref py py-data docutils literal"><span class="pre">logging.INFO</span></code>.
-For those not wanting such verbosity from <a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> the log level can
-be changed.  For example, to change the level to <code class="xref py py-data docutils literal"><span class="pre">logging.WARNING</span></code>:</p>
+<p><a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> モジュールのデフォルトのログレベルは、 <code class="xref py py-data docutils literal"><span class="pre">logging.INFO</span></code> です。<a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> にそれほどの冗長性を求めないユーザは、ログレベルを変更できます。例えば、レベルを <code class="xref py py-data docutils literal"><span class="pre">logging.WARNING</span></code> に変更するには、以下のようにします。</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>logging.getLogger(&#39;asyncio&#39;).setLevel(logging.WARNING)
 </pre></div>
 </div>
@@ -416,11 +400,8 @@ task: &lt;Task pending coro=&lt;kill_me() done, defined at test.py:5&gt; wait_fo
 </div>
 <div class="section" id="close-transports-and-event-loops">
 <span id="asyncio-close-transports"></span><h2>18.5.9.10. トランスポートとイベントループを閉じる<a class="headerlink" href="#close-transports-and-event-loops" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>When a transport is no more needed, call its <code class="docutils literal"><span class="pre">close()</span></code> method to release
-resources. Event loops must also be closed explicitly.</p>
-<p>If a transport or an event loop is not closed explicitly, a
-<a class="reference internal" href="exceptions.html#ResourceWarning" title="ResourceWarning"><code class="xref py py-exc docutils literal"><span class="pre">ResourceWarning</span></code></a> warning will be emitted in its destructor. By default,
-<a class="reference internal" href="exceptions.html#ResourceWarning" title="ResourceWarning"><code class="xref py py-exc docutils literal"><span class="pre">ResourceWarning</span></code></a> warnings are ignored. The <a class="reference internal" href="#asyncio-debug-mode"><span class="std std-ref">Debug mode of asyncio</span></a> section explains how to display them.</p>
+<p>もはやトランスポートの必要がない場合、その <code class="docutils literal"><span class="pre">close()</span></code>&nbsp;メソッドを呼び出して、リソースを解放します。イベントループも、明示的に閉じなければなりません。</p>
+<p>トランスポートまたはイベントループが明示的に閉じられない場合、デストラクタ内で <a class="reference internal" href="exceptions.html#ResourceWarning" title="ResourceWarning"><code class="xref py py-exc docutils literal"><span class="pre">ResourceWarning</span></code></a> 警告が送出されます。デフォルトでは、 <a class="reference internal" href="exceptions.html#ResourceWarning" title="ResourceWarning"><code class="xref py py-exc docutils literal"><span class="pre">ResourceWarning</span></code></a> 警告は無視されます。<a class="reference internal" href="#asyncio-debug-mode"><span class="std std-ref">asyncio のデバッグモード</span></a> セクションで、それらを表示する方法を説明します。</p>
 </div>
 </div>
 
@@ -517,7 +498,7 @@ resources. Event loops must also be closed explicitly.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 6月 25, 2017
+    最終更新日時: 6月 26, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
