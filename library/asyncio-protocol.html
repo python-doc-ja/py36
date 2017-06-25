@@ -465,10 +465,8 @@
 <p>接続中、<code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code> は複数回呼び出されえます。<code class="xref py py-meth docutils literal"><span class="pre">eof_received()</span></code> が呼び出されるのは 1 回で、1 度呼び出されると、その後 <code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code> が呼び出されることはありません。</p>
 <p>ステートマシン:</p>
 <blockquote>
-<div>start -&gt; <a class="reference internal" href="#asyncio.BaseProtocol.connection_made" title="asyncio.BaseProtocol.connection_made"><code class="xref py py-meth docutils literal"><span class="pre">connection_made()</span></code></a>
-[-&gt; <a class="reference internal" href="#asyncio.Protocol.data_received" title="asyncio.Protocol.data_received"><code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code></a> *]
-[-&gt; <a class="reference internal" href="#asyncio.Protocol.eof_received" title="asyncio.Protocol.eof_received"><code class="xref py py-meth docutils literal"><span class="pre">eof_received()</span></code></a> ?]
--&gt; <a class="reference internal" href="#asyncio.BaseProtocol.connection_lost" title="asyncio.BaseProtocol.connection_lost"><code class="xref py py-meth docutils literal"><span class="pre">connection_lost()</span></code></a> -&gt; end</div></blockquote>
+<div><p>開始状態 -&gt; <a class="reference internal" href="#asyncio.BaseProtocol.connection_made" title="asyncio.BaseProtocol.connection_made"><code class="xref py py-meth docutils literal"><span class="pre">connection_made()</span></code></a> [-&gt; <a class="reference internal" href="#asyncio.Protocol.data_received" title="asyncio.Protocol.data_received"><code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code></a> *] [-&gt; <a class="reference internal" href="#asyncio.Protocol.eof_received" title="asyncio.Protocol.eof_received"><code class="xref py py-meth docutils literal"><span class="pre">eof_received()</span></code></a> ?] -&gt; <a class="reference internal" href="#asyncio.BaseProtocol.connection_lost" title="asyncio.BaseProtocol.connection_lost"><code class="xref py py-meth docutils literal"><span class="pre">connection_lost()</span></code></a> -&gt; 終了状態</p>
+</div></blockquote>
 </div>
 <div class="section" id="datagram-protocols">
 <h3>18.5.4.2.4. データグラムプロトコル<a class="headerlink" href="#datagram-protocols" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -514,9 +512,7 @@
 </div>
 <div class="section" id="coroutines-and-protocols">
 <h3>18.5.4.2.6. コルーチンとプロトコル<a class="headerlink" href="#coroutines-and-protocols" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>Coroutines can be scheduled in a protocol method using <a class="reference internal" href="asyncio-task.html#asyncio.ensure_future" title="asyncio.ensure_future"><code class="xref py py-func docutils literal"><span class="pre">ensure_future()</span></code></a>,
-but there is no guarantee made about the execution order.  Protocols are not
-aware of coroutines created in protocol methods and so will not wait for them.</p>
+<p>コルーチンはプロトコルメソッドで <a class="reference internal" href="asyncio-task.html#asyncio.ensure_future" title="asyncio.ensure_future"><code class="xref py py-func docutils literal"><span class="pre">ensure_future()</span></code></a> を使用してスケジュールされることがありますが、それは実行順を保証するものではありません。プロトコルはプロトコルメソッド内で作成されたコルーチンを検知しないため、それらを待機しません。</p>
 <p>信頼できる実行順を持つには、コルーチンの  <code class="docutils literal"><span class="pre">yield</span> <span class="pre">from</span></code> で <a class="reference internal" href="asyncio-stream.html#asyncio-streams"><span class="std std-ref">ストリームオブジェクト</span></a> を使用します。例えば、<a class="reference internal" href="asyncio-stream.html#asyncio.StreamWriter.drain" title="asyncio.StreamWriter.drain"><code class="xref py py-meth docutils literal"><span class="pre">StreamWriter.drain()</span></code></a> コルーチンは書き込みバッファーがフラッシュされるまで待機することができます。</p>
 </div>
 </div>
@@ -524,8 +520,7 @@ aware of coroutines created in protocol methods and so will not wait for them.</
 <h2>18.5.4.3. プロトコルの例<a class="headerlink" href="#protocol-examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <div class="section" id="tcp-echo-client-protocol">
 <span id="asyncio-tcp-echo-client-protocol"></span><h3>18.5.4.3.1. TCP Echo クライアントプロトコル<a class="headerlink" href="#tcp-echo-client-protocol" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>TCP echo client  using the <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_connection" title="asyncio.AbstractEventLoop.create_connection"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_connection()</span></code></a> method, send
-data and wait until the connection is closed:</p>
+<p><a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_connection" title="asyncio.AbstractEventLoop.create_connection"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_connection()</span></code></a> メソッドを使用した TCP Echo クライアントで、データを送信しコネクションがクローズされるまで待機します。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
 
 <span class="k">class</span> <span class="nc">EchoClientProtocol</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">Protocol</span><span class="p">):</span>
@@ -554,12 +549,7 @@ data and wait until the connection is closed:</p>
 <span class="n">loop</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The event loop is running twice. The
-<a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.run_until_complete" title="asyncio.AbstractEventLoop.run_until_complete"><code class="xref py py-meth docutils literal"><span class="pre">run_until_complete()</span></code></a> method is preferred in this short
-example to raise an exception if the server is not listening, instead of
-having to write a short coroutine to handle the exception and stop the
-running loop. At <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.run_until_complete" title="asyncio.AbstractEventLoop.run_until_complete"><code class="xref py py-meth docutils literal"><span class="pre">run_until_complete()</span></code></a> exit, the loop is
-no longer running, so there is no need to stop the loop in case of an error.</p>
+<p>この例ではイベントループを 2 個実行しています。<a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.run_until_complete" title="asyncio.AbstractEventLoop.run_until_complete"><code class="xref py py-meth docutils literal"><span class="pre">run_until_complete()</span></code></a> メソッドはサーバが待ち受け状態にないときに例外を送出するためのもので、通常作成しなければならない例外の送出やループの停止などを行うための短いコルーチンの代用になります。<a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.run_until_complete" title="asyncio.AbstractEventLoop.run_until_complete"><code class="xref py py-meth docutils literal"><span class="pre">run_until_complete()</span></code></a> の終了時、ループの実行は終了しているので、エラー発生時にループを停止する必要はありません。</p>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <p class="last"><a class="reference internal" href="asyncio-stream.html#asyncio-tcp-echo-client-streams"><span class="std std-ref">ストリームを使った TCP Echo クライアント</span></a> の例では <a class="reference internal" href="asyncio-stream.html#asyncio.open_connection" title="asyncio.open_connection"><code class="xref py py-func docutils literal"><span class="pre">asyncio.open_connection()</span></code></a> 関数を使用しています。</p>
@@ -567,8 +557,7 @@ no longer running, so there is no need to stop the loop in case of an error.</p>
 </div>
 <div class="section" id="tcp-echo-server-protocol">
 <span id="asyncio-tcp-echo-server-protocol"></span><h3>18.5.4.3.2. TCP Echo サーバープロトコル<a class="headerlink" href="#tcp-echo-server-protocol" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>TCP echo server using the <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_server" title="asyncio.AbstractEventLoop.create_server"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_server()</span></code></a> method, send back
-received data and close the connection:</p>
+<p><a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_server" title="asyncio.AbstractEventLoop.create_server"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_server()</span></code></a> メソッドを使用した TCP Echo サーバーで、受信したデータを返信しコネクションをクローズします。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
 
 <span class="k">class</span> <span class="nc">EchoServerClientProtocol</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">Protocol</span><span class="p">):</span>
@@ -613,8 +602,7 @@ received data and close the connection:</p>
 </div>
 <div class="section" id="udp-echo-client-protocol">
 <span id="asyncio-udp-echo-client-protocol"></span><h3>18.5.4.3.3. UDP Echo クライアントプロトコル<a class="headerlink" href="#udp-echo-client-protocol" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>UDP echo client using the <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_datagram_endpoint" title="asyncio.AbstractEventLoop.create_datagram_endpoint"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_datagram_endpoint()</span></code></a>
-method, send data and close the transport when we received the answer:</p>
+<p><a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_datagram_endpoint" title="asyncio.AbstractEventLoop.create_datagram_endpoint"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_datagram_endpoint()</span></code></a> メソッドを使用する UDP Echo クライアントで、データを送信し応答を受信するとトランスポートをクローズします。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
 
 <span class="k">class</span> <span class="nc">EchoClientProtocol</span><span class="p">:</span>
@@ -656,8 +644,7 @@ method, send data and close the transport when we received the answer:</p>
 </div>
 <div class="section" id="udp-echo-server-protocol">
 <span id="asyncio-udp-echo-server-protocol"></span><h3>18.5.4.3.4. UDP Echo サーバープロトコル<a class="headerlink" href="#udp-echo-server-protocol" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>UDP echo server using the <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_datagram_endpoint" title="asyncio.AbstractEventLoop.create_datagram_endpoint"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_datagram_endpoint()</span></code></a>
-method, send back received data:</p>
+<p><a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_datagram_endpoint" title="asyncio.AbstractEventLoop.create_datagram_endpoint"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_datagram_endpoint()</span></code></a> メソッドを使用しする UDP Echo サーバーで、受信したデータを返送します。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
 
 <span class="k">class</span> <span class="nc">EchoServerProtocol</span><span class="p">:</span>
@@ -689,9 +676,7 @@ method, send back received data:</p>
 </div>
 <div class="section" id="register-an-open-socket-to-wait-for-data-using-a-protocol">
 <span id="asyncio-register-socket"></span><h3>18.5.4.3.5. プロトコルを使ってデータを待つオープンソケットの登録<a class="headerlink" href="#register-an-open-socket-to-wait-for-data-using-a-protocol" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>Wait until a socket receives data using the
-<a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_connection" title="asyncio.AbstractEventLoop.create_connection"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_connection()</span></code></a> method with a protocol, and then close
-the event loop</p>
+<p>プロトコルと <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.create_connection" title="asyncio.AbstractEventLoop.create_connection"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.create_connection()</span></code></a> メソッドを使用してソケットがデータを受信するまで待機し、受信後イベントループをクローズします。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">socket</span> <span class="k">import</span> <span class="n">socketpair</span>
