@@ -108,16 +108,12 @@
 <h1>18.5.4. トランスポートとプロトコル (コールバックベースの API)<a class="headerlink" href="#transports-and-protocols-callback-based-api" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <div class="section" id="transports">
 <span id="asyncio-transport"></span><h2>18.5.4.1. トランスポート<a class="headerlink" href="#transports" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>Transports are classes provided by <a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> in order to abstract
-various kinds of communication channels.  You generally won&#8217;t instantiate
-a transport yourself; instead, you will call an <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop" title="asyncio.AbstractEventLoop"><code class="xref py py-class docutils literal"><span class="pre">AbstractEventLoop</span></code></a> method
-which will create the transport and try to initiate the underlying
-communication channel, calling you back when it succeeds.</p>
+<p>トランスポートは、<a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> が提供する、さまざまな種類の通信チャンネルを抽象化するクラス群です。通常あなた自身が直接トランスポートのインスタンスを作成することはなく、<a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop" title="asyncio.AbstractEventLoop"><code class="xref py py-class docutils literal"><span class="pre">AbstractEventLoop</span></code></a> のメソッドを呼び出すことでトランスポートとその下層の通信チャンネルのインスタンスが作成され、成功時にコールバックが返ります。</p>
 <p>いったん通信チャンネルが確立されると、トランスポートは常に <a class="reference internal" href="#asyncio-protocol"><span class="std std-ref">プロトコル</span></a> インスタンスとのペアを成します。プロトコルはその後さまざまな用途のためトランスポートのメソッドを呼び出します。</p>
 <p><a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> は現在 TCP、UDP、SSL およびサブプロセスパイプのトランスポートを実装しています。利用可能なトランスポートのメソッドはトランスポートの種類に依存します。</p>
 <p>トランスポートクラスは <a class="reference internal" href="asyncio-dev.html#asyncio-multithreading"><span class="std std-ref">スレッド安全ではありません</span></a>。</p>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.6 で変更: </span>The socket option <code class="docutils literal"><span class="pre">TCP_NODELAY</span></code> is now set by default.</p>
+<p><span class="versionmodified">バージョン 3.6 で変更: </span>デフォルトでソケットオプションの <code class="docutils literal"><span class="pre">TCP_NODELAY</span></code>&nbsp;が設定されるようになりました。</p>
 </div>
 <div class="section" id="basetransport">
 <h3>18.5.4.1.1. BaseTransport<a class="headerlink" href="#basetransport" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -188,8 +184,7 @@ communication channel, calling you back when it succeeds.</p>
 <dl class="method">
 <dt id="asyncio.BaseTransport.set_protocol">
 <code class="descname">set_protocol</code><span class="sig-paren">(</span><em>protocol</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseTransport.set_protocol" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Set a new protocol.  Switching protocol should only be done when both
-protocols are documented to support the switch.</p>
+<dd><p>新しいプロトコルを設定します。プロトコルの切り替えは、両方のプロトコルのドキュメントで切り替えがサポートされている場合にのみ行うべきです。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.5.3 で追加.</span></p>
 </div>
@@ -198,7 +193,7 @@ protocols are documented to support the switch.</p>
 <dl class="method">
 <dt id="asyncio.BaseTransport.get_protocol">
 <code class="descname">get_protocol</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseTransport.get_protocol" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Return the current protocol.</p>
+<dd><p>現在のプロトコルを返します。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.5.3 で追加.</span></p>
 </div>
@@ -270,16 +265,7 @@ protocols are documented to support the switch.</p>
 <code class="descname">set_write_buffer_limits</code><span class="sig-paren">(</span><em>high=None</em>, <em>low=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.WriteTransport.set_write_buffer_limits" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>書き込みフロー制御の <em>最高</em> および <em>最低</em> 水位点 (<em>high</em>- and <em>low</em>-water limits) を設定します。</p>
 <p>これら 2 個の値はプロトコルの <code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> および <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> メソッドが呼ばれたときの振る舞いを制御します。指定する場合、<em>low</em> は <em>high</em> 以下でなければなりません。<em>high</em> も <em>low</em> も負数は指定できません。</p>
-<p>The defaults are implementation-specific.  If only the
-high-water limit is given, the low-water limit defaults to an
-implementation-specific value less than or equal to the
-high-water limit.  Setting <em>high</em> to zero forces <em>low</em> to zero as
-well, and causes <code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> to be called whenever the
-buffer becomes non-empty.  Setting <em>low</em> to zero causes
-<code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> to be called only once the buffer is empty.
-Use of zero for either limit is generally sub-optimal as it
-reduces opportunities for doing I/O and computation
-concurrently.</p>
+<p>デフォルト値は実装固有になります。最高水位点のみ与えられた場合、最低水位点は最高水位点以下の実装固有のデフォルト値になります。最高水位点にゼロが設定されると最低水位点も強制的にゼロになり、バッファが空でなくなるたびに <code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> が呼び出されるようになります。最低水位点にゼロが設定されるとバッファは空になるとすぐに <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> が呼び出されるようになります。どちらかにゼロを設定することは、並列の I/O 処理や計算の機会を減らすことになるため、一般に最善とは言えません。</p>
 <p>水位点の取得には <a class="reference internal" href="#asyncio.WriteTransport.get_write_buffer_limits" title="asyncio.WriteTransport.get_write_buffer_limits"><code class="xref py py-meth docutils literal"><span class="pre">get_write_buffer_limits()</span></code></a> を使用します。</p>
 </dd></dl>
 
@@ -358,7 +344,7 @@ concurrently.</p>
 <dl class="method">
 <dt id="asyncio.BaseSubprocessTransport.kill">
 <code class="descname">kill</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseSubprocessTransport.kill" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Kill the subprocess, as in <a class="reference internal" href="subprocess.html#subprocess.Popen.kill" title="subprocess.Popen.kill"><code class="xref py py-meth docutils literal"><span class="pre">subprocess.Popen.kill()</span></code></a>.</p>
+<dd><p><a class="reference internal" href="subprocess.html#subprocess.Popen.kill" title="subprocess.Popen.kill"><code class="xref py py-meth docutils literal"><span class="pre">subprocess.Popen.kill()</span></code></a> と同様に、サブプロセスを kill します。</p>
 <p>POSIX システムでは、この関数はサブプロセスに SIGKILL を送信します。Windows では、このメソッドは <a class="reference internal" href="#asyncio.BaseSubprocessTransport.terminate" title="asyncio.BaseSubprocessTransport.terminate"><code class="xref py py-meth docutils literal"><span class="pre">terminate()</span></code></a> の別名です。</p>
 </dd></dl>
 
@@ -468,13 +454,8 @@ concurrently.</p>
 <dl class="method">
 <dt id="asyncio.Protocol.eof_received">
 <code class="descclassname">Protocol.</code><code class="descname">eof_received</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Protocol.eof_received" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Called when the other end signals it won&#8217;t send any more data
-(for example by calling <code class="xref py py-meth docutils literal"><span class="pre">write_eof()</span></code>, if the other end also uses
-asyncio).</p>
-<p>This method may return a false value (including <code class="docutils literal"><span class="pre">None</span></code>), in which case
-the transport will close itself.  Conversely, if this method returns a
-true value, closing the transport is up to the protocol.  Since the
-default implementation returns <code class="docutils literal"><span class="pre">None</span></code>, it implicitly closes the connection.</p>
+<dd><p>相手方が送信するデータがないことを伝えてきたとき (例えば相手方が asyncio を使用しており <code class="xref py py-meth docutils literal"><span class="pre">write_eof()</span></code> を呼び出した場合) に呼び出されます。</p>
+<p>このメソッドは偽値 (<code class="docutils literal"><span class="pre">None</span></code> を含む) を返すことがあり、その場合トランスポートは自身をクローズします。真値を返す場合、トランスポートはプロトコルによってクローズされます。デフォルトの実装では <code class="docutils literal"><span class="pre">None</span></code> を返すため、コネクションは暗黙的にクローズされます。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">SSL のような一部のトランスポートはハーフクローズ接続をサポートしていません。その場合このメソッドが真値を返すとコネクションのクローズを回避できません。</p>
@@ -482,7 +463,7 @@ default implementation returns <code class="docutils literal"><span class="pre">
 </dd></dl>
 
 <p>接続中、<code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code> は複数回呼び出されえます。<code class="xref py py-meth docutils literal"><span class="pre">eof_received()</span></code> が呼び出されるのは 1 回で、1 度呼び出されると、その後 <code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code> が呼び出されることはありません。</p>
-<p>State machine:</p>
+<p>ステートマシン:</p>
 <blockquote>
 <div>start -&gt; <a class="reference internal" href="#asyncio.BaseProtocol.connection_made" title="asyncio.BaseProtocol.connection_made"><code class="xref py py-meth docutils literal"><span class="pre">connection_made()</span></code></a>
 [-&gt; <a class="reference internal" href="#asyncio.Protocol.data_received" title="asyncio.Protocol.data_received"><code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code></a> *]
@@ -870,7 +851,7 @@ the event loop</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 6月 24, 2017
+    最終更新日時: 6月 25, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。

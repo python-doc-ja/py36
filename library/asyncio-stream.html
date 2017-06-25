@@ -110,9 +110,7 @@
 <h2>18.5.5.1. ストリーム関数<a class="headerlink" href="#stream-functions" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last">The top-level functions in this module are meant as convenience wrappers
-only; there&#8217;s really nothing special there, and if they don&#8217;t do
-exactly what you want, feel free to copy their code.</p>
+<p class="last">このモジュール内のトップレベル関数は、便利なラッパーとしてのみ意図されています。特別なことは何もありませんし、それらが思い通りに動作しない場合は、ご自由にコードをコピーしてください。</p>
 </div>
 <dl class="function">
 <dt id="asyncio.open_connection">
@@ -219,20 +217,10 @@ exactly what you want, feel free to copy their code.</p>
 <dt id="asyncio.StreamReader.readuntil">
 <em class="property">coroutine </em><code class="descname">readuntil</code><span class="sig-paren">(</span><em>separator=b'\n'</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.StreamReader.readuntil" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">separator</span></code> が見つかるまでストリームからデータを読み込みます。</p>
-<p>On success, the data and separator will be removed from the
-internal buffer (consumed). Returned data will include the
-separator at the end.</p>
-<p>Configured stream limit is used to check result. Limit sets the
-maximal length of data that can be returned, not counting the
-separator.</p>
-<p>If an EOF occurs and the complete separator is still not found,
-an <a class="reference internal" href="#asyncio.IncompleteReadError" title="asyncio.IncompleteReadError"><code class="xref py py-exc docutils literal"><span class="pre">IncompleteReadError</span></code></a> exception will be
-raised, and the internal buffer will be reset.  The
-<a class="reference internal" href="#asyncio.IncompleteReadError.partial" title="asyncio.IncompleteReadError.partial"><code class="xref py py-attr docutils literal"><span class="pre">IncompleteReadError.partial</span></code></a> attribute may contain the
-separator partially.</p>
-<p>If the data cannot be read because of over limit, a
-<a class="reference internal" href="#asyncio.LimitOverrunError" title="asyncio.LimitOverrunError"><code class="xref py py-exc docutils literal"><span class="pre">LimitOverrunError</span></code></a> exception  will be raised, and the data
-will be left in the internal buffer, so it can be read again.</p>
+<p>成功時には、データと区切り文字は内部バッファから削除されます (消費されます)。返されるデータの最後には区切り文字が含まれます。</p>
+<p>設定したストリームの制限は、結果を検証するために使用されます。制限により、返すことのできるデータの最大長さ (区切り文字を含まず) が設定されます。</p>
+<p>EOF が発生し、完全な区切り文字が見つからない場合には、<a class="reference internal" href="#asyncio.IncompleteReadError" title="asyncio.IncompleteReadError"><code class="xref py py-exc docutils literal"><span class="pre">IncompleteReadError</span></code></a>&nbsp;例外が創出されるとともに、内部バッファはリセットされます。 <a class="reference internal" href="#asyncio.IncompleteReadError.partial" title="asyncio.IncompleteReadError.partial"><code class="xref py py-attr docutils literal"><span class="pre">IncompleteReadError.partial</span></code></a>&nbsp;属性に、区切り文字が部分的に含まれる場合があります。</p>
+<p>制限超過のためにデータを読み取ることができない場合、<a class="reference internal" href="#asyncio.LimitOverrunError" title="asyncio.LimitOverrunError"><code class="xref py py-exc docutils literal"><span class="pre">LimitOverrunError</span></code></a>&nbsp;例外が送出され、データは内部バッファ内に残ります。そのため、データを再度読み取ることができます。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.5.2 で追加.</span></p>
 </div>
@@ -282,14 +270,8 @@ will be left in the internal buffer, so it can be read again.</p>
 <span class="k">yield from</span> <span class="n">w</span><span class="o">.</span><span class="n">drain</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>When the size of the transport buffer reaches the high-water limit (the
-protocol is paused), block until the size of the buffer is drained down
-to the low-water limit and the protocol is resumed. When there is nothing
-to wait for, the yield-from continues immediately.</p>
-<p>Yielding from <a class="reference internal" href="#asyncio.StreamWriter.drain" title="asyncio.StreamWriter.drain"><code class="xref py py-meth docutils literal"><span class="pre">drain()</span></code></a> gives the opportunity for the loop to
-schedule the write operation and flush the buffer. It should especially
-be used when a possibly large amount of data is written to the transport,
-and the coroutine does not yield-from between calls to <a class="reference internal" href="#asyncio.StreamWriter.write" title="asyncio.StreamWriter.write"><code class="xref py py-meth docutils literal"><span class="pre">write()</span></code></a>.</p>
+<p>転送バッファのサイズが高水位制限値に達した場合 (プロトコルが一時停止された場合)、バッファサイズが低水位制限まで引き出されて、プロトコルが再開されるまで、ブロックします。待機するものがなくなると、直ちに yield-from&nbsp;を続行します。</p>
+<p><a class="reference internal" href="#asyncio.StreamWriter.drain" title="asyncio.StreamWriter.drain"><code class="xref py py-meth docutils literal"><span class="pre">drain()</span></code></a> から yield することにより、ループは書き込み操作をスケジュールし、バッファのフラッシュを行うことができます。このことは、転送に大量のデータが書き込まれる可能性がある場合に非常に有用で、コルーチンは <a class="reference internal" href="#asyncio.StreamWriter.write" title="asyncio.StreamWriter.write"><code class="xref py py-meth docutils literal"><span class="pre">write()</span></code></a> 呼び出しの間に yield-from&nbsp;を行いません。</p>
 <p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
 </dd></dl>
 
@@ -363,7 +345,7 @@ and the coroutine does not yield-from between calls to <a class="reference inter
 <dl class="attribute">
 <dt id="asyncio.LimitOverrunError.consumed">
 <code class="descname">consumed</code><a class="headerlink" href="#asyncio.LimitOverrunError.consumed" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Total number of to be consumed bytes.</p>
+<dd><p>未消費のバイトの合計数。</p>
 </dd></dl>
 
 </dd></dl>
@@ -628,7 +610,7 @@ and the coroutine does not yield-from between calls to <a class="reference inter
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 6月 24, 2017
+    最終更新日時: 6月 25, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
