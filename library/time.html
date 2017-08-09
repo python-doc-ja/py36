@@ -116,7 +116,7 @@ Unix では、エポックは (UTC で) 1970 年 1 月 1 日 0 時 0 分 0 秒�
 </li>
 </ul>
 <ul class="simple" id="index-1">
-<li><p class="first"><em class="dfn">エポック秒</em> (<em class="dfn">seconds since the epoch</em>) は、エポックからの総経過秒数を示していますが、たいていは <a class="reference external" href="leapseconds">うるう秒</a> は含まれていません。
+<li><p class="first"><em class="dfn">エポック秒</em> (<em class="dfn">seconds since the epoch</em>) は、エポックからの総経過秒数を示していますが、たいていはうるう秒 (<a class="reference external" href="https://en.wikipedia.org/wiki/Leap_second">leap seconds</a>) は含まれていません。
 全ての POSIX 互換のプラットフォームで、うるう秒はこの総秒数には含まれません。</p>
 </li>
 </ul>
@@ -667,22 +667,15 @@ Unix では、エポックは (UTC で) 1970 年 1 月 1 日 0 時 0 分 0 秒�
 <dl class="function">
 <dt id="time.time">
 <code class="descclassname">time.</code><code class="descname">time</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#time.time" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Return the time in seconds since the <a class="reference internal" href="#epoch">epoch</a> as a floating point
-number. The specific date of the epoch and the handling of
-<a class="reference external" href="https://en.wikipedia.org/wiki/Leap_second">leap seconds</a> is platform dependent.
-On Windows and most Unix systems, the epoch is January 1, 1970,
-00:00:00 (UTC) and leap seconds are not counted towards the time
-in seconds since the epoch. This is commonly referred to as
-<a class="reference external" href="https://en.wikipedia.org/wiki/Unix_time">Unix time</a>.
-To find out what the epoch is on a given platform, look at
-<code class="docutils literal"><span class="pre">gmtime(0)</span></code>.</p>
-<p>時刻は常に浮動小数点で返されますが、すべてのシステムが 1 秒より高い精度で時刻を提供するとは限らないので注意してください。この関数が返す値は通常減少していくことはありませんが、この関数を 2 回呼び出し、呼び出しの間にシステムクロックの時刻を巻き戻して設定した場合には、以前の呼び出しよりも低い値が返ることがあります。</p>
-<p>The number returned by <a class="reference internal" href="#time.time" title="time.time"><code class="xref py py-func docutils literal"><span class="pre">time()</span></code></a> may be converted into a more common
-time format (i.e. year, month, day, hour, etc...) in UTC by passing it to
-<a class="reference internal" href="#time.gmtime" title="time.gmtime"><code class="xref py py-func docutils literal"><span class="pre">gmtime()</span></code></a> function or in local time by passing it to the
-<a class="reference internal" href="#time.localtime" title="time.localtime"><code class="xref py py-func docutils literal"><span class="pre">localtime()</span></code></a> function. In both cases a
-<a class="reference internal" href="#time.struct_time" title="time.struct_time"><code class="xref py py-class docutils literal"><span class="pre">struct_time</span></code></a> object is returned, from which the components
-of the calendar date may be accessed as attributes.</p>
+<dd><p><a class="reference external" href="epoch">エポック</a> からの秒数を浮動小数点数で返します。
+エポックの具体的な日付とうるう秒 (<a class="reference external" href="https://en.wikipedia.org/wiki/Leap_second">leap seconds</a>) の扱いはプラットフォーム依存です。
+Windows とほとんどの Unix システムでは、エポックは (UTC で) 1970 年 1 月 1 日 0 時 0 分 0 秒で、うるう秒はエポック秒の時間の勘定には入りません。
+これは一般に <a class="reference external" href="https://en.wikipedia.org/wiki/Unix_time">Unix 時間</a> と呼ばれています。
+与えられたプラットフォームでエポックが何なのかを知るには、 time.gmtime(0) の値を見てください。</p>
+<p>時刻は常に浮動小数点数で返されますが、すべてのシステムが 1 秒より高い精度で時刻を提供するとは限らないので注意してください。
+この関数が返す値は通常減少していくことはありませんが、この関数を 2 回呼び出し、その呼び出しの間にシステムクロックの時刻を巻き戻して設定した場合には、以前の呼び出しよりも低い値が返ることがあります。</p>
+<p><a class="reference internal" href="#time.time" title="time.time"><code class="xref py py-func docutils literal"><span class="pre">time()</span></code></a> が返す数値は、 <a class="reference internal" href="#time.gmtime" title="time.gmtime"><code class="xref py py-func docutils literal"><span class="pre">gmtime()</span></code></a> 関数に渡されて UTC の、あるいは <a class="reference internal" href="#time.localtime" title="time.localtime"><code class="xref py py-func docutils literal"><span class="pre">localtime()</span></code></a> 関数に渡されて現地時間の、より一般的な時間のフォーマット (つまり、年、月、日、時間など) に変換されているかもしれません。
+どちらの場合でも <a class="reference internal" href="#time.struct_time" title="time.struct_time"><code class="xref py py-class docutils literal"><span class="pre">struct_time</span></code></a> オブジェクトが返され、このオブジェクトの属性としてカレンダー日付の構成要素へアクセスできます。</p>
 </dd></dl>
 
 <dl class="data">
