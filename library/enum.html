@@ -958,7 +958,7 @@ the bitwise operations without losing their <a class="reference internal" href="
 </li>
 <li><p class="first"><code class="docutils literal"><span class="pre">_value_</span></code> &#8211; メンバーの値; <code class="docutils literal"><span class="pre">__new__</span></code> で設定したり、変更したりできます</p>
 </li>
-<li><p class="first"><code class="docutils literal"><span class="pre">_missing_</span></code> &#8211; 値が見付からなかったときに使われるルックアップ関数; オーバーライドされていることがあります</p>
+<li><p class="first"><code class="docutils literal"><span class="pre">_missing_</span></code> &#8211; 値が見付からなかったときに使われる検索関数; オーバーライドされていることがあります</p>
 </li>
 <li><code class="docutils literal"><span class="pre">_order_</span></code> &#8211; used in Python 2/3 code to ensure member order is consistent
 (class attribute, removed during class creation)</li>
@@ -990,13 +990,10 @@ order is lost before it can be recorded.</p>
 </div>
 </div>
 <div class="section" id="enum-member-type">
-<h4>8.13.15.3.3. <code class="docutils literal"><span class="pre">Enum</span></code> member type<a class="headerlink" href="#enum-member-type" title="このヘッドラインへのパーマリンク">¶</a></h4>
-<p><a class="reference internal" href="#enum.Enum" title="enum.Enum"><code class="xref py py-class docutils literal"><span class="pre">Enum</span></code></a> members are instances of their <a class="reference internal" href="#enum.Enum" title="enum.Enum"><code class="xref py py-class docutils literal"><span class="pre">Enum</span></code></a> class, and are
-normally accessed as <code class="docutils literal"><span class="pre">EnumClass.member</span></code>.  Under certain circumstances they
-can also be accessed as <code class="docutils literal"><span class="pre">EnumClass.member.member</span></code>, but you should never do
-this as that lookup may fail or, worse, return something besides the
-<a class="reference internal" href="#enum.Enum" title="enum.Enum"><code class="xref py py-class docutils literal"><span class="pre">Enum</span></code></a> member you are looking for (this is another good reason to use
-all-uppercase names for members):</p>
+<h4>8.13.15.3.3. <code class="docutils literal"><span class="pre">Enum</span></code> メンバー型<a class="headerlink" href="#enum-member-type" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p><a class="reference internal" href="#enum.Enum" title="enum.Enum"><code class="xref py py-class docutils literal"><span class="pre">Enum</span></code></a> メンバーは、それらの <a class="reference internal" href="#enum.Enum" title="enum.Enum"><code class="xref py py-class docutils literal"><span class="pre">Enum</span></code></a> クラスのインスタンスで、通常は <code class="docutils literal"><span class="pre">EnumClass.member</span></code> のようにアクセスします。
+ある状況下では、 <code class="docutils literal"><span class="pre">EnumClass.member.member</span></code> としてもアクセスできますが、この方法は絶対に使うべきではありません。
+というのは、この検索は失敗するか、さらに悪い場合には、探している <a class="reference internal" href="#enum.Enum" title="enum.Enum"><code class="xref py py-class docutils literal"><span class="pre">Enum</span></code></a> メンバー以外のものを返す場合もあるからです (これがメンバーの名前に大文字のみを使うのが良い理由の 1 つでもあります):</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">FieldTypes</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">name</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">... </span>    <span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
@@ -1013,21 +1010,19 @@ all-uppercase names for members):</p>
 </div>
 </div>
 <div class="section" id="boolean-value-of-enum-classes-and-members">
-<h4>8.13.15.3.4. Boolean value of <code class="docutils literal"><span class="pre">Enum</span></code> classes and members<a class="headerlink" href="#boolean-value-of-enum-classes-and-members" title="このヘッドラインへのパーマリンク">¶</a></h4>
-<p><a class="reference internal" href="#enum.Enum" title="enum.Enum"><code class="xref py py-class docutils literal"><span class="pre">Enum</span></code></a> members that are mixed with non-<a class="reference internal" href="#enum.Enum" title="enum.Enum"><code class="xref py py-class docutils literal"><span class="pre">Enum</span></code></a> types (such as
-<a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>, <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>, etc.) are evaluated according to the mixed-in
-type&#8217;s rules; otherwise, all members evaluate as <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-data docutils literal"><span class="pre">True</span></code></a>.  To make your
-own Enum&#8217;s boolean evaluation depend on the member&#8217;s value add the following to
-your class:</p>
+<h4>8.13.15.3.4. <code class="docutils literal"><span class="pre">Enum</span></code> クラスとメンバーの真偽値<a class="headerlink" href="#boolean-value-of-enum-classes-and-members" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p>(<a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>, <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> などのような) 非 <a class="reference internal" href="#enum.Enum" title="enum.Enum"><code class="xref py py-class docutils literal"><span class="pre">Enum</span></code></a> 型と複合させた <a class="reference internal" href="#enum.Enum" title="enum.Enum"><code class="xref py py-class docutils literal"><span class="pre">Enum</span></code></a> のメンバーは、その複合された型の規則に従って評価されます;
+そうでない場合は、全てのメンバーは <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-data docutils literal"><span class="pre">True</span></code></a> と評価されます。
+メンバーの値に依存する独自の Enum の真偽値評価を行うには、クラスに次のコードを追加してください:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><a class="reference internal" href="#enum.Enum" title="enum.Enum"><code class="xref py py-class docutils literal"><span class="pre">Enum</span></code></a> classes always evaluate as <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-data docutils literal"><span class="pre">True</span></code></a>.</p>
+<p><a class="reference internal" href="#enum.Enum" title="enum.Enum"><code class="xref py py-class docutils literal"><span class="pre">Enum</span></code></a> クラスは常に <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-data docutils literal"><span class="pre">True</span></code></a> と評価されます。</p>
 </div>
 <div class="section" id="enum-classes-with-methods">
-<h4>8.13.15.3.5. <code class="docutils literal"><span class="pre">Enum</span></code> classes with methods<a class="headerlink" href="#enum-classes-with-methods" title="このヘッドラインへのパーマリンク">¶</a></h4>
-<p><a class="reference internal" href="#enum.Enum" title="enum.Enum"><code class="xref py py-class docutils literal"><span class="pre">Enum</span></code></a> サブクラスに拡張メソッドを与えた場合、上述の <a class="reference internal" href="#planet">Planet</a> のように、それらメソッドはメンバーの <a class="reference internal" href="functions.html#dir" title="dir"><code class="xref py py-func docutils literal"><span class="pre">dir()</span></code></a> に表示されますが、クラスのそれには表示されません:</p>
+<h4>8.13.15.3.5. メソッド付きの <code class="docutils literal"><span class="pre">Enum</span></code> クラス<a class="headerlink" href="#enum-classes-with-methods" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p><a class="reference internal" href="#enum.Enum" title="enum.Enum"><code class="xref py py-class docutils literal"><span class="pre">Enum</span></code></a> サブクラスに追加のメソッドを与えた場合、上述の <a class="reference internal" href="#planet">Planet</a> クラスのように、そのメソッドはメンバーの <a class="reference internal" href="functions.html#dir" title="dir"><code class="xref py py-func docutils literal"><span class="pre">dir()</span></code></a> に表示されますが、クラスの <a class="reference internal" href="functions.html#dir" title="dir"><code class="xref py py-func docutils literal"><span class="pre">dir()</span></code></a> には表示されません:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">dir</span><span class="p">(</span><span class="n">Planet</span><span class="p">)</span>
 <span class="go">[&#39;EARTH&#39;, &#39;JUPITER&#39;, &#39;MARS&#39;, &#39;MERCURY&#39;, &#39;NEPTUNE&#39;, &#39;SATURN&#39;, &#39;URANUS&#39;, &#39;VENUS&#39;, &#39;__class__&#39;, &#39;__doc__&#39;, &#39;__members__&#39;, &#39;__module__&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">dir</span><span class="p">(</span><span class="n">Planet</span><span class="o">.</span><span class="n">EARTH</span><span class="p">)</span>
@@ -1036,9 +1031,8 @@ your class:</p>
 </div>
 </div>
 <div class="section" id="combining-members-of-flag">
-<h4>8.13.15.3.6. Combining members of <code class="docutils literal"><span class="pre">Flag</span></code><a class="headerlink" href="#combining-members-of-flag" title="このヘッドラインへのパーマリンク">¶</a></h4>
-<p>If a combination of Flag members is not named, the <a class="reference internal" href="functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> will include
-all named flags and all named combinations of flags that are in the value:</p>
+<h4>8.13.15.3.6. <code class="docutils literal"><span class="pre">Flag</span></code> のメンバーの組み合わせ<a class="headerlink" href="#combining-members-of-flag" title="このヘッドラインへのパーマリンク">¶</a></h4>
+<p>Flag メンバーの組み合わせに名前が無い場合、 <a class="reference internal" href="functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> の出力には、その値にある全ての名前を持つフラグと全ての名前を持つ組み合わせが含まれます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Color</span><span class="p">(</span><span class="n">Flag</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">RED</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
 <span class="gp">... </span>    <span class="n">GREEN</span> <span class="o">=</span> <span class="n">auto</span><span class="p">()</span>
@@ -1105,10 +1099,10 @@ all named flags and all named combinations of flags that are in the value:</p>
 <li><a class="reference internal" href="#finer-points">8.13.15.3. 細かい点</a><ul>
 <li><a class="reference internal" href="#supported-dunder-names">8.13.15.3.1. <code class="docutils literal"><span class="pre">__dunder__</span></code> 名のサポート</a></li>
 <li><a class="reference internal" href="#supported-sunder-names">8.13.15.3.2. <code class="docutils literal"><span class="pre">_sunder_</span></code> 名のサポート</a></li>
-<li><a class="reference internal" href="#enum-member-type">8.13.15.3.3. <code class="docutils literal"><span class="pre">Enum</span></code> member type</a></li>
-<li><a class="reference internal" href="#boolean-value-of-enum-classes-and-members">8.13.15.3.4. Boolean value of <code class="docutils literal"><span class="pre">Enum</span></code> classes and members</a></li>
-<li><a class="reference internal" href="#enum-classes-with-methods">8.13.15.3.5. <code class="docutils literal"><span class="pre">Enum</span></code> classes with methods</a></li>
-<li><a class="reference internal" href="#combining-members-of-flag">8.13.15.3.6. Combining members of <code class="docutils literal"><span class="pre">Flag</span></code></a></li>
+<li><a class="reference internal" href="#enum-member-type">8.13.15.3.3. <code class="docutils literal"><span class="pre">Enum</span></code> メンバー型</a></li>
+<li><a class="reference internal" href="#boolean-value-of-enum-classes-and-members">8.13.15.3.4. <code class="docutils literal"><span class="pre">Enum</span></code> クラスとメンバーの真偽値</a></li>
+<li><a class="reference internal" href="#enum-classes-with-methods">8.13.15.3.5. メソッド付きの <code class="docutils literal"><span class="pre">Enum</span></code> クラス</a></li>
+<li><a class="reference internal" href="#combining-members-of-flag">8.13.15.3.6. <code class="docutils literal"><span class="pre">Flag</span></code> のメンバーの組み合わせ</a></li>
 </ul>
 </li>
 </ul>
