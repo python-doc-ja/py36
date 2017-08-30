@@ -227,7 +227,7 @@
 <p><code class="docutils literal"><span class="pre">x</span> <span class="pre">+=</span> <span class="pre">1</span></code> のような累算代入式は、 <code class="docutils literal"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">x</span> <span class="pre">+</span> <span class="pre">1</span></code> のように書き換えてほぼ同様の動作にできますが、厳密に等価にはなりません。累算代入の方では、 <code class="docutils literal"><span class="pre">x</span></code> は一度しか評価されません。また、実際の処理として、可能ならば <em>インプレース (in-place)</em> 演算が実行されます。これは、代入時に新たなオブジェクトを生成してターゲットに代入するのではなく、以前のオブジェクトの内容を変更するということです。</p>
 <p>通常の代入とは違い、累算代入文は右辺を評価する*前に*左辺を評価します。たとえば、<code class="docutils literal"><span class="pre">a[i]</span> <span class="pre">+=</span> <span class="pre">f(x)</span></code> はまず <code class="docutils literal"><span class="pre">a[i]</span></code> を調べ、<code class="docutils literal"><span class="pre">f(x)</span></code> を評価して加算を行い、最後に結果を <code class="docutils literal"><span class="pre">a[i]</span></code> に割り当てます。</p>
 <p>累算代入文で行われる代入は、タプルへの代入や、一文中に複数のターゲットが存在する場合を除き、通常の代入と同じように扱われます。同様に、累算代入で行われる二項演算は、場合によって <em>インプレース演算</em> が行われることを除き、通常の二項演算と同じです。</p>
-<p>属性参照のターゲットの場合、 <a class="reference internal" href="#attr-target-note"><span class="std std-ref">クラスとインスタンスの属性についての注意</span></a> と同様に通常の代入が適用されます。</p>
+<p>属性参照のターゲットの場合、 <a class="reference internal" href="#attr-target-note"><span class="std std-ref">クラス属性とインスタンス属性についての注意</span></a> と同様に通常の代入が適用されます。</p>
 </div>
 <div class="section" id="annotated-assignment-statements">
 <span id="annassign"></span><h3>7.2.2. 注釈付き代入文 (annotated assignment statements)<a class="headerlink" href="#annotated-assignment-statements" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -236,13 +236,9 @@
 <strong id="grammar-token-annotated_assignment_stmt">annotated_assignment_stmt</strong> ::=  <a class="reference internal" href="#grammar-token-augtarget"><code class="xref docutils literal"><span class="pre">augtarget</span></code></a> &quot;:&quot; <a class="reference internal" href="expressions.html#grammar-token-expression"><code class="xref docutils literal"><span class="pre">expression</span></code></a> [&quot;=&quot; <a class="reference internal" href="expressions.html#grammar-token-expression"><code class="xref docutils literal"><span class="pre">expression</span></code></a>]
 </pre>
 <p><a class="reference internal" href="#assignment"><span class="std std-ref">代入文 (assignment statement)</span></a> との違いは、代入先が 1 つに限定され右辺の値も 1 つに限定されることです。</p>
-<p>For simple names as assignment targets, if in class or module scope,
-the annotations are evaluated and stored in a special class or module
-attribute <code class="xref py py-attr docutils literal"><span class="pre">__annotations__</span></code>
-that is a dictionary mapping from variable names (mangled if private) to
-evaluated annotations. This attribute is writable and is automatically
-created at the start of class or module body execution, if annotations
-are found statically.</p>
+<p>代入先として単純名を使うと、クラススコープもしくはモジュールスコープの場合、注釈は評価され、クラスもしくはモジュールの特殊属性 <code class="xref py py-attr docutils literal"><span class="pre">__annotations__</span></code> に格納されます。
+この属性は、変数名 (プライベート変数の場合はマングリングされた名前) から評価後の注釈への対応付けを持つ辞書です。
+この属性は書き込み可能であり、注釈が静的に存在している場合、クラスもしくはモジュールの本体の実行の先頭で自動的に作成されます。</p>
 <p>For expressions as assignment targets, the annotations are evaluated if
 in class or module scope, but not stored.</p>
 <p>If a name is annotated in a function scope, then this name is local for
@@ -643,7 +639,7 @@ annotation.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 8月 29, 2017
+    最終更新日時: 8月 30, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
