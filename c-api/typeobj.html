@@ -215,7 +215,7 @@ Py_ssize_t <code class="descname">PyObject.ob_refcnt</code><a class="headerlink"
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">Foo_Type</span><span class="p">.</span><span class="n">ob_type</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">PyType_Type</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>上の操作は、該当する型のいかなるインスタンス生成よりも前にしておかなければなりません。 <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> は <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> が <em>NULL</em> かどうか調べ、 <em>NULL</em> の場合には基底クラスの <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> フィールドに初期化します。 <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> が非ゼロの場合、 <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> はこのフィールドを変更しません。</p>
+<p>上の操作は、該当する型のいかなるインスタンス生成よりも前にしておかなければなりません。 <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> は <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> が <em>NULL</em> かどうか調べ、 <em>NULL</em> の場合には基底クラスの <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> フィールドで初期化します。 <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> がゼロでない場合、 <a class="reference internal" href="type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> はこのフィールドを変更しません。</p>
 <p>サブタイプはこのフィールドを継承します。</p>
 </dd></dl>
 
@@ -231,7 +231,7 @@ Py_ssize_t <code class="descname">PyVarObject.ob_size</code><a class="headerlink
 const char* <code class="descname">PyTypeObject.tp_name</code><a class="headerlink" href="#c.PyTypeObject.tp_name" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>型の名前が入っている NUL 終端された文字列へのポインタです。モジュールのグローバル変数としてアクセスできる型の場合、この文字列は完全なモジュール名、ドット、そして型の名前と続く文字列になります; 組み込み型の場合、ただの型の名前です。モジュールがあるパッケージのサブモジュールの場合、完全なパッケージ名が完全なモジュール名の一部になっています。例えば、パッケージ <code class="xref py py-mod docutils literal"><span class="pre">P</span></code> 内のサブモジュール <code class="xref py py-mod docutils literal"><span class="pre">Q</span></code> に入っているモジュール <code class="xref py py-mod docutils literal"><span class="pre">M</span></code> 内で定義されている <code class="xref py py-class docutils literal"><span class="pre">T</span></code> は、 <a class="reference internal" href="#c.PyTypeObject.tp_name" title="PyTypeObject.tp_name"><code class="xref c c-member docutils literal"><span class="pre">tp_name</span></code></a> を <code class="docutils literal"><span class="pre">&quot;P.Q.M.T&quot;</span></code> に初期化します。</p>
 <p>動的にメモリ確保される型オブジェクトの場合、このフィールドは単に型の名前になり、モジュール名は型の辞書内でキー <code class="docutils literal"><span class="pre">'__module__'</span></code> に対する値として明示的に保存されます。</p>
-<p>静的にメモリ確保される型オブジェクトの場合、 <code class="xref py py-attr docutils literal"><span class="pre">tp_name</span></code> フィールドにはドットが含まれているはずです。
+<p>静的にメモリ確保される型オブジェクトの場合、 tp_name フィールドにはドットが含まれているはずです。
 最後のドットよりも前にある部分文字列全体は <code class="xref py py-attr docutils literal"><span class="pre">__module__</span></code> 属性として、またドットよりも後ろにある部分は <a class="reference internal" href="../library/stdtypes.html#definition.__name__" title="definition.__name__"><code class="xref py py-attr docutils literal"><span class="pre">__name__</span></code></a> 属性としてアクセスできます。</p>
 <p>ドットが入っていない場合、 <a class="reference internal" href="#c.PyTypeObject.tp_name" title="PyTypeObject.tp_name"><code class="xref c c-member docutils literal"><span class="pre">tp_name</span></code></a> フィールドの内容全てが <a class="reference internal" href="../library/stdtypes.html#definition.__name__" title="definition.__name__"><code class="xref py py-attr docutils literal"><span class="pre">__name__</span></code></a> 属性になり、 <code class="xref py py-attr docutils literal"><span class="pre">__module__</span></code> 属性は (前述のように型の辞書内で明示的にセットしないかぎり) 未定義になります。
 このため、その型は pickle 化できないことになります。
@@ -395,7 +395,7 @@ unsigned long <code class="descname">PyTypeObject.tp_flags</code><a class="heade
 <dl class="data">
 <dt id="Py_TPFLAGS_HEAPTYPE">
 <code class="descname">Py_TPFLAGS_HEAPTYPE</code><a class="headerlink" href="#Py_TPFLAGS_HEAPTYPE" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>型オブジェクト自体がヒープにメモリ確保される場合にセットされるビットです。型オブジェクト自体がヒープにメモリ確保される場合、インスタンスの <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> フィールドは型オブジェクトへの参照とみなされます。この場合、新たなインスタンスを生成する度に型オブジェクトを INCREF し、インスタンスを解放するたびに DECREF します (サブタイプのインスタンスには適当されません; インスタンスが <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> で参照している型だけが INCREF および DECREF されます)。</p>
+<dd><p>型オブジェクト自体がヒープにメモリ確保される場合にセットされるビットです。型オブジェクト自体がヒープにメモリ確保される場合、インスタンスの <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> フィールドは型オブジェクトへの参照とみなされます。この場合、新たなインスタンスを生成する度に型オブジェクトを INCREF し、インスタンスを解放するたびに DECREF します (サブタイプのインスタンスには適用されません; インスタンスが <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> で参照している型だけが INCREF および DECREF されます)。</p>
 </dd></dl>
 
 <dl class="data">
@@ -1224,7 +1224,7 @@ unaryfunc <code class="descname">PyAsyncMethods.am_anext</code><a class="headerl
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 9月 07, 2017
+    最終更新日時: 9月 08, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
