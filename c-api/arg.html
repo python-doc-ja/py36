@@ -204,7 +204,7 @@ Unicode オブジェクトは <code class="docutils literal"><span class="pre">'
 <p>この書式には三つの引数が必要です。一つ目は入力にのみ用いられ、 NUL で終端されたエンコード名文字列を指す <code class="xref c c-type docutils literal"><span class="pre">const</span> <span class="pre">char*</span></code> 型か <em>NULL</em> でなければなりません。 <em>NULL</em> の場合には <code class="docutils literal"><span class="pre">'utf-8'</span></code> を使います。指定したエンコード名を Python が理解できない場合には例外を送出します。第二の引数は <code class="xref c c-type docutils literal"><span class="pre">char**</span></code> でなければなりません; この引数が参照しているポインタの値は、引数に指定したテキストの内容が入ったバッファへのポインタになります。テキストは最初の引数に指定したエンコード方式でエンコードされます。第三の引数は整数へのポインタでなければなりません; ポインタが参照している整数の値は出力バッファ内のバイト数にセットされます。</p>
 <p>この書式の処理には二つのモードがあります:</p>
 <p><em>*buffer</em> が <em>NULL</em> ポインタを指している場合、関数は必要なサイズのバッファを確保し、そのバッファにエンコード後のデータをコピーして、 <em>*buffer</em> がこの新たに確保された記憶領域を指すように変更します。呼び出し側には、確保されたバッファを使い終わった後に <a class="reference internal" href="memory.html#c.PyMem_Free" title="PyMem_Free"><code class="xref c c-func docutils literal"><span class="pre">PyMem_Free()</span></code></a> で解放する責任があります。</p>
-<p><em>*buffer</em> が非 <em>NULL</em> のポインタ (すでにメモリ確保済みのバッファ) を指している場合、 <a class="reference internal" href="#c.PyArg_ParseTuple" title="PyArg_ParseTuple"><code class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></code></a> はこのメモリ位置をバッファとして用い、 <em>*buffer_length</em> の初期値をバッファサイズとして用います。 <a class="reference internal" href="#c.PyArg_ParseTuple" title="PyArg_ParseTuple"><code class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></code></a> は次にエンコード済みのデータをバッファにコピーして、NUL で終端します。バッファの大きさが足りなければ <a class="reference internal" href="../library/exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> がセットされます。</p>
+<p><em>*buffer</em> が非 <em>NULL</em> のポインタ (すでにメモリ確保済みのバッファ) を指している場合、 <a class="reference internal" href="#c.PyArg_ParseTuple" title="PyArg_ParseTuple"><code class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></code></a> はこのメモリ位置をバッファとして用い、 <em>*buffer_length</em> の初期値をバッファサイズとして用います。 PyArg_ParseTuple は次にエンコード済みのデータをバッファにコピーして、NUL で終端します。バッファの大きさが足りなければ <a class="reference internal" href="../library/exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> がセットされます。</p>
 <p class="last">どちらの場合も、 <em>*buffer_length</em> は終端の NUL バイトを含まないエンコード済みデータの長さにセットされます。</p>
 </dd>
 <dt><code class="docutils literal"><span class="pre">et#</span></code> (<a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>, <a class="reference internal" href="../library/functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> または <a class="reference internal" href="../library/functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a>) [const char *encoding, char **buffer, int *buffer_length]</dt>
@@ -610,7 +610,7 @@ int <code class="descname">PyArg_UnpackTuple</code><span class="sig-paren">(</sp
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 9月 09, 2017
+    最終更新日時: 9月 12, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
