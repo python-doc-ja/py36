@@ -115,21 +115,15 @@
 <p><span class="versionmodified">バージョン 3.3 で変更: </span>以前は <a class="reference internal" href="../using/cmdline.html#cmdoption-S"><code class="xref std std-option docutils literal"><span class="pre">-S</span></code></a> を使っているときでも、モジュールをインポートするとパス変更が起動されていました。</p>
 </div>
 <p id="index-1"><a class="reference internal" href="#site.main" title="site.main"><code class="xref py py-func docutils literal"><span class="pre">site.main()</span></code></a> 関数の処理は、前部と後部からなる最大で四つまでのディレクトリを構築するところから始まります。
-前部には、 <code class="docutils literal"><span class="pre">sys.prefix</span></code> と <code class="docutils literal"><span class="pre">sys.exec_prefix</span></code> を使用します; 空の前部は使われません。
-後部には、まず空文字列を使い、次に <code class="file docutils literal"><span class="pre">lib/site-packages</span></code> (Windows) または <code class="file docutils literal"><span class="pre">lib/python</span><em><span class="pre">X.Y</span></em><span class="pre">/site-packages</span></code> (Unix と Macintosh)を使います。
-前部-後部の異なる組み合わせのそれぞれに対して、それが存在するディレクトリを参照しているかどうかを調べ、もしそうならば <code class="docutils literal"><span class="pre">sys.path</span></code> へ追加します。
+前部では <code class="docutils literal"><span class="pre">sys.prefix</span></code> と <code class="docutils literal"><span class="pre">sys.exec_prefix</span></code> を使用します; 空の前部は使われません。
+後部では、1つ目は空文字列を使い、2つ目は <code class="file docutils literal"><span class="pre">lib/site-packages</span></code> (Windows) または <code class="file docutils literal"><span class="pre">lib/python</span><em><span class="pre">X.Y</span></em><span class="pre">/site-packages</span></code> (Unix と Macintosh) を使います。
+前部-後部の異なる組み合わせごとに、それが存在しているディレクトリを参照しているかどうかを調べ、存在している場合は <code class="docutils literal"><span class="pre">sys.path</span></code> へ追加します。
 そして、新しく追加されたパスからパス設定ファイルを検索します。</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.5 で変更: </span>&#8220;site-python&#8221; ディレクトリのサポートは削除されました。</p>
 </div>
-<p>If a file named &#8220;pyvenv.cfg&#8221; exists one directory above sys.executable,
-sys.prefix and sys.exec_prefix are set to that directory and
-it is also checked for site-packages (sys.base_prefix and
-sys.base_exec_prefix will always be the &#8220;real&#8221; prefixes of the Python
-installation). If &#8220;pyvenv.cfg&#8221; (a bootstrap configuration file) contains
-the key &#8220;include-system-site-packages&#8221; set to anything other than &#8220;false&#8221;
-(case-insensitive), the system-level prefixes will still also be
-searched for site-packages; otherwise they won&#8217;t.</p>
+<p>&#8220;pyvenv.cfg&#8221; という名前のファイルが上で挙げたディレクトリの 1 つに存在していた場合、 sys.executable, sys.prefix, sys.exec_prefix にはそのディレクトリが設定され、 site-packages もチェックします (sys.base_prefix と sys.base_exec_prefix は常にインストールされているPythonの &#8220;実際の&#8221; プレフィックスです)。
+(ブートストラップの設定ファイルである) &#8220;pyvenv.cfg&#8221; で、キー &#8220;include-system-site-packages&#8221; に &#8220;false&#8221; (大文字小文字は区別しない) 以外が設定されている場合は、 site-packages を探しにシステムレベルのプレフィックスも見に行きます; そうでない場合は見に行きません。</p>
 <p>パス設定ファイルは <code class="file docutils literal"><em><span class="pre">name</span></em><span class="pre">.pth</span></code> という形式の名前をもつファイルで、上の4つのディレクトリのひとつにあります。その内容は <code class="docutils literal"><span class="pre">sys.path</span></code> に追加される追加項目(一行に一つ)です。存在しない項目は <code class="docutils literal"><span class="pre">sys.path</span></code> へは決して追加されませんが、項目がファイルではなくディレクトリを参照しているかどうかはチェックされません。項目が <code class="docutils literal"><span class="pre">sys.path</span></code> へ二回以上追加されることはありません。空行と <code class="docutils literal"><span class="pre">#</span></code> で始まる行は読み飛ばされます。 <code class="docutils literal"><span class="pre">import</span></code> で始まる(そしてその後ろにスペースかタブが続く)行は実行されます。</p>
 <p id="index-2">例えば、 <code class="docutils literal"><span class="pre">sys.prefix</span></code> と <code class="docutils literal"><span class="pre">sys.exec_prefix</span></code> が <code class="file docutils literal"><span class="pre">/usr/local</span></code> に設定されていると仮定します。そのときPython X.Y ライブラリは <code class="file docutils literal"><span class="pre">/usr/local/lib/python</span><em><span class="pre">X.Y</span></em></code> にインストールされています。ここにはサブディレクトリ <code class="file docutils literal"><span class="pre">/usr/local/lib/python</span><em><span class="pre">X.Y</span></em><span class="pre">/site-packages</span></code> があり、その中に三つのサブディレクトリ <code class="file docutils literal"><span class="pre">foo</span></code>, <code class="file docutils literal"><span class="pre">bar</span></code> および <code class="file docutils literal"><span class="pre">spam</span></code> と二つのパス設定ファイル <code class="file docutils literal"><span class="pre">foo.pth</span></code> と <code class="file docutils literal"><span class="pre">bar.pth</span></code> をもつと仮定します。 <code class="file docutils literal"><span class="pre">foo.pth</span></code> には以下のものが記載されていると想定してください:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span># foo package configuration
