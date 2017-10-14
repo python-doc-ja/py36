@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>16.16. ctypes — Pythonのための外部関数ライブラリ &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="16. 汎用オペレーティングシステムサービス" href="allos.html" />
     <link rel="next" title="17. 並行実行" href="concurrency.html" />
     <link rel="prev" title="16.15. errno — 標準の errno システムシンボル" href="errno.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,13 +100,13 @@
           <div class="body" role="main">
             
   <div class="section" id="module-ctypes">
-<span id="ctypes-a-foreign-function-library-for-python"></span><h1>16.16. <a class="reference internal" href="#module-ctypes" title="ctypes: A foreign function library for Python."><code class="xref py py-mod docutils literal"><span class="pre">ctypes</span></code></a> &#8212; Pythonのための外部関数ライブラリ<a class="headerlink" href="#module-ctypes" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="ctypes-a-foreign-function-library-for-python"></span><h1>16.16. <a class="reference internal" href="#module-ctypes" title="ctypes: A foreign function library for Python."><code class="xref py py-mod docutils literal"><span class="pre">ctypes</span></code></a> — Pythonのための外部関数ライブラリ<a class="headerlink" href="#module-ctypes" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <hr class="docutils" />
 <p><a class="reference internal" href="#module-ctypes" title="ctypes: A foreign function library for Python."><code class="xref py py-mod docutils literal"><span class="pre">ctypes</span></code></a> は Python のための外部関数ライブラリです。このライブラリは C と互換性のあるデータ型を提供し、動的リンク/共有ライブラリ内の関数呼び出しを可能にします。動的リンク/共有ライブラリを純粋な Python でラップするために使うことができます。</p>
 <div class="section" id="ctypes-tutorial">
 <span id="ctypes-ctypes-tutorial"></span><h2>16.16.1. ctypesチュートリアル<a class="headerlink" href="#ctypes-tutorial" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>注意: このチュートリアルのコードサンプルは動作確認のために <a class="reference internal" href="doctest.html#module-doctest" title="doctest: Test pieces of code within docstrings."><code class="xref py py-mod docutils literal"><span class="pre">doctest</span></code></a> を使います。コードサンプルの中には Linux、 Windows、あるいは Mac OS X 上で異なる動作をするものがあるため、サンプルのコメントに doctest 命令を入れてあります。</p>
-<p>注意: いくつかのコードサンプルで ctypes の <a class="reference internal" href="#ctypes.c_int" title="ctypes.c_int"><code class="xref py py-class docutils literal"><span class="pre">c_int</span></code></a> 型を参照しています。 <code class="docutils literal"><span class="pre">sizeof(long)</span> <span class="pre">==</span> <span class="pre">sizeof(int)</span></code> であるようなプラットフォームでは、この型は <a class="reference internal" href="#ctypes.c_long" title="ctypes.c_long"><code class="xref py py-class docutils literal"><span class="pre">c_long</span></code></a> のエイリアスです。そのため、 <a class="reference internal" href="#ctypes.c_int" title="ctypes.c_int"><code class="xref py py-class docutils literal"><span class="pre">c_int</span></code></a> 型を想定しているときに <a class="reference internal" href="#ctypes.c_long" title="ctypes.c_long"><code class="xref py py-class docutils literal"><span class="pre">c_long</span></code></a> が表示されたとしても、混乱しないようにしてください &#8212; 実際には同じ型なのです。</p>
+<p>注意: いくつかのコードサンプルで ctypes の <a class="reference internal" href="#ctypes.c_int" title="ctypes.c_int"><code class="xref py py-class docutils literal"><span class="pre">c_int</span></code></a> 型を参照しています。 <code class="docutils literal"><span class="pre">sizeof(long)</span> <span class="pre">==</span> <span class="pre">sizeof(int)</span></code> であるようなプラットフォームでは、この型は <a class="reference internal" href="#ctypes.c_long" title="ctypes.c_long"><code class="xref py py-class docutils literal"><span class="pre">c_long</span></code></a> のエイリアスです。そのため、 <a class="reference internal" href="#ctypes.c_int" title="ctypes.c_int"><code class="xref py py-class docutils literal"><span class="pre">c_int</span></code></a> 型を想定しているときに <a class="reference internal" href="#ctypes.c_long" title="ctypes.c_long"><code class="xref py py-class docutils literal"><span class="pre">c_long</span></code></a> が表示されたとしても、混乱しないようにしてください — 実際には同じ型なのです。</p>
 <div class="section" id="loading-dynamic-link-libraries">
 <span id="ctypes-loading-dynamic-link-libraries"></span><h3>16.16.1.1. 動的リンクライブラリをロードする<a class="headerlink" href="#loading-dynamic-link-libraries" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>動的リンクライブラリをロードするために、 <a class="reference internal" href="#module-ctypes" title="ctypes: A foreign function library for Python."><code class="xref py py-mod docutils literal"><span class="pre">ctypes</span></code></a> は <em>cdll</em> をエクスポートします。 Windows では <em>windll</em> と <em>oledll</em> オブジェクトをエクスポートします。</p>
@@ -247,12 +243,9 @@
 <col width="30%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">ctypes の型</p>
-</th>
-<th class="head"><p class="first last">C の型</p>
-</th>
-<th class="head"><p class="first last">Python の型</p>
-</th>
+<tr class="row-odd"><th class="head">ctypes の型</th>
+<th class="head">C の型</th>
+<th class="head">Python の型</th>
 </tr>
 </thead>
 <tbody valign="top">
@@ -262,13 +255,11 @@
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#ctypes.c_char" title="ctypes.c_char"><code class="xref py py-class docutils literal"><span class="pre">c_char</span></code></a></td>
 <td><code class="xref c c-type docutils literal"><span class="pre">char</span></code></td>
-<td><p class="first last">1文字のバイト列オブジェクト</p>
-</td>
+<td>1文字のバイト列オブジェクト</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#ctypes.c_wchar" title="ctypes.c_wchar"><code class="xref py py-class docutils literal"><span class="pre">c_wchar</span></code></a></td>
 <td><code class="xref c c-type docutils literal"><span class="pre">wchar_t</span></code></td>
-<td><p class="first last">1文字の文字列</p>
-</td>
+<td>1文字の文字列</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#ctypes.c_byte" title="ctypes.c_byte"><code class="xref py py-class docutils literal"><span class="pre">c_byte</span></code></a></td>
 <td><code class="xref c c-type docutils literal"><span class="pre">char</span></code></td>
@@ -303,13 +294,11 @@
 <td>int</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#ctypes.c_longlong" title="ctypes.c_longlong"><code class="xref py py-class docutils literal"><span class="pre">c_longlong</span></code></a></td>
-<td><p class="first last"><code class="xref c c-type docutils literal"><span class="pre">__int64</span></code> または <code class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">long</span></code></p>
-</td>
+<td><code class="xref c c-type docutils literal"><span class="pre">__int64</span></code> または <code class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">long</span></code></td>
 <td>int</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#ctypes.c_ulonglong" title="ctypes.c_ulonglong"><code class="xref py py-class docutils literal"><span class="pre">c_ulonglong</span></code></a></td>
-<td><p class="first last"><code class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">__int64</span></code> または <code class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></code></p>
-</td>
+<td><code class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">__int64</span></code> または <code class="xref c c-type docutils literal"><span class="pre">unsigned</span> <span class="pre">long</span> <span class="pre">long</span></code></td>
 <td>int</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#ctypes.c_size_t" title="ctypes.c_size_t"><code class="xref py py-class docutils literal"><span class="pre">c_size_t</span></code></a></td>
@@ -317,47 +306,37 @@
 <td>int</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#ctypes.c_ssize_t" title="ctypes.c_ssize_t"><code class="xref py py-class docutils literal"><span class="pre">c_ssize_t</span></code></a></td>
-<td><p class="first last"><code class="xref c c-type docutils literal"><span class="pre">ssize_t</span></code> または <code class="xref c c-type docutils literal"><span class="pre">Py_ssize_t</span></code></p>
-</td>
+<td><code class="xref c c-type docutils literal"><span class="pre">ssize_t</span></code> または <code class="xref c c-type docutils literal"><span class="pre">Py_ssize_t</span></code></td>
 <td>int</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#ctypes.c_float" title="ctypes.c_float"><code class="xref py py-class docutils literal"><span class="pre">c_float</span></code></a></td>
 <td><code class="xref c c-type docutils literal"><span class="pre">float</span></code></td>
-<td><p class="first last">浮動小数点数</p>
-</td>
+<td>浮動小数点数</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#ctypes.c_double" title="ctypes.c_double"><code class="xref py py-class docutils literal"><span class="pre">c_double</span></code></a></td>
 <td><code class="xref c c-type docutils literal"><span class="pre">double</span></code></td>
-<td><p class="first last">浮動小数点数</p>
-</td>
+<td>浮動小数点数</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#ctypes.c_longdouble" title="ctypes.c_longdouble"><code class="xref py py-class docutils literal"><span class="pre">c_longdouble</span></code></a></td>
 <td><code class="xref c c-type docutils literal"><span class="pre">long</span> <span class="pre">double</span></code></td>
-<td><p class="first last">浮動小数点数</p>
-</td>
+<td>浮動小数点数</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#ctypes.c_char_p" title="ctypes.c_char_p"><code class="xref py py-class docutils literal"><span class="pre">c_char_p</span></code></a></td>
-<td><p class="first last"><code class="xref c c-type docutils literal"><span class="pre">char</span> <span class="pre">*</span></code> (NUL 終端)</p>
-</td>
-<td><p class="first last">バイト列オブジェクトまたは <code class="docutils literal"><span class="pre">None</span></code></p>
-</td>
+<td><code class="xref c c-type docutils literal"><span class="pre">char</span> <span class="pre">*</span></code> (NUL 終端)</td>
+<td>バイト列オブジェクトまたは <code class="docutils literal"><span class="pre">None</span></code></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#ctypes.c_wchar_p" title="ctypes.c_wchar_p"><code class="xref py py-class docutils literal"><span class="pre">c_wchar_p</span></code></a></td>
-<td><p class="first last"><code class="xref c c-type docutils literal"><span class="pre">wchar_t</span> <span class="pre">*</span></code> (NUL 終端)</p>
-</td>
-<td><p class="first last">文字列または <code class="docutils literal"><span class="pre">None</span></code></p>
-</td>
+<td><code class="xref c c-type docutils literal"><span class="pre">wchar_t</span> <span class="pre">*</span></code> (NUL 終端)</td>
+<td>文字列または <code class="docutils literal"><span class="pre">None</span></code></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#ctypes.c_void_p" title="ctypes.c_void_p"><code class="xref py py-class docutils literal"><span class="pre">c_void_p</span></code></a></td>
 <td><code class="xref c c-type docutils literal"><span class="pre">void</span> <span class="pre">*</span></code></td>
-<td><p class="first last">整数または <code class="docutils literal"><span class="pre">None</span></code></p>
-</td>
+<td>整数または <code class="docutils literal"><span class="pre">None</span></code></td>
 </tr>
 </tbody>
 </table>
 <ol class="arabic simple">
-<li><p class="first">コンストラクタは任意のオブジェクトをその真偽値として受け取ります。</p>
-</li>
+<li>コンストラクタは任意のオブジェクトをその真偽値として受け取ります。</li>
 </ol>
 <p>これら全ての型はその型を呼び出すことによって作成でき、オプションとして型と値が合っている初期化子を指定することができます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c_int</span><span class="p">()</span>
@@ -921,7 +900,7 @@
 </div>
 <div class="section" id="accessing-values-exported-from-dlls">
 <span id="ctypes-accessing-values-exported-from-dlls"></span><h3>16.16.1.18. dllからエクスポートされた値へアクセスする<a class="headerlink" href="#accessing-values-exported-from-dlls" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>共有ライブラリの一部は関数だけでなく変数もエクスポートしています。 Python ライブラリにある例としては <code class="xref c c-data docutils literal"><span class="pre">Py_OptimizeFlag</span></code> 、起動時の <a class="reference internal" href="../using/cmdline.html#cmdoption-O"><code class="xref std std-option docutils literal"><span class="pre">-O</span></code></a> または <a class="reference internal" href="../using/cmdline.html#cmdoption-OO"><code class="xref std std-option docutils literal"><span class="pre">-OO</span></code></a> フラグに依存して、 0 , 1 または 2 が設定される整数があります。</p>
+<p>共有ライブラリの一部は関数だけでなく変数もエクスポートしています。 Python ライブラリにある例としては <code class="xref c c-data docutils literal"><span class="pre">Py_OptimizeFlag</span></code> 、起動時の <a class="reference internal" href="../using/cmdline.html#cmdoption-o"><code class="xref std std-option docutils literal"><span class="pre">-O</span></code></a> または <a class="reference internal" href="../using/cmdline.html#cmdoption-oo"><code class="xref std std-option docutils literal"><span class="pre">-OO</span></code></a> フラグに依存して、 0 , 1 または 2 が設定される整数があります。</p>
 <p><a class="reference internal" href="#module-ctypes" title="ctypes: A foreign function library for Python."><code class="xref py py-mod docutils literal"><span class="pre">ctypes</span></code></a> は型の <code class="xref py py-meth docutils literal"><span class="pre">in_dll()</span></code> クラスメソッドを使ってこのように値にアクセスできます。 <em>pythonapi</em> はPython C api へアクセスできるようにするための予め定義されたシンボルです。:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">opt_flag</span> <span class="o">=</span> <span class="n">c_int</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">pythonapi</span><span class="p">,</span> <span class="s2">&quot;Py_OptimizeFlag&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">opt_flag</span><span class="p">)</span>
@@ -929,12 +908,11 @@
 <span class="go">&gt;&gt;&gt;</span>
 </pre></div>
 </div>
-<p>インタープリタが <a class="reference internal" href="../using/cmdline.html#cmdoption-O"><code class="xref std std-option docutils literal"><span class="pre">-O</span></code></a> を指定されて動き始めた場合、サンプルは <code class="docutils literal"><span class="pre">c_long(1)</span></code> を表示するでしょうし、 <a class="reference internal" href="../using/cmdline.html#cmdoption-OO"><code class="xref std std-option docutils literal"><span class="pre">-OO</span></code></a> が指定されたならば <code class="docutils literal"><span class="pre">c_long(2)</span></code> を表示するでしょう。</p>
+<p>インタープリタが <a class="reference internal" href="../using/cmdline.html#cmdoption-o"><code class="xref std std-option docutils literal"><span class="pre">-O</span></code></a> を指定されて動き始めた場合、サンプルは <code class="docutils literal"><span class="pre">c_long(1)</span></code> を表示するでしょうし、 <a class="reference internal" href="../using/cmdline.html#cmdoption-oo"><code class="xref std std-option docutils literal"><span class="pre">-OO</span></code></a> が指定されたならば <code class="docutils literal"><span class="pre">c_long(2)</span></code> を表示するでしょう。</p>
 <p>ポインタの使い方を説明する拡張例では、 Python がエクスポートする <a class="reference internal" href="../c-api/import.html#c.PyImport_FrozenModules" title="PyImport_FrozenModules"><code class="xref c c-data docutils literal"><span class="pre">PyImport_FrozenModules</span></code></a> ポインタにアクセスします。</p>
 <p>この値のドキュメントから引用すると:</p>
 <blockquote>
-<div><p>このポインタは <code class="xref c c-type docutils literal"><span class="pre">struct</span> <span class="pre">_frozen</span></code> のレコードからなり、終端の要素のメンバが <em>NULL</em> かゼロになっているような配列を指すよう初期化されます。フリーズされたモジュールをインポートするとき、このテーブルを検索します。サードパーティ製のコードからこのポインタに仕掛けを講じて、動的に生成されたフリーズ化モジュールの集合を提供するようにできます。</p>
-</div></blockquote>
+<div>このポインタは <code class="xref c c-type docutils literal"><span class="pre">struct</span> <span class="pre">_frozen</span></code> のレコードからなり、終端の要素のメンバが <em>NULL</em> かゼロになっているような配列を指すよう初期化されます。フリーズされたモジュールをインポートするとき、このテーブルを検索します。サードパーティ製のコードからこのポインタに仕掛けを講じて、動的に生成されたフリーズ化モジュールの集合を提供するようにできます。</div></blockquote>
 <p>これで、このポインタを操作することが役に立つことを証明できるでしょう。例の大きさを制限するために、このテーブルを <a class="reference internal" href="#module-ctypes" title="ctypes: A foreign function library for Python."><code class="xref py py-mod docutils literal"><span class="pre">ctypes</span></code></a> を使って読む方法だけを示します。:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">ctypes</span> <span class="k">import</span> <span class="o">*</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -1320,14 +1298,11 @@ POSIX システムでは RTLD_NOW が常に追加され、設定変更はでき�
 <blockquote>
 <div><dl class="docutils">
 <dt>1</dt>
-<dd><p class="first last">入力パラメータを関数に指定します。</p>
-</dd>
+<dd>入力パラメータを関数に指定します。</dd>
 <dt>2</dt>
-<dd><p class="first last">出力パラメータ。外部関数が値を書き込みます。</p>
-</dd>
+<dd>出力パラメータ。外部関数が値を書き込みます。</dd>
 <dt>4</dt>
-<dd><p class="first last">デフォルトで整数ゼロになる入力パラメータ。</p>
-</dd>
+<dd>デフォルトで整数ゼロになる入力パラメータ。</dd>
 </dl>
 </div></blockquote>
 <p>オプションの第二要素はパラメータ名の文字列です。これが指定された場合は、外部関数を名前付きパラメータで呼び出すことができます。</p>
@@ -1969,7 +1944,7 @@ windows のヘッダファイルの C の宣言は次の通りです:</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">16.16. <code class="docutils literal"><span class="pre">ctypes</span></code> &#8212; Pythonのための外部関数ライブラリ</a><ul>
+<li><a class="reference internal" href="#">16.16. <code class="docutils literal"><span class="pre">ctypes</span></code> — Pythonのための外部関数ライブラリ</a><ul>
 <li><a class="reference internal" href="#ctypes-tutorial">16.16.1. ctypesチュートリアル</a><ul>
 <li><a class="reference internal" href="#loading-dynamic-link-libraries">16.16.1.1. 動的リンクライブラリをロードする</a></li>
 <li><a class="reference internal" href="#accessing-functions-from-loaded-dlls">16.16.1.2. ロードしたdllから関数にアクセスする</a></li>
@@ -2011,7 +1986,7 @@ windows のヘッダファイルの C の宣言は次の通りです:</p>
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="errno.html"
-                        title="前の章へ">16.15. <code class="docutils literal"><span class="pre">errno</span></code> &#8212; 標準の errno システムシンボル</a></p>
+                        title="前の章へ">16.15. <code class="docutils literal"><span class="pre">errno</span></code> — 標準の errno システムシンボル</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="concurrency.html"
                         title="次の章へ">17. 並行実行</a></p>
@@ -2020,7 +1995,7 @@ windows のヘッダファイルの C の宣言は次の通りです:</p>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/ctypes.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/ctypes.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -2081,7 +2056,7 @@ windows のヘッダファイルの C の宣言は次の通りです:</p>
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

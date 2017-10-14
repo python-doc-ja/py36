@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>18.3. select — I/O 処理の完了を待機する &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="18. プロセス間通信とネットワーク" href="ipc.html" />
     <link rel="next" title="18.4. selectors — 高水準の I/O 多重化" href="selectors.html" />
     <link rel="prev" title="18.2. ssl — ソケットオブジェクトに対する TLS/SSL ラッパー" href="ssl.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,7 +100,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-select">
-<span id="select-waiting-for-i-o-completion"></span><h1>18.3. <a class="reference internal" href="#module-select" title="select: Wait for I/O completion on multiple streams."><code class="xref py py-mod docutils literal"><span class="pre">select</span></code></a> &#8212; I/O 処理の完了を待機する<a class="headerlink" href="#module-select" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="select-waiting-for-i-o-completion"></span><h1>18.3. <a class="reference internal" href="#module-select" title="select: Wait for I/O completion on multiple streams."><code class="xref py py-mod docutils literal"><span class="pre">select</span></code></a> — I/O 処理の完了を待機する<a class="headerlink" href="#module-select" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <hr class="docutils" />
 <p>このモジュールでは、ほとんどのオペレーティングシステムで利用可能な <code class="xref c c-func docutils literal"><span class="pre">select()</span></code> および <code class="xref c c-func docutils literal"><span class="pre">poll()</span></code> 関数、Solaris やその派生で利用可能な <code class="xref c c-func docutils literal"><span class="pre">devpoll()</span></code> 、Linux 2.5+ で利用可能な <code class="xref c c-func docutils literal"><span class="pre">epoll()</span></code> 、多くのBSDで利用可能な <code class="xref c c-func docutils literal"><span class="pre">kqueue()</span></code> 関数に対するアクセスを提供しています。 Windows 上ではソケットに対してしか動作しないので注意してください; その他のオペレーティングシステムでは、他のファイル形式でも (特に Unixではパイプにも) 動作します。通常のファイルに対して適用し、最後にファイルを読み出した時から内容が増えているかを決定するために使うことはできません。</p>
 <div class="admonition note">
@@ -188,14 +184,11 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
 <dl class="function">
 <dt id="select.select">
 <code class="descclassname">select.</code><code class="descname">select</code><span class="sig-paren">(</span><em>rlist</em>, <em>wlist</em>, <em>xlist</em><span class="optional">[</span>, <em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#select.select" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Unix の <code class="xref c c-func docutils literal"><span class="pre">select()</span></code> システムコールに対する直接的なインタフェースです。最初の 3 つの引数は &#8216;待機可能オブジェクト&#8217; からなるシーケンスです: 待機可能オブジェクトとは、ファイル記述子を表す整数値か、そのような整数を返す引数なしメソッド <a class="reference internal" href="io.html#io.IOBase.fileno" title="io.IOBase.fileno"><code class="xref py py-meth docutils literal"><span class="pre">fileno()</span></code></a> を持つオブジェクトです。</p>
+<dd><p>Unix の <code class="xref c c-func docutils literal"><span class="pre">select()</span></code> システムコールに対する直接的なインタフェースです。最初の 3 つの引数は 『待機可能オブジェクト』 からなるシーケンスです: 待機可能オブジェクトとは、ファイル記述子を表す整数値か、そのような整数を返す引数なしメソッド <a class="reference internal" href="io.html#io.IOBase.fileno" title="io.IOBase.fileno"><code class="xref py py-meth docutils literal"><span class="pre">fileno()</span></code></a> を持つオブジェクトです。</p>
 <ul class="simple">
-<li><p class="first"><em>rlist</em>: 読み込み可能になるまで待機</p>
-</li>
-<li><p class="first"><em>wlist</em>: 書き込み可能になるまで待機</p>
-</li>
-<li><p class="first"><em>xlist</em>: &#8220;例外状態 (exceptional condition)&#8221; になるまで待機 (&#8220;例外状態&#8221; については、システムのマニュアルページを参照してください)</p>
-</li>
+<li><em>rlist</em>: 読み込み可能になるまで待機</li>
+<li><em>wlist</em>: 書き込み可能になるまで待機</li>
+<li><em>xlist</em>: 「例外状態 (exceptional condition)」 になるまで待機 (「例外状態」 については、システムのマニュアルページを参照してください)</li>
 </ul>
 <p>引数に空のシーケンスを指定してもかまいませんが、3 つの引数全てを空のシーケンスにしてもよいかどうかはプラットフォームに依存します (Unix では動作し、Windows では動作しないことが知られています)。オプションの <em>timeout</em> 引数にはタイムアウトまでの秒数を浮動小数点数で指定します。<em>timeout</em> 引数が省略された場合、関数は少なくとも一つのファイル記述子が何らかの準備完了状態になるまでブロックします。<em>timeout</em> に 0 を指定した場合は、ポーリングを行いブロックしないことを示します。</p>
 <p>戻り値は準備完了状態のオブジェクトからなる 3 つのリストです: したがってこのリストはそれぞれ関数の最初の 3 つの引数のサブセットになります。ファイル記述子のいずれも準備完了にならないままタイムアウトした場合、3 つの空のリストが返されます。</p>
@@ -278,7 +271,7 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
 <dl class="method">
 <dt id="select.devpoll.poll">
 <code class="descclassname">devpoll.</code><code class="descname">poll</code><span class="sig-paren">(</span><span class="optional">[</span><em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#select.devpoll.poll" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>登録されたファイル記述子に対してポーリングを行い、報告すべき I/O イベントまたはエラーの発生したファイル記述子毎に 2 要素のタプル <code class="docutils literal"><span class="pre">(fd,</span> <span class="pre">event)</span></code> からなるリストを返します。リストは空になることもあります。 <em>fd</em> はファイル記述子で、 <em>event</em> は該当するファイル記述子について報告されたイベントを表すビットマスクです &#8212; 例えば <code class="xref py py-const docutils literal"><span class="pre">POLLIN</span></code> は入力待ちを示し、 <code class="xref py py-const docutils literal"><span class="pre">POLLOUT</span></code> はファイル記述子に対する書き込みが可能を示す、などです。空のリストは呼び出しがタイムアウトしたか、報告すべきイベントがどのファイル記述子でも発生しなかったことを示します。 <em>timeout</em> が与えられた場合、処理を戻すまで待機する時間の長さをミリ秒単位で指定します。 <em>timeout</em> が省略されたり、 -1 であったり、あるいは <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> の場合、そのポーリングオブジェクトが監視している何らかのイベントが発生するまでブロックします。</p>
+<dd><p>登録されたファイル記述子に対してポーリングを行い、報告すべき I/O イベントまたはエラーの発生したファイル記述子毎に 2 要素のタプル <code class="docutils literal"><span class="pre">(fd,</span> <span class="pre">event)</span></code> からなるリストを返します。リストは空になることもあります。 <em>fd</em> はファイル記述子で、 <em>event</em> は該当するファイル記述子について報告されたイベントを表すビットマスクです — 例えば <code class="xref py py-const docutils literal"><span class="pre">POLLIN</span></code> は入力待ちを示し、 <code class="xref py py-const docutils literal"><span class="pre">POLLOUT</span></code> はファイル記述子に対する書き込みが可能を示す、などです。空のリストは呼び出しがタイムアウトしたか、報告すべきイベントがどのファイル記述子でも発生しなかったことを示します。 <em>timeout</em> が与えられた場合、処理を戻すまで待機する時間の長さをミリ秒単位で指定します。 <em>timeout</em> が省略されたり、 -1 であったり、あるいは <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> の場合、そのポーリングオブジェクトが監視している何らかのイベントが発生するまでブロックします。</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.5 で変更: </span>この関数は、シグナルによって中断された時に、 <a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> を上げる代わりに再計算されたタイムアウトによってリトライするようになりました。ただし、シグナルハンドラが例外を起こした場合を除きます (この論理的根拠については <span class="target" id="index-16"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> を見てください)。</p>
 </div>
@@ -296,68 +289,52 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
 <col width="65%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">定数</p>
-</th>
-<th class="head"><p class="first last">意味</p>
-</th>
+<tr class="row-odd"><th class="head">定数</th>
+<th class="head">意味</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">EPOLLIN</span></code></td>
-<td><p class="first last">読み込み可能</p>
-</td>
+<td>読み込み可能</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">EPOLLOUT</span></code></td>
-<td><p class="first last">書き込み可能</p>
-</td>
+<td>書き込み可能</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">EPOLLPRI</span></code></td>
-<td><p class="first last">緊急の読み出しデータ</p>
-</td>
+<td>緊急の読み出しデータ</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">EPOLLERR</span></code></td>
-<td><p class="first last">設定された fd にエラー状態が発生した</p>
-</td>
+<td>設定された fd にエラー状態が発生した</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">EPOLLHUP</span></code></td>
-<td><p class="first last">設定された fd がハングアップした</p>
-</td>
+<td>設定された fd がハングアップした</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">EPOLLET</span></code></td>
-<td><p class="first last">エッジトリガ動作に設定する。デフォルトではレベルトリガ動作</p>
-</td>
+<td>エッジトリガ動作に設定する。デフォルトではレベルトリガ動作</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">EPOLLONESHOT</span></code></td>
-<td><p class="first last">1ショット動作に設定する。1回イベントが取り出されたら、その fd が内部で無効になる</p>
-</td>
+<td>1ショット動作に設定する。1回イベントが取り出されたら、その fd が内部で無効になる</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">EPOLLEXCLUSIVE</span></code></td>
-<td><p class="first last">関連づけられた fd にイベントがある場合、1 つの epoll オブジェクトのみを起こします。デフォルトでは (このフラグが設定されていない場合には)、fd に対してポーリングするすべての epoll オブジェクトを起こします。</p>
-</td>
+<td>関連づけられた fd にイベントがある場合、1 つの epoll オブジェクトのみを起こします。デフォルトでは (このフラグが設定されていない場合には)、fd に対してポーリングするすべての epoll オブジェクトを起こします。</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">EPOLLRDHUP</span></code></td>
-<td><p class="first last">ストリームソケットの他端が接続を切断したか、接続の書き込み側のシャットダウンを行った。</p>
-</td>
+<td>ストリームソケットの他端が接続を切断したか、接続の書き込み側のシャットダウンを行った。</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">EPOLLRDNORM</span></code></td>
-<td><p class="first last"><code class="xref py py-const docutils literal"><span class="pre">EPOLLIN</span></code> と同じ</p>
-</td>
+<td><code class="xref py py-const docutils literal"><span class="pre">EPOLLIN</span></code> と同じ</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">EPOLLRDBAND</span></code></td>
-<td><p class="first last">優先データバンドを読み込める。</p>
-</td>
+<td>優先データバンドを読み込める。</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">EPOLLWRNORM</span></code></td>
-<td><p class="first last"><code class="xref py py-const docutils literal"><span class="pre">EPOLLOUT</span></code> と同じ</p>
-</td>
+<td><code class="xref py py-const docutils literal"><span class="pre">EPOLLOUT</span></code> と同じ</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">EPOLLWRBAND</span></code></td>
-<td><p class="first last">優先データに書き込みできる。</p>
-</td>
+<td>優先データに書き込みできる。</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">EPOLLMSG</span></code></td>
-<td><p class="first last">無視される。</p>
-</td>
+<td>無視される。</td>
 </tr>
 </tbody>
 </table>
@@ -428,40 +405,31 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
 <col width="69%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">定数</p>
-</th>
-<th class="head"><p class="first last">意味</p>
-</th>
+<tr class="row-odd"><th class="head">定数</th>
+<th class="head">意味</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">POLLIN</span></code></td>
-<td><p class="first last">読み出し可能なデータが存在する</p>
-</td>
+<td>読み出し可能なデータが存在する</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">POLLPRI</span></code></td>
-<td><p class="first last">緊急の読み出し可能なデータが存在する</p>
-</td>
+<td>緊急の読み出し可能なデータが存在する</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">POLLOUT</span></code></td>
-<td><p class="first last">書き出しの準備ができている: 書き出し処理がブロックしない</p>
-</td>
+<td>書き出しの準備ができている: 書き出し処理がブロックしない</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">POLLERR</span></code></td>
-<td><p class="first last">何らかのエラー状態</p>
-</td>
+<td>何らかのエラー状態</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">POLLHUP</span></code></td>
-<td><p class="first last">ハングアップ</p>
-</td>
+<td>ハングアップ</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">POLLRDHUP</span></code></td>
-<td><p class="first last">ストリームソケットの他端が接続を切断したか、接続の書き込み側のシャットダウンを行った。</p>
-</td>
+<td>ストリームソケットの他端が接続を切断したか、接続の書き込み側のシャットダウンを行った。</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">POLLNVAL</span></code></td>
-<td><p class="first last">無効な要求: 記述子が開かれていない</p>
-</td>
+<td>無効な要求: 記述子が開かれていない</td>
 </tr>
 </tbody>
 </table>
@@ -484,7 +452,7 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
 <dl class="method">
 <dt id="select.poll.poll">
 <code class="descclassname">poll.</code><code class="descname">poll</code><span class="sig-paren">(</span><span class="optional">[</span><em>timeout</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#select.poll.poll" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>登録されたファイル記述子に対してポーリングを行い、報告すべき I/O イベントまたはエラーの発生したファイル記述子毎に 2 要素のタプル <code class="docutils literal"><span class="pre">(fd,</span> <span class="pre">event)</span></code> からなるリストを返します。リストは空になることもあります。 <em>fd</em> はファイル記述子で、 <em>event</em> は該当するファイル記述子について報告されたイベントを表すビットマスクです &#8212; 例えば <code class="xref py py-const docutils literal"><span class="pre">POLLIN</span></code> は入力待ちを示し、 <code class="xref py py-const docutils literal"><span class="pre">POLLOUT</span></code> はファイル記述子に対する書き込みが可能を示す、などです。空のリストは呼び出しがタイムアウトしたか、報告すべきイベントがどのファイル記述子でも発生しなかったことを示します。 <em>timeout</em> が与えられた場合、処理を戻すまで待機する時間の長さをミリ秒単位で指定します。 <em>timeout</em> が省略されたり、負の値であったり、あるいは <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> の場合、そのポーリングオブジェクトが監視している何らかのイベントが発生するまでブロックします。</p>
+<dd><p>登録されたファイル記述子に対してポーリングを行い、報告すべき I/O イベントまたはエラーの発生したファイル記述子毎に 2 要素のタプル <code class="docutils literal"><span class="pre">(fd,</span> <span class="pre">event)</span></code> からなるリストを返します。リストは空になることもあります。 <em>fd</em> はファイル記述子で、 <em>event</em> は該当するファイル記述子について報告されたイベントを表すビットマスクです — 例えば <code class="xref py py-const docutils literal"><span class="pre">POLLIN</span></code> は入力待ちを示し、 <code class="xref py py-const docutils literal"><span class="pre">POLLOUT</span></code> はファイル記述子に対する書き込みが可能を示す、などです。空のリストは呼び出しがタイムアウトしたか、報告すべきイベントがどのファイル記述子でも発生しなかったことを示します。 <em>timeout</em> が与えられた場合、処理を戻すまで待機する時間の長さをミリ秒単位で指定します。 <em>timeout</em> が省略されたり、負の値であったり、あるいは <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> の場合、そのポーリングオブジェクトが監視している何らかのイベントが発生するまでブロックします。</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.5 で変更: </span>この関数は、シグナルによって中断された時に、 <a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> を上げる代わりに再計算されたタイムアウトによってリトライするようになりました。ただし、シグナルハンドラが例外を起こした場合を除きます (この論理的根拠については <span class="target" id="index-18"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> を見てください)。</p>
 </div>
@@ -519,15 +487,12 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
 
 <dl class="method">
 <dt id="select.kqueue.control">
-<code class="descclassname">kqueue.</code><code class="descname">control</code><span class="sig-paren">(</span><em>changelist</em>, <em>max_events</em><span class="optional">[</span>, <em>timeout=None</em><span class="optional">]</span><span class="sig-paren">)</span> &rarr; eventlist<a class="headerlink" href="#select.kqueue.control" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descclassname">kqueue.</code><code class="descname">control</code><span class="sig-paren">(</span><em>changelist</em>, <em>max_events</em><span class="optional">[</span>, <em>timeout=None</em><span class="optional">]</span><span class="sig-paren">)</span> &#x2192; eventlist<a class="headerlink" href="#select.kqueue.control" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>kevent に対する低水準のインタフェース</p>
 <ul class="simple">
-<li><p class="first"><em>changelist</em> は kevent オブジェクトのイテラブルまたは <code class="docutils literal"><span class="pre">None</span></code></p>
-</li>
-<li><p class="first"><em>max_events</em> は 0 または正の整数</p>
-</li>
-<li><p class="first"><em>timeout</em> はタイムアウト秒数 (float を利用可能)</p>
-</li>
+<li><em>changelist</em> は kevent オブジェクトのイテラブルまたは <code class="docutils literal"><span class="pre">None</span></code></li>
+<li><em>max_events</em> は 0 または正の整数</li>
+<li><em>timeout</em> はタイムアウト秒数 (float を利用可能)</li>
 </ul>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.5 で変更: </span>この関数は、シグナルによって中断された時に、 <a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> を上げる代わりに再計算されたタイムアウトによってリトライするようになりました。ただし、シグナルハンドラが例外を起こした場合を除きます (この論理的根拠については <span class="target" id="index-19"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> を見てください)。</p>
@@ -554,44 +519,34 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
 <col width="63%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">定数</p>
-</th>
-<th class="head"><p class="first last">意味</p>
-</th>
+<tr class="row-odd"><th class="head">定数</th>
+<th class="head">意味</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_FILTER_READ</span></code></td>
-<td><p class="first last">記述子を受け取り、読み込めるデータが存在する時に戻る</p>
-</td>
+<td>記述子を受け取り、読み込めるデータが存在する時に戻る</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_FILTER_WRITE</span></code></td>
-<td><p class="first last">記述子を受け取り、書き込み可能な時に戻る</p>
-</td>
+<td>記述子を受け取り、書き込み可能な時に戻る</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_FILTER_AIO</span></code></td>
-<td><p class="first last">AIO リクエスト</p>
-</td>
+<td>AIO リクエスト</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_FILTER_VNODE</span></code></td>
-<td><p class="first last"><em>fflag</em> で監視されたイベントが1つ以上発生したときに戻る</p>
-</td>
+<td><em>fflag</em> で監視されたイベントが1つ以上発生したときに戻る</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_FILTER_PROC</span></code></td>
-<td><p class="first last">プロセスID上のイベントを監視する</p>
-</td>
+<td>プロセスID上のイベントを監視する</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_FILTER_NETDEV</span></code></td>
-<td><p class="first last">ネットワークデバイス上のイベントを監視する (Mac OS X では利用不可)</p>
-</td>
+<td>ネットワークデバイス上のイベントを監視する (Mac OS X では利用不可)</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_FILTER_SIGNAL</span></code></td>
-<td><p class="first last">監視しているシグナルがプロセスに届いたときに戻る</p>
-</td>
+<td>監視しているシグナルがプロセスに届いたときに戻る</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_FILTER_TIMER</span></code></td>
-<td><p class="first last">任意のタイマを設定する</p>
-</td>
+<td>任意のタイマを設定する</td>
 </tr>
 </tbody>
 </table>
@@ -607,52 +562,40 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
 <col width="63%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">定数</p>
-</th>
-<th class="head"><p class="first last">意味</p>
-</th>
+<tr class="row-odd"><th class="head">定数</th>
+<th class="head">意味</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_EV_ADD</span></code></td>
-<td><p class="first last">イベントを追加または修正する</p>
-</td>
+<td>イベントを追加または修正する</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_EV_DELETE</span></code></td>
-<td><p class="first last">キューからイベントを取り除く</p>
-</td>
+<td>キューからイベントを取り除く</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_EV_ENABLE</span></code></td>
-<td><p class="first last">control() がイベントを返すのを許可する</p>
-</td>
+<td>control() がイベントを返すのを許可する</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_EV_DISABLE</span></code></td>
-<td><p class="first last">イベントを無効にする</p>
-</td>
+<td>イベントを無効にする</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_EV_ONESHOT</span></code></td>
-<td><p class="first last">イベントを最初の発生後無効にする</p>
-</td>
+<td>イベントを最初の発生後無効にする</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_EV_CLEAR</span></code></td>
-<td><p class="first last">イベントを受け取った後で状態をリセットする</p>
-</td>
+<td>イベントを受け取った後で状態をリセットする</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_EV_SYSFLAGS</span></code></td>
-<td><p class="first last">内部イベント</p>
-</td>
+<td>内部イベント</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_EV_FLAG1</span></code></td>
-<td><p class="first last">内部イベント</p>
-</td>
+<td>内部イベント</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_EV_EOF</span></code></td>
-<td><p class="first last">フィルタ依存のEOF状態</p>
-</td>
+<td>フィルタ依存のEOF状態</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_EV_ERROR</span></code></td>
-<td><p class="first last">戻り値を参照</p>
-</td>
+<td>戻り値を参照</td>
 </tr>
 </tbody>
 </table>
@@ -669,16 +612,13 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
 <col width="61%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">定数</p>
-</th>
-<th class="head"><p class="first last">意味</p>
-</th>
+<tr class="row-odd"><th class="head">定数</th>
+<th class="head">意味</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_LOWAT</span></code></td>
-<td><p class="first last">ソケットバッファの最低基準値</p>
-</td>
+<td>ソケットバッファの最低基準値</td>
 </tr>
 </tbody>
 </table>
@@ -689,40 +629,31 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
 <col width="61%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">定数</p>
-</th>
-<th class="head"><p class="first last">意味</p>
-</th>
+<tr class="row-odd"><th class="head">定数</th>
+<th class="head">意味</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_DELETE</span></code></td>
-<td><p class="first last"><em>unlink()</em> が呼ばれた</p>
-</td>
+<td><em>unlink()</em> が呼ばれた</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_WRITE</span></code></td>
-<td><p class="first last">書き込みが発生した</p>
-</td>
+<td>書き込みが発生した</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_EXTEND</span></code></td>
-<td><p class="first last">ファイルのサイズが拡張された</p>
-</td>
+<td>ファイルのサイズが拡張された</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_ATTRIB</span></code></td>
-<td><p class="first last">属性が変更された</p>
-</td>
+<td>属性が変更された</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_LINK</span></code></td>
-<td><p class="first last">リンクカウントが変更された</p>
-</td>
+<td>リンクカウントが変更された</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_RENAME</span></code></td>
-<td><p class="first last">ファイル名が変更された</p>
-</td>
+<td>ファイル名が変更された</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_REVOKE</span></code></td>
-<td><p class="first last">ファイルアクセスが破棄された</p>
-</td>
+<td>ファイルアクセスが破棄された</td>
 </tr>
 </tbody>
 </table>
@@ -733,44 +664,34 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
 <col width="61%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">定数</p>
-</th>
-<th class="head"><p class="first last">意味</p>
-</th>
+<tr class="row-odd"><th class="head">定数</th>
+<th class="head">意味</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_EXIT</span></code></td>
-<td><p class="first last">プロセスが終了した</p>
-</td>
+<td>プロセスが終了した</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_FORK</span></code></td>
-<td><p class="first last">プロセスが <em>fork()</em> を呼び出した</p>
-</td>
+<td>プロセスが <em>fork()</em> を呼び出した</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_EXEC</span></code></td>
-<td><p class="first last">プロセスが新しいプロセスを実行した</p>
-</td>
+<td>プロセスが新しいプロセスを実行した</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_PCTRLMASK</span></code></td>
-<td><p class="first last">内部フィルタフラグ</p>
-</td>
+<td>内部フィルタフラグ</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_PDATAMASK</span></code></td>
-<td><p class="first last">内部フィルタフラグ</p>
-</td>
+<td>内部フィルタフラグ</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_TRACK</span></code></td>
-<td><p class="first last"><em>fork()</em> の呼び出しを超えてプロセスを監視する</p>
-</td>
+<td><em>fork()</em> の呼び出しを超えてプロセスを監視する</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_CHILD</span></code></td>
-<td><p class="first last"><em>NOTE_TRACK</em> に対して子プロセスに渡される</p>
-</td>
+<td><em>NOTE_TRACK</em> に対して子プロセスに渡される</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_TRACKERR</span></code></td>
-<td><p class="first last">子プロセスにアタッチできなかった</p>
-</td>
+<td>子プロセスにアタッチできなかった</td>
 </tr>
 </tbody>
 </table>
@@ -781,24 +702,19 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
 <col width="61%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">定数</p>
-</th>
-<th class="head"><p class="first last">意味</p>
-</th>
+<tr class="row-odd"><th class="head">定数</th>
+<th class="head">意味</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_LINKUP</span></code></td>
-<td><p class="first last">リンクアップしている</p>
-</td>
+<td>リンクアップしている</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_LINKDOWN</span></code></td>
-<td><p class="first last">リンクダウンしている</p>
-</td>
+<td>リンクダウンしている</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">KQ_NOTE_LINKINV</span></code></td>
-<td><p class="first last">リンク状態が不正</p>
-</td>
+<td>リンク状態が不正</td>
 </tr>
 </tbody>
 </table>
@@ -827,7 +743,7 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">18.3. <code class="docutils literal"><span class="pre">select</span></code> &#8212; I/O 処理の完了を待機する</a><ul>
+<li><a class="reference internal" href="#">18.3. <code class="docutils literal"><span class="pre">select</span></code> — I/O 処理の完了を待機する</a><ul>
 <li><a class="reference internal" href="#dev-poll-polling-objects">18.3.1. <code class="docutils literal"><span class="pre">/dev/poll</span></code> ポーリングオブジェクト</a></li>
 <li><a class="reference internal" href="#edge-and-level-trigger-polling-epoll-objects">18.3.2. エッジおよびレベルトリガポーリング (epoll) オブジェクト</a></li>
 <li><a class="reference internal" href="#polling-objects">18.3.3. ポーリングオブジェクト</a></li>
@@ -839,16 +755,16 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="ssl.html"
-                        title="前の章へ">18.2. <code class="docutils literal"><span class="pre">ssl</span></code> &#8212; ソケットオブジェクトに対する TLS/SSL ラッパー</a></p>
+                        title="前の章へ">18.2. <code class="docutils literal"><span class="pre">ssl</span></code> — ソケットオブジェクトに対する TLS/SSL ラッパー</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="selectors.html"
-                        title="次の章へ">18.4. <code class="docutils literal"><span class="pre">selectors</span></code> &#8212; 高水準の I/O 多重化</a></p>
+                        title="次の章へ">18.4. <code class="docutils literal"><span class="pre">selectors</span></code> — 高水準の I/O 多重化</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/select.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/select.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -909,7 +825,7 @@ OS レベルプリミティブを使用した正確な制御を求めない限�
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>2. 新しい型を定義する &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="Python インタプリタの拡張と埋め込み" href="index.html" />
     <link rel="next" title="3. C および C++ 拡張のビルド" href="building.html" />
     <link rel="prev" title="1. C や C++ による Python の拡張" href="extending.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -108,7 +104,7 @@
 <p>これはそんなにむずかしくはありません。拡張型のためのコードにはすべて、一定のパターンが存在しています。しかし始める前に、いくつか細かいことを理解しておく必要があるでしょう。</p>
 <div class="section" id="the-basics">
 <span id="dnt-basics"></span><h2>2.1. 基本的なこと<a class="headerlink" href="#the-basics" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>Python ランタイムは Python の全てのオブジェクトを <a class="reference internal" href="../c-api/structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject*</span></code></a> 型の変数と見なします。 <a class="reference internal" href="../c-api/structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject*</span></code></a> は Python の全てのオブジェクトの &#8220;基礎型 (base type)&#8221; となっています。 <a class="reference internal" href="../c-api/structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject</span></code></a> 自身は参照カウントと、オブジェクトの &#8220;タイプオブジェクト (type object)&#8221; へのポインタのみを持ちます。ここには動作が定義されています; 型オブジェクトは、例えば、ある属性があるオブジェクトから検索されたり、他のオブジェクトによって操作されたりしたときに、どの (C) 関数が呼ばれるのかを決定します。これらの C 関数は &#8220;タイプメソッド (type method)&#8221; と呼ばれます。</p>
+<p>Python ランタイムは Python の全てのオブジェクトを <a class="reference internal" href="../c-api/structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject*</span></code></a> 型の変数と見なします。 <a class="reference internal" href="../c-api/structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject*</span></code></a> は Python の全てのオブジェクトの 「基礎型 (base type)」 となっています。 <a class="reference internal" href="../c-api/structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject</span></code></a> 自身は参照カウントと、オブジェクトの 「タイプオブジェクト (type object)」 へのポインタのみを持ちます。ここには動作が定義されています; 型オブジェクトは、例えば、ある属性があるオブジェクトから検索されたり、他のオブジェクトによって操作されたりしたときに、どの (C) 関数が呼ばれるのかを決定します。これらの C 関数は 「タイプメソッド (type method)」 と呼ばれます。</p>
 <p>なので、新しいオブジェクトの型を定義したいときは、新しいタイプオブジェクトを作成すればよいわけです。</p>
 <p>この手のことは例を見たほうが早いでしょうから、ここに最小限の、しかし完全な、新しい型を定義するモジュールをあげておきます:</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;Python.h&gt;</span><span class="cp"></span>
@@ -176,7 +172,7 @@
 <span class="p">}</span> <span class="n">noddy_NoddyObject</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>これが Noddy オブジェクトの内容です &#8212; このケースでは、すべての Python オブジェクトが持っているものと何ら変わりはありません &#8212; <code class="docutils literal"><span class="pre">ob_base</span></code> と呼ばれる <a class="reference internal" href="../c-api/structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject</span></code></a> 型のフィールドです。さらに <a class="reference internal" href="../c-api/structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject</span></code></a> は、 <code class="docutils literal"><span class="pre">ob_refcnt</span></code> フィールドと型オブジェクトへのポインタを持っています。これらは、マクロ <a class="reference internal" href="../c-api/structures.html#c.Py_REFCNT" title="Py_REFCNT"><code class="xref c c-macro docutils literal"><span class="pre">Py_REFCNT</span></code></a> と <a class="reference internal" href="../c-api/structures.html#c.Py_TYPE" title="Py_TYPE"><code class="xref c c-macro docutils literal"><span class="pre">Py_TYPE</span></code></a> を使ってそれぞれアクセスできます。これらは <a class="reference internal" href="../c-api/structures.html#c.PyObject_HEAD" title="PyObject_HEAD"><code class="xref c c-macro docutils literal"><span class="pre">PyObject_HEAD</span></code></a> マクロによって展開されるメンバです。マクロを使う理由は、レイアウトを標準化するためと、デバッグ用ビルド時に特別なデバッグ用のメンバを定義できるようにするためです。</p>
+<p>これが Noddy オブジェクトの内容です — このケースでは、すべての Python オブジェクトが持っているものと何ら変わりはありません — <code class="docutils literal"><span class="pre">ob_base</span></code> と呼ばれる <a class="reference internal" href="../c-api/structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject</span></code></a> 型のフィールドです。さらに <a class="reference internal" href="../c-api/structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject</span></code></a> は、 <code class="docutils literal"><span class="pre">ob_refcnt</span></code> フィールドと型オブジェクトへのポインタを持っています。これらは、マクロ <a class="reference internal" href="../c-api/structures.html#c.Py_REFCNT" title="Py_REFCNT"><code class="xref c c-macro docutils literal"><span class="pre">Py_REFCNT</span></code></a> と <a class="reference internal" href="../c-api/structures.html#c.Py_TYPE" title="Py_TYPE"><code class="xref c c-macro docutils literal"><span class="pre">Py_TYPE</span></code></a> を使ってそれぞれアクセスできます。これらは <a class="reference internal" href="../c-api/structures.html#c.PyObject_HEAD" title="PyObject_HEAD"><code class="xref c c-macro docutils literal"><span class="pre">PyObject_HEAD</span></code></a> マクロによって展開されるメンバです。マクロを使う理由は、レイアウトを標準化するためと、デバッグ用ビルド時に特別なデバッグ用のメンバを定義できるようにするためです。</p>
 <p>この <a class="reference internal" href="../c-api/structures.html#c.PyObject_HEAD" title="PyObject_HEAD"><code class="xref c c-macro docutils literal"><span class="pre">PyObject_HEAD</span></code></a> マクロの後にはセミコロンがないことに注意してください。セミコロンはすでにマクロ内に含まれています。うっかり後にセミコロンをつけてしまわないように気をつけて。これはお使いの機種では何の問題も起こらないかもしれませんが、機種によっては、おそらく問題になるのです! (Windows 上では、MS Visual C がこの手のエラーを出し、コンパイルできないことが知られています)</p>
 <p>比較のため、以下に標準的な Python の浮動小数点数型の定義を見てみましょう:</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
@@ -534,7 +530,7 @@
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">Noddy_new</span><span class="p">,</span>                 <span class="cm">/* tp_new */</span>
 </pre></div>
 </div>
-<p>この新しいメンバはその型のオブジェクトを (初期化するのではなく) 作成する責任を負っています。Python ではこのメンバは <a class="reference internal" href="../reference/datamodel.html#object.__new__" title="object.__new__"><code class="xref py py-meth docutils literal"><span class="pre">__new__()</span></code></a> メソッドとして見えています。 <a class="reference internal" href="../reference/datamodel.html#object.__new__" title="object.__new__"><code class="xref py py-meth docutils literal"><span class="pre">__new__()</span></code></a> メソッドについての詳しい議論は &#8220;Unifying types and classes in Python&#8221; という題名の論文を見てください。 new メソッドを実装する理由のひとつは、インスタンス変数の初期値を保証するためです。この例でやりたいのは new メソッドが <code class="xref py py-attr docutils literal"><span class="pre">first</span></code> メンバと  <code class="xref py py-attr docutils literal"><span class="pre">last</span></code> メンバの値を <em>NULL</em> でないようにするということです。もしこれらの初期値が <em>NULL</em> でもよいのであれば、先の例でやったように、new メソッドとして <a class="reference internal" href="../c-api/type.html#c.PyType_GenericNew" title="PyType_GenericNew"><code class="xref c c-func docutils literal"><span class="pre">PyType_GenericNew()</span></code></a> を使うこともできたでしょう。 <a class="reference internal" href="../c-api/type.html#c.PyType_GenericNew" title="PyType_GenericNew"><code class="xref c c-func docutils literal"><span class="pre">PyType_GenericNew()</span></code></a> はすべてのインスタンス変数のメンバを <em>NULL</em> にします。</p>
+<p>この新しいメンバはその型のオブジェクトを (初期化するのではなく) 作成する責任を負っています。Python ではこのメンバは <a class="reference internal" href="../reference/datamodel.html#object.__new__" title="object.__new__"><code class="xref py py-meth docutils literal"><span class="pre">__new__()</span></code></a> メソッドとして見えています。 <a class="reference internal" href="../reference/datamodel.html#object.__new__" title="object.__new__"><code class="xref py py-meth docutils literal"><span class="pre">__new__()</span></code></a> メソッドについての詳しい議論は 「Unifying types and classes in Python」 という題名の論文を見てください。 new メソッドを実装する理由のひとつは、インスタンス変数の初期値を保証するためです。この例でやりたいのは new メソッドが <code class="xref py py-attr docutils literal"><span class="pre">first</span></code> メンバと  <code class="xref py py-attr docutils literal"><span class="pre">last</span></code> メンバの値を <em>NULL</em> でないようにするということです。もしこれらの初期値が <em>NULL</em> でもよいのであれば、先の例でやったように、new メソッドとして <a class="reference internal" href="../c-api/type.html#c.PyType_GenericNew" title="PyType_GenericNew"><code class="xref c c-func docutils literal"><span class="pre">PyType_GenericNew()</span></code></a> を使うこともできたでしょう。 <a class="reference internal" href="../c-api/type.html#c.PyType_GenericNew" title="PyType_GenericNew"><code class="xref c c-func docutils literal"><span class="pre">PyType_GenericNew()</span></code></a> はすべてのインスタンス変数のメンバを <em>NULL</em> にします。</p>
 <p>この new メソッドは静的なメソッドで、インスタンス化される型と、型が呼び出されたときの引数が渡され、新しいオブジェクトを作成して返します。
 new メソッドは常に固定引数 (positional argument) とキーワード引数を取りますが、それらの引数は無視して初期化メソッドにそのまま渡すことがよくあります。
 型がサブクラスをサポートしている場合、渡された型が定義している型でないかもしれないことに注意してください。
@@ -597,12 +593,9 @@ new メソッドとはちがって、初期化メソッドは必ず呼ばれる�
 </div>
 <p>しかしこのやり方は危険です。このタイプでは <code class="xref py py-attr docutils literal"><span class="pre">first</span></code> メンバに入るオブジェクトをなにも限定していないので、どんなオブジェクトでもとり得てしまうからです。それはこのコードが <code class="xref py py-attr docutils literal"><span class="pre">first</span></code> メンバにアクセスしようとする前に、そのデストラクタが呼び出されてしまうかもしれないのです。このような可能性からパラノイア的に身をまもるため、ほとんどの場合メンバへの代入は,その参照カウントを減らす前におこなってください。こうする必要がないのはどんな場合でしょうか?</p>
 <ul class="simple">
-<li><p class="first">その参照カウントが 1 より大きいと確信できる場合。</p>
-</li>
-<li><p class="first">そのオブジェクトの解放があなたのタイプのコードにコールバックするようなことが決してない場合 <a class="footnote-reference" href="#id7" id="id2">[1]</a> 。</p>
-</li>
-<li><p class="first">ガベージコレクションがサポートされていない場合に <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_dealloc" title="PyTypeObject.tp_dealloc"><code class="xref c c-member docutils literal"><span class="pre">tp_dealloc</span></code></a> ハンドラで参照カウントを減らすとき <a class="footnote-reference" href="#id8" id="id3">[2]</a> 。</p>
-</li>
+<li>その参照カウントが 1 より大きいと確信できる場合。</li>
+<li>そのオブジェクトの解放があなたのタイプのコードにコールバックするようなことが決してない場合 <a class="footnote-reference" href="#id7" id="id2">[1]</a> 。</li>
+<li>ガベージコレクションがサポートされていない場合に <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_dealloc" title="PyTypeObject.tp_dealloc"><code class="xref c c-member docutils literal"><span class="pre">tp_dealloc</span></code></a> ハンドラで参照カウントを減らすとき <a class="footnote-reference" href="#id8" id="id3">[2]</a> 。</li>
 </ul>
 <p>ここではインスタンス変数を属性として見えるようにしたいのですが、これにはいくつもの方法があります。もっとも簡単な方法は、メンバの定義を与えることです:</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="n">PyMemberDef</span> <span class="n">Noddy_members</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
@@ -620,7 +613,7 @@ new メソッドとはちがって、初期化メソッドは必ず呼ばれる�
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">Noddy_members</span><span class="p">,</span>             <span class="cm">/* tp_members */</span>
 </pre></div>
 </div>
-<p>各メンバの定義はそれぞれ、メンバの名前、型、オフセット、アクセスフラグおよび docstring です。詳しくは後の &#8220;総称的な属性を管理する&#8221; (<a class="reference internal" href="#generic-attribute-management"><span class="std std-ref">総称的な属性を管理する</span></a>) の節をご覧ください。</p>
+<p>各メンバの定義はそれぞれ、メンバの名前、型、オフセット、アクセスフラグおよび docstring です。詳しくは後の 「総称的な属性を管理する」 (<a class="reference internal" href="#generic-attribute-management"><span class="std std-ref">総称的な属性を管理する</span></a>) の節をご覧ください。</p>
 <p>この方法の欠点は、Python 属性に代入できるオブジェクトの型を制限する方法がないことです。ここではファーストネーム first とラストネーム last に、ともに文字列が入るよう期待していますが、今のやり方ではどんな Python オブジェクトも代入できてしまいます。加えてこの属性は削除 (del) できてしまい、その場合、 C のポインタには <em>NULL</em> が設定されます。たとえもしメンバが <em>NULL</em> 以外の値に初期化されるようにしてあったとしても、属性が削除されればメンバは <em>NULL</em> になってしまいます。</p>
 <p>ここでは <code class="xref py py-meth docutils literal"><span class="pre">name()</span></code> と呼ばれるメソッドを定義しましょう。これはファーストネーム first とラストネーム last を連結した文字列をそのオブジェクトの名前として返します。</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="n">PyObject</span> <span class="o">*</span>
@@ -1463,7 +1456,7 @@ new メソッドとはちがって、初期化メソッドは必ず呼ばれる�
 <span class="p">}</span>
 </pre></div>
 </div>
-<p><code class="xref c c-func docutils literal"><span class="pre">PyType_Read()</span></code> を呼ぶ前に、型の構造は <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_base" title="PyTypeObject.tp_base"><code class="xref c c-member docutils literal"><span class="pre">tp_base</span></code></a> スロットは埋められていなければなりません。継承している新しい型を作るとき、 <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_alloc" title="PyTypeObject.tp_alloc"><code class="xref c c-member docutils literal"><span class="pre">tp_alloc</span></code></a> スロットを <a class="reference internal" href="../c-api/type.html#c.PyType_GenericNew" title="PyType_GenericNew"><code class="xref c c-func docutils literal"><span class="pre">PyType_GenericNew()</span></code></a> で埋める必要はありません。 &#8211; 基底型のアロケート関数が継承されます。</p>
+<p><code class="xref c c-func docutils literal"><span class="pre">PyType_Read()</span></code> を呼ぶ前に、型の構造は <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_base" title="PyTypeObject.tp_base"><code class="xref c c-member docutils literal"><span class="pre">tp_base</span></code></a> スロットは埋められていなければなりません。継承している新しい型を作るとき、 <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_alloc" title="PyTypeObject.tp_alloc"><code class="xref c c-member docutils literal"><span class="pre">tp_alloc</span></code></a> スロットを <a class="reference internal" href="../c-api/type.html#c.PyType_GenericNew" title="PyType_GenericNew"><code class="xref c c-func docutils literal"><span class="pre">PyType_GenericNew()</span></code></a> で埋める必要はありません。 – 基底型のアロケート関数が継承されます。</p>
 <p>この後は、 <a class="reference internal" href="../c-api/type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> 関数を呼び、タイプオブジェクトをモジュールへ追加するのは、基本的な <code class="xref py py-class docutils literal"><span class="pre">Noddy</span></code> の例と同じです。</p>
 </div>
 </div>
@@ -1667,10 +1660,8 @@ new メソッドとはちがって、初期化メソッドは必ず呼ばれる�
 <span id="id6"></span><h4>2.2.3.1. 総称的な属性を管理する<a class="headerlink" href="#generic-attribute-management" title="このヘッドラインへのパーマリンク">¶</a></h4>
 <p>ほとんどの型は <em>単純な</em> 属性を使うだけです。では、どのような属性が単純だといえるのでしょうか? それが満たすべき条件はごくわずかです:</p>
 <ol class="arabic simple">
-<li><p class="first"><a class="reference internal" href="../c-api/type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> が呼ばれたとき、すでに属性の名前がわかっていること。</p>
-</li>
-<li><p class="first">属性を参照したり設定したりするときに、特別な記録のための処理が必要でなく、また参照したり設定した値に対してどんな操作も実行する必要がないこと。</p>
-</li>
+<li><a class="reference internal" href="../c-api/type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> が呼ばれたとき、すでに属性の名前がわかっていること。</li>
+<li>属性を参照したり設定したりするときに、特別な記録のための処理が必要でなく、また参照したり設定した値に対してどんな操作も実行する必要がないこと。</li>
 </ol>
 <p>これらの条件は、属性の値や、値が計算されるタイミング、または格納されたデータがどの程度妥当なものであるかといったことになんら制約を課すものではないことに注意してください。</p>
 <p><a class="reference internal" href="../c-api/type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> が呼ばれると、これはそのタイプオブジェクトに参照されている 3つのテーブルを使って、そのタイプオブジェクトの辞書中にデスクリプタ(<a class="reference internal" href="../glossary.html#term-descriptor"><span class="xref std std-term">descriptor</span></a>) を作成します。各デスクリプタは、インスタンスオブジェクトの属性に対するアクセスを制御します。それぞれのテーブルはなくてもかまいません。もしこれら 3つがすべて <em>NULL</em> だと、その型のインスタンスはその基底型から継承した属性だけを持つことになります。また、 <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_getattro" title="PyTypeObject.tp_getattro"><code class="xref c c-member docutils literal"><span class="pre">tp_getattro</span></code></a> および <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_setattro" title="PyTypeObject.tp_setattro"><code class="xref c c-member docutils literal"><span class="pre">tp_setattro</span></code></a> が <em>NULL</em> のままだった場合も、基底型にこれらの属性の操作がまかせられます。</p>
@@ -1708,28 +1699,22 @@ new メソッドとはちがって、初期化メソッドは必ず呼ばれる�
 <col width="63%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">定数</p>
-</th>
-<th class="head"><p class="first last">意味</p>
-</th>
+<tr class="row-odd"><th class="head">定数</th>
+<th class="head">意味</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">READONLY</span></code></td>
-<td><p class="first last">絶対に変更できない。</p>
-</td>
+<td>絶対に変更できない。</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">READ_RESTRICTED</span></code></td>
-<td><p class="first last">制限モード (restricted mode) では参照できない。</p>
-</td>
+<td>制限モード (restricted mode) では参照できない。</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">WRITE_RESTRICTED</span></code></td>
-<td><p class="first last">制限モード (restricted mode) では変更できない。</p>
-</td>
+<td>制限モード (restricted mode) では変更できない。</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">RESTRICTED</span></code></td>
-<td><p class="first last">制限モード (restricted mode) では参照も変更もできない。</p>
-</td>
+<td>制限モード (restricted mode) では参照も変更もできない。</td>
 </tr>
 </tbody>
 </table>
@@ -1833,12 +1818,9 @@ new メソッドとはちがって、初期化メソッドは必ず呼ばれる�
 <p>この関数は、その型のインスタンスが「関数として呼び出される」ときに呼ばれます。たとえばもし <code class="docutils literal"><span class="pre">obj1</span></code> にそのインスタンスが入っていて、Python スクリプトで <code class="docutils literal"><span class="pre">obj1('hello')</span></code> を実行したとすると、 <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_call" title="PyTypeObject.tp_call"><code class="xref c c-member docutils literal"><span class="pre">tp_call</span></code></a> ハンドラが呼ばれます。</p>
 <p>この関数は 3つの引数をとります:</p>
 <ol class="arabic simple">
-<li><p class="first"><em>arg1</em> にはその呼び出しの対象となる、そのデータ型のインスタンスが入ります。たとえば呼び出しが <code class="docutils literal"><span class="pre">obj1('hello')</span></code> の場合、 <em>arg1</em> は <code class="docutils literal"><span class="pre">obj1</span></code> になります。</p>
-</li>
-<li><p class="first"><em>arg2</em> は呼び出しの引数を格納しているタプルです。ここから引数を取り出すには <a class="reference internal" href="../c-api/arg.html#c.PyArg_ParseTuple" title="PyArg_ParseTuple"><code class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></code></a> を使います。</p>
-</li>
-<li><p class="first"><em>arg3</em> はキーワード引数のための辞書です。これが <em>NULL</em> 以外でキーワード引数をサポートしているなら、 <a class="reference internal" href="../c-api/arg.html#c.PyArg_ParseTupleAndKeywords" title="PyArg_ParseTupleAndKeywords"><code class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTupleAndKeywords()</span></code></a> をつかって引数を取り出せます。キーワード引数をサポートしていないのにこれが <em>NULL</em> 以外の場合は、キーワード引数はサポートしていない旨のメッセージとともに <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> を発生させてください。</p>
-</li>
+<li><em>arg1</em> にはその呼び出しの対象となる、そのデータ型のインスタンスが入ります。たとえば呼び出しが <code class="docutils literal"><span class="pre">obj1('hello')</span></code> の場合、 <em>arg1</em> は <code class="docutils literal"><span class="pre">obj1</span></code> になります。</li>
+<li><em>arg2</em> は呼び出しの引数を格納しているタプルです。ここから引数を取り出すには <a class="reference internal" href="../c-api/arg.html#c.PyArg_ParseTuple" title="PyArg_ParseTuple"><code class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></code></a> を使います。</li>
+<li><em>arg3</em> はキーワード引数のための辞書です。これが <em>NULL</em> 以外でキーワード引数をサポートしているなら、 <a class="reference internal" href="../c-api/arg.html#c.PyArg_ParseTupleAndKeywords" title="PyArg_ParseTupleAndKeywords"><code class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTupleAndKeywords()</span></code></a> をつかって引数を取り出せます。キーワード引数をサポートしていないのにこれが <em>NULL</em> 以外の場合は、キーワード引数はサポートしていない旨のメッセージとともに <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> を発生させてください。</li>
 </ol>
 <p>以下はこの call 関数をてきとうに使った例です。</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="cm">/* Implement the call function.</span>
@@ -1945,29 +1927,25 @@ new メソッドとはちがって、初期化メソッドは必ず呼ばれる�
 <table class="docutils footnote" frame="void" id="id7" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td><p class="first last">これはそのオブジェクトが文字列や実数などの基本タイプであるような時に成り立ちます。</p>
-</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>これはそのオブジェクトが文字列や実数などの基本タイプであるような時に成り立ちます。</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id8" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[2]</a></td><td><p class="first last">ここで出てきたタイプではガベージコレクションをサポートしていないので、この例では <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_dealloc" title="PyTypeObject.tp_dealloc"><code class="xref c c-member docutils literal"><span class="pre">tp_dealloc</span></code></a> ハンドラに依存しています。このハンドラはそのタイプがたとえガベージコレクションをサポートしている場合でも、そのオブジェクトの「追跡を解除する」ために呼ばれることがありますが、これは高度な話題でありここでは扱いません。</p>
-</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[2]</a></td><td>ここで出てきたタイプではガベージコレクションをサポートしていないので、この例では <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_dealloc" title="PyTypeObject.tp_dealloc"><code class="xref c c-member docutils literal"><span class="pre">tp_dealloc</span></code></a> ハンドラに依存しています。このハンドラはそのタイプがたとえガベージコレクションをサポートしている場合でも、そのオブジェクトの「追跡を解除する」ために呼ばれることがありますが、これは高度な話題でありここでは扱いません。</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id9" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id4">[3]</a></td><td><p class="first last">first および last メンバが文字列であるということはわかっているので、いまやそれらの参照カウントを減らすときにはそれほど注意する必要はないように思えるかもしれません。しかし文字列型のサブクラスは依然として受けつけられています。通常の文字列型ならば、解放時にあなたのオブジェクトがコールバックされることはありませんが、文字列型のサブクラスがそうしないという保証はありません。</p>
-</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id4">[3]</a></td><td>first および last メンバが文字列であるということはわかっているので、いまやそれらの参照カウントを減らすときにはそれほど注意する必要はないように思えるかもしれません。しかし文字列型のサブクラスは依然として受けつけられています。通常の文字列型ならば、解放時にあなたのオブジェクトがコールバックされることはありませんが、文字列型のサブクラスがそうしないという保証はありません。</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id10" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5">[4]</a></td><td><p class="first last">3番目のバージョンでさえ、循環を回避できるという保証はされていません。たとえ通常の文字列型なら循環しない場合でも、文字列型のサブクラスをとることが許されていれば、そのタイプでは循環が発生しうるからです。</p>
-</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id5">[4]</a></td><td>3番目のバージョンでさえ、循環を回避できるという保証はされていません。たとえ通常の文字列型なら循環しない場合でも、文字列型のサブクラスをとることが許されていれば、そのタイプでは循環が発生しうるからです。</td></tr>
 </tbody>
 </table>
 </div>
@@ -2019,7 +1997,7 @@ new メソッドとはちがって、初期化メソッドは必ず呼ばれる�
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/extending/newtypes.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/extending/newtypes.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -2079,7 +2057,7 @@ new メソッドとはちがって、初期化メソッドは必ず呼ばれる�
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

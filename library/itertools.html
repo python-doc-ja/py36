@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>10.1. itertools — 効率的なループ実行のためのイテレータ生成関数 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="10. 関数型プログラミング用モジュール" href="functional.html" />
     <link rel="next" title="10.2. functools — 高階関数と呼び出し可能オブジェクトの操作" href="functools.html" />
     <link rel="prev" title="10. 関数型プログラミング用モジュール" href="functional.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,10 +100,10 @@
           <div class="body" role="main">
             
   <div class="section" id="module-itertools">
-<span id="itertools-functions-creating-iterators-for-efficient-looping"></span><h1>10.1. <a class="reference internal" href="#module-itertools" title="itertools: Functions creating iterators for efficient looping."><code class="xref py py-mod docutils literal"><span class="pre">itertools</span></code></a> &#8212; 効率的なループ実行のためのイテレータ生成関数<a class="headerlink" href="#module-itertools" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="itertools-functions-creating-iterators-for-efficient-looping"></span><h1>10.1. <a class="reference internal" href="#module-itertools" title="itertools: Functions creating iterators for efficient looping."><code class="xref py py-mod docutils literal"><span class="pre">itertools</span></code></a> — 効率的なループ実行のためのイテレータ生成関数<a class="headerlink" href="#module-itertools" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <hr class="docutils" />
 <p>このモジュールは <a class="reference internal" href="../glossary.html#term-iterator"><span class="xref std std-term">イテレータ</span></a> を構築する部品を実装しています。プログラム言語 APL, Haskell, SML からアイデアを得ていますが、 Python に適した形に修正されています。</p>
-<p>このモジュールは、高速でメモリ効率に優れ、単独でも組合せても使用することのできるツールを標準化したものです。同時に、このツール群は &#8220;イテレータの代数&#8221; を構成していて、pure Python で簡潔かつ効率的なツールを作れるようにしています。</p>
+<p>このモジュールは、高速でメモリ効率に優れ、単独でも組合せても使用することのできるツールを標準化したものです。同時に、このツール群は 「イテレータの代数」 を構成していて、pure Python で簡潔かつ効率的なツールを作れるようにしています。</p>
 <p>例えば、SML の作表ツール <code class="docutils literal"><span class="pre">tabulate(f)</span></code> は <code class="docutils literal"><span class="pre">f(0),</span> <span class="pre">f(1),</span> <span class="pre">...</span></code> のシーケンスを作成します。同じことを Python では <a class="reference internal" href="functions.html#map" title="map"><code class="xref py py-func docutils literal"><span class="pre">map()</span></code></a> と <a class="reference internal" href="#itertools.count" title="itertools.count"><code class="xref py py-func docutils literal"><span class="pre">count()</span></code></a> を組合せて <code class="docutils literal"><span class="pre">map(f,</span> <span class="pre">count())</span></code> という形で実現できます。</p>
 <p>これらのツールと組み込み関数は <a class="reference internal" href="operator.html#module-operator" title="operator: Functions corresponding to the standard operators."><code class="xref py py-mod docutils literal"><span class="pre">operator</span></code></a> モジュール内の高速な関数とともに使うことで見事に動作します。例えば、乗算演算子を2つのベクトルにわたってマップすることで効率的な内積計算を実現できます: <code class="docutils literal"><span class="pre">sum(map(operator.mul,</span> <span class="pre">vector1,</span> <span class="pre">vector2))</span></code> 。</p>
 <p><strong>無限イテレータ:</strong></p>
@@ -119,31 +115,26 @@
 <col width="33%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">イテレータ</p>
-</th>
-<th class="head"><p class="first last">引数</p>
-</th>
-<th class="head"><p class="first last">結果</p>
-</th>
-<th class="head"><p class="first last">使用例</p>
-</th>
+<tr class="row-odd"><th class="head">イテレータ</th>
+<th class="head">引数</th>
+<th class="head">結果</th>
+<th class="head">使用例</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><a class="reference internal" href="#itertools.count" title="itertools.count"><code class="xref py py-func docutils literal"><span class="pre">count()</span></code></a></td>
 <td>start, [step]</td>
-<td>start, start+step, start+2*step, ...</td>
+<td>start, start+step, start+2*step, …</td>
 <td><code class="docutils literal"><span class="pre">count(10)</span> <span class="pre">--&gt;</span> <span class="pre">10</span> <span class="pre">11</span> <span class="pre">12</span> <span class="pre">13</span> <span class="pre">14</span> <span class="pre">...</span></code></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#itertools.cycle" title="itertools.cycle"><code class="xref py py-func docutils literal"><span class="pre">cycle()</span></code></a></td>
 <td>p</td>
-<td>p0, p1, ... plast, p0, p1, ...</td>
+<td>p0, p1, … plast, p0, p1, …</td>
 <td><code class="docutils literal"><span class="pre">cycle('ABCD')</span> <span class="pre">--&gt;</span> <span class="pre">A</span> <span class="pre">B</span> <span class="pre">C</span> <span class="pre">D</span> <span class="pre">A</span> <span class="pre">B</span> <span class="pre">C</span> <span class="pre">D</span> <span class="pre">...</span></code></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#itertools.repeat" title="itertools.repeat"><code class="xref py py-func docutils literal"><span class="pre">repeat()</span></code></a></td>
 <td>elem [,n]</td>
-<td><p class="first last">elem, elem, elem, ... 無限もしくは n 回</p>
-</td>
+<td>elem, elem, elem, … 無限もしくは n 回</td>
 <td><code class="docutils literal"><span class="pre">repeat(10,</span> <span class="pre">3)</span> <span class="pre">--&gt;</span> <span class="pre">10</span> <span class="pre">10</span> <span class="pre">10</span></code></td>
 </tr>
 </tbody>
@@ -157,81 +148,71 @@
 <col width="37%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">イテレータ</p>
-</th>
-<th class="head"><p class="first last">引数</p>
-</th>
-<th class="head"><p class="first last">結果</p>
-</th>
-<th class="head"><p class="first last">使用例</p>
-</th>
+<tr class="row-odd"><th class="head">イテレータ</th>
+<th class="head">引数</th>
+<th class="head">結果</th>
+<th class="head">使用例</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><a class="reference internal" href="#itertools.accumulate" title="itertools.accumulate"><code class="xref py py-func docutils literal"><span class="pre">accumulate()</span></code></a></td>
 <td>p [,func]</td>
-<td>p0, p0+p1, p0+p1+p2, ...</td>
+<td>p0, p0+p1, p0+p1+p2, …</td>
 <td><code class="docutils literal"><span class="pre">accumulate([1,2,3,4,5])</span> <span class="pre">--&gt;</span> <span class="pre">1</span> <span class="pre">3</span> <span class="pre">6</span> <span class="pre">10</span> <span class="pre">15</span></code></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#itertools.chain" title="itertools.chain"><code class="xref py py-func docutils literal"><span class="pre">chain()</span></code></a></td>
-<td>p, q, ...</td>
-<td>p0, p1, ... plast, q0, q1, ...</td>
+<td>p, q, …</td>
+<td>p0, p1, … plast, q0, q1, …</td>
 <td><code class="docutils literal"><span class="pre">chain('ABC',</span> <span class="pre">'DEF')</span> <span class="pre">--&gt;</span> <span class="pre">A</span> <span class="pre">B</span> <span class="pre">C</span> <span class="pre">D</span> <span class="pre">E</span> <span class="pre">F</span></code></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#itertools.chain.from_iterable" title="itertools.chain.from_iterable"><code class="xref py py-func docutils literal"><span class="pre">chain.from_iterable()</span></code></a></td>
 <td>iterable</td>
-<td>p0, p1, ... plast, q0, q1, ...</td>
+<td>p0, p1, … plast, q0, q1, …</td>
 <td><code class="docutils literal"><span class="pre">chain.from_iterable(['ABC',</span> <span class="pre">'DEF'])</span> <span class="pre">--&gt;</span> <span class="pre">A</span> <span class="pre">B</span> <span class="pre">C</span> <span class="pre">D</span> <span class="pre">E</span> <span class="pre">F</span></code></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#itertools.compress" title="itertools.compress"><code class="xref py py-func docutils literal"><span class="pre">compress()</span></code></a></td>
 <td>data, selectors</td>
-<td>(d[0] if s[0]), (d[1] if s[1]), ...</td>
+<td>(d[0] if s[0]), (d[1] if s[1]), …</td>
 <td><code class="docutils literal"><span class="pre">compress('ABCDEF',</span> <span class="pre">[1,0,1,0,1,1])</span> <span class="pre">--&gt;</span> <span class="pre">A</span> <span class="pre">C</span> <span class="pre">E</span> <span class="pre">F</span></code></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#itertools.dropwhile" title="itertools.dropwhile"><code class="xref py py-func docutils literal"><span class="pre">dropwhile()</span></code></a></td>
 <td>pred, seq</td>
-<td><p class="first last">seq[n], seq[n+1], pred が偽の場所から始まる</p>
-</td>
+<td>seq[n], seq[n+1], pred が偽の場所から始まる</td>
 <td><code class="docutils literal"><span class="pre">dropwhile(lambda</span> <span class="pre">x:</span> <span class="pre">x&lt;5,</span> <span class="pre">[1,4,6,4,1])</span> <span class="pre">--&gt;</span> <span class="pre">6</span> <span class="pre">4</span> <span class="pre">1</span></code></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#itertools.filterfalse" title="itertools.filterfalse"><code class="xref py py-func docutils literal"><span class="pre">filterfalse()</span></code></a></td>
 <td>pred, seq</td>
-<td><p class="first last">pred(elem) が偽になるseqの要素</p>
-</td>
+<td>pred(elem) が偽になるseqの要素</td>
 <td><code class="docutils literal"><span class="pre">filterfalse(lambda</span> <span class="pre">x:</span> <span class="pre">x%2,</span> <span class="pre">range(10))</span> <span class="pre">--&gt;</span> <span class="pre">0</span> <span class="pre">2</span> <span class="pre">4</span> <span class="pre">6</span> <span class="pre">8</span></code></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#itertools.groupby" title="itertools.groupby"><code class="xref py py-func docutils literal"><span class="pre">groupby()</span></code></a></td>
 <td>iterable[, keyfunc]</td>
-<td><p class="first last">keyfunc(v) の値でグループ化したサブイテレータ</p>
-</td>
-<td>&nbsp;</td>
+<td>keyfunc(v) の値でグループ化したサブイテレータ</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#itertools.islice" title="itertools.islice"><code class="xref py py-func docutils literal"><span class="pre">islice()</span></code></a></td>
 <td>seq, [start,] stop [, step]</td>
-<td><p class="first last">seq[start:stop:step]</p>
-</td>
+<td>seq[start:stop:step]</td>
 <td><code class="docutils literal"><span class="pre">islice('ABCDEFG',</span> <span class="pre">2,</span> <span class="pre">None)</span> <span class="pre">--&gt;</span> <span class="pre">C</span> <span class="pre">D</span> <span class="pre">E</span> <span class="pre">F</span> <span class="pre">G</span></code></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#itertools.starmap" title="itertools.starmap"><code class="xref py py-func docutils literal"><span class="pre">starmap()</span></code></a></td>
 <td>func, seq</td>
-<td>func(*seq[0]), func(*seq[1]), ...</td>
+<td>func(*seq[0]), func(*seq[1]), …</td>
 <td><code class="docutils literal"><span class="pre">starmap(pow,</span> <span class="pre">[(2,5),</span> <span class="pre">(3,2),</span> <span class="pre">(10,3)])</span> <span class="pre">--&gt;</span> <span class="pre">32</span> <span class="pre">9</span> <span class="pre">1000</span></code></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#itertools.takewhile" title="itertools.takewhile"><code class="xref py py-func docutils literal"><span class="pre">takewhile()</span></code></a></td>
 <td>pred, seq</td>
-<td><p class="first last">seq[0], seq[1], pred が偽になるまで</p>
-</td>
+<td>seq[0], seq[1], pred が偽になるまで</td>
 <td><code class="docutils literal"><span class="pre">takewhile(lambda</span> <span class="pre">x:</span> <span class="pre">x&lt;5,</span> <span class="pre">[1,4,6,4,1])</span> <span class="pre">--&gt;</span> <span class="pre">1</span> <span class="pre">4</span></code></td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#itertools.tee" title="itertools.tee"><code class="xref py py-func docutils literal"><span class="pre">tee()</span></code></a></td>
 <td>it, n</td>
-<td><p class="first last">it1, it2 , ... itn 一つのイテレータを n 個に分ける</p>
-</td>
-<td>&nbsp;</td>
+<td>it1, it2 , … itn 一つのイテレータを n 個に分ける</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#itertools.zip_longest" title="itertools.zip_longest"><code class="xref py py-func docutils literal"><span class="pre">zip_longest()</span></code></a></td>
-<td>p, q, ...</td>
-<td>(p[0], q[0]), (p[1], q[1]), ...</td>
+<td>p, q, …</td>
+<td>(p[0], q[0]), (p[1], q[1]), …</td>
 <td><code class="docutils literal"><span class="pre">zip_longest('ABCD',</span> <span class="pre">'xy',</span> <span class="pre">fillvalue='-')</span> <span class="pre">--&gt;</span> <span class="pre">Ax</span> <span class="pre">By</span> <span class="pre">C-</span> <span class="pre">D-</span></code></td>
 </tr>
 </tbody>
@@ -244,49 +225,42 @@
 <col width="48%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">イテレータ</p>
-</th>
-<th class="head"><p class="first last">引数</p>
-</th>
-<th class="head"><p class="first last">結果</p>
-</th>
+<tr class="row-odd"><th class="head">イテレータ</th>
+<th class="head">引数</th>
+<th class="head">結果</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><a class="reference internal" href="#itertools.product" title="itertools.product"><code class="xref py py-func docutils literal"><span class="pre">product()</span></code></a></td>
-<td>p, q, ... [repeat=1]</td>
-<td><p class="first last">デカルト積、ネストしたforループと等価</p>
-</td>
+<td>p, q, … [repeat=1]</td>
+<td>デカルト積、ネストしたforループと等価</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#itertools.permutations" title="itertools.permutations"><code class="xref py py-func docutils literal"><span class="pre">permutations()</span></code></a></td>
 <td>p[, r]</td>
-<td><p class="first last">長さrのタプル列、重複なしのあらゆる並び</p>
-</td>
+<td>長さrのタプル列、重複なしのあらゆる並び</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#itertools.combinations" title="itertools.combinations"><code class="xref py py-func docutils literal"><span class="pre">combinations()</span></code></a></td>
 <td>p, r</td>
-<td><p class="first last">長さrのタプル列、ソートされた順で重複なし</p>
-</td>
+<td>長さrのタプル列、ソートされた順で重複なし</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#itertools.combinations_with_replacement" title="itertools.combinations_with_replacement"><code class="xref py py-func docutils literal"><span class="pre">combinations_with_replacement()</span></code></a></td>
 <td>p, r</td>
-<td><p class="first last">長さrのタプル列、ソートされた順で重複あり</p>
-</td>
+<td>長さrのタプル列、ソートされた順で重複あり</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">product('ABCD',</span> <span class="pre">repeat=2)</span></code></td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td><code class="docutils literal"><span class="pre">AA</span> <span class="pre">AB</span> <span class="pre">AC</span> <span class="pre">AD</span> <span class="pre">BA</span> <span class="pre">BB</span> <span class="pre">BC</span> <span class="pre">BD</span> <span class="pre">CA</span> <span class="pre">CB</span> <span class="pre">CC</span> <span class="pre">CD</span> <span class="pre">DA</span> <span class="pre">DB</span> <span class="pre">DC</span> <span class="pre">DD</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">permutations('ABCD',</span> <span class="pre">2)</span></code></td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td><code class="docutils literal"><span class="pre">AB</span> <span class="pre">AC</span> <span class="pre">AD</span> <span class="pre">BA</span> <span class="pre">BC</span> <span class="pre">BD</span> <span class="pre">CA</span> <span class="pre">CB</span> <span class="pre">CD</span> <span class="pre">DA</span> <span class="pre">DB</span> <span class="pre">DC</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">combinations('ABCD',</span> <span class="pre">2)</span></code></td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td><code class="docutils literal"><span class="pre">AB</span> <span class="pre">AC</span> <span class="pre">AD</span> <span class="pre">BC</span> <span class="pre">BD</span> <span class="pre">CD</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">combinations_with_replacement('ABCD',</span> <span class="pre">2)</span></code></td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 <td><code class="docutils literal"><span class="pre">AA</span> <span class="pre">AB</span> <span class="pre">AC</span> <span class="pre">AD</span> <span class="pre">BB</span> <span class="pre">BC</span> <span class="pre">BD</span> <span class="pre">CC</span> <span class="pre">CD</span> <span class="pre">DD</span></code></td>
 </tr>
 </tbody>
@@ -704,7 +678,7 @@
 <dl class="function">
 <dt id="itertools.starmap">
 <code class="descclassname">itertools.</code><code class="descname">starmap</code><span class="sig-paren">(</span><em>function</em>, <em>iterable</em><span class="sig-paren">)</span><a class="headerlink" href="#itertools.starmap" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>iterables の要素を引数として funtion を計算するイテレータを作成します。 function の引数が一つの iterable からタプルに既にグループ化されている (データが &#8220;zip済み&#8221;) 場合、<a class="reference internal" href="functions.html#map" title="map"><code class="xref py py-func docutils literal"><span class="pre">map()</span></code></a> の代わりに使用します。<a class="reference internal" href="functions.html#map" title="map"><code class="xref py py-func docutils literal"><span class="pre">map()</span></code></a> と <a class="reference internal" href="#itertools.starmap" title="itertools.starmap"><code class="xref py py-func docutils literal"><span class="pre">starmap()</span></code></a> の違いは <code class="docutils literal"><span class="pre">function(a,b)</span></code> と <code class="docutils literal"><span class="pre">function(*c)</span></code> の差に似ています。およそ次と等価です:</p>
+<dd><p>iterables の要素を引数として funtion を計算するイテレータを作成します。 function の引数が一つの iterable からタプルに既にグループ化されている (データが 「zip済み」) 場合、<a class="reference internal" href="functions.html#map" title="map"><code class="xref py py-func docutils literal"><span class="pre">map()</span></code></a> の代わりに使用します。<a class="reference internal" href="functions.html#map" title="map"><code class="xref py py-func docutils literal"><span class="pre">map()</span></code></a> と <a class="reference internal" href="#itertools.starmap" title="itertools.starmap"><code class="xref py py-func docutils literal"><span class="pre">starmap()</span></code></a> の違いは <code class="docutils literal"><span class="pre">function(a,b)</span></code> と <code class="docutils literal"><span class="pre">function(*c)</span></code> の差に似ています。およそ次と等価です:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">starmap</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
     <span class="c1"># starmap(pow, [(2,5), (3,2), (10,3)]) --&gt; 32 9 1000</span>
     <span class="k">for</span> <span class="n">args</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
@@ -787,7 +761,7 @@
 <div class="section" id="itertools-recipes">
 <span id="id1"></span><h2>10.1.2. Itertools レシピ<a class="headerlink" href="#itertools-recipes" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>この節では、既存の itertools を素材としてツールセットを拡張するためのレシピを示します。</p>
-<p>iterable 全体を一度にメモリ上に置くよりも、要素を一つづつ処理する方がメモリ効率上の有利さを保てます。関数形式のままツールをリンクしてゆくと、コードのサイズを減らし、一時変数を減らす助けになります。インタプリタのオーバヘッドをもたらす for ループやジェネレータ(<a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">generator</span></a>) を使わずに、 &#8220;ベクトル化された&#8221; ビルディングブロックを使うと、高速な処理を実現できます。</p>
+<p>iterable 全体を一度にメモリ上に置くよりも、要素を一つづつ処理する方がメモリ効率上の有利さを保てます。関数形式のままツールをリンクしてゆくと、コードのサイズを減らし、一時変数を減らす助けになります。インタプリタのオーバヘッドをもたらす for ループやジェネレータ(<a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">generator</span></a>) を使わずに、 「ベクトル化された」 ビルディングブロックを使うと、高速な処理を実現できます。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
     <span class="s2">&quot;Return first n items of the iterable as a list&quot;</span>
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
@@ -988,7 +962,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">10.1. <code class="docutils literal"><span class="pre">itertools</span></code> &#8212; 効率的なループ実行のためのイテレータ生成関数</a><ul>
+<li><a class="reference internal" href="#">10.1. <code class="docutils literal"><span class="pre">itertools</span></code> — 効率的なループ実行のためのイテレータ生成関数</a><ul>
 <li><a class="reference internal" href="#itertool-functions">10.1.1. Itertool関数</a></li>
 <li><a class="reference internal" href="#itertools-recipes">10.1.2. Itertools レシピ</a></li>
 </ul>
@@ -1000,13 +974,13 @@
                         title="前の章へ">10. 関数型プログラミング用モジュール</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="functools.html"
-                        title="次の章へ">10.2. <code class="docutils literal"><span class="pre">functools</span></code> &#8212; 高階関数と呼び出し可能オブジェクトの操作</a></p>
+                        title="次の章へ">10.2. <code class="docutils literal"><span class="pre">functools</span></code> — 高階関数と呼び出し可能オブジェクトの操作</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/itertools.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/itertools.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -1067,7 +1041,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

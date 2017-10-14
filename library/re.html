@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>6.2. re — 正規表現操作 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="6. テキスト処理サービス" href="text.html" />
     <link rel="next" title="6.3. difflib — 差分の計算を助ける" href="difflib.html" />
     <link rel="prev" title="6.1. string — 一般的な文字列操作" href="string.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,7 +100,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-re">
-<span id="re-regular-expression-operations"></span><h1>6.2. <a class="reference internal" href="#module-re" title="re: Regular expression operations."><code class="xref py py-mod docutils literal"><span class="pre">re</span></code></a> &#8212; 正規表現操作<a class="headerlink" href="#module-re" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="re-regular-expression-operations"></span><h1>6.2. <a class="reference internal" href="#module-re" title="re: Regular expression operations."><code class="xref py py-mod docutils literal"><span class="pre">re</span></code></a> — 正規表現操作<a class="headerlink" href="#module-re" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/re.py">Lib/re.py</a></p>
 <hr class="docutils" />
 <p>このモジュールは、Perl などと同様の正規表現マッチング操作を提供しています。</p>
@@ -130,35 +126,25 @@
 <p>特殊文字を以下に示します:</p>
 <dl class="docutils">
 <dt><code class="docutils literal"><span class="pre">'.'</span></code></dt>
-<dd><p class="first last">(ドット) デフォルトのモードでは改行以外の任意の文字にマッチします。 <a class="reference internal" href="#re.DOTALL" title="re.DOTALL"><code class="xref py py-const docutils literal"><span class="pre">DOTALL</span></code></a> フラグが指定されていれば改行も含むすべての文字にマッチします。</p>
-</dd>
+<dd>(ドット) デフォルトのモードでは改行以外の任意の文字にマッチします。 <a class="reference internal" href="#re.DOTALL" title="re.DOTALL"><code class="xref py py-const docutils literal"><span class="pre">DOTALL</span></code></a> フラグが指定されていれば改行も含むすべての文字にマッチします。</dd>
 <dt><code class="docutils literal"><span class="pre">'^'</span></code></dt>
-<dd><p class="first last">(キャレット) 文字列の先頭とマッチします。 <a class="reference internal" href="#re.MULTILINE" title="re.MULTILINE"><code class="xref py py-const docutils literal"><span class="pre">MULTILINE</span></code></a> モードでは各改行の直後にマッチします。</p>
-</dd>
+<dd>(キャレット) 文字列の先頭とマッチします。 <a class="reference internal" href="#re.MULTILINE" title="re.MULTILINE"><code class="xref py py-const docutils literal"><span class="pre">MULTILINE</span></code></a> モードでは各改行の直後にマッチします。</dd>
 <dt><code class="docutils literal"><span class="pre">'$'</span></code></dt>
-<dd><p class="first last">文字列の末尾、あるいは文字列の末尾の改行の直前にマッチします。例えば、 <code class="docutils literal"><span class="pre">foo</span></code> は &#8216;foo&#8217; と &#8216;foobar&#8217; の両方にマッチします。一方、正規表現 <code class="docutils literal"><span class="pre">foo$</span></code> は &#8216;foo&#8217; だけとマッチします。興味深いことに、 <code class="docutils literal"><span class="pre">'foo1\nfoo2\n'</span></code> を <code class="docutils literal"><span class="pre">foo.$</span></code> で検索した場合、通常のモードでは &#8216;foo2&#8217; だけにマッチし、 <a class="reference internal" href="#re.MULTILINE" title="re.MULTILINE"><code class="xref py py-const docutils literal"><span class="pre">MULTILINE</span></code></a> モードでは &#8216;foo1&#8217; にもマッチします。 <code class="docutils literal"><span class="pre">$</span></code> だけで <code class="docutils literal"><span class="pre">'foo\n'</span></code> を検索した場合、2箇所 (内容は空) でマッチします: 1つは、改行の直前で、もう1つは、文字列の最後です。</p>
-</dd>
+<dd>文字列の末尾、あるいは文字列の末尾の改行の直前にマッチします。例えば、 <code class="docutils literal"><span class="pre">foo</span></code> は 『foo』 と 『foobar』 の両方にマッチします。一方、正規表現 <code class="docutils literal"><span class="pre">foo$</span></code> は 『foo』 だけとマッチします。興味深いことに、 <code class="docutils literal"><span class="pre">'foo1\nfoo2\n'</span></code> を <code class="docutils literal"><span class="pre">foo.$</span></code> で検索した場合、通常のモードでは 『foo2』 だけにマッチし、 <a class="reference internal" href="#re.MULTILINE" title="re.MULTILINE"><code class="xref py py-const docutils literal"><span class="pre">MULTILINE</span></code></a> モードでは 『foo1』 にもマッチします。 <code class="docutils literal"><span class="pre">$</span></code> だけで <code class="docutils literal"><span class="pre">'foo\n'</span></code> を検索した場合、2箇所 (内容は空) でマッチします: 1つは、改行の直前で、もう1つは、文字列の最後です。</dd>
 <dt><code class="docutils literal"><span class="pre">'*'</span></code></dt>
-<dd><p class="first last">直前にある RE に作用して、 RE を 0 回以上できるだけ多く繰り返したものにマッチさせるようにします。例えば <code class="docutils literal"><span class="pre">ab*</span></code> は &#8216;a&#8217;、&#8217;ab&#8217;、あるいは &#8216;a&#8217; に任意個数の&#8217;b&#8217; を続けたものにマッチします。</p>
-</dd>
+<dd>直前にある RE に作用して、 RE を 0 回以上できるだけ多く繰り返したものにマッチさせるようにします。例えば <code class="docutils literal"><span class="pre">ab*</span></code> は 『a』、』ab』、あるいは 『a』 に任意個数の’b』 を続けたものにマッチします。</dd>
 <dt><code class="docutils literal"><span class="pre">'+'</span></code></dt>
-<dd><p class="first last">直前にある RE に作用して、 RE を、1 回以上繰り返したものにマッチさせるようにします。例えば <code class="docutils literal"><span class="pre">ab+</span></code> は &#8216;a&#8217; に一つ以上の &#8216;b&#8217; が続いたものにマッチし、 &#8216;a&#8217; 単体にはマッチしません。</p>
-</dd>
+<dd>直前にある RE に作用して、 RE を、1 回以上繰り返したものにマッチさせるようにします。例えば <code class="docutils literal"><span class="pre">ab+</span></code> は 『a』 に一つ以上の 『b』 が続いたものにマッチし、 『a』 単体にはマッチしません。</dd>
 <dt><code class="docutils literal"><span class="pre">'?'</span></code></dt>
-<dd><p class="first last">直前にある RE に作用して、 RE を 0 回か 1 回繰り返したものにマッチさせるようにします。例えば <code class="docutils literal"><span class="pre">ab?</span></code> は &#8216;a&#8217; あるいは &#8216;ab&#8217; にマッチします。</p>
-</dd>
+<dd>直前にある RE に作用して、 RE を 0 回か 1 回繰り返したものにマッチさせるようにします。例えば <code class="docutils literal"><span class="pre">ab?</span></code> は 『a』 あるいは 『ab』 にマッチします。</dd>
 <dt><code class="docutils literal"><span class="pre">*?</span></code>, <code class="docutils literal"><span class="pre">+?</span></code>, <code class="docutils literal"><span class="pre">??</span></code></dt>
-<dd><p class="first last"><code class="docutils literal"><span class="pre">'*'</span></code> 、 <code class="docutils literal"><span class="pre">'+'</span></code> 、 <code class="docutils literal"><span class="pre">'?'</span></code> といった修飾子は、すべて <em class="dfn">貪欲 (greedy)</em> マッチ、すなわちできるだけ多くのテキストにマッチするようになっています。時にはこの動作が望ましくない場合もあります。例えば正規表現 <code class="docutils literal"><span class="pre">&lt;.*&gt;</span></code> を <code class="docutils literal"><span class="pre">&lt;a&gt;</span> <span class="pre">b</span> <span class="pre">&lt;c&gt;</span></code> にマッチさせると、 <code class="docutils literal"><span class="pre">&lt;a&gt;</span></code> だけにマッチするのではなく全文字列にマッチしてしまいます。 <code class="docutils literal"><span class="pre">?</span></code> を修飾子の後に追加すると、 <em class="dfn">非貪欲 (non-greedy)</em> あるいは <em class="dfn">最小一致 (minimal)</em> のマッチになり、できるだけ <em>少ない</em> 文字数のマッチになります。例えば正規表現 <code class="docutils literal"><span class="pre">&lt;.*?&gt;</span></code> を使うと <code class="docutils literal"><span class="pre">&lt;a&gt;</span></code> だけにマッチします。</p>
-</dd>
+<dd><code class="docutils literal"><span class="pre">'*'</span></code> 、 <code class="docutils literal"><span class="pre">'+'</span></code> 、 <code class="docutils literal"><span class="pre">'?'</span></code> といった修飾子は、すべて <em class="dfn">貪欲 (greedy)</em> マッチ、すなわちできるだけ多くのテキストにマッチするようになっています。時にはこの動作が望ましくない場合もあります。例えば正規表現 <code class="docutils literal"><span class="pre">&lt;.*&gt;</span></code> を <code class="docutils literal"><span class="pre">&lt;a&gt;</span> <span class="pre">b</span> <span class="pre">&lt;c&gt;</span></code> にマッチさせると、 <code class="docutils literal"><span class="pre">&lt;a&gt;</span></code> だけにマッチするのではなく全文字列にマッチしてしまいます。 <code class="docutils literal"><span class="pre">?</span></code> を修飾子の後に追加すると、 <em class="dfn">非貪欲 (non-greedy)</em> あるいは <em class="dfn">最小一致 (minimal)</em> のマッチになり、できるだけ <em>少ない</em> 文字数のマッチになります。例えば正規表現 <code class="docutils literal"><span class="pre">&lt;.*?&gt;</span></code> を使うと <code class="docutils literal"><span class="pre">&lt;a&gt;</span></code> だけにマッチします。</dd>
 <dt><code class="docutils literal"><span class="pre">{m}</span></code></dt>
-<dd><p class="first last">前にある RE の <em>m</em> 回の正確なコピーとマッチすべきであることを指定します；マッチ回数が少なければ、RE 全体ではマッチしません。例えば、 <code class="docutils literal"><span class="pre">a{6}</span></code> は、正確に 6個の <code class="docutils literal"><span class="pre">'a'</span></code> 文字とマッチしますが、 5個ではマッチしません。</p>
-</dd>
+<dd>前にある RE の <em>m</em> 回の正確なコピーとマッチすべきであることを指定します；マッチ回数が少なければ、RE 全体ではマッチしません。例えば、 <code class="docutils literal"><span class="pre">a{6}</span></code> は、正確に 6個の <code class="docutils literal"><span class="pre">'a'</span></code> 文字とマッチしますが、 5個ではマッチしません。</dd>
 <dt><code class="docutils literal"><span class="pre">{m,n}</span></code></dt>
-<dd><p class="first last">結果の RE は、前にある RE を、 <em>m</em> 回から <em>n</em> 回まで繰り返したもので、できるだけ多く繰り返したものとマッチするように、マッチします。例えば、 <code class="docutils literal"><span class="pre">a{3,5}</span></code> は、3個から 5個の <code class="docutils literal"><span class="pre">'a'</span></code> 文字とマッチします。 <em>m</em> を省略するとマッチ回数の下限として0を指定した事になり、 <em>n</em> を省略することは、上限が無限であることを指定します； <code class="docutils literal"><span class="pre">a{4,}b</span></code> は <code class="docutils literal"><span class="pre">aaaab</span></code> や、千個の <code class="docutils literal"><span class="pre">'a'</span></code> 文字に <code class="docutils literal"><span class="pre">b</span></code> が続いたものとマッチしますが、 <code class="docutils literal"><span class="pre">aaab</span></code> とはマッチしません。コンマは省略できません、そうでないと修飾子が上で述べた形式と混同されてしまうからです。</p>
-</dd>
+<dd>結果の RE は、前にある RE を、 <em>m</em> 回から <em>n</em> 回まで繰り返したもので、できるだけ多く繰り返したものとマッチするように、マッチします。例えば、 <code class="docutils literal"><span class="pre">a{3,5}</span></code> は、3個から 5個の <code class="docutils literal"><span class="pre">'a'</span></code> 文字とマッチします。 <em>m</em> を省略するとマッチ回数の下限として0を指定した事になり、 <em>n</em> を省略することは、上限が無限であることを指定します； <code class="docutils literal"><span class="pre">a{4,}b</span></code> は <code class="docutils literal"><span class="pre">aaaab</span></code> や、千個の <code class="docutils literal"><span class="pre">'a'</span></code> 文字に <code class="docutils literal"><span class="pre">b</span></code> が続いたものとマッチしますが、 <code class="docutils literal"><span class="pre">aaab</span></code> とはマッチしません。コンマは省略できません、そうでないと修飾子が上で述べた形式と混同されてしまうからです。</dd>
 <dt><code class="docutils literal"><span class="pre">{m,n}?</span></code></dt>
-<dd><p class="first last">結果の RE は、前にある RE の <em>m</em> 回から <em>n</em> 回まで繰り返したもので、できるだけ <em>少なく</em> 繰り返したものとマッチするように、マッチします。これは、前の修飾子の控え目バージョンです。例えば、 6文字文字列 <code class="docutils literal"><span class="pre">'aaaaaa'</span></code> では、 <code class="docutils literal"><span class="pre">a{3,5}</span></code> は、5個の <code class="docutils literal"><span class="pre">'a'</span></code> 文字とマッチしますが、 <code class="docutils literal"><span class="pre">a{3,5}?</span></code> は3個の文字とマッチするだけです。</p>
-</dd>
+<dd>結果の RE は、前にある RE の <em>m</em> 回から <em>n</em> 回まで繰り返したもので、できるだけ <em>少なく</em> 繰り返したものとマッチするように、マッチします。これは、前の修飾子の控え目バージョンです。例えば、 6文字文字列 <code class="docutils literal"><span class="pre">'aaaaaa'</span></code> では、 <code class="docutils literal"><span class="pre">a{3,5}</span></code> は、5個の <code class="docutils literal"><span class="pre">'a'</span></code> 文字とマッチしますが、 <code class="docutils literal"><span class="pre">a{3,5}?</span></code> は3個の文字とマッチするだけです。</dd>
 <dt><code class="docutils literal"><span class="pre">'\'</span></code></dt>
 <dd><p class="first">特殊文字をエスケープする( <code class="docutils literal"><span class="pre">'*'</span></code> や <code class="docutils literal"><span class="pre">'?'</span></code> 等のような文字とのマッチをできるようにする) か、あるいは、特殊シーケンスの合図です; 特殊シーケンスは後で議論します。</p>
 <p class="last">もしパターンを表現するのに raw string を使用していないのであれば、 Python も、バックスラッシュを文字列リテラルでのエスケープシーケンスとして使っていることを覚えていて下さい。エスケープシーケンスを Python の構文解析器が認識して処理しない場合、そのバックスラッシュとそれに続く文字は、結果の文字列にそのまま含まれます。しかし、Python が結果のシーケンスを認識する場合は、バックスラッシュを 2回繰り返さなければいけません。これは複雑で理解しにくいので、最も簡単な表現以外は、すべて raw string を使うことを強く推奨します。</p>
@@ -166,39 +152,28 @@
 <dt><code class="docutils literal"><span class="pre">[]</span></code></dt>
 <dd><p class="first">文字の集合を指定するのに使用します。集合には以下のものが指定できます:</p>
 <ul class="last simple">
-<li><p class="first">個別に指定できる文字。 <code class="docutils literal"><span class="pre">[amk]</span></code> は <code class="docutils literal"><span class="pre">'a'</span></code>, <code class="docutils literal"><span class="pre">'m'</span></code>, <code class="docutils literal"><span class="pre">'k'</span></code> とマッチします。</p>
-</li>
-<li><p class="first">連続した文字の範囲を、先頭と最後の2文字とその間に <code class="docutils literal"><span class="pre">'-'</span></code> を挟んだ形で指定できます。 <code class="docutils literal"><span class="pre">[a-z]</span></code> はすべての小文字の ASCII 文字とマッチします。 <code class="docutils literal"><span class="pre">[0-5][0-9]</span></code> は <code class="docutils literal"><span class="pre">00</span></code> から <code class="docutils literal"><span class="pre">59</span></code> までの、すべての 2 桁の数字とマッチします。 <code class="docutils literal"><span class="pre">[0-9A-Fa-f]</span></code> は任意の 16 進数の数字とマッチします。 <code class="docutils literal"><span class="pre">-</span></code> が、エスケープされた場合 (例: <code class="docutils literal"><span class="pre">[a\-z]</span></code>)、あるいは先頭か末尾に置かれた場合 (例: <code class="docutils literal"><span class="pre">[a-]</span></code>)、リテラル <code class="docutils literal"><span class="pre">'-'</span></code> とマッチします。</p>
-</li>
-<li><p class="first">集合内では、特殊文字はその意味を失います。 <code class="docutils literal"><span class="pre">[(+*)]</span></code> はリテラル文字 <code class="docutils literal"><span class="pre">'('</span></code> <code class="docutils literal"><span class="pre">'+'</span></code> 、 <code class="docutils literal"><span class="pre">'*'</span></code> 、あるいは <code class="docutils literal"><span class="pre">')'</span></code> のいずれかとマッチします。</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">\w</span></code> や <code class="docutils literal"><span class="pre">\S</span></code> のような文字クラス (後述) も集合内に指定できますが、それらにマッチする文字は <a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> か <a class="reference internal" href="#re.LOCALE" title="re.LOCALE"><code class="xref py py-const docutils literal"><span class="pre">LOCALE</span></code></a> のどちらか有効にされているモードに依存します。</p>
-</li>
-<li><p class="first">範囲内にない文字とは、その集合の <em class="dfn">補集合</em> をとることでマッチできます。集合の最初の文字が <code class="docutils literal"><span class="pre">'^'</span></code> の時、集合に <em>ない</em> 文字すべてとマッチします。 <code class="docutils literal"><span class="pre">[^5]</span></code> は <code class="docutils literal"><span class="pre">'5'</span></code> を除くあらゆる文字にマッチします。 <code class="docutils literal"><span class="pre">[^^]</span></code> は <code class="docutils literal"><span class="pre">'^'</span></code> を除くあらゆる文字にマッチします。 <code class="docutils literal"><span class="pre">^</span></code> は集合の最初の文字でない限り特別の意味を持ちません。</p>
-</li>
-<li><p class="first">集合内でリテラル <code class="docutils literal"><span class="pre">']'</span></code> をマッチさせるには、その前にバックスラッシュをつけるか、集合の先頭に置きます。 <code class="docutils literal"><span class="pre">[()[\]{}]</span></code> と <code class="docutils literal"><span class="pre">[]()[{}]</span></code> はどちらも <code class="docutils literal"><span class="pre">']'</span></code> にマッチします。</p>
-</li>
+<li>個別に指定できる文字。 <code class="docutils literal"><span class="pre">[amk]</span></code> は <code class="docutils literal"><span class="pre">'a'</span></code>, <code class="docutils literal"><span class="pre">'m'</span></code>, <code class="docutils literal"><span class="pre">'k'</span></code> とマッチします。</li>
+<li>連続した文字の範囲を、先頭と最後の2文字とその間に <code class="docutils literal"><span class="pre">'-'</span></code> を挟んだ形で指定できます。 <code class="docutils literal"><span class="pre">[a-z]</span></code> はすべての小文字の ASCII 文字とマッチします。 <code class="docutils literal"><span class="pre">[0-5][0-9]</span></code> は <code class="docutils literal"><span class="pre">00</span></code> から <code class="docutils literal"><span class="pre">59</span></code> までの、すべての 2 桁の数字とマッチします。 <code class="docutils literal"><span class="pre">[0-9A-Fa-f]</span></code> は任意の 16 進数の数字とマッチします。 <code class="docutils literal"><span class="pre">-</span></code> が、エスケープされた場合 (例: <code class="docutils literal"><span class="pre">[a\-z]</span></code>)、あるいは先頭か末尾に置かれた場合 (例: <code class="docutils literal"><span class="pre">[a-]</span></code>)、リテラル <code class="docutils literal"><span class="pre">'-'</span></code> とマッチします。</li>
+<li>集合内では、特殊文字はその意味を失います。 <code class="docutils literal"><span class="pre">[(+*)]</span></code> はリテラル文字 <code class="docutils literal"><span class="pre">'('</span></code> <code class="docutils literal"><span class="pre">'+'</span></code> 、 <code class="docutils literal"><span class="pre">'*'</span></code> 、あるいは <code class="docutils literal"><span class="pre">')'</span></code> のいずれかとマッチします。</li>
+<li><code class="docutils literal"><span class="pre">\w</span></code> や <code class="docutils literal"><span class="pre">\S</span></code> のような文字クラス (後述) も集合内に指定できますが、それらにマッチする文字は <a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> か <a class="reference internal" href="#re.LOCALE" title="re.LOCALE"><code class="xref py py-const docutils literal"><span class="pre">LOCALE</span></code></a> のどちらか有効にされているモードに依存します。</li>
+<li>範囲内にない文字とは、その集合の <em class="dfn">補集合</em> をとることでマッチできます。集合の最初の文字が <code class="docutils literal"><span class="pre">'^'</span></code> の時、集合に <em>ない</em> 文字すべてとマッチします。 <code class="docutils literal"><span class="pre">[^5]</span></code> は <code class="docutils literal"><span class="pre">'5'</span></code> を除くあらゆる文字にマッチします。 <code class="docutils literal"><span class="pre">[^^]</span></code> は <code class="docutils literal"><span class="pre">'^'</span></code> を除くあらゆる文字にマッチします。 <code class="docutils literal"><span class="pre">^</span></code> は集合の最初の文字でない限り特別の意味を持ちません。</li>
+<li>集合内でリテラル <code class="docutils literal"><span class="pre">']'</span></code> をマッチさせるには、その前にバックスラッシュをつけるか、集合の先頭に置きます。 <code class="docutils literal"><span class="pre">[()[\]{}]</span></code> と <code class="docutils literal"><span class="pre">[]()[{}]</span></code> はどちらも <code class="docutils literal"><span class="pre">']'</span></code> にマッチします。</li>
 </ul>
 </dd>
 <dt><code class="docutils literal"><span class="pre">'|'</span></code></dt>
-<dd><p class="first last">A と B を任意の RE としたとき、<code class="docutils literal"><span class="pre">A|B</span></code> は A か B のどちらかとマッチする正規表現を作成します。任意個数の RE を、このように <code class="docutils literal"><span class="pre">'|'</span></code> で分離することができます。これはグループ (以下参照) 内部でも同様に使えます。検査対象文字列をスキャンする中で、 <code class="docutils literal"><span class="pre">'|'</span></code> で分離された RE は左から右への順に検査されます。一つでも完全にマッチしたパターンがあれば、そのパターン枝が受理されます。つまり、<code class="docutils literal"><span class="pre">A</span></code> がマッチした場合、たとえ <code class="docutils literal"><span class="pre">B</span></code> によるマッチが全体としてより長いマッチになったとしても、 <code class="docutils literal"><span class="pre">B</span></code> をスキャンしません。言いかえると、 <code class="docutils literal"><span class="pre">'|'</span></code> 演算子は決して貪欲 (greedy) ではありません。文字通りの <code class="docutils literal"><span class="pre">'|'</span></code> とマッチするには、 <code class="docutils literal"><span class="pre">\|</span></code> を使うか、あるいはそれを <code class="docutils literal"><span class="pre">[|]</span></code> のように文字クラス内に入れます。</p>
-</dd>
+<dd>A と B を任意の RE としたとき、<code class="docutils literal"><span class="pre">A|B</span></code> は A か B のどちらかとマッチする正規表現を作成します。任意個数の RE を、このように <code class="docutils literal"><span class="pre">'|'</span></code> で分離することができます。これはグループ (以下参照) 内部でも同様に使えます。検査対象文字列をスキャンする中で、 <code class="docutils literal"><span class="pre">'|'</span></code> で分離された RE は左から右への順に検査されます。一つでも完全にマッチしたパターンがあれば、そのパターン枝が受理されます。つまり、<code class="docutils literal"><span class="pre">A</span></code> がマッチした場合、たとえ <code class="docutils literal"><span class="pre">B</span></code> によるマッチが全体としてより長いマッチになったとしても、 <code class="docutils literal"><span class="pre">B</span></code> をスキャンしません。言いかえると、 <code class="docutils literal"><span class="pre">'|'</span></code> 演算子は決して貪欲 (greedy) ではありません。文字通りの <code class="docutils literal"><span class="pre">'|'</span></code> とマッチするには、 <code class="docutils literal"><span class="pre">\|</span></code> を使うか、あるいはそれを <code class="docutils literal"><span class="pre">[|]</span></code> のように文字クラス内に入れます。</dd>
 <dt><code class="docutils literal"><span class="pre">(...)</span></code></dt>
-<dd><p class="first last">丸括弧の中にどのような正規表現があってもマッチし、またグループの先頭と末尾を表します；グループの中身は、マッチが実行された後に検索され、後述する <code class="docutils literal"><span class="pre">\number</span></code> 特殊シーケンス付きの文字列内で、後でマッチされます。文字通りの <code class="docutils literal"><span class="pre">'('</span></code> や <code class="docutils literal"><span class="pre">')'</span></code> とマッチするには、 <code class="docutils literal"><span class="pre">\(</span></code> あるいは <code class="docutils literal"><span class="pre">\)</span></code> を使うか、それらを文字クラス内に入れます： <code class="docutils literal"><span class="pre">[(]</span> <span class="pre">[)]</span></code> 。</p>
-</dd>
+<dd>丸括弧の中にどのような正規表現があってもマッチし、またグループの先頭と末尾を表します；グループの中身は、マッチが実行された後に検索され、後述する <code class="docutils literal"><span class="pre">\number</span></code> 特殊シーケンス付きの文字列内で、後でマッチされます。文字通りの <code class="docutils literal"><span class="pre">'('</span></code> や <code class="docutils literal"><span class="pre">')'</span></code> とマッチするには、 <code class="docutils literal"><span class="pre">\(</span></code> あるいは <code class="docutils literal"><span class="pre">\)</span></code> を使うか、それらを文字クラス内に入れます： <code class="docutils literal"><span class="pre">[(]</span> <span class="pre">[)]</span></code> 。</dd>
 <dt><code class="docutils literal"><span class="pre">(?...)</span></code></dt>
-<dd><p class="first last">これは拡張記法です (<code class="docutils literal"><span class="pre">'('</span></code> に続く <code class="docutils literal"><span class="pre">'?'</span></code> は他には意味がありません) 。 <code class="docutils literal"><span class="pre">'?'</span></code> の後の最初の文字が、この構造の意味とこれ以上のシンタックスがどういうものであるかを決定します。拡張記法は普通新しいグループを作成しません； <code class="docutils literal"><span class="pre">(?P&lt;name&gt;...)</span></code> がこの規則の唯一の例外です。以下に現在サポートされている拡張記法を示します。</p>
-</dd>
+<dd>これは拡張記法です (<code class="docutils literal"><span class="pre">'('</span></code> に続く <code class="docutils literal"><span class="pre">'?'</span></code> は他には意味がありません) 。 <code class="docutils literal"><span class="pre">'?'</span></code> の後の最初の文字が、この構造の意味とこれ以上のシンタックスがどういうものであるかを決定します。拡張記法は普通新しいグループを作成しません； <code class="docutils literal"><span class="pre">(?P&lt;name&gt;...)</span></code> がこの規則の唯一の例外です。以下に現在サポートされている拡張記法を示します。</dd>
 <dt><code class="docutils literal"><span class="pre">(?aiLmsux)</span></code></dt>
-<dd><p class="first last">(<code class="docutils literal"><span class="pre">'a'</span></code>, <code class="docutils literal"><span class="pre">'i'</span></code>, <code class="docutils literal"><span class="pre">'L'</span></code>, <code class="docutils literal"><span class="pre">'m'</span></code>, <code class="docutils literal"><span class="pre">'s'</span></code>, <code class="docutils literal"><span class="pre">'u'</span></code>, <code class="docutils literal"><span class="pre">'x'</span></code> の集合にある文字を 1 個以上。)
+<dd>(<code class="docutils literal"><span class="pre">'a'</span></code>, <code class="docutils literal"><span class="pre">'i'</span></code>, <code class="docutils literal"><span class="pre">'L'</span></code>, <code class="docutils literal"><span class="pre">'m'</span></code>, <code class="docutils literal"><span class="pre">'s'</span></code>, <code class="docutils literal"><span class="pre">'u'</span></code>, <code class="docutils literal"><span class="pre">'x'</span></code> の集合にある文字を 1 個以上。)
 グループは空文字列ともマッチします; 正規表現全体に対して、文字に対応するフラグ、 <a class="reference internal" href="#re.A" title="re.A"><code class="xref py py-const docutils literal"><span class="pre">re.A</span></code></a> (ASCII 限定マッチ)、<a class="reference internal" href="#re.I" title="re.I"><code class="xref py py-const docutils literal"><span class="pre">re.I</span></code></a> (大文字・小文字を区別しない)、<a class="reference internal" href="#re.L" title="re.L"><code class="xref py py-const docutils literal"><span class="pre">re.L</span></code></a> (ロケール依存)、<a class="reference internal" href="#re.M" title="re.M"><code class="xref py py-const docutils literal"><span class="pre">re.M</span></code></a> (MULTILINE モード)、<a class="reference internal" href="#re.S" title="re.S"><code class="xref py py-const docutils literal"><span class="pre">re.S</span></code></a> (DOTALL モード)、 <a class="reference internal" href="#re.X" title="re.X"><code class="xref py py-const docutils literal"><span class="pre">re.X</span></code></a> (冗長) を設定します。
 (フラグについては <a class="reference internal" href="#contents-of-module-re"><span class="std std-ref">モジュールコンテンツ</span></a> を参照してください。)
 これは、<em>flag</em> 引数を <a class="reference internal" href="#re.compile" title="re.compile"><code class="xref py py-func docutils literal"><span class="pre">re.compile()</span></code></a> 関数に渡すのではなく、そのフラグを正規表現の一部に含めたい場合に役立ちます。
-フラグは正規表現文字列の先頭で使うべきです。</p>
-</dd>
+フラグは正規表現文字列の先頭で使うべきです。</dd>
 <dt><code class="docutils literal"><span class="pre">(?:...)</span></code></dt>
-<dd><p class="first last">正規表現の丸括弧の取り込まないバージョンです。どのような正規表現が丸括弧内にあってもマッチしますが、グループによってマッチされたサブ文字列は、マッチを実行したあと検索されることも、あるいは後でパターンで参照されることも <em>できません</em> 。</p>
-</dd>
+<dd>正規表現の丸括弧の取り込まないバージョンです。どのような正規表現が丸括弧内にあってもマッチしますが、グループによってマッチされたサブ文字列は、マッチを実行したあと検索されることも、あるいは後でパターンで参照されることも <em>できません</em> 。</dd>
 <dt><code class="docutils literal"><span class="pre">(?imsx-imsx:...)</span></code></dt>
 <dd><p class="first">(<code class="docutils literal"><span class="pre">'i'</span></code>, <code class="docutils literal"><span class="pre">'m'</span></code>, <code class="docutils literal"><span class="pre">'s'</span></code>, <code class="docutils literal"><span class="pre">'x'</span></code> の集合にある文字を 0 個以上、それに続くオプショナルな <code class="docutils literal"><span class="pre">'-'</span></code> と先程と同じ集合にある文字を 1 個以上。)
 正規表現の一部に対して、文字に対応するフラグ、<a class="reference internal" href="#re.I" title="re.I"><code class="xref py py-const docutils literal"><span class="pre">re.I</span></code></a> (大文字・小文字を区別しない), <a class="reference internal" href="#re.M" title="re.M"><code class="xref py py-const docutils literal"><span class="pre">re.M</span></code></a> (MULTILINE モード), <a class="reference internal" href="#re.S" title="re.S"><code class="xref py py-const docutils literal"><span class="pre">re.S</span></code></a> (DOTALL モード), <a class="reference internal" href="#re.X" title="re.X"><code class="xref py py-const docutils literal"><span class="pre">re.X</span></code></a> (冗長) を設定したり除去したりします。
@@ -216,32 +191,26 @@
 <col width="47%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">グループ &#8220;quote&#8221; を参照するコンテキスト</p>
-</th>
-<th class="head"><p class="first last">参照方法</p>
-</th>
+<tr class="row-odd"><th class="head">グループ 「quote」 を参照するコンテキスト</th>
+<th class="head">参照方法</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><p class="first last">同一パターンへの参照</p>
-</td>
+<tr class="row-even"><td>同一パターンへの参照</td>
 <td><ul class="first last simple">
-<li><p class="first"><code class="docutils literal"><span class="pre">(?P=quote)</span></code> (そのまま)</p>
-</li>
+<li><code class="docutils literal"><span class="pre">(?P=quote)</span></code> (そのまま)</li>
 <li><code class="docutils literal"><span class="pre">\1</span></code></li>
 </ul>
 </td>
 </tr>
-<tr class="row-odd"><td><p class="first last">マッチオブジェクト <code class="docutils literal"><span class="pre">m</span></code> の処理時</p>
-</td>
+<tr class="row-odd"><td>マッチオブジェクト <code class="docutils literal"><span class="pre">m</span></code> の処理時</td>
 <td><ul class="first last simple">
 <li><code class="docutils literal"><span class="pre">m.group('quote')</span></code></li>
 <li><code class="docutils literal"><span class="pre">m.end('quote')</span></code> (etc.)</li>
 </ul>
 </td>
 </tr>
-<tr class="row-even"><td><p class="first last"><code class="docutils literal"><span class="pre">re.sub()</span></code> の <code class="docutils literal"><span class="pre">repl</span></code> 引数へ渡される文字列</p>
-</td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">re.sub()</span></code> の <code class="docutils literal"><span class="pre">repl</span></code> 引数へ渡される文字列</td>
 <td><ul class="first last simple">
 <li><code class="docutils literal"><span class="pre">\g&lt;quote&gt;</span></code></li>
 <li><code class="docutils literal"><span class="pre">\g&lt;1&gt;</span></code></li>
@@ -253,17 +222,13 @@
 </table>
 </dd>
 <dt><code class="docutils literal"><span class="pre">(?P=name)</span></code></dt>
-<dd><p class="first last">名前付きグループへの後方参照です; 既出のグループ名 <em>name</em> にマッチする文字列は何にでもマッチします。</p>
-</dd>
+<dd>名前付きグループへの後方参照です; 既出のグループ名 <em>name</em> にマッチする文字列は何にでもマッチします。</dd>
 <dt><code class="docutils literal"><span class="pre">(?#...)</span></code></dt>
-<dd><p class="first last">コメントです；括弧の内容は単純に無視されます。</p>
-</dd>
+<dd>コメントです；括弧の内容は単純に無視されます。</dd>
 <dt><code class="docutils literal"><span class="pre">(?=...)</span></code></dt>
-<dd><p class="first last">もし <code class="docutils literal"><span class="pre">...</span></code> が次に続くものとマッチすればマッチしますが、文字列をまったく消費しません。これは先読みアサーション (lookahead assertion) と呼ばれます。例えば、 <code class="docutils literal"><span class="pre">Isaac</span> <span class="pre">(?=Asimov)</span></code> は、 <code class="docutils literal"><span class="pre">'Isaac</span> <span class="pre">'</span></code> に <code class="docutils literal"><span class="pre">'Asimov'</span></code> が続く場合だけ、 <code class="docutils literal"><span class="pre">'Isaac</span> <span class="pre">'</span></code> とマッチします。</p>
-</dd>
+<dd>もし <code class="docutils literal"><span class="pre">...</span></code> が次に続くものとマッチすればマッチしますが、文字列をまったく消費しません。これは先読みアサーション (lookahead assertion) と呼ばれます。例えば、 <code class="docutils literal"><span class="pre">Isaac</span> <span class="pre">(?=Asimov)</span></code> は、 <code class="docutils literal"><span class="pre">'Isaac</span> <span class="pre">'</span></code> に <code class="docutils literal"><span class="pre">'Asimov'</span></code> が続く場合だけ、 <code class="docutils literal"><span class="pre">'Isaac</span> <span class="pre">'</span></code> とマッチします。</dd>
 <dt><code class="docutils literal"><span class="pre">(?!...)</span></code></dt>
-<dd><p class="first last">もし <code class="docutils literal"><span class="pre">...</span></code> が次に続くものとマッチしなければマッチします。これは否定先読みアサーション (negative lookahead assertion) です。例えば、 <code class="docutils literal"><span class="pre">Isaac</span> <span class="pre">(?!Asimov)</span></code> は、 <code class="docutils literal"><span class="pre">'Isaac</span> <span class="pre">'</span></code> に <code class="docutils literal"><span class="pre">'Asimov'</span></code> が続か <em>ない</em> 場合のみマッチします。</p>
-</dd>
+<dd>もし <code class="docutils literal"><span class="pre">...</span></code> が次に続くものとマッチしなければマッチします。これは否定先読みアサーション (negative lookahead assertion) です。例えば、 <code class="docutils literal"><span class="pre">Isaac</span> <span class="pre">(?!Asimov)</span></code> は、 <code class="docutils literal"><span class="pre">'Isaac</span> <span class="pre">'</span></code> に <code class="docutils literal"><span class="pre">'Asimov'</span></code> が続か <em>ない</em> 場合のみマッチします。</dd>
 <dt><code class="docutils literal"><span class="pre">(?&lt;=...)</span></code></dt>
 <dd><p class="first">文字列内の現在位置の前に、現在位置で終わる <code class="docutils literal"><span class="pre">...</span></code> とのマッチがあれば、マッチします。これは <em class="dfn">後読みアサーション</em> と呼ばれます。<code class="docutils literal"><span class="pre">(?&lt;=abc)def</span></code> は <code class="docutils literal"><span class="pre">abcdef</span></code> にマッチを見つけます。後読みは 3 文字をバックアップし、含まれているパターンとマッチするかどうか検査します。含まれるパターンは、固定長の文字列にのみマッチしなければなりません。すなわち、<code class="docutils literal"><span class="pre">abc</span></code> や <code class="docutils literal"><span class="pre">a|b</span></code> は許されますが、<code class="docutils literal"><span class="pre">a*</span></code> や <code class="docutils literal"><span class="pre">a{3,4}</span></code> は許されません。肯定後読みアサーションで始まるパターンは、検索される文字列の先頭とは決してマッチしないことに注意して下さい; この表現を使用するのは、おそらく <a class="reference internal" href="#re.match" title="re.match"><code class="xref py py-func docutils literal"><span class="pre">match()</span></code></a> 関数より <a class="reference internal" href="#re.search" title="re.search"><code class="xref py py-func docutils literal"><span class="pre">search()</span></code></a> 関数の方が適しています:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">re</span>
@@ -283,11 +248,9 @@
 </div>
 </dd>
 <dt><code class="docutils literal"><span class="pre">(?&lt;!...)</span></code></dt>
-<dd><p class="first last">文字列内の現在位置の前に <code class="docutils literal"><span class="pre">...</span></code> とのマッチがない場合に、マッチします。これは <em class="dfn">否定後読みアサーション(negative lookbehind assertion)</em> と呼ばれます。肯定後読みアサーションと同様に、含まれるパターンは固定長さの文字列だけにマッチしなければなりません。否定後読みアサーションで始まるパターンは、検索される文字列の先頭とマッチできます。</p>
-</dd>
+<dd>文字列内の現在位置の前に <code class="docutils literal"><span class="pre">...</span></code> とのマッチがない場合に、マッチします。これは <em class="dfn">否定後読みアサーション(negative lookbehind assertion)</em> と呼ばれます。肯定後読みアサーションと同様に、含まれるパターンは固定長さの文字列だけにマッチしなければなりません。否定後読みアサーションで始まるパターンは、検索される文字列の先頭とマッチできます。</dd>
 <dt><code class="docutils literal"><span class="pre">(?(id/name)yes-pattern|no-pattern)</span></code></dt>
-<dd><p class="first last">与えられたグループ <em>id</em> あるいは <em>name</em> が存在する場合、<code class="docutils literal"><span class="pre">yes-pattern</span></code> とのマッチを、存在しない場合 <code class="docutils literal"><span class="pre">no-pattern</span></code> とのマッチを試みます。<code class="docutils literal"><span class="pre">no-pattern</span></code> は省略可能です。例えば、<code class="docutils literal"><span class="pre">(&lt;)?(\w+&#64;\w+(?:\.\w+)+)(?(1)&gt;|$)</span></code> は貧弱な E-mail マッチングパターンで、<code class="docutils literal"><span class="pre">'&lt;user&#64;host.com&gt;'</span></code> や <code class="docutils literal"><span class="pre">'user&#64;host.com'</span></code> にマッチしますが、<code class="docutils literal"><span class="pre">'&lt;user&#64;host.com'</span></code> や <code class="docutils literal"><span class="pre">'user&#64;host.com&gt;'</span></code> とはマッチしません。</p>
-</dd>
+<dd>与えられたグループ <em>id</em> あるいは <em>name</em> が存在する場合、<code class="docutils literal"><span class="pre">yes-pattern</span></code> とのマッチを、存在しない場合 <code class="docutils literal"><span class="pre">no-pattern</span></code> とのマッチを試みます。<code class="docutils literal"><span class="pre">no-pattern</span></code> は省略可能です。例えば、<code class="docutils literal"><span class="pre">(&lt;)?(\w+&#64;\w+(?:\.\w+)+)(?(1)&gt;|$)</span></code> は貧弱な E-mail マッチングパターンで、<code class="docutils literal"><span class="pre">'&lt;user&#64;host.com&gt;'</span></code> や <code class="docutils literal"><span class="pre">'user&#64;host.com'</span></code> にマッチしますが、<code class="docutils literal"><span class="pre">'&lt;user&#64;host.com'</span></code> や <code class="docutils literal"><span class="pre">'user&#64;host.com&gt;'</span></code> とはマッチしません。</dd>
 </dl>
 <p>The special sequences consist of <code class="docutils literal"><span class="pre">'\'</span></code> and a character from the list below.
 If the ordinary character is not an ASCII digit or an ASCII letter, then the
@@ -295,60 +258,47 @@ resulting RE will match the second character.  For example, <code class="docutil
 character <code class="docutils literal"><span class="pre">'$'</span></code>.</p>
 <dl class="docutils">
 <dt><code class="docutils literal"><span class="pre">\number</span></code></dt>
-<dd><p class="first last">同じ番号のグループの中身とマッチします。グループは1から始まる番号をつけられます。例えば、 <code class="docutils literal"><span class="pre">(.+)</span> <span class="pre">\1</span></code> は、 <code class="docutils literal"><span class="pre">'the</span> <span class="pre">the'</span></code> あるいは <code class="docutils literal"><span class="pre">'55</span> <span class="pre">55'</span></code> とマッチしますが、 <code class="docutils literal"><span class="pre">'thethe'</span></code> とはマッチしません(グループの後のスペースに注意して下さい)。この特殊シーケンスは最初の 99 グループのうちの一つとマッチするのに使うことができるだけです。もし <em>number</em> の最初の桁が 0 である、すなわち <em>number</em> が 3 桁の8進数であれば、それはグループのマッチとは解釈されず、 8進数値 <em>number</em> を持つ文字として解釈されます。文字クラスの <code class="docutils literal"><span class="pre">'['</span></code> と <code class="docutils literal"><span class="pre">']'</span></code> の中の数値エスケープは、文字として扱われます。</p>
-</dd>
+<dd>同じ番号のグループの中身とマッチします。グループは1から始まる番号をつけられます。例えば、 <code class="docutils literal"><span class="pre">(.+)</span> <span class="pre">\1</span></code> は、 <code class="docutils literal"><span class="pre">'the</span> <span class="pre">the'</span></code> あるいは <code class="docutils literal"><span class="pre">'55</span> <span class="pre">55'</span></code> とマッチしますが、 <code class="docutils literal"><span class="pre">'thethe'</span></code> とはマッチしません(グループの後のスペースに注意して下さい)。この特殊シーケンスは最初の 99 グループのうちの一つとマッチするのに使うことができるだけです。もし <em>number</em> の最初の桁が 0 である、すなわち <em>number</em> が 3 桁の8進数であれば、それはグループのマッチとは解釈されず、 8進数値 <em>number</em> を持つ文字として解釈されます。文字クラスの <code class="docutils literal"><span class="pre">'['</span></code> と <code class="docutils literal"><span class="pre">']'</span></code> の中の数値エスケープは、文字として扱われます。</dd>
 <dt><code class="docutils literal"><span class="pre">\A</span></code></dt>
-<dd><p class="first last">文字列の先頭だけにマッチします。</p>
-</dd>
+<dd>文字列の先頭だけにマッチします。</dd>
 <dt><code class="docutils literal"><span class="pre">\b</span></code></dt>
 <dd><p class="first">空文字列とマッチしますが、単語の先頭か末尾の時だけです。単語とは Unicode 英数字 (日本語など英字以外も含む非記号) またはアンダースコアからなるシーケンスで、単語の終わりは空白文字、あるいはアンダースコアを除く記号で表します。<code class="docutils literal"><span class="pre">\b</span></code> は <code class="docutils literal"><span class="pre">\w</span></code> および <code class="docutils literal"><span class="pre">\W</span></code> の間 (およびその逆) あるいは <code class="docutils literal"><span class="pre">\w</span></code> と文字列の開始/終了との間の境界として定義されています。例えば、<code class="docutils literal"><span class="pre">r'\bfoo\b'</span></code> は <code class="docutils literal"><span class="pre">'foo'</span></code> , <code class="docutils literal"><span class="pre">'foo.'</span></code> , <code class="docutils literal"><span class="pre">'(foo)'</span></code>, <code class="docutils literal"><span class="pre">'bar</span> <span class="pre">foo</span> <span class="pre">baz'</span></code> にマッチしますが、<code class="docutils literal"><span class="pre">'foobar'</span></code>, <code class="docutils literal"><span class="pre">'foo3'</span></code> にはマッチしません。</p>
 <p class="last">デフォルトでは、Unicode 英数字 (日本語など英字以外も含む非記号) が使用されますが、これは <a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> フラグを使って ASCII に限定できます。文字範囲内では、<code class="docutils literal"><span class="pre">\b</span></code> は Python の文字列リテラルとの互換性のため、後退 (backspace) 文字を表します。</p>
 </dd>
 <dt><code class="docutils literal"><span class="pre">\B</span></code></dt>
-<dd><p class="first last">空文字列とマッチしますが、それが単語の先頭あるいは末尾に <em>ない</em> 時だけです。<code class="docutils literal"><span class="pre">r'py\B'</span></code> は <code class="docutils literal"><span class="pre">'python'</span></code>, <code class="docutils literal"><span class="pre">'py3'</span></code>, <code class="docutils literal"><span class="pre">'py2'</span></code> にはマッチしますが、<code class="docutils literal"><span class="pre">'py'</span></code>, <code class="docutils literal"><span class="pre">'py.'</span></code>, <code class="docutils literal"><span class="pre">'py!'</span></code> にはマッチしません。<code class="docutils literal"><span class="pre">\B</span></code> は <code class="docutils literal"><span class="pre">\b</span></code> のちょうど反対で、単語の文字は Unicode 英数字 (日本語など英字以外も含む非記号) またはアンダースコアですが、<a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> フラグで ASCII に限定できます。</p>
-</dd>
+<dd>空文字列とマッチしますが、それが単語の先頭あるいは末尾に <em>ない</em> 時だけです。<code class="docutils literal"><span class="pre">r'py\B'</span></code> は <code class="docutils literal"><span class="pre">'python'</span></code>, <code class="docutils literal"><span class="pre">'py3'</span></code>, <code class="docutils literal"><span class="pre">'py2'</span></code> にはマッチしますが、<code class="docutils literal"><span class="pre">'py'</span></code>, <code class="docutils literal"><span class="pre">'py.'</span></code>, <code class="docutils literal"><span class="pre">'py!'</span></code> にはマッチしません。<code class="docutils literal"><span class="pre">\B</span></code> は <code class="docutils literal"><span class="pre">\b</span></code> のちょうど反対で、単語の文字は Unicode 英数字 (日本語など英字以外も含む非記号) またはアンダースコアですが、<a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> フラグで ASCII に限定できます。</dd>
 <dt><code class="docutils literal"><span class="pre">\d</span></code></dt>
 <dd><dl class="first last docutils">
 <dt>ユニコード (str) パターンに対して:</dt>
-<dd><p class="first last">任意の Unicode 10進数 (Unicode 文字カテゴリ [Nd]) とマッチします。これには <code class="docutils literal"><span class="pre">[0-9]</span></code> とその他の 10 進数文字が含まれます。<a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> が使用された場合、<code class="docutils literal"><span class="pre">[0-9]</span></code> のみマッチします。ただし、このフラグは正規表現全体に作用しますので、明示的に <code class="docutils literal"><span class="pre">[0-9]</span></code> と指定する方が良い場合があるかもしれません。</p>
-</dd>
+<dd>任意の Unicode 10進数 (Unicode 文字カテゴリ [Nd]) とマッチします。これには <code class="docutils literal"><span class="pre">[0-9]</span></code> とその他の 10 進数文字が含まれます。<a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> が使用された場合、<code class="docutils literal"><span class="pre">[0-9]</span></code> のみマッチします。ただし、このフラグは正規表現全体に作用しますので、明示的に <code class="docutils literal"><span class="pre">[0-9]</span></code> と指定する方が良い場合があるかもしれません。</dd>
 <dt>8bit (bytes) パターンに対して:</dt>
-<dd><p class="first last">任意の 10 進数にマッチします; これは <code class="docutils literal"><span class="pre">[0-9]</span></code> と等価です。</p>
-</dd>
+<dd>任意の 10 進数にマッチします; これは <code class="docutils literal"><span class="pre">[0-9]</span></code> と等価です。</dd>
 </dl>
 </dd>
 <dt><code class="docutils literal"><span class="pre">\D</span></code></dt>
-<dd><p class="first last">任意の非 Unicode 10 進数文字にマッチします。これは <code class="docutils literal"><span class="pre">\d</span></code> の反対です。<a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> フラグを使用すると <code class="docutils literal"><span class="pre">[^0-9]</span></code> と等価になります。ただし、このフラグは正規表現全体に作用しますので、明示的に <code class="docutils literal"><span class="pre">[^0-9]</span></code> と指定する方が良い場合があるかもしれません。</p>
-</dd>
+<dd>任意の非 Unicode 10 進数文字にマッチします。これは <code class="docutils literal"><span class="pre">\d</span></code> の反対です。<a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> フラグを使用すると <code class="docutils literal"><span class="pre">[^0-9]</span></code> と等価になります。ただし、このフラグは正規表現全体に作用しますので、明示的に <code class="docutils literal"><span class="pre">[^0-9]</span></code> と指定する方が良い場合があるかもしれません。</dd>
 <dt><code class="docutils literal"><span class="pre">\s</span></code></dt>
 <dd><dl class="first last docutils">
 <dt>ユニコード (str) パターンに対して:</dt>
-<dd><p class="first last">任意の空白文字とマッチします。これには <code class="docutils literal"><span class="pre">[</span> <span class="pre">\t\n\r\f\v]</span></code> およびノーブレークスペースなど、多くの言語におけるタイポグラフィ規則で定義された文字が含まれます。<a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> フラグを使用すると、<code class="docutils literal"><span class="pre">[</span> <span class="pre">\t\n\r\f\v]</span></code> のみにマッチします。ただし、このフラグは正規表現全体に作用しますので、明示的に <code class="docutils literal"><span class="pre">[</span> <span class="pre">\t\n\r\f\v]</span></code> と指定する方が良い場合があるかもしれません。</p>
-</dd>
+<dd>任意の空白文字とマッチします。これには <code class="docutils literal"><span class="pre">[</span> <span class="pre">\t\n\r\f\v]</span></code> およびノーブレークスペースなど、多くの言語におけるタイポグラフィ規則で定義された文字が含まれます。<a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> フラグを使用すると、<code class="docutils literal"><span class="pre">[</span> <span class="pre">\t\n\r\f\v]</span></code> のみにマッチします。ただし、このフラグは正規表現全体に作用しますので、明示的に <code class="docutils literal"><span class="pre">[</span> <span class="pre">\t\n\r\f\v]</span></code> と指定する方が良い場合があるかもしれません。</dd>
 <dt>8bit (bytes) パターンに対して:</dt>
-<dd><p class="first last">ASCII 文字セットにおける空白文字とマッチします。これは <code class="docutils literal"><span class="pre">[</span> <span class="pre">\t\n\r\f\v]</span></code> と等価です。</p>
-</dd>
+<dd>ASCII 文字セットにおける空白文字とマッチします。これは <code class="docutils literal"><span class="pre">[</span> <span class="pre">\t\n\r\f\v]</span></code> と等価です。</dd>
 </dl>
 </dd>
 <dt><code class="docutils literal"><span class="pre">\S</span></code></dt>
-<dd><p class="first last">任意の非空白文字にマッチします。これは <code class="docutils literal"><span class="pre">\s</span></code> の反対です。<a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> フラグを使用すると <code class="docutils literal"><span class="pre">[^</span> <span class="pre">\t\n\r\f\v]</span></code> と等価になります。ただし、このフラグは正規表現全体に作用しますので、明示的に <code class="docutils literal"><span class="pre">[^</span> <span class="pre">\t\n\r\f\v]</span></code> と指定する方が良い場合があるかもしれません。</p>
-</dd>
+<dd>任意の非空白文字にマッチします。これは <code class="docutils literal"><span class="pre">\s</span></code> の反対です。<a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> フラグを使用すると <code class="docutils literal"><span class="pre">[^</span> <span class="pre">\t\n\r\f\v]</span></code> と等価になります。ただし、このフラグは正規表現全体に作用しますので、明示的に <code class="docutils literal"><span class="pre">[^</span> <span class="pre">\t\n\r\f\v]</span></code> と指定する方が良い場合があるかもしれません。</dd>
 <dt><code class="docutils literal"><span class="pre">\w</span></code></dt>
 <dd><dl class="first last docutils">
 <dt>ユニコード (str) パターンに対して:</dt>
-<dd><p class="first last">任意の Unicode 単語文字にマッチします。これにはあらゆる言語で単語の一部になりうる文字、数字、およびアンダースコアが含まれます。<a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> フラグを使用すると <code class="docutils literal"><span class="pre">[a-zA-Z0-9_]</span></code> のみにマッチします。ただし、このフラグは正規表現全体に作用しますので、明示的に <code class="docutils literal"><span class="pre">[a-zA-Z0-9_]</span></code> と指定する方が良い場合があるかもしれません。</p>
-</dd>
+<dd>任意の Unicode 単語文字にマッチします。これにはあらゆる言語で単語の一部になりうる文字、数字、およびアンダースコアが含まれます。<a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> フラグを使用すると <code class="docutils literal"><span class="pre">[a-zA-Z0-9_]</span></code> のみにマッチします。ただし、このフラグは正規表現全体に作用しますので、明示的に <code class="docutils literal"><span class="pre">[a-zA-Z0-9_]</span></code> と指定する方が良い場合があるかもしれません。</dd>
 <dt>8bit (bytes) パターンに対して:</dt>
-<dd><p class="first last">ASCII 文字セットでの英数字とアンダースコアにマッチします。これは <code class="docutils literal"><span class="pre">[a-zA-Z0-9_]</span></code> と等価です。</p>
-</dd>
+<dd>ASCII 文字セットでの英数字とアンダースコアにマッチします。これは <code class="docutils literal"><span class="pre">[a-zA-Z0-9_]</span></code> と等価です。</dd>
 </dl>
 </dd>
 <dt><code class="docutils literal"><span class="pre">\W</span></code></dt>
-<dd><p class="first last">任意の非 Unicode 単語文字にマッチします。これは <code class="docutils literal"><span class="pre">\w</span></code> の反対です。<a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> フラグを使用した場合、<code class="docutils literal"><span class="pre">[^a-zA-Z0-9_]</span></code> と等価になります。ただし、このフラグは正規表現全体に作用しますので、明示的に <code class="docutils literal"><span class="pre">[^a-zA-Z0-9_]</span></code> と指定する方が良い場合があるかもしれません。</p>
-</dd>
+<dd>任意の非 Unicode 単語文字にマッチします。これは <code class="docutils literal"><span class="pre">\w</span></code> の反対です。<a class="reference internal" href="#re.ASCII" title="re.ASCII"><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code></a> フラグを使用した場合、<code class="docutils literal"><span class="pre">[^a-zA-Z0-9_]</span></code> と等価になります。ただし、このフラグは正規表現全体に作用しますので、明示的に <code class="docutils literal"><span class="pre">[^a-zA-Z0-9_]</span></code> と指定する方が良い場合があるかもしれません。</dd>
 <dt><code class="docutils literal"><span class="pre">\Z</span></code></dt>
-<dd><p class="first last">文字列の末尾とのみマッチします。</p>
-</dd>
+<dd>文字列の末尾とのみマッチします。</dd>
 </dl>
 <p>Python 文字列リテラルによってサポートされている標準エスケープのほとんども、正規表現パーザによって認識されます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span>\<span class="n">a</span>      \<span class="n">b</span>      \<span class="n">f</span>      \<span class="n">n</span>
@@ -369,8 +319,7 @@ character <code class="docutils literal"><span class="pre">'$'</span></code>.</p
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
 <dt>Mastering Regular Expressions 詳説正規表現</dt>
-<dd><p class="first last">Jeffrey Friedl 著、O&#8217;Reilly 刊の正規表現に関する本です。この本の第2版ではPyhonについては触れていませんが、良い正規表現パターンの書き方を非常にくわしく説明しています。</p>
-</dd>
+<dd>Jeffrey Friedl 著、O’Reilly 刊の正規表現に関する本です。この本の第2版ではPyhonについては触れていませんが、良い正規表現パターンの書き方を非常にくわしく説明しています。</dd>
 </dl>
 </div>
 </div>
@@ -431,7 +380,7 @@ character <code class="docutils literal"><span class="pre">'$'</span></code>.</p
 <code class="descclassname">re.</code><code class="descname">LOCALE</code><a class="headerlink" href="#re.LOCALE" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>Make <code class="docutils literal"><span class="pre">\w</span></code>, <code class="docutils literal"><span class="pre">\W</span></code>, <code class="docutils literal"><span class="pre">\b</span></code>, <code class="docutils literal"><span class="pre">\B</span></code>, <code class="docutils literal"><span class="pre">\s</span></code> and <code class="docutils literal"><span class="pre">\S</span></code> dependent on the
 current locale. The use of this flag is discouraged as the locale mechanism
-is very unreliable, and it only handles one &#8220;culture&#8221; at a time anyway;
+is very unreliable, and it only handles one 「culture」 at a time anyway;
 you should use Unicode matching instead, which is the default in Python 3
 for Unicode (str) patterns. This flag can be used only with bytes patterns.</p>
 <div class="versionchanged">
@@ -520,7 +469,7 @@ for Unicode (str) patterns. This flag can be used only with bytes patterns.</p>
 <span class="go">[&#39;a&#39;, &#39;bc&#39;]</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">'x*'</span></code> は &#8216;a&#8217; の前、 &#8216;b&#8217; と &#8216;c&#8217; との間、 &#8216;c&#8217; の後の 0 個の &#8216;x&#8217; にもマッチしますが、現在これらのマッチは無視されます。正しい動作 (空のマッチでも文字列を分割し、<code class="docutils literal"><span class="pre">['',</span> <span class="pre">'a',</span> <span class="pre">'b',</span> <span class="pre">'c',</span> <span class="pre">'']</span></code> を返す) は、Python の将来のバージョンで実装されます。これは、後方互換生のない変更であるため、移行期間中は <a class="reference internal" href="exceptions.html#FutureWarning" title="FutureWarning"><code class="xref py py-exc docutils literal"><span class="pre">FutureWarning</span></code></a> が送出されます。</p>
+<p><code class="docutils literal"><span class="pre">'x*'</span></code> は 『a』 の前、 『b』 と 『c』 との間、 『c』 の後の 0 個の 『x』 にもマッチしますが、現在これらのマッチは無視されます。正しい動作 (空のマッチでも文字列を分割し、<code class="docutils literal"><span class="pre">['',</span> <span class="pre">'a',</span> <span class="pre">'b',</span> <span class="pre">'c',</span> <span class="pre">'']</span></code> を返す) は、Python の将来のバージョンで実装されます。これは、後方互換生のない変更であるため、移行期間中は <a class="reference internal" href="exceptions.html#FutureWarning" title="FutureWarning"><code class="xref py py-exc docutils literal"><span class="pre">FutureWarning</span></code></a> が送出されます。</p>
 <p>空の文字列のみとマッチするパターンは、現在文字列を全く分割しません。これは望ましい動作ではないため、Python 3.5 から <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> が送出されます:</p>
 <div class="last highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;^$&quot;</span><span class="p">,</span> <span class="s2">&quot;foo</span><span class="se">\n\n</span><span class="s2">bar</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
 <span class="gt">Traceback (most recent call last):</span>
@@ -583,7 +532,7 @@ for Unicode (str) patterns. This flag can be used only with bytes patterns.</p>
 <p><span class="versionmodified">バージョン 3.6 で変更: </span><em>pattern</em> 中に <code class="docutils literal"><span class="pre">'\'</span></code> と ASCII 文字からなる未知のエスケープがあると、エラーになります。</p>
 </div>
 <div class="deprecated-removed">
-<p>バージョン 3.5 で非推奨、バージョン 3.7 で削除予定。&#8217;&#8217; および ASCII 文字からなる未知のエスケープは、非推奨の警告を送出し、Python 3.7 では禁止されます。</p>
+<p>バージョン 3.5 で非推奨、バージョン 3.7 で削除予定。』』 および ASCII 文字からなる未知のエスケープは、非推奨の警告を送出し、Python 3.7 では禁止されます。</p>
 </div>
 </dd></dl>
 
@@ -951,7 +900,7 @@ an individual group from a match:</p>
     <span class="k">return</span> <span class="s1">&#39;&lt;Match: </span><span class="si">%r</span><span class="s1">, groups=</span><span class="si">%r</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(),</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">())</span>
 </pre></div>
 </div>
-<p>あなたがポーカープログラムを書いているとします。プレイヤーの持ち札はそれぞれの文字が1枚のカードを意味する5文字の文字列によって表現されます。 &#8220;a&#8221; はエース、 &#8220;k&#8221; はキング、 &#8220;q&#8221; はクイーン、 &#8220;j&#8221; はジャック、 &#8220;t&#8221; は10、そして &#8220;2&#8221; から &#8220;9&#8221; はそれぞれの数字のカードを表します。</p>
+<p>あなたがポーカープログラムを書いているとします。プレイヤーの持ち札はそれぞれの文字が1枚のカードを意味する5文字の文字列によって表現されます。 「a」 はエース、 「k」 はキング、 「q」 はクイーン、 「j」 はジャック、 「t」 は10、そして 「2」 から 「9」 はそれぞれの数字のカードを表します。</p>
 <p>与えられた文字列が持ち札として有効かどうかの確認は、次のようにして行えます。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">valid</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^[a2-9tjqk]</span><span class="si">{5}</span><span class="s2">$&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">displaymatch</span><span class="p">(</span><span class="n">valid</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;akt5q&quot;</span><span class="p">))</span>  <span class="c1"># Valid.</span>
@@ -996,10 +945,8 @@ an individual group from a match:</p>
 <col width="58%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last"><code class="xref c c-func docutils literal"><span class="pre">scanf()</span></code> トークン</p>
-</th>
-<th class="head"><p class="first last">正規表現</p>
-</th>
+<tr class="row-odd"><th class="head"><code class="xref c c-func docutils literal"><span class="pre">scanf()</span></code> トークン</th>
+<th class="head">正規表現</th>
 </tr>
 </thead>
 <tbody valign="top">
@@ -1109,7 +1056,7 @@ an individual group from a match:</p>
 </div>
 <div class="section" id="text-munging">
 <h3>6.2.5.5. テキストの秘匿<a class="headerlink" href="#text-munging" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p><a class="reference internal" href="#re.sub" title="re.sub"><code class="xref py py-func docutils literal"><span class="pre">sub()</span></code></a> はパターンにマッチした部分を文字列や関数の返り値で置き換えます。この例では、&#8221;秘匿&#8221; する文字列に、関数と共に <a class="reference internal" href="#re.sub" title="re.sub"><code class="xref py py-func docutils literal"><span class="pre">sub()</span></code></a> を適用する例を示します。言い換えると、最初と最後の文字を除く、単語中の文字の位置をランダム化します。</p>
+<p><a class="reference internal" href="#re.sub" title="re.sub"><code class="xref py py-func docutils literal"><span class="pre">sub()</span></code></a> はパターンにマッチした部分を文字列や関数の返り値で置き換えます。この例では、」秘匿」 する文字列に、関数と共に <a class="reference internal" href="#re.sub" title="re.sub"><code class="xref py py-func docutils literal"><span class="pre">sub()</span></code></a> を適用する例を示します。言い換えると、最初と最後の文字を除く、単語中の文字の位置をランダム化します。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">repl</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">inner_word</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
 <span class="gp">... </span>    <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">inner_word</span><span class="p">)</span>
@@ -1244,7 +1191,7 @@ an individual group from a match:</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">6.2. <code class="docutils literal"><span class="pre">re</span></code> &#8212; 正規表現操作</a><ul>
+<li><a class="reference internal" href="#">6.2. <code class="docutils literal"><span class="pre">re</span></code> — 正規表現操作</a><ul>
 <li><a class="reference internal" href="#regular-expression-syntax">6.2.1. 正規表現のシンタックス</a></li>
 <li><a class="reference internal" href="#module-contents">6.2.2. モジュールコンテンツ</a></li>
 <li><a class="reference internal" href="#regular-expression-objects">6.2.3. 正規表現オブジェクト</a></li>
@@ -1267,16 +1214,16 @@ an individual group from a match:</p>
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="string.html"
-                        title="前の章へ">6.1. <code class="docutils literal"><span class="pre">string</span></code> &#8212; 一般的な文字列操作</a></p>
+                        title="前の章へ">6.1. <code class="docutils literal"><span class="pre">string</span></code> — 一般的な文字列操作</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="difflib.html"
-                        title="次の章へ">6.3. <code class="docutils literal"><span class="pre">difflib</span></code> &#8212; 差分の計算を助ける</a></p>
+                        title="次の章へ">6.3. <code class="docutils literal"><span class="pre">difflib</span></code> — 差分の計算を助ける</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/re.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/re.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -1337,7 +1284,7 @@ an individual group from a match:</p>
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

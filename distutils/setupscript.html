@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>2. setup スクリプトを書く &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="Python モジュールの配布 (レガシーバージョン)" href="index.html" />
     <link rel="next" title="3. setup 設定ファイル (setup configuration file) を書く" href="configfile.html" />
     <link rel="prev" title="1. Distutilsの紹介" href="introduction.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -121,7 +117,7 @@
 </pre></div>
 </div>
 <p>上の例と、 <a class="reference internal" href="introduction.html#distutils-simple-example"><span class="std std-ref">簡単な例</span></a> で示したファイル一つからなる小さな配布物とは、違うところは二つしかありません: メタデータの追加と、モジュールではなくパッケージとして pure Python モジュール群を指定しているという点です。この点は重要です。というのも、 Distutils は 2 ダースものモジュールが (今のところ) 二つのパッケージに分かれて入っているからです; 各モジュールについていちいち明示的に記述したリストは、作成するのが面倒だし、維持するのも難しくなるでしょう。その他のメタデータについては、 <a class="reference internal" href="#meta-data"><span class="std std-ref">追加のメタデータ</span></a> を参照してください。</p>
-<p>setup スクリプトに与えるパス名 (ファイルまたはディレクトリ) は、 Unix におけるファイル名規約、つまりスラッシュ (&#8216;/&#8217;) 区切りで書かねばなりません。Distutils はこのプラットフォーム中立の表記を、実際にパス名として使う前に、現在のプラットフォームに適した表記に注意深く変換します。この機能のおかげで、setup スクリプトを異なるオペレーティングシステム間にわたって可搬性があるものにできます。言うまでもなく、これは Distutils の大きな目標の一つです。この精神に従って、このドキュメントでは全てのパス名をスラッシュ区切りにしています。</p>
+<p>setup スクリプトに与えるパス名 (ファイルまたはディレクトリ) は、 Unix におけるファイル名規約、つまりスラッシュ (『/』) 区切りで書かねばなりません。Distutils はこのプラットフォーム中立の表記を、実際にパス名として使う前に、現在のプラットフォームに適した表記に注意深く変換します。この機能のおかげで、setup スクリプトを異なるオペレーティングシステム間にわたって可搬性があるものにできます。言うまでもなく、これは Distutils の大きな目標の一つです。この精神に従って、このドキュメントでは全てのパス名をスラッシュ区切りにしています。</p>
 <p>もちろん、この取り決めは Distutils に渡すパス名だけに適用されます。もし、例えば <a class="reference internal" href="../library/glob.html#glob.glob" title="glob.glob"><code class="xref py py-func docutils literal"><span class="pre">glob.glob()</span></code></a> や <a class="reference internal" href="../library/os.html#os.listdir" title="os.listdir"><code class="xref py py-func docutils literal"><span class="pre">os.listdir()</span></code></a> のような、標準の Python 関数を使ってファイル群を指定するのなら、パス区切り文字 (path separator) をハードコーディングせず、以下のように可搬性のあるコードを書くよう注意すべきです:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;mydir&#39;</span><span class="p">,</span> <span class="s1">&#39;subdir&#39;</span><span class="p">,</span> <span class="s1">&#39;*.html&#39;</span><span class="p">))</span>
 <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;mydir&#39;</span><span class="p">,</span> <span class="s1">&#39;subdir&#39;</span><span class="p">))</span>
@@ -130,7 +126,7 @@
 <div class="section" id="listing-whole-packages">
 <span id="listing-packages"></span><h2>2.1. パッケージを全て列挙する<a class="headerlink" href="#listing-whole-packages" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><code class="docutils literal"><span class="pre">packages</span></code> オプションは、 <code class="docutils literal"><span class="pre">packages</span></code> リスト中で指定されている各々のパッケージについて、パッケージ内に見つかった全ての pure Python モジュールを処理 (ビルド、配布、インストール、等) するよう Distutils に指示します。このオプションを指定するためには、当然のことながら各パッケージ名はファイルシステム上のディレクトリ名と何らかの対応付けができなければなりません。デフォルトで使われる対応関係はきわめてはっきりしたものです。すなわち、パッケージ <a class="reference internal" href="../library/distutils.html#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> が配布物ルートディレクトリからの相対パス <code class="file docutils literal"><span class="pre">distutils</span></code> で表されるディレクトリ中にあるというものです。つまり、setup スクリプト中で <code class="docutils literal"><span class="pre">packages</span> <span class="pre">=</span> <span class="pre">['foo']</span></code> と指定したら、スクリプトの置かれたディレクトリからの相対パスで <code class="file docutils literal"><span class="pre">foo/__init__.py</span></code> を探し出せると Distutils に確約したことになります。この約束を裏切ると Distutils は警告を出しますが、そのまま壊れたパッケージの処理を継続します。</p>
-<p>ソースコードディレクトリの配置について違った規約を使っていても、まったく問題はありません: 単に <code class="docutils literal"><span class="pre">package_dir</span></code> オプションを指定して、 Distutils に自分の規約を教えればよいのです。例えば、全ての Python ソースコードを <code class="file docutils literal"><span class="pre">lib</span></code> 下に置いて、 &#8220;ルートパッケージ&#8221; 内のモジュール (つまり、どのパッケージにも入っていないモジュール) を <code class="file docutils literal"><span class="pre">lib</span></code> 内に入れ、 <code class="xref py py-mod docutils literal"><span class="pre">foo</span></code> パッケージを <code class="file docutils literal"><span class="pre">lib/foo</span></code> に入れる、といった具合にしたいのなら</p>
+<p>ソースコードディレクトリの配置について違った規約を使っていても、まったく問題はありません: 単に <code class="docutils literal"><span class="pre">package_dir</span></code> オプションを指定して、 Distutils に自分の規約を教えればよいのです。例えば、全ての Python ソースコードを <code class="file docutils literal"><span class="pre">lib</span></code> 下に置いて、 「ルートパッケージ」 内のモジュール (つまり、どのパッケージにも入っていないモジュール) を <code class="file docutils literal"><span class="pre">lib</span></code> 内に入れ、 <code class="xref py py-mod docutils literal"><span class="pre">foo</span></code> パッケージを <code class="file docutils literal"><span class="pre">lib/foo</span></code> に入れる、といった具合にしたいのなら</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">package_dir</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="s1">&#39;lib&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
@@ -143,11 +139,11 @@
 </div>
 <div class="section" id="listing-individual-modules">
 <span id="listing-modules"></span><h2>2.2. 個々のモジュールを列挙する<a class="headerlink" href="#listing-individual-modules" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>小さなモジュール配布物の場合、パッケージを列挙するよりも、全てのモジュールを列挙するほうがよいと思うかもしれません &#8212; 特に、単一のモジュールが &#8220;ルートパッケージ&#8221; にインストールされる (すなわち、パッケージは全くない) ような場合がそうです。この最も単純なケースは <a class="reference internal" href="introduction.html#distutils-simple-example"><span class="std std-ref">簡単な例</span></a> で示しました; ここではもうちょっと入り組んだ例を示します:</p>
+<p>小さなモジュール配布物の場合、パッケージを列挙するよりも、全てのモジュールを列挙するほうがよいと思うかもしれません — 特に、単一のモジュールが 「ルートパッケージ」 にインストールされる (すなわち、パッケージは全くない) ような場合がそうです。この最も単純なケースは <a class="reference internal" href="introduction.html#distutils-simple-example"><span class="std std-ref">簡単な例</span></a> で示しました; ここではもうちょっと入り組んだ例を示します:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">py_modules</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mod1&#39;</span><span class="p">,</span> <span class="s1">&#39;pkg.mod2&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>ここでは二つのモジュールについて述べていて、一方は &#8220;ルート&#8221; パッケージに入り、他方は <code class="xref py py-mod docutils literal"><span class="pre">pkg</span></code> パッケージに入ります。ここでも、デフォルトのパッケージ/ディレクトリのレイアウトは、二つのモジュールが <code class="file docutils literal"><span class="pre">mod1.py</span></code> と <code class="file docutils literal"><span class="pre">pkg/mod2.py</span></code> にあり、 <code class="file docutils literal"><span class="pre">pkg/__init__.py</span></code> が存在することを暗示しています。また、パッケージ/ディレクトリの対応関係は <code class="docutils literal"><span class="pre">package_dir</span></code> オプションでも上書きできます。</p>
+<p>ここでは二つのモジュールについて述べていて、一方は 「ルート」 パッケージに入り、他方は <code class="xref py py-mod docutils literal"><span class="pre">pkg</span></code> パッケージに入ります。ここでも、デフォルトのパッケージ/ディレクトリのレイアウトは、二つのモジュールが <code class="file docutils literal"><span class="pre">mod1.py</span></code> と <code class="file docutils literal"><span class="pre">pkg/mod2.py</span></code> にあり、 <code class="file docutils literal"><span class="pre">pkg/__init__.py</span></code> が存在することを暗示しています。また、パッケージ/ディレクトリの対応関係は <code class="docutils literal"><span class="pre">package_dir</span></code> オプションでも上書きできます。</p>
 </div>
 <div class="section" id="describing-extension-modules">
 <span id="describing-extensions"></span><h2>2.3. 拡張モジュールについて記述する<a class="headerlink" href="#describing-extension-modules" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -219,7 +215,7 @@
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1">#include &lt;X11/Xlib.h&gt;</span>
 </pre></div>
 </div>
-<p>他の Python 拡張モジュール由来のヘッダを include する必要があるなら、 Distutils の <strong class="command">install_header</strong> コマンドが一貫した方法でヘッダファイルをインストールするという事実を活用できます。例えば、 Numerical Python のヘッダファイルは、 (標準的な Unix がインストールされた環境では) <code class="file docutils literal"><span class="pre">/usr/local/include/python1.5/Numerical</span></code> にインストールされます。 (実際の場所は、プラットフォームやどの Python をインストールしたかで異なります。) Python の include ディレクトリ &#8212; 今の例では <code class="file docutils literal"><span class="pre">/usr/local/include/python1.5</span></code> &#8212; は、 Python 拡張モジュールをビルドする際に常にヘッダファイル検索パスに取り込まれるので、 C コードを書く上でもっともよいアプローチは、以下のようなものとなります</p>
+<p>他の Python 拡張モジュール由来のヘッダを include する必要があるなら、 Distutils の <strong class="command">install_header</strong> コマンドが一貫した方法でヘッダファイルをインストールするという事実を活用できます。例えば、 Numerical Python のヘッダファイルは、 (標準的な Unix がインストールされた環境では) <code class="file docutils literal"><span class="pre">/usr/local/include/python1.5/Numerical</span></code> にインストールされます。 (実際の場所は、プラットフォームやどの Python をインストールしたかで異なります。) Python の include ディレクトリ — 今の例では <code class="file docutils literal"><span class="pre">/usr/local/include/python1.5</span></code> — は、 Python 拡張モジュールをビルドする際に常にヘッダファイル検索パスに取り込まれるので、 C コードを書く上でもっともよいアプローチは、以下のようなものとなります</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1">#include &lt;Numerical/arrayobject.h&gt;</span>
 </pre></div>
 </div>
@@ -231,7 +227,7 @@
       <span class="p">)</span>
 </pre></div>
 </div>
-<p>この書き方も可搬性はあります &#8212; プラットフォームに関わらず、どんな Python がインストールされていても動作します &#8212; が、単に実践的な書き方で C コードを書く方が簡単でしょう。</p>
+<p>この書き方も可搬性はあります — プラットフォームに関わらず、どんな Python がインストールされていても動作します — が、単に実践的な書き方で C コードを書く方が簡単でしょう。</p>
 <p><code class="docutils literal"><span class="pre">define_macros</span></code> および <code class="docutils literal"><span class="pre">undef_macros</span></code> オプションを使って、プリプロセッサマクロを定義 (define) したり、定義解除 (undefine) したりもできます。 <code class="docutils literal"><span class="pre">define_macros</span></code> はタプル <code class="docutils literal"><span class="pre">(name,</span> <span class="pre">value)</span></code> からなるリストを引数にとります。 <code class="docutils literal"><span class="pre">name</span></code> は定義したいマクロの名前 (文字列) で、 <code class="docutils literal"><span class="pre">value</span></code> はその値です: <code class="docutils literal"><span class="pre">value</span></code> は文字列か <code class="docutils literal"><span class="pre">None</span></code> になります。(マクロ <code class="docutils literal"><span class="pre">FOO</span></code> を <code class="docutils literal"><span class="pre">None</span></code> にすると、C ソースコード内で <code class="docutils literal"><span class="pre">#define</span> <span class="pre">FOO</span></code> と書いたのと同じになります: こう書くと、ほとんどのコンパイラは <code class="docutils literal"><span class="pre">FOO</span></code> を文字列 <code class="docutils literal"><span class="pre">1</span></code> に設定します。) <code class="docutils literal"><span class="pre">undef_macros</span></code> には、定義解除したいマクロ名からなるリストを指定します。</p>
 <p>例えば:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">Extension</span><span class="p">(</span><span class="o">...</span><span class="p">,</span>
@@ -278,12 +274,9 @@
 <h2>2.4. パッケージと配布物の関係<a class="headerlink" href="#relationships-between-distributions-and-packages" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>配布物はパッケージと3種類の方法で関係します:</p>
 <ol class="arabic simple">
-<li><p class="first">パッケージかモジュールを要求する。</p>
-</li>
-<li><p class="first">パッケージかモジュールを提供する。</p>
-</li>
-<li><p class="first">パッケージかモジュールを廃止する。</p>
-</li>
+<li>パッケージかモジュールを要求する。</li>
+<li>パッケージかモジュールを提供する。</li>
+<li>パッケージかモジュールを廃止する。</li>
 </ol>
 <p>これらの関係は、 <a class="reference internal" href="apiref.html#distutils.core.setup" title="distutils.core.setup"><code class="xref py py-func docutils literal"><span class="pre">distutils.core.setup()</span></code></a> 関数のキーワード引数を利用して指定することができます。</p>
 <p>他のPythonモジュールやパッケージに対する依存は、 <code class="xref py py-func docutils literal"><span class="pre">setup()</span></code> の <em>requires</em> キーワード引数で指定できます。引数の値は文字列のリストでなければなりません。各文字列は、必要とするパッケージと、オプションとしてパッケージのバージョンを指定します。</p>
@@ -301,20 +294,16 @@
 <col width="65%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">require式</p>
-</th>
-<th class="head"><p class="first last">説明</p>
-</th>
+<tr class="row-odd"><th class="head">require式</th>
+<th class="head">説明</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">==1.0</span></code></td>
-<td><p class="first last">version <code class="docutils literal"><span class="pre">1.0</span></code> のみが適合します</p>
-</td>
+<td>version <code class="docutils literal"><span class="pre">1.0</span></code> のみが適合します</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">&gt;1.0,</span> <span class="pre">!=1.5.1,</span> <span class="pre">&lt;2.0</span></code></td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">1.5.1</span></code> を除いて、 <code class="docutils literal"><span class="pre">1.0</span></code> より後ろで <code class="docutils literal"><span class="pre">2.0</span></code> より前の全てのバージョンに適合します。</p>
-</td>
+<td><code class="docutils literal"><span class="pre">1.5.1</span></code> を除いて、 <code class="docutils literal"><span class="pre">1.0</span></code> より後ろで <code class="docutils literal"><span class="pre">2.0</span></code> より前の全てのバージョンに適合します。</td>
 </tr>
 </tbody>
 </table>
@@ -326,20 +315,16 @@
 <col width="69%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">provide 式</p>
-</th>
-<th class="head"><p class="first last">説明</p>
-</th>
+<tr class="row-odd"><th class="head">provide 式</th>
+<th class="head">説明</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">mypkg</span></code></td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">mypkg</span></code> を提供します。バージョンは配布物のものを使います。</p>
-</td>
+<td><code class="docutils literal"><span class="pre">mypkg</span></code> を提供します。バージョンは配布物のものを使います。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">mypkg</span> <span class="pre">(1.1)</span></code></td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">mypkg</span></code> version 1.1 を提供します。配布物のバージョン番号は気にしません</p>
-</td>
+<td><code class="docutils literal"><span class="pre">mypkg</span></code> version 1.1 を提供します。配布物のバージョン番号は気にしません</td>
 </tr>
 </tbody>
 </table>
@@ -349,7 +334,7 @@
 <div class="section" id="installing-scripts">
 <span id="distutils-installing-scripts"></span><h2>2.5. スクリプトをインストールする<a class="headerlink" href="#installing-scripts" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>ここまでは、スクリプトから import され、それ自体では実行されないような pure Python モジュールおよび非 pure Python モジュールについて扱ってきました。</p>
-<p>スクリプトとは、Python ソースコードを含むファイルで、コマンドラインから実行できるよう作られているものです。スクリプトは Distutils に複雑なことを一切させません。唯一の気の利いた機能は、スクリプトの最初の行が <code class="docutils literal"><span class="pre">#!</span></code> で始まっていて、 &#8220;python&#8221; という単語が入っていた場合、Distutils は最初の行を現在使っているインタプリタを参照するよう置き換えます。デフォルトでは現在使っているインタプリタと置換しますが、オプション <code class="xref std std-option docutils literal"><span class="pre">--executable</span></code> (または <code class="xref std std-option docutils literal"><span class="pre">-e</span></code>) を指定することで、明示的にインタプリタのパスを指定して上書きすることができます。</p>
+<p>スクリプトとは、Python ソースコードを含むファイルで、コマンドラインから実行できるよう作られているものです。スクリプトは Distutils に複雑なことを一切させません。唯一の気の利いた機能は、スクリプトの最初の行が <code class="docutils literal"><span class="pre">#!</span></code> で始まっていて、 「python」 という単語が入っていた場合、Distutils は最初の行を現在使っているインタプリタを参照するよう置き換えます。デフォルトでは現在使っているインタプリタと置換しますが、オプション <code class="xref std std-option docutils literal"><span class="pre">--executable</span></code> (または <code class="xref std std-option docutils literal"><span class="pre">-e</span></code>) を指定することで、明示的にインタプリタのパスを指定して上書きすることができます。</p>
 <p><code class="docutils literal"><span class="pre">scripts</span></code> オプションには、単に上で述べた方法で取り扱うべきファイルのリストを指定するだけです。PyXML の setup スクリプトを例に示します:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span><span class="o">...</span><span class="p">,</span>
       <span class="n">scripts</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;scripts/xmlproc_parse&#39;</span><span class="p">,</span> <span class="s1">&#39;scripts/xmlproc_val&#39;</span><span class="p">]</span>
@@ -418,142 +403,103 @@
 <col width="11%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">メタデータ</p>
-</th>
-<th class="head"><p class="first last">説明</p>
-</th>
-<th class="head"><p class="first last">値</p>
-</th>
-<th class="head"><p class="first last">注釈</p>
-</th>
+<tr class="row-odd"><th class="head">メタデータ</th>
+<th class="head">説明</th>
+<th class="head">値</th>
+<th class="head">注釈</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">name</span></code></td>
-<td><p class="first last">パッケージ名</p>
-</td>
-<td><p class="first last">短い文字列</p>
-</td>
+<td>パッケージ名</td>
+<td>短い文字列</td>
 <td>(1)</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">version</span></code></td>
-<td><p class="first last">リリースのバージョン</p>
-</td>
-<td><p class="first last">短い文字列</p>
-</td>
+<td>リリースのバージョン</td>
+<td>短い文字列</td>
 <td>(1)(2)</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">author</span></code></td>
-<td><p class="first last">パッケージ作者名</p>
-</td>
-<td><p class="first last">短い文字列</p>
-</td>
+<td>パッケージ作者名</td>
+<td>短い文字列</td>
 <td>(3)</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">author_email</span></code></td>
-<td><p class="first last">パッケージ作者の電子メールアドレス</p>
-</td>
-<td><p class="first last">電子メールアドレス</p>
-</td>
+<td>パッケージ作者の電子メールアドレス</td>
+<td>電子メールアドレス</td>
 <td>(3)</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">maintainer</span></code></td>
-<td><p class="first last">パッケージメンテナンス担当者の名前</p>
-</td>
-<td><p class="first last">短い文字列</p>
-</td>
+<td>パッケージメンテナンス担当者の名前</td>
+<td>短い文字列</td>
 <td>(3)</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">maintainer_email</span></code></td>
-<td><p class="first last">パッケージメンテナンス担当者の電子メールアドレス</p>
-</td>
-<td><p class="first last">電子メールアドレス</p>
-</td>
+<td>パッケージメンテナンス担当者の電子メールアドレス</td>
+<td>電子メールアドレス</td>
 <td>(3)</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">url</span></code></td>
-<td><p class="first last">パッケージのホームページ</p>
-</td>
+<td>パッケージのホームページ</td>
 <td>URL</td>
 <td>(1)</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">description</span></code></td>
-<td><p class="first last">パッケージについての簡潔な概要説明</p>
-</td>
-<td><p class="first last">短い文字列</p>
-</td>
-<td>&nbsp;</td>
+<td>パッケージについての簡潔な概要説明</td>
+<td>短い文字列</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">long_description</span></code></td>
-<td><p class="first last">パッケージについての詳細な説明</p>
-</td>
-<td><p class="first last">長い文字列</p>
-</td>
+<td>パッケージについての詳細な説明</td>
+<td>長い文字列</td>
 <td>(5)</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">download_url</span></code></td>
-<td><p class="first last">パッケージをダウンロードできる場所</p>
-</td>
+<td>パッケージをダウンロードできる場所</td>
 <td>URL</td>
 <td>(4)</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">classifiers</span></code></td>
-<td><p class="first last">分類語のリスト</p>
-</td>
-<td><p class="first last">文字列からなるリスト</p>
-</td>
+<td>分類語のリスト</td>
+<td>文字列からなるリスト</td>
 <td>(4)</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">platforms</span></code></td>
-<td><p class="first last">プラットフォームのリスト</p>
-</td>
-<td><p class="first last">文字列からなるリスト</p>
-</td>
-<td>&nbsp;</td>
+<td>プラットフォームのリスト</td>
+<td>文字列からなるリスト</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">license</span></code></td>
-<td><p class="first last">パッケージのライセンス</p>
-</td>
-<td><p class="first last">短い文字列</p>
-</td>
+<td>パッケージのライセンス</td>
+<td>短い文字列</td>
 <td>(6)</td>
 </tr>
 </tbody>
 </table>
 <p>注釈:</p>
 <ol class="arabic simple">
-<li><p class="first">必須のフィールドです。</p>
-</li>
-<li><p class="first">バージョン番号は <em>major.minor[.patch[.sub]]</em> の形式をとるよう奨めます。</p>
-</li>
-<li><p class="first">作者かメンテナのどちらかは必ず区別してください。メンテナが与えられると、distutils は <code class="file docutils literal"><span class="pre">PKG-INFO</span></code> に作者としてリストします。</p>
-</li>
-<li><p class="first">これらのフィールドは、2.2.3 および 2.3 より以前のバージョンの Python でも互換性を持たせたい場合には指定してはなりません。リストは <a class="reference external" href="https://pypi.python.org/pypi">PyPI ウェブサイト</a> にあります。</p>
-</li>
-<li><p class="first">パッケージを PyPI に <a class="reference internal" href="packageindex.html#package-register"><span class="std std-ref">登録</span></a> する際、PyPI は <code class="docutils literal"><span class="pre">long_description</span></code> フィールドの値を使って <a class="reference internal" href="packageindex.html#package-display"><span class="std std-ref">パッケージのホームページをビルド</span></a> します。</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">license</span></code> フィールドは、ライセンスが &#8220;License&#8221; Trove 分類から選ばれたのではない場合にパッケージをカバーするライセンスを示すテキストです。 <code class="docutils literal"><span class="pre">Classifier</span></code> フィールドを参照してください。お気づきの通り、廃止された <code class="docutils literal"><span class="pre">licence</span></code> というオプションがあり、未だに <code class="docutils literal"><span class="pre">license</span></code> のエイリアスとして働いています。</p>
-</li>
+<li>必須のフィールドです。</li>
+<li>バージョン番号は <em>major.minor[.patch[.sub]]</em> の形式をとるよう奨めます。</li>
+<li>作者かメンテナのどちらかは必ず区別してください。メンテナが与えられると、distutils は <code class="file docutils literal"><span class="pre">PKG-INFO</span></code> に作者としてリストします。</li>
+<li>これらのフィールドは、2.2.3 および 2.3 より以前のバージョンの Python でも互換性を持たせたい場合には指定してはなりません。リストは <a class="reference external" href="https://pypi.python.org/pypi">PyPI ウェブサイト</a> にあります。</li>
+<li>パッケージを PyPI に <a class="reference internal" href="packageindex.html#package-register"><span class="std std-ref">登録</span></a> する際、PyPI は <code class="docutils literal"><span class="pre">long_description</span></code> フィールドの値を使って <a class="reference internal" href="packageindex.html#package-display"><span class="std std-ref">パッケージのホームページをビルド</span></a> します。</li>
+<li><code class="docutils literal"><span class="pre">license</span></code> フィールドは、ライセンスが 「License」 Trove 分類から選ばれたのではない場合にパッケージをカバーするライセンスを示すテキストです。 <code class="docutils literal"><span class="pre">Classifier</span></code> フィールドを参照してください。お気づきの通り、廃止された <code class="docutils literal"><span class="pre">licence</span></code> というオプションがあり、未だに <code class="docutils literal"><span class="pre">license</span></code> のエイリアスとして働いています。</li>
 </ol>
 <dl class="docutils">
 <dt>「短い文字列」</dt>
-<dd><p class="first last">200 文字以内の一行のテキスト。</p>
-</dd>
+<dd>200 文字以内の一行のテキスト。</dd>
 <dt>「長い文字列」</dt>
-<dd><p class="first last">複数行からなり、ReStructuredText 形式で書かれたプレーンテキスト (<a class="reference external" href="http://docutils.sourceforge.net/">http://docutils.sourceforge.net/</a> を参照してください)。</p>
-</dd>
+<dd>複数行からなり、ReStructuredText 形式で書かれたプレーンテキスト (<a class="reference external" href="http://docutils.sourceforge.net/">http://docutils.sourceforge.net/</a> を参照してください)。</dd>
 <dt>「文字列のリスト」</dt>
-<dd><p class="first last">下記を参照してください。</p>
-</dd>
+<dd>下記を参照してください。</dd>
 </dl>
-<p>バージョン情報のコード化は、それ自体が一つのアートです。 Python のパッケージは一般的に、 <em>major.minor[.patch][sub]</em> というバージョン表記に従います。メジャー (major) 番号は最初は 0 で、これはソフトウェアが実験的リリースにあることを示します。メジャー番号は、パッケージが主要な開発目標を達成したとき、それを示すために加算されてゆきます。マイナー (minor) 番号は、パッケージに重要な新機能が追加されたときに加算されてゆきます。パッチ (patch) 番号は、バグフィクス版のリリースが作成されたときに加算されます。末尾にバージョン情報が追加され、サブリリースを示すこともあります。これは &#8220;a1,a2,...,aN&#8221; (アルファリリースの場合で、機能や API が変更されているとき)、 &#8220;b1,b2,...,bN&#8221; (ベータリリースの場合で、バグフィクスのみのとき) 、そして &#8220;pr1,pr2,...,prN&#8221;  (プレリリースの最終段階で、リリーステストのとき) になります。以下に例を示します:</p>
+<p>バージョン情報のコード化は、それ自体が一つのアートです。 Python のパッケージは一般的に、 <em>major.minor[.patch][sub]</em> というバージョン表記に従います。メジャー (major) 番号は最初は 0 で、これはソフトウェアが実験的リリースにあることを示します。メジャー番号は、パッケージが主要な開発目標を達成したとき、それを示すために加算されてゆきます。マイナー (minor) 番号は、パッケージに重要な新機能が追加されたときに加算されてゆきます。パッチ (patch) 番号は、バグフィクス版のリリースが作成されたときに加算されます。末尾にバージョン情報が追加され、サブリリースを示すこともあります。これは 「a1,a2,…,aN」 (アルファリリースの場合で、機能や API が変更されているとき)、 「b1,b2,…,bN」 (ベータリリースの場合で、バグフィクスのみのとき) 、そして 「pr1,pr2,…,prN」  (プレリリースの最終段階で、リリーステストのとき) になります。以下に例を示します:</p>
 <dl class="docutils">
 <dt>0.1.0</dt>
-<dd><p class="first last">パッケージの最初の実験的なリリース</p>
-</dd>
+<dd>パッケージの最初の実験的なリリース</dd>
 <dt>1.0.1a2</dt>
-<dd><p class="first last">1.0 の最初のパッチバージョンに対する、2 回目のアルファリリース</p>
-</dd>
+<dd>1.0 の最初のパッチバージョンに対する、2 回目のアルファリリース</dd>
 </dl>
 <p><code class="docutils literal"><span class="pre">classifiers</span></code> は、Python のリスト型で指定します:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="p">(</span><span class="o">...</span><span class="p">,</span>
@@ -625,7 +571,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/distutils/setupscript.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/distutils/setupscript.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -685,7 +631,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

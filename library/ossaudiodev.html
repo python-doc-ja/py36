@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>22.9. ossaudiodev — OSS互換オーディオデバイスへのアクセス &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="22. マルチメディアサービス" href="mm.html" />
     <link rel="next" title="23. 国際化" href="i18n.html" />
     <link rel="prev" title="22.8. sndhdr — サウンドファイルの識別" href="sndhdr.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,7 +100,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-ossaudiodev">
-<span id="ossaudiodev-access-to-oss-compatible-audio-devices"></span><h1>22.9. <a class="reference internal" href="#module-ossaudiodev" title="ossaudiodev: Access to OSS-compatible audio devices. (Linux, FreeBSD)"><code class="xref py py-mod docutils literal"><span class="pre">ossaudiodev</span></code></a> &#8212; OSS互換オーディオデバイスへのアクセス<a class="headerlink" href="#module-ossaudiodev" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="ossaudiodev-access-to-oss-compatible-audio-devices"></span><h1>22.9. <a class="reference internal" href="#module-ossaudiodev" title="ossaudiodev: Access to OSS-compatible audio devices. (Linux, FreeBSD)"><code class="xref py py-mod docutils literal"><span class="pre">ossaudiodev</span></code></a> — OSS互換オーディオデバイスへのアクセス<a class="headerlink" href="#module-ossaudiodev" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <hr class="docutils" />
 <p>このモジュールを使うとOSS (Open Sound System) オーディオインターフェースにアクセスできます。OSSはオープンソースあるいは商用のUnixで広く利用でき、Linux (カーネル 2.4まで) とFreeBSDで標準のオーディオインターフェースです。</p>
 <div class="versionchanged">
@@ -113,9 +109,8 @@
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <dl class="docutils">
-<dt><a class="reference external" href="http://www.opensound.com/pguide/oss.pdf">Open Sound System Programmer&#8217;s Guide</a></dt>
-<dd><p class="first last">OSS C API の公式ドキュメント</p>
-</dd>
+<dt><a class="reference external" href="http://www.opensound.com/pguide/oss.pdf">Open Sound System Programmer’s Guide</a></dt>
+<dd>OSS C API の公式ドキュメント</dd>
 </dl>
 <p class="last">このモジュールでは、OSS デバイスドライバが提供している大量の定数が定義されています; 一覧は Linux や FreeBSD 上の <code class="docutils literal"><span class="pre">&lt;sys/soundcard.h&gt;</span></code> を参照してください。</p>
 </div>
@@ -149,12 +144,9 @@
 <span id="ossaudio-device-objects"></span><h2>22.9.1. オーディオデバイスオブジェクト<a class="headerlink" href="#audio-device-objects" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>オーディオデバイスに読み書きできるようになるには、まず 3 つのメソッドを正しい順序で呼び出さねばなりません:</p>
 <ol class="arabic simple">
-<li><p class="first"><code class="xref py py-meth docutils literal"><span class="pre">setfmt()</span></code> で出力形式を設定し</p>
-</li>
-<li><p class="first"><code class="xref py py-meth docutils literal"><span class="pre">channels()</span></code> でチャンネル数を設定し</p>
-</li>
-<li><p class="first"><code class="xref py py-meth docutils literal"><span class="pre">speed()</span></code> でサンプリングレートを設定します</p>
-</li>
+<li><code class="xref py py-meth docutils literal"><span class="pre">setfmt()</span></code> で出力形式を設定し</li>
+<li><code class="xref py py-meth docutils literal"><span class="pre">channels()</span></code> でチャンネル数を設定し</li>
+<li><code class="xref py py-meth docutils literal"><span class="pre">speed()</span></code> でサンプリングレートを設定します</li>
 </ol>
 <p>この代わりに <code class="xref py py-meth docutils literal"><span class="pre">setparameters()</span></code> メソッドを呼び出せば、三つのオーディオパラメタを一度で設定できます。 <code class="xref py py-meth docutils literal"><span class="pre">setparameters()</span></code> は便利ですが、多くの状況で柔軟性に欠けるでしょう。</p>
 <p><a class="reference internal" href="#ossaudiodev.open" title="ossaudiodev.open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> の返すオーディオデバイスオブジェクトには以下のメソッドおよび(読み出し専用の)属性があります:</p>
@@ -179,7 +171,7 @@
 <dl class="method">
 <dt id="ossaudiodev.oss_audio_device.write">
 <code class="descclassname">oss_audio_device.</code><code class="descname">write</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#ossaudiodev.oss_audio_device.write" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> <em>data</em> の内容をオーディオデバイスに書き込み、書き込まれたバイト数を返します。オーディオデバイスがブロックモード (デフォルト) の場合、常にデータ全体を書き込みます (前述のように、これは通常のUnix デバイスの振舞いとは異なります)。デバイスが非ブロックモードの場合、データの一部が書き込まれないことがあります &#8212; <a class="reference internal" href="#ossaudiodev.oss_audio_device.writeall" title="ossaudiodev.oss_audio_device.writeall"><code class="xref py py-meth docutils literal"><span class="pre">writeall()</span></code></a> を参照してください。</p>
+<dd><p><a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> <em>data</em> の内容をオーディオデバイスに書き込み、書き込まれたバイト数を返します。オーディオデバイスがブロックモード (デフォルト) の場合、常にデータ全体を書き込みます (前述のように、これは通常のUnix デバイスの振舞いとは異なります)。デバイスが非ブロックモードの場合、データの一部が書き込まれないことがあります — <a class="reference internal" href="#ossaudiodev.oss_audio_device.writeall" title="ossaudiodev.oss_audio_device.writeall"><code class="xref py py-meth docutils literal"><span class="pre">writeall()</span></code></a> を参照してください。</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.5 で変更: </span>書き込み可能な <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> を使用できるようになりました。</p>
 </div>
@@ -214,48 +206,37 @@
 <col width="64%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">フォーマット</p>
-</th>
-<th class="head"><p class="first last">説明</p>
-</th>
+<tr class="row-odd"><th class="head">フォーマット</th>
+<th class="head">説明</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">AFMT_MU_LAW</span></code></td>
-<td><p class="first last">対数符号化 (Sun の <code class="docutils literal"><span class="pre">.au</span></code> 形式や <code class="file docutils literal"><span class="pre">/dev/audio</span></code> で使われている形式)</p>
-</td>
+<td>対数符号化 (Sun の <code class="docutils literal"><span class="pre">.au</span></code> 形式や <code class="file docutils literal"><span class="pre">/dev/audio</span></code> で使われている形式)</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">AFMT_A_LAW</span></code></td>
-<td><p class="first last">対数符号化</p>
-</td>
+<td>対数符号化</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">AFMT_IMA_ADPCM</span></code></td>
-<td><p class="first last">Interactive Multimedia Association で定義されている 4:1 圧縮形式</p>
-</td>
+<td>Interactive Multimedia Association で定義されている 4:1 圧縮形式</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">AFMT_U8</span></code></td>
-<td><p class="first last">符号なし 8 ビットオーディオ</p>
-</td>
+<td>符号なし 8 ビットオーディオ</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">AFMT_S16_LE</span></code></td>
-<td><p class="first last">符号つき 16 ビットオーディオ、リトルエンディアンバイトオーダ (Intelプロセッサで使われている形式)</p>
-</td>
+<td>符号つき 16 ビットオーディオ、リトルエンディアンバイトオーダ (Intelプロセッサで使われている形式)</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">AFMT_S16_BE</span></code></td>
-<td><p class="first last">符号つき 16 ビットオーディオ、ビッグエンディアンバイトオーダ (68k、PowerPC、Sparcで使われている形式)</p>
-</td>
+<td>符号つき 16 ビットオーディオ、ビッグエンディアンバイトオーダ (68k、PowerPC、Sparcで使われている形式)</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">AFMT_S8</span></code></td>
-<td><p class="first last">符号つき 8 ビットオーディオ</p>
-</td>
+<td>符号つき 8 ビットオーディオ</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">AFMT_U16_LE</span></code></td>
-<td><p class="first last">符号なし 16 ビットリトルエンディアンオーディオ</p>
-</td>
+<td>符号なし 16 ビットリトルエンディアンオーディオ</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">AFMT_U16_BE</span></code></td>
-<td><p class="first last">符号なし 16 ビットビッグエンディアンオーディオ</p>
-</td>
+<td>符号なし 16 ビットビッグエンディアンオーディオ</td>
 </tr>
 </tbody>
 </table>
@@ -265,7 +246,7 @@
 <dl class="method">
 <dt id="ossaudiodev.oss_audio_device.setfmt">
 <code class="descclassname">oss_audio_device.</code><code class="descname">setfmt</code><span class="sig-paren">(</span><em>format</em><span class="sig-paren">)</span><a class="headerlink" href="#ossaudiodev.oss_audio_device.setfmt" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>現在のオーディオ形式を <em>format</em> に設定しようと試みます &#8212; <em>format</em> については <a class="reference internal" href="#ossaudiodev.oss_audio_device.getfmts" title="ossaudiodev.oss_audio_device.getfmts"><code class="xref py py-meth docutils literal"><span class="pre">getfmts()</span></code></a> のリストを参照してください。実際にデバイスに設定されたオーディオ形式を返します。要求通りの形式でないこともあります。 <code class="xref py py-const docutils literal"><span class="pre">AFMT_QUERY</span></code> を渡すと現在デバイスに設定されているオーディオ形式を返します。</p>
+<dd><p>現在のオーディオ形式を <em>format</em> に設定しようと試みます — <em>format</em> については <a class="reference internal" href="#ossaudiodev.oss_audio_device.getfmts" title="ossaudiodev.oss_audio_device.getfmts"><code class="xref py py-meth docutils literal"><span class="pre">getfmts()</span></code></a> のリストを参照してください。実際にデバイスに設定されたオーディオ形式を返します。要求通りの形式でないこともあります。 <code class="xref py py-const docutils literal"><span class="pre">AFMT_QUERY</span></code> を渡すと現在デバイスに設定されているオーディオ形式を返します。</p>
 </dd></dl>
 
 <dl class="method">
@@ -284,31 +265,25 @@
 <col width="86%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">レート</p>
-</th>
-<th class="head"><p class="first last">説明</p>
-</th>
+<tr class="row-odd"><th class="head">レート</th>
+<th class="head">説明</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>8000</td>
-<td><p class="first last"><code class="file docutils literal"><span class="pre">/dev/audio</span></code> のデフォルト</p>
-</td>
+<td><code class="file docutils literal"><span class="pre">/dev/audio</span></code> のデフォルト</td>
 </tr>
 <tr class="row-odd"><td>11025</td>
-<td><p class="first last">会話音声の録音に使われるレート</p>
-</td>
+<td>会話音声の録音に使われるレート</td>
 </tr>
 <tr class="row-even"><td>22050</td>
-<td>&nbsp;</td>
+<td>&#160;</td>
 </tr>
 <tr class="row-odd"><td>44100</td>
-<td><p class="first last">(サンプルあたり 16 ビットで 2 チャネルの場合) CD 品質のオーディオ</p>
-</td>
+<td>(サンプルあたり 16 ビットで 2 チャネルの場合) CD 品質のオーディオ</td>
 </tr>
 <tr class="row-even"><td>96000</td>
-<td><p class="first last">(サンプル当たり 24 ビットの場合) DVD 品質のオーディオ</p>
-</td>
+<td>(サンプル当たり 24 ビットの場合) DVD 品質のオーディオ</td>
 </tr>
 </tbody>
 </table>
@@ -409,14 +384,14 @@
 <dl class="method">
 <dt id="ossaudiodev.oss_mixer_device.controls">
 <code class="descclassname">oss_mixer_device.</code><code class="descname">controls</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ossaudiodev.oss_mixer_device.controls" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>このメソッドは、利用可能なミキサコントロール (<code class="xref py py-const docutils literal"><span class="pre">SOUND_MIXER_PCM</span></code> や <code class="xref py py-const docutils literal"><span class="pre">SOUND_MIXER_SYNTH</span></code> のように、ミキシングを行えるチャネル) を指定するビットマスクを返します。このビットマスクは利用可能な全てのミキサコントロールのサブセットです &#8212; 定数 <code class="xref py py-const docutils literal"><span class="pre">SOUND_MIXER_*</span></code> はモジュールレベルで定義されています。例えば、もし現在のミキサオブジェクトがPCM ミキサをサポートしているか調べるには、以下のPythonコードを実行します:</p>
+<dd><p>このメソッドは、利用可能なミキサコントロール (<code class="xref py py-const docutils literal"><span class="pre">SOUND_MIXER_PCM</span></code> や <code class="xref py py-const docutils literal"><span class="pre">SOUND_MIXER_SYNTH</span></code> のように、ミキシングを行えるチャネル) を指定するビットマスクを返します。このビットマスクは利用可能な全てのミキサコントロールのサブセットです — 定数 <code class="xref py py-const docutils literal"><span class="pre">SOUND_MIXER_*</span></code> はモジュールレベルで定義されています。例えば、もし現在のミキサオブジェクトがPCM ミキサをサポートしているか調べるには、以下のPythonコードを実行します:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">mixer</span><span class="o">=</span><span class="n">ossaudiodev</span><span class="o">.</span><span class="n">openmixer</span><span class="p">()</span>
 <span class="k">if</span> <span class="n">mixer</span><span class="o">.</span><span class="n">controls</span><span class="p">()</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">ossaudiodev</span><span class="o">.</span><span class="n">SOUND_MIXER_PCM</span><span class="p">):</span>
     <span class="c1"># PCM is supported</span>
     <span class="o">...</span> <span class="n">code</span> <span class="o">...</span>
 </pre></div>
 </div>
-<p>ほとんどの用途には、 <code class="xref py py-const docutils literal"><span class="pre">SOUND_MIXER_VOLUME</span></code> (マスタボリューム) と <code class="xref py py-const docutils literal"><span class="pre">SOUND_MIXER_PCM</span></code> コントロールがあれば十分でしょう &#8212; とはいえ、ミキサを使うコードを書くときには、コントロールを選ぶ時に柔軟性を持たせるべきです。例えば Gravis Ultrasound には <code class="xref py py-const docutils literal"><span class="pre">SOUND_MIXER_VOLUME</span></code> がありません。</p>
+<p>ほとんどの用途には、 <code class="xref py py-const docutils literal"><span class="pre">SOUND_MIXER_VOLUME</span></code> (マスタボリューム) と <code class="xref py py-const docutils literal"><span class="pre">SOUND_MIXER_PCM</span></code> コントロールがあれば十分でしょう — とはいえ、ミキサを使うコードを書くときには、コントロールを選ぶ時に柔軟性を持たせるべきです。例えば Gravis Ultrasound には <code class="xref py py-const docutils literal"><span class="pre">SOUND_MIXER_VOLUME</span></code> がありません。</p>
 </dd></dl>
 
 <dl class="method">
@@ -472,7 +447,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">22.9. <code class="docutils literal"><span class="pre">ossaudiodev</span></code> &#8212; OSS互換オーディオデバイスへのアクセス</a><ul>
+<li><a class="reference internal" href="#">22.9. <code class="docutils literal"><span class="pre">ossaudiodev</span></code> — OSS互換オーディオデバイスへのアクセス</a><ul>
 <li><a class="reference internal" href="#audio-device-objects">22.9.1. オーディオデバイスオブジェクト</a></li>
 <li><a class="reference internal" href="#mixer-device-objects">22.9.2. ミキサデバイスオブジェクト</a></li>
 </ul>
@@ -481,7 +456,7 @@
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="sndhdr.html"
-                        title="前の章へ">22.8. <code class="docutils literal"><span class="pre">sndhdr</span></code> &#8212; サウンドファイルの識別</a></p>
+                        title="前の章へ">22.8. <code class="docutils literal"><span class="pre">sndhdr</span></code> — サウンドファイルの識別</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="i18n.html"
                         title="次の章へ">23. 国際化</a></p>
@@ -490,7 +465,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/ossaudiodev.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/ossaudiodev.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -551,7 +526,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

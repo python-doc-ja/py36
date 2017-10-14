@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>文字列の変換と書式化 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="ユーティリティ" href="utilities.html" />
     <link rel="next" title="リフレクション" href="reflection.html" />
     <link rel="prev" title="引数の解釈と値の構築" href="arg.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -123,12 +119,9 @@ int <code class="descname">PyOS_vsnprintf</code><span class="sig-paren">(</span>
 <p>もし <code class="xref c c-func docutils literal"><span class="pre">vsnprintf()</span></code> のないプラットフォームで、切り捨てを避けるために必要なバッファサイズが <em>size</em> を512バイトより大きく超過していれば、 Python は <em>Py_FatalError</em> で abort します。</p>
 <p>これらの関数の戻り値 (以下では <em>rv</em> とします) は以下の意味を持ちます:</p>
 <ul class="simple">
-<li><p class="first"><code class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">rv</span> <span class="pre">&lt;</span> <span class="pre">size</span></code> のとき、変換出力は成功して、(最後の <em>str*[*rv</em>] にある <code class="docutils literal"><span class="pre">'\0'</span></code> を除いて) <em>rv</em> 文字が <em>str</em> に出力された。</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">rv</span> <span class="pre">&gt;=</span> <span class="pre">size</span></code> のとき、変換出力は切り詰められており、成功するためには <code class="docutils literal"><span class="pre">rv</span> <span class="pre">+</span> <span class="pre">1</span></code> バイトが必要だったことを示します。<em>str*[*size</em>-1] は <code class="docutils literal"><span class="pre">'\0'</span></code> です。</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">rv</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> のときは、何か悪いことが起こった時です。この場合でも <em>str*[*size</em>-1] は <code class="docutils literal"><span class="pre">'\0'</span></code> ですが、<em>str</em> のそれ以外の部分は未定義です。エラーの正確な原因はプラットフォーム依存です。</p>
-</li>
+<li><code class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">rv</span> <span class="pre">&lt;</span> <span class="pre">size</span></code> のとき、変換出力は成功して、(最後の <em>str*[*rv</em>] にある <code class="docutils literal"><span class="pre">'\0'</span></code> を除いて) <em>rv</em> 文字が <em>str</em> に出力された。</li>
+<li><code class="docutils literal"><span class="pre">rv</span> <span class="pre">&gt;=</span> <span class="pre">size</span></code> のとき、変換出力は切り詰められており、成功するためには <code class="docutils literal"><span class="pre">rv</span> <span class="pre">+</span> <span class="pre">1</span></code> バイトが必要だったことを示します。<em>str*[*size</em>-1] は <code class="docutils literal"><span class="pre">'\0'</span></code> です。</li>
+<li><code class="docutils literal"><span class="pre">rv</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> のときは、何か悪いことが起こった時です。この場合でも <em>str*[*size</em>-1] は <code class="docutils literal"><span class="pre">'\0'</span></code> ですが、<em>str</em> のそれ以外の部分は未定義です。エラーの正確な原因はプラットフォーム依存です。</li>
 </ul>
 <p>以下の関数は locale 非依存な文字列から数値への変換を行ないます。</p>
 <dl class="function">
@@ -151,12 +144,9 @@ char* <code class="descname">PyOS_double_to_string</code><span class="sig-paren"
 <p><em>format_code</em> は <code class="docutils literal"><span class="pre">'e'</span></code>, <code class="docutils literal"><span class="pre">'E'</span></code>, <code class="docutils literal"><span class="pre">'f'</span></code>, <code class="docutils literal"><span class="pre">'F'</span></code>, <code class="docutils literal"><span class="pre">'g'</span></code>, <code class="docutils literal"><span class="pre">'G'</span></code>, <code class="docutils literal"><span class="pre">'r'</span></code> のどれかでなければなりません。 <code class="docutils literal"><span class="pre">'r'</span></code> の場合、 <em>precision</em> は 0 でなければならず、無視されます。 <code class="docutils literal"><span class="pre">'r'</span></code> フォーマットコードは標準の <a class="reference internal" href="../library/functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> フォーマットを指定しています。</p>
 <p><em>flags</em> は 0 か、<em>Py_DTSF_SIGN</em>, <em>Py_DTSF_ADD_DOT_0</em>, <em>Py_DTSF_ALT</em> かこれらの or を取ったものです:</p>
 <ul class="simple">
-<li><p class="first"><em>Py_DTSF_SIGN</em> は、<em>val</em> が負で無いときも常に符号文字を先頭につけることを意味します。</p>
-</li>
-<li><p class="first"><em>Py_DTSF_ADD_DOT_0</em> は文字列が整数のように見えないことを保証します。</p>
-</li>
-<li><p class="first"><em>Py_DTSF_ALT</em> は &#8220;alternate&#8221; フォーマットルールを適用することを意味します。詳細は <a class="reference internal" href="#c.PyOS_snprintf" title="PyOS_snprintf"><code class="xref c c-func docutils literal"><span class="pre">PyOS_snprintf()</span></code></a> の <code class="docutils literal"><span class="pre">'#'</span></code> 指定を参照してください。</p>
-</li>
+<li><em>Py_DTSF_SIGN</em> は、<em>val</em> が負で無いときも常に符号文字を先頭につけることを意味します。</li>
+<li><em>Py_DTSF_ADD_DOT_0</em> は文字列が整数のように見えないことを保証します。</li>
+<li><em>Py_DTSF_ALT</em> は 「alternate」 フォーマットルールを適用することを意味します。詳細は <a class="reference internal" href="#c.PyOS_snprintf" title="PyOS_snprintf"><code class="xref c c-func docutils literal"><span class="pre">PyOS_snprintf()</span></code></a> の <code class="docutils literal"><span class="pre">'#'</span></code> 指定を参照してください。</li>
 </ul>
 <p><em>ptype</em> が NULL で無い場合、<em>val</em> が有限数、無限数、NaNのどれかに合わせて、<em>Py_DTST_FINITE</em>, <em>Py_DTST_INFINITE</em>, <em>Py_DTST_NAN</em> のいずれかに設定されます。</p>
 <p>戻り値は変換後の文字列が格納された <em>buffer</em> へのポインタか、変換が失敗した場合は <em>NULL</em> です。呼び出し側は、返された文字列を <a class="reference internal" href="memory.html#c.PyMem_Free" title="PyMem_Free"><code class="xref c c-func docutils literal"><span class="pre">PyMem_Free()</span></code></a> を使って解放する責任があります。</p>
@@ -196,7 +186,7 @@ int <code class="descname">PyOS_strnicmp</code><span class="sig-paren">(</span>c
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/conversion.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/conversion.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -257,7 +247,7 @@ int <code class="descname">PyOS_strnicmp</code><span class="sig-paren">(</span>c
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

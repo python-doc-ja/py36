@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>型オブジェクト &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="オブジェクト実装サポート (object implementation support)" href="objimpl.html" />
     <link rel="next" title="循環参照ガベージコレクションをサポートする" href="gcsupport.html" />
     <link rel="prev" title="共通のオブジェクト構造体 (common object structure)" href="structures.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -246,7 +242,7 @@ Py_ssize_t <code class="descname">PyTypeObject.tp_basicsize</code><a class="head
 Py_ssize_t <code class="descname">PyTypeObject.tp_itemsize</code><a class="headerlink" href="#c.PyTypeObject.tp_itemsize" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>これらのフィールドは、型インスタンスのバイトサイズを計算できるようにします。</p>
 <p>型には二つの種類があります: 固定長インスタンスの型は、 <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> フィールドがゼロで、可変長インスタンスの方は <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> フィールドが非ゼロの値になります。固定長インスタンスの型の場合、全てのインスタンスは等しく <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> で与えられたサイズになります。</p>
-<p>可変長インスタンスの型の場合、インスタンスには <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code>  フィールドがなくてはならず、インスタンスのサイズは N をオブジェクトの &#8220;長さ&#8221; として、 <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> と <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> の N 倍を足したものになります。 N の値は通常、インスタンスの <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code>  フィールドに記憶されます。ただし例外がいくつかあります: 例えば、整数では負の値を <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> に使って、インスタンスの表す値が負であることを示し、 N 自体は <code class="docutils literal"><span class="pre">abs(ob_size)</span></code> になります。また、 <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> フィールドがあるからといって、必ずしもインスタンスが可変長であることを意味しません (例えば、 リスト型の構造体は固定長のインスタンスになるにもかかわらず、インスタンスにはちゃんと意味を持った <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> フィールドがあります)。</p>
+<p>可変長インスタンスの型の場合、インスタンスには <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code>  フィールドがなくてはならず、インスタンスのサイズは N をオブジェクトの 「長さ」 として、 <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> と <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> の N 倍を足したものになります。 N の値は通常、インスタンスの <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code>  フィールドに記憶されます。ただし例外がいくつかあります: 例えば、整数では負の値を <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> に使って、インスタンスの表す値が負であることを示し、 N 自体は <code class="docutils literal"><span class="pre">abs(ob_size)</span></code> になります。また、 <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> フィールドがあるからといって、必ずしもインスタンスが可変長であることを意味しません (例えば、 リスト型の構造体は固定長のインスタンスになるにもかかわらず、インスタンスにはちゃんと意味を持った <code class="xref py py-attr docutils literal"><span class="pre">ob_size</span></code> フィールドがあります)。</p>
 <p>基本サイズには、 <a class="reference internal" href="structures.html#c.PyObject_HEAD" title="PyObject_HEAD"><code class="xref c c-macro docutils literal"><span class="pre">PyObject_HEAD</span></code></a> マクロまたは  <a class="reference internal" href="structures.html#c.PyObject_VAR_HEAD" title="PyObject_VAR_HEAD"><code class="xref c c-macro docutils literal"><span class="pre">PyObject_VAR_HEAD</span></code></a> マクロ (インスタンス構造体を宣言するのに使ったどちらかのマクロ) で宣言されているフィールドが入っています。さらに、 <code class="xref py py-attr docutils literal"><span class="pre">_ob_prev</span></code> および <code class="xref py py-attr docutils literal"><span class="pre">_ob_next</span></code> フィールドがある場合、これらのフィールドもサイズに加算されます。従って、 <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> の正しい初期化値を得るには、インスタンスデータのレイアウトを宣言するのに使う構造体に対して <code class="docutils literal"><span class="pre">sizeof</span></code> 演算子を使うしかありません。基本サイズには、GC ヘッダサイズは入っていません。</p>
 <p>これらのフィールドはサブタイプに別々に継承されます。基底タイプが 0 でない <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> を持っていた場合、基底タイプの実装に依存しますが、一般的にはサブタイプで別の 0 で無い値を <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> に設定するのは安全ではありません。</p>
 <p>アラインメントに関する注釈: 変数の各要素を配置する際に特定のアラインメントが必要となる場合、 <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> の値に気をつけなければなりません。例: ある型が <code class="docutils literal"><span class="pre">double</span></code> の配列を実装しているとします。 <a class="reference internal" href="#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> は <code class="docutils literal"><span class="pre">sizeof(double)</span></code> です。 <a class="reference internal" href="#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> が <code class="docutils literal"><span class="pre">sizeof(double)</span></code> (ここではこれを <code class="docutils literal"><span class="pre">double</span></code> のアラインメントが要求するサイズと仮定する) の個数分のサイズになるようにするのはプログラマの責任です。</p>
@@ -356,7 +352,7 @@ ternaryfunc <code class="descname">PyTypeObject.tp_call</code><a class="headerli
 <dt id="c.PyTypeObject.tp_str">
 reprfunc <code class="descname">PyTypeObject.tp_str</code><a class="headerlink" href="#c.PyTypeObject.tp_str" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>オプションのポインタで、組み込みの演算 <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> を実装している関数を指します。(<a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> が型の一つになったため、 <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> は <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> のコンストラクタを呼び出すことに注意してください。このコンストラクタは実際の処理を行う上で <a class="reference internal" href="object.html#c.PyObject_Str" title="PyObject_Str"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Str()</span></code></a> を呼び出し、さらに <a class="reference internal" href="object.html#c.PyObject_Str" title="PyObject_Str"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Str()</span></code></a> がこのハンドラを呼び出すことになります。)</p>
-<p>シグネチャは <a class="reference internal" href="object.html#c.PyObject_Str" title="PyObject_Str"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Str()</span></code></a> と同じです; この関数は文字列オブジェクトか Unicode オブジェクトを返さなければなりません。また、この関数はオブジェクトを &#8220;分かりやすく (friendly)&#8221; 表現した文字列を返さなければなりません。というのは、この文字列はとりわけ <a class="reference internal" href="../library/functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> 関数で使われることになる表記だからです。</p>
+<p>シグネチャは <a class="reference internal" href="object.html#c.PyObject_Str" title="PyObject_Str"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Str()</span></code></a> と同じです; この関数は文字列オブジェクトか Unicode オブジェクトを返さなければなりません。また、この関数はオブジェクトを 「分かりやすく (friendly)」 表現した文字列を返さなければなりません。というのは、この文字列はとりわけ <a class="reference internal" href="../library/functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> 関数で使われることになる表記だからです。</p>
 <p>このフィールドが設定されていない場合、文字列表現を返すためには <a class="reference internal" href="object.html#c.PyObject_Repr" title="PyObject_Repr"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Repr()</span></code></a> が呼び出されます。</p>
 <p>サブタイプはこのフィールドを継承します。</p>
 </dd></dl>
@@ -401,7 +397,7 @@ unsigned long <code class="descname">PyTypeObject.tp_flags</code><a class="heade
 <dl class="data">
 <dt id="Py_TPFLAGS_BASETYPE">
 <code class="descname">Py_TPFLAGS_BASETYPE</code><a class="headerlink" href="#Py_TPFLAGS_BASETYPE" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>型を別の型の基底タイプとして使える場合にセットされるビットです。このビットがクリアならば、この型のサブタイプは生成できません (Java における &#8220;final&#8221; クラスに似たクラスになります)。</p>
+<dd><p>型を別の型の基底タイプとして使える場合にセットされるビットです。このビットがクリアならば、この型のサブタイプは生成できません (Java における 「final」 クラスに似たクラスになります)。</p>
 </dd></dl>
 
 <dl class="data">
@@ -551,10 +547,8 @@ richcmpfunc <code class="descname">PyTypeObject.tp_richcompare</code><a class="h
 <col width="43%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">定数</p>
-</th>
-<th class="head"><p class="first last">比較</p>
-</th>
+<tr class="row-odd"><th class="head">定数</th>
+<th class="head">比較</th>
 </tr>
 </thead>
 <tbody valign="top">
@@ -821,7 +815,7 @@ destructor <code class="descname">PyTypeObject.tp_finalize</code><a class="heade
 </div>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
-<p class="last">&#8220;オブジェクトの安全な終了処理&#8221; (<span class="target" id="index-7"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0442"><strong>PEP 442</strong></a>)</p>
+<p class="last">「オブジェクトの安全な終了処理」 (<span class="target" id="index-7"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0442"><strong>PEP 442</strong></a>)</p>
 </div>
 </dd></dl>
 
@@ -1039,24 +1033,17 @@ getbufferproc <code class="descname">PyBufferProcs.bf_getbuffer</code><a class="
 </div>
 <p><em>flags</em> で指定された方法で <em>view</em> を埋めてほしいという <em>exporter</em> に対する要求を処理します。ステップ(3) を除いて、この関数の実装では以下のステップを行わなければなりません:</p>
 <ol class="arabic simple">
-<li><p class="first">リクエストが合致するか確認します。
-合致しない場合は、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_BufferError</span></code> を送出し、 <code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> に <em>NULL</em> を設定し <code class="docutils literal"><span class="pre">-1</span></code> を返します。</p>
-</li>
-<li><p class="first">要求されたフィールドを埋めます。</p>
-</li>
-<li><p class="first">エクスポートした回数を保持する内部カウンタをインクリメントします。</p>
-</li>
-<li><p class="first"><code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> に <em>exporter</em> を設定し、 <code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> をインクリメントします。</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">0</span></code> を返します。</p>
-</li>
+<li>リクエストが合致するか確認します。
+合致しない場合は、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_BufferError</span></code> を送出し、 <code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> に <em>NULL</em> を設定し <code class="docutils literal"><span class="pre">-1</span></code> を返します。</li>
+<li>要求されたフィールドを埋めます。</li>
+<li>エクスポートした回数を保持する内部カウンタをインクリメントします。</li>
+<li><code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> に <em>exporter</em> を設定し、 <code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> をインクリメントします。</li>
+<li><code class="docutils literal"><span class="pre">0</span></code> を返します。</li>
 </ol>
 <p><em>exporter</em> がバッファプロバイダのチェインかツリーの一部であれば、２つの主要な方式が使用できます:</p>
 <ul class="simple">
-<li><p class="first">再エクスポート: ツリーの各要素がエクスポートされるオブジェクトとして振る舞い、自身への新しい参照を <code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> へセットします。</p>
-</li>
-<li><p class="first">リダイレクト: バッファ要求がツリーのルートオブジェクトにリダイレクトされます。ここでは、 <code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> はルートオブジェクトへの新しい参照になります。</p>
-</li>
+<li>再エクスポート: ツリーの各要素がエクスポートされるオブジェクトとして振る舞い、自身への新しい参照を <code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> へセットします。</li>
+<li>リダイレクト: バッファ要求がツリーのルートオブジェクトにリダイレクトされます。ここでは、 <code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> はルートオブジェクトへの新しい参照になります。</li>
 </ul>
 <p><em>view</em> の個別のフィールドは <a class="reference internal" href="buffer.html#buffer-structure"><span class="std std-ref">バッファ構造体</span></a> の節で説明されており、エクスポートが特定の要求に対しどう対応しなければならないかの規則は、 <a class="reference internal" href="buffer.html#buffer-request-types"><span class="std std-ref">バッファ要求のタイプ</span></a> の節にあります。</p>
 <p><a class="reference internal" href="buffer.html#c.Py_buffer" title="Py_buffer"><code class="xref c c-type docutils literal"><span class="pre">Py_buffer</span></code></a> 構造体の中から参照している全てのメモリはエクスポータに属し、コンシューマがいなくなるまで有効でなくてはなりません。 <a class="reference internal" href="buffer.html#c.Py_buffer.format" title="Py_buffer.format"><code class="xref c c-member docutils literal"><span class="pre">format</span></code></a> 、 <a class="reference internal" href="buffer.html#c.Py_buffer.shape" title="Py_buffer.shape"><code class="xref c c-member docutils literal"><span class="pre">shape</span></code></a> 、 <a class="reference internal" href="buffer.html#c.Py_buffer.strides" title="Py_buffer.strides"><code class="xref c c-member docutils literal"><span class="pre">strides</span></code></a> 、 <a class="reference internal" href="buffer.html#c.Py_buffer.suboffsets" title="Py_buffer.suboffsets"><code class="xref c c-member docutils literal"><span class="pre">suboffsets</span></code></a> 、 <a class="reference internal" href="buffer.html#c.Py_buffer.internal" title="Py_buffer.internal"><code class="xref c c-member docutils literal"><span class="pre">internal</span></code></a> はコンシューマからは読み取り専用です。</p>
@@ -1073,10 +1060,8 @@ releasebufferproc <code class="descname">PyBufferProcs.bf_releasebuffer</code><a
 </div>
 <p>バッファのリソースを開放する要求を処理します。もし開放する必要のあるリソースがない場合、 <a class="reference internal" href="#c.PyBufferProcs.bf_releasebuffer" title="PyBufferProcs.bf_releasebuffer"><code class="xref c c-member docutils literal"><span class="pre">PyBufferProcs.bf_releasebuffer</span></code></a> は <em>NULL</em> にしても構いません。そうでない場合は、この関数の標準的な実装は、以下の任意の処理手順 (optional step) を行います:</p>
 <ol class="arabic simple">
-<li><p class="first">エクスポートした回数を保持する内部カウンタをデクリメントします。</p>
-</li>
-<li><p class="first">カウンタが <code class="docutils literal"><span class="pre">0</span></code> の場合は、<em>view</em> に関連付けられた全てのメモリを解放します。</p>
-</li>
+<li>エクスポートした回数を保持する内部カウンタをデクリメントします。</li>
+<li>カウンタが <code class="docutils literal"><span class="pre">0</span></code> の場合は、<em>view</em> に関連付けられた全てのメモリを解放します。</li>
 </ol>
 <p>エクスポータは、バッファ固有のリソースを監視し続けるために <a class="reference internal" href="buffer.html#c.Py_buffer.internal" title="Py_buffer.internal"><code class="xref c c-member docutils literal"><span class="pre">internal</span></code></a> フィールドを使わなければなりません。このフィールドは、コンシューマが <em>view</em> 引数としてオリジナルのバッファのコピーを渡しているであろう間、変わらないことが保証されています。</p>
 <p>この関数は、<code class="xref c c-data docutils literal"><span class="pre">view-&gt;obj</span></code> をデクリメントしてはいけません、なぜならそれは <a class="reference internal" href="buffer.html#c.PyBuffer_Release" title="PyBuffer_Release"><code class="xref c c-func docutils literal"><span class="pre">PyBuffer_Release()</span></code></a> で自動的に行われるからです(この方式は参照の循環を防ぐのに有用です)。</p>
@@ -1168,7 +1153,7 @@ unaryfunc <code class="descname">PyAsyncMethods.am_anext</code><a class="headerl
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/typeobj.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/typeobj.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -1229,7 +1214,7 @@ unaryfunc <code class="descname">PyAsyncMethods.am_anext</code><a class="headerl
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

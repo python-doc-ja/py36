@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>28.1. distutils — Python モジュールの構築とインストール &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="28. ソフトウェア・パッケージと配布" href="distribution.html" />
     <link rel="next" title="28.2. ensurepip — pip インストーラのブートストラップ" href="ensurepip.html" />
     <link rel="prev" title="28. ソフトウェア・パッケージと配布" href="distribution.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,21 +100,16 @@
           <div class="body" role="main">
             
   <div class="section" id="module-distutils">
-<span id="distutils-building-and-installing-python-modules"></span><h1>28.1. <a class="reference internal" href="#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> &#8212; Python モジュールの構築とインストール<a class="headerlink" href="#module-distutils" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="distutils-building-and-installing-python-modules"></span><h1>28.1. <a class="reference internal" href="#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> — Python モジュールの構築とインストール<a class="headerlink" href="#module-distutils" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <hr class="docutils" />
 <p><a class="reference internal" href="#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> パッケージは、現在インストールされている Python に追加するためのモジュール構築、および実際のインストールを支援します。新規のモジュールは 100%-pure Python でも、C で書かれた拡張モジュールでも、あるいは Python と C 両方のコードが入っているモジュールからなる Python パッケージでもかまいません。</p>
 <p>Python ユーザの大半はこのパッケージを直接使い <em>たくはない</em> でしょうが、代わりに Python Packaging Authority が保守しているクロスバージョンツールを使うでしょう。特に、<a class="reference external" href="https://setuptools.readthedocs.io/en/latest/">setuptools</a> は <a class="reference internal" href="#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> の改良された代替品で、以下を提供しています:</p>
 <ul class="simple">
-<li><p class="first">プロジェクトの依存性の宣言のサポート</p>
-</li>
-<li><p class="first">ソースのリリースの際どのファイルを含めるか指定する追加の機構 (バージョン管理システムとの統合のためのプラグインも含む)</p>
-</li>
-<li><p class="first">プロジェクトの &#8220;エントリーポイント&#8221; を宣言する機能、アプリケーションプラグインシステムとして使うことができます</p>
-</li>
-<li><p class="first">インストール時に事前にビルドすることなく、Windows コマンドライン実行ファイルを自動的に生成する機能</p>
-</li>
-<li><p class="first">サポートしている Python の全バージョンで一貫性のある挙動</p>
-</li>
+<li>プロジェクトの依存性の宣言のサポート</li>
+<li>ソースのリリースの際どのファイルを含めるか指定する追加の機構 (バージョン管理システムとの統合のためのプラグインも含む)</li>
+<li>プロジェクトの 「エントリーポイント」 を宣言する機能、アプリケーションプラグインシステムとして使うことができます</li>
+<li>インストール時に事前にビルドすることなく、Windows コマンドライン実行ファイルを自動的に生成する機能</li>
+<li>サポートしている Python の全バージョンで一貫性のある挙動</li>
 </ul>
 <p>たとえスクリプト自身が <code class="docutils literal"><span class="pre">distutils</span></code> のみをインポートしていても、推奨される <a class="reference external" href="https://pip.pypa.io/">pip</a> インストーラは <code class="docutils literal"><span class="pre">setuptools</span></code> で全 <code class="docutils literal"><span class="pre">setup.py</span></code> スクリプトを実行します。詳細は <a class="reference external" href="https://packaging.python.org">Python Packaging User Guide</a> を参照してください。</p>
 <p>現在のパッケージと配布システムへの理解を深めようとしている著者やユーザのために、レガシーな <a class="reference internal" href="#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> に基づくユーザドキュメントと API のリファレンスは利用可能なままになっています。</p>
@@ -139,13 +130,13 @@
                         title="前の章へ">28. ソフトウェア・パッケージと配布</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="ensurepip.html"
-                        title="次の章へ">28.2. <code class="docutils literal"><span class="pre">ensurepip</span></code> &#8212;  <code class="docutils literal"><span class="pre">pip</span></code> インストーラのブートストラップ</a></p>
+                        title="次の章へ">28.2. <code class="docutils literal"><span class="pre">ensurepip</span></code> —  <code class="docutils literal"><span class="pre">pip</span></code> インストーラのブートストラップ</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/distutils.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/distutils.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -206,7 +197,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

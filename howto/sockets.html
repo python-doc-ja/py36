@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>ソケットプログラミング HOWTO &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="Python HOWTO" href="index.html" />
     <link rel="next" title="ソート HOW TO" href="sorting.html" />
     <link rel="prev" title="正規表現 HOWTO" href="regex.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -113,7 +109,7 @@
 </tbody>
 </table>
 <div class="topic">
-<p class="topic-title first">概要</p>
+<p class="topic-title first">Abstract</p>
 <p>ソケットはそこかしこで使われているが、最大級に誤解されている技術でもある。この文書はソケットの全体像を俯瞰しており、チュートリアルとしてはあまり役に立たない。実際に動くモノを完成させるには、他にもやらなければいけないことがあるからだ。この文書はソケットの微妙なところ (たくさんある) まではカバーしていないが、恥ずかしくない使い方ができるようになる程度の情報は得られるはずだ。</p>
 </div>
 <div class="section" id="sockets">
@@ -219,14 +215,14 @@
 <p>紙面の都合および教育的配慮 (と著者の地位確保) のため、こうした改良は練習問題として残しておく。さあ片付けてしまおう。</p>
 <div class="section" id="binary-data">
 <h3>バイナリデータ<a class="headerlink" href="#binary-data" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>バイナリデータはまったく問題なくソケットに乗せられる。問題は、すべてのマシンで同じ形式を使っているわけではないことにある。たとえば Motorola のチップなら 16 ビット整数の 1 という値をふたつの 16 進バイト列 00 01 で表現するが、Intel や DEC は逆バイトだ - 同じ 1 が 01 00 になるのだ。ソケットライブラリは 16 ビットや 32 ビット整数の変換用コールを持っている - <code class="docutils literal"><span class="pre">ntohl,</span> <span class="pre">htonl,</span> <span class="pre">ntohs,</span> <span class="pre">htons</span></code> である。&#8221;n&#8221; は <em>network</em>、 &#8220;h&#8221; は <em>host</em> を意味する。 &#8220;s&#8221; は <em>short</em> で &#8220;l&#8221; は <em>long</em> だ。これらのコールは、「ネットワーク並び = ホスト並び」なら何もしないが、マシンが逆バイトならそれに合わせてぐるっと交換してくれる。</p>
-<p>この 32 ビット時代、バイナリデータは ASCII 表現のほうが小さくなることが多い。というのも、long なのに値が 0 ばっかりでたまに 1 だとかいうことは驚くほど多いからだ。文字列なら &#8220;0&#8221; は 2 バイトなのに、バイナリは 4 バイトも喰う。もちろんこれは固定長メッセージには合わないが。さあ、どうする、どうする。</p>
+<p>バイナリデータはまったく問題なくソケットに乗せられる。問題は、すべてのマシンで同じ形式を使っているわけではないことにある。たとえば Motorola のチップなら 16 ビット整数の 1 という値をふたつの 16 進バイト列 00 01 で表現するが、Intel や DEC は逆バイトだ - 同じ 1 が 01 00 になるのだ。ソケットライブラリは 16 ビットや 32 ビット整数の変換用コールを持っている - <code class="docutils literal"><span class="pre">ntohl,</span> <span class="pre">htonl,</span> <span class="pre">ntohs,</span> <span class="pre">htons</span></code> である。」n」 は <em>network</em>、 「h」 は <em>host</em> を意味する。 「s」 は <em>short</em> で 「l」 は <em>long</em> だ。これらのコールは、「ネットワーク並び = ホスト並び」なら何もしないが、マシンが逆バイトならそれに合わせてぐるっと交換してくれる。</p>
+<p>この 32 ビット時代、バイナリデータは ASCII 表現のほうが小さくなることが多い。というのも、long なのに値が 0 ばっかりでたまに 1 だとかいうことは驚くほど多いからだ。文字列なら 「0」 は 2 バイトなのに、バイナリは 4 バイトも喰う。もちろんこれは固定長メッセージには合わないが。さあ、どうする、どうする。</p>
 </div>
 </div>
 <div class="section" id="disconnecting">
 <h2>切断<a class="headerlink" href="#disconnecting" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>厳密には、ソケットを <code class="docutils literal"><span class="pre">close</span></code> する前には <code class="docutils literal"><span class="pre">shutdown</span></code> することになっている。 <code class="docutils literal"><span class="pre">shutdown</span></code> は相手ソケットに対する報告であり、渡す引数によって「これ以上こっちからは送らないけど、まだ聞いてるぜ」という意味になったり、「もう聞かない。せいせいした!」だったりする。しかしほとんどのソケットライブラリは、このエチケットを怠るプログラマに慣れてしまって、通常 <code class="docutils literal"><span class="pre">close</span></code> だけで <code class="docutils literal"><span class="pre">shutdown();</span> <span class="pre">close()</span></code> と同じことになる。だから大抵はわざわざ <code class="docutils literal"><span class="pre">shutdown</span></code> しなくてもいい。</p>
-<p><code class="docutils literal"><span class="pre">shutdown</span></code> の効果的な使い方のひとつは、HTTP 風のやりとりだ。クライアントは要求を出してすぐに <code class="docutils literal"><span class="pre">shutdown(1)</span></code> する。これでサーバに、「クライアントは送信完了ですが、まだ受信可能です」と伝わる。サーバは 0 バイト受信で &#8220;EOF&#8221; を検出することができる。要求を残さず受け取ったことにして良いのだ。対してサーバは返答を送る。その <code class="docutils literal"><span class="pre">send</span></code> が成功したなら、クライアントは実際にまだ受信していたことになる。</p>
+<p><code class="docutils literal"><span class="pre">shutdown</span></code> の効果的な使い方のひとつは、HTTP 風のやりとりだ。クライアントは要求を出してすぐに <code class="docutils literal"><span class="pre">shutdown(1)</span></code> する。これでサーバに、「クライアントは送信完了ですが、まだ受信可能です」と伝わる。サーバは 0 バイト受信で 「EOF」 を検出することができる。要求を残さず受け取ったことにして良いのだ。対してサーバは返答を送る。その <code class="docutils literal"><span class="pre">send</span></code> が成功したなら、クライアントは実際にまだ受信していたことになる。</p>
 <p>Python はこの自動 shutdown をもう一歩進めて、ソケットが GC されるときに必要なら自動で <code class="docutils literal"><span class="pre">close</span></code> してくれると言っている。しかしこれに頼るクセをつけてはいけない。もしソケットが <code class="docutils literal"><span class="pre">close</span></code> せずに姿を消せば、相手ソケットはこちらが遅いだけだと思ってハングしてしまうかもしれない。 <em>お願いだから</em> 終わったらちゃんと <code class="docutils literal"><span class="pre">close</span></code> してくれ。</p>
 <div class="section" id="when-sockets-die">
 <h3>ソケットが死ぬと<a class="headerlink" href="#when-sockets-die" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -298,7 +294,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/sockets.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/sockets.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -358,7 +354,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

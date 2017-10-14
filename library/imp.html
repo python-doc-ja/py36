@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>36.2. imp — import 内部へのアクセス &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="36. 取って代わられたモジュール群" href="superseded.html" />
     <link rel="next" title="37. ドキュメント化されていないモジュール" href="undoc.html" />
     <link rel="prev" title="36.1. optparse — コマンドラインオプション解析器" href="optparse.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,10 +100,10 @@
           <div class="body" role="main">
             
   <div class="section" id="module-imp">
-<span id="imp-access-the-import-internals"></span><h1>36.2. <a class="reference internal" href="#module-imp" title="imp: Access the implementation of the import statement. (撤廃)"><code class="xref py py-mod docutils literal"><span class="pre">imp</span></code></a> &#8212; <a class="reference internal" href="../reference/import.html#importsystem"><span class="std std-ref">import</span></a> 内部へのアクセス<a class="headerlink" href="#module-imp" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="imp-access-the-import-internals"></span><h1>36.2. <a class="reference internal" href="#module-imp" title="imp: Access the implementation of the import statement. (非推奨)"><code class="xref py py-mod docutils literal"><span class="pre">imp</span></code></a> — <a class="reference internal" href="../reference/import.html#importsystem"><span class="std std-ref">import</span></a> 内部へのアクセス<a class="headerlink" href="#module-imp" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/imp.py">Lib/imp.py</a></p>
 <div class="deprecated">
-<p><span class="versionmodified">バージョン 3.4 で撤廃: </span><a class="reference internal" href="#module-imp" title="imp: Access the implementation of the import statement. (撤廃)"><code class="xref py py-mod docutils literal"><span class="pre">imp</span></code></a> パッケージは <a class="reference internal" href="importlib.html#module-importlib" title="importlib: The implementation of the import machinery."><code class="xref py py-mod docutils literal"><span class="pre">importlib</span></code></a> を後継として廃止予定です。</p>
+<p><span class="versionmodified">バージョン 3.4 で撤廃: </span><a class="reference internal" href="#module-imp" title="imp: Access the implementation of the import statement. (非推奨)"><code class="xref py py-mod docutils literal"><span class="pre">imp</span></code></a> パッケージは <a class="reference internal" href="importlib.html#module-importlib" title="importlib: The implementation of the import machinery."><code class="xref py py-mod docutils literal"><span class="pre">importlib</span></code></a> を後継として廃止予定です。</p>
 </div>
 <hr class="docutils" id="index-0" />
 <p>このモジュールは <a class="reference internal" href="../reference/simple_stmts.html#import"><code class="xref std std-keyword docutils literal"><span class="pre">import</span></code></a> 文を実装するために使われているメカニズムへのインターフェイスを提供します。次の定数と関数が定義されています:</p>
@@ -149,7 +145,7 @@
 <code class="descclassname">imp.</code><code class="descname">load_module</code><span class="sig-paren">(</span><em>name</em>, <em>file</em>, <em>pathname</em>, <em>description</em><span class="sig-paren">)</span><a class="headerlink" href="#imp.load_module" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><a class="reference internal" href="#imp.find_module" title="imp.find_module"><code class="xref py py-func docutils literal"><span class="pre">find_module()</span></code></a> を使って(あるいは、互換性のある結果を作り出す検索を行って)以前見つけたモジュールをロードします。この関数はモジュールをインポートするという以上のことを行います: モジュールが既にインポートされているならば、リロードします! <em>name</em> 引数は(これがパッケージのサブモジュールならばパッケージ名を含む)完全なモジュール名を示します。 <em>file</em> 引数はオープンしたファイルで、 <em>pathname</em> は対応するファイル名です。モジュールがパッケージであるかファイルからロードされようとしていないとき、これらはそれぞれ <code class="docutils literal"><span class="pre">None</span></code> と <code class="docutils literal"><span class="pre">''</span></code> であっても構いません。 <a class="reference internal" href="#imp.get_suffixes" title="imp.get_suffixes"><code class="xref py py-func docutils literal"><span class="pre">get_suffixes()</span></code></a> が返すように <em>description</em> 引数はタプルで、どの種類のモジュールがロードされなければならないかを説明するものです。</p>
 <p>ロードが成功したならば、戻り値はモジュールオブジェクトです。そうでなければ、例外(たいていは <a class="reference internal" href="exceptions.html#ImportError" title="ImportError"><code class="xref py py-exc docutils literal"><span class="pre">ImportError</span></code></a>)が発生します。</p>
-<p><strong>重要:</strong> <em>file</em> 引数が <code class="docutils literal"><span class="pre">None</span></code> でなければ、例外が発生した場合でも呼び出し側にはそれを閉じる責任があります。これを行うには、 <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a> ... <a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal"><span class="pre">finally</span></code></a> 文を使うことが最も良いです。</p>
+<p><strong>重要:</strong> <em>file</em> 引数が <code class="docutils literal"><span class="pre">None</span></code> でなければ、例外が発生した場合でも呼び出し側にはそれを閉じる責任があります。これを行うには、 <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a> … <a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal"><span class="pre">finally</span></code></a> 文を使うことが最も良いです。</p>
 <div class="deprecated">
 <p><span class="versionmodified">バージョン 3.3 で撤廃: </span>If previously used in conjunction with <a class="reference internal" href="#imp.find_module" title="imp.find_module"><code class="xref py py-func docutils literal"><span class="pre">imp.find_module()</span></code></a> then
 consider using <a class="reference internal" href="importlib.html#importlib.import_module" title="importlib.import_module"><code class="xref py py-func docutils literal"><span class="pre">importlib.import_module()</span></code></a>, otherwise use the loader
@@ -178,17 +174,13 @@ approaches.</p>
 <dd><p>すでにインポートされた <em>module</em> を再解釈し、再初期化します。引数はモジュールオブジェクトでなければならないので、予めインポートに成功していなければなりません。この関数はモジュールのソースコードファイルを外部エディタで編集して、Python インタプリタから離れることなく新しいバージョンを試したい際に有効です。戻り値は (<em>module</em> 引数と同じ) モジュールオブジェクトです。</p>
 <p><code class="docutils literal"><span class="pre">reload(module)</span></code> を実行すると、以下の処理が行われます:</p>
 <ul class="simple">
-<li><p class="first">Python モジュールのコードは再コンパイルされ、モジュールレベルのコードは再度実行されます。モジュールの辞書中にある、何らかの名前に結び付けられたオブジェクトを新たに定義します。拡張モジュール中の <code class="docutils literal"><span class="pre">init</span></code> 関数が二度呼び出されることはありません。</p>
-</li>
-<li><p class="first">Python における他のオブジェクトと同様、以前のオブジェクトのメモリ領域は、参照カウントがゼロにならないかぎり再利用されません。</p>
-</li>
-<li><p class="first">モジュール名前空間内の名前は新しいオブジェクト (または更新されたオブジェクト) を指すよう更新されます。</p>
-</li>
-<li><p class="first">以前のオブジェクトが (外部の他のモジュールなどからの) 参照を受けている場合、それらを新たなオブジェクトに再束縛し直すことはないので、必要なら自分で名前空間を更新しなければなりません。</p>
-</li>
+<li>Python モジュールのコードは再コンパイルされ、モジュールレベルのコードは再度実行されます。モジュールの辞書中にある、何らかの名前に結び付けられたオブジェクトを新たに定義します。拡張モジュール中の <code class="docutils literal"><span class="pre">init</span></code> 関数が二度呼び出されることはありません。</li>
+<li>Python における他のオブジェクトと同様、以前のオブジェクトのメモリ領域は、参照カウントがゼロにならないかぎり再利用されません。</li>
+<li>モジュール名前空間内の名前は新しいオブジェクト (または更新されたオブジェクト) を指すよう更新されます。</li>
+<li>以前のオブジェクトが (外部の他のモジュールなどからの) 参照を受けている場合、それらを新たなオブジェクトに再束縛し直すことはないので、必要なら自分で名前空間を更新しなければなりません。</li>
 </ul>
 <p>いくつか補足説明があります:</p>
-<p>モジュールが再ロードされた際、その辞書 (モジュールのグローバル変数を含みます) はそのまま残ります。名前の再定義を行うと、以前の定義を上書きするので、一般的には問題はありません。新たなバージョンのモジュールが古いバージョンで定義された名前を定義していない場合、古い定義がそのまま残ります。辞書がグローバルテーブルやオブジェクトのキャッシュを維持していれば、この機能をモジュールを有効性を引き出すために使うことができます &#8212; つまり、 <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a> 文を使えば、必要に応じてテーブルがあるかどうかをテストし、その初期化を飛ばすことができます:</p>
+<p>モジュールが再ロードされた際、その辞書 (モジュールのグローバル変数を含みます) はそのまま残ります。名前の再定義を行うと、以前の定義を上書きするので、一般的には問題はありません。新たなバージョンのモジュールが古いバージョンで定義された名前を定義していない場合、古い定義がそのまま残ります。辞書がグローバルテーブルやオブジェクトのキャッシュを維持していれば、この機能をモジュールを有効性を引き出すために使うことができます — つまり、 <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a> 文を使えば、必要に応じてテーブルがあるかどうかをテストし、その初期化を飛ばすことができます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
     <span class="n">cache</span>
 <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
@@ -196,8 +188,8 @@ approaches.</p>
 </pre></div>
 </div>
 <p>ビルトインのモジュールや動的にロードされたモジュールをリロードすることは、 <a class="reference internal" href="sys.html#module-sys" title="sys: Access system-specific parameters and functions."><code class="xref py py-mod docutils literal"><span class="pre">sys</span></code></a>, <a class="reference internal" href="__main__.html#module-__main__" title="__main__: The environment where the top-level script is run."><code class="xref py py-mod docutils literal"><span class="pre">__main__</span></code></a>, <a class="reference internal" href="builtins.html#module-builtins" title="builtins: The module that provides the built-in namespace."><code class="xref py py-mod docutils literal"><span class="pre">builtins</span></code></a> を除いて一般にはそれほど有用ではありませんが、合法です。しかし、多くの場合、拡張モジュールは二度以上初期化されるようには作られておらず、リロードされた時に無作為な方法で失敗するかもしれません。</p>
-<p>一方のモジュールが <a class="reference internal" href="../reference/simple_stmts.html#from"><code class="xref std std-keyword docutils literal"><span class="pre">from</span></code></a> ... <a class="reference internal" href="../reference/simple_stmts.html#import"><code class="xref std std-keyword docutils literal"><span class="pre">import</span></code></a> ... を使って、オブジェクトを他方のモジュールからインポートしているなら、他方のモジュールを <a class="reference internal" href="#imp.reload" title="imp.reload"><code class="xref py py-func docutils literal"><span class="pre">reload()</span></code></a> で呼び出しても、そのモジュールからインポートされたオブジェクトを再定義することはできません &#8212; この問題を回避する一つの方法は、 <a class="reference internal" href="../reference/simple_stmts.html#from"><code class="xref std std-keyword docutils literal"><span class="pre">from</span></code></a> 文を再度実行することで、もう一つの方法は <a class="reference internal" href="../reference/simple_stmts.html#from"><code class="xref std std-keyword docutils literal"><span class="pre">from</span></code></a> 文の代わりに <a class="reference internal" href="../reference/simple_stmts.html#import"><code class="xref std std-keyword docutils literal"><span class="pre">import</span></code></a> と限定的な名前 (<em>module</em>.*name*) を使うことです。</p>
-<p>あるモジュールがクラスのインスタンスを生成している場合、そのクラスを定義しているモジュールの再ロードはそれらインスタンスのメソッド定義に影響しません &#8212; それらは古いクラス定義を使い続けます。これは派生クラスの場合でも同じです。</p>
+<p>一方のモジュールが <a class="reference internal" href="../reference/simple_stmts.html#from"><code class="xref std std-keyword docutils literal"><span class="pre">from</span></code></a> … <a class="reference internal" href="../reference/simple_stmts.html#import"><code class="xref std std-keyword docutils literal"><span class="pre">import</span></code></a> … を使って、オブジェクトを他方のモジュールからインポートしているなら、他方のモジュールを <a class="reference internal" href="#imp.reload" title="imp.reload"><code class="xref py py-func docutils literal"><span class="pre">reload()</span></code></a> で呼び出しても、そのモジュールからインポートされたオブジェクトを再定義することはできません — この問題を回避する一つの方法は、 <a class="reference internal" href="../reference/simple_stmts.html#from"><code class="xref std std-keyword docutils literal"><span class="pre">from</span></code></a> 文を再度実行することで、もう一つの方法は <a class="reference internal" href="../reference/simple_stmts.html#from"><code class="xref std std-keyword docutils literal"><span class="pre">from</span></code></a> 文の代わりに <a class="reference internal" href="../reference/simple_stmts.html#import"><code class="xref std std-keyword docutils literal"><span class="pre">import</span></code></a> と限定的な名前 (<em>module</em>.*name*) を使うことです。</p>
+<p>あるモジュールがクラスのインスタンスを生成している場合、そのクラスを定義しているモジュールの再ロードはそれらインスタンスのメソッド定義に影響しません — それらは古いクラス定義を使い続けます。これは派生クラスの場合でも同じです。</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.3 で変更: </span>リロードされるモジュール上で、<code class="docutils literal"><span class="pre">__name__</span></code> だけでなく <code class="docutils literal"><span class="pre">__name__</span></code> と <code class="docutils literal"><span class="pre">__loader__</span></code> の両方が定義されていることに依存します。</p>
 </div>
@@ -398,7 +390,7 @@ approaches.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">36.2. <code class="docutils literal"><span class="pre">imp</span></code> &#8212; <code class="docutils literal"><span class="pre">import</span></code> 内部へのアクセス</a><ul>
+<li><a class="reference internal" href="#">36.2. <code class="docutils literal"><span class="pre">imp</span></code> — <code class="docutils literal"><span class="pre">import</span></code> 内部へのアクセス</a><ul>
 <li><a class="reference internal" href="#examples">36.2.1. 使用例</a></li>
 </ul>
 </li>
@@ -406,7 +398,7 @@ approaches.</p>
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="optparse.html"
-                        title="前の章へ">36.1. <code class="docutils literal"><span class="pre">optparse</span></code> &#8212; コマンドラインオプション解析器</a></p>
+                        title="前の章へ">36.1. <code class="docutils literal"><span class="pre">optparse</span></code> — コマンドラインオプション解析器</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="undoc.html"
                         title="次の章へ">37. ドキュメント化されていないモジュール</a></p>
@@ -415,7 +407,7 @@ approaches.</p>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/imp.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/imp.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -476,7 +468,7 @@ approaches.</p>
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

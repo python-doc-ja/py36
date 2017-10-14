@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>29.6. contextlib — with 文コンテキスト用ユーティリティ &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="29. Python ランタイムサービス" href="python.html" />
     <link rel="next" title="29.7. abc — 抽象基底クラス" href="abc.html" />
     <link rel="prev" title="29.5. warnings — 警告の制御" href="warnings.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,7 +100,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-contextlib">
-<span id="contextlib-utilities-for-with-statement-contexts"></span><h1>29.6. <a class="reference internal" href="#module-contextlib" title="contextlib: Utilities for with-statement contexts."><code class="xref py py-mod docutils literal"><span class="pre">contextlib</span></code></a> &#8212; <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文コンテキスト用ユーティリティ<a class="headerlink" href="#module-contextlib" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="contextlib-utilities-for-with-statement-contexts"></span><h1>29.6. <a class="reference internal" href="#module-contextlib" title="contextlib: Utilities for with-statement contexts."><code class="xref py py-mod docutils literal"><span class="pre">contextlib</span></code></a> — <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文コンテキスト用ユーティリティ<a class="headerlink" href="#module-contextlib" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/contextlib.py">Lib/contextlib.py</a></p>
 <hr class="docutils" />
 <p>このモジュールは <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文に関わる一般的なタスクのためのユーティリティを提供します。詳しい情報は、 <a class="reference internal" href="stdtypes.html#typecontextmanager"><span class="std std-ref">コンテキストマネージャ型</span></a> と <a class="reference internal" href="../reference/datamodel.html#context-managers"><span class="std std-ref">with文とコンテキストマネージャ</span></a> を参照してください。</p>
@@ -146,7 +142,7 @@ returns <code class="docutils literal"><span class="pre">None</span></code>. See
 </pre></div>
 </div>
 <p>デコレート対象の関数は呼び出されたときに <a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">ジェネレータ</span></a>-イテレータを返す必要があります。このイテレータは必ず値を1つ yield しなければなりません。 <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文の <a class="reference internal" href="../reference/compound_stmts.html#as"><code class="xref std std-keyword docutils literal"><span class="pre">as</span></code></a> 節が存在するなら、その値は as 節のターゲットへ束縛されることになります。</p>
-<p>ジェネレータが yield を実行した箇所で <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文のネストされたブロックが実行されます。ブロックから抜けた後でジェネレータは再開されます。ブロック内で処理されない例外が発生した場合は、ジェネレータ内部の yield を実行した箇所で例外が再送出されます。なので、(もしあれば) エラーを捕捉したり、クリーンアップ処理を確実に実行したりするために、<a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a>...<a class="reference internal" href="../reference/compound_stmts.html#except"><code class="xref std std-keyword docutils literal"><span class="pre">except</span></code></a>...<a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal"><span class="pre">finally</span></code></a> 構文を使用できます。例外を捕捉する目的が、(完全に例外を抑制してしまうのではなく) 単に例外のログをとるため、もしくはあるアクションを実行するためなら、ジェネレータはその例外を再送出しなければなりません。例外を再送出しない場合、ジェネレータのコンテキストマネージャは <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文に対して例外が処理されたことを示し、<a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文の直後の文から実行を再開します。</p>
+<p>ジェネレータが yield を実行した箇所で <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文のネストされたブロックが実行されます。ブロックから抜けた後でジェネレータは再開されます。ブロック内で処理されない例外が発生した場合は、ジェネレータ内部の yield を実行した箇所で例外が再送出されます。なので、(もしあれば) エラーを捕捉したり、クリーンアップ処理を確実に実行したりするために、<a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a>…<a class="reference internal" href="../reference/compound_stmts.html#except"><code class="xref std std-keyword docutils literal"><span class="pre">except</span></code></a>…<a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal"><span class="pre">finally</span></code></a> 構文を使用できます。例外を捕捉する目的が、(完全に例外を抑制してしまうのではなく) 単に例外のログをとるため、もしくはあるアクションを実行するためなら、ジェネレータはその例外を再送出しなければなりません。例外を再送出しない場合、ジェネレータのコンテキストマネージャは <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文に対して例外が処理されたことを示し、<a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文の直後の文から実行を再開します。</p>
 <p><a class="reference internal" href="#contextlib.contextmanager" title="contextlib.contextmanager"><code class="xref py py-func docutils literal"><span class="pre">contextmanager()</span></code></a> は <a class="reference internal" href="#contextlib.ContextDecorator" title="contextlib.ContextDecorator"><code class="xref py py-class docutils literal"><span class="pre">ContextDecorator</span></code></a> を使っているので、 <a class="reference internal" href="#contextlib.contextmanager" title="contextlib.contextmanager"><code class="xref py py-func docutils literal"><span class="pre">contextmanager()</span></code></a> で作ったコンテキストマネージャは <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文だけでなくデコレータとしても利用できます。デコレーターとして利用された場合、新しい generator インスタンスが関数呼び出しのたびに暗黙に生成されます (このことによって、 <a class="reference internal" href="#contextlib.contextmanager" title="contextlib.contextmanager"><code class="xref py py-func docutils literal"><span class="pre">contextmanager()</span></code></a> によって作られたなにがしか「単発」コンテキストマネージャを、コンテキストマネージャがデコレータとして使われるためには多重に呼び出されることをサポートする必要がある、という要件に合致させることが出来ます。)</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.2 で変更: </span><a class="reference internal" href="#contextlib.ContextDecorator" title="contextlib.ContextDecorator"><code class="xref py py-class docutils literal"><span class="pre">ContextDecorator</span></code></a> の使用。</p>
@@ -377,7 +373,7 @@ However, it is still a useful approach for many utility scripts.</p>
 <dt id="contextlib.ExitStack.pop_all">
 <code class="descname">pop_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#contextlib.ExitStack.pop_all" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>コールバックスタックを新しい <a class="reference internal" href="#contextlib.ExitStack" title="contextlib.ExitStack"><code class="xref py py-class docutils literal"><span class="pre">ExitStack</span></code></a> インスタンスに移して、それを返します。このメソッドは callback を実行しません。代わりに、新しい stack が (明示的に、あるいは <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文の終わりに暗黙的に) close されるときに実行されます。</p>
-<p>例えば、複数のファイルを &#8220;all or nothing&#8221; に開く処理を次のように書けます:</p>
+<p>例えば、複数のファイルを 「all or nothing」 に開く処理を次のように書けます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">ExitStack</span><span class="p">()</span> <span class="k">as</span> <span class="n">stack</span><span class="p">:</span>
     <span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="n">stack</span><span class="o">.</span><span class="n">enter_context</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">))</span> <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">]</span>
     <span class="c1"># Hold onto the close method, but don&#39;t call it yet.</span>
@@ -580,9 +576,8 @@ be released must be accessed as closure variables.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
-<dt><span class="target" id="index-2"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0343"><strong>PEP 343</strong></a> - &#8220;with&#8221; ステートメント</dt>
-<dd><p class="first last">Python の <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文の仕様、背景、および例が記載されています。</p>
-</dd>
+<dt><span class="target" id="index-2"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0343"><strong>PEP 343</strong></a> - 「with」 ステートメント</dt>
+<dd>Python の <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文の仕様、背景、および例が記載されています。</dd>
 </dl>
 </div>
 </div>
@@ -591,7 +586,7 @@ be released must be accessed as closure variables.</p>
 <span id="single-use-reusable-and-reentrant-cms"></span><h2>29.6.3. Single use, reusable and reentrant context managers<a class="headerlink" href="#single-use-reusable-and-reentrant-context-managers" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Most context managers are written in a way that means they can only be
 used effectively in a <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> statement once. These single use
-context managers must be created afresh each time they&#8217;re used -
+context managers must be created afresh each time they’re used -
 attempting to use them a second time will trigger an exception or
 otherwise not work correctly.</p>
 <p>This common limitation means that it is generally advisable to create
@@ -626,12 +621,12 @@ to yield if an attempt is made to use them a second time:</p>
 </div>
 <div class="section" id="reentrant-context-managers">
 <span id="reentrant-cms"></span><h3>29.6.3.1. Reentrant context managers<a class="headerlink" href="#reentrant-context-managers" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>More sophisticated context managers may be &#8220;reentrant&#8221;. These context
+<p>More sophisticated context managers may be 「reentrant」. These context
 managers can not only be used in multiple <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> statements,
 but may also be used <em>inside</em> a <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> statement that is already
 using the same context manager.</p>
 <p><a class="reference internal" href="threading.html#threading.RLock" title="threading.RLock"><code class="xref py py-class docutils literal"><span class="pre">threading.RLock</span></code></a> is an example of a reentrant context manager, as are
-<a class="reference internal" href="#contextlib.suppress" title="contextlib.suppress"><code class="xref py py-func docutils literal"><span class="pre">suppress()</span></code></a> and <a class="reference internal" href="#contextlib.redirect_stdout" title="contextlib.redirect_stdout"><code class="xref py py-func docutils literal"><span class="pre">redirect_stdout()</span></code></a>. Here&#8217;s a very simple example of
+<a class="reference internal" href="#contextlib.suppress" title="contextlib.suppress"><code class="xref py py-func docutils literal"><span class="pre">suppress()</span></code></a> and <a class="reference internal" href="#contextlib.redirect_stdout" title="contextlib.redirect_stdout"><code class="xref py py-func docutils literal"><span class="pre">redirect_stdout()</span></code></a>. Here’s a very simple example of
 reentrant use:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">redirect_stdout</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">StringIO</span>
@@ -659,9 +654,9 @@ to a different stream.</p>
 </div>
 <div class="section" id="reusable-context-managers">
 <span id="reusable-cms"></span><h3>29.6.3.2. Reusable context managers<a class="headerlink" href="#reusable-context-managers" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>Distinct from both single use and reentrant context managers are &#8220;reusable&#8221;
-context managers (or, to be completely explicit, &#8220;reusable, but not
-reentrant&#8221; context managers, since reentrant context managers are also
+<p>Distinct from both single use and reentrant context managers are 「reusable」
+context managers (or, to be completely explicit, 「reusable, but not
+reentrant」 context managers, since reentrant context managers are also
 reusable). These context managers support being used multiple times, but
 will fail (or otherwise not work correctly) if the specific context manager
 instance has already been used in a containing with statement.</p>
@@ -731,7 +726,7 @@ instance avoids that problem:</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">29.6. <code class="docutils literal"><span class="pre">contextlib</span></code> &#8212; <code class="docutils literal"><span class="pre">with</span></code> 文コンテキスト用ユーティリティ</a><ul>
+<li><a class="reference internal" href="#">29.6. <code class="docutils literal"><span class="pre">contextlib</span></code> — <code class="docutils literal"><span class="pre">with</span></code> 文コンテキスト用ユーティリティ</a><ul>
 <li><a class="reference internal" href="#utilities">29.6.1. ユーティリティ</a></li>
 <li><a class="reference internal" href="#examples-and-recipes">29.6.2. 例とレシピ</a><ul>
 <li><a class="reference internal" href="#supporting-a-variable-number-of-context-managers">29.6.2.1. 可変数個のコンテキストマネージャーをサポートする</a></li>
@@ -753,16 +748,16 @@ instance avoids that problem:</p>
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="warnings.html"
-                        title="前の章へ">29.5. <code class="docutils literal"><span class="pre">warnings</span></code> &#8212; 警告の制御</a></p>
+                        title="前の章へ">29.5. <code class="docutils literal"><span class="pre">warnings</span></code> — 警告の制御</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="abc.html"
-                        title="次の章へ">29.7. <code class="docutils literal"><span class="pre">abc</span></code> &#8212; 抽象基底クラス</a></p>
+                        title="次の章へ">29.7. <code class="docutils literal"><span class="pre">abc</span></code> — 抽象基底クラス</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/contextlib.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/contextlib.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -823,7 +818,7 @@ instance avoids that problem:</p>
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

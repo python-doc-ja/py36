@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Python で Curses プログラミング &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="Python HOWTO" href="index.html" />
     <link rel="next" title="デスクリプタ HowTo ガイド" href="descriptor.html" />
     <link rel="prev" title="Python 3 への拡張モジュール移植" href="cporting.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -115,7 +111,7 @@
 </tbody>
 </table>
 <div class="topic">
-<p class="topic-title first">概要</p>
+<p class="topic-title first">Abstract</p>
 <p>このドキュメントでは <a class="reference internal" href="../library/curses.html#module-curses" title="curses: An interface to the curses library, providing portable terminal handling. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">curses</span></code></a> 拡張モジュールでテキストモードディスプレイを制御する方法について記述します。</p>
 </div>
 <div class="section" id="what-is-curses">
@@ -128,15 +124,15 @@
 <div class="section" id="the-python-curses-module">
 <h3>Python の curses module<a class="headerlink" href="#the-python-curses-module" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Thy Python module is a fairly simple wrapper over the C functions provided by
-curses; if you&#8217;re already familiar with curses programming in C, it&#8217;s really
+curses; if you’re already familiar with curses programming in C, it’s really
 easy to transfer that knowledge to Python.  The biggest difference is that the
 Python interface makes things simpler by merging different C functions such as
 <code class="xref c c-func docutils literal"><span class="pre">addstr()</span></code>, <code class="xref c c-func docutils literal"><span class="pre">mvaddstr()</span></code>, and <code class="xref c c-func docutils literal"><span class="pre">mvwaddstr()</span></code> into a single
-<a class="reference internal" href="../library/curses.html#curses.window.addstr" title="curses.window.addstr"><code class="xref py py-meth docutils literal"><span class="pre">addstr()</span></code></a> method.  You&#8217;ll see this covered in more
+<a class="reference internal" href="../library/curses.html#curses.window.addstr" title="curses.window.addstr"><code class="xref py py-meth docutils literal"><span class="pre">addstr()</span></code></a> method.  You’ll see this covered in more
 detail later.</p>
 <p>This HOWTO is an introduction to writing text-mode programs with curses
-and Python. It doesn&#8217;t attempt to be a complete guide to the curses API; for
-that, see the Python library guide&#8217;s section on ncurses, and the C manual pages
+and Python. It doesn’t attempt to be a complete guide to the curses API; for
+that, see the Python library guide’s section on ncurses, and the C manual pages
 for ncurses.  It will, however, give you the basic ideas.</p>
 </div>
 </div>
@@ -202,10 +198,10 @@ initializations described above, also initializing colors if color
 support is present.  <code class="xref py py-func docutils literal"><span class="pre">wrapper()</span></code> then runs your provided callable.
 Once the callable returns, <code class="xref py py-func docutils literal"><span class="pre">wrapper()</span></code> will restore the original
 state of the terminal.  The callable is called inside a
-<a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a>...<a class="reference internal" href="../reference/compound_stmts.html#except"><code class="xref std std-keyword docutils literal"><span class="pre">except</span></code></a> that catches exceptions, restores
+<a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a>…<a class="reference internal" href="../reference/compound_stmts.html#except"><code class="xref std std-keyword docutils literal"><span class="pre">except</span></code></a> that catches exceptions, restores
 the state of the terminal, and then re-raises the exception.  Therefore
-your terminal won&#8217;t be left in a funny state on exception and you&#8217;ll be
-able to read the exception&#8217;s message and traceback.</p>
+your terminal won’t be left in a funny state on exception and you’ll be
+able to read the exception’s message and traceback.</p>
 </div>
 <div class="section" id="windows-and-pads">
 <h2>ウィンドウとパッド<a class="headerlink" href="#windows-and-pads" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -228,13 +224,13 @@ Coordinates are always passed in the order <em>y,x</em>, and the top-left
 corner of a window is coordinate (0,0).  This breaks the normal
 convention for handling coordinates where the <em>x</em> coordinate comes
 first.  This is an unfortunate difference from most other computer
-applications, but it&#8217;s been part of curses since it was first written,
-and it&#8217;s too late to change things now.</p>
+applications, but it’s been part of curses since it was first written,
+and it’s too late to change things now.</p>
 <p>Your application can determine the size of the screen by using the
 <code class="xref py py-data docutils literal"><span class="pre">curses.LINES</span></code> and <code class="xref py py-data docutils literal"><span class="pre">curses.COLS</span></code> variables to obtain the <em>y</em> and
 <em>x</em> sizes.  Legal coordinates will then extend from <code class="docutils literal"><span class="pre">(0,0)</span></code> to
 <code class="docutils literal"><span class="pre">(curses.LINES</span> <span class="pre">-</span> <span class="pre">1,</span> <span class="pre">curses.COLS</span> <span class="pre">-</span> <span class="pre">1)</span></code>.</p>
-<p>When you call a method to display or erase text, the effect doesn&#8217;t
+<p>When you call a method to display or erase text, the effect doesn’t
 immediately show up on the display.  Instead you must call the
 <a class="reference internal" href="../library/curses.html#curses.window.refresh" title="curses.window.refresh"><code class="xref py py-meth docutils literal"><span class="pre">refresh()</span></code></a> method of window objects to update the
 screen.</p>
@@ -244,9 +240,9 @@ time required to redraw the screen was very important.  Instead curses
 accumulates changes to the screen and displays them in the most
 efficient manner when you call <code class="xref py py-meth docutils literal"><span class="pre">refresh()</span></code>.  For example, if your
 program displays some text in a window and then clears the window,
-there&#8217;s no need to send the original text because they&#8217;re never
+there’s no need to send the original text because they’re never
 visible.</p>
-<p>In practice, explicitly telling curses to redraw a window doesn&#8217;t
+<p>In practice, explicitly telling curses to redraw a window doesn’t
 really complicate programming with curses much. Most programs go into a flurry
 of activity, and then pause waiting for a keypress or some other action on the
 part of the user.  All you have to do is to be sure that the screen has been
@@ -255,7 +251,7 @@ redrawn before pausing to wait for user input, by first calling
 window.</p>
 <p>A pad is a special case of a window; it can be larger than the actual display
 screen, and only a portion of the pad displayed at a time. Creating a pad
-requires the pad&#8217;s height and width, while refreshing a pad requires giving the
+requires the pad’s height and width, while refreshing a pad requires giving the
 coordinates of the on-screen area where a subsection of the pad will be
 displayed.</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">pad</span> <span class="o">=</span> <span class="n">curses</span><span class="o">.</span><span class="n">newpad</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
@@ -281,10 +277,8 @@ that difference, pads are exactly like ordinary windows and support the same
 methods.</p>
 <p>もし、スクリーンに複数のウィンドウやパッドを持っている場合、スクリーンをより効率よく更新し、スクリーンの各部が更新されるたびに起こるいらいらするちらつきを抑える方法があります。 <code class="xref py py-meth docutils literal"><span class="pre">refresh()</span></code> は実際には二つの事を行っています。</p>
 <ol class="arabic simple">
-<li><p class="first">それぞれのウィンドウの <a class="reference internal" href="../library/curses.html#curses.window.noutrefresh" title="curses.window.noutrefresh"><code class="xref py py-meth docutils literal"><span class="pre">noutrefresh()</span></code></a> メソッドを呼び出して、配下にある、スクリーンの望ましい状態を表すデータ構造を更新します。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/curses.html#curses.doupdate" title="curses.doupdate"><code class="xref py py-func docutils literal"><span class="pre">doupdate()</span></code></a> 関数を呼び出して、データ構造に記録された望ましい状態に合致するように、物理スクリーンを更新します。</p>
-</li>
+<li>それぞれのウィンドウの <a class="reference internal" href="../library/curses.html#curses.window.noutrefresh" title="curses.window.noutrefresh"><code class="xref py py-meth docutils literal"><span class="pre">noutrefresh()</span></code></a> メソッドを呼び出して、配下にある、スクリーンの望ましい状態を表すデータ構造を更新します。</li>
+<li><a class="reference internal" href="../library/curses.html#curses.doupdate" title="curses.doupdate"><code class="xref py py-func docutils literal"><span class="pre">doupdate()</span></code></a> 関数を呼び出して、データ構造に記録された望ましい状態に合致するように、物理スクリーンを更新します。</li>
 </ol>
 <p>かわりに、<code class="xref py py-meth docutils literal"><span class="pre">noutrefresh()</span></code> を呼び出して、いくつかのウィンドウのデータ構造を更新し、その後に <code class="xref py py-func docutils literal"><span class="pre">doupdate()</span></code> を呼び出して、スクリーンを更新できます。</p>
 </div>
@@ -298,32 +292,22 @@ methods.</p>
 <col width="59%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">形式</p>
-</th>
-<th class="head"><p class="first last">説明</p>
-</th>
+<tr class="row-odd"><th class="head">形式</th>
+<th class="head">説明</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><p class="first last"><em>str</em> または <em>ch</em></p>
-</td>
-<td><p class="first last">文字列 <em>str</em> または文字 <em>ch</em> を現在位置に表示します</p>
-</td>
+<tr class="row-even"><td><em>str</em> または <em>ch</em></td>
+<td>文字列 <em>str</em> または文字 <em>ch</em> を現在位置に表示します</td>
 </tr>
-<tr class="row-odd"><td><p class="first last"><em>str</em> または <em>ch</em>, <em>attr</em></p>
-</td>
-<td><p class="first last">文字列 <em>str</em> または文字 <em>ch</em> を属性 <em>attr</em> を利用して現在位置に表示します</p>
-</td>
+<tr class="row-odd"><td><em>str</em> または <em>ch</em>, <em>attr</em></td>
+<td>文字列 <em>str</em> または文字 <em>ch</em> を属性 <em>attr</em> を利用して現在位置に表示します</td>
 </tr>
-<tr class="row-even"><td><p class="first last"><em>y</em>, <em>x</em>, <em>str</em> または <em>ch</em></p>
-</td>
-<td><p class="first last">ウィンドウ内の位置 <em>y,x</em> に移動し <em>str</em> または <em>ch</em> を表示します</p>
-</td>
+<tr class="row-even"><td><em>y</em>, <em>x</em>, <em>str</em> または <em>ch</em></td>
+<td>ウィンドウ内の位置 <em>y,x</em> に移動し <em>str</em> または <em>ch</em> を表示します</td>
 </tr>
-<tr class="row-odd"><td><p class="first last"><em>y</em>, <em>x</em>, <em>str</em> または <em>ch</em>, <em>attr</em></p>
-</td>
-<td><p class="first last">ウィンドウ内の位置 <em>y,x</em> に移動し属性 <em>attr</em> を利用して <em>str</em> または <em>ch</em> を表示します</p>
-</td>
+<tr class="row-odd"><td><em>y</em>, <em>x</em>, <em>str</em> または <em>ch</em>, <em>attr</em></td>
+<td>ウィンドウ内の位置 <em>y,x</em> に移動し属性 <em>attr</em> を利用して <em>str</em> または <em>ch</em> を表示します</td>
 </tr>
 </tbody>
 </table>
@@ -331,7 +315,7 @@ methods.</p>
 <p>The <a class="reference internal" href="../library/curses.html#curses.window.addstr" title="curses.window.addstr"><code class="xref py py-meth docutils literal"><span class="pre">addstr()</span></code></a> method takes a Python string or
 bytestring as the value to be displayed.  The contents of bytestrings
 are sent to the terminal as-is.  Strings are encoded to bytes using
-the value of the window&#8217;s <code class="xref py py-attr docutils literal"><span class="pre">encoding</span></code> attribute; this defaults to
+the value of the window’s <code class="xref py py-attr docutils literal"><span class="pre">encoding</span></code> attribute; this defaults to
 the default system encoding as returned by
 <a class="reference internal" href="../library/locale.html#locale.getpreferredencoding" title="locale.getpreferredencoding"><code class="xref py py-func docutils literal"><span class="pre">locale.getpreferredencoding()</span></code></a>.</p>
 <p>The <a class="reference internal" href="../library/curses.html#curses.window.addch" title="curses.window.addch"><code class="xref py py-meth docutils literal"><span class="pre">addch()</span></code></a> methods take a character, which can be
@@ -342,12 +326,12 @@ symbol, and <code class="xref py py-const docutils literal"><span class="pre">AC
 (handy for drawing borders).  You can also use the appropriate Unicode
 character.</p>
 <p>ウィンドウは最後の操作の後のカーソル位置を覚えているため、 <em>y,x</em> 座標をうっかり忘れてしまっても、文字列や文字は最後の操作位置に表示されます。 <code class="docutils literal"><span class="pre">move(y,x)</span></code> メソッドでカーソルを移動させることもできます。常に点滅するカーソルを表示する端末もあるため、カーソルが特定の位置にいることを保証して注意が反れないようにしたいと思うかもしれません; ランダムに見える位置でカーソルが点滅すると面を食らってしまいます。</p>
-<p>If your application doesn&#8217;t need a blinking cursor at all, you can
+<p>If your application doesn’t need a blinking cursor at all, you can
 call <code class="docutils literal"><span class="pre">curs_set(False)</span></code> to make it invisible.  For compatibility
-with older curses versions, there&#8217;s a <code class="docutils literal"><span class="pre">leaveok(bool)</span></code> function
-that&#8217;s a synonym for <a class="reference internal" href="../library/curses.html#curses.curs_set" title="curses.curs_set"><code class="xref py py-func docutils literal"><span class="pre">curs_set()</span></code></a>.  When <em>bool</em> is true, the
+with older curses versions, there’s a <code class="docutils literal"><span class="pre">leaveok(bool)</span></code> function
+that’s a synonym for <a class="reference internal" href="../library/curses.html#curses.curs_set" title="curses.curs_set"><code class="xref py py-func docutils literal"><span class="pre">curs_set()</span></code></a>.  When <em>bool</em> is true, the
 curses library will attempt to suppress the flashing cursor, and you
-won&#8217;t need to worry about leaving it in odd locations.</p>
+won’t need to worry about leaving it in odd locations.</p>
 <div class="section" id="attributes-and-color">
 <h3>属性とカラー<a class="headerlink" href="#attributes-and-color" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Characters can be displayed in different ways.  Status lines in a text-based
@@ -361,36 +345,28 @@ attribute for each cell on the screen.</p>
 <col width="63%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">属性</p>
-</th>
-<th class="head"><p class="first last">説明</p>
-</th>
+<tr class="row-odd"><th class="head">属性</th>
+<th class="head">説明</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">A_BLINK</span></code></td>
-<td><p class="first last">テキストを点滅</p>
-</td>
+<td>テキストを点滅</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">A_BOLD</span></code></td>
-<td><p class="first last">高輝度またはボールドテキスト</p>
-</td>
+<td>高輝度またはボールドテキスト</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">A_DIM</span></code></td>
-<td><p class="first last">低輝度テキスト</p>
-</td>
+<td>低輝度テキスト</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">A_REVERSE</span></code></td>
-<td><p class="first last">反転テキスト</p>
-</td>
+<td>反転テキスト</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">A_STANDOUT</span></code></td>
-<td><p class="first last">利用できる最良のハイライトモード</p>
-</td>
+<td>利用できる最良のハイライトモード</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">A_UNDERLINE</span></code></td>
-<td><p class="first last">下線付きテキスト</p>
-</td>
+<td>下線付きテキスト</td>
 </tr>
 </tbody>
 </table>
@@ -403,17 +379,17 @@ attribute for each cell on the screen.</p>
 <p>curses ライブラリはカラー機能を提供している端末でのカラーもサポートしています。そんな端末の中で最も一般的なものは Linux コンソールで、color xterm もそれに続きます。</p>
 <p>To use color, you must call the <a class="reference internal" href="../library/curses.html#curses.start_color" title="curses.start_color"><code class="xref py py-func docutils literal"><span class="pre">start_color()</span></code></a> function soon
 after calling <a class="reference internal" href="../library/curses.html#curses.initscr" title="curses.initscr"><code class="xref py py-func docutils literal"><span class="pre">initscr()</span></code></a>, to initialize the default color set
-(the <a class="reference internal" href="../library/curses.html#curses.wrapper" title="curses.wrapper"><code class="xref py py-func docutils literal"><span class="pre">curses.wrapper()</span></code></a> function does this automatically).  Once that&#8217;s
+(the <a class="reference internal" href="../library/curses.html#curses.wrapper" title="curses.wrapper"><code class="xref py py-func docutils literal"><span class="pre">curses.wrapper()</span></code></a> function does this automatically).  Once that’s
 done, the <a class="reference internal" href="../library/curses.html#curses.has_colors" title="curses.has_colors"><code class="xref py py-func docutils literal"><span class="pre">has_colors()</span></code></a> function returns TRUE if the terminal
 in use can
-actually display color.  (Note: curses uses the American spelling &#8216;color&#8217;,
-instead of the Canadian/British spelling &#8216;colour&#8217;.  If you&#8217;re used to the
-British spelling, you&#8217;ll have to resign yourself to misspelling it for the sake
+actually display color.  (Note: curses uses the American spelling 『color』,
+instead of the Canadian/British spelling 『colour』.  If you’re used to the
+British spelling, you’ll have to resign yourself to misspelling it for the sake
 of these functions.)</p>
 <p>The curses library maintains a finite number of color pairs, containing a
 foreground (or text) color and a background color.  You can get the attribute
 value corresponding to a color pair with the <a class="reference internal" href="../library/curses.html#curses.color_pair" title="curses.color_pair"><code class="xref py py-func docutils literal"><span class="pre">color_pair()</span></code></a>
-function; this can be bitwise-OR&#8217;ed with other attributes such as
+function; this can be bitwise-OR’ed with other attributes such as
 <code class="xref py py-const docutils literal"><span class="pre">A_REVERSE</span></code>, but again, such combinations are not guaranteed to work
 on all terminals.</p>
 <p>例として、テキスト行をカラーペア 1 を使って表示します:</p>
@@ -440,17 +416,17 @@ module defines named constants for each of these colors:
 </div>
 <p>Very fancy terminals can change the definitions of the actual colors to a given
 RGB value.  This lets you change color 1, which is usually red, to purple or
-blue or any other color you like.  Unfortunately, the Linux console doesn&#8217;t
-support this, so I&#8217;m unable to try it out, and can&#8217;t provide any examples.  You
+blue or any other color you like.  Unfortunately, the Linux console doesn’t
+support this, so I’m unable to try it out, and can’t provide any examples.  You
 can check if your terminal can do this by calling
 <a class="reference internal" href="../library/curses.html#curses.can_change_color" title="curses.can_change_color"><code class="xref py py-func docutils literal"><span class="pre">can_change_color()</span></code></a>, which returns <code class="docutils literal"><span class="pre">True</span></code> if the capability is
-there.  If you&#8217;re lucky enough to have such a talented terminal, consult your
-system&#8217;s man pages for more information.</p>
+there.  If you’re lucky enough to have such a talented terminal, consult your
+system’s man pages for more information.</p>
 </div>
 </div>
 <div class="section" id="user-input">
 <h2>ユーザ入力<a class="headerlink" href="#user-input" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>The C curses library offers only very simple input mechanisms. Python&#8217;s
+<p>The C curses library offers only very simple input mechanisms. Python’s
 <a class="reference internal" href="../library/curses.html#module-curses" title="curses: An interface to the curses library, providing portable terminal handling. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">curses</span></code></a> module adds a basic text-input widget.  (Other libraries
 such as <a class="reference external" href="https://pypi.python.org/pypi/urwid/">Urwid</a> have more extensive
 collections of widgets.)</p>
@@ -465,16 +441,16 @@ integer to a string.  Individual characters are returned as
 1-character strings, and special keys such as function keys return
 longer strings containing a key name such as <code class="docutils literal"><span class="pre">KEY_UP</span></code> or <code class="docutils literal"><span class="pre">^G</span></code>.</li>
 </ul>
-<p>It&#8217;s possible to not wait for the user using the
+<p>It’s possible to not wait for the user using the
 <a class="reference internal" href="../library/curses.html#curses.window.nodelay" title="curses.window.nodelay"><code class="xref py py-meth docutils literal"><span class="pre">nodelay()</span></code></a> window method. After <code class="docutils literal"><span class="pre">nodelay(True)</span></code>,
 <code class="xref py py-meth docutils literal"><span class="pre">getch()</span></code> and <code class="xref py py-meth docutils literal"><span class="pre">getkey()</span></code> for the window become
 non-blocking. To signal that no input is ready, <code class="xref py py-meth docutils literal"><span class="pre">getch()</span></code> returns
 <code class="docutils literal"><span class="pre">curses.ERR</span></code> (a value of -1) and <code class="xref py py-meth docutils literal"><span class="pre">getkey()</span></code> raises an exception.
-There&#8217;s also a <a class="reference internal" href="../library/curses.html#curses.halfdelay" title="curses.halfdelay"><code class="xref py py-func docutils literal"><span class="pre">halfdelay()</span></code></a> function, which can be used to (in
+There’s also a <a class="reference internal" href="../library/curses.html#curses.halfdelay" title="curses.halfdelay"><code class="xref py py-func docutils literal"><span class="pre">halfdelay()</span></code></a> function, which can be used to (in
 effect) set a timer on each <code class="xref py py-meth docutils literal"><span class="pre">getch()</span></code>; if no input becomes
 available within a specified delay (measured in tenths of a second),
 curses raises an exception.</p>
-<p>The <code class="xref py py-meth docutils literal"><span class="pre">getch()</span></code> method returns an integer; if it&#8217;s between 0 and 255, it
+<p>The <code class="xref py py-meth docutils literal"><span class="pre">getch()</span></code> method returns an integer; if it’s between 0 and 255, it
 represents the ASCII code of the key pressed.  Values greater than 255 are
 special keys such as Page Up, Home, or the cursor keys. You can compare the
 value returned to constants such as <code class="xref py py-const docutils literal"><span class="pre">curses.KEY_PPAGE</span></code>,
@@ -496,8 +472,8 @@ writing more readable tests for such loops.  It also supplies
 conversion functions  that take either integer or 1-character-string arguments
 and return the same type.  For example, <a class="reference internal" href="../library/curses.ascii.html#curses.ascii.ctrl" title="curses.ascii.ctrl"><code class="xref py py-func docutils literal"><span class="pre">curses.ascii.ctrl()</span></code></a> returns the
 control character corresponding to its argument.</p>
-<p>There&#8217;s also a method to retrieve an entire string,
-<a class="reference internal" href="../library/curses.html#curses.window.getstr" title="curses.window.getstr"><code class="xref py py-meth docutils literal"><span class="pre">getstr()</span></code></a>.  It isn&#8217;t used very often, because its
+<p>There’s also a method to retrieve an entire string,
+<a class="reference internal" href="../library/curses.html#curses.window.getstr" title="curses.window.getstr"><code class="xref py py-meth docutils literal"><span class="pre">getstr()</span></code></a>.  It isn’t used very often, because its
 functionality is quite limited; the only editing keys available are
 the backspace key and the Enter key, which terminates the string.  It
 can optionally be limited to a fixed number of characters.</p>
@@ -511,7 +487,7 @@ can optionally be limited to a fixed number of characters.</p>
 Emacs-like set of keybindings.  Various methods of the
 <a class="reference internal" href="../library/curses.html#curses.textpad.Textbox" title="curses.textpad.Textbox"><code class="xref py py-class docutils literal"><span class="pre">Textbox</span></code></a> class support editing with input
 validation and gathering the edit results either with or without
-trailing spaces.  Here&#8217;s an example:</p>
+trailing spaces.  Here’s an example:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">curses</span>
 <span class="kn">from</span> <span class="nn">curses.textpad</span> <span class="k">import</span> <span class="n">Textbox</span><span class="p">,</span> <span class="n">rectangle</span>
 
@@ -537,17 +513,13 @@ trailing spaces.  Here&#8217;s an example:</p>
 <h2>より多くの情報<a class="headerlink" href="#for-more-information" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>この HOWTO ではいくつかの進んだ話題、スクリーンスクレイピングや xterm インスタンスからマウスイベントを捉えるなど、については扱っていません。しかし、Python の <a class="reference internal" href="../library/curses.html#module-curses" title="curses: An interface to the curses library, providing portable terminal handling. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">curses</span></code></a> モジュールのライブラリページはいまやかなり充実しています。次はこれを見るべきです。</p>
 <p>curses 関数の詳細な振る舞いで不審に思ったら、それが ncurses であろうがプロプライエタリな Unix ベンダーのものであろうが、curses 実装のマニュアルページを調べてください。マニュアルページには、どんな気紛れ血の迷いでもドキュメントされ、関数、属性、 <code class="xref py py-const docutils literal"><span class="pre">ACS_*</span></code> 文字の完全なリストが提供されていることでしょう。</p>
-<p>curses API は巨大なので、Python インターフェースではいくつかの関数はサポートされていません。実現が難しいからということではなくまだ誰も必要としたことがないから、というものもしばしばあります。ついでに ncurese に関連したメニューやパネルライブラリのサポートも行なわれていません。これらのサポートを追加するパッチは大歓迎です; Python に対するパッチを提出する方法について学ぶのには <a class="reference external" href="https://docs.python.org/devguide/">the Python Developer&#8217;s Guide</a> を読みましょう。</p>
+<p>curses API は巨大なので、Python インターフェースではいくつかの関数はサポートされていません。実現が難しいからということではなくまだ誰も必要としたことがないから、というものもしばしばあります。ついでに ncurese に関連したメニューやパネルライブラリのサポートも行なわれていません。これらのサポートを追加するパッチは大歓迎です; Python に対するパッチを提出する方法について学ぶのには <a class="reference external" href="https://docs.python.org/devguide/">the Python Developer’s Guide</a> を読みましょう。</p>
 <ul class="simple">
-<li><p class="first"><a class="reference external" href="http://invisible-island.net/ncurses/ncurses-intro.html">Writing Programs with NCURSES</a>: C プログラマ向けの非常に長いチュートリアルです。</p>
-</li>
-<li><p class="first"><a class="reference external" href="http://linux.die.net/man/3/ncurses">ncurses マニュアルページ</a></p>
-</li>
+<li><a class="reference external" href="http://invisible-island.net/ncurses/ncurses-intro.html">Writing Programs with NCURSES</a>: C プログラマ向けの非常に長いチュートリアルです。</li>
+<li><a class="reference external" href="http://linux.die.net/man/3/ncurses">ncurses マニュアルページ</a></li>
 <li><a class="reference external" href="http://invisible-island.net/ncurses/ncurses.faq.html">The ncurses FAQ</a></li>
-<li><p class="first"><a class="reference external" href="https://www.youtube.com/watch?v=eN1eZtjLEnU">&#8220;Use curses... don&#8217;t swear&#8221;</a>: curses または Urwid を使って端末を制御する PyCon 2013 講演ビデオです。</p>
-</li>
-<li><p class="first"><a class="reference external" href="http://www.pyvideo.org/video/1568/console-applications-with-urwid">&#8220;Console Applications with Urwid&#8221;</a>: Urwid で書かれたいくつかのアプリケーションをデモンストレーションしている PyCon CA 2012 講演ビデオです。</p>
-</li>
+<li><a class="reference external" href="https://www.youtube.com/watch?v=eN1eZtjLEnU">「Use curses… don’t swear」</a>: curses または Urwid を使って端末を制御する PyCon 2013 講演ビデオです。</li>
+<li><a class="reference external" href="http://www.pyvideo.org/video/1568/console-applications-with-urwid">「Console Applications with Urwid」</a>: Urwid で書かれたいくつかのアプリケーションをデモンストレーションしている PyCon CA 2012 講演ビデオです。</li>
 </ul>
 </div>
 </div>
@@ -588,7 +560,7 @@ trailing spaces.  Here&#8217;s an example:</p>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/curses.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/curses.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -648,7 +620,7 @@ trailing spaces.  Here&#8217;s an example:</p>
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

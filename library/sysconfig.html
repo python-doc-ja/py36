@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>29.2. sysconfig — Python の構成情報にアクセスする &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="29. Python ランタイムサービス" href="python.html" />
     <link rel="next" title="29.3. builtins — 組み込みオブジェクト" href="builtins.html" />
     <link rel="prev" title="29.1. sys — システムパラメータと関数" href="sys.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,7 +100,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-sysconfig">
-<span id="sysconfig-provide-access-to-python-s-configuration-information"></span><h1>29.2. <a class="reference internal" href="#module-sysconfig" title="sysconfig: Python's configuration information"><code class="xref py py-mod docutils literal"><span class="pre">sysconfig</span></code></a> &#8212; Python の構成情報にアクセスする<a class="headerlink" href="#module-sysconfig" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="sysconfig-provide-access-to-python-s-configuration-information"></span><h1>29.2. <a class="reference internal" href="#module-sysconfig" title="sysconfig: Python's configuration information"><code class="xref py py-mod docutils literal"><span class="pre">sysconfig</span></code></a> — Python の構成情報にアクセスする<a class="headerlink" href="#module-sysconfig" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
 </div>
@@ -148,35 +144,22 @@
 <p><a class="reference internal" href="distutils.html#module-distutils" title="distutils: Support for building and installing Python modules into an existing Python installation."><code class="xref py py-mod docutils literal"><span class="pre">distutils</span></code></a> やそれに基づいたシステムによって新しいコンポーネントをインストールするときは、同じスキームに従ってファイルを正しい場所にコピーします。</p>
 <p>Python は現在7つのスキームをサポートしています:</p>
 <ul class="simple">
-<li><p class="first"><em>posix_prefix</em>: Linux や Mac OS X などの Posix プラットフォーム用のスキームです。これは Python やコンポーネントをインストールするときに使われるデフォルトのスキームです。</p>
-</li>
-<li><p class="first"><em>posix_home</em>: インストール時に <em>home</em> オプションが利用された場合における、Posix プラットフォーム用のスキームです。このスキームはコンポーネントが Distutils に特定の home prefix を指定してインストールされたときに利用されます。</p>
-</li>
-<li><p class="first"><em>posix_user</em>: Distutils に <em>user</em> オプションを指定してコンポーネントをインストールするときに使われる、Posix プラットフォーム用のスキームです。このスキームはユーザーのホームディレクトリ以下に配置されたパスヲ定義します。</p>
-</li>
-<li><p class="first"><em>nt</em>: Windows などの NT プラットフォーム用のスキームです。</p>
-</li>
-<li><p class="first"><em>nt_user</em>: <em>user</em> オプションが利用された場合の、NT プラットフォーム用のスキームです。</p>
-</li>
+<li><em>posix_prefix</em>: Linux や Mac OS X などの Posix プラットフォーム用のスキームです。これは Python やコンポーネントをインストールするときに使われるデフォルトのスキームです。</li>
+<li><em>posix_home</em>: インストール時に <em>home</em> オプションが利用された場合における、Posix プラットフォーム用のスキームです。このスキームはコンポーネントが Distutils に特定の home prefix を指定してインストールされたときに利用されます。</li>
+<li><em>posix_user</em>: Distutils に <em>user</em> オプションを指定してコンポーネントをインストールするときに使われる、Posix プラットフォーム用のスキームです。このスキームはユーザーのホームディレクトリ以下に配置されたパスヲ定義します。</li>
+<li><em>nt</em>: Windows などの NT プラットフォーム用のスキームです。</li>
+<li><em>nt_user</em>: <em>user</em> オプションが利用された場合の、NT プラットフォーム用のスキームです。</li>
 </ul>
 <p>各スキームは、ユニークな識別子を持ったいくつかのパスの集合から成っています。現在 Python は8つのパスを利用します:</p>
 <ul class="simple">
-<li><p class="first"><em>stdlib</em>: プラットフォーム非依存の、標準 Python ライブラリファイルを格納するディレクトリ.</p>
-</li>
-<li><p class="first"><em>platstdlib</em>: プラットフォーム依存の、標準 Python ライブラリファイルを格納するディレクトリ.</p>
-</li>
-<li><p class="first"><em>platlib</em>: プラットフォーム依存の、site ごとのファイルを格納するディレクトリ。</p>
-</li>
-<li><p class="first"><em>purelib</em>: プラットフォーム非依存の、site ごとのファイルを格納するディレクトリ。</p>
-</li>
-<li><p class="first"><em>include</em>: プラットフォーム非依存のヘッダーファイルを格納するディレクトリ。</p>
-</li>
-<li><p class="first"><em>platinclude</em>: プラットフォーム依存の、ヘッダーファイルを格納するディレクトリ。</p>
-</li>
-<li><p class="first"><em>scripts</em>: スクリプトファイルのためのディレクトリ。</p>
-</li>
-<li><p class="first"><em>data</em>: データファイルのためのディレクトリ。</p>
-</li>
+<li><em>stdlib</em>: プラットフォーム非依存の、標準 Python ライブラリファイルを格納するディレクトリ.</li>
+<li><em>platstdlib</em>: プラットフォーム依存の、標準 Python ライブラリファイルを格納するディレクトリ.</li>
+<li><em>platlib</em>: プラットフォーム依存の、site ごとのファイルを格納するディレクトリ。</li>
+<li><em>purelib</em>: プラットフォーム非依存の、site ごとのファイルを格納するディレクトリ。</li>
+<li><em>include</em>: プラットフォーム非依存のヘッダーファイルを格納するディレクトリ。</li>
+<li><em>platinclude</em>: プラットフォーム依存の、ヘッダーファイルを格納するディレクトリ。</li>
+<li><em>scripts</em>: スクリプトファイルのためのディレクトリ。</li>
+<li><em>data</em>: データファイルのためのディレクトリ。</li>
 </ul>
 <p><a class="reference internal" href="#module-sysconfig" title="sysconfig: Python's configuration information"><code class="xref py py-mod docutils literal"><span class="pre">sysconfig</span></code></a> はこれらのパスを決定するためのいくつかの関数を提供しています。</p>
 <dl class="function">
@@ -238,12 +221,9 @@
 </ul>
 <p>Windows では以下のどれかを返します:</p>
 <ul class="simple">
-<li><p class="first">win-amd64 (AMD64 (別名 x86_64、Intel64、EM64T など) 上の 64bit Windows))</p>
-</li>
-<li><p class="first">win-ia64 (Itanium 上の 64bit Windows)</p>
-</li>
-<li><p class="first">win32 (その他すべて - 具体的には sys.platform が返す値)</p>
-</li>
+<li>win-amd64 (AMD64 (別名 x86_64、Intel64、EM64T など) 上の 64bit Windows))</li>
+<li>win-ia64 (Itanium 上の 64bit Windows)</li>
+<li>win32 (その他すべて - 具体的には sys.platform が返す値)</li>
 </ul>
 <p>Mac OS X では以下のどれかを返します:</p>
 <ul class="simple">
@@ -322,7 +302,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">29.2. <code class="docutils literal"><span class="pre">sysconfig</span></code> &#8212; Python の構成情報にアクセスする</a><ul>
+<li><a class="reference internal" href="#">29.2. <code class="docutils literal"><span class="pre">sysconfig</span></code> — Python の構成情報にアクセスする</a><ul>
 <li><a class="reference internal" href="#configuration-variables">29.2.1. 構成変数</a></li>
 <li><a class="reference internal" href="#installation-paths">29.2.2. インストールパス</a></li>
 <li><a class="reference internal" href="#other-functions">29.2.3. その他の関数</a></li>
@@ -333,16 +313,16 @@
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="sys.html"
-                        title="前の章へ">29.1. <code class="docutils literal"><span class="pre">sys</span></code> &#8212; システムパラメータと関数</a></p>
+                        title="前の章へ">29.1. <code class="docutils literal"><span class="pre">sys</span></code> — システムパラメータと関数</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="builtins.html"
-                        title="次の章へ">29.3. <code class="docutils literal"><span class="pre">builtins</span></code> &#8212; 組み込みオブジェクト</a></p>
+                        title="次の章へ">29.3. <code class="docutils literal"><span class="pre">builtins</span></code> — 組み込みオブジェクト</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/sysconfig.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/sysconfig.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -403,7 +383,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

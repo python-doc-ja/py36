@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>共通のオブジェクト構造体 (common object structure) &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="オブジェクト実装サポート (object implementation support)" href="objimpl.html" />
     <link rel="next" title="型オブジェクト" href="typeobj.html" />
     <link rel="prev" title="オブジェクトをヒープ上にメモリ確保する" href="allocation.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -114,7 +110,7 @@
 <code class="descname">PyObject</code><a class="headerlink" href="#c.PyObject" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>全てのオブジェクト型はこの型を拡張したものです。
 この型には、あるオブジェクトを指すポインタをオブジェクトとして Python から扱うのに必要な情報が入っています。
-通常の &#8220;リリース&#8221; ビルドでは、この構造体にはオブジェクトの参照カウントとオブジェクトに対応する型オブジェクトだけが入っています。
+通常の 「リリース」 ビルドでは、この構造体にはオブジェクトの参照カウントとオブジェクトに対応する型オブジェクトだけが入っています。
 実際には <a class="reference internal" href="#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject</span></code></a> であることは宣言されていませんが、全ての Python オブジェクトへのポインタは <a class="reference internal" href="#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject*</span></code></a> へキャストできます。
 メンバにアクセスするには <a class="reference internal" href="#c.Py_REFCNT" title="Py_REFCNT"><code class="xref c c-macro docutils literal"><span class="pre">Py_REFCNT</span></code></a> マクロと <a class="reference internal" href="#c.Py_TYPE" title="Py_TYPE"><code class="xref c c-macro docutils literal"><span class="pre">Py_TYPE</span></code></a> マクロを使わなければなりません。</p>
 </dd></dl>
@@ -223,34 +219,27 @@ PyObject_VAR_HEAD マクロは次のように展開されます:</p>
 <col width="50%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">フィールド</p>
-</th>
-<th class="head"><p class="first last">C の型</p>
-</th>
-<th class="head"><p class="first last">意味</p>
-</th>
+<tr class="row-odd"><th class="head">フィールド</th>
+<th class="head">C の型</th>
+<th class="head">意味</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-attr docutils literal"><span class="pre">ml_name</span></code></td>
 <td>char *</td>
-<td><p class="first last">メソッド名</p>
-</td>
+<td>メソッド名</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-attr docutils literal"><span class="pre">ml_meth</span></code></td>
 <td>PyCFunction</td>
-<td><p class="first last">C 実装へのポインタ</p>
-</td>
+<td>C 実装へのポインタ</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-attr docutils literal"><span class="pre">ml_flags</span></code></td>
 <td>int</td>
-<td><p class="first last">呼び出しをどのように行うかを示すフラグビット</p>
-</td>
+<td>呼び出しをどのように行うかを示すフラグビット</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-attr docutils literal"><span class="pre">ml_doc</span></code></td>
 <td>char *</td>
-<td><p class="first last">docstring の内容を指すポインタ</p>
-</td>
+<td>docstring の内容を指すポインタ</td>
 </tr>
 </tbody>
 </table>
@@ -318,39 +307,31 @@ PyObject_VAR_HEAD マクロは次のように展開されます:</p>
 <col width="50%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">フィールド</p>
-</th>
-<th class="head"><p class="first last">C の型</p>
-</th>
-<th class="head"><p class="first last">意味</p>
-</th>
+<tr class="row-odd"><th class="head">フィールド</th>
+<th class="head">C の型</th>
+<th class="head">意味</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-attr docutils literal"><span class="pre">name</span></code></td>
 <td>char *</td>
-<td><p class="first last">メンバ名</p>
-</td>
+<td>メンバ名</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-attr docutils literal"><span class="pre">type</span></code></td>
 <td>int</td>
-<td><p class="first last">C 構造体の中のメンバの型</p>
-</td>
+<td>C 構造体の中のメンバの型</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-attr docutils literal"><span class="pre">offset</span></code></td>
 <td>Py_ssize_t</td>
-<td><p class="first last">そのメンバの type object 構造体中の場所の offset バイト数</p>
-</td>
+<td>そのメンバの type object 構造体中の場所の offset バイト数</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-attr docutils literal"><span class="pre">flags</span></code></td>
 <td>int</td>
-<td><p class="first last">フィールドが読み込み専用か書込み可能なのかを示すビットフラグ</p>
-</td>
+<td>フィールドが読み込み専用か書込み可能なのかを示すビットフラグ</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-attr docutils literal"><span class="pre">doc</span></code></td>
 <td>char *</td>
-<td><p class="first last">docstring の内容を指すポインタ</p>
-</td>
+<td>docstring の内容を指すポインタ</td>
 </tr>
 </tbody>
 </table>
@@ -361,10 +342,8 @@ PyObject_VAR_HEAD マクロは次のように展開されます:</p>
 <col width="55%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">マクロ名</p>
-</th>
-<th class="head"><p class="first last">C の型</p>
-</th>
+<tr class="row-odd"><th class="head">マクロ名</th>
+<th class="head">C の型</th>
 </tr>
 </thead>
 <tbody valign="top">
@@ -378,8 +357,7 @@ PyObject_VAR_HEAD マクロは次のように展開されます:</p>
 <td>long</td>
 </tr>
 <tr class="row-odd"><td>T_FLOAT</td>
-<td><p class="first last">浮動小数点数</p>
-</td>
+<td>浮動小数点数</td>
 </tr>
 <tr class="row-even"><td>T_DOUBLE</td>
 <td>double</td>
@@ -451,7 +429,7 @@ PyObject_VAR_HEAD マクロは次のように展開されます:</p>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/structures.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/structures.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -512,7 +490,7 @@ PyObject_VAR_HEAD マクロは次のように展開されます:</p>
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

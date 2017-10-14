@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>11.2. os.path — 共通のパス名操作 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="11. ファイルとディレクトリへのアクセス" href="filesys.html" />
     <link rel="next" title="11.3. fileinput — 複数の入力ストリームをまたいだ行の繰り返し処理をサポートする" href="fileinput.html" />
     <link rel="prev" title="11.1. pathlib — オブジェクト指向のファイルシステムパス" href="pathlib.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,7 +100,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-os.path">
-<span id="os-path-common-pathname-manipulations"></span><h1>11.2. <a class="reference internal" href="#module-os.path" title="os.path: Operations on pathnames."><code class="xref py py-mod docutils literal"><span class="pre">os.path</span></code></a> &#8212; 共通のパス名操作<a class="headerlink" href="#module-os.path" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="os-path-common-pathname-manipulations"></span><h1>11.2. <a class="reference internal" href="#module-os.path" title="os.path: Operations on pathnames."><code class="xref py py-mod docutils literal"><span class="pre">os.path</span></code></a> — 共通のパス名操作<a class="headerlink" href="#module-os.path" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/posixpath.py">Lib/posixpath.py</a> (POSIX), <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/ntpath.py">Lib/ntpath.py</a> (Windows NT), <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/macpath.py">Lib/macpath.py</a> (Mac)</p>
 <hr class="docutils" id="index-0" />
 <p>このモジュールには、パス名を操作する便利な関数が実装されています。ファイルの読み書きに関しては <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> を、ファイルシステムへのアクセスに関しては <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a> モジュールを参照してください。パスパラメータは文字列またはバイト列で渡すことができます。アプリケーションは、ファイル名を Unicode 文字列で表すことが推奨されています。残念ながら、Unix では文字列で表すことのできないファイル名があるため、Unix 上で任意のファイル名をサポートする必要のあるアプリケーションは、そのパス名にバイト列を使用すべきです。逆に、バイト列オブジェクトを使用すると Windows (標準の <code class="docutils literal"><span class="pre">mbcs</span></code> エンコーディング) 上ではすべてのファイル名を表すことができないため、Windows アプリケーションはファイルアクセスのために文字列オブジェクトを使用するべきです。</p>
@@ -121,12 +117,9 @@
 <p class="first admonition-title">注釈</p>
 <p>OS によって異なるパス名の決まりがあるため、標準ライブラリにはこのモジュールのいくつかのバージョンが含まれています。 <a class="reference internal" href="#module-os.path" title="os.path: Operations on pathnames."><code class="xref py py-mod docutils literal"><span class="pre">os.path</span></code></a> モジュールは常に現在 Python が動作している OS に適したパスモジュールであるため、ローカルのパスを扱うのに適しています。各々のモジュールをインポートして <em>常に</em> 一つのフォーマットを利用することも可能です。これらはすべて同じインタフェースを持っています:</p>
 <ul class="last simple">
-<li><p class="first"><code class="xref py py-mod docutils literal"><span class="pre">posixpath</span></code> UNIX スタイルのパス用</p>
-</li>
-<li><p class="first"><code class="xref py py-mod docutils literal"><span class="pre">ntpath</span></code> Windows パス用</p>
-</li>
-<li><p class="first"><a class="reference internal" href="macpath.html#module-macpath" title="macpath: Mac OS 9 path manipulation functions."><code class="xref py py-mod docutils literal"><span class="pre">macpath</span></code></a> 古いスタイルの MacOS パス用</p>
-</li>
+<li><code class="xref py py-mod docutils literal"><span class="pre">posixpath</span></code> UNIX スタイルのパス用</li>
+<li><code class="xref py py-mod docutils literal"><span class="pre">ntpath</span></code> Windows パス用</li>
+<li><a class="reference internal" href="macpath.html#module-macpath" title="macpath: Mac OS 9 path manipulation functions."><code class="xref py py-mod docutils literal"><span class="pre">macpath</span></code></a> 古いスタイルの MacOS パス用</li>
 </ul>
 </div>
 <dl class="function">
@@ -306,7 +299,7 @@
 <dl class="function">
 <dt id="os.path.ismount">
 <code class="descclassname">os.path.</code><code class="descname">ismount</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.ismount" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>パス名 <em>path</em> がマウントポイント <em class="dfn">mount point</em> (ファイルシステムの中で異なるファイルシステムがマウントされているところ) なら、 <code class="docutils literal"><span class="pre">True</span></code> を返します。POSIX では、この関数は <em>path</em> の親ディレクトリである <code class="file docutils literal"><span class="pre">path/..</span></code> が <em>path</em> と異なるデバイス上にあるか、あるいは <code class="file docutils literal"><span class="pre">path/..</span></code> と <em>path</em> が同じデバイス上の同じ i-node を指しているかをチェックします &#8212; これによって全ての Unix 系システムと POSIX 標準でマウントポイントが検出できます。Windows では、ドライブレターを持つルートと共有 UNC は常にマウントポイントであり、また他のパスでは、入力のパスが異なるデバイスからのものか見るために <code class="docutils literal"><span class="pre">GetVolumePathName</span></code> が呼び出されます。</p>
+<dd><p>パス名 <em>path</em> がマウントポイント <em class="dfn">mount point</em> (ファイルシステムの中で異なるファイルシステムがマウントされているところ) なら、 <code class="docutils literal"><span class="pre">True</span></code> を返します。POSIX では、この関数は <em>path</em> の親ディレクトリである <code class="file docutils literal"><span class="pre">path/..</span></code> が <em>path</em> と異なるデバイス上にあるか、あるいは <code class="file docutils literal"><span class="pre">path/..</span></code> と <em>path</em> が同じデバイス上の同じ i-node を指しているかをチェックします — これによって全ての Unix 系システムと POSIX 標準でマウントポイントが検出できます。Windows では、ドライブレターを持つルートと共有 UNC は常にマウントポイントであり、また他のパスでは、入力のパスが異なるデバイスからのものか見るために <code class="docutils literal"><span class="pre">GetVolumePathName</span></code> が呼び出されます。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.4 で追加: </span>Windows での、ルートでないマウントポイントの検出をサポートするようになっています。</p>
 </div>
@@ -465,16 +458,16 @@ or indirectly through the <a class="reference internal" href="os.html#os.PathLik
         <div class="sphinxsidebarwrapper">
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="pathlib.html"
-                        title="前の章へ">11.1. <code class="docutils literal"><span class="pre">pathlib</span></code> &#8212; オブジェクト指向のファイルシステムパス</a></p>
+                        title="前の章へ">11.1. <code class="docutils literal"><span class="pre">pathlib</span></code> — オブジェクト指向のファイルシステムパス</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="fileinput.html"
-                        title="次の章へ">11.3. <code class="docutils literal"><span class="pre">fileinput</span></code> &#8212; 複数の入力ストリームをまたいだ行の繰り返し処理をサポートする</a></p>
+                        title="次の章へ">11.3. <code class="docutils literal"><span class="pre">fileinput</span></code> — 複数の入力ストリームをまたいだ行の繰り返し処理をサポートする</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/os.path.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/os.path.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -535,7 +528,7 @@ or indirectly through the <a class="reference internal" href="os.html#os.PathLik
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

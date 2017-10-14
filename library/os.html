@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>16.1. os — 雑多なオペレーティングシステムインタフェース &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="16. 汎用オペレーティングシステムサービス" href="allos.html" />
     <link rel="next" title="16.2. io — ストリームを扱うコアツール" href="io.html" />
     <link rel="prev" title="16. 汎用オペレーティングシステムサービス" href="allos.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,22 +100,17 @@
           <div class="body" role="main">
             
   <div class="section" id="module-os">
-<span id="os-miscellaneous-operating-system-interfaces"></span><h1>16.1. <a class="reference internal" href="#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a> &#8212; 雑多なオペレーティングシステムインタフェース<a class="headerlink" href="#module-os" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="os-miscellaneous-operating-system-interfaces"></span><h1>16.1. <a class="reference internal" href="#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a> — 雑多なオペレーティングシステムインタフェース<a class="headerlink" href="#module-os" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/os.py">Lib/os.py</a></p>
 <hr class="docutils" />
 <p>このモジュールは、 OS 依存の機能を利用するポータブルな方法を提供します。単純なファイルの読み書きについては、 <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> を参照してください。パス操作については、 <a class="reference internal" href="os.path.html#module-os.path" title="os.path: Operations on pathnames."><code class="xref py py-mod docutils literal"><span class="pre">os.path</span></code></a> モジュールを参照してください。コマンドラインに与えられたすべてのファイルから行を読み込んでいくには、 <a class="reference internal" href="fileinput.html#module-fileinput" title="fileinput: Loop over standard input or a list of files."><code class="xref py py-mod docutils literal"><span class="pre">fileinput</span></code></a> モジュールを参照してください。一時ファイルや一時ディレクトリの作成については、 <a class="reference internal" href="tempfile.html#module-tempfile" title="tempfile: Generate temporary files and directories."><code class="xref py py-mod docutils literal"><span class="pre">tempfile</span></code></a> モジュールを参照してください。高水準のファイルとディレクトリの操作については、 <a class="reference internal" href="shutil.html#module-shutil" title="shutil: High-level file operations, including copying."><code class="xref py py-mod docutils literal"><span class="pre">shutil</span></code></a> モジュールを参照してください。</p>
 <p>利用可能性に関する注意 :</p>
 <ul class="simple">
-<li><p class="first">Python の、すべての OS 依存モジュールの設計方針は、可能な限り同一のインタフェースで同一の機能を利用できるようにする、というものです。例えば、 <code class="docutils literal"><span class="pre">os.stat(path)</span></code> は <em>path</em> に関する stat 情報を、 (POSIX を元にした ) 同じフォーマットで返します。</p>
-</li>
-<li><p class="first">特定のオペレーティングシステム固有の拡張も <a class="reference internal" href="#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a> を介して利用することができますが、これらの利用はもちろん、可搬性を脅かします。</p>
-</li>
-<li><p class="first">パスやファイル名を受け付けるすべての関数は、バイト列型および文字列型両方のオブジェクトを受け付け、パスやファイル名を返す時は、同じ型のオブジェクトを返します。</p>
-</li>
-<li><p class="first">「利用できる環境 : Unix 」の意味はこの関数が Unix システムにあることが多いということです。このことは特定の OS における存在を主張するものではありません。</p>
-</li>
-<li><p class="first">特に記述がない場合、「利用できる環境 : Unix 」と書かれている関数は、 Unix をコアにしている Mac OS X でも利用することができます。</p>
-</li>
+<li>Python の、すべての OS 依存モジュールの設計方針は、可能な限り同一のインタフェースで同一の機能を利用できるようにする、というものです。例えば、 <code class="docutils literal"><span class="pre">os.stat(path)</span></code> は <em>path</em> に関する stat 情報を、 (POSIX を元にした ) 同じフォーマットで返します。</li>
+<li>特定のオペレーティングシステム固有の拡張も <a class="reference internal" href="#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a> を介して利用することができますが、これらの利用はもちろん、可搬性を脅かします。</li>
+<li>パスやファイル名を受け付けるすべての関数は、バイト列型および文字列型両方のオブジェクトを受け付け、パスやファイル名を返す時は、同じ型のオブジェクトを返します。</li>
+<li>「利用できる環境 : Unix 」の意味はこの関数が Unix システムにあることが多いということです。このことは特定の OS における存在を主張するものではありません。</li>
+<li>特に記述がない場合、「利用できる環境 : Unix 」と書かれている関数は、 Unix をコアにしている Mac OS X でも利用することができます。</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
@@ -288,7 +279,7 @@ on Windows; return <a class="reference internal" href="stdtypes.html#str" title=
 <dl class="function">
 <dt id="os.getegid">
 <code class="descclassname">os.</code><code class="descname">getegid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#os.getegid" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>現在のプロセスの実効グループ id を返します。この id は現在のプロセスで実行されているファイルの &#8220;set id&#8221; ビットに対応します。</p>
+<dd><p>現在のプロセスの実効グループ id を返します。この id は現在のプロセスで実行されているファイルの 「set id」 ビットに対応します。</p>
 <p>利用できる環境 : Unix 。</p>
 </dd></dl>
 
@@ -574,16 +565,11 @@ on Windows; return <a class="reference internal" href="stdtypes.html#str" title=
 <code class="descclassname">os.</code><code class="descname">uname</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#os.uname" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p id="index-12">現在のオペレーティングシステムを識別する情報を返します。返り値は 5 個の属性を持つオブジェクトです:</p>
 <ul class="simple">
-<li><p class="first"><code class="xref py py-attr docutils literal"><span class="pre">sysname</span></code> - OS の名前</p>
-</li>
-<li><p class="first"><code class="xref py py-attr docutils literal"><span class="pre">nodename</span></code> - (実装時に定義された) ネットワーク上でのマシン名</p>
-</li>
-<li><p class="first"><code class="xref py py-attr docutils literal"><span class="pre">release</span></code> - OS のリリース</p>
-</li>
-<li><p class="first"><code class="xref py py-attr docutils literal"><span class="pre">version</span></code> - OS のバージョン</p>
-</li>
-<li><p class="first"><code class="xref py py-attr docutils literal"><span class="pre">machine</span></code> - ハードウェア識別子</p>
-</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">sysname</span></code> - OS の名前</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">nodename</span></code> - (実装時に定義された) ネットワーク上でのマシン名</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">release</span></code> - OS のリリース</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">version</span></code> - OS のバージョン</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">machine</span></code> - ハードウェア識別子</li>
 </ul>
 <p>後方互換性のため、このオブジェクトはイテラブルでもあり、<code class="xref py py-attr docutils literal"><span class="pre">sysname</span></code>、<code class="xref py py-attr docutils literal"><span class="pre">nodename</span></code>、<code class="xref py py-attr docutils literal"><span class="pre">release</span></code>、<code class="xref py py-attr docutils literal"><span class="pre">version</span></code>、および <code class="xref py py-attr docutils literal"><span class="pre">machine</span></code> の 5 個の要素をこの順序で持つタプルのように振る舞います。</p>
 <p>一部のシステムでは、<code class="xref py py-attr docutils literal"><span class="pre">nodename</span></code> はコンポーネントを読み込むために 8 文字または先頭の要素だけに切り詰められます; ホスト名を取得する方法としては、<a class="reference internal" href="socket.html#socket.gethostname" title="socket.gethostname"><code class="xref py py-func docutils literal"><span class="pre">socket.gethostname()</span></code></a> を使う方がよいでしょう。あるいは <code class="docutils literal"><span class="pre">socket.gethostbyaddr(socket.gethostname())</span></code> でもかまいません。</p>
@@ -624,7 +610,7 @@ on Windows; return <a class="reference internal" href="stdtypes.html#str" title=
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">この関数は低水準の I/O 向けのもので、 <a class="reference internal" href="#os.open" title="os.open"><code class="xref py py-func docutils literal"><span class="pre">os.open()</span></code></a> や <a class="reference internal" href="#os.pipe" title="os.pipe"><code class="xref py py-func docutils literal"><span class="pre">pipe()</span></code></a> が返すファイル記述子に対して使用しなければなりません。
-組み込み関数 <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> や <a class="reference internal" href="#os.popen" title="os.popen"><code class="xref py py-func docutils literal"><span class="pre">popen()</span></code></a> 、 <a class="reference internal" href="#os.fdopen" title="os.fdopen"><code class="xref py py-func docutils literal"><span class="pre">fdopen()</span></code></a> が返す &#8220;ファイルオブジェクト&#8221; を閉じるには、オブジェクトの <a class="reference internal" href="io.html#io.IOBase.close" title="io.IOBase.close"><code class="xref py py-meth docutils literal"><span class="pre">close()</span></code></a> メソッドを使用してください。</p>
+組み込み関数 <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> や <a class="reference internal" href="#os.popen" title="os.popen"><code class="xref py py-func docutils literal"><span class="pre">popen()</span></code></a> 、 <a class="reference internal" href="#os.fdopen" title="os.fdopen"><code class="xref py py-func docutils literal"><span class="pre">fdopen()</span></code></a> が返す 「ファイルオブジェクト」 を閉じるには、オブジェクトの <a class="reference internal" href="io.html#io.IOBase.close" title="io.IOBase.close"><code class="xref py py-meth docutils literal"><span class="pre">close()</span></code></a> メソッドを使用してください。</p>
 </div>
 </dd></dl>
 
@@ -1006,7 +992,7 @@ on Windows; return <a class="reference internal" href="stdtypes.html#str" title=
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">この関数は低水準の I/O 向けのもので、 <a class="reference internal" href="#os.open" title="os.open"><code class="xref py py-func docutils literal"><span class="pre">os.open()</span></code></a> や <a class="reference internal" href="#os.pipe" title="os.pipe"><code class="xref py py-func docutils literal"><span class="pre">pipe()</span></code></a> が返すファイル記述子に対して使用されなければなりません。
-組み込み関数 <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> や <a class="reference internal" href="#os.popen" title="os.popen"><code class="xref py py-func docutils literal"><span class="pre">popen()</span></code></a> 、 <a class="reference internal" href="#os.fdopen" title="os.fdopen"><code class="xref py py-func docutils literal"><span class="pre">fdopen()</span></code></a> 、あるいは <a class="reference internal" href="sys.html#sys.stdin" title="sys.stdin"><code class="xref py py-data docutils literal"><span class="pre">sys.stdin</span></code></a> が返す &#8220;ファイルオブジェクト&#8221; を読み込むには、オブジェクトの <code class="xref py py-meth docutils literal"><span class="pre">read()</span></code> か <code class="xref py py-meth docutils literal"><span class="pre">readline()</span></code> メソッドを使用してください。</p>
+組み込み関数 <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> や <a class="reference internal" href="#os.popen" title="os.popen"><code class="xref py py-func docutils literal"><span class="pre">popen()</span></code></a> 、 <a class="reference internal" href="#os.fdopen" title="os.fdopen"><code class="xref py py-func docutils literal"><span class="pre">fdopen()</span></code></a> 、あるいは <a class="reference internal" href="sys.html#sys.stdin" title="sys.stdin"><code class="xref py py-data docutils literal"><span class="pre">sys.stdin</span></code></a> が返す 「ファイルオブジェクト」 を読み込むには、オブジェクトの <code class="xref py py-meth docutils literal"><span class="pre">read()</span></code> か <code class="xref py py-meth docutils literal"><span class="pre">readline()</span></code> メソッドを使用してください。</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.5 で変更: </span>システムコールが中断されシグナルハンドラが例外を送出しなかった場合、この関数は <a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> 例外を送出する代わりにシステムコールを再試行するようになりました (論拠については <span class="target" id="index-53"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> を参照してください)。</p>
@@ -1101,7 +1087,7 @@ EOF に達した場合は 0 を返します。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">この関数は低水準の I/O 向けのもので、 <a class="reference internal" href="#os.open" title="os.open"><code class="xref py py-func docutils literal"><span class="pre">os.open()</span></code></a> や <a class="reference internal" href="#os.pipe" title="os.pipe"><code class="xref py py-func docutils literal"><span class="pre">pipe()</span></code></a> が返すファイル記述子に対して使用しなければなりません。
-組み込み関数 <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> や <a class="reference internal" href="#os.popen" title="os.popen"><code class="xref py py-func docutils literal"><span class="pre">popen()</span></code></a> 、 <a class="reference internal" href="#os.fdopen" title="os.fdopen"><code class="xref py py-func docutils literal"><span class="pre">fdopen()</span></code></a> 、あるいは <a class="reference internal" href="sys.html#sys.stdout" title="sys.stdout"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a> や <a class="reference internal" href="sys.html#sys.stderr" title="sys.stderr"><code class="xref py py-data docutils literal"><span class="pre">sys.stderr</span></code></a> が返す &#8220;ファイルオブジェクト&#8221; に書き込むには、オブジェクトの <code class="xref py py-meth docutils literal"><span class="pre">write()</span></code> メソッドを使用してください。</p>
+組み込み関数 <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> や <a class="reference internal" href="#os.popen" title="os.popen"><code class="xref py py-func docutils literal"><span class="pre">popen()</span></code></a> 、 <a class="reference internal" href="#os.fdopen" title="os.fdopen"><code class="xref py py-func docutils literal"><span class="pre">fdopen()</span></code></a> 、あるいは <a class="reference internal" href="sys.html#sys.stdout" title="sys.stdout"><code class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></code></a> や <a class="reference internal" href="sys.html#sys.stderr" title="sys.stderr"><code class="xref py py-data docutils literal"><span class="pre">sys.stderr</span></code></a> が返す 「ファイルオブジェクト」 に書き込むには、オブジェクトの <code class="xref py py-meth docutils literal"><span class="pre">write()</span></code> メソッドを使用してください。</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.5 で変更: </span>システムコールが中断されシグナルハンドラが例外を送出しなかった場合、この関数は <a class="reference internal" href="exceptions.html#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal"><span class="pre">InterruptedError</span></code></a> 例外を送出する代わりにシステムコールを再試行するようになりました (論拠については <span class="target" id="index-54"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0475"><strong>PEP 475</strong></a> を参照してください)。</p>
@@ -1502,7 +1488,7 @@ in all other circumstances, they will be of type <code class="docutils literal">
 <p><em>exist_ok</em> が (デフォルトの) <code class="docutils literal"><span class="pre">False</span></code> である場合、ターゲットのディレクトリが既に存在していれば <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> が送出されます。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last">作成するパス要素に <a class="reference internal" href="#os.pardir" title="os.pardir"><code class="xref py py-data docutils literal"><span class="pre">pardir</span></code></a> (UNIX では &#8221;..&#8221;) が含まれる場合、<a class="reference internal" href="#os.makedirs" title="os.makedirs"><code class="xref py py-func docutils literal"><span class="pre">makedirs()</span></code></a> は混乱します。</p>
+<p class="last">作成するパス要素に <a class="reference internal" href="#os.pardir" title="os.pardir"><code class="xref py py-data docutils literal"><span class="pre">pardir</span></code></a> (UNIX では 「..」) が含まれる場合、<a class="reference internal" href="#os.makedirs" title="os.makedirs"><code class="xref py py-func docutils literal"><span class="pre">makedirs()</span></code></a> は混乱します。</p>
 </div>
 <p>この関数は UNC パスを正しく扱えるようになりました。</p>
 <div class="versionadded">
@@ -1521,7 +1507,7 @@ in all other circumstances, they will be of type <code class="docutils literal">
 <code class="descclassname">os.</code><code class="descname">mkfifo</code><span class="sig-paren">(</span><em>path</em>, <em>mode=0o666</em>, <em>*</em>, <em>dir_fd=None</em><span class="sig-paren">)</span><a class="headerlink" href="#os.mkfifo" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>FIFO (名前付きパイプ) <em>path</em> を数値モード <em>mode</em> で作成します。先に現在の umask 値でマスクされます。</p>
 <p>この関数は <a class="reference internal" href="#dir-fd"><span class="std std-ref">ディレクトリ記述子への相対パス</span></a> もサポートすることができます。</p>
-<p>FIFO は通常のファイルのようにアクセスできるパイプです。 FIFO は ( 例えば <a class="reference internal" href="#os.unlink" title="os.unlink"><code class="xref py py-func docutils literal"><span class="pre">os.unlink()</span></code></a> を使って ) 削除されるまで存在しつづけます。一般的に、 FIFO は &#8221; クライアント &#8221; と &#8221; サーバー &#8221; 形式のプロセス間でランデブーを行うために使われます : この時、サーバーは FIFO を読み込み用に、クライアントは書き出し用にオープンします。 <a class="reference internal" href="#os.mkfifo" title="os.mkfifo"><code class="xref py py-func docutils literal"><span class="pre">mkfifo()</span></code></a> は FIFO をオープンしない &#8212; 単にランデブーポイントを作成するだけ &#8212; なので注意してください。</p>
+<p>FIFO は通常のファイルのようにアクセスできるパイプです。 FIFO は ( 例えば <a class="reference internal" href="#os.unlink" title="os.unlink"><code class="xref py py-func docutils literal"><span class="pre">os.unlink()</span></code></a> を使って ) 削除されるまで存在しつづけます。一般的に、 FIFO は 」 クライアント 」 と 」 サーバー 」 形式のプロセス間でランデブーを行うために使われます : この時、サーバーは FIFO を読み込み用に、クライアントは書き出し用にオープンします。 <a class="reference internal" href="#os.mkfifo" title="os.mkfifo"><code class="xref py py-func docutils literal"><span class="pre">mkfifo()</span></code></a> は FIFO をオープンしない — 単にランデブーポイントを作成するだけ — なので注意してください。</p>
 <p>利用できる環境 : Unix 。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.3 で追加: </span>引数 <em>dir_fd</em> が追加されました。</p>
@@ -1710,7 +1696,7 @@ circumstances, they will be of type <code class="docutils literal"><span class="
 </div>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last">On Unix-based systems, <a class="reference internal" href="#os.scandir" title="os.scandir"><code class="xref py py-func docutils literal"><span class="pre">scandir()</span></code></a> uses the system&#8217;s
+<p class="last">On Unix-based systems, <a class="reference internal" href="#os.scandir" title="os.scandir"><code class="xref py py-func docutils literal"><span class="pre">scandir()</span></code></a> uses the system’s
 <a class="reference external" href="http://pubs.opengroup.org/onlinepubs/009695399/functions/opendir.html">opendir()</a>
 and
 <a class="reference external" href="http://pubs.opengroup.org/onlinepubs/009695399/functions/readdir_r.html">readdir()</a>
@@ -1819,8 +1805,8 @@ implements the <a class="reference internal" href="#os.PathLike" title="os.PathL
 <code class="descclassname">os.</code><code class="descname">stat</code><span class="sig-paren">(</span><em>path</em>, <em>*</em>, <em>dir_fd=None</em>, <em>follow_symlinks=True</em><span class="sig-paren">)</span><a class="headerlink" href="#os.stat" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>Get the status of a file or a file descriptor. Perform the equivalent of a
 <code class="xref c c-func docutils literal"><span class="pre">stat()</span></code> system call on the given path. <em>path</em> may be specified as
-either a string or bytes &#8211; directly or indirectly through the <a class="reference internal" href="#os.PathLike" title="os.PathLike"><code class="xref py py-class docutils literal"><span class="pre">PathLike</span></code></a>
-interface &#8211; or as an open file descriptor. Return a <a class="reference internal" href="#os.stat_result" title="os.stat_result"><code class="xref py py-class docutils literal"><span class="pre">stat_result</span></code></a>
+either a string or bytes – directly or indirectly through the <a class="reference internal" href="#os.PathLike" title="os.PathLike"><code class="xref py py-class docutils literal"><span class="pre">PathLike</span></code></a>
+interface – or as an open file descriptor. Return a <a class="reference internal" href="#os.stat_result" title="os.stat_result"><code class="xref py py-class docutils literal"><span class="pre">stat_result</span></code></a>
 object.</p>
 <p>この関数は通常はシンボリックリンクをたどります。シンボリックリンクに対して stat したい場合は <code class="docutils literal"><span class="pre">follow_symlinks=False</span></code> とするか、 <a class="reference internal" href="#os.lstat" title="os.lstat"><code class="xref py py-func docutils literal"><span class="pre">lstat()</span></code></a> を利用してください。</p>
 <p>この関数は <a class="reference internal" href="#path-fd"><span class="std std-ref">ファイル記述子の指定</span></a> および <a class="reference internal" href="#follow-symlinks"><span class="std std-ref">シンボリックリンクをたどらない</span></a> をサポートしています。</p>
@@ -1912,10 +1898,8 @@ object.</p>
 <code class="descname">st_ctime</code><a class="headerlink" href="#os.stat_result.st_ctime" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>プラットフォーム依存:</p>
 <ul class="simple">
-<li><p class="first">Unix ではメタデータの最終更新時刻</p>
-</li>
-<li><p class="first">Windows では作成時刻、単位は秒</p>
-</li>
+<li>Unix ではメタデータの最終更新時刻</li>
+<li>Windows では作成時刻、単位は秒</li>
 </ul>
 </dd></dl>
 
@@ -1936,10 +1920,8 @@ object.</p>
 <code class="descname">st_ctime_ns</code><a class="headerlink" href="#os.stat_result.st_ctime_ns" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>プラットフォーム依存:</p>
 <ul class="simple">
-<li><p class="first">Unix ではメタデータの最終更新時刻</p>
-</li>
-<li><p class="first">Windows で、ナノ秒 (整数) で表した作成時刻。</p>
-</li>
+<li>Unix ではメタデータの最終更新時刻</li>
+<li>Windows で、ナノ秒 (整数) で表した作成時刻。</li>
 </ul>
 </dd></dl>
 
@@ -2181,12 +2163,9 @@ object.</p>
 <dd><p><em>path</em> で指定されたファイルに最終アクセス時刻および最終修正時刻を設定します。</p>
 <p><a class="reference internal" href="#os.utime" title="os.utime"><code class="xref py py-func docutils literal"><span class="pre">utime()</span></code></a> は 2 つの任意引数 <em>times</em> と <em>ns</em> をとります。これらは <em>path</em> に設定する時刻を指定し、以下のように使用されます:</p>
 <ul class="simple">
-<li><p class="first"><em>ns</em> を指定する場合、ナノ秒を表す整数値をメンバーとして使用して、 <code class="docutils literal"><span class="pre">(atime_ns,</span> <span class="pre">mtime_ns)</span></code> の形式の 2 要素タプルを指定する必要があります。</p>
-</li>
-<li><p class="first"><em>times</em> が <code class="docutils literal"><span class="pre">None</span></code> ではない場合、<code class="docutils literal"><span class="pre">(atime,</span> <span class="pre">mtime)</span></code> の形式で各メンバーは単位を秒で表す整数か浮動小数点値のタプルを指定しなければなりません。</p>
-</li>
-<li><p class="first"><em>times</em> が <code class="docutils literal"><span class="pre">None</span></code> で、 <em>ns</em> が指定されていない場合、これは両方の時間を現在時刻として <code class="docutils literal"><span class="pre">ns=(atime_ns,</span> <span class="pre">mtime_ns)</span></code> を指定することと等価です。</p>
-</li>
+<li><em>ns</em> を指定する場合、ナノ秒を表す整数値をメンバーとして使用して、 <code class="docutils literal"><span class="pre">(atime_ns,</span> <span class="pre">mtime_ns)</span></code> の形式の 2 要素タプルを指定する必要があります。</li>
+<li><em>times</em> が <code class="docutils literal"><span class="pre">None</span></code> ではない場合、<code class="docutils literal"><span class="pre">(atime,</span> <span class="pre">mtime)</span></code> の形式で各メンバーは単位を秒で表す整数か浮動小数点値のタプルを指定しなければなりません。</li>
+<li><em>times</em> が <code class="docutils literal"><span class="pre">None</span></code> で、 <em>ns</em> が指定されていない場合、これは両方の時間を現在時刻として <code class="docutils literal"><span class="pre">ns=(atime_ns,</span> <span class="pre">mtime_ns)</span></code> を指定することと等価です。</li>
 </ul>
 <p><em>times</em> と <em>ns</em> の両方にタプルが指定されるとエラーになります。</p>
 <p><em>path</em> にディレクトリを指定できるかどうかは、オペレーティングシステムがディレクトリをファイルとして実装しているかどうかによります (例えば Windows はそうではありません)。ここで設定した時刻が、後に <a class="reference internal" href="#os.stat" title="os.stat"><code class="xref py py-func docutils literal"><span class="pre">stat()</span></code></a> の呼び出し時正確に返されない場合があります。これはオペレーティングシステムが記録するアクセスおよび修正時刻の精度に依存しています; <a class="reference internal" href="#os.stat" title="os.stat"><code class="xref py py-func docutils literal"><span class="pre">stat()</span></code></a> を参照してください。正確な時刻を保持する最善の方法は、<cite>utime</cite> で <em>ns</em> 引数を指定し、<a class="reference internal" href="#os.stat" title="os.stat"><code class="xref py py-func docutils literal"><span class="pre">os.stat()</span></code></a> の返り値オブジェクトから <em>st_atime_ns</em> および <em>st_mtime_ns</em> フィールドを使用することです。</p>
@@ -2403,9 +2382,9 @@ attribute will not be created and <code class="docutils literal"><span class="pr
 <code class="descclassname">os.</code><code class="descname">execvpe</code><span class="sig-paren">(</span><em>file</em>, <em>args</em>, <em>env</em><span class="sig-paren">)</span><a class="headerlink" href="#os.execvpe" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>これらの関数はすべて、現在のプロセスを置き換える形で新たなプログラムを実行します ; 現在のプロセスは返り値を返しません。 Unix では、新たに実行される実行コードは現在のプロセス内に読み込まれ、呼び出し側と同じプロセス ID を持つことになります。エラーは <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> 例外として報告されます。</p>
 <p>現在のプロセスは瞬時に置き換えられます。開かれているファイルオブジェクトやファイル記述子はフラッシュされません。そのため、バッファ内にデータが残っているかもしれない場合、 <a class="reference internal" href="#os.execl" title="os.execl"><code class="xref py py-func docutils literal"><span class="pre">exec*</span></code></a> 関数を実行する前に <code class="xref py py-func docutils literal"><span class="pre">sys.stdout.flush()</span></code> か <a class="reference internal" href="#os.fsync" title="os.fsync"><code class="xref py py-func docutils literal"><span class="pre">os.fsync()</span></code></a> を利用してバッファをフラッシュしておく必要があります。</p>
-<p>&#8220;l&#8221; および &#8220;v&#8221; のついた <a class="reference internal" href="#os.execl" title="os.execl"><code class="xref py py-func docutils literal"><span class="pre">exec*</span></code></a> 関数は、コマンドライン引数をどのように渡すかが異なります。 &#8220;l&#8221; 型は、コードを書くときにパラメタ数が決まっている場合に、おそらくもっとも簡単に利用できます。個々のパラメタは単に <code class="xref py py-func docutils literal"><span class="pre">execl*()</span></code> 関数の追加パラメタとなります。 &#8220;v&#8221; 型は、パラメタの数が可変の時に便利で、リストかタプルの引数が <em>args</em> パラメタとして渡されます。どちらの場合も、子プロセスに渡す引数は動作させようとしているコマンドの名前から始まるべきですが、これは強制されません。</p>
-<p>末尾近くに &#8220;p&#8221; をもつ型 (<a class="reference internal" href="#os.execlp" title="os.execlp"><code class="xref py py-func docutils literal"><span class="pre">execlp()</span></code></a>, <a class="reference internal" href="#os.execlpe" title="os.execlpe"><code class="xref py py-func docutils literal"><span class="pre">execlpe()</span></code></a>, <a class="reference internal" href="#os.execvp" title="os.execvp"><code class="xref py py-func docutils literal"><span class="pre">execvp()</span></code></a>, および <a class="reference internal" href="#os.execvpe" title="os.execvpe"><code class="xref py py-func docutils literal"><span class="pre">execvpe()</span></code></a>) は、プログラム <em>file</em> を探すために環境変数 <span class="target" id="index-55"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code> を利用します。環境変数が ( 次の段で述べる <a class="reference internal" href="#os.execl" title="os.execl"><code class="xref py py-func docutils literal"><span class="pre">exec*e</span></code></a> 型関数で ) 置き換えられる場合、環境変数は <span class="target" id="index-56"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code> を決定する上の情報源として使われます。その他の型、 <a class="reference internal" href="#os.execl" title="os.execl"><code class="xref py py-func docutils literal"><span class="pre">execl()</span></code></a>, <a class="reference internal" href="#os.execle" title="os.execle"><code class="xref py py-func docutils literal"><span class="pre">execle()</span></code></a>, <a class="reference internal" href="#os.execv" title="os.execv"><code class="xref py py-func docutils literal"><span class="pre">execv()</span></code></a>, および <a class="reference internal" href="#os.execve" title="os.execve"><code class="xref py py-func docutils literal"><span class="pre">execve()</span></code></a> では、実行コードを探すために <span class="target" id="index-57"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code> を使いません。 <em>path</em> には適切に設定された絶対パスまたは相対パスが入っていなくてはなりません。</p>
-<p><a class="reference internal" href="#os.execle" title="os.execle"><code class="xref py py-func docutils literal"><span class="pre">execle()</span></code></a> 、 <a class="reference internal" href="#os.execlpe" title="os.execlpe"><code class="xref py py-func docutils literal"><span class="pre">execlpe()</span></code></a> 、 <a class="reference internal" href="#os.execve" title="os.execve"><code class="xref py py-func docutils literal"><span class="pre">execve()</span></code></a> 、および <a class="reference internal" href="#os.execvpe" title="os.execvpe"><code class="xref py py-func docutils literal"><span class="pre">execvpe()</span></code></a> (すべて末尾に &#8220;e&#8221; がついています) では、 <em>env</em> 引数は新たなプロセスで利用される環境変数を定義するためのマップ型でなくてはなりません ( 現在のプロセスの環境変数の代わりに利用されます ); <a class="reference internal" href="#os.execl" title="os.execl"><code class="xref py py-func docutils literal"><span class="pre">execl()</span></code></a> 、 <a class="reference internal" href="#os.execlp" title="os.execlp"><code class="xref py py-func docutils literal"><span class="pre">execlp()</span></code></a> 、 <a class="reference internal" href="#os.execv" title="os.execv"><code class="xref py py-func docutils literal"><span class="pre">execv()</span></code></a> 、および <a class="reference internal" href="#os.execvp" title="os.execvp"><code class="xref py py-func docutils literal"><span class="pre">execvp()</span></code></a> では、すべて新たなプロセスは現在のプロセスの環境を引き継ぎます。</p>
+<p>「l」 および 「v」 のついた <a class="reference internal" href="#os.execl" title="os.execl"><code class="xref py py-func docutils literal"><span class="pre">exec*</span></code></a> 関数は、コマンドライン引数をどのように渡すかが異なります。 「l」 型は、コードを書くときにパラメタ数が決まっている場合に、おそらくもっとも簡単に利用できます。個々のパラメタは単に <code class="xref py py-func docutils literal"><span class="pre">execl*()</span></code> 関数の追加パラメタとなります。 「v」 型は、パラメタの数が可変の時に便利で、リストかタプルの引数が <em>args</em> パラメタとして渡されます。どちらの場合も、子プロセスに渡す引数は動作させようとしているコマンドの名前から始まるべきですが、これは強制されません。</p>
+<p>末尾近くに 「p」 をもつ型 (<a class="reference internal" href="#os.execlp" title="os.execlp"><code class="xref py py-func docutils literal"><span class="pre">execlp()</span></code></a>, <a class="reference internal" href="#os.execlpe" title="os.execlpe"><code class="xref py py-func docutils literal"><span class="pre">execlpe()</span></code></a>, <a class="reference internal" href="#os.execvp" title="os.execvp"><code class="xref py py-func docutils literal"><span class="pre">execvp()</span></code></a>, および <a class="reference internal" href="#os.execvpe" title="os.execvpe"><code class="xref py py-func docutils literal"><span class="pre">execvpe()</span></code></a>) は、プログラム <em>file</em> を探すために環境変数 <span class="target" id="index-55"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code> を利用します。環境変数が ( 次の段で述べる <a class="reference internal" href="#os.execl" title="os.execl"><code class="xref py py-func docutils literal"><span class="pre">exec*e</span></code></a> 型関数で ) 置き換えられる場合、環境変数は <span class="target" id="index-56"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code> を決定する上の情報源として使われます。その他の型、 <a class="reference internal" href="#os.execl" title="os.execl"><code class="xref py py-func docutils literal"><span class="pre">execl()</span></code></a>, <a class="reference internal" href="#os.execle" title="os.execle"><code class="xref py py-func docutils literal"><span class="pre">execle()</span></code></a>, <a class="reference internal" href="#os.execv" title="os.execv"><code class="xref py py-func docutils literal"><span class="pre">execv()</span></code></a>, および <a class="reference internal" href="#os.execve" title="os.execve"><code class="xref py py-func docutils literal"><span class="pre">execve()</span></code></a> では、実行コードを探すために <span class="target" id="index-57"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code> を使いません。 <em>path</em> には適切に設定された絶対パスまたは相対パスが入っていなくてはなりません。</p>
+<p><a class="reference internal" href="#os.execle" title="os.execle"><code class="xref py py-func docutils literal"><span class="pre">execle()</span></code></a> 、 <a class="reference internal" href="#os.execlpe" title="os.execlpe"><code class="xref py py-func docutils literal"><span class="pre">execlpe()</span></code></a> 、 <a class="reference internal" href="#os.execve" title="os.execve"><code class="xref py py-func docutils literal"><span class="pre">execve()</span></code></a> 、および <a class="reference internal" href="#os.execvpe" title="os.execvpe"><code class="xref py py-func docutils literal"><span class="pre">execvpe()</span></code></a> (すべて末尾に 「e」 がついています) では、 <em>env</em> 引数は新たなプロセスで利用される環境変数を定義するためのマップ型でなくてはなりません ( 現在のプロセスの環境変数の代わりに利用されます ); <a class="reference internal" href="#os.execl" title="os.execl"><code class="xref py py-func docutils literal"><span class="pre">execl()</span></code></a> 、 <a class="reference internal" href="#os.execlp" title="os.execlp"><code class="xref py py-func docutils literal"><span class="pre">execlp()</span></code></a> 、 <a class="reference internal" href="#os.execv" title="os.execv"><code class="xref py py-func docutils literal"><span class="pre">execv()</span></code></a> 、および <a class="reference internal" href="#os.execvp" title="os.execvp"><code class="xref py py-func docutils literal"><span class="pre">execvp()</span></code></a> では、すべて新たなプロセスは現在のプロセスの環境を引き継ぎます。</p>
 <p>一部のプラットフォームの <a class="reference internal" href="#os.execve" title="os.execve"><code class="xref py py-func docutils literal"><span class="pre">execve()</span></code></a> では、<em>path</em> はオープンしているファイル記述子で指定することもできます。この機能をサポートしていないプラットフォームもあります; <a class="reference internal" href="#os.supports_fd" title="os.supports_fd"><code class="xref py py-data docutils literal"><span class="pre">os.supports_fd</span></code></a> を使うことで利用可能かどうか調べることができます。利用できない場合、<a class="reference internal" href="exceptions.html#NotImplementedError" title="NotImplementedError"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code></a> が送出されます。</p>
 <p>利用できる環境 : Unix 、 Windows 。</p>
 <div class="versionadded">
@@ -2546,7 +2525,7 @@ attribute will not be created and <code class="docutils literal"><span class="pr
 <dl class="data">
 <dt id="os.EX_NOTFOUND">
 <code class="descclassname">os.</code><code class="descname">EX_NOTFOUND</code><a class="headerlink" href="#os.EX_NOTFOUND" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>&#8220;an entry was not found&#8221; のようなことを表す終了コード。</p>
+<dd><p>「an entry was not found」 のようなことを表す終了コード。</p>
 <p>利用できる環境 : Unix 。</p>
 </dd></dl>
 
@@ -2590,7 +2569,7 @@ attribute will not be created and <code class="docutils literal"><span class="pr
 <dl class="function">
 <dt id="os.nice">
 <code class="descclassname">os.</code><code class="descname">nice</code><span class="sig-paren">(</span><em>increment</em><span class="sig-paren">)</span><a class="headerlink" href="#os.nice" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>プロセスの &#8220;nice 値 &#8221; に <em>increment</em> を加えます。新たな nice 値を返します。</p>
+<dd><p>プロセスの 「nice 値 」 に <em>increment</em> を加えます。新たな nice 値を返します。</p>
 <p>利用できる環境 : Unix 。</p>
 </dd></dl>
 
@@ -2629,9 +2608,9 @@ attribute will not be created and <code class="docutils literal"><span class="pr
 <dd><p>新たなプロセス内でプログラム <em>path</em> を実行します。</p>
 <p>(<a class="reference internal" href="subprocess.html#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal"><span class="pre">subprocess</span></code></a> モジュールが、新しいプロセスを実行して結果を取得するための、より強力な機能を提供しています。この関数の代わりに <a class="reference internal" href="subprocess.html#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal"><span class="pre">subprocess</span></code></a> モジュールを利用することが推奨されています。 <a class="reference internal" href="subprocess.html#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal"><span class="pre">subprocess</span></code></a> モジュールのドキュメントの、 <a class="reference internal" href="subprocess.html#subprocess-replacements"><span class="std std-ref">古い関数を subprocess モジュールで置き換える</span></a> セクションを参照してください )</p>
 <p><em>mode</em> が <a class="reference internal" href="#os.P_NOWAIT" title="os.P_NOWAIT"><code class="xref py py-const docutils literal"><span class="pre">P_NOWAIT</span></code></a> の場合、この関数は新たなプロセスのプロセス ID を返します ; <em>mode</em> が <a class="reference internal" href="#os.P_WAIT" title="os.P_WAIT"><code class="xref py py-const docutils literal"><span class="pre">P_WAIT</span></code></a> の場合、子プロセスが正常に終了するとその終了コードが返ります。そうでない場合にはプロセスを kill したシグナル <em>signal</em> に対して <code class="docutils literal"><span class="pre">-signal</span></code> が返ります。 Windows では、プロセス ID は実際にはプロセスハンドル値になるので、 <a class="reference internal" href="#os.waitpid" title="os.waitpid"><code class="xref py py-func docutils literal"><span class="pre">waitpid()</span></code></a> 関数で使えます。</p>
-<p>&#8220;l&#8221; および &#8220;v&#8221; のついた <a class="reference internal" href="#os.spawnl" title="os.spawnl"><code class="xref py py-func docutils literal"><span class="pre">spawn*</span></code></a> 関数は、コマンドライン引数をどのように渡すかが異なります。 &#8220;l&#8221; 型は、コードを書くときにパラメタ数が決まっている場合に、おそらくもっとも簡単に利用できます。個々のパラメタは単に <code class="xref py py-func docutils literal"><span class="pre">spawnl*()</span></code> 関数の追加パラメタとなります。 &#8220;v&#8221; 型は、パラメタの数が可変の時に便利で、リストかタプルの引数が <em>args</em> パラメタとして渡されます。どちらの場合も、子プロセスに渡す引数は動作させようとしているコマンドの名前から始まらなければなりません。</p>
-<p>末尾近くに &#8220;p&#8221; をもつ型 (<a class="reference internal" href="#os.spawnlp" title="os.spawnlp"><code class="xref py py-func docutils literal"><span class="pre">spawnlp()</span></code></a>, <a class="reference internal" href="#os.spawnlpe" title="os.spawnlpe"><code class="xref py py-func docutils literal"><span class="pre">spawnlpe()</span></code></a>, <a class="reference internal" href="#os.spawnvp" title="os.spawnvp"><code class="xref py py-func docutils literal"><span class="pre">spawnvp()</span></code></a>, <a class="reference internal" href="#os.spawnvpe" title="os.spawnvpe"><code class="xref py py-func docutils literal"><span class="pre">spawnvpe()</span></code></a>) は、プログラム <em>file</em> を探すために環境変数 <span class="target" id="index-58"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code> を利用します。環境変数が ( 次の段で述べる <a class="reference internal" href="#os.spawnl" title="os.spawnl"><code class="xref py py-func docutils literal"><span class="pre">spawn*e</span></code></a> 型関数で ) 置き換えられる場合、環境変数は <span class="target" id="index-59"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code> を決定する上の情報源として使われます。その他の型、 <a class="reference internal" href="#os.spawnl" title="os.spawnl"><code class="xref py py-func docutils literal"><span class="pre">spawnl()</span></code></a>, <a class="reference internal" href="#os.spawnle" title="os.spawnle"><code class="xref py py-func docutils literal"><span class="pre">spawnle()</span></code></a>, <a class="reference internal" href="#os.spawnv" title="os.spawnv"><code class="xref py py-func docutils literal"><span class="pre">spawnv()</span></code></a>, および <a class="reference internal" href="#os.spawnve" title="os.spawnve"><code class="xref py py-func docutils literal"><span class="pre">spawnve()</span></code></a> では、実行コードを探すために <span class="target" id="index-60"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code> を使いません。 <em>path</em> には適切に設定された絶対パスまたは相対パスが入っていなくてはなりません。</p>
-<p><a class="reference internal" href="#os.spawnle" title="os.spawnle"><code class="xref py py-func docutils literal"><span class="pre">spawnle()</span></code></a>, <a class="reference internal" href="#os.spawnlpe" title="os.spawnlpe"><code class="xref py py-func docutils literal"><span class="pre">spawnlpe()</span></code></a>, <a class="reference internal" href="#os.spawnve" title="os.spawnve"><code class="xref py py-func docutils literal"><span class="pre">spawnve()</span></code></a>, および <a class="reference internal" href="#os.spawnvpe" title="os.spawnvpe"><code class="xref py py-func docutils literal"><span class="pre">spawnvpe()</span></code></a> (すべて末尾に &#8220;e&#8221; がついています) では、 <em>env</em> 引数は新たなプロセスで利用される環境変数を定義するためのマップ型でなくてはなりません ; <a class="reference internal" href="#os.spawnl" title="os.spawnl"><code class="xref py py-func docutils literal"><span class="pre">spawnl()</span></code></a> 、 <a class="reference internal" href="#os.spawnlp" title="os.spawnlp"><code class="xref py py-func docutils literal"><span class="pre">spawnlp()</span></code></a> 、 <a class="reference internal" href="#os.spawnv" title="os.spawnv"><code class="xref py py-func docutils literal"><span class="pre">spawnv()</span></code></a> 、および <a class="reference internal" href="#os.spawnvp" title="os.spawnvp"><code class="xref py py-func docutils literal"><span class="pre">spawnvp()</span></code></a> では、すべて新たなプロセスは現在のプロセスの環境を引き継ぎます。 <em>env</em> 辞書のキーと値はすべて文字列である必要があります。不正なキーや値を与えると関数が失敗し、 <code class="docutils literal"><span class="pre">127</span></code> を返します。</p>
+<p>「l」 および 「v」 のついた <a class="reference internal" href="#os.spawnl" title="os.spawnl"><code class="xref py py-func docutils literal"><span class="pre">spawn*</span></code></a> 関数は、コマンドライン引数をどのように渡すかが異なります。 「l」 型は、コードを書くときにパラメタ数が決まっている場合に、おそらくもっとも簡単に利用できます。個々のパラメタは単に <code class="xref py py-func docutils literal"><span class="pre">spawnl*()</span></code> 関数の追加パラメタとなります。 「v」 型は、パラメタの数が可変の時に便利で、リストかタプルの引数が <em>args</em> パラメタとして渡されます。どちらの場合も、子プロセスに渡す引数は動作させようとしているコマンドの名前から始まらなければなりません。</p>
+<p>末尾近くに 「p」 をもつ型 (<a class="reference internal" href="#os.spawnlp" title="os.spawnlp"><code class="xref py py-func docutils literal"><span class="pre">spawnlp()</span></code></a>, <a class="reference internal" href="#os.spawnlpe" title="os.spawnlpe"><code class="xref py py-func docutils literal"><span class="pre">spawnlpe()</span></code></a>, <a class="reference internal" href="#os.spawnvp" title="os.spawnvp"><code class="xref py py-func docutils literal"><span class="pre">spawnvp()</span></code></a>, <a class="reference internal" href="#os.spawnvpe" title="os.spawnvpe"><code class="xref py py-func docutils literal"><span class="pre">spawnvpe()</span></code></a>) は、プログラム <em>file</em> を探すために環境変数 <span class="target" id="index-58"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code> を利用します。環境変数が ( 次の段で述べる <a class="reference internal" href="#os.spawnl" title="os.spawnl"><code class="xref py py-func docutils literal"><span class="pre">spawn*e</span></code></a> 型関数で ) 置き換えられる場合、環境変数は <span class="target" id="index-59"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code> を決定する上の情報源として使われます。その他の型、 <a class="reference internal" href="#os.spawnl" title="os.spawnl"><code class="xref py py-func docutils literal"><span class="pre">spawnl()</span></code></a>, <a class="reference internal" href="#os.spawnle" title="os.spawnle"><code class="xref py py-func docutils literal"><span class="pre">spawnle()</span></code></a>, <a class="reference internal" href="#os.spawnv" title="os.spawnv"><code class="xref py py-func docutils literal"><span class="pre">spawnv()</span></code></a>, および <a class="reference internal" href="#os.spawnve" title="os.spawnve"><code class="xref py py-func docutils literal"><span class="pre">spawnve()</span></code></a> では、実行コードを探すために <span class="target" id="index-60"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code> を使いません。 <em>path</em> には適切に設定された絶対パスまたは相対パスが入っていなくてはなりません。</p>
+<p><a class="reference internal" href="#os.spawnle" title="os.spawnle"><code class="xref py py-func docutils literal"><span class="pre">spawnle()</span></code></a>, <a class="reference internal" href="#os.spawnlpe" title="os.spawnlpe"><code class="xref py py-func docutils literal"><span class="pre">spawnlpe()</span></code></a>, <a class="reference internal" href="#os.spawnve" title="os.spawnve"><code class="xref py py-func docutils literal"><span class="pre">spawnve()</span></code></a>, および <a class="reference internal" href="#os.spawnvpe" title="os.spawnvpe"><code class="xref py py-func docutils literal"><span class="pre">spawnvpe()</span></code></a> (すべて末尾に 「e」 がついています) では、 <em>env</em> 引数は新たなプロセスで利用される環境変数を定義するためのマップ型でなくてはなりません ; <a class="reference internal" href="#os.spawnl" title="os.spawnl"><code class="xref py py-func docutils literal"><span class="pre">spawnl()</span></code></a> 、 <a class="reference internal" href="#os.spawnlp" title="os.spawnlp"><code class="xref py py-func docutils literal"><span class="pre">spawnlp()</span></code></a> 、 <a class="reference internal" href="#os.spawnv" title="os.spawnv"><code class="xref py py-func docutils literal"><span class="pre">spawnv()</span></code></a> 、および <a class="reference internal" href="#os.spawnvp" title="os.spawnvp"><code class="xref py py-func docutils literal"><span class="pre">spawnvp()</span></code></a> では、すべて新たなプロセスは現在のプロセスの環境を引き継ぎます。 <em>env</em> 辞書のキーと値はすべて文字列である必要があります。不正なキーや値を与えると関数が失敗し、 <code class="docutils literal"><span class="pre">127</span></code> を返します。</p>
 <p>例えば、以下の <a class="reference internal" href="#os.spawnlp" title="os.spawnlp"><code class="xref py py-func docutils literal"><span class="pre">spawnlp()</span></code></a> および <a class="reference internal" href="#os.spawnvpe" title="os.spawnvpe"><code class="xref py py-func docutils literal"><span class="pre">spawnvpe()</span></code></a> 呼び出しは等価です</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="n">os</span><span class="o">.</span><span class="n">spawnlp</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">P_WAIT</span><span class="p">,</span> <span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;cp&#39;</span><span class="p">,</span> <span class="s1">&#39;index.html&#39;</span><span class="p">,</span> <span class="s1">&#39;/dev/null&#39;</span><span class="p">)</span>
@@ -2676,7 +2655,7 @@ attribute will not be created and <code class="docutils literal"><span class="pr
 <code class="descclassname">os.</code><code class="descname">startfile</code><span class="sig-paren">(</span><em>path</em><span class="optional">[</span>, <em>operation</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#os.startfile" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>ファイルを関連付けられたアプリケーションを使ってスタートします。</p>
 <p><em>operation</em> が指定されないか、または <code class="docutils literal"><span class="pre">'open'</span></code> である時、この動作は、 Windows の Explorer 上でのファイルをダブルクリックした、あるいはコマンドプロンプト上でファイル名を <strong class="program">start</strong> コマンドの引数としての実行した場合と等価です : ファイルは拡張子が関連付けされているアプリケーション ( が存在する場合 ) を使って開かれます。</p>
-<p>他の <em>operation</em> が与えられる場合、それはファイルに対して何がなされるべきかを表す &#8220;command verb&#8221; ( コマンドを表す動詞 ) でなければなりません。 Microsoft が文書化している動詞は、 <code class="docutils literal"><span class="pre">'print'</span></code> と <code class="docutils literal"><span class="pre">'edit'</span></code> ( ファイルに対して ) および <code class="docutils literal"><span class="pre">'explore'</span></code> と <code class="docutils literal"><span class="pre">'find'</span></code> ( ディレクトリに対して ) です。</p>
+<p>他の <em>operation</em> が与えられる場合、それはファイルに対して何がなされるべきかを表す 「command verb」 ( コマンドを表す動詞 ) でなければなりません。 Microsoft が文書化している動詞は、 <code class="docutils literal"><span class="pre">'print'</span></code> と <code class="docutils literal"><span class="pre">'edit'</span></code> ( ファイルに対して ) および <code class="docutils literal"><span class="pre">'explore'</span></code> と <code class="docutils literal"><span class="pre">'find'</span></code> ( ディレクトリに対して ) です。</p>
 <p><a class="reference internal" href="#os.startfile" title="os.startfile"><code class="xref py py-func docutils literal"><span class="pre">startfile()</span></code></a> は関連付けされたアプリケーションが起動すると同時に返ります。アプリケーションが閉じるまで待機させるためのオプションはなく、アプリケーションの終了状態を取得する方法もありません。引数 <em>path</em> はカレントディレクトリからの相対パスです。絶対パスで指定したい場合は、最初の文字はスラッシュ (<code class="docutils literal"><span class="pre">'/'</span></code>) ではないので注意してください。最初の文字がスラッシュの場合、下層の Win32 <code class="xref c c-func docutils literal"><span class="pre">ShellExecute()</span></code> 関数は動作しません。 <a class="reference internal" href="os.path.html#os.path.normpath" title="os.path.normpath"><code class="xref py py-func docutils literal"><span class="pre">os.path.normpath()</span></code></a> 関数を使って、 Win32 用に正しくコード化されたパスになるようにしてください。</p>
 <p>インタープリタの起動時のオーバーヘッドを削減するため、この関数が最初に呼ばれるまで、Win32 <code class="xref c c-func docutils literal"><span class="pre">ShellExecute()</span></code> 関数は決定されません。関数を決定できない場合、 <a class="reference internal" href="exceptions.html#NotImplementedError" title="NotImplementedError"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code></a> が送出されます。</p>
 <p>利用できる環境 : Windows.</p>
@@ -2697,16 +2676,11 @@ attribute will not be created and <code class="docutils literal"><span class="pr
 <code class="descclassname">os.</code><code class="descname">times</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#os.times" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>現在の全体的なプロセス時間を返します。返り値は 5 個の属性を持つオブジェクトになります:</p>
 <ul class="simple">
-<li><p class="first"><code class="xref py py-attr docutils literal"><span class="pre">user</span></code> - ユーザー時間</p>
-</li>
-<li><p class="first"><a class="reference internal" href="#os.system" title="os.system"><code class="xref py py-attr docutils literal"><span class="pre">system</span></code></a> - システム時間</p>
-</li>
-<li><p class="first"><code class="xref py py-attr docutils literal"><span class="pre">children_user</span></code> - すべての子プロセスのユーザー時間</p>
-</li>
-<li><p class="first"><code class="xref py py-attr docutils literal"><span class="pre">children_system</span></code> - すべての子プロセスのシステム時間</p>
-</li>
-<li><p class="first"><code class="xref py py-attr docutils literal"><span class="pre">elapsed</span></code> - 去のある固定時点からの経過実時間</p>
-</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">user</span></code> - ユーザー時間</li>
+<li><a class="reference internal" href="#os.system" title="os.system"><code class="xref py py-attr docutils literal"><span class="pre">system</span></code></a> - システム時間</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">children_user</span></code> - すべての子プロセスのユーザー時間</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">children_system</span></code> - すべての子プロセスのシステム時間</li>
+<li><code class="xref py py-attr docutils literal"><span class="pre">elapsed</span></code> - 去のある固定時点からの経過実時間</li>
 </ul>
 <p>後方互換性のため、このオブジェクトは 5 個のアイテム <code class="xref py py-attr docutils literal"><span class="pre">user</span></code> 、 <a class="reference internal" href="#os.system" title="os.system"><code class="xref py py-attr docutils literal"><span class="pre">system</span></code></a> 、 <code class="xref py py-attr docutils literal"><span class="pre">children_user</span></code> 、 <code class="xref py py-attr docutils literal"><span class="pre">children_system</span></code> 、および <code class="xref py py-attr docutils literal"><span class="pre">elapsed</span></code> を持つタプルのようにも振る舞います。</p>
 <p><em class="manpage">times(2)</em> の Unix マニュアルページ、または対応する Windows プラットフォーム API ドキュメントを参照してください。Windows では、<code class="xref py py-attr docutils literal"><span class="pre">user</span></code> および <a class="reference internal" href="#os.system" title="os.system"><code class="xref py py-attr docutils literal"><span class="pre">system</span></code></a> のみ有効で、その他の属性にはゼロが入ります。</p>
@@ -2719,7 +2693,7 @@ attribute will not be created and <code class="docutils literal"><span class="pr
 <dl class="function">
 <dt id="os.wait">
 <code class="descclassname">os.</code><code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#os.wait" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>子プロセスの実行完了を待機し、子プロセスの pid と終了コードインジケーター &#8212; 16 ビットの数値で、下位バイトがプロセスを kill したシグナル番号、上位バイトが終了ステータス ( シグナル番号がゼロの場合 ) &#8212; の入ったタプルを返します ; コアダンプファイルが生成された場合、下位バイトの最上桁ビットが立てられます。</p>
+<dd><p>子プロセスの実行完了を待機し、子プロセスの pid と終了コードインジケーター — 16 ビットの数値で、下位バイトがプロセスを kill したシグナル番号、上位バイトが終了ステータス ( シグナル番号がゼロの場合 ) — の入ったタプルを返します ; コアダンプファイルが生成された場合、下位バイトの最上桁ビットが立てられます。</p>
 <p>利用できる環境 : Unix 。</p>
 </dd></dl>
 
@@ -3073,7 +3047,7 @@ attribute will not be created and <code class="docutils literal"><span class="pr
 <dl class="data">
 <dt id="os.sep">
 <code class="descclassname">os.</code><code class="descname">sep</code><a class="headerlink" href="#os.sep" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>パス名を要素に分割するためにオペレーティングシステムで利用されている文字です。例えば POSIX では <code class="docutils literal"><span class="pre">'/'</span></code> で、 Windows では <code class="docutils literal"><span class="pre">'\\'</span></code> です。しかし、このことを知っているだけではパス名を解析したり、パス名同士を結合したりするには不十分です &#8212; こうした操作には <a class="reference internal" href="os.path.html#os.path.split" title="os.path.split"><code class="xref py py-func docutils literal"><span class="pre">os.path.split()</span></code></a> や <a class="reference internal" href="os.path.html#os.path.join" title="os.path.join"><code class="xref py py-func docutils literal"><span class="pre">os.path.join()</span></code></a> を使用してください &#8212; が、たまに便利なこともあります。 <a class="reference internal" href="os.path.html#module-os.path" title="os.path: Operations on pathnames."><code class="xref py py-mod docutils literal"><span class="pre">os.path</span></code></a> からも利用できます。</p>
+<dd><p>パス名を要素に分割するためにオペレーティングシステムで利用されている文字です。例えば POSIX では <code class="docutils literal"><span class="pre">'/'</span></code> で、 Windows では <code class="docutils literal"><span class="pre">'\\'</span></code> です。しかし、このことを知っているだけではパス名を解析したり、パス名同士を結合したりするには不十分です — こうした操作には <a class="reference internal" href="os.path.html#os.path.split" title="os.path.split"><code class="xref py py-func docutils literal"><span class="pre">os.path.split()</span></code></a> や <a class="reference internal" href="os.path.html#os.path.join" title="os.path.join"><code class="xref py py-func docutils literal"><span class="pre">os.path.join()</span></code></a> を使用してください — が、たまに便利なこともあります。 <a class="reference internal" href="os.path.html#module-os.path" title="os.path: Operations on pathnames."><code class="xref py py-mod docutils literal"><span class="pre">os.path</span></code></a> からも利用できます。</p>
 </dd></dl>
 
 <dl class="data">
@@ -3218,7 +3192,7 @@ block in these cases, but instead immediately raises <a class="reference interna
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">16.1. <code class="docutils literal"><span class="pre">os</span></code> &#8212; 雑多なオペレーティングシステムインタフェース</a><ul>
+<li><a class="reference internal" href="#">16.1. <code class="docutils literal"><span class="pre">os</span></code> — 雑多なオペレーティングシステムインタフェース</a><ul>
 <li><a class="reference internal" href="#file-names-command-line-arguments-and-environment-variables">16.1.1. ファイル名、コマンドライン引数、および環境変数</a></li>
 <li><a class="reference internal" href="#process-parameters">16.1.2. プロセスのパラメーター</a></li>
 <li><a class="reference internal" href="#file-object-creation">16.1.3. ファイルオブジェクトの生成</a></li>
@@ -3244,13 +3218,13 @@ block in these cases, but instead immediately raises <a class="reference interna
                         title="前の章へ">16. 汎用オペレーティングシステムサービス</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="io.html"
-                        title="次の章へ">16.2. <code class="docutils literal"><span class="pre">io</span></code> &#8212; ストリームを扱うコアツール</a></p>
+                        title="次の章へ">16.2. <code class="docutils literal"><span class="pre">io</span></code> — ストリームを扱うコアツール</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/os.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/os.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -3311,7 +3285,7 @@ block in these cases, but instead immediately raises <a class="reference interna
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

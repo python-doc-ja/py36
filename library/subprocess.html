@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>17.5. subprocess — サブプロセス管理 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="17. 並行実行" href="concurrency.html" />
     <link rel="next" title="17.6. sched — イベントスケジューラ" href="sched.html" />
     <link rel="prev" title="17.4. concurrent.futures – 並列タスク実行" href="concurrent.futures.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,7 +100,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-subprocess">
-<span id="subprocess-subprocess-management"></span><h1>17.5. <a class="reference internal" href="#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal"><span class="pre">subprocess</span></code></a> &#8212; サブプロセス管理<a class="headerlink" href="#module-subprocess" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="subprocess-subprocess-management"></span><h1>17.5. <a class="reference internal" href="#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal"><span class="pre">subprocess</span></code></a> — サブプロセス管理<a class="headerlink" href="#module-subprocess" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/subprocess.py">Lib/subprocess.py</a></p>
 <hr class="docutils" />
 <p><a class="reference internal" href="#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal"><span class="pre">subprocess</span></code></a> モジュールは新しいプロセスの開始、入力/出力/エラーパイプの接続、リターンコードの取得を可能とします。このモジュールは以下の古いモジュールや関数を置き換えることを目的としています：</p>
@@ -115,7 +111,7 @@
 <p>これらのモジュールや関数の代わりに、<a class="reference internal" href="#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal"><span class="pre">subprocess</span></code></a> モジュールをどのように使うかについてを以下の節で説明します。</p>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
-<p class="last"><span class="target" id="index-7"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0324"><strong>PEP 324</strong></a> &#8211; subprocess モジュールを提案している PEP</p>
+<p class="last"><span class="target" id="index-7"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0324"><strong>PEP 324</strong></a> – subprocess モジュールを提案している PEP</p>
 </div>
 <div class="section" id="using-the-subprocess-module">
 <h2>17.5.1. <a class="reference internal" href="#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal"><span class="pre">subprocess</span></code></a> モジュールを使う<a class="headerlink" href="#using-the-subprocess-module" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -129,7 +125,7 @@
 <p>デフォルトでは、標準出力や標準エラー出力を捕捉しません。捕捉したい場合は <em>stdout</em> または/および <em>stderr</em> 引数に <a class="reference internal" href="#subprocess.PIPE" title="subprocess.PIPE"><code class="xref py py-data docutils literal"><span class="pre">PIPE</span></code></a> を渡してください。</p>
 <p>引数 <em>timeout</em> は <a class="reference internal" href="#subprocess.Popen.communicate" title="subprocess.Popen.communicate"><code class="xref py py-meth docutils literal"><span class="pre">Popen.communicate()</span></code></a> に渡されます。タイムアウトが発生すると、子プロセスは kill され、待機されます。子プロセスが中断されたあと <a class="reference internal" href="#subprocess.TimeoutExpired" title="subprocess.TimeoutExpired"><code class="xref py py-exc docutils literal"><span class="pre">TimeoutExpired</span></code></a> が再び送出されます。</p>
 <p>The <em>input</em> argument is passed to <a class="reference internal" href="#subprocess.Popen.communicate" title="subprocess.Popen.communicate"><code class="xref py py-meth docutils literal"><span class="pre">Popen.communicate()</span></code></a> and thus to the
-subprocess&#8217;s stdin.  If used it must be a byte sequence, or a string if
+subprocess’s stdin.  If used it must be a byte sequence, or a string if
 <em>encoding</em> or <em>errors</em> is specified or <em>universal_newlines</em> is true.  When
 used, the internal <a class="reference internal" href="#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">Popen</span></code></a> object is automatically created with
 <code class="docutils literal"><span class="pre">stdin=PIPE</span></code>, and the <em>stdin</em> argument may not be used as well.</p>
@@ -388,14 +384,10 @@ binary streams. No encoding or line ending conversion is performed.</p>
 </div>
 <p><em>bufsize</em> は標準入力/標準出力/標準エラー出力パイプファイルオブジェクトを生成するときに <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> 関数の対応する引数に渡されます:</p>
 <ul class="simple">
-<li><p class="first"><code class="xref py py-const docutils literal"><span class="pre">0</span></code> はバッファーされないことを意味します (読み込みおよび書き出しのたびにシステムコールが行われ、すぐに復帰します)。</p>
-</li>
-<li><p class="first"><code class="xref py py-const docutils literal"><span class="pre">1</span></code> はラインバッファーを意味します (<code class="docutils literal"><span class="pre">universal_newlines=True</span></code>、すなわちテキストモードの場合のみ使用可能)。</p>
-</li>
-<li><p class="first">それ以外の正の整数はバッファーのおよそのサイズになることを意味します。</p>
-</li>
-<li><p class="first">負のサイズ (デフォルト) は io.DEFAULT_BUFFER_SIZE のシステムデフォルトが使用されることを意味します。</p>
-</li>
+<li><code class="xref py py-const docutils literal"><span class="pre">0</span></code> はバッファーされないことを意味します (読み込みおよび書き出しのたびにシステムコールが行われ、すぐに復帰します)。</li>
+<li><code class="xref py py-const docutils literal"><span class="pre">1</span></code> はラインバッファーを意味します (<code class="docutils literal"><span class="pre">universal_newlines=True</span></code>、すなわちテキストモードの場合のみ使用可能)。</li>
+<li>それ以外の正の整数はバッファーのおよそのサイズになることを意味します。</li>
+<li>負のサイズ (デフォルト) は io.DEFAULT_BUFFER_SIZE のシステムデフォルトが使用されることを意味します。</li>
 </ul>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.3.1 で変更: </span>ほとんどのコードが期待する振る舞いに合わせてデフォルトでバッファリングが有効となるよう <em>bufsize</em> のデフォルト値が -1 になりました。Python 3.2.4 および 3.3.1 より前のバージョンでは、誤ってバッファーされず短い読み込みを許可する <code class="xref py py-const docutils literal"><span class="pre">0</span></code> がデフォルトになっていました。これは意図したものではなく、ほとんどのコードが期待する Python 2 での振る舞いとも一致していませんでした。</p>
@@ -571,7 +563,7 @@ bytes.</p>
 <dl class="attribute">
 <dt id="subprocess.Popen.args">
 <code class="descclassname">Popen.</code><code class="descname">args</code><a class="headerlink" href="#subprocess.Popen.args" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><a class="reference internal" href="#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">Popen</span></code></a> に渡された引数 <em>args</em> です &#8211; プログラム引数のシーケンスまたは 1 個の文字列になります。</p>
+<dd><p><a class="reference internal" href="#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">Popen</span></code></a> に渡された引数 <em>args</em> です – プログラム引数のシーケンスまたは 1 個の文字列になります。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.3 で追加.</span></p>
 </div>
@@ -801,10 +793,10 @@ not <a class="reference internal" href="#subprocess.PIPE" title="subprocess.PIPE
 </div>
 <div class="section" id="replacing-older-functions-with-the-subprocess-module">
 <span id="subprocess-replacements"></span><h2>17.5.6. 古い関数を <a class="reference internal" href="#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal"><span class="pre">subprocess</span></code></a> モジュールで置き換える<a class="headerlink" href="#replacing-older-functions-with-the-subprocess-module" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>この節では、 &#8220;a becomes b&#8221; と書かれているものは a の代替として b が使えるということを表します。</p>
+<p>この節では、 「a becomes b」 と書かれているものは a の代替として b が使えるということを表します。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p>この節で紹介されている &#8220;a&#8221; 関数は全て、実行するプログラムが見つからないときは (おおむね) 静かに終了します。それに対して &#8220;b&#8221; 代替手段は <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> 例外を送出します。</p>
+<p>この節で紹介されている 「a」 関数は全て、実行するプログラムが見つからないときは (おおむね) 静かに終了します。それに対して 「b」 代替手段は <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> 例外を送出します。</p>
 <p class="last">また、要求された操作が非ゼロの終了コードを返した場合、<a class="reference internal" href="#subprocess.check_output" title="subprocess.check_output"><code class="xref py py-func docutils literal"><span class="pre">check_output()</span></code></a> を使用した置き換えは <a class="reference internal" href="#subprocess.CalledProcessError" title="subprocess.CalledProcessError"><code class="xref py py-exc docutils literal"><span class="pre">CalledProcessError</span></code></a> で失敗します。その出力は、送出された例外の <a class="reference internal" href="#subprocess.CalledProcessError.output" title="subprocess.CalledProcessError.output"><code class="xref py py-attr docutils literal"><span class="pre">output</span></code></a> 属性として利用可能です。</p>
 </div>
 <p>以下の例では、適切な関数が <a class="reference internal" href="#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal"><span class="pre">subprocess</span></code></a> モジュールからすでにインポートされていることを前提としています。</p>
@@ -849,8 +841,7 @@ not <a class="reference internal" href="#subprocess.PIPE" title="subprocess.PIPE
 </div>
 <p>注釈:</p>
 <ul class="simple">
-<li><p class="first">このプログラムは普通シェル経由で呼び出す必要はありません。</p>
-</li>
+<li>このプログラムは普通シェル経由で呼び出す必要はありません。</li>
 </ul>
 <p>より現実的な例ではこうなるでしょう:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
@@ -955,14 +946,10 @@ not <a class="reference internal" href="#subprocess.PIPE" title="subprocess.PIPE
 </div>
 <p><code class="xref py py-class docutils literal"><span class="pre">popen2.Popen3</span></code> および <code class="xref py py-class docutils literal"><span class="pre">popen2.Popen4</span></code> は以下の点を除けば、基本的に <a class="reference internal" href="#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">subprocess.Popen</span></code></a> と同じです:</p>
 <ul class="simple">
-<li><p class="first"><a class="reference internal" href="#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">Popen</span></code></a> は実行が失敗した場合に例外を送出します。</p>
-</li>
-<li><p class="first"><em>capturestderr</em> 引数は <em>stderr</em> 引数に代わりました。</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">stdin=PIPE</span></code> および <code class="docutils literal"><span class="pre">stdout=PIPE</span></code> を指定する必要があります。</p>
-</li>
-<li><p class="first">popen2 はデフォルトですべてのファイル記述子を閉じます。しかし、全てのプラットフォーム上で、あるいは過去の Python バージョンでこの挙動を保証するためには、 <a class="reference internal" href="#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">Popen</span></code></a> に対して <code class="docutils literal"><span class="pre">close_fds=True</span></code> を指定しなければなりません。</p>
-</li>
+<li><a class="reference internal" href="#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">Popen</span></code></a> は実行が失敗した場合に例外を送出します。</li>
+<li><em>capturestderr</em> 引数は <em>stderr</em> 引数に代わりました。</li>
+<li><code class="docutils literal"><span class="pre">stdin=PIPE</span></code> および <code class="docutils literal"><span class="pre">stdout=PIPE</span></code> を指定する必要があります。</li>
+<li>popen2 はデフォルトですべてのファイル記述子を閉じます。しかし、全てのプラットフォーム上で、あるいは過去の Python バージョンでこの挙動を保証するためには、 <a class="reference internal" href="#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">Popen</span></code></a> に対して <code class="docutils literal"><span class="pre">close_fds=True</span></code> を指定しなければなりません。</li>
 </ul>
 </div>
 </div>
@@ -1013,23 +1000,17 @@ see the notes on <a class="reference internal" href="#frequently-used-arguments"
 <span id="converting-argument-sequence"></span><h3>17.5.8.1. Windows における引数シーケンスから文字列への変換<a class="headerlink" href="#converting-an-argument-sequence-to-a-string-on-windows" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Windows では、 <em>args</em> シーケンスは以下の (MS C ランタイムで使われる規則に対応する) 規則を使って解析できる文字列に変換されます:</p>
 <ol class="arabic simple">
-<li><p class="first">引数は、スペースかタブのどちらかの空白で分けられます。</p>
-</li>
-<li><p class="first">ダブルクオーテーションマークで囲まれた文字列は、空白が含まれていたとしても 1 つの引数として解釈されます。クオートされた文字列は引数に埋め込めます。</p>
-</li>
-<li><p class="first">バックスラッシュに続くダブルクオーテーションマークは、リテラルのダブルクオーテーションマークと解釈されます。</p>
-</li>
-<li><p class="first">バックスラッシュは、ダブルクオーテーションが続かない限り、リテラルとして解釈されます。</p>
-</li>
-<li><p class="first">複数のバックスラッシュにダブルクオーテーションマークが続くなら、バックスラッシュ 2 つで 1 つのバックスラッシュ文字と解釈されます。バックスラッシュの数が奇数なら、最後のバックスラッシュは規則 3 に従って続くダブルクオーテーションマークをエスケープします。</p>
-</li>
+<li>引数は、スペースかタブのどちらかの空白で分けられます。</li>
+<li>ダブルクオーテーションマークで囲まれた文字列は、空白が含まれていたとしても 1 つの引数として解釈されます。クオートされた文字列は引数に埋め込めます。</li>
+<li>バックスラッシュに続くダブルクオーテーションマークは、リテラルのダブルクオーテーションマークと解釈されます。</li>
+<li>バックスラッシュは、ダブルクオーテーションが続かない限り、リテラルとして解釈されます。</li>
+<li>複数のバックスラッシュにダブルクオーテーションマークが続くなら、バックスラッシュ 2 つで 1 つのバックスラッシュ文字と解釈されます。バックスラッシュの数が奇数なら、最後のバックスラッシュは規則 3 に従って続くダブルクオーテーションマークをエスケープします。</li>
 </ol>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
 <dt><a class="reference internal" href="shlex.html#module-shlex" title="shlex: Simple lexical analysis for Unix shell-like languages."><code class="xref py py-mod docutils literal"><span class="pre">shlex</span></code></a></dt>
-<dd><p class="first last">コマンドラインを解析したりエスケープしたりする関数を提供するモジュール。</p>
-</dd>
+<dd>コマンドラインを解析したりエスケープしたりする関数を提供するモジュール。</dd>
 </dl>
 </div>
 </div>
@@ -1044,7 +1025,7 @@ see the notes on <a class="reference internal" href="#frequently-used-arguments"
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">17.5. <code class="docutils literal"><span class="pre">subprocess</span></code> &#8212; サブプロセス管理</a><ul>
+<li><a class="reference internal" href="#">17.5. <code class="docutils literal"><span class="pre">subprocess</span></code> — サブプロセス管理</a><ul>
 <li><a class="reference internal" href="#using-the-subprocess-module">17.5.1. <code class="docutils literal"><span class="pre">subprocess</span></code> モジュールを使う</a><ul>
 <li><a class="reference internal" href="#frequently-used-arguments">17.5.1.1. よく使われる引数</a></li>
 <li><a class="reference internal" href="#popen-constructor">17.5.1.2. Popen コンストラクター</a></li>
@@ -1078,16 +1059,16 @@ see the notes on <a class="reference internal" href="#frequently-used-arguments"
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="concurrent.futures.html"
-                        title="前の章へ">17.4. <code class="docutils literal"><span class="pre">concurrent.futures</span></code> &#8211; 並列タスク実行</a></p>
+                        title="前の章へ">17.4. <code class="docutils literal"><span class="pre">concurrent.futures</span></code> – 並列タスク実行</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="sched.html"
-                        title="次の章へ">17.6. <code class="docutils literal"><span class="pre">sched</span></code> &#8212; イベントスケジューラ</a></p>
+                        title="次の章へ">17.6. <code class="docutils literal"><span class="pre">sched</span></code> — イベントスケジューラ</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/subprocess.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/subprocess.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -1148,7 +1129,7 @@ see the notes on <a class="reference internal" href="#frequently-used-arguments"
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

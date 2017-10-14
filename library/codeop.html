@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>30.2. codeop — Pythonコードをコンパイルする &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="30. カスタム Python インタプリタ" href="custominterp.html" />
     <link rel="next" title="31. モジュールのインポート" href="modules.html" />
     <link rel="prev" title="30.1. code — インタプリタ基底クラス" href="code.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,16 +100,14 @@
           <div class="body" role="main">
             
   <div class="section" id="module-codeop">
-<span id="codeop-compile-python-code"></span><h1>30.2. <a class="reference internal" href="#module-codeop" title="codeop: Compile (possibly incomplete) Python code."><code class="xref py py-mod docutils literal"><span class="pre">codeop</span></code></a> &#8212; Pythonコードをコンパイルする<a class="headerlink" href="#module-codeop" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="codeop-compile-python-code"></span><h1>30.2. <a class="reference internal" href="#module-codeop" title="codeop: Compile (possibly incomplete) Python code."><code class="xref py py-mod docutils literal"><span class="pre">codeop</span></code></a> — Pythonコードをコンパイルする<a class="headerlink" href="#module-codeop" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/codeop.py">Lib/codeop.py</a></p>
 <hr class="docutils" />
 <p><a class="reference internal" href="#module-codeop" title="codeop: Compile (possibly incomplete) Python code."><code class="xref py py-mod docutils literal"><span class="pre">codeop</span></code></a> モジュールは、 <a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><code class="xref py py-mod docutils literal"><span class="pre">code</span></code></a> モジュールで行われているようなPythonの read-eval-printループをエミュレートするユーティリティを提供します。そのため、このモジュールを直接利用する場面はあまり無いでしょう。プログラムにこのようなループを含めたい場合は、 <a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><code class="xref py py-mod docutils literal"><span class="pre">code</span></code></a> モジュールの方が便利です。</p>
 <p>この仕事には二つの部分があります:</p>
 <ol class="arabic simple">
-<li><p class="first">入力の一行がPythonの文として完全であるかどうかを見分けられること: 簡単に言えば、次が &#8216;<code class="docutils literal"><span class="pre">&gt;&gt;&gt;</span></code>&#8216; か、あるいは &#8216;<code class="docutils literal"><span class="pre">...</span></code>&#8216; かどうかを見分けます。</p>
-</li>
-<li><p class="first">どのfuture文をユーザが入力したのかを覚えていること。したがって、実質的にそれに続く入力をこれらとともにコンパイルすることができます。</p>
-</li>
+<li>入力の一行がPythonの文として完全であるかどうかを見分けられること: 簡単に言えば、次が 『<code class="docutils literal"><span class="pre">&gt;&gt;&gt;</span></code>』 か、あるいは 『<code class="docutils literal"><span class="pre">...</span></code>』 かどうかを見分けます。</li>
+<li>どのfuture文をユーザが入力したのかを覚えていること。したがって、実質的にそれに続く入力をこれらとともにコンパイルすることができます。</li>
 </ol>
 <p><a class="reference internal" href="#module-codeop" title="codeop: Compile (possibly incomplete) Python code."><code class="xref py py-mod docutils literal"><span class="pre">codeop</span></code></a> モジュールはこうしたことのそれぞれを行う方法とそれら両方を行う方法を提供します。</p>
 <p>前者は実行するには:</p>
@@ -132,13 +126,13 @@
 <dl class="class">
 <dt id="codeop.Compile">
 <em class="property">class </em><code class="descclassname">codeop.</code><code class="descname">Compile</code><a class="headerlink" href="#codeop.Compile" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>このクラスのインスタンスは組み込み関数 <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> とシグネチャが一致する <a class="reference internal" href="../reference/datamodel.html#object.__call__" title="object.__call__"><code class="xref py py-meth docutils literal"><span class="pre">__call__()</span></code></a> メソッドを持っていますが、インスタンスが <a class="reference internal" href="__future__.html#module-__future__" title="__future__: Future statement definitions"><code class="xref py py-mod docutils literal"><span class="pre">__future__</span></code></a> 文を含むプログラムテキストをコンパイルする場合は、インスタンスは有効なその文とともに続くすべてのプログラムテキストを&#8217;覚えていて&#8217;コンパイルするという違いがあります。</p>
+<dd><p>このクラスのインスタンスは組み込み関数 <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> とシグネチャが一致する <a class="reference internal" href="../reference/datamodel.html#object.__call__" title="object.__call__"><code class="xref py py-meth docutils literal"><span class="pre">__call__()</span></code></a> メソッドを持っていますが、インスタンスが <a class="reference internal" href="__future__.html#module-__future__" title="__future__: Future statement definitions"><code class="xref py py-mod docutils literal"><span class="pre">__future__</span></code></a> 文を含むプログラムテキストをコンパイルする場合は、インスタンスは有効なその文とともに続くすべてのプログラムテキストを’覚えていて’コンパイルするという違いがあります。</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="codeop.CommandCompiler">
 <em class="property">class </em><code class="descclassname">codeop.</code><code class="descname">CommandCompiler</code><a class="headerlink" href="#codeop.CommandCompiler" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>このクラスのインスタンスは <a class="reference internal" href="#codeop.compile_command" title="codeop.compile_command"><code class="xref py py-func docutils literal"><span class="pre">compile_command()</span></code></a> とシグネチャが一致する <a class="reference internal" href="../reference/datamodel.html#object.__call__" title="object.__call__"><code class="xref py py-meth docutils literal"><span class="pre">__call__()</span></code></a> メソッドを持っています。インスタンスが <code class="docutils literal"><span class="pre">__future__</span></code> 文を含むプログラムテキストをコンパイルする場合に、インスタンスは有効なその文とともにそれに続くすべてのプログラムテキストを&#8217;覚えていて&#8217;コンパイルするという違いがあります。</p>
+<dd><p>このクラスのインスタンスは <a class="reference internal" href="#codeop.compile_command" title="codeop.compile_command"><code class="xref py py-func docutils literal"><span class="pre">compile_command()</span></code></a> とシグネチャが一致する <a class="reference internal" href="../reference/datamodel.html#object.__call__" title="object.__call__"><code class="xref py py-meth docutils literal"><span class="pre">__call__()</span></code></a> メソッドを持っています。インスタンスが <code class="docutils literal"><span class="pre">__future__</span></code> 文を含むプログラムテキストをコンパイルする場合に、インスタンスは有効なその文とともにそれに続くすべてのプログラムテキストを’覚えていて’コンパイルするという違いがあります。</p>
 </dd></dl>
 
 </div>
@@ -151,7 +145,7 @@
         <div class="sphinxsidebarwrapper">
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="code.html"
-                        title="前の章へ">30.1. <code class="docutils literal"><span class="pre">code</span></code> &#8212; インタプリタ基底クラス</a></p>
+                        title="前の章へ">30.1. <code class="docutils literal"><span class="pre">code</span></code> — インタプリタ基底クラス</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="modules.html"
                         title="次の章へ">31. モジュールのインポート</a></p>
@@ -160,7 +154,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/codeop.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/codeop.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -221,7 +215,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

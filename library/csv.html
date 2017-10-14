@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>14.1. csv — CSV ファイルの読み書き &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="14. ファイルフォーマット" href="fileformats.html" />
     <link rel="next" title="14.2. configparser — 設定ファイルのパーサー" href="configparser.html" />
     <link rel="prev" title="14. ファイルフォーマット" href="fileformats.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,18 +100,17 @@
           <div class="body" role="main">
             
   <div class="section" id="module-csv">
-<span id="csv-csv-file-reading-and-writing"></span><h1>14.1. <a class="reference internal" href="#module-csv" title="csv: Write and read tabular data to and from delimited files."><code class="xref py py-mod docutils literal"><span class="pre">csv</span></code></a> &#8212; CSV ファイルの読み書き<a class="headerlink" href="#module-csv" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="csv-csv-file-reading-and-writing"></span><h1>14.1. <a class="reference internal" href="#module-csv" title="csv: Write and read tabular data to and from delimited files."><code class="xref py py-mod docutils literal"><span class="pre">csv</span></code></a> — CSV ファイルの読み書き<a class="headerlink" href="#module-csv" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/csv.py">Lib/csv.py</a></p>
 <hr class="docutils" id="index-0" />
 <p>CSV (Comma Separated Values、カンマ区切り値列) と呼ばれる形式は、 スプレッドシートやデータベース間でのデータのインポートやエクスポートにおける最も一般的な形式です。 CSVフォーマットは、 <span class="target" id="index-5"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc4180.html"><strong>RFC 4180</strong></a> によって標準的な方法でフォーマットを記述する試みが行われる以前から長年使用されました。明確に定義された標準がないということは、異なるアプリケーション によって生成されたり取り込まれたりするデータ間では、しばしば微妙な違いが発生するということを意味します。こうした違いのために、複数のデータ源から得られた CSV ファイルを処理する作業が鬱陶しいものになることがあります。とはいえ、デリミタ (delimiter) やクオート文字の 相違はあっても、全体的な形式は十分似通っているため、こうしたデータを効率的に操作し、データの読み書きにおける細々としたことをプログラマ から隠蔽するような単一のモジュールを書くことは可能です。</p>
-<p><a class="reference internal" href="#module-csv" title="csv: Write and read tabular data to and from delimited files."><code class="xref py py-mod docutils literal"><span class="pre">csv</span></code></a> モジュールでは、CSV 形式で書かれたテーブル状のデータを読み書きするためのクラスを実装しています。このモジュールを使うことで、プログラマは Excel で使われている CSV  形式に関して詳しい知識をもっていなくても、 &#8220;このデータを Excel で推奨されている形式で書いてください&#8221; とか、 &#8220;データを Excel で作成されたこのファイルから読み出してください&#8221; と言うことができます。プログラマはまた、他のアプリケーションが解釈できる CSV 形式を記述したり、独自の特殊な目的をもった CSV 形式を定義することができます。</p>
+<p><a class="reference internal" href="#module-csv" title="csv: Write and read tabular data to and from delimited files."><code class="xref py py-mod docutils literal"><span class="pre">csv</span></code></a> モジュールでは、CSV 形式で書かれたテーブル状のデータを読み書きするためのクラスを実装しています。このモジュールを使うことで、プログラマは Excel で使われている CSV  形式に関して詳しい知識をもっていなくても、 「このデータを Excel で推奨されている形式で書いてください」 とか、 「データを Excel で作成されたこのファイルから読み出してください」 と言うことができます。プログラマはまた、他のアプリケーションが解釈できる CSV 形式を記述したり、独自の特殊な目的をもった CSV 形式を定義することができます。</p>
 <p><a class="reference internal" href="#module-csv" title="csv: Write and read tabular data to and from delimited files."><code class="xref py py-mod docutils literal"><span class="pre">csv</span></code></a> モジュールの <a class="reference internal" href="#csv.reader" title="csv.reader"><code class="xref py py-class docutils literal"><span class="pre">reader</span></code></a> および <a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-class docutils literal"><span class="pre">writer</span></code></a> オブジェクトはシーケンス型を読み書きします。プログラマは <a class="reference internal" href="#csv.DictReader" title="csv.DictReader"><code class="xref py py-class docutils literal"><span class="pre">DictReader</span></code></a> や <a class="reference internal" href="#csv.DictWriter" title="csv.DictWriter"><code class="xref py py-class docutils literal"><span class="pre">DictWriter</span></code></a> クラスを使うことで、データを辞書形式で読み書きすることもできます。</p>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
 <dt><span class="target" id="index-2"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0305"><strong>PEP 305</strong></a> - CSV File API</dt>
-<dd><p class="first last">Python へのこのモジュールの追加を提案している Python 改良案 (PEP: Python Enhancement Proposal)。</p>
-</dd>
+<dd>Python へのこのモジュールの追加を提案している Python 改良案 (PEP: Python Enhancement Proposal)。</dd>
 </dl>
 </div>
 <div class="section" id="module-contents">
@@ -124,7 +119,7 @@
 <span class="target" id="index-3"></span><dl class="function">
 <dt id="csv.reader">
 <code class="descclassname">csv.</code><code class="descname">reader</code><span class="sig-paren">(</span><em>csvfile</em>, <em>dialect='excel'</em>, <em>**fmtparams</em><span class="sig-paren">)</span><a class="headerlink" href="#csv.reader" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>与えられた <em>csvfile</em> 内の行を反復処理するような reader  オブジェクトを返します。 <em>csvfile</em> はイテレータ(<a class="reference internal" href="../glossary.html#term-iterator"><span class="xref std std-term">iterator</span></a>)プロトコルをサポートし、 <code class="xref py py-meth docutils literal"><span class="pre">__next__()</span></code> メソッドが呼ばれた際に常に文字列を返すような任意のオブジェクトにすることができます &#8212; <a class="reference internal" href="../glossary.html#term-file-object"><span class="xref std std-term">ファイルオブジェクト</span></a> でもリストでも構いません。 <em>csvfile</em> がファイルオブジェクトの場合、 <code class="docutils literal"><span class="pre">newline=''</span></code> として開くべきです。 <a class="footnote-reference" href="#id3" id="id1">[1]</a> オプションとして <em>dialect</em> パラメータを与えることができ、特定の CSV 表現形式 (dialect) 特有のパラメータの集合を定義するために使われます。 <em>dialect</em> 引数は <a class="reference internal" href="#csv.Dialect" title="csv.Dialect"><code class="xref py py-class docutils literal"><span class="pre">Dialect</span></code></a> クラスのサブクラスのインスタンスか、 <a class="reference internal" href="#csv.list_dialects" title="csv.list_dialects"><code class="xref py py-func docutils literal"><span class="pre">list_dialects()</span></code></a> 関数が返す文字列の一つにすることができます。別のオプションである <em>fmtparams</em> キーワード引数は、現在の表現形式における個々の書式パラメータを上書きするために与えることができます。表現形式および書式化パラメータの詳細については、 <a class="reference internal" href="#csv-fmt-params"><span class="std std-ref">Dialect クラスと書式化パラメータ</span></a> 節を参照してください。</p>
+<dd><p>与えられた <em>csvfile</em> 内の行を反復処理するような reader  オブジェクトを返します。 <em>csvfile</em> はイテレータ(<a class="reference internal" href="../glossary.html#term-iterator"><span class="xref std std-term">iterator</span></a>)プロトコルをサポートし、 <code class="xref py py-meth docutils literal"><span class="pre">__next__()</span></code> メソッドが呼ばれた際に常に文字列を返すような任意のオブジェクトにすることができます — <a class="reference internal" href="../glossary.html#term-file-object"><span class="xref std std-term">ファイルオブジェクト</span></a> でもリストでも構いません。 <em>csvfile</em> がファイルオブジェクトの場合、 <code class="docutils literal"><span class="pre">newline=''</span></code> として開くべきです。 <a class="footnote-reference" href="#id3" id="id1">[1]</a> オプションとして <em>dialect</em> パラメータを与えることができ、特定の CSV 表現形式 (dialect) 特有のパラメータの集合を定義するために使われます。 <em>dialect</em> 引数は <a class="reference internal" href="#csv.Dialect" title="csv.Dialect"><code class="xref py py-class docutils literal"><span class="pre">Dialect</span></code></a> クラスのサブクラスのインスタンスか、 <a class="reference internal" href="#csv.list_dialects" title="csv.list_dialects"><code class="xref py py-func docutils literal"><span class="pre">list_dialects()</span></code></a> 関数が返す文字列の一つにすることができます。別のオプションである <em>fmtparams</em> キーワード引数は、現在の表現形式における個々の書式パラメータを上書きするために与えることができます。表現形式および書式化パラメータの詳細については、 <a class="reference internal" href="#csv-fmt-params"><span class="std std-ref">Dialect クラスと書式化パラメータ</span></a> 節を参照してください。</p>
 <p>csv ファイルから読み込まれた各行は、文字列のリストとして返されます。<code class="docutils literal"><span class="pre">QUOTE_NONNUMERIC</span></code> フォーマットオプションが指定された場合を除き、データ型の変換が自動的に行われることはありません (このオプションが指定された場合、クォートされていないフィールドは浮動小数点数に変換されます)。</p>
 <p>短い利用例:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">csv</span>
@@ -484,7 +479,7 @@
     <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;unixpwd&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>もう少し手の込んだ reader の使い方 &#8212; エラーを捉えてレポートします。</p>
+<p>もう少し手の込んだ reader の使い方 — エラーを捉えてレポートします。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">csv</span><span class="o">,</span> <span class="nn">sys</span>
 <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;some.csv&#39;</span>
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -506,8 +501,7 @@
 <table class="docutils footnote" frame="void" id="id3" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>)</em> <p class="last"><code class="docutils literal"><span class="pre">newline=''</span></code> が指定されない場合、クォートされたフィールド内の改行は適切に解釈されず、書き込み時に <code class="docutils literal"><span class="pre">\r\n</span></code> を行末に用いる処理系では余分な <code class="docutils literal"><span class="pre">\r</span></code> が追加されてしまいます。csv モジュールは独自 (<a class="reference internal" href="../glossary.html#term-universal-newlines"><span class="xref std std-term">universal newlines</span></a>) の改行処理を行うため、<code class="docutils literal"><span class="pre">newline=''</span></code> を指定することは常に安全なはずです。</p>
-</td></tr>
+<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>)</em> <code class="docutils literal"><span class="pre">newline=''</span></code> が指定されない場合、クォートされたフィールド内の改行は適切に解釈されず、書き込み時に <code class="docutils literal"><span class="pre">\r\n</span></code> を行末に用いる処理系では余分な <code class="docutils literal"><span class="pre">\r</span></code> が追加されてしまいます。csv モジュールは独自 (<a class="reference internal" href="../glossary.html#term-universal-newlines"><span class="xref std std-term">universal newlines</span></a>) の改行処理を行うため、<code class="docutils literal"><span class="pre">newline=''</span></code> を指定することは常に安全なはずです。</td></tr>
 </tbody>
 </table>
 </div>
@@ -521,7 +515,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">14.1. <code class="docutils literal"><span class="pre">csv</span></code> &#8212; CSV ファイルの読み書き</a><ul>
+<li><a class="reference internal" href="#">14.1. <code class="docutils literal"><span class="pre">csv</span></code> — CSV ファイルの読み書き</a><ul>
 <li><a class="reference internal" href="#module-contents">14.1.1. モジュールコンテンツ</a></li>
 <li><a class="reference internal" href="#dialects-and-formatting-parameters">14.1.2. Dialect クラスと書式化パラメータ</a></li>
 <li><a class="reference internal" href="#reader-objects">14.1.3. reader オブジェクト</a></li>
@@ -536,13 +530,13 @@
                         title="前の章へ">14. ファイルフォーマット</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="configparser.html"
-                        title="次の章へ">14.2. <code class="docutils literal"><span class="pre">configparser</span></code> &#8212; 設定ファイルのパーサー</a></p>
+                        title="次の章へ">14.2. <code class="docutils literal"><span class="pre">configparser</span></code> — 設定ファイルのパーサー</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/csv.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/csv.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -603,7 +597,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

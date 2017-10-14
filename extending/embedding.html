@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>1. 他のアプリケーションへの Python の埋め込み &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="Python インタプリタの拡張と埋め込み" href="index.html" />
     <link rel="next" title="Python/C API リファレンスマニュアル" href="../c-api/index.html" />
     <link rel="prev" title="4. Windows 上での C および C++ 拡張モジュールのビルド" href="windows.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -105,15 +101,14 @@
   <div class="section" id="embedding-python-in-another-application">
 <span id="embedding"></span><h1>1. 他のアプリケーションへの Python の埋め込み<a class="headerlink" href="#embedding-python-in-another-application" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p>前章では、 Python を拡張する方法、すなわち C 関数のライブラリを Python に結びつけて機能を拡張する方法について述べました。同じようなことを別の方法でも実行できます: それは、自分の C/C++ アプリケーションに Python を埋め込んで機能を強化する、というものです。埋め込みを行うことで、アプリケーションの何らかの機能を C や C++ の代わりに Python で実装できるようになります。埋め込みは多くの用途で利用できます; ユーザが Python でスクリプトを書き、アプリケーションを自分好みに仕立てられるようにする、というのがその一例です。プログラマが、特定の機能を Python でより楽に書ける場合に自分自身のために埋め込みを行うこともできます。</p>
-<p>Python の埋め込みは Python の拡張と似ていますが、全く同じというわけではありません。その違いは、Python を拡張した場合にはアプリケーションのメインプログラムは依然として Python インタプリタである一方、 Python を組み込みんだ場合には、メインプログラムには Python が関係しない &#8212; その代わりに、アプリケーションのある一部分が時折 Python インタプリタを呼び出して何らかの Python コードを実行させる &#8212; かもしれない、ということです。</p>
+<p>Python の埋め込みは Python の拡張と似ていますが、全く同じというわけではありません。その違いは、Python を拡張した場合にはアプリケーションのメインプログラムは依然として Python インタプリタである一方、 Python を組み込みんだ場合には、メインプログラムには Python が関係しない — その代わりに、アプリケーションのある一部分が時折 Python インタプリタを呼び出して何らかの Python コードを実行させる — かもしれない、ということです。</p>
 <p>従って、 Python の埋め込みを行う場合、自作のメインプログラムを提供しなければなりません。メインプログラムがやらなければならないことの一つに、 Python インタプリタの初期化があります。とにかく少なくとも関数 <a class="reference internal" href="../c-api/init.html#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> を呼び出さねばなりません。オプションとして、Python 側にコマンドライン引数を渡すために関数呼び出しを行います。その後、アプリケーションのどこでもインタプリタを呼び出せるようになります。</p>
 <p>インタプリタを呼び出すには、異なるいくつかの方法があります: Python 文が入った文字列を <a class="reference internal" href="../c-api/veryhigh.html#c.PyRun_SimpleString" title="PyRun_SimpleString"><code class="xref c c-func docutils literal"><span class="pre">PyRun_SimpleString()</span></code></a> に渡す、 stdio ファイルポインタとファイル名 (これはエラーメッセージ内でコードを識別するためだけのものです) を <a class="reference internal" href="../c-api/veryhigh.html#c.PyRun_SimpleFile" title="PyRun_SimpleFile"><code class="xref c c-func docutils literal"><span class="pre">PyRun_SimpleFile()</span></code></a> に渡す、といった具合です。これまでの各章で説明した低水準の操作を呼び出して、Python オブジェクトを構築したり使用したりもできます。</p>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
 <dt><a class="reference internal" href="../c-api/index.html#c-api-index"><span class="std std-ref">Python/C API リファレンスマニュアル</span></a></dt>
-<dd><p class="first last">Python C インタフェースの詳細はこのマニュアルに書かれています。必要な情報の大部分はここにあるはずです。</p>
-</dd>
+<dd>Python C インタフェースの詳細はこのマニュアルに書かれています。必要な情報の大部分はここにあるはずです。</dd>
 </dl>
 </div>
 <div class="section" id="very-high-level-embedding">
@@ -148,21 +143,15 @@
 <p>高水準インタフェースは、断片的な Python コードをアプリケーションから実行できるようにしてくれますが、アプリケーションと Python コードの間でのデータのやり取りは、控えめに言っても煩わしいものです。データのやり取りをしたいなら、より低水準のインタフェース呼び出しを利用しなくてはなりません。より多く C コードを書かねばならない代わりに、ほぼ何でもできるようになります。</p>
 <p>Python の拡張と埋め込みは、趣旨こそ違え、同じ作業であるということに注意せねばなりません。これまでの章で議論してきたトピックのほとんどが埋め込みでもあてはまります。これを示すために、 Python から C への拡張を行うコードが実際には何をするか考えてみましょう:</p>
 <ol class="arabic simple">
-<li><p class="first">データ値を Python から C に変換する。</p>
-</li>
-<li><p class="first">変換された値を使って C ルーチンの関数呼び出しを行い、</p>
-</li>
-<li><p class="first">呼び出しで得られたデータ値 C から Python に変換する。</p>
-</li>
+<li>データ値を Python から C に変換する。</li>
+<li>変換された値を使って C ルーチンの関数呼び出しを行い、</li>
+<li>呼び出しで得られたデータ値 C から Python に変換する。</li>
 </ol>
 <p>Python を埋め込む場合には、インタフェースコードが行う作業は以下のようになります:</p>
 <ol class="arabic simple">
-<li><p class="first">データ値を C から Python に変換する。</p>
-</li>
-<li><p class="first">変換された値を使って Python インタフェースルーチンの関数呼び出しを行い、</p>
-</li>
-<li><p class="first">呼び出しで得られたデータ値 Python から C に変換する。</p>
-</li>
+<li>データ値を C から Python に変換する。</li>
+<li>変換された値を使って Python インタフェースルーチンの関数呼び出しを行い、</li>
+<li>呼び出しで得られたデータ値 Python から C に変換する。</li>
 </ol>
 <p>一見して分かるように、データ変換のステップは、言語間でデータを転送する方向が変わったのに合わせて単に入れ替えただけです。唯一の相違点は、データ変換の間にあるルーチンです。拡張を行う際には C ルーチンを呼び出しますが、埋め込みの際には Python ルーチンを呼び出します。</p>
 <p>この章では、Python から C へ、そしてその逆へとデータを変換する方法については議論しません。また、正しい参照の使い方やエラーの扱い方についてすでに理解しているものと仮定します。これらの側面についてはインタプリタの拡張と何ら変わるところがないので、必要な情報については以前の章を参照できます。</p>
@@ -392,7 +381,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/extending/embedding.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/extending/embedding.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -452,7 +441,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>正規表現 HOWTO &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="Python HOWTO" href="index.html" />
     <link rel="next" title="ソケットプログラミング HOWTO" href="sockets.html" />
     <link rel="prev" title="Logging クックブック" href="logging-cookbook.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -113,7 +109,7 @@
 </tbody>
 </table>
 <div class="topic">
-<p class="topic-title first">概要</p>
+<p class="topic-title first">Abstract</p>
 <p>このドキュメントは <a class="reference internal" href="../library/re.html#module-re" title="re: Regular expression operations."><code class="xref py py-mod docutils literal"><span class="pre">re</span></code></a> モジュールを使って Python で正規表現を扱うための導入のチュートリアルです。ライブラリレファレンスの正規表現の節よりもやさしい入門ドキュメントを用意しています。</p>
 </div>
 <div class="section" id="introduction">
@@ -143,23 +139,17 @@
 <p>以下に続く特別な文字列のリストは完全ではありません。特殊シーケンスと拡張クラスについてのユニコードパターンの定義についての完全なリストは、標準ライブラリリファレンスの <a class="reference internal" href="../library/re.html#re-syntax"><span class="std std-ref">正規表現の構文</span></a> の最後のパートを参照してください。一般的にユニコードバージョンは、ユニコードデータベース内で相応しいカテゴリに属すればマッチします。</p>
 <dl class="docutils">
 <dt><code class="docutils literal"><span class="pre">\d</span></code></dt>
-<dd><p class="first last">任意の十進数とマッチします; これは集合 <code class="docutils literal"><span class="pre">[0-9]</span></code> と同じ意味です。</p>
-</dd>
+<dd>任意の十進数とマッチします; これは集合 <code class="docutils literal"><span class="pre">[0-9]</span></code> と同じ意味です。</dd>
 <dt><code class="docutils literal"><span class="pre">\D</span></code></dt>
-<dd><p class="first last">任意の非数字文字とマッチします; これは集合 <code class="docutils literal"><span class="pre">[^0-9]</span></code> と同じ意味です。</p>
-</dd>
+<dd>任意の非数字文字とマッチします; これは集合 <code class="docutils literal"><span class="pre">[^0-9]</span></code> と同じ意味です。</dd>
 <dt><code class="docutils literal"><span class="pre">\s</span></code></dt>
-<dd><p class="first last">任意の空白文字とマッチします; これは集合 <code class="docutils literal"><span class="pre">[</span> <span class="pre">\t\n\r\f\v]</span></code> と同じ意味です。</p>
-</dd>
+<dd>任意の空白文字とマッチします; これは集合 <code class="docutils literal"><span class="pre">[</span> <span class="pre">\t\n\r\f\v]</span></code> と同じ意味です。</dd>
 <dt><code class="docutils literal"><span class="pre">\S</span></code></dt>
-<dd><p class="first last">任意の非空白文字とマッチします; これは集合 <code class="docutils literal"><span class="pre">[^</span> <span class="pre">\t\n\r\f\v]</span></code> と同じ意味です。</p>
-</dd>
+<dd>任意の非空白文字とマッチします; これは集合 <code class="docutils literal"><span class="pre">[^</span> <span class="pre">\t\n\r\f\v]</span></code> と同じ意味です。</dd>
 <dt><code class="docutils literal"><span class="pre">\w</span></code></dt>
-<dd><p class="first last">任意の英数文字および下線とマッチします; これは、集合 <code class="docutils literal"><span class="pre">[a-zA-Z0-9_]</span></code> と同じ意味です。</p>
-</dd>
+<dd>任意の英数文字および下線とマッチします; これは、集合 <code class="docutils literal"><span class="pre">[a-zA-Z0-9_]</span></code> と同じ意味です。</dd>
 <dt><code class="docutils literal"><span class="pre">\W</span></code></dt>
-<dd><p class="first last">任意の非英数文字とマッチします; これは集合 <code class="docutils literal"><span class="pre">[^a-zA-Z0-9_]</span></code> と同じ意味です。</p>
-</dd>
+<dd>任意の非英数文字とマッチします; これは集合 <code class="docutils literal"><span class="pre">[^a-zA-Z0-9_]</span></code> と同じ意味です。</dd>
 </dl>
 <p>これらのシーケンスは文字クラス内に含めることができます。例えば、 <code class="docutils literal"><span class="pre">[\s,.]</span></code> は空白文字や <code class="docutils literal"><span class="pre">','</span></code> または <code class="docutils literal"><span class="pre">'.'</span></code> にマッチする文字クラスです。</p>
 <p>この節での最後の特殊文字は <code class="docutils literal"><span class="pre">.</span></code> です。これは改行文字を除く任意の文字にマッチします、さらに改行文字に対してもマッチさせる代替モード (<code class="docutils literal"><span class="pre">re.DOTALL</span></code>) があります。 <code class="docutils literal"><span class="pre">'.'</span></code> は「任意の文字」にマッチさせたい場合に利用されます。</p>
@@ -178,51 +168,39 @@
 <col width="66%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">ステップ</p>
-</th>
-<th class="head"><p class="first last">マッチした文字列</p>
-</th>
-<th class="head"><p class="first last">説明</p>
-</th>
+<tr class="row-odd"><th class="head">ステップ</th>
+<th class="head">マッチした文字列</th>
+<th class="head">説明</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>1</td>
 <td><code class="docutils literal"><span class="pre">a</span></code></td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">a</span></code> が正規表現にマッチ。</p>
-</td>
+<td><code class="docutils literal"><span class="pre">a</span></code> が正規表現にマッチ。</td>
 </tr>
 <tr class="row-odd"><td>2</td>
 <td><code class="docutils literal"><span class="pre">abcbd</span></code></td>
-<td><p class="first last">正規表現エンジンが <code class="docutils literal"><span class="pre">[bcd]*</span></code> で文字列の最後まで可能な限り進む。</p>
-</td>
+<td>正規表現エンジンが <code class="docutils literal"><span class="pre">[bcd]*</span></code> で文字列の最後まで可能な限り進む。</td>
 </tr>
 <tr class="row-even"><td>3</td>
-<td><p class="first last"><em>失敗</em></p>
-</td>
-<td><p class="first last">エンジンが <code class="docutils literal"><span class="pre">b</span></code> とのマッチを試みるが、現在の位置が文字列の最後なので、失敗する。</p>
-</td>
+<td><em>失敗</em></td>
+<td>エンジンが <code class="docutils literal"><span class="pre">b</span></code> とのマッチを試みるが、現在の位置が文字列の最後なので、失敗する。</td>
 </tr>
 <tr class="row-odd"><td>4</td>
 <td><code class="docutils literal"><span class="pre">abcb</span></code></td>
-<td><p class="first last">戻って <code class="docutils literal"><span class="pre">[bcd]*</span></code> は一文字少なくマッチ。</p>
-</td>
+<td>戻って <code class="docutils literal"><span class="pre">[bcd]*</span></code> は一文字少なくマッチ。</td>
 </tr>
 <tr class="row-even"><td>5</td>
-<td><p class="first last"><em>失敗</em></p>
-</td>
-<td><p class="first last">再び <code class="docutils literal"><span class="pre">b</span></code> へのマッチを試みるが、現在の文字は最後の文字 <code class="docutils literal"><span class="pre">'d'</span></code> 。</p>
-</td>
+<td><em>失敗</em></td>
+<td>再び <code class="docutils literal"><span class="pre">b</span></code> へのマッチを試みるが、現在の文字は最後の文字 <code class="docutils literal"><span class="pre">'d'</span></code> 。</td>
 </tr>
 <tr class="row-odd"><td>6</td>
 <td><code class="docutils literal"><span class="pre">abc</span></code></td>
-<td><p class="first last">再び戻る, <code class="docutils literal"><span class="pre">[bcd]*</span></code> は <code class="docutils literal"><span class="pre">bc</span></code> のみにマッチ。</p>
-</td>
+<td>再び戻る, <code class="docutils literal"><span class="pre">[bcd]*</span></code> は <code class="docutils literal"><span class="pre">bc</span></code> のみにマッチ。</td>
 </tr>
 <tr class="row-even"><td>6</td>
 <td><code class="docutils literal"><span class="pre">abcb</span></code></td>
-<td><p class="first last">再び <code class="docutils literal"><span class="pre">b</span></code> を試みる。今回の現在位置の文字は <code class="docutils literal"><span class="pre">'b'</span></code> なので成功。</p>
-</td>
+<td>再び <code class="docutils literal"><span class="pre">b</span></code> を試みる。今回の現在位置の文字は <code class="docutils literal"><span class="pre">'b'</span></code> なので成功。</td>
 </tr>
 </tbody>
 </table>
@@ -230,7 +208,7 @@
 <p>別の繰り返しの特殊文字は <code class="docutils literal"><span class="pre">+</span></code> です、この特殊文字は1回以上の繰り返しにマッチします。 <code class="docutils literal"><span class="pre">*</span></code> と <code class="docutils literal"><span class="pre">+</span></code> に違いに対しては十分注意して下さい; <code class="docutils literal"><span class="pre">*</span></code> は <em>0回</em> 以上の繰り返しにマッチします、つまり繰り返す部分が全くなくても問題ありません、一方で <code class="docutils literal"><span class="pre">+</span></code> は少なくとも <em>1回</em> は表われる必要があります。同様の例を使うと <code class="docutils literal"><span class="pre">ca+t</span></code> は <code class="docutils literal"><span class="pre">cat</span></code> (<code class="docutils literal"><span class="pre">a</span></code> 1文字), <code class="docutils literal"><span class="pre">caaat</span></code> (<code class="docutils literal"><span class="pre">a</span></code> 3文字), とマッチし、 <code class="docutils literal"><span class="pre">ct</span></code> とはマッチしません。</p>
 <p>2回以上の繰り返しを制限する修飾子も存在します。クエスチョンマーク <code class="docutils literal"><span class="pre">?</span></code> は0か1回のどちらかにマッチします; これはオプションであることを示していると考えることもできます。例えば、 <code class="docutils literal"><span class="pre">home-?brew</span></code> は <code class="docutils literal"><span class="pre">homebrew</span></code> と <code class="docutils literal"><span class="pre">home-brew</span></code> のどちらにもマッチします。</p>
 <p>より複雑に繰り返しを制限するのは <code class="docutils literal"><span class="pre">{m,n}</span></code> です、ここで <em>m</em> と <em>n</em> は10進数の整数です。この修飾子は最低 <em>m</em> 回、最大で <em>n</em> 回の繰り返すことを意味しています。例えば、 <code class="docutils literal"><span class="pre">a/{1,3}b</span></code> は <code class="docutils literal"><span class="pre">a/b</span></code> と <code class="docutils literal"><span class="pre">a//b</span></code> そして <code class="docutils literal"><span class="pre">a///b</span></code> にマッチします。これはスラッシュの無い <code class="docutils literal"><span class="pre">ab</span></code> や4つのスラッシュを持つ <code class="docutils literal"><span class="pre">a////b</span></code> とはマッチしません。</p>
-<p><em>m</em> か <em>n</em> のどちらかは省略することができます; そうした場合省略された値はもっともらしい値と仮定されます。 <em>m</em> の省略は下限 0 と解釈され、 <em>n</em> の省略は無限の上限として解釈されます &#8212; 実際には上限は前に述べたように20億ですが、無限大とみなしてもいいでしょう。</p>
+<p><em>m</em> か <em>n</em> のどちらかは省略することができます; そうした場合省略された値はもっともらしい値と仮定されます。 <em>m</em> の省略は下限 0 と解釈され、 <em>n</em> の省略は無限の上限として解釈されます — 実際には上限は前に述べたように20億ですが、無限大とみなしてもいいでしょう。</p>
 <p>還元主義的素養のある読者は、3つの修飾子がこの表記で表現できることに気づくでしょう。 <code class="docutils literal"><span class="pre">{0,}</span></code> は <code class="docutils literal"><span class="pre">*</span></code> と同じで <code class="docutils literal"><span class="pre">{1,}</span></code> は <code class="docutils literal"><span class="pre">+</span></code> と、そして <code class="docutils literal"><span class="pre">{0,1}</span></code> は <code class="docutils literal"><span class="pre">?</span></code> と同じです。利用できる場合には <code class="docutils literal"><span class="pre">*</span></code>, <code class="docutils literal"><span class="pre">+</span></code> または <code class="docutils literal"><span class="pre">?</span></code> を利用した方が賢明です、そうすることで単純に、短く読み易くすることができます。</p>
 </div>
 </div>
@@ -263,24 +241,19 @@
 <col width="69%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">文字</p>
-</th>
-<th class="head"><p class="first last">段階</p>
-</th>
+<tr class="row-odd"><th class="head">文字</th>
+<th class="head">段階</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">\section</span></code></td>
-<td><p class="first last">マッチさせるテキスト</p>
-</td>
+<td>マッチさせるテキスト</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">\\section</span></code></td>
-<td><p class="first last"><a class="reference internal" href="../library/re.html#re.compile" title="re.compile"><code class="xref py py-func docutils literal"><span class="pre">re.compile()</span></code></a> のためのバックスラッシュエスケープ</p>
-</td>
+<td><a class="reference internal" href="../library/re.html#re.compile" title="re.compile"><code class="xref py py-func docutils literal"><span class="pre">re.compile()</span></code></a> のためのバックスラッシュエスケープ</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">&quot;\\\\section&quot;</span></code></td>
-<td><p class="first last">文字列リテラルのためのバックスラッシュエスケープ</p>
-</td>
+<td>文字列リテラルのためのバックスラッシュエスケープ</td>
 </tr>
 </tbody>
 </table>
@@ -292,8 +265,7 @@
 <col width="49%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">通常の文字列</p>
-</th>
+<tr class="row-odd"><th class="head">通常の文字列</th>
 <th class="head">Raw string</th>
 </tr>
 </thead>
@@ -319,28 +291,22 @@
 <col width="72%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">メソッド/属性</p>
-</th>
-<th class="head"><p class="first last">目的</p>
-</th>
+<tr class="row-odd"><th class="head">メソッド/属性</th>
+<th class="head">目的</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">match()</span></code></td>
-<td><p class="first last">文字列の先頭で正規表現とマッチするか判定します。</p>
-</td>
+<td>文字列の先頭で正規表現とマッチするか判定します。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">search()</span></code></td>
-<td><p class="first last">文字列を操作して、正規表現がどこにマッチするか調べます。</p>
-</td>
+<td>文字列を操作して、正規表現がどこにマッチするか調べます。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">findall()</span></code></td>
-<td><p class="first last">正規表現にマッチする部分文字列を全て探しだしリストとして返します。</p>
-</td>
+<td>正規表現にマッチする部分文字列を全て探しだしリストとして返します。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">finditer()</span></code></td>
-<td><p class="first last">正規表現にマッチする部分文字列を全て探しだし <a class="reference internal" href="../glossary.html#term-iterator"><span class="xref std std-term">iterator</span></a> として返します。</p>
-</td>
+<td>正規表現にマッチする部分文字列を全て探しだし <a class="reference internal" href="../glossary.html#term-iterator"><span class="xref std std-term">iterator</span></a> として返します。</td>
 </tr>
 </tbody>
 </table>
@@ -372,28 +338,22 @@
 <col width="71%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">メソッド/属性</p>
-</th>
-<th class="head"><p class="first last">目的</p>
-</th>
+<tr class="row-odd"><th class="head">メソッド/属性</th>
+<th class="head">目的</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">group()</span></code></td>
-<td><p class="first last">正規表現にマッチした文字列を返す</p>
-</td>
+<td>正規表現にマッチした文字列を返す</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">start()</span></code></td>
-<td><p class="first last">マッチの開始位置を返す</p>
-</td>
+<td>マッチの開始位置を返す</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">end()</span></code></td>
-<td><p class="first last">マッチの終了位置を返す</p>
-</td>
+<td>マッチの終了位置を返す</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">span()</span></code></td>
-<td><p class="first last">マッチの位置 (start, end) を含むタプルを返す</p>
-</td>
+<td>マッチの位置 (start, end) を含むタプルを返す</td>
 </tr>
 </tbody>
 </table>
@@ -468,35 +428,27 @@
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Flag</th>
-<th class="head"><p class="first last">意味</p>
-</th>
+<th class="head">意味</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">ASCII</span></code>, <code class="xref py py-const docutils literal"><span class="pre">A</span></code></td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">\w</span></code>, <code class="docutils literal"><span class="pre">\b</span></code>, <code class="docutils literal"><span class="pre">\s</span></code>, そして <code class="docutils literal"><span class="pre">\d</span></code> などをそれぞれのプロパティをもつ ASCII 文字だけにマッチさせます。</p>
-</td>
+<td><code class="docutils literal"><span class="pre">\w</span></code>, <code class="docutils literal"><span class="pre">\b</span></code>, <code class="docutils literal"><span class="pre">\s</span></code>, そして <code class="docutils literal"><span class="pre">\d</span></code> などをそれぞれのプロパティをもつ ASCII 文字だけにマッチさせます。</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">DOTALL</span></code>, <code class="xref py py-const docutils literal"><span class="pre">S</span></code></td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">.</span></code> を改行を含む任意の文字にマッチするようにします</p>
-</td>
+<td><code class="docutils literal"><span class="pre">.</span></code> を改行を含む任意の文字にマッチするようにします</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">IGNORECASE</span></code>, <code class="xref py py-const docutils literal"><span class="pre">I</span></code></td>
-<td><p class="first last">大文字小文字を区別しないマッチを行います</p>
-</td>
+<td>大文字小文字を区別しないマッチを行います</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">LOCALE</span></code>, <code class="xref py py-const docutils literal"><span class="pre">L</span></code></td>
-<td><p class="first last">ロケールに対応したマッチを行います</p>
-</td>
+<td>ロケールに対応したマッチを行います</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-const docutils literal"><span class="pre">MULTILINE</span></code>, <code class="xref py py-const docutils literal"><span class="pre">M</span></code></td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">^</span></code> や <code class="docutils literal"><span class="pre">$</span></code> に作用して、複数行にマッチング</p>
-</td>
+<td><code class="docutils literal"><span class="pre">^</span></code> や <code class="docutils literal"><span class="pre">$</span></code> に作用して、複数行にマッチング</td>
 </tr>
-<tr class="row-odd"><td><p class="first last"><code class="xref py py-const docutils literal"><span class="pre">VERBOSE</span></code>, <code class="xref py py-const docutils literal"><span class="pre">X</span></code> (&#8216;X&#8217; は &#8216;extended&#8217; の &#8216;X&#8217;)</p>
-</td>
-<td><p class="first last">冗長な正規表現を利用できるようにして、よりきれいで理解しやすくまとめることができます。</p>
-</td>
+<tr class="row-odd"><td><code class="xref py py-const docutils literal"><span class="pre">VERBOSE</span></code>, <code class="xref py py-const docutils literal"><span class="pre">X</span></code> (『X』 は 『extended』 の 『X』)</td>
+<td>冗長な正規表現を利用できるようにして、よりきれいで理解しやすくまとめることができます。</td>
 </tr>
 </tbody>
 </table>
@@ -580,7 +532,7 @@
 <p>残りの特殊文字の内いくつかは <em class="dfn">ゼロ幅アサーション zero-width-assertions</em> に関するものです。これらは文字列に対してエンジンを進めません; 文字列を全く利用しない代わりに、単純に成功か失敗かを利用します。例えば、 <code class="docutils literal"><span class="pre">\b</span></code> は現在位置が単語の境界であることを示します; <code class="docutils literal"><span class="pre">\b</span></code> によってエンジンの読んでいる位置は全く変化しません。つまり、これはゼロ幅アサーションは繰り返し使うことがありません、一度ある位置でマッチしたら、明らかに無限回マッチできます。</p>
 <dl class="docutils">
 <dt><code class="docutils literal"><span class="pre">|</span></code></dt>
-<dd><p class="first">代替 (alternation) または &#8220;or&#8221; 演算子。 A と B が正規表現の場合、 <code class="docutils literal"><span class="pre">A|B</span></code> は <code class="docutils literal"><span class="pre">A</span></code> または <code class="docutils literal"><span class="pre">B</span></code> のどちらの文字列にもマッチします。 <code class="docutils literal"><span class="pre">|</span></code> は複数の文字列をかわるがわる試す場合でもうまく動作するように優先度はとても低くなっています <code class="docutils literal"><span class="pre">Crow|Servo</span></code> は <code class="docutils literal"><span class="pre">Crow</span></code> または <code class="docutils literal"><span class="pre">Servo</span></code> のどちらにもマッチします、 <code class="docutils literal"><span class="pre">Cro</span></code>, <code class="docutils literal"><span class="pre">'w'</span></code> または <code class="docutils literal"><span class="pre">'S'</span></code>, <code class="docutils literal"><span class="pre">ervo</span></code> とはマッチしません。</p>
+<dd><p class="first">代替 (alternation) または 「or」 演算子。 A と B が正規表現の場合、 <code class="docutils literal"><span class="pre">A|B</span></code> は <code class="docutils literal"><span class="pre">A</span></code> または <code class="docutils literal"><span class="pre">B</span></code> のどちらの文字列にもマッチします。 <code class="docutils literal"><span class="pre">|</span></code> は複数の文字列をかわるがわる試す場合でもうまく動作するように優先度はとても低くなっています <code class="docutils literal"><span class="pre">Crow|Servo</span></code> は <code class="docutils literal"><span class="pre">Crow</span></code> または <code class="docutils literal"><span class="pre">Servo</span></code> のどちらにもマッチします、 <code class="docutils literal"><span class="pre">Cro</span></code>, <code class="docutils literal"><span class="pre">'w'</span></code> または <code class="docutils literal"><span class="pre">'S'</span></code>, <code class="docutils literal"><span class="pre">ervo</span></code> とはマッチしません。</p>
 <p class="last">リテラル <code class="docutils literal"><span class="pre">'|'</span></code> にマッチするには、 <code class="docutils literal"><span class="pre">\|</span></code> を利用するか、 <code class="docutils literal"><span class="pre">[|]</span></code> のように文字クラス内に収めて下さい。</p>
 </dd>
 <dt><code class="docutils literal"><span class="pre">^</span></code></dt>
@@ -606,11 +558,9 @@
 <p class="last">リテラル <code class="docutils literal"><span class="pre">'$'</span></code> にマッチするには、 <code class="docutils literal"><span class="pre">\$</span></code> を利用するか、 <code class="docutils literal"><span class="pre">[$]</span></code> のように文字クラス内に収めて下さい。</p>
 </dd>
 <dt><code class="docutils literal"><span class="pre">\A</span></code></dt>
-<dd><p class="first last">文字列の先頭にのみマッチします。 <code class="xref py py-const docutils literal"><span class="pre">MULTILINE</span></code> モードでない場合には <code class="docutils literal"><span class="pre">\A</span></code> と <code class="docutils literal"><span class="pre">^</span></code> は実質的に同じです。 <code class="xref py py-const docutils literal"><span class="pre">MULTILINE</span></code> モードでのこれらの違いは: <code class="docutils literal"><span class="pre">\A</span></code> は依然として文字列の先頭にのみマッチしますが、 <code class="docutils literal"><span class="pre">^</span></code> は文字列内に改行文字に続く部分があればそこにマッチすることです。</p>
-</dd>
+<dd>文字列の先頭にのみマッチします。 <code class="xref py py-const docutils literal"><span class="pre">MULTILINE</span></code> モードでない場合には <code class="docutils literal"><span class="pre">\A</span></code> と <code class="docutils literal"><span class="pre">^</span></code> は実質的に同じです。 <code class="xref py py-const docutils literal"><span class="pre">MULTILINE</span></code> モードでのこれらの違いは: <code class="docutils literal"><span class="pre">\A</span></code> は依然として文字列の先頭にのみマッチしますが、 <code class="docutils literal"><span class="pre">^</span></code> は文字列内に改行文字に続く部分があればそこにマッチすることです。</dd>
 <dt><code class="docutils literal"><span class="pre">\Z</span></code></dt>
-<dd><p class="first last">文字列の末尾とのみマッチします。</p>
-</dd>
+<dd>文字列の末尾とのみマッチします。</dd>
 <dt><code class="docutils literal"><span class="pre">\b</span></code></dt>
 <dd><p class="first">単語の境界。これはゼロ幅アサーションで、単語の始まりか終わりにのみマッチします。単語は英数文字のシーケンスとして定義されます、つまり単語の終わりは空白か非英数文字として表われます。</p>
 <p>以下の例では <code class="docutils literal"><span class="pre">class</span></code> がそのものの単語のときのみマッチします; 別の単語内に含まれている場合はマッチしません。</p>
@@ -634,8 +584,7 @@
 <p class="last">ふたつめはこのアサーションが利用できない文字列クラスの内部では Python の文字列リテラルとの互換性のために、 <code class="docutils literal"><span class="pre">\b</span></code> はバックスペース文字を表わすことになるということです。</p>
 </dd>
 <dt><code class="docutils literal"><span class="pre">\B</span></code></dt>
-<dd><p class="first last">別のゼロ幅アサーションで、 <code class="docutils literal"><span class="pre">\b</span></code> と逆で、現在の位置が単語の境界でないときにのみマッチします。</p>
-</dd>
+<dd>別のゼロ幅アサーションで、 <code class="docutils literal"><span class="pre">\b</span></code> と逆で、現在の位置が単語の境界でないときにのみマッチします。</dd>
 </dl>
 </div>
 <div class="section" id="grouping">
@@ -691,7 +640,7 @@
 <span class="go">&#39;the the&#39;</span>
 </pre></div>
 </div>
-<p>このような後方参照は文字列を検索するだけの用途では多くの場合役に立ちません。&#8212; このように繰り返されるテキストフォーマットは少数です。&#8212; しかし、文字列の置換をする場合には <em>とても</em> 有効であることに気づくでしょう。</p>
+<p>このような後方参照は文字列を検索するだけの用途では多くの場合役に立ちません。— このように繰り返されるテキストフォーマットは少数です。— しかし、文字列の置換をする場合には <em>とても</em> 有効であることに気づくでしょう。</p>
 </div>
 <div class="section" id="non-capturing-and-named-groups">
 <h3>取り出さないグループと名前つきグループ<a class="headerlink" href="#non-capturing-and-named-groups" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -742,11 +691,9 @@
 <p>他のゼロ幅アサーションは先読みアサーションです。先読みアサーションは肯定、否定の両方の形式が利用可能です、これを見てください:</p>
 <dl class="docutils">
 <dt><code class="docutils literal"><span class="pre">(?=...)</span></code></dt>
-<dd><p class="first last">肯定先読みアサーション。 <code class="docutils literal"><span class="pre">...</span></code> で表わす正規表現が現在位置でマッチすれば成功し、それ以外の場合失敗します。しかし、表現が試行された場合でもエンジンは先に進みません; パターンの残りの部分はアサーションの開始時点から右に試行します。</p>
-</dd>
+<dd>肯定先読みアサーション。 <code class="docutils literal"><span class="pre">...</span></code> で表わす正規表現が現在位置でマッチすれば成功し、それ以外の場合失敗します。しかし、表現が試行された場合でもエンジンは先に進みません; パターンの残りの部分はアサーションの開始時点から右に試行します。</dd>
 <dt><code class="docutils literal"><span class="pre">(?!...)</span></code></dt>
-<dd><p class="first last">否定先読みアサーション。これは肯定アサーションの逆で、正規表現が文字列の現在位置にマッチ <em>しなかった</em> 場合に成功します。</p>
-</dd>
+<dd>否定先読みアサーション。これは肯定アサーションの逆で、正規表現が文字列の現在位置にマッチ <em>しなかった</em> 場合に成功します。</dd>
 </dl>
 <p>より具体的にするため、先読みが便利な場合をみてみましょう。ファイル名にマッチし、 <code class="docutils literal"><span class="pre">.</span></code> で分けられた基本部分と拡張子に分離する単純なパターンを考えましょう。例えば、 <code class="docutils literal"><span class="pre">news.rc</span></code> は <code class="docutils literal"><span class="pre">news</span></code> が基本部分で <code class="docutils literal"><span class="pre">rc</span></code> がファイル名の拡張子です。</p>
 <p>マッチするパターンはとても単純です:</p>
@@ -775,24 +722,19 @@
 <col width="72%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">メソッド/属性</p>
-</th>
-<th class="head"><p class="first last">目的</p>
-</th>
+<tr class="row-odd"><th class="head">メソッド/属性</th>
+<th class="head">目的</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">split()</span></code></td>
-<td><p class="first last">文字列をリストに分割する、正規表現がマッチした全ての場所で分割を行う</p>
-</td>
+<td>文字列をリストに分割する、正規表現がマッチした全ての場所で分割を行う</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">sub()</span></code></td>
-<td><p class="first last">正規表現にマッチした全ての文字列を発見し、別の文字列に置き換えます</p>
-</td>
+<td>正規表現にマッチした全ての文字列を発見し、別の文字列に置き換えます</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">subn()</span></code></td>
-<td><p class="first last"><code class="xref py py-meth docutils literal"><span class="pre">sub()</span></code> と同じことをしますが、新しい文字列と置き換えの回数を返します</p>
-</td>
+<td><code class="xref py py-meth docutils literal"><span class="pre">sub()</span></code> と同じことをしますが、新しい文字列と置き換えの回数を返します</td>
 </tr>
 </tbody>
 </table>
@@ -969,7 +911,7 @@
 <div class="section" id="feedback">
 <h2>フィードバック<a class="headerlink" href="#feedback" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>正規表現は複雑な話題です。このドキュメントは助けになったでしょうか？わかりにくかったところや、あなたが遭遇した問題が扱われていない等なかったでしょうか？もしそんな問題があれば、著者に改善の提案を送って下さい。</p>
-<p>O&#8217;Reilly から出版されている Jeffrey Friedl の Mastering Regular Expressions は正規表現に関するほぼ完璧な書籍です (訳注　日本語訳「詳説　正規表現」が出版されています) 。不幸なことに、この本は Perl と Java の正規表現を集中して扱っていて、 Python の正規表現については全く扱っていません、そのため Python プログラミングのためのレファレンスとして使うことはできません。 (第一版はいまや削除された Python の <code class="xref py py-mod docutils literal"><span class="pre">regex</span></code> モジュールについて扱っていましたが、これはあまり役に立たないでしょう。) 図書館で調べるのを検討してみましょう。</p>
+<p>O’Reilly から出版されている Jeffrey Friedl の Mastering Regular Expressions は正規表現に関するほぼ完璧な書籍です (訳注　日本語訳「詳説　正規表現」が出版されています) 。不幸なことに、この本は Perl と Java の正規表現を集中して扱っていて、 Python の正規表現については全く扱っていません、そのため Python プログラミングのためのレファレンスとして使うことはできません。 (第一版はいまや削除された Python の <code class="xref py py-mod docutils literal"><span class="pre">regex</span></code> モジュールについて扱っていましたが、これはあまり役に立たないでしょう。) 図書館で調べるのを検討してみましょう。</p>
 </div>
 </div>
 
@@ -1031,7 +973,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/regex.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/regex.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -1091,7 +1033,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

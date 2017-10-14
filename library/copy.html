@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>8.10. copy — 浅いコピーおよび深いコピー操作 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="8. データ型" href="datatypes.html" />
     <link rel="next" title="8.11. pprint — データ出力の整然化" href="pprint.html" />
     <link rel="prev" title="8.9. types — 動的な型生成と組み込み型に対する名前" href="types.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,7 +100,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-copy">
-<span id="copy-shallow-and-deep-copy-operations"></span><h1>8.10. <a class="reference internal" href="#module-copy" title="copy: Shallow and deep copy operations."><code class="xref py py-mod docutils literal"><span class="pre">copy</span></code></a> &#8212; 浅いコピーおよび深いコピー操作<a class="headerlink" href="#module-copy" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="copy-shallow-and-deep-copy-operations"></span><h1>8.10. <a class="reference internal" href="#module-copy" title="copy: Shallow and deep copy operations."><code class="xref py py-mod docutils literal"><span class="pre">copy</span></code></a> — 浅いコピーおよび深いコピー操作<a class="headerlink" href="#module-copy" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/copy.py">Lib/copy.py</a></p>
 <hr class="docutils" />
 <p>Python において代入文はオブジェクトをコピーしません。代入はターゲットとオブジェクトの間に束縛を作ります。ミュータブルなコレクションまたはミュータブルなアイテムを含むコレクションについては、元のオブジェクトを変更せずにコピーを変更できるように、コピーが必要になることが時々あります。このモジュールは、汎用的な浅い (shallow) コピーと深い (deep) コピーの操作 (以下で説明されます) を提供します。</p>
@@ -129,24 +125,18 @@
 
 <p>浅い (shallow) コピーと深い (deep) コピーの違いが関係するのは、複合オブジェクト (リストやクラスインスタンスのような他のオブジェクトを含むオブジェクト) だけです:</p>
 <ul class="simple">
-<li><p class="first"><em>浅いコピー (shallow copy)</em> は新たな複合オブジェクトを作成し、その後 (可能な限り) 元のオブジェクト中に見つかったオブジェクトに対する <em>参照</em> を挿入します。</p>
-</li>
-<li><p class="first"><em>深いコピー (deep copy)</em> は新たな複合オブジェクトを作成し、その後元のオブジェクト中に見つかったオブジェクトの <em>コピー</em> を挿入します。</p>
-</li>
+<li><em>浅いコピー (shallow copy)</em> は新たな複合オブジェクトを作成し、その後 (可能な限り) 元のオブジェクト中に見つかったオブジェクトに対する <em>参照</em> を挿入します。</li>
+<li><em>深いコピー (deep copy)</em> は新たな複合オブジェクトを作成し、その後元のオブジェクト中に見つかったオブジェクトの <em>コピー</em> を挿入します。</li>
 </ul>
 <p>深いコピー操作には、しばしば浅いコピー操作の時には存在しない 2 つの問題がついてまわります:</p>
 <ul class="simple">
-<li><p class="first">再帰的なオブジェクト (直接、間接に関わらず、自分自身に対する参照を持つ複合オブジェクト) は再帰ループを引き起こします。</p>
-</li>
-<li><p class="first">深いコピーは何もかもコピーしてしまうため、例えば複数のコピー間で共有するつもりだったデータも余分にコピーしてしまいます。</p>
-</li>
+<li>再帰的なオブジェクト (直接、間接に関わらず、自分自身に対する参照を持つ複合オブジェクト) は再帰ループを引き起こします。</li>
+<li>深いコピーは何もかもコピーしてしまうため、例えば複数のコピー間で共有するつもりだったデータも余分にコピーしてしまいます。</li>
 </ul>
 <p><a class="reference internal" href="#copy.deepcopy" title="copy.deepcopy"><code class="xref py py-func docutils literal"><span class="pre">deepcopy()</span></code></a> 関数では、これらの問題を以下のようにして回避しています:</p>
 <ul class="simple">
-<li><p class="first">現在のコピー過程ですでにコピーされたオブジェクトからなる、&#8221;メモ&#8221; 辞書を保持します; かつ</p>
-</li>
-<li><p class="first">ユーザ定義のクラスでコピー操作やコピーされる内容の集合を上書きできるようにします。</p>
-</li>
+<li>現在のコピー過程ですでにコピーされたオブジェクトからなる、」メモ」 辞書を保持します; かつ</li>
+<li>ユーザ定義のクラスでコピー操作やコピーされる内容の集合を上書きできるようにします。</li>
 </ul>
 <p>このモジュールでは、モジュール、メソッド、スタックトレース、スタックフレーム、ファイル、ソケット、ウィンドウ、アレイ、その他これらに類似の型をコピーしません。このモジュールでは元のオブジェクトを変更せずに返すことで関数とクラスを (浅くまたは深く)「コピー」します。これは <a class="reference internal" href="pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code></a> モジュールでの扱われかたと同じです。</p>
 <p>辞書型の浅いコピーは <a class="reference internal" href="stdtypes.html#dict.copy" title="dict.copy"><code class="xref py py-meth docutils literal"><span class="pre">dict.copy()</span></code></a> で、リストの浅いコピーはリスト全体を指すスライス (例えば <code class="docutils literal"><span class="pre">copied_list</span> <span class="pre">=</span> <span class="pre">original_list[:]</span></code>) でできます。</p>
@@ -156,8 +146,7 @@
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
 <dt><a class="reference internal" href="pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code></a> モジュール</dt>
-<dd><p class="first last">オブジェクト状態の取得と復元をサポートするために使われる特殊メソッドについて議論されています。</p>
-</dd>
+<dd>オブジェクト状態の取得と復元をサポートするために使われる特殊メソッドについて議論されています。</dd>
 </dl>
 </div>
 </div>
@@ -170,16 +159,16 @@
         <div class="sphinxsidebarwrapper">
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="types.html"
-                        title="前の章へ">8.9. <code class="docutils literal"><span class="pre">types</span></code> &#8212; 動的な型生成と組み込み型に対する名前</a></p>
+                        title="前の章へ">8.9. <code class="docutils literal"><span class="pre">types</span></code> — 動的な型生成と組み込み型に対する名前</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="pprint.html"
-                        title="次の章へ">8.11. <code class="docutils literal"><span class="pre">pprint</span></code> &#8212; データ出力の整然化</a></p>
+                        title="次の章へ">8.11. <code class="docutils literal"><span class="pre">pprint</span></code> — データ出力の整然化</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/copy.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/copy.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -240,7 +229,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

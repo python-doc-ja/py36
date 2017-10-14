@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>16.6. logging — Python 用ロギング機能 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="16. 汎用オペレーティングシステムサービス" href="allos.html" />
     <link rel="next" title="16.7. logging.config — ロギングの環境設定" href="logging.config.html" />
     <link rel="prev" title="16.5. getopt — C 言語スタイルのコマンドラインオプションパーサ" href="getopt.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,18 +100,15 @@
           <div class="body" role="main">
             
   <div class="section" id="module-logging">
-<span id="logging-logging-facility-for-python"></span><h1>16.6. <a class="reference internal" href="#module-logging" title="logging: Flexible event logging system for applications."><code class="xref py py-mod docutils literal"><span class="pre">logging</span></code></a> &#8212; Python 用ロギング機能<a class="headerlink" href="#module-logging" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="logging-logging-facility-for-python"></span><h1>16.6. <a class="reference internal" href="#module-logging" title="logging: Flexible event logging system for applications."><code class="xref py py-mod docutils literal"><span class="pre">logging</span></code></a> — Python 用ロギング機能<a class="headerlink" href="#module-logging" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/logging/__init__.py">Lib/logging/__init__.py</a></p>
 <div class="sidebar" id="index-0">
-<p class="first sidebar-title">重要</p>
+<p class="first sidebar-title">Important</p>
 <p>このページには、リファレンス情報だけが含まれています。チュートリアルは、以下のページを参照してください</p>
 <ul class="last simple">
-<li><p class="first"><a class="reference internal" href="../howto/logging.html#logging-basic-tutorial"><span class="std std-ref">基本チュートリアル</span></a></p>
-</li>
-<li><p class="first"><a class="reference internal" href="../howto/logging.html#logging-advanced-tutorial"><span class="std std-ref">上級チュートリアル</span></a></p>
-</li>
-<li><p class="first"><a class="reference internal" href="../howto/logging-cookbook.html#logging-cookbook"><span class="std std-ref">ロギングクックブック</span></a></p>
-</li>
+<li><a class="reference internal" href="../howto/logging.html#logging-basic-tutorial"><span class="std std-ref">基本チュートリアル</span></a></li>
+<li><a class="reference internal" href="../howto/logging.html#logging-advanced-tutorial"><span class="std std-ref">上級チュートリアル</span></a></li>
+<li><a class="reference internal" href="../howto/logging-cookbook.html#logging-cookbook"><span class="std std-ref">ロギングクックブック</span></a></li>
 </ul>
 </div>
 <hr class="docutils" />
@@ -124,14 +117,10 @@
 <p>このモジュールは、多くの機能性と柔軟性を提供します。ロギングに慣れていないなら、つかむのに一番いいのはチュートリアルを読むことです (右のリンクを参照してください)。</p>
 <p>モジュールで定義されている基本的なクラスと関数を、以下に列挙します。</p>
 <ul class="simple">
-<li><p class="first">ロガーは、アプリケーションコードが直接使うインタフェースを公開します。</p>
-</li>
-<li><p class="first">ハンドラは、(ロガーによって生成された) ログ記録を適切な送信先に送ります。</p>
-</li>
-<li><p class="first">フィルタは、どのログ記録を出力するかを決定する、きめ細かい機能を提供します。</p>
-</li>
-<li><p class="first">フォーマッタは、ログ記録が最終的に出力されるレイアウトを指定します。</p>
-</li>
+<li>ロガーは、アプリケーションコードが直接使うインタフェースを公開します。</li>
+<li>ハンドラは、(ロガーによって生成された) ログ記録を適切な送信先に送ります。</li>
+<li>フィルタは、どのログ記録を出力するかを決定する、きめ細かい機能を提供します。</li>
+<li>フォーマッタは、ログ記録が最終的に出力されるレイアウトを指定します。</li>
 </ul>
 <div class="section" id="logger-objects">
 <span id="logger"></span><h2>16.6.1. ロガーオブジェクト<a class="headerlink" href="#logger-objects" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -163,7 +152,7 @@
 <p>ルートに到達した場合、ルートのレベルが NOTEST ならばすべてのメッセージは処理されます。そうでなければルートのレベルが実効レベルとして使われます。</p>
 <p>レベルの一覧については <a class="reference internal" href="#levels"><span class="std std-ref">ロギングレベル</span></a> を参照してください。</p>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.2 で変更: </span><em>lvl</em> パラメータは、 <code class="xref py py-const docutils literal"><span class="pre">INFO</span></code> のような整数定数の代わりに &#8216;INFO&#8217; のようなレベルの文字列表現も受け付けるようになりました。ただし、レベルは内部で整数として保存されますし、 <a class="reference internal" href="#logging.Logger.getEffectiveLevel" title="logging.Logger.getEffectiveLevel"><code class="xref py py-meth docutils literal"><span class="pre">getEffectiveLevel()</span></code></a> や <a class="reference internal" href="#logging.Logger.isEnabledFor" title="logging.Logger.isEnabledFor"><code class="xref py py-meth docutils literal"><span class="pre">isEnabledFor()</span></code></a> といったメソッドは、整数を返し、また渡されるものと期待します。</p>
+<p><span class="versionmodified">バージョン 3.2 で変更: </span><em>lvl</em> パラメータは、 <code class="xref py py-const docutils literal"><span class="pre">INFO</span></code> のような整数定数の代わりに 『INFO』 のようなレベルの文字列表現も受け付けるようになりました。ただし、レベルは内部で整数として保存されますし、 <a class="reference internal" href="#logging.Logger.getEffectiveLevel" title="logging.Logger.getEffectiveLevel"><code class="xref py py-meth docutils literal"><span class="pre">getEffectiveLevel()</span></code></a> や <a class="reference internal" href="#logging.Logger.isEnabledFor" title="logging.Logger.isEnabledFor"><code class="xref py py-meth docutils literal"><span class="pre">isEnabledFor()</span></code></a> といったメソッドは、整数を返し、また渡されるものと期待します。</p>
 </div>
 </dd></dl>
 
@@ -213,7 +202,7 @@
 </pre></div>
 </div>
 <p><em>extra</em> で渡される辞書のキーはロギングシステムで使われているものと衝突しないようにしなければなりません。 (どのキーがロギングシステムで使われているかについての詳細は <a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> のドキュメントを参照してください。)</p>
-<p>これらの属性をログメッセージに使うことにしたなら、少し注意が必要です。上の例では、 &#8216;clientip&#8217; と &#8216;user&#8217; が LogRecord の属性辞書に含まれていることを期待した書式文字列で <a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> がセットアップされています。もしこれらが欠けていると、書式化例外が発生してしまうためメッセージはログに残りません。したがってこの場合、常にこれらのキーを含む <em>extra</em> 辞書を渡す必要があります。</p>
+<p>これらの属性をログメッセージに使うことにしたなら、少し注意が必要です。上の例では、 『clientip』 と 『user』 が LogRecord の属性辞書に含まれていることを期待した書式文字列で <a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> がセットアップされています。もしこれらが欠けていると、書式化例外が発生してしまうためメッセージはログに残りません。したがってこの場合、常にこれらのキーを含む <em>extra</em> 辞書を渡す必要があります。</p>
 <p>このようなことは煩わしいかもしれませんが、この機能は限定された場面で使われるように意図しているものなのです。たとえば同じコードがいくつものコンテキストで実行されるマルチスレッドのサーバで、興味のある条件が現れるのがそのコンテキストに依存している (上の例で言えば、リモートのクライアント IP アドレスや認証されたユーザ名など)、というような場合です。そういった場面では、それ用の <a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> が特定の <code class="xref py py-class docutils literal"><span class="pre">Handler</span></code> と共に使われるというのはよくあることです。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.2 で追加: </span><em>stack_info</em> パラメータが追加されました。</p>
@@ -317,7 +306,7 @@
 <dd><p>このロガーにハンドラが設定されているかどうかを調べます。
 そのために、このロガーとロガー階層におけるその祖先についてハンドラ探していきます。
 ハンドラが見つかれば <code class="docutils literal"><span class="pre">True</span></code> 、そうでなければ <code class="docutils literal"><span class="pre">False</span></code> を返します。
-このメソッドは、&#8217;propagate&#8217; 属性が偽に設定されたロガーを見つけると、さらに上位の探索をやめます - そのロガーが、ハンドラが存在するかどうかチェックされる最後のロガー、という意味です。</p>
+このメソッドは、』propagate』 属性が偽に設定されたロガーを見つけると、さらに上位の探索をやめます - そのロガーが、ハンドラが存在するかどうかチェックされる最後のロガー、という意味です。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
 </div>
@@ -333,10 +322,8 @@
 <col width="52%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">レベル</p>
-</th>
-<th class="head"><p class="first last">数値</p>
-</th>
+<tr class="row-odd"><th class="head">レベル</th>
+<th class="head">数値</th>
 </tr>
 </thead>
 <tbody valign="top">
@@ -394,7 +381,7 @@
 <dd><p>このハンドラに対する閾値を <em>lvl</em> に設定します。ログ記録しようとするメッセージで、 <em>lvl</em> よりも深刻でないものは無視されます。ハンドラが生成された際、レベルは <code class="xref py py-const docutils literal"><span class="pre">NOTSET</span></code> (すべてのメッセージが処理される) に設定されます。</p>
 <p>レベルの一覧については <a class="reference internal" href="#levels"><span class="std std-ref">ロギングレベル</span></a> を参照してください。</p>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.2 で変更: </span><em>lvl</em> パラメータは、 <code class="xref py py-const docutils literal"><span class="pre">INFO</span></code> のような整数定数の代わりに &#8216;INFO&#8217; のようなレベルの文字列表現も受け付けるようになりました。</p>
+<p><span class="versionmodified">バージョン 3.2 で変更: </span><em>lvl</em> パラメータは、 <code class="xref py py-const docutils literal"><span class="pre">INFO</span></code> のような整数定数の代わりに 『INFO』 のようなレベルの文字列表現も受け付けるようになりました。</p>
 </div>
 </dd></dl>
 
@@ -469,7 +456,7 @@
 <dt id="logging.Formatter">
 <em class="property">class </em><code class="descclassname">logging.</code><code class="descname">Formatter</code><span class="sig-paren">(</span><em>fmt=None</em>, <em>datefmt=None</em>, <em>style='%'</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.Formatter" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> クラスの新たなインスタンスを返します。インスタンスは全体としてのメッセージに対する書式文字列と、メッセージの日付/時刻部分のための書式文字列を伴って初期化されます。 <em>fmt</em> が指定されない場合、 <code class="docutils literal"><span class="pre">'%(message)s'</span></code> が使われます。 <em>datefmt</em> が指定されない場合、 ISO8601 日付書式が使われます。</p>
-<p><em>style</em> パラメーターは &#8216;%&#8217;,  &#8216;{&#8216;, &#8216;$&#8217; のうちのいずれかで、書式文字列がどのようにデータとマージされるかを決めます: %-format 、 <a class="reference internal" href="stdtypes.html#str.format" title="str.format"><code class="xref py py-meth docutils literal"><span class="pre">str.format()</span></code></a> 、 <a class="reference internal" href="string.html#string.Template" title="string.Template"><code class="xref py py-class docutils literal"><span class="pre">string.Template</span></code></a> のうちのどれかが使用されます。ログメッセージに使用する { および $ 形式のフォーマットの情報は <a class="reference internal" href="../howto/logging-cookbook.html#formatting-styles"><span class="std std-ref">固有の書式化スタイルをアプリケーション全体で使う</span></a> を参照してください。</p>
+<p><em>style</em> パラメーターは 『%』,  『{『, 『$』 のうちのいずれかで、書式文字列がどのようにデータとマージされるかを決めます: %-format 、 <a class="reference internal" href="stdtypes.html#str.format" title="str.format"><code class="xref py py-meth docutils literal"><span class="pre">str.format()</span></code></a> 、 <a class="reference internal" href="string.html#string.Template" title="string.Template"><code class="xref py py-class docutils literal"><span class="pre">string.Template</span></code></a> のうちのどれかが使用されます。ログメッセージに使用する { および $ 形式のフォーマットの情報は <a class="reference internal" href="../howto/logging-cookbook.html#formatting-styles"><span class="std std-ref">固有の書式化スタイルをアプリケーション全体で使う</span></a> を参照してください。</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.2 で変更: </span><em>style</em> パラメータが追加されました。</p>
 </div>
@@ -507,7 +494,7 @@
 </div>
 <div class="section" id="filter-objects">
 <span id="filter"></span><h2>16.6.5. フィルタオブジェクト<a class="headerlink" href="#filter-objects" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">フィルタ</span> <span class="pre">(Filter)</span></code> は、<code class="docutils literal"><span class="pre">ハンドラ</span></code> や <code class="docutils literal"><span class="pre">ロガー</span></code> によって使われ、レベルによって提供されるのよりも洗練されたフィルタリングを実現します。基底のフィルタクラスは、ロガー階層構造内の特定地点の配下にあるイベントだけを許可します。例えば、&#8217;A.B&#8217; で初期化されたフィルタは、ロガー &#8216;A.B&#8217;, &#8216;A.B.C&#8217;, &#8216;A.B.C.D&#8217;, &#8216;A.B.D&#8217; 等によって記録されたイベントは許可しますが、&#8217;A.BB&#8217;, &#8216;B.A.B&#8217; などは許可しません。空の文字列で初期化された場合、すべてのイベントを通過させます。</p>
+<p><code class="docutils literal"><span class="pre">フィルタ</span> <span class="pre">(Filter)</span></code> は、<code class="docutils literal"><span class="pre">ハンドラ</span></code> や <code class="docutils literal"><span class="pre">ロガー</span></code> によって使われ、レベルによって提供されるのよりも洗練されたフィルタリングを実現します。基底のフィルタクラスは、ロガー階層構造内の特定地点の配下にあるイベントだけを許可します。例えば、』A.B』 で初期化されたフィルタは、ロガー 『A.B』, 『A.B.C』, 『A.B.C.D』, 『A.B.D』 等によって記録されたイベントは許可しますが、』A.BB』, 『B.A.B』 などは許可しません。空の文字列で初期化された場合、すべてのイベントを通過させます。</p>
 <dl class="class">
 <dt id="logging.Filter">
 <em class="property">class </em><code class="descclassname">logging.</code><code class="descname">Filter</code><span class="sig-paren">(</span><em>name=''</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.Filter" title="この定義へのパーマリンク">¶</a></dt>
@@ -540,15 +527,15 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">パラメータ:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> &#8211; この LogRecord で表されるイベントをロギングするのに使われるロガーの名前です。ここで与える名前が、たとえ他の(祖先の)ロガーに結び付けられたハンドラによって発せられるとしても、与えたこの値のままであることに注意してください。</li>
-<li><strong>level</strong> &#8211; このロギングイベントの数値のレベル (DEBUG, INFO などのいずれか) です。なお、これは LogRecord の <em>2つの</em> 属性に変換されます。数値 <code class="docutils literal"><span class="pre">levelno</span></code> と、対応するレベル名 <code class="docutils literal"><span class="pre">levelname</span></code> です。</li>
-<li><strong>pathname</strong> &#8211; ロギングの呼び出しが発せられたファイルの完全なパス名。</li>
-<li><strong>lineno</strong> &#8211; ロギングの呼び出しが発せられたソース行番号。</li>
-<li><strong>msg</strong> &#8211; イベント記述メッセージで、これは変数データのプレースホルダを持つフォーマット文字列になり得ます。</li>
-<li><strong>args</strong> &#8211; <em>msg</em> 引数と組み合わせてイベント記述を得るための変数データです。</li>
-<li><strong>exc_info</strong> &#8211; 現在の例外情報を含む例外タプルか、利用できる例外情報がない場合は <code class="docutils literal"><span class="pre">None</span></code> です。</li>
-<li><strong>func</strong> &#8211; ロギングの呼び出しを行った関数またはメソッドの名前です。</li>
-<li><strong>sinfo</strong> &#8211; 現在のスレッドのスタックベースからログ呼び出しまでの間のスタック情報を表わすテキスト文字列。</li>
+<li><strong>name</strong> – この LogRecord で表されるイベントをロギングするのに使われるロガーの名前です。ここで与える名前が、たとえ他の(祖先の)ロガーに結び付けられたハンドラによって発せられるとしても、与えたこの値のままであることに注意してください。</li>
+<li><strong>level</strong> – このロギングイベントの数値のレベル (DEBUG, INFO などのいずれか) です。なお、これは LogRecord の <em>2つの</em> 属性に変換されます。数値 <code class="docutils literal"><span class="pre">levelno</span></code> と、対応するレベル名 <code class="docutils literal"><span class="pre">levelname</span></code> です。</li>
+<li><strong>pathname</strong> – ロギングの呼び出しが発せられたファイルの完全なパス名。</li>
+<li><strong>lineno</strong> – ロギングの呼び出しが発せられたソース行番号。</li>
+<li><strong>msg</strong> – イベント記述メッセージで、これは変数データのプレースホルダを持つフォーマット文字列になり得ます。</li>
+<li><strong>args</strong> – <em>msg</em> 引数と組み合わせてイベント記述を得るための変数データです。</li>
+<li><strong>exc_info</strong> – 現在の例外情報を含む例外タプルか、利用できる例外情報がない場合は <code class="docutils literal"><span class="pre">None</span></code> です。</li>
+<li><strong>func</strong> – ロギングの呼び出しを行った関数またはメソッドの名前です。</li>
+<li><strong>sinfo</strong> – 現在のスレッドのスタックベースからログ呼び出しまでの間のスタック情報を表わすテキスト文字列。</li>
 </ul>
 </td>
 </tr>
@@ -590,126 +577,95 @@
 <col width="53%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">属性名</p>
-</th>
-<th class="head"><p class="first last">フォーマット</p>
-</th>
-<th class="head"><p class="first last">説明</p>
-</th>
+<tr class="row-odd"><th class="head">属性名</th>
+<th class="head">フォーマット</th>
+<th class="head">説明</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><p class="first last"><code class="docutils literal"><span class="pre">args</span></code></p>
-</td>
-<td><p class="first last">このフォーマットを自分で使う必要はないでしょう。</p>
-</td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">msg</span></code> に組み合わせて <code class="docutils literal"><span class="pre">message</span></code> を生成するための引数のタプル、または、マージに用いられる辞書(引数が一つしかなく、かつそれが辞書の場合)。</p>
-</td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">args</span></code></td>
+<td>このフォーマットを自分で使う必要はないでしょう。</td>
+<td><code class="docutils literal"><span class="pre">msg</span></code> に組み合わせて <code class="docutils literal"><span class="pre">message</span></code> を生成するための引数のタプル、または、マージに用いられる辞書(引数が一つしかなく、かつそれが辞書の場合)。</td>
 </tr>
 <tr class="row-odd"><td>asctime</td>
 <td><code class="docutils literal"><span class="pre">%(asctime)s</span></code></td>
-<td><p class="first last"><a class="reference internal" href="#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> が生成された時刻を人間が読める書式で表したもの。デフォルトでは &#8220;2003-07-08 16:49:45,896&#8221; 形式 (コンマ以降の数字は時刻のミリ秒部分) です。</p>
-</td>
+<td><a class="reference internal" href="#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> が生成された時刻を人間が読める書式で表したもの。デフォルトでは 「2003-07-08 16:49:45,896」 形式 (コンマ以降の数字は時刻のミリ秒部分) です。</td>
 </tr>
 <tr class="row-even"><td>created</td>
 <td><code class="docutils literal"><span class="pre">%(created)f</span></code></td>
-<td><p class="first last"><a class="reference internal" href="#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> が生成された時刻 (<a class="reference internal" href="time.html#time.time" title="time.time"><code class="xref py py-func docutils literal"><span class="pre">time.time()</span></code></a> によって返される形式で)。</p>
-</td>
+<td><a class="reference internal" href="#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> が生成された時刻 (<a class="reference internal" href="time.html#time.time" title="time.time"><code class="xref py py-func docutils literal"><span class="pre">time.time()</span></code></a> によって返される形式で)。</td>
 </tr>
 <tr class="row-odd"><td>exc_info</td>
-<td><p class="first last">このフォーマットを自分で使う必要はないでしょう。</p>
-</td>
-<td><p class="first last">(<code class="docutils literal"><span class="pre">sys.exc_info</span></code> 風の) 例外タプルか、例外が起こっていない場合は <code class="docutils literal"><span class="pre">None</span></code>。</p>
-</td>
+<td>このフォーマットを自分で使う必要はないでしょう。</td>
+<td>(<code class="docutils literal"><span class="pre">sys.exc_info</span></code> 風の) 例外タプルか、例外が起こっていない場合は <code class="docutils literal"><span class="pre">None</span></code>。</td>
 </tr>
-<tr class="row-even"><td><p class="first last">ファイル名</p>
-</td>
+<tr class="row-even"><td>ファイル名</td>
 <td><code class="docutils literal"><span class="pre">%(filename)s</span></code></td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">pathname</span></code> のファイル名部分。</p>
-</td>
+<td><code class="docutils literal"><span class="pre">pathname</span></code> のファイル名部分。</td>
 </tr>
 <tr class="row-odd"><td>funcName</td>
 <td><code class="docutils literal"><span class="pre">%(funcName)s</span></code></td>
-<td><p class="first last">ロギングの呼び出しを含む関数の名前。</p>
-</td>
+<td>ロギングの呼び出しを含む関数の名前。</td>
 </tr>
 <tr class="row-even"><td>levelname</td>
 <td><code class="docutils literal"><span class="pre">%(levelname)s</span></code></td>
-<td><p class="first last">メッセージのための文字のロギングレベル (<code class="docutils literal"><span class="pre">'DEBUG'</span></code>, <code class="docutils literal"><span class="pre">'INFO'</span></code>, <code class="docutils literal"><span class="pre">'WARNING'</span></code>, <code class="docutils literal"><span class="pre">'ERROR'</span></code>, <code class="docutils literal"><span class="pre">'CRITICAL'</span></code>)。</p>
-</td>
+<td>メッセージのための文字のロギングレベル (<code class="docutils literal"><span class="pre">'DEBUG'</span></code>, <code class="docutils literal"><span class="pre">'INFO'</span></code>, <code class="docutils literal"><span class="pre">'WARNING'</span></code>, <code class="docutils literal"><span class="pre">'ERROR'</span></code>, <code class="docutils literal"><span class="pre">'CRITICAL'</span></code>)。</td>
 </tr>
 <tr class="row-odd"><td>levelno</td>
 <td><code class="docutils literal"><span class="pre">%(levelno)s</span></code></td>
-<td><p class="first last">メッセージのための数値のロギングレベル (<code class="xref py py-const docutils literal"><span class="pre">DEBUG</span></code>, <code class="xref py py-const docutils literal"><span class="pre">INFO</span></code>, <code class="xref py py-const docutils literal"><span class="pre">WARNING</span></code>, <code class="xref py py-const docutils literal"><span class="pre">ERROR</span></code>, <code class="xref py py-const docutils literal"><span class="pre">CRITICAL</span></code>)。</p>
-</td>
+<td>メッセージのための数値のロギングレベル (<code class="xref py py-const docutils literal"><span class="pre">DEBUG</span></code>, <code class="xref py py-const docutils literal"><span class="pre">INFO</span></code>, <code class="xref py py-const docutils literal"><span class="pre">WARNING</span></code>, <code class="xref py py-const docutils literal"><span class="pre">ERROR</span></code>, <code class="xref py py-const docutils literal"><span class="pre">CRITICAL</span></code>)。</td>
 </tr>
 <tr class="row-even"><td>lineno</td>
 <td><code class="docutils literal"><span class="pre">%(lineno)d</span></code></td>
-<td><p class="first last">ロギングの呼び出しが発せられたソース行番号 (利用できる場合のみ)。</p>
-</td>
+<td>ロギングの呼び出しが発せられたソース行番号 (利用できる場合のみ)。</td>
 </tr>
 <tr class="row-odd"><td>module</td>
 <td><code class="docutils literal"><span class="pre">%(module)s</span></code></td>
-<td><p class="first last">モジュール (<code class="docutils literal"><span class="pre">filename</span></code> の名前部分)。</p>
-</td>
+<td>モジュール (<code class="docutils literal"><span class="pre">filename</span></code> の名前部分)。</td>
 </tr>
 <tr class="row-even"><td>msecs</td>
 <td><code class="docutils literal"><span class="pre">%(msecs)d</span></code></td>
-<td><p class="first last"><a class="reference internal" href="#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> が生成された時刻のミリ秒部分。</p>
-</td>
+<td><a class="reference internal" href="#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> が生成された時刻のミリ秒部分。</td>
 </tr>
 <tr class="row-odd"><td>message</td>
 <td><code class="docutils literal"><span class="pre">%(message)s</span></code></td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">msg</span> <span class="pre">%</span> <span class="pre">args</span></code> として求められた、ログメッセージ。 <a class="reference internal" href="#logging.Formatter.format" title="logging.Formatter.format"><code class="xref py py-meth docutils literal"><span class="pre">Formatter.format()</span></code></a> が呼び出されたときに設定されます。</p>
-</td>
+<td><code class="docutils literal"><span class="pre">msg</span> <span class="pre">%</span> <span class="pre">args</span></code> として求められた、ログメッセージ。 <a class="reference internal" href="#logging.Formatter.format" title="logging.Formatter.format"><code class="xref py py-meth docutils literal"><span class="pre">Formatter.format()</span></code></a> が呼び出されたときに設定されます。</td>
 </tr>
 <tr class="row-even"><td>msg</td>
-<td><p class="first last">このフォーマットを自分で使う必要はないでしょう。</p>
-</td>
-<td><p class="first last">元のロギングの呼び出しで渡されたフォーマット文字列。 <code class="docutils literal"><span class="pre">args</span></code> と合わせて、 <code class="docutils literal"><span class="pre">message</span></code> 、または任意のオブジェクトを生成します (<a class="reference internal" href="../howto/logging.html#arbitrary-object-messages"><span class="std std-ref">任意のオブジェクトをメッセージに使用する</span></a> 参照)。</p>
-</td>
+<td>このフォーマットを自分で使う必要はないでしょう。</td>
+<td>元のロギングの呼び出しで渡されたフォーマット文字列。 <code class="docutils literal"><span class="pre">args</span></code> と合わせて、 <code class="docutils literal"><span class="pre">message</span></code> 、または任意のオブジェクトを生成します (<a class="reference internal" href="../howto/logging.html#arbitrary-object-messages"><span class="std std-ref">任意のオブジェクトをメッセージに使用する</span></a> 参照)。</td>
 </tr>
-<tr class="row-odd"><td><p class="first last">名前</p>
-</td>
+<tr class="row-odd"><td>名前</td>
 <td><code class="docutils literal"><span class="pre">%(name)s</span></code></td>
-<td><p class="first last">ロギングに使われたロガーの名前。</p>
-</td>
+<td>ロギングに使われたロガーの名前。</td>
 </tr>
 <tr class="row-even"><td>pathname</td>
 <td><code class="docutils literal"><span class="pre">%(pathname)s</span></code></td>
-<td><p class="first last">ロギングの呼び出しが発せられたファイルの完全なパス名 (利用できる場合のみ)。</p>
-</td>
+<td>ロギングの呼び出しが発せられたファイルの完全なパス名 (利用できる場合のみ)。</td>
 </tr>
 <tr class="row-odd"><td>process</td>
 <td><code class="docutils literal"><span class="pre">%(process)d</span></code></td>
-<td><p class="first last">プロセス ID (利用可能な場合のみ)。</p>
-</td>
+<td>プロセス ID (利用可能な場合のみ)。</td>
 </tr>
 <tr class="row-even"><td>processName</td>
 <td><code class="docutils literal"><span class="pre">%(processName)s</span></code></td>
-<td><p class="first last">プロセス名 (利用可能な場合のみ)。</p>
-</td>
+<td>プロセス名 (利用可能な場合のみ)。</td>
 </tr>
 <tr class="row-odd"><td>relativeCreated</td>
 <td><code class="docutils literal"><span class="pre">%(relativeCreated)d</span></code></td>
-<td><p class="first last">logging モジュールが読み込まれた時刻に対する、LogRecord が生成された時刻を、ミリ秒で表したもの。</p>
-</td>
+<td>logging モジュールが読み込まれた時刻に対する、LogRecord が生成された時刻を、ミリ秒で表したもの。</td>
 </tr>
 <tr class="row-even"><td>stack_info</td>
-<td><p class="first last">このフォーマットを自分で使う必要はないでしょう。</p>
-</td>
-<td><p class="first last">現在のスレッドでのスタックの底からこのレコードの生成に帰着したログ呼び出しまでのスタックフレーム情報 (利用可能な場合)。</p>
-</td>
+<td>このフォーマットを自分で使う必要はないでしょう。</td>
+<td>現在のスレッドでのスタックの底からこのレコードの生成に帰着したログ呼び出しまでのスタックフレーム情報 (利用可能な場合)。</td>
 </tr>
 <tr class="row-odd"><td>thread</td>
 <td><code class="docutils literal"><span class="pre">%(thread)d</span></code></td>
-<td><p class="first last">スレッド ID (利用可能な場合のみ)。</p>
-</td>
+<td>スレッド ID (利用可能な場合のみ)。</td>
 </tr>
 <tr class="row-even"><td>threadName</td>
 <td><code class="docutils literal"><span class="pre">%(threadName)s</span></code></td>
-<td><p class="first last">スレッド名 (利用可能な場合のみ)。</p>
-</td>
+<td>スレッド名 (利用可能な場合のみ)。</td>
 </tr>
 </tbody>
 </table>
@@ -727,7 +683,7 @@
 <dl class="method">
 <dt id="logging.LoggerAdapter.process">
 <code class="descname">process</code><span class="sig-paren">(</span><em>msg</em>, <em>kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.LoggerAdapter.process" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>文脈情報を挿入するために、ログ記録呼び出しに渡されたメッセージおよび/またはキーワード引数に変更を加えます。ここでの実装は <em>extra</em> としてコンストラクタに渡されたオブジェクトを取り、&#8217;extra&#8217; キーを使って <em>kwargs</em> に加えます。返り値は (<em>msg</em>, <em>kwargs</em>) というタプルで、(変更されているはずの) 渡された引数を含みます。</p>
+<dd><p>文脈情報を挿入するために、ログ記録呼び出しに渡されたメッセージおよび/またはキーワード引数に変更を加えます。ここでの実装は <em>extra</em> としてコンストラクタに渡されたオブジェクトを取り、』extra』 キーを使って <em>kwargs</em> に加えます。返り値は (<em>msg</em>, <em>kwargs</em>) というタプルで、(変更されているはずの) 渡された引数を含みます。</p>
 </dd></dl>
 
 </dd></dl>
@@ -748,7 +704,7 @@
 <dl class="function">
 <dt id="logging.getLogger">
 <code class="descclassname">logging.</code><code class="descname">getLogger</code><span class="sig-paren">(</span><em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.getLogger" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>指定された名前のロガーを返します。名前が <code class="docutils literal"><span class="pre">None</span></code> であれば、ロガー階層のルート (root) にあるロガーを返します。<em>name</em> を指定する場合には、通常は <em>&#8216;a&#8217;</em>, <em>&#8216;a.b&#8217;</em>, <em>&#8216;a.b.c.d&#8217;</em> といったドット区切りの階層的な名前にします。名前の付け方はログ機能を使う開発者次第です。</p>
+<dd><p>指定された名前のロガーを返します。名前が <code class="docutils literal"><span class="pre">None</span></code> であれば、ロガー階層のルート (root) にあるロガーを返します。<em>name</em> を指定する場合には、通常は <em>『a』</em>, <em>『a.b』</em>, <em>『a.b.c.d』</em> といったドット区切りの階層的な名前にします。名前の付け方はログ機能を使う開発者次第です。</p>
 <p>与えられた名前に対して、この関数はどの呼び出しでも同じロガーインスタンスを返します。したがって、ロガーインスタンスをアプリケーションの各部でやりとりする必要はありません。</p>
 </dd></dl>
 
@@ -795,7 +751,7 @@
 </pre></div>
 </div>
 <p><em>extra</em> で渡される辞書のキーはロギングシステムで使われているものと衝突しないようにしなければなりません。 (どのキーがロギングシステムで使われているかについての詳細は <a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> のドキュメントを参照してください。)</p>
-<p>これらの属性をログメッセージに使うことにしたなら、少し注意が必要です。上の例では、 &#8216;clientip&#8217; と &#8216;user&#8217; が LogRecord の属性辞書に含まれていることを期待した書式文字列で <a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> がセットアップされています。もしこれらが欠けていると、書式化例外が発生してしまうためメッセージはログに残りません。したがってこの場合、常にこれらのキーを含む <em>extra</em> 辞書を渡す必要があります。</p>
+<p>これらの属性をログメッセージに使うことにしたなら、少し注意が必要です。上の例では、 『clientip』 と 『user』 が LogRecord の属性辞書に含まれていることを期待した書式文字列で <a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> がセットアップされています。もしこれらが欠けていると、書式化例外が発生してしまうためメッセージはログに残りません。したがってこの場合、常にこれらのキーを含む <em>extra</em> 辞書を渡す必要があります。</p>
 <p>このようなことは煩わしいかもしれませんが、この機能は限定された場面で使われるように意図しているものなのです。たとえば同じコードがいくつものコンテキストで実行されるマルチスレッドのサーバで、興味のある条件が現れるのがそのコンテキストに依存している (上の例で言えば、リモートのクライアント IP アドレスや認証されたユーザ名など)、というような場合です。そういった場面では、それ用の <a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> が特定の <code class="xref py py-class docutils literal"><span class="pre">Handler</span></code> と共に使われるというのはよくあることです。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.2 で追加: </span><em>stack_info</em> パラメータが追加されました。</p>
@@ -865,7 +821,7 @@
 <dl class="function">
 <dt id="logging.getLevelName">
 <code class="descclassname">logging.</code><code class="descname">getLevelName</code><span class="sig-paren">(</span><em>lvl</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.getLevelName" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>ログ記録レベル <em>lvl</em> のテキスト表現を返します。レベルが定義済みのレベル <code class="xref py py-const docutils literal"><span class="pre">CRITICAL</span></code>, <code class="xref py py-const docutils literal"><span class="pre">ERROR</span></code>, <code class="xref py py-const docutils literal"><span class="pre">WARNING</span></code>, <code class="xref py py-const docutils literal"><span class="pre">INFO</span></code>, <code class="xref py py-const docutils literal"><span class="pre">DEBUG</span></code> のいずれかである場合、対応する文字列が返されます。 <a class="reference internal" href="#logging.addLevelName" title="logging.addLevelName"><code class="xref py py-func docutils literal"><span class="pre">addLevelName()</span></code></a> を使ってレベルに名前を関連付けていた場合、 <em>lvl</em> に関連付けられた名前が返されます。定義済みのレベルに対応する数値を指定した場合、レベルに対応した文字列表現を返します。そうでない場合、文字列 &#8216;Level %s&#8217; % lvl を返します。</p>
+<dd><p>ログ記録レベル <em>lvl</em> のテキスト表現を返します。レベルが定義済みのレベル <code class="xref py py-const docutils literal"><span class="pre">CRITICAL</span></code>, <code class="xref py py-const docutils literal"><span class="pre">ERROR</span></code>, <code class="xref py py-const docutils literal"><span class="pre">WARNING</span></code>, <code class="xref py py-const docutils literal"><span class="pre">INFO</span></code>, <code class="xref py py-const docutils literal"><span class="pre">DEBUG</span></code> のいずれかである場合、対応する文字列が返されます。 <a class="reference internal" href="#logging.addLevelName" title="logging.addLevelName"><code class="xref py py-func docutils literal"><span class="pre">addLevelName()</span></code></a> を使ってレベルに名前を関連付けていた場合、 <em>lvl</em> に関連付けられた名前が返されます。定義済みのレベルに対応する数値を指定した場合、レベルに対応した文字列表現を返します。そうでない場合、文字列 『Level %s』 % lvl を返します。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">レベルは内部的には整数です(これはロギングのロジックが大小比較をする必要があるからです)。この関数は、数値のレベルを、書式記述子 <code class="docutils literal"><span class="pre">%(levelname)s</span></code> (<a class="reference internal" href="#logrecord-attributes"><span class="std std-ref">LogRecord 属性</span></a> 参照)によって書式化されるログ出力の表示用レベル名に変換するのに使用されます。</p>
@@ -897,44 +853,34 @@
 <col width="76%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">フォーマット</p>
-</th>
-<th class="head"><p class="first last">説明</p>
-</th>
+<tr class="row-odd"><th class="head">フォーマット</th>
+<th class="head">説明</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">filename</span></code></td>
-<td><p class="first last">StreamHandler ではなく指定された名前で FileHandler が作られます。</p>
-</td>
+<td>StreamHandler ではなく指定された名前で FileHandler が作られます。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">filemode</span></code></td>
-<td><p class="first last">filename が指定されているとき、ファイルモードを指定します (filemode が指定されない場合デフォルトは &#8216;a&#8217; です)。</p>
-</td>
+<td>filename が指定されているとき、ファイルモードを指定します (filemode が指定されない場合デフォルトは 『a』 です)。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">format</span></code></td>
-<td><p class="first last">指定された書式文字列をハンドラで使います。</p>
-</td>
+<td>指定された書式文字列をハンドラで使います。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">datefmt</span></code></td>
-<td><p class="first last">指定された日付/時刻の書式を使います。</p>
-</td>
+<td>指定された日付/時刻の書式を使います。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">style</span></code></td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">format</span></code> が指定された場合は、書式文字列にこのスタイルを使用します。 &#8216;%&#8217;, &#8216;{&#8216;, &#8216;$&#8217; のうちの1つで、それぞれ %-format 、 <a class="reference internal" href="stdtypes.html#str.format" title="str.format"><code class="xref py py-meth docutils literal"><span class="pre">str.format()</span></code></a> 、 <a class="reference internal" href="string.html#string.Template" title="string.Template"><code class="xref py py-class docutils literal"><span class="pre">string.Template</span></code></a> に対応します。指定されなかった場合、デフォルトで &#8216;%&#8217; になります。</p>
-</td>
+<td><code class="docutils literal"><span class="pre">format</span></code> が指定された場合は、書式文字列にこのスタイルを使用します。 『%』, 『{『, 『$』 のうちの1つで、それぞれ %-format 、 <a class="reference internal" href="stdtypes.html#str.format" title="str.format"><code class="xref py py-meth docutils literal"><span class="pre">str.format()</span></code></a> 、 <a class="reference internal" href="string.html#string.Template" title="string.Template"><code class="xref py py-class docutils literal"><span class="pre">string.Template</span></code></a> に対応します。指定されなかった場合、デフォルトで 『%』 になります。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">level</span></code></td>
-<td><p class="first last">ルートロガーのレベルを指定されたものにします。</p>
-</td>
+<td>ルートロガーのレベルを指定されたものにします。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">stream</span></code></td>
-<td><p class="first last">指定されたストリームを StreamHandler の初期化に使います。この引数は &#8216;filename&#8217; と同時には使えないことに注意してください。両方が指定されたときには <code class="docutils literal"><span class="pre">ValueError</span></code> が送出されます。</p>
-</td>
+<td>指定されたストリームを StreamHandler の初期化に使います。この引数は 『filename』 と同時には使えないことに注意してください。両方が指定されたときには <code class="docutils literal"><span class="pre">ValueError</span></code> が送出されます。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">handlers</span></code></td>
-<td><p class="first last">もし指定されれば、これは root ロガーに追加される既に作られたハンドラのイテラブルになります。まだフォーマッタがセットされていないすべてのハンドラは、この関数で作られたデフォルトフォーマッタが割り当てられることになります。この引数は &#8216;filename&#8217; や &#8216;stream&#8217; と互換性がないことに注意してください。両方が存在する場合 <code class="docutils literal"><span class="pre">ValueError</span></code> が上げられます。</p>
-</td>
+<td>もし指定されれば、これは root ロガーに追加される既に作られたハンドラのイテラブルになります。まだフォーマッタがセットされていないすべてのハンドラは、この関数で作られたデフォルトフォーマッタが割り当てられることになります。この引数は 『filename』 や 『stream』 と互換性がないことに注意してください。両方が存在する場合 <code class="docutils literal"><span class="pre">ValueError</span></code> が上げられます。</td>
 </tr>
 </tbody>
 </table>
@@ -966,7 +912,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">パラメータ:</th><td class="field-body"><strong>factory</strong> &#8211; ログレコードを生成するファクトリとして振舞う callable。</td>
+<tr class="field-odd field"><th class="field-name">パラメータ:</th><td class="field-body"><strong>factory</strong> – ログレコードを生成するファクトリとして振舞う callable。</td>
 </tr>
 </tbody>
 </table>
@@ -980,35 +926,25 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first last">ロガーの名前。</p>
-</td>
+<tr class="field-odd field"><th class="field-name">名前:</th><td class="field-body">ロガーの名前。</td>
 </tr>
-<tr class="field-even field"><th class="field-name">level:</th><td class="field-body"><p class="first last">ログレベル (数値)。</p>
-</td>
+<tr class="field-even field"><th class="field-name">level:</th><td class="field-body">ログレベル (数値)。</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">fn:</th><td class="field-body"><p class="first last">ログ呼び出しが行われたファイルのフルパス名。</p>
-</td>
+<tr class="field-odd field"><th class="field-name">fn:</th><td class="field-body">ログ呼び出しが行われたファイルのフルパス名。</td>
 </tr>
-<tr class="field-even field"><th class="field-name">lno:</th><td class="field-body"><p class="first last">ログ呼び出しが行われたファイルの行数。</p>
-</td>
+<tr class="field-even field"><th class="field-name">lno:</th><td class="field-body">ログ呼び出しが行われたファイルの行数。</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">msg:</th><td class="field-body"><p class="first last">ログメッセージ。</p>
-</td>
+<tr class="field-odd field"><th class="field-name">msg:</th><td class="field-body">ログメッセージ。</td>
 </tr>
-<tr class="field-even field"><th class="field-name">args:</th><td class="field-body"><p class="first last">ログメッセージに対する引数。</p>
-</td>
+<tr class="field-even field"><th class="field-name"><code class="docutils literal"><span class="pre">args</span></code>:</th><td class="field-body">ログメッセージに対する引数。</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">exc_info:</th><td class="field-body"><p class="first last">例外タプルまたは <code class="docutils literal"><span class="pre">None</span></code>。</p>
-</td>
+<tr class="field-odd field"><th class="field-name">exc_info:</th><td class="field-body">例外タプルまたは <code class="docutils literal"><span class="pre">None</span></code>。</td>
 </tr>
-<tr class="field-even field"><th class="field-name">func:</th><td class="field-body"><p class="first last">ログ呼び出しを起動した関数またはメソッドの名前。</p>
-</td>
+<tr class="field-even field"><th class="field-name">func:</th><td class="field-body">ログ呼び出しを起動した関数またはメソッドの名前。</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">sinfo:</th><td class="field-body"><p class="first last"><a class="reference internal" href="traceback.html#traceback.print_stack" title="traceback.print_stack"><code class="xref py py-func docutils literal"><span class="pre">traceback.print_stack()</span></code></a> で提供されるような、呼び出し階層を示すスタックトレースバック。</p>
-</td>
+<tr class="field-odd field"><th class="field-name">sinfo:</th><td class="field-body"><a class="reference internal" href="traceback.html#traceback.print_stack" title="traceback.print_stack"><code class="xref py py-func docutils literal"><span class="pre">traceback.print_stack()</span></code></a> で提供されるような、呼び出し階層を示すスタックトレースバック。</td>
 </tr>
-<tr class="field-even field"><th class="field-name">kwargs:</th><td class="field-body"><p class="first last">追加のキーワード引数。</p>
-</td>
+<tr class="field-even field"><th class="field-name">kwargs:</th><td class="field-body">追加のキーワード引数。</td>
 </tr>
 </tbody>
 </table>
@@ -1043,17 +979,13 @@
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
 <dt><a class="reference internal" href="logging.config.html#module-logging.config" title="logging.config: Configuration of the logging module."><code class="xref py py-mod docutils literal"><span class="pre">logging.config</span></code></a> モジュール</dt>
-<dd><p class="first last">logging モジュールの環境設定 API です。</p>
-</dd>
+<dd>logging モジュールの環境設定 API です。</dd>
 <dt><a class="reference internal" href="logging.handlers.html#module-logging.handlers" title="logging.handlers: Handlers for the logging module."><code class="xref py py-mod docutils literal"><span class="pre">logging.handlers</span></code></a> モジュール</dt>
-<dd><p class="first last">logging モジュールに含まれる、便利なハンドラです。</p>
-</dd>
+<dd>logging モジュールに含まれる、便利なハンドラです。</dd>
 <dt><span class="target" id="index-3"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0282"><strong>PEP 282</strong></a> - ログシステム</dt>
-<dd><p class="first last">この機能を Python 標準ライブラリに含めることを述べた提案です。</p>
-</dd>
+<dd>この機能を Python 標準ライブラリに含めることを述べた提案です。</dd>
 <dt><a class="reference external" href="https://www.red-dove.com/python_logging.html">Original Python logging package</a></dt>
-<dd><p class="first last">これは、 <a class="reference internal" href="#module-logging" title="logging: Flexible event logging system for applications."><code class="xref py py-mod docutils literal"><span class="pre">logging</span></code></a> パッケージのオリジナルのソースです。このサイトから利用できるバージョンのパッケージは、 <a class="reference internal" href="#module-logging" title="logging: Flexible event logging system for applications."><code class="xref py py-mod docutils literal"><span class="pre">logging</span></code></a> パッケージを標準ライブラリに含まない、 Python 1.5.2, 2.1.x および 2.2.x で使うのに適しています。</p>
-</dd>
+<dd>これは、 <a class="reference internal" href="#module-logging" title="logging: Flexible event logging system for applications."><code class="xref py py-mod docutils literal"><span class="pre">logging</span></code></a> パッケージのオリジナルのソースです。このサイトから利用できるバージョンのパッケージは、 <a class="reference internal" href="#module-logging" title="logging: Flexible event logging system for applications."><code class="xref py py-mod docutils literal"><span class="pre">logging</span></code></a> パッケージを標準ライブラリに含まない、 Python 1.5.2, 2.1.x および 2.2.x で使うのに適しています。</dd>
 </dl>
 </div>
 </div>
@@ -1067,7 +999,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">16.6. <code class="docutils literal"><span class="pre">logging</span></code> &#8212; Python 用ロギング機能</a><ul>
+<li><a class="reference internal" href="#">16.6. <code class="docutils literal"><span class="pre">logging</span></code> — Python 用ロギング機能</a><ul>
 <li><a class="reference internal" href="#logger-objects">16.6.1. ロガーオブジェクト</a></li>
 <li><a class="reference internal" href="#logging-levels">16.6.2. ロギングレベル</a></li>
 <li><a class="reference internal" href="#handler-objects">16.6.3. ハンドラオブジェクト</a></li>
@@ -1086,16 +1018,16 @@
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="getopt.html"
-                        title="前の章へ">16.5. <code class="docutils literal"><span class="pre">getopt</span></code> &#8212; C 言語スタイルのコマンドラインオプションパーサ</a></p>
+                        title="前の章へ">16.5. <code class="docutils literal"><span class="pre">getopt</span></code> — C 言語スタイルのコマンドラインオプションパーサ</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="logging.config.html"
-                        title="次の章へ">16.7. <code class="docutils literal"><span class="pre">logging.config</span></code> &#8212; ロギングの環境設定</a></p>
+                        title="次の章へ">16.7. <code class="docutils literal"><span class="pre">logging.config</span></code> — ロギングの環境設定</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/logging.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/logging.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -1156,7 +1088,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

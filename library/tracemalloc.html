@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>27.7. tracemalloc — メモリ割り当ての追跡 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="27. デバッグとプロファイル" href="debug.html" />
     <link rel="next" title="28. ソフトウェア・パッケージと配布" href="distribution.html" />
     <link rel="prev" title="27.6. trace — Python 文実行のトレースと追跡" href="trace.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,7 +100,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-tracemalloc">
-<span id="tracemalloc-trace-memory-allocations"></span><h1>27.7. <a class="reference internal" href="#module-tracemalloc" title="tracemalloc: Trace memory allocations."><code class="xref py py-mod docutils literal"><span class="pre">tracemalloc</span></code></a> &#8212; メモリ割り当ての追跡<a class="headerlink" href="#module-tracemalloc" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="tracemalloc-trace-memory-allocations"></span><h1>27.7. <a class="reference internal" href="#module-tracemalloc" title="tracemalloc: Trace memory allocations."><code class="xref py py-mod docutils literal"><span class="pre">tracemalloc</span></code></a> — メモリ割り当ての追跡<a class="headerlink" href="#module-tracemalloc" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
 </div>
@@ -112,15 +108,12 @@
 <hr class="docutils" />
 <p>tracemallocモジュールは、Python が割り当てたメモリブロックをトレースするためのデバッグツールです。このモジュールは以下の情報を提供します。</p>
 <ul class="simple">
-<li><p class="first">オブジェクトが割り当てられた場所のトレースバック</p>
-</li>
-<li><p class="first">ファイル名ごと、及び行ごとに割り当てられたメモリブロックの以下の統計を取ります：総サイズ、ブロック数、割り当てられたブロックの平均サイズ</p>
-</li>
-<li><p class="first">メモリリークを検出するために2つのスナップショットの差を計算します。</p>
-</li>
+<li>オブジェクトが割り当てられた場所のトレースバック</li>
+<li>ファイル名ごと、及び行ごとに割り当てられたメモリブロックの以下の統計を取ります：総サイズ、ブロック数、割り当てられたブロックの平均サイズ</li>
+<li>メモリリークを検出するために2つのスナップショットの差を計算します。</li>
 </ul>
-<p>Python が割り当てたメモリブロックの大半をトレースするには、 <span class="target" id="index-6"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONTRACEMALLOC"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONTRACEMALLOC</span></code></a> 環境変数を <code class="docutils literal"><span class="pre">1</span></code> に設定して可能な限り早くモジュールを開始させるか、<a class="reference internal" href="../using/cmdline.html#cmdoption-X"><code class="xref std std-option docutils literal"><span class="pre">-X</span></code></a> <code class="docutils literal"><span class="pre">tracemalloc</span></code> コマンドラインオプションを使用してください。実行時に <a class="reference internal" href="#tracemalloc.start" title="tracemalloc.start"><code class="xref py py-func docutils literal"><span class="pre">tracemalloc.start()</span></code></a> を呼んで Python のメモリ割り当てのトレースを開始することが出来ます。</p>
-<p>デフォルトでは、割り当てられたメモリブロック1つのトレースは最新1フレームを保存します。開始時に25フレームを保存するには、<span class="target" id="index-7"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONTRACEMALLOC"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONTRACEMALLOC</span></code></a> 環境変数を <code class="docutils literal"><span class="pre">25</span></code> に設定するか、<a class="reference internal" href="../using/cmdline.html#cmdoption-X"><code class="xref std std-option docutils literal"><span class="pre">-X</span></code></a> <code class="docutils literal"><span class="pre">tracemalloc=25</span></code> コマンドラインオプションを使用してください。</p>
+<p>Python が割り当てたメモリブロックの大半をトレースするには、 <span class="target" id="index-6"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONTRACEMALLOC"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONTRACEMALLOC</span></code></a> 環境変数を <code class="docutils literal"><span class="pre">1</span></code> に設定して可能な限り早くモジュールを開始させるか、<a class="reference internal" href="../using/cmdline.html#id5"><code class="xref std std-option docutils literal"><span class="pre">-X</span></code></a> <code class="docutils literal"><span class="pre">tracemalloc</span></code> コマンドラインオプションを使用してください。実行時に <a class="reference internal" href="#tracemalloc.start" title="tracemalloc.start"><code class="xref py py-func docutils literal"><span class="pre">tracemalloc.start()</span></code></a> を呼んで Python のメモリ割り当てのトレースを開始することが出来ます。</p>
+<p>デフォルトでは、割り当てられたメモリブロック1つのトレースは最新1フレームを保存します。開始時に25フレームを保存するには、<span class="target" id="index-7"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONTRACEMALLOC"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONTRACEMALLOC</span></code></a> 環境変数を <code class="docutils literal"><span class="pre">25</span></code> に設定するか、<a class="reference internal" href="../using/cmdline.html#id5"><code class="xref std std-option docutils literal"><span class="pre">-X</span></code></a> <code class="docutils literal"><span class="pre">tracemalloc=25</span></code> コマンドラインオプションを使用してください。</p>
 <div class="section" id="examples">
 <h2>27.7.1. 使用例<a class="headerlink" href="#examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <div class="section" id="display-the-top-10">
@@ -387,7 +380,7 @@ loaded.</p>
 <a class="reference internal" href="#tracemalloc.Snapshot.compare_to" title="tracemalloc.Snapshot.compare_to"><code class="xref py py-meth docutils literal"><span class="pre">Snapshot.compare_to()</span></code></a> および <a class="reference internal" href="#tracemalloc.Snapshot.statistics" title="tracemalloc.Snapshot.statistics"><code class="xref py py-meth docutils literal"><span class="pre">Snapshot.statistics()</span></code></a> メソッドを参照してください。</p>
 <p>保存するフレーム数を増やすと <a class="reference internal" href="#module-tracemalloc" title="tracemalloc: Trace memory allocations."><code class="xref py py-mod docutils literal"><span class="pre">tracemalloc</span></code></a> モジュールのメモリと CPU のオーバーヘッドは増加します。
 <a class="reference internal" href="#module-tracemalloc" title="tracemalloc: Trace memory allocations."><code class="xref py py-mod docutils literal"><span class="pre">tracemalloc</span></code></a> モジュールが使用しているメモリ量を調べるには <a class="reference internal" href="#tracemalloc.get_tracemalloc_memory" title="tracemalloc.get_tracemalloc_memory"><code class="xref py py-func docutils literal"><span class="pre">get_tracemalloc_memory()</span></code></a> 関数を使用してください。</p>
-<p><span class="target" id="index-8"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONTRACEMALLOC"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONTRACEMALLOC</span></code></a> 環境変数 (<code class="docutils literal"><span class="pre">PYTHONTRACEMALLOC=NFRAME</span></code>) と  <a class="reference internal" href="../using/cmdline.html#cmdoption-X"><code class="xref std std-option docutils literal"><span class="pre">-X</span></code></a> <code class="docutils literal"><span class="pre">tracemalloc=NFRAME</span></code> コマンドラインオプションを使って実行開始時にトレースを始めることが出来ます。</p>
+<p><span class="target" id="index-8"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONTRACEMALLOC"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONTRACEMALLOC</span></code></a> 環境変数 (<code class="docutils literal"><span class="pre">PYTHONTRACEMALLOC=NFRAME</span></code>) と  <a class="reference internal" href="../using/cmdline.html#id5"><code class="xref std std-option docutils literal"><span class="pre">-X</span></code></a> <code class="docutils literal"><span class="pre">tracemalloc=NFRAME</span></code> コマンドラインオプションを使って実行開始時にトレースを始めることが出来ます。</p>
 <p><a class="reference internal" href="#tracemalloc.stop" title="tracemalloc.stop"><code class="xref py py-func docutils literal"><span class="pre">stop()</span></code></a>、<a class="reference internal" href="#tracemalloc.is_tracing" title="tracemalloc.is_tracing"><code class="xref py py-func docutils literal"><span class="pre">is_tracing()</span></code></a>、<a class="reference internal" href="#tracemalloc.get_traceback_limit" title="tracemalloc.get_traceback_limit"><code class="xref py py-func docutils literal"><span class="pre">get_traceback_limit()</span></code></a> 関数を参照してください。</p>
 </dd></dl>
 
@@ -446,12 +439,9 @@ in the address space <a class="reference internal" href="#tracemalloc.DomainFilt
 <p><em>filename_pattern</em> のシンタックスについては <a class="reference internal" href="fnmatch.html#fnmatch.fnmatch" title="fnmatch.fnmatch"><code class="xref py py-func docutils literal"><span class="pre">fnmatch.fnmatch()</span></code></a> 関数を参照してください。<code class="docutils literal"><span class="pre">'.pyc'</span></code> 拡張子は <code class="docutils literal"><span class="pre">'.py'</span></code> に置換されます。</p>
 <p>例:</p>
 <ul class="simple">
-<li><p class="first"><code class="docutils literal"><span class="pre">Filter(True,</span> <span class="pre">subprocess.__file__)</span></code> は <a class="reference internal" href="subprocess.html#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal"><span class="pre">subprocess</span></code></a> モジュールのみを含みます</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">Filter(False,</span> <span class="pre">tracemalloc.__file__)</span></code> は <a class="reference internal" href="#module-tracemalloc" title="tracemalloc: Trace memory allocations."><code class="xref py py-mod docutils literal"><span class="pre">tracemalloc</span></code></a> モジュールのトレースを除外します</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">Filter(False,</span> <span class="pre">&quot;&lt;unknown&gt;&quot;)</span></code> は空のトレースバックを除外します</p>
-</li>
+<li><code class="docutils literal"><span class="pre">Filter(True,</span> <span class="pre">subprocess.__file__)</span></code> は <a class="reference internal" href="subprocess.html#module-subprocess" title="subprocess: Subprocess management."><code class="xref py py-mod docutils literal"><span class="pre">subprocess</span></code></a> モジュールのみを含みます</li>
+<li><code class="docutils literal"><span class="pre">Filter(False,</span> <span class="pre">tracemalloc.__file__)</span></code> は <a class="reference internal" href="#module-tracemalloc" title="tracemalloc: Trace memory allocations."><code class="xref py py-mod docutils literal"><span class="pre">tracemalloc</span></code></a> モジュールのトレースを除外します</li>
+<li><code class="docutils literal"><span class="pre">Filter(False,</span> <span class="pre">&quot;&lt;unknown&gt;&quot;)</span></code> は空のトレースバックを除外します</li>
 </ul>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.5 で変更: </span><code class="docutils literal"><span class="pre">'.pyo'</span></code> ファイル拡張子が <code class="docutils literal"><span class="pre">'.py'</span></code> に置換されることはもうありません。</p>
@@ -584,12 +574,10 @@ by <em>key_type</em>:</p>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'filename'</span></code></td>
-<td><p class="first last">ファイル名</p>
-</td>
+<td>ファイル名</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'lineno'</span></code></td>
-<td><p class="first last">ファイル名と行番号</p>
-</td>
+<td>ファイル名と行番号</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'traceback'</span></code></td>
 <td>traceback</td>
@@ -763,7 +751,7 @@ instance.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">27.7. <code class="docutils literal"><span class="pre">tracemalloc</span></code> &#8212; メモリ割り当ての追跡</a><ul>
+<li><a class="reference internal" href="#">27.7. <code class="docutils literal"><span class="pre">tracemalloc</span></code> — メモリ割り当ての追跡</a><ul>
 <li><a class="reference internal" href="#examples">27.7.1. 使用例</a><ul>
 <li><a class="reference internal" href="#display-the-top-10">27.7.1.1. 上位10を表示する</a></li>
 <li><a class="reference internal" href="#compute-differences">27.7.1.2. 差を計算する</a></li>
@@ -789,7 +777,7 @@ instance.</p>
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="trace.html"
-                        title="前の章へ">27.6. <code class="docutils literal"><span class="pre">trace</span></code> &#8212; Python 文実行のトレースと追跡</a></p>
+                        title="前の章へ">27.6. <code class="docutils literal"><span class="pre">trace</span></code> — Python 文実行のトレースと追跡</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="distribution.html"
                         title="次の章へ">28. ソフトウェア・パッケージと配布</a></p>
@@ -798,7 +786,7 @@ instance.</p>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/tracemalloc.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/tracemalloc.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -859,7 +847,7 @@ instance.</p>
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

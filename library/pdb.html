@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>27.3. pdb — Python デバッガ &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="27. デバッグとプロファイル" href="debug.html" />
     <link rel="next" title="27.4. Python プロファイラ" href="profile.html" />
     <link rel="prev" title="27.2. faulthandler — Python tracebackのダンプ" href="faulthandler.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,11 +100,11 @@
           <div class="body" role="main">
             
   <div class="section" id="module-pdb">
-<span id="pdb-the-python-debugger"></span><span id="debugger"></span><h1>27.3. <a class="reference internal" href="#module-pdb" title="pdb: The Python debugger for interactive interpreters."><code class="xref py py-mod docutils literal"><span class="pre">pdb</span></code></a> &#8212; Python デバッガ<a class="headerlink" href="#module-pdb" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="pdb-the-python-debugger"></span><span id="debugger"></span><h1>27.3. <a class="reference internal" href="#module-pdb" title="pdb: The Python debugger for interactive interpreters."><code class="xref py py-mod docutils literal"><span class="pre">pdb</span></code></a> — Python デバッガ<a class="headerlink" href="#module-pdb" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/pdb.py">Lib/pdb.py</a></p>
 <hr class="docutils" id="index-0" />
 <p>モジュール <a class="reference internal" href="#module-pdb" title="pdb: The Python debugger for interactive interpreters."><code class="xref py py-mod docutils literal"><span class="pre">pdb</span></code></a> は Python プログラム用の対話型ソースコードデバッガを定義します。 (条件付き)ブレークポイントの設定やソース行レベルでのシングルステップ実行、スタックフレームのインスペクション、ソースコードリスティングおよびあらゆるスタックフレームのコンテキストにおける任意の Python コードの評価をサポートしています。事後解析デバッギングもサポートし、プログラムの制御下で呼び出すことができます。</p>
-<p id="index-1">デバッガーは拡張可能です &#8211; 実際にはクラス <a class="reference internal" href="#pdb.Pdb" title="pdb.Pdb"><code class="xref py py-class docutils literal"><span class="pre">Pdb</span></code></a> として定義されています。現在これについてのドキュメントはありませんが、ソースを読めば簡単に理解できます。拡張インターフェースはモジュール <a class="reference internal" href="bdb.html#module-bdb" title="bdb: Debugger framework."><code class="xref py py-mod docutils literal"><span class="pre">bdb</span></code></a> と <a class="reference internal" href="cmd.html#module-cmd" title="cmd: Build line-oriented command interpreters."><code class="xref py py-mod docutils literal"><span class="pre">cmd</span></code></a> を使っています。</p>
+<p id="index-1">デバッガーは拡張可能です – 実際にはクラス <a class="reference internal" href="#pdb.Pdb" title="pdb.Pdb"><code class="xref py py-class docutils literal"><span class="pre">Pdb</span></code></a> として定義されています。現在これについてのドキュメントはありませんが、ソースを読めば簡単に理解できます。拡張インターフェースはモジュール <a class="reference internal" href="bdb.html#module-bdb" title="bdb: Debugger framework."><code class="xref py py-mod docutils literal"><span class="pre">bdb</span></code></a> と <a class="reference internal" href="cmd.html#module-cmd" title="cmd: Build line-oriented command interpreters."><code class="xref py py-mod docutils literal"><span class="pre">cmd</span></code></a> を使っています。</p>
 <p>デバッガのプロンプトは <code class="docutils literal"><span class="pre">(Pdb)</span></code> です。デバッガに制御された状態でプログラムを実行するための典型的な使い方は以下のようになります:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pdb</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">mymodule</span>
@@ -321,7 +317,7 @@
 <p><em>bpnumber</em> 引数が指定されない場合、最後にセットされたブレークポイントを参照することになります。</p>
 <p>ブレークポイントコマンドはプログラムを走らせ直すのに使えます。ただ continue コマンドや step、その他実行を再開するコマンドを使えば良いのです。</p>
 <p>実行を再開するコマンド (現在のところ continue, step, next, return, jump, quit とそれらの省略形) によって、コマンドリストは終了するものと見なされます (コマンドにすぐ end が続いているかのように)。というのも実行を再開すれば (それが単純な next や step であっても) 別のブレークポイントに到達するかもしれないからです。そのブレークポイントにさらにコマンドリストがあれば、どちらのリストを実行すべきか状況が曖昧になります。</p>
-<p>コマンドリストの中で &#8216;silent&#8217; コマンドを使うと、ブレークポイントで停止したという通常のメッセージはプリントされません。この振る舞いは特定のメッセージを出して実行を続けるようなブレークポイントでは望ましいものでしょう。他のコマンドが何も画面出力をしなければ、そのブレークポイントに到達したというサインを見ないことになります。</p>
+<p>コマンドリストの中で 『silent』 コマンドを使うと、ブレークポイントで停止したという通常のメッセージはプリントされません。この振る舞いは特定のメッセージを出して実行を続けるようなブレークポイントでは望ましいものでしょう。他のコマンドが何も画面出力をしなければ、そのブレークポイントに到達したというサインを見ないことになります。</p>
 </dd></dl>
 
 <dl class="pdbcommand">
@@ -396,14 +392,14 @@
 <dd><p>現在のコンテキストにおいて <em>expression</em> を評価し、その値をプリントします。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last"><code class="docutils literal"><span class="pre">print()</span></code> も使えますが、これはデバッガーコマンドではありません &#8212; これは Python の関数 <a class="reference internal" href="functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> が実行されます。</p>
+<p class="last"><code class="docutils literal"><span class="pre">print()</span></code> も使えますが、これはデバッガーコマンドではありません — これは Python の関数 <a class="reference internal" href="functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> が実行されます。</p>
 </div>
 </dd></dl>
 
 <dl class="pdbcommand">
 <dt id="pdbcommand-pp">
 <code class="descname">pp</code><code class="descclassname"> expression</code><a class="headerlink" href="#pdbcommand-pp" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><a class="reference internal" href="#pdbcommand-p"><code class="xref std std-pdbcmd docutils literal"><span class="pre">p</span></code></a> コマンドに似ていますが、式の値以外は <a class="reference internal" href="pprint.html#module-pprint" title="pprint: Data pretty printer."><code class="xref py py-mod docutils literal"><span class="pre">pprint</span></code></a> モジュールを使用して &#8220;pretty-print&#8221; されます。</p>
+<dd><p><a class="reference internal" href="#pdbcommand-p"><code class="xref std std-pdbcmd docutils literal"><span class="pre">p</span></code></a> コマンドに似ていますが、式の値以外は <a class="reference internal" href="pprint.html#module-pprint" title="pprint: Data pretty printer."><code class="xref py py-mod docutils literal"><span class="pre">pprint</span></code></a> モジュールを使用して 「pretty-print」 されます。</p>
 </dd></dl>
 
 <dl class="pdbcommand">
@@ -497,8 +493,7 @@
 <table class="docutils footnote" frame="void" id="id3" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><p class="first last">フレームが属するモジュールは、そのフレームのグローバルの <code class="docutils literal"><span class="pre">__name__</span></code> によって決定されます。</p>
-</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>フレームが属するモジュールは、そのフレームのグローバルの <code class="docutils literal"><span class="pre">__name__</span></code> によって決定されます。</td></tr>
 </tbody>
 </table>
 </div>
@@ -512,7 +507,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">27.3. <code class="docutils literal"><span class="pre">pdb</span></code> &#8212; Python デバッガ</a><ul>
+<li><a class="reference internal" href="#">27.3. <code class="docutils literal"><span class="pre">pdb</span></code> — Python デバッガ</a><ul>
 <li><a class="reference internal" href="#debugger-commands">27.3.1. デバッガコマンド</a></li>
 </ul>
 </li>
@@ -520,7 +515,7 @@
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="faulthandler.html"
-                        title="前の章へ">27.2. <code class="docutils literal"><span class="pre">faulthandler</span></code> &#8212; Python tracebackのダンプ</a></p>
+                        title="前の章へ">27.2. <code class="docutils literal"><span class="pre">faulthandler</span></code> — Python tracebackのダンプ</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="profile.html"
                         title="次の章へ">27.4. Python プロファイラ</a></p>
@@ -529,7 +524,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/pdb.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/pdb.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -590,7 +585,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

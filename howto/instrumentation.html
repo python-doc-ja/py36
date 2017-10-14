@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>DTrace と SystemTap で CPython を測定する &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="Python HOWTO" href="index.html" />
     <link rel="next" title="Python よくある質問" href="../faq/index.html" />
     <link rel="prev" title="Argument Clinic How-To" href="clinic.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -118,15 +114,12 @@
 どちらもドメイン固有言語 (domain-specific language) を使用して、次のことができるスクリプトをユーザが書けます:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p class="first">観測対象のプロセスを絞り込む</p>
-</li>
-<li><p class="first">関心のあるプロセスからデータを収集する</p>
-</li>
-<li><p class="first">収集したデータからレポートを生成する</p>
-</li>
+<li>観測対象のプロセスを絞り込む</li>
+<li>関心のあるプロセスからデータを収集する</li>
+<li>収集したデータからレポートを生成する</li>
 </ul>
 </div></blockquote>
-<p>Python 3.6 では、 CPython は &#8220;プローブ&#8221; としても知られる &#8220;マーカー&#8221; を埋め込んだビルドが行えます。
+<p>Python 3.6 では、 CPython は 「プローブ」 としても知られる 「マーカー」 を埋め込んだビルドが行えます。
 マーカーは DTrace や SystemTap のスクリプトから観測でき、システムの CPython プロセスが何をしているかを観察するのが簡単になります。</p>
 <div class="impl-detail compound">
 <p><strong>CPython 実装の詳細:</strong> DTrace マーカーは CPython インタプリタの実装詳細です。
@@ -167,12 +160,12 @@ Python provider:</p>
 </pre></div>
 </div>
 <p>On Linux, you can verify if the SystemTap static markers are present in
-the built binary by seeing if it contains a &#8221;.note.stapsdt&#8221; section.</p>
+the built binary by seeing if it contains a 「.note.stapsdt」 section.</p>
 <div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> readelf -S ./python <span class="p">|</span> grep .note.stapsdt
 <span class="go">[30] .note.stapsdt        NOTE         0000000000000000 00308d78</span>
 </pre></div>
 </div>
-<p>Python を (&#8211;enable-shared を指定して) 共有ライブラリとしてビルドした場合は、代わりにその共有ライブラリの中を覗く必要があります。
+<p>Python を (–enable-shared を指定して) 共有ライブラリとしてビルドした場合は、代わりにその共有ライブラリの中を覗く必要があります。
 例えば次のようにします:</p>
 <div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> readelf -S libpython3.3dm.so.1.0 <span class="p">|</span> grep .note.stapsdt
 <span class="go">[29] .note.stapsdt        NOTE         0000000000000000 00365b68</span>
@@ -223,7 +216,7 @@ tracing hooks used by a SystemTap script.</p>
 <h2>静的 DTrace プローブ<a class="headerlink" href="#static-dtrace-probes" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>The following example DTrace script can be used to show the call/return
 hierarchy of a Python script, only tracing within the invocation of
-a function called &#8220;start&#8221;. In other words, import-time function
+a function called 「start」. In other words, import-time function
 invocations are not going to be listed:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>self int indent;
 
@@ -327,16 +320,13 @@ probe process(&quot;python&quot;).mark(&quot;function__return&quot;) {
 <p>それぞれの列の内容は次の通りです:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p class="first">スクリプトを起動してからのマイクロ秒単位の時間</p>
-</li>
-<li><p class="first">実行可能ファイルの名前</p>
-</li>
-<li><p class="first">プロセスの PID</p>
-</li>
+<li>スクリプトを起動してからのマイクロ秒単位の時間</li>
+<li>実行可能ファイルの名前</li>
+<li>プロセスの PID</li>
 </ul>
 </div></blockquote>
 <p>そして、残りの部分はスクリプトが実行していた呼び出し/返却階層を表示しています。</p>
-<p><cite>&#8211;enable-shared</cite> を付けてビルドした CPython ではマーカーは共有ライブラリ libpython に含まれていて、プローブを付けるパスはそれを反映する必要があります。
+<p><cite>–enable-shared</cite> を付けてビルドした CPython ではマーカーは共有ライブラリ libpython に含まれていて、プローブを付けるパスはそれを反映する必要があります。
 例えば、上の例のこの行は:</p>
 <div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="go">probe process(&quot;python&quot;).mark(&quot;function__entry&quot;) {</span>
 </pre></div>
@@ -357,12 +347,9 @@ probe process(&quot;python&quot;).mark(&quot;function__return&quot;) {
 <p>トレーススクリプトには位置引数として、ファイル名、関数名、行番号が渡され、必ず <code class="docutils literal"><span class="pre">$arg1</span></code>, <code class="docutils literal"><span class="pre">$arg2</span></code>, <code class="docutils literal"><span class="pre">$arg3</span></code> で渡されます:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p class="first"><code class="docutils literal"><span class="pre">$arg1</span></code> : <code class="docutils literal"><span class="pre">(const</span> <span class="pre">char</span> <span class="pre">*)</span></code> ファイル名、 <code class="docutils literal"><span class="pre">user_string($arg1)</span></code> でアクセスできます</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">$arg2</span></code> : <code class="docutils literal"><span class="pre">(const</span> <span class="pre">char</span> <span class="pre">*)</span></code> 関数名、 <code class="docutils literal"><span class="pre">user_string($arg2)</span></code> でアクセスできます</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">$arg3</span></code> : <code class="docutils literal"><span class="pre">int</span></code> 行番号</p>
-</li>
+<li><code class="docutils literal"><span class="pre">$arg1</span></code> : <code class="docutils literal"><span class="pre">(const</span> <span class="pre">char</span> <span class="pre">*)</span></code> ファイル名、 <code class="docutils literal"><span class="pre">user_string($arg1)</span></code> でアクセスできます</li>
+<li><code class="docutils literal"><span class="pre">$arg2</span></code> : <code class="docutils literal"><span class="pre">(const</span> <span class="pre">char</span> <span class="pre">*)</span></code> 関数名、 <code class="docutils literal"><span class="pre">user_string($arg2)</span></code> でアクセスできます</li>
+<li><code class="docutils literal"><span class="pre">$arg3</span></code> : <code class="docutils literal"><span class="pre">int</span></code> 行番号</li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -401,8 +388,8 @@ probe process(&quot;python&quot;).mark(&quot;function__return&quot;) {
 </div>
 <div class="section" id="systemtap-tapsets">
 <h2>SystemTap Tapset<a class="headerlink" href="#systemtap-tapsets" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>The higher-level way to use the SystemTap integration is to use a &#8220;tapset&#8221;:
-SystemTap&#8217;s equivalent of a library, which hides some of the lower-level
+<p>The higher-level way to use the SystemTap integration is to use a 「tapset」:
+SystemTap’s equivalent of a library, which hides some of the lower-level
 details of the static markers.</p>
 <p>Here is a tapset file, based on a non-shared build of CPython:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>/*
@@ -425,7 +412,7 @@ probe python.function.return = process(&quot;python&quot;).mark(&quot;function__
 }
 </pre></div>
 </div>
-<p>If this file is installed in SystemTap&#8217;s tapset directory (e.g.
+<p>If this file is installed in SystemTap’s tapset directory (e.g.
 <code class="docutils literal"><span class="pre">/usr/share/systemtap/tapset</span></code>), then these additional probepoints become
 available:</p>
 <dl class="function">
@@ -519,7 +506,7 @@ probe timer.ms(1000) {
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/instrumentation.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/instrumentation.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -579,7 +566,7 @@ probe timer.ms(1000) {
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

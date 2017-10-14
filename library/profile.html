@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>27.4. Python プロファイラ &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="27. デバッグとプロファイル" href="debug.html" />
     <link rel="next" title="27.5. timeit — 小さなコード断片の実行時間計測" href="timeit.html" />
     <link rel="prev" title="27.3. pdb — Python デバッガ" href="pdb.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -112,10 +108,8 @@
 <p id="index-0"><a class="reference internal" href="#module-cProfile" title="cProfile"><code class="xref py py-mod docutils literal"><span class="pre">cProfile</span></code></a> と <a class="reference internal" href="#module-profile" title="profile: Python source profiler."><code class="xref py py-mod docutils literal"><span class="pre">profile</span></code></a> は <em class="dfn">決定論的プロファイリング (deterministic profiling)</em> を行います。 <em class="dfn">プロファイル (profile)</em> とは、プログラムの各部分がどれだけ頻繁に呼ばれたか、そして実行にどれだけ時間がかかったかという統計情報です。 <a class="reference internal" href="#module-pstats" title="pstats: Statistics object for use with the profiler."><code class="xref py py-mod docutils literal"><span class="pre">pstats</span></code></a> モジュールを使ってこの統計情報をフォーマットし表示することができます。</p>
 <p>Python 標準ライブラリは同じインターフェイスを提供するプロファイラの実装を2つ提供しています:</p>
 <ol class="arabic simple">
-<li><p class="first"><a class="reference internal" href="#module-cProfile" title="cProfile"><code class="xref py py-mod docutils literal"><span class="pre">cProfile</span></code></a> はほとんどのユーザーに推奨されるモジュールです。 C言語で書かれた拡張モジュールで、オーバーヘッドが少ないため長時間実行されるプログラムのプロファイルに適しています。 Brett Rosen と Ted Czotter によって提供された <code class="xref py py-mod docutils literal"><span class="pre">lsprof</span></code> に基づいています。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="#module-profile" title="profile: Python source profiler."><code class="xref py py-mod docutils literal"><span class="pre">profile</span></code></a> はピュア Python モジュールで、 <a class="reference internal" href="#module-cProfile" title="cProfile"><code class="xref py py-mod docutils literal"><span class="pre">cProfile</span></code></a> モジュールはこのモジュールのインタフェースを真似ています。対象プログラムに相当のオーバーヘッドが生じます。もしプロファイラに何らかの拡張をしたいのであれば、こちらのモジュールを拡張する方が簡単でしょう。このモジュールはもともと Jim Roskind により設計、実装されました。</p>
-</li>
+<li><a class="reference internal" href="#module-cProfile" title="cProfile"><code class="xref py py-mod docutils literal"><span class="pre">cProfile</span></code></a> はほとんどのユーザーに推奨されるモジュールです。 C言語で書かれた拡張モジュールで、オーバーヘッドが少ないため長時間実行されるプログラムのプロファイルに適しています。 Brett Rosen と Ted Czotter によって提供された <code class="xref py py-mod docutils literal"><span class="pre">lsprof</span></code> に基づいています。</li>
+<li><a class="reference internal" href="#module-profile" title="profile: Python source profiler."><code class="xref py py-mod docutils literal"><span class="pre">profile</span></code></a> はピュア Python モジュールで、 <a class="reference internal" href="#module-cProfile" title="cProfile"><code class="xref py py-mod docutils literal"><span class="pre">cProfile</span></code></a> モジュールはこのモジュールのインタフェースを真似ています。対象プログラムに相当のオーバーヘッドが生じます。もしプロファイラに何らかの拡張をしたいのであれば、こちらのモジュールを拡張する方が簡単でしょう。このモジュールはもともと Jim Roskind により設計、実装されました。</li>
 </ol>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
@@ -124,7 +118,7 @@
 </div>
 <div class="section" id="instant-user-s-manual">
 <span id="profile-instant"></span><h2>27.4.2. かんたんユーザマニュアル<a class="headerlink" href="#instant-user-s-manual" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>この節は &#8220;マニュアルなんか読みたくない人&#8221;のために書かれています。ここではきわめて簡単な概要説明とアプリケーションのプロファイリングを手っ取り早く行う方法だけを解説します。</p>
+<p>この節は 「マニュアルなんか読みたくない人」のために書かれています。ここではきわめて簡単な概要説明とアプリケーションのプロファイリングを手っ取り早く行う方法だけを解説します。</p>
 <p>1つの引数を取る関数をプロファイルしたい場合、次のようにできます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cProfile</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -150,23 +144,17 @@
 <p>最初の行は 197 回の呼び出しを測定したことを示しています。その中で 192 回は <em class="dfn">プリミティブ</em> です。すなわち呼び出しが再帰によってなされてはいません。次の行は <code class="docutils literal"><span class="pre">Ordered</span> <span class="pre">by:</span> <span class="pre">standard</span> <span class="pre">name</span></code> は一番右の列の文字列が出力のソートに用いられたことを示します。列の見出しは以下を含みます:</p>
 <dl class="docutils">
 <dt>ncalls</dt>
-<dd><p class="first last">呼び出し回数</p>
-</dd>
+<dd>呼び出し回数</dd>
 <dt>tottime</dt>
-<dd><p class="first last">与えられた関数に消費された合計時間 (sub-function の呼び出しで消費された時間は除外されています)</p>
-</dd>
+<dd>与えられた関数に消費された合計時間 (sub-function の呼び出しで消費された時間は除外されています)</dd>
 <dt>percall</dt>
-<dd><p class="first last"><code class="docutils literal"><span class="pre">tottime</span></code> を <code class="docutils literal"><span class="pre">ncalls</span></code> で割った値</p>
-</dd>
+<dd><code class="docutils literal"><span class="pre">tottime</span></code> を <code class="docutils literal"><span class="pre">ncalls</span></code> で割った値</dd>
 <dt>cumtime</dt>
-<dd><p class="first last">この関数と全ての subfunction に消費された累積時間 (起動から終了まで)。この数字は再帰関数に <em>ついても</em> 正確です。</p>
-</dd>
+<dd>この関数と全ての subfunction に消費された累積時間 (起動から終了まで)。この数字は再帰関数に <em>ついても</em> 正確です。</dd>
 <dt>percall</dt>
-<dd><p class="first last"><code class="docutils literal"><span class="pre">cumtime</span></code> をプリミティブな呼び出し回数で割った値</p>
-</dd>
+<dd><code class="docutils literal"><span class="pre">cumtime</span></code> をプリミティブな呼び出し回数で割った値</dd>
 <dt>filename:lineno(function)</dt>
-<dd><p class="first last">その関数のファイル名、行番号、関数名</p>
-</dd>
+<dd>その関数のファイル名、行番号、関数名</dd>
 </dl>
 <p>最初の行に 2 つの数字がある場合 (たとえば <code class="docutils literal"><span class="pre">3/1</span></code>) は、関数が再帰的に呼び出されたということです。2 つ目の数字はプリミティブな呼び出しの回数で、1 つ目の数字は総呼び出し回数です。関数が再帰的に呼び出されなかった場合、それらは同じ値で数字は 1 つしか表示されないことに留意してください。</p>
 <p><code class="xref py py-func docutils literal"><span class="pre">run()</span></code> 関数でファイル名を指定することで、プロファイル実行の終了時に出力を表示する代わりに、ファイルに保存することが出来ます。</p>
@@ -225,7 +213,7 @@
 <p>スクリプトとして起動した場合、 <a class="reference internal" href="#module-pstats" title="pstats: Statistics object for use with the profiler."><code class="xref py py-mod docutils literal"><span class="pre">pstats</span></code></a> モジュールはプロファイルのダンプを読み込み、分析するための統計ブラウザとして動きます。シンプルな行指向のインタフェース (<a class="reference internal" href="cmd.html#module-cmd" title="cmd: Build line-oriented command interpreters."><code class="xref py py-mod docutils literal"><span class="pre">cmd</span></code></a> を使って実装) とヘルプ機能を備えています。</p>
 </div>
 <div class="section" id="module-cProfile">
-<span id="profile-and-cprofile-module-reference"></span><h2>27.4.3. リファレンスマニュアル &#8211; <a class="reference internal" href="#module-profile" title="profile: Python source profiler."><code class="xref py py-mod docutils literal"><span class="pre">profile</span></code></a> と <a class="reference internal" href="#module-cProfile" title="cProfile"><code class="xref py py-mod docutils literal"><span class="pre">cProfile</span></code></a><a class="headerlink" href="#module-cProfile" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<span id="profile-and-cprofile-module-reference"></span><h2>27.4.3. リファレンスマニュアル – <a class="reference internal" href="#module-profile" title="profile: Python source profiler."><code class="xref py py-mod docutils literal"><span class="pre">profile</span></code></a> と <a class="reference internal" href="#module-cProfile" title="cProfile"><code class="xref py py-mod docutils literal"><span class="pre">cProfile</span></code></a><a class="headerlink" href="#module-cProfile" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <span class="target" id="module-profile"></span><p><a class="reference internal" href="#module-profile" title="profile: Python source profiler."><code class="xref py py-mod docutils literal"><span class="pre">profile</span></code></a> および <a class="reference internal" href="#module-cProfile" title="cProfile"><code class="xref py py-mod docutils literal"><span class="pre">cProfile</span></code></a> モジュールは以下の関数を提供します:</p>
 <dl class="function">
 <dt id="profile.run">
@@ -322,14 +310,14 @@
 <span class="target" id="module-pstats"></span><dl class="class">
 <dt id="pstats.Stats">
 <em class="property">class </em><code class="descclassname">pstats.</code><code class="descname">Stats</code><span class="sig-paren">(</span><em>*filenames or profile</em>, <em>stream=sys.stdout</em><span class="sig-paren">)</span><a class="headerlink" href="#pstats.Stats" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>このコンストラクタは <em>filename</em> で指定した (単一または複数の) ファイルもしくは <code class="xref py py-class docutils literal"><span class="pre">Profile</span></code> のインスタンスから &#8220;統計情報オブジェクト&#8221; のインスタンスを生成します。出力は <em>stream</em> で指定したストリームに出力されます。</p>
+<dd><p>このコンストラクタは <em>filename</em> で指定した (単一または複数の) ファイルもしくは <code class="xref py py-class docutils literal"><span class="pre">Profile</span></code> のインスタンスから 「統計情報オブジェクト」 のインスタンスを生成します。出力は <em>stream</em> で指定したストリームに出力されます。</p>
 <p>上記コンストラクタで指定するファイルは、使用する <a class="reference internal" href="#pstats.Stats" title="pstats.Stats"><code class="xref py py-class docutils literal"><span class="pre">Stats</span></code></a> に対応したバージョンの <a class="reference internal" href="#module-profile" title="profile: Python source profiler."><code class="xref py py-mod docutils literal"><span class="pre">profile</span></code></a> または <a class="reference internal" href="#module-cProfile" title="cProfile"><code class="xref py py-mod docutils literal"><span class="pre">cProfile</span></code></a> で作成されたものでなければなりません。将来のバージョンのプロファイラとの互換性は <em>保証されておらず</em> 、他のプロファイラとの互換性もないことに注意してください。複数のファイルを指定した場合、同一の関数の統計情報はすべて合算され、複数のプロセスで構成される全体をひとつのレポートで検証することが可能になります。既存の <a class="reference internal" href="#pstats.Stats" title="pstats.Stats"><code class="xref py py-class docutils literal"><span class="pre">Stats</span></code></a> オブジェクトに別のファイルの情報を追加するときは、 <a class="reference internal" href="#pstats.Stats.add" title="pstats.Stats.add"><code class="xref py py-meth docutils literal"><span class="pre">add()</span></code></a> メソッドを使用します。</p>
 <p>プロファイルデータをファイルから読み込む代わりに、 <code class="xref py py-class docutils literal"><span class="pre">cProfile.Profile</span></code> または <a class="reference internal" href="#profile.Profile" title="profile.Profile"><code class="xref py py-class docutils literal"><span class="pre">profile.Profile</span></code></a> オブジェクトをプロファイルデータのソースとして使うことができます。</p>
 <p><a class="reference internal" href="#pstats.Stats" title="pstats.Stats"><code class="xref py py-class docutils literal"><span class="pre">Stats</span></code></a> には次のメソッドがあります:</p>
 <dl class="method">
 <dt id="pstats.Stats.strip_dirs">
 <code class="descname">strip_dirs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pstats.Stats.strip_dirs" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><a class="reference internal" href="#pstats.Stats" title="pstats.Stats"><code class="xref py py-class docutils literal"><span class="pre">Stats</span></code></a> クラスのこのメソッドは、ファイル名の前に付いているすべてのパス情報を取り除くためのものです。出力の幅を80文字以内に収めたいときに重宝します。このメソッドはオブジェクトを変更するため、取り除いたパス情報は失われます。パス情報除去の操作後、オブジェクトが保持するデータエントリは、オブジェクトの初期化、ロード直後と同じように &#8220;ランダムに&#8221; 並んでいます。 <a class="reference internal" href="#pstats.Stats.strip_dirs" title="pstats.Stats.strip_dirs"><code class="xref py py-meth docutils literal"><span class="pre">strip_dirs()</span></code></a> を実行した結果、2つの関数名が区別できない (両者が同じファイルの同じ行番号で同じ関数名となった) 場合、一つのエントリに合算されされます。</p>
+<dd><p><a class="reference internal" href="#pstats.Stats" title="pstats.Stats"><code class="xref py py-class docutils literal"><span class="pre">Stats</span></code></a> クラスのこのメソッドは、ファイル名の前に付いているすべてのパス情報を取り除くためのものです。出力の幅を80文字以内に収めたいときに重宝します。このメソッドはオブジェクトを変更するため、取り除いたパス情報は失われます。パス情報除去の操作後、オブジェクトが保持するデータエントリは、オブジェクトの初期化、ロード直後と同じように 「ランダムに」 並んでいます。 <a class="reference internal" href="#pstats.Stats.strip_dirs" title="pstats.Stats.strip_dirs"><code class="xref py py-meth docutils literal"><span class="pre">strip_dirs()</span></code></a> を実行した結果、2つの関数名が区別できない (両者が同じファイルの同じ行番号で同じ関数名となった) 場合、一つのエントリに合算されされます。</p>
 </dd></dl>
 
 <dl class="method">
@@ -356,68 +344,52 @@
 <col width="55%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">有効な引数</p>
-</th>
-<th class="head"><p class="first last">意味</p>
-</th>
+<tr class="row-odd"><th class="head">有効な引数</th>
+<th class="head">意味</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'calls'</span></code></td>
-<td><p class="first last">呼び出し数</p>
-</td>
+<td>呼び出し数</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'cumulative'</span></code></td>
-<td><p class="first last">累積時間</p>
-</td>
+<td>累積時間</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'cumtime'</span></code></td>
-<td><p class="first last">累積時間</p>
-</td>
+<td>累積時間</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'file'</span></code></td>
-<td><p class="first last">ファイル名</p>
-</td>
+<td>ファイル名</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'filename'</span></code></td>
-<td><p class="first last">ファイル名</p>
-</td>
+<td>ファイル名</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'module'</span></code></td>
-<td><p class="first last">ファイル名</p>
-</td>
+<td>ファイル名</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'ncalls'</span></code></td>
-<td><p class="first last">呼び出し数</p>
-</td>
+<td>呼び出し数</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'pcalls'</span></code></td>
-<td><p class="first last">プリミティブな呼び出し回数</p>
-</td>
+<td>プリミティブな呼び出し回数</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'line'</span></code></td>
-<td><p class="first last">行番号</p>
-</td>
+<td>行番号</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'name'</span></code></td>
-<td><p class="first last">関数名</p>
-</td>
+<td>関数名</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'nfl'</span></code></td>
-<td><p class="first last">関数名/ファイル名/行番号</p>
-</td>
+<td>関数名/ファイル名/行番号</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'stdname'</span></code></td>
-<td><p class="first last">標準名</p>
-</td>
+<td>標準名</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'time'</span></code></td>
-<td><p class="first last">内部時間</p>
-</td>
+<td>内部時間</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'tottime'</span></code></td>
-<td><p class="first last">内部時間</p>
-</td>
+<td>内部時間</td>
 </tr>
 </tbody>
 </table>
@@ -452,10 +424,8 @@
 <code class="descname">print_callers</code><span class="sig-paren">(</span><em>*restrictions</em><span class="sig-paren">)</span><a class="headerlink" href="#pstats.Stats.print_callers" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><a class="reference internal" href="#pstats.Stats" title="pstats.Stats"><code class="xref py py-class docutils literal"><span class="pre">Stats</span></code></a> クラスのこのメソッドは、プロファイルのデータベースの中から何らかの関数呼び出しを行った関数をすべて出力します。出力の順序は <a class="reference internal" href="#pstats.Stats.print_stats" title="pstats.Stats.print_stats"><code class="xref py py-meth docutils literal"><span class="pre">print_stats()</span></code></a> によって与えられるものと同じです。出力を制限する引数も同じです。各呼び出し側関数についてそれぞれ一行ずつ表示されます。フォーマットは統計を作り出したプロファイラごとに微妙に異なります:</p>
 <ul class="simple">
-<li><p class="first"><a class="reference internal" href="#module-profile" title="profile: Python source profiler."><code class="xref py py-mod docutils literal"><span class="pre">profile</span></code></a> の場合、呼び出し側関数の後に括弧で囲まれて表示される数値はその呼び出しが何回行われたかを示しています。利便性のため、 2番目の括弧なしで表示される数値によって、関数が消費した累積時間を表しています。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="#module-cProfile" title="cProfile"><code class="xref py py-mod docutils literal"><span class="pre">cProfile</span></code></a> の場合、各呼び出し側関数の後に3つの数字が付きます。呼び出しが何回行われたかと、この呼び出し側関数からの呼び出しによって現在の関数内で消費された合計時間および累積時間です。</p>
-</li>
+<li><a class="reference internal" href="#module-profile" title="profile: Python source profiler."><code class="xref py py-mod docutils literal"><span class="pre">profile</span></code></a> の場合、呼び出し側関数の後に括弧で囲まれて表示される数値はその呼び出しが何回行われたかを示しています。利便性のため、 2番目の括弧なしで表示される数値によって、関数が消費した累積時間を表しています。</li>
+<li><a class="reference internal" href="#module-cProfile" title="cProfile"><code class="xref py py-mod docutils literal"><span class="pre">cProfile</span></code></a> の場合、各呼び出し側関数の後に3つの数字が付きます。呼び出しが何回行われたかと、この呼び出し側関数からの呼び出しによって現在の関数内で消費された合計時間および累積時間です。</li>
 </ul>
 </dd></dl>
 
@@ -472,12 +442,12 @@
 <span id="deterministic-profiling"></span><h2>27.4.5. 決定論的プロファイリングとは<a class="headerlink" href="#what-is-deterministic-profiling" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><em class="dfn">決定論的プロファイリング</em> とは、すべての <em>関数呼び出し</em>, <em>関数からのリターン</em>, <em>例外発生</em> をモニターし、正確なタイミングを記録することで、イベント間の時間、つまりどの時間にユーザコードが実行されているのかを計測するやり方です。もう一方の <em class="dfn">統計的プロファイリング</em> (このモジュールでこの方法は採用していません) とは、有効なインストラクションポインタからランダムにサンプリングを行い、プログラムのどこで時間が使われているかを推定する方法です。後者の方法は、オーバヘッドが少ないものの、プログラムのどこで多くの時間が使われているか、その相対的な示唆に留まります。</p>
 <p>Python の場合、実行中は必ずインタプリタが動作しているため、決定論的プロファイリングを行うにあたり、計測用にコードを追加する必要はありません。 Python は自動的に各イベントに <em class="dfn">フック</em> (オプションのコールバック) を提供します。加えて Python のインタプリタという性質によって、実行時に大きなオーバーヘッドを伴う傾向がありますが、それに比べると一般的なアプリケーションでは決定論的プロファイリングで追加される処理のオーバーヘッドは少ない傾向にあります。結果的に、決定論的プロファイリングは少ないコストで Python プログラムの実行時間に関する詳細な統計を得られる方法となっているのです。</p>
-<p>呼び出し回数はコード中のバグ発見にも使用できます (とんでもない数の呼び出しが行われている部分)。インライン拡張の対象とすべき部分を見つけるためにも使えます (呼び出し頻度の高い部分)。内部時間の統計は、注意深く最適化すべき&#8221;ホットループ&#8221;の発見にも役立ちます。累積時間の統計は、アルゴリズム選択に関連した高レベルのエラー検知に役立ちます。なお、このプロファイラは再帰的なアルゴリズム実装の累計時間を計ることが可能で、通常のループを使った実装と直接比較することもできるようになっています。</p>
+<p>呼び出し回数はコード中のバグ発見にも使用できます (とんでもない数の呼び出しが行われている部分)。インライン拡張の対象とすべき部分を見つけるためにも使えます (呼び出し頻度の高い部分)。内部時間の統計は、注意深く最適化すべき」ホットループ」の発見にも役立ちます。累積時間の統計は、アルゴリズム選択に関連した高レベルのエラー検知に役立ちます。なお、このプロファイラは再帰的なアルゴリズム実装の累計時間を計ることが可能で、通常のループを使った実装と直接比較することもできるようになっています。</p>
 </div>
 <div class="section" id="limitations">
 <span id="profile-limitations"></span><h2>27.4.6. 制限事項<a class="headerlink" href="#limitations" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>一つの制限はタイミング情報の正確さに関するものです。決定論的プロファイラには正確さに関する根本的問題があります。最も明白な制限は、 (一般に) &#8220;クロック&#8221;は .001 秒の精度しかないということです。これ以上の精度で計測することはできません。仮に充分な精度が得られたとしても、&#8221;誤差&#8221;が計測の平均値に影響を及ぼすことがあります。この最初の誤差を取り除いたとしても、それがまた別の誤差を引き起こす原因となります。</p>
-<p>もう一つの問題として、イベントを検知してからプロファイラがその時刻を実際に <em>取得</em> するまでに &#8220;いくらかの時間がかかる&#8221; ことです。同様に、イベントハンドラが終了する時にも、時刻を取得して (そしてその値を保存して) から、ユーザコードが処理を再開するまでの間に遅延が発生します。結果的に多く呼び出される関数または多数の関数から呼び出される関数の情報にはこの種の誤差が蓄積する傾向にあります。このようにして蓄積される誤差は、典型的にはクロックの精度を下回ります (1クロック以下) が、一方でこの時間が累計して非常に大きな値になることも <em>あり得ます</em> 。</p>
+<p>一つの制限はタイミング情報の正確さに関するものです。決定論的プロファイラには正確さに関する根本的問題があります。最も明白な制限は、 (一般に) 「クロック」は .001 秒の精度しかないということです。これ以上の精度で計測することはできません。仮に充分な精度が得られたとしても、」誤差」が計測の平均値に影響を及ぼすことがあります。この最初の誤差を取り除いたとしても、それがまた別の誤差を引き起こす原因となります。</p>
+<p>もう一つの問題として、イベントを検知してからプロファイラがその時刻を実際に <em>取得</em> するまでに 「いくらかの時間がかかる」 ことです。同様に、イベントハンドラが終了する時にも、時刻を取得して (そしてその値を保存して) から、ユーザコードが処理を再開するまでの間に遅延が発生します。結果的に多く呼び出される関数または多数の関数から呼び出される関数の情報にはこの種の誤差が蓄積する傾向にあります。このようにして蓄積される誤差は、典型的にはクロックの精度を下回ります (1クロック以下) が、一方でこの時間が累計して非常に大きな値になることも <em>あり得ます</em> 。</p>
 <p>この問題はオーバーヘッドの小さい <a class="reference internal" href="#module-cProfile" title="cProfile"><code class="xref py py-mod docutils literal"><span class="pre">cProfile</span></code></a> よりも <a class="reference internal" href="#module-profile" title="profile: Python source profiler."><code class="xref py py-mod docutils literal"><span class="pre">profile</span></code></a> においてより重要です。そのため、 <a class="reference internal" href="#module-profile" title="profile: Python source profiler."><code class="xref py py-mod docutils literal"><span class="pre">profile</span></code></a> は誤差が確率的に (平均値で) 減少するようにプラットフォームごとに補正する機能を備えています。プロファイラに補正を施すと (最小二乗の意味で) 正確さが増しますが、ときには数値が負の値になってしまうこともあります (呼び出し回数が極めて少なく、確率の神があなたに意地悪をしたとき :-) )。プロファイルの結果に負の値が出力されても <em>驚かないでください</em> 。これは補正を行った場合にのみ生じることで、補正を行わない場合に比べて計測結果は実際にはより正確になっているはずだからです。</p>
 </div>
 <div class="section" id="calibration">
@@ -505,7 +475,7 @@
 <span class="n">pr</span> <span class="o">=</span> <span class="n">profile</span><span class="o">.</span><span class="n">Profile</span><span class="p">(</span><span class="n">bias</span><span class="o">=</span><span class="n">your_computed_bias</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>選択肢がある場合は、補正値は小さめに設定した方が良いでしょう。プロファイルの結果に負の値が表われる&#8221;頻度が低く&#8221;なるはずです。</p>
+<p>選択肢がある場合は、補正値は小さめに設定した方が良いでしょう。プロファイルの結果に負の値が表われる」頻度が低く」なるはずです。</p>
 </div>
 <div class="section" id="using-a-custom-timer">
 <span id="profile-timers"></span><h2>27.4.8. カスタムな時刻取得用関数を使う<a class="headerlink" href="#using-a-custom-timer" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -543,7 +513,7 @@
 <li><a class="reference internal" href="#">27.4. Python プロファイラ</a><ul>
 <li><a class="reference internal" href="#introduction-to-the-profilers">27.4.1. プロファイラとは</a></li>
 <li><a class="reference internal" href="#instant-user-s-manual">27.4.2. かんたんユーザマニュアル</a></li>
-<li><a class="reference internal" href="#module-cProfile">27.4.3. リファレンスマニュアル &#8211; <code class="docutils literal"><span class="pre">profile</span></code> と <code class="docutils literal"><span class="pre">cProfile</span></code></a></li>
+<li><a class="reference internal" href="#module-cProfile">27.4.3. リファレンスマニュアル – <code class="docutils literal"><span class="pre">profile</span></code> と <code class="docutils literal"><span class="pre">cProfile</span></code></a></li>
 <li><a class="reference internal" href="#the-stats-class">27.4.4. <code class="docutils literal"><span class="pre">Stats</span></code> クラス</a></li>
 <li><a class="reference internal" href="#what-is-deterministic-profiling">27.4.5. 決定論的プロファイリングとは</a></li>
 <li><a class="reference internal" href="#limitations">27.4.6. 制限事項</a></li>
@@ -555,16 +525,16 @@
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="pdb.html"
-                        title="前の章へ">27.3. <code class="docutils literal"><span class="pre">pdb</span></code> &#8212; Python デバッガ</a></p>
+                        title="前の章へ">27.3. <code class="docutils literal"><span class="pre">pdb</span></code> — Python デバッガ</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="timeit.html"
-                        title="次の章へ">27.5. <code class="docutils literal"><span class="pre">timeit</span></code> &#8212; 小さなコード断片の実行時間計測</a></p>
+                        title="次の章へ">27.5. <code class="docutils literal"><span class="pre">timeit</span></code> — 小さなコード断片の実行時間計測</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/profile.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/profile.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -625,7 +595,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

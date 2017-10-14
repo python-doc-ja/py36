@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>27.6. trace — Python 文実行のトレースと追跡 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="27. デバッグとプロファイル" href="debug.html" />
     <link rel="next" title="27.7. tracemalloc — メモリ割り当ての追跡" href="tracemalloc.html" />
     <link rel="prev" title="27.5. timeit — 小さなコード断片の実行時間計測" href="timeit.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,7 +100,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-trace">
-<span id="trace-trace-or-track-python-statement-execution"></span><h1>27.6. <a class="reference internal" href="#module-trace" title="trace: Trace or track Python statement execution."><code class="xref py py-mod docutils literal"><span class="pre">trace</span></code></a> &#8212; Python 文実行のトレースと追跡<a class="headerlink" href="#module-trace" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="trace-trace-or-track-python-statement-execution"></span><h1>27.6. <a class="reference internal" href="#module-trace" title="trace: Trace or track Python statement execution."><code class="xref py py-mod docutils literal"><span class="pre">trace</span></code></a> — Python 文実行のトレースと追跡<a class="headerlink" href="#module-trace" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/trace.py">Lib/trace.py</a></p>
 <hr class="docutils" />
 <p><a class="reference internal" href="#module-trace" title="trace: Trace or track Python statement execution."><code class="xref py py-mod docutils literal"><span class="pre">trace</span></code></a> モジュールにより、プログラム実行のトレース、 注釈された文のカバレッジの一覧の作成、呼び出し元/呼び出し先の関係の出力、プログラム実行中に実行された関数の表の作成を行うことができます。
@@ -125,14 +121,14 @@ output along with advanced features such as branch coverage.</dd>
 </div>
 <p>これで、 <code class="file docutils literal"><span class="pre">somefile.py</span></code> の実行中に import された Python モジュールの注釈付きリストがカレントディレクトリに生成されます。</p>
 <dl class="cmdoption">
-<dt id="cmdoption-trace--help">
-<code class="descname">--help</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace--help" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="cmdoption-trace-help">
+<code class="descname">--help</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-help" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>使い方を表示して終了します。</p>
 </dd></dl>
 
 <dl class="cmdoption">
-<dt id="cmdoption-trace--version">
-<code class="descname">--version</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace--version" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="cmdoption-trace-version">
+<code class="descname">--version</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-version" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>モジュールのバージョンを表示して終了します。</p>
 </dd></dl>
 
@@ -141,31 +137,31 @@ output along with advanced features such as branch coverage.</dd>
 <p><a class="reference internal" href="#module-trace" title="trace: Trace or track Python statement execution."><code class="xref py py-mod docutils literal"><span class="pre">trace</span></code></a> を実行するときには、以下のオプションの少なくとも 1 つを指定しなければいけません。 <a class="reference internal" href="#cmdoption-trace-l"><code class="xref std std-option docutils literal"><span class="pre">--listfuncs</span></code></a> オプションは、 <a class="reference internal" href="#cmdoption-trace-t"><code class="xref std std-option docutils literal"><span class="pre">--trace</span></code></a> オプション、 <a class="reference internal" href="#cmdoption-trace-c"><code class="xref std std-option docutils literal"><span class="pre">--count</span></code></a> オプションと相互排他的です。 <a class="reference internal" href="#cmdoption-trace-l"><code class="xref std std-option docutils literal"><span class="pre">--listfuncs</span></code></a> が与えられたとき、 <a class="reference internal" href="#cmdoption-trace-t"><code class="xref std std-option docutils literal"><span class="pre">--trace</span></code></a> オプション、 <a class="reference internal" href="#cmdoption-trace-c"><code class="xref std std-option docutils literal"><span class="pre">--count</span></code></a> オプションの両方とも受け付けず、他の場合も同様です。</p>
 <dl class="cmdoption">
 <dt id="cmdoption-trace-c">
-<span id="cmdoption-trace--count"></span><code class="descname">-c</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--count</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-c" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>プログラム完了時に、それぞれの文が何回実行されたかを示す注釈付きリストのファイルを生成します。下記の <a class="reference internal" href="#cmdoption-trace-C"><code class="xref std std-option docutils literal"><span class="pre">--coverdir</span></code></a>, <a class="reference internal" href="#cmdoption-trace-f"><code class="xref std std-option docutils literal"><span class="pre">--file</span></code></a>, <a class="reference internal" href="#cmdoption-trace-R"><code class="xref std std-option docutils literal"><span class="pre">--no-report</span></code></a> も参照してください。</p>
+<code class="descname">-c</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--count</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-c" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>プログラム完了時に、それぞれの文が何回実行されたかを示す注釈付きリストのファイルを生成します。下記の <a class="reference internal" href="#cmdoption-trace-coverdir"><code class="xref std std-option docutils literal"><span class="pre">--coverdir</span></code></a>, <a class="reference internal" href="#cmdoption-trace-f"><code class="xref std std-option docutils literal"><span class="pre">--file</span></code></a>, <a class="reference internal" href="#cmdoption-trace-no-report"><code class="xref std std-option docutils literal"><span class="pre">--no-report</span></code></a> も参照してください。</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-trace-t">
-<span id="cmdoption-trace--trace"></span><code class="descname">-t</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--trace</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-t" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">-t</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--trace</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-t" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>実行された通りに行を表示します。</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-trace-l">
-<span id="cmdoption-trace--listfuncs"></span><code class="descname">-l</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--listfuncs</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-l" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">-l</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--listfuncs</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-l" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>プログラム実行の際に実行された関数を表示します。</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-trace-r">
-<span id="cmdoption-trace--report"></span><code class="descname">-r</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--report</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-r" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">-r</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--report</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-r" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><a class="reference internal" href="#cmdoption-trace-c"><code class="xref std std-option docutils literal"><span class="pre">--count</span></code></a> と <a class="reference internal" href="#cmdoption-trace-f"><code class="xref std std-option docutils literal"><span class="pre">--file</span></code></a> 引数を使った過去のプログラム実行結果から、注釈付きリストのファイルを生成します。コードを実行するわけではありません。</p>
 </dd></dl>
 
 <dl class="cmdoption">
-<dt id="cmdoption-trace-T">
-<span id="cmdoption-trace--trackcalls"></span><code class="descname">-T</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--trackcalls</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-T" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="cmdoption-trace-trackcalls">
+<code class="descname">-T</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--trackcalls</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-trackcalls" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>プログラム実行によって明らかになった呼び出しの関係を表示します。</p>
 </dd></dl>
 
@@ -174,37 +170,37 @@ output along with advanced features such as branch coverage.</dd>
 <h3>27.6.1.2. 修飾的オプション<a class="headerlink" href="#modifiers" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <dl class="cmdoption">
 <dt id="cmdoption-trace-f">
-<span id="cmdoption-trace--file"></span><code class="descname">-f</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--file</code><code class="descclassname">=&lt;file&gt;</code><a class="headerlink" href="#cmdoption-trace-f" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">-f</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--file</code><code class="descclassname">=&lt;file&gt;</code><a class="headerlink" href="#cmdoption-trace-f" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>複数回にわたるトレース実行についてカウント (count) を累積するファイルに名前をつけます。 <a class="reference internal" href="#cmdoption-trace-c"><code class="xref std std-option docutils literal"><span class="pre">--count</span></code></a> オプションと一緒に使って下さい。</p>
 </dd></dl>
 
 <dl class="cmdoption">
-<dt id="cmdoption-trace-C">
-<span id="cmdoption-trace--coverdir"></span><code class="descname">-C</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--coverdir</code><code class="descclassname">=&lt;dir&gt;</code><a class="headerlink" href="#cmdoption-trace-C" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="cmdoption-trace-coverdir">
+<code class="descname">-C</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--coverdir</code><code class="descclassname">=&lt;dir&gt;</code><a class="headerlink" href="#cmdoption-trace-coverdir" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>レポートファイルを保存するディレクトリを指定します。 <code class="docutils literal"><span class="pre">package.module</span></code> についてのカバレッジレポートは <code class="file docutils literal"><em><span class="pre">dir</span></em><span class="pre">/</span><em><span class="pre">package</span></em><span class="pre">/</span><em><span class="pre">module</span></em><span class="pre">.cover</span></code> に書き込まれます。</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-trace-m">
-<span id="cmdoption-trace--missing"></span><code class="descname">-m</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--missing</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-m" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">-m</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--missing</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-m" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>注釈付きリストの生成時に、実行されなかった行に <code class="docutils literal"><span class="pre">&gt;&gt;&gt;&gt;&gt;&gt;</span></code> の印を付けます。</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-trace-s">
-<span id="cmdoption-trace--summary"></span><code class="descname">-s</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--summary</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-s" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">-s</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--summary</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-s" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><a class="reference internal" href="#cmdoption-trace-c"><code class="xref std std-option docutils literal"><span class="pre">--count</span></code></a> または <a class="reference internal" href="#cmdoption-trace-r"><code class="xref std std-option docutils literal"><span class="pre">--report</span></code></a> の利用時に、処理されたファイルそれぞれの簡潔な概要を標準出力 (stdout) に書き出します。</p>
 </dd></dl>
 
 <dl class="cmdoption">
-<dt id="cmdoption-trace-R">
-<span id="cmdoption-trace--no-report"></span><code class="descname">-R</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--no-report</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-R" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="cmdoption-trace-no-report">
+<code class="descname">-R</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--no-report</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-no-report" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>注釈付きリストを生成しません。これは <a class="reference internal" href="#cmdoption-trace-c"><code class="xref std std-option docutils literal"><span class="pre">--count</span></code></a> を何度か走らせてから最後に単一の注釈付きリストを生成するような場合に便利です。</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-trace-g">
-<span id="cmdoption-trace--timing"></span><code class="descname">-g</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--timing</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-g" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">-g</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--timing</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-trace-g" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>各行の先頭にプログラム開始からの時間を付けます。トレース中にだけ使われます。</p>
 </dd></dl>
 
@@ -213,14 +209,14 @@ output along with advanced features such as branch coverage.</dd>
 <h3>27.6.1.3. フィルターオプション<a class="headerlink" href="#filters" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>これらのオプションは複数回指定できます。</p>
 <dl class="cmdoption">
-<dt id="cmdoption-trace--ignore-module">
-<code class="descname">--ignore-module</code><code class="descclassname">=&lt;mod&gt;</code><a class="headerlink" href="#cmdoption-trace--ignore-module" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="cmdoption-trace-ignore-module">
+<code class="descname">--ignore-module</code><code class="descclassname">=&lt;mod&gt;</code><a class="headerlink" href="#cmdoption-trace-ignore-module" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>指定されたモジュールと（パッケージだった場合は）そのサブモジュールを無視します。引数はカンマ区切りのモジュール名リストです。</p>
 </dd></dl>
 
 <dl class="cmdoption">
-<dt id="cmdoption-trace--ignore-dir">
-<code class="descname">--ignore-dir</code><code class="descclassname">=&lt;dir&gt;</code><a class="headerlink" href="#cmdoption-trace--ignore-dir" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="cmdoption-trace-ignore-dir">
+<code class="descname">--ignore-dir</code><code class="descclassname">=&lt;dir&gt;</code><a class="headerlink" href="#cmdoption-trace-ignore-dir" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>指定されたディレクトリとサブディレクトリ中のモジュールとパッケージを全て無視します。引数は <a class="reference internal" href="os.html#os.pathsep" title="os.pathsep"><code class="xref py py-data docutils literal"><span class="pre">os.pathsep</span></code></a> で区切られたディレクトリのリストです。</p>
 </dd></dl>
 
@@ -310,7 +306,7 @@ output along with advanced features such as branch coverage.</dd>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">27.6. <code class="docutils literal"><span class="pre">trace</span></code> &#8212; Python 文実行のトレースと追跡</a><ul>
+<li><a class="reference internal" href="#">27.6. <code class="docutils literal"><span class="pre">trace</span></code> — Python 文実行のトレースと追跡</a><ul>
 <li><a class="reference internal" href="#command-line-usage">27.6.1. コマンドラインからの使用</a><ul>
 <li><a class="reference internal" href="#main-options">27.6.1.1. 主要なオプション</a></li>
 <li><a class="reference internal" href="#modifiers">27.6.1.2. 修飾的オプション</a></li>
@@ -324,16 +320,16 @@ output along with advanced features such as branch coverage.</dd>
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="timeit.html"
-                        title="前の章へ">27.5. <code class="docutils literal"><span class="pre">timeit</span></code> &#8212; 小さなコード断片の実行時間計測</a></p>
+                        title="前の章へ">27.5. <code class="docutils literal"><span class="pre">timeit</span></code> — 小さなコード断片の実行時間計測</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="tracemalloc.html"
-                        title="次の章へ">27.7. <code class="docutils literal"><span class="pre">tracemalloc</span></code> &#8212; メモリ割り当ての追跡</a></p>
+                        title="次の章へ">27.7. <code class="docutils literal"><span class="pre">tracemalloc</span></code> — メモリ割り当ての追跡</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/trace.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/trace.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -394,7 +390,7 @@ output along with advanced features such as branch coverage.</dd>
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

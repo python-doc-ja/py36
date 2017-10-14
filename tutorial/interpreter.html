@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>2. Python インタプリタを使う &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="Python チュートリアル" href="index.html" />
     <link rel="next" title="3. 形式ばらない Python の紹介" href="introduction.html" />
     <link rel="prev" title="1. やる気を高めよう" href="appetite.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -115,7 +111,7 @@
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="nb">set</span> <span class="n">path</span><span class="o">=%</span><span class="n">path</span><span class="o">%</span><span class="p">;</span><span class="n">C</span><span class="p">:</span>\<span class="n">python36</span>
 </pre></div>
 </div>
-<p>ファイル終端文字 (Unixでは <code class="kbd docutils literal"><span class="pre">Control-D</span></code> 、DOS や Windows では <code class="kbd docutils literal"><span class="pre">Control-Z</span></code>) を一次プロンプト (訳注: &#8216;&gt;&gt;&gt;&#8217; のこと) に入力すると、インタプリタが終了ステータス 0 で終了します。もしこの操作がうまく働かないなら、コマンド: <code class="docutils literal"><span class="pre">quit()</span></code> と入力すればインタプリタを終了できます。</p>
+<p>ファイル終端文字 (Unixでは <code class="kbd docutils literal"><span class="pre">Control-D</span></code> 、DOS や Windows では <code class="kbd docutils literal"><span class="pre">Control-Z</span></code>) を一次プロンプト (訳注: 『&gt;&gt;&gt;』 のこと) に入力すると、インタプリタが終了ステータス 0 で終了します。もしこの操作がうまく働かないなら、コマンド: <code class="docutils literal"><span class="pre">quit()</span></code> と入力すればインタプリタを終了できます。</p>
 <p>readline をサポートしているシステム上では、対話的行編集やヒストリ置換、コード補完のインタプリタの行編集機能が利用できます。コマンドライン編集機能がサポートされているかを最も手っ取り早く調べる方法は、おそらく最初に表示された Python プロンプトに <code class="kbd docutils literal"><span class="pre">Control-P</span></code> を入力してみることでしょう。ビープ音が鳴るなら、コマンドライン編集機能があります。編集キーについての解説は付録 <a class="reference internal" href="interactive.html#tut-interacting"><span class="std std-ref">対話入力編集と履歴置換</span></a> を参照してください。何も起こらないように見えるか、 <code class="docutils literal"><span class="pre">^P</span></code> がエコーバックされるなら、コマンドライン編集機能は利用できません。この場合、現在編集中の行から文字を削除するにはバックスペースを使うしかありません。</p>
 <p>インタプリタはさながら Unix シェルのように働きます。標準入力が端末に接続された状態で呼び出されると、コマンドを対話的に読み込んで実行します。ファイル名を引数にしたり、標準入力からファイルを入力すると、インタプリタはファイルから <em>スクリプト</em> を読み込んで実行します。</p>
 <p>インタプリタを起動する第二の方法は <code class="docutils literal"><span class="pre">python</span> <span class="pre">-c</span> <span class="pre">command</span> <span class="pre">[arg]</span> <span class="pre">...</span></code> です。この形式では、シェルの <a class="reference internal" href="../using/cmdline.html#cmdoption-c"><code class="xref std std-option docutils literal"><span class="pre">-c</span></code></a> オプションと同じように、 <em>command</em> に指定した文を実行します。 Python 文には、スペースなどのシェルにとって特殊な意味をもつ文字がしばしば含まれるので、 <em>command</em> 全体をシングルクォート(訳注: <code class="docutils literal"><span class="pre">'</span></code>)で囲っておいたほうが良いでしょう。</p>
@@ -151,7 +147,7 @@
 <span id="tut-interp"></span><h2>2.2. インタプリタとその環境<a class="headerlink" href="#the-interpreter-and-its-environment" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <div class="section" id="source-code-encoding">
 <span id="tut-source-encoding"></span><h3>2.2.1. ソースコードの文字コード<a class="headerlink" href="#source-code-encoding" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>デフォルトでは、Python のソースコードは UTF-8 でエンコードされているものとして扱われます。UTF-8 では、世界中のほとんどの言語の文字を同時に文字列リテラルや識別子やコメント中に書くことができます。&#8212; ただし、標準ライブラリは識別子に ASCII 文字のみを利用していて、その他のポータブルなコードもその慣習に従うべきです。それらの文字を正しく表示するためには、エディターはそのファイルが UTF-8 である事を識別して、そのファイルに含まれている文字を全てサポートしたフォントを使わなければなりません。</p>
+<p>デフォルトでは、Python のソースコードは UTF-8 でエンコードされているものとして扱われます。UTF-8 では、世界中のほとんどの言語の文字を同時に文字列リテラルや識別子やコメント中に書くことができます。— ただし、標準ライブラリは識別子に ASCII 文字のみを利用していて、その他のポータブルなコードもその慣習に従うべきです。それらの文字を正しく表示するためには、エディターはそのファイルが UTF-8 である事を識別して、そのファイルに含まれている文字を全てサポートしたフォントを使わなければなりません。</p>
 <p>デフォルトエンコーディング以外のエンコーディングを使用するにはファイルの <em>先頭</em> の行に特別なコメントを追加しなければなりません。書式は以下の通りです:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: encoding -*-</span>
 </pre></div>
@@ -161,7 +157,7 @@
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: cp-1252 -*-</span>
 </pre></div>
 </div>
-<p>ソースコードが <a class="reference internal" href="appendix.html#tut-scripts"><span class="std std-ref">UNIX &#8220;shebang&#8221; 行</span></a> で始まる場合には、<em>先頭行</em> のルールは当てはまりません。
+<p>ソースコードが <a class="reference internal" href="appendix.html#tut-scripts"><span class="std std-ref">UNIX 「shebang」 行</span></a> で始まる場合には、<em>先頭行</em> のルールは当てはまりません。
 この場合には、エンコーディングの宣言はファイルの2行目に追加します。
 例えば以下のようになります:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
@@ -172,8 +168,7 @@
 <table class="docutils footnote" frame="void" id="id2" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><p class="first last">Unixでは、Python 3.x インタープリタの実行ファイルはデフォルトでは <code class="docutils literal"><span class="pre">python</span></code> という名前ではインストールされません。同時にインストールされた Python 2.x 実行ファイルと衝突させないためです。</p>
-</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Unixでは、Python 3.x インタープリタの実行ファイルはデフォルトでは <code class="docutils literal"><span class="pre">python</span></code> という名前ではインストールされません。同時にインストールされた Python 2.x 実行ファイルと衝突させないためです。</td></tr>
 </tbody>
 </table>
 </div>
@@ -213,7 +208,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/tutorial/interpreter.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/tutorial/interpreter.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -273,7 +268,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>13.6. tarfile — tar アーカイブファイルの読み書き &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="13. データ圧縮とアーカイブ" href="archiving.html" />
     <link rel="next" title="14. ファイルフォーマット" href="fileformats.html" />
     <link rel="prev" title="13.5. zipfile — ZIP アーカイブの処理" href="zipfile.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,22 +100,17 @@
           <div class="body" role="main">
             
   <div class="section" id="module-tarfile">
-<span id="tarfile-read-and-write-tar-archive-files"></span><h1>13.6. <a class="reference internal" href="#module-tarfile" title="tarfile: Read and write tar-format archive files."><code class="xref py py-mod docutils literal"><span class="pre">tarfile</span></code></a> &#8212; tar アーカイブファイルの読み書き<a class="headerlink" href="#module-tarfile" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="tarfile-read-and-write-tar-archive-files"></span><h1>13.6. <a class="reference internal" href="#module-tarfile" title="tarfile: Read and write tar-format archive files."><code class="xref py py-mod docutils literal"><span class="pre">tarfile</span></code></a> — tar アーカイブファイルの読み書き<a class="headerlink" href="#module-tarfile" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/tarfile.py">Lib/tarfile.py</a></p>
 <hr class="docutils" />
 <p><a class="reference internal" href="#module-tarfile" title="tarfile: Read and write tar-format archive files."><code class="xref py py-mod docutils literal"><span class="pre">tarfile</span></code></a> モジュールは、gzip、bz2、および lzma 圧縮されたものを含む、tar アーカイブを読み書きできます。<code class="file docutils literal"><span class="pre">.zip</span></code> ファイルの読み書きには <a class="reference internal" href="zipfile.html#module-zipfile" title="zipfile: Read and write ZIP-format archive files."><code class="xref py py-mod docutils literal"><span class="pre">zipfile</span></code></a> モジュールか、あるいは <a class="reference internal" href="shutil.html#archiving-operations"><span class="std std-ref">shutil</span></a> の高水準関数を使用してください。</p>
 <p>いくつかの事実と形態:</p>
 <ul class="simple">
-<li><p class="first">モジュールが利用可能な場合、<a class="reference internal" href="gzip.html#module-gzip" title="gzip: Interfaces for gzip compression and decompression using file objects."><code class="xref py py-mod docutils literal"><span class="pre">gzip</span></code></a>、<a class="reference internal" href="bz2.html#module-bz2" title="bz2: Interfaces for bzip2 compression and decompression."><code class="xref py py-mod docutils literal"><span class="pre">bz2</span></code></a> ならびに <a class="reference internal" href="lzma.html#module-lzma" title="lzma: A Python wrapper for the liblzma compression library."><code class="xref py py-mod docutils literal"><span class="pre">lzma</span></code></a> で圧縮されたアーカイブを読み書きします。</p>
-</li>
-<li><p class="first">POSIX.1-1988 (ustar) フォーマットの読み書きをサポートしています。</p>
-</li>
-<li><p class="first"><em>longname</em> および <em>longlink</em> 拡張を含む GNU tar フォーマットの読み書きをサポートしています。スパースファイルの復元を含む <em>sparse</em> 拡張は読み込みのみサポートしています。</p>
-</li>
-<li><p class="first">POSIX.1-2001 (pax) フォーマットの読み書きをサポートしています。</p>
-</li>
-<li><p class="first">ディレクトリ、一般ファイル、ハードリンク、シンボリックリンク、fifo、キャラクターデバイスおよびブロックデバイスを処理します。また、タイムスタンプ、アクセス許可や所有者のようなファイル情報の取得および保存が可能です。</p>
-</li>
+<li>モジュールが利用可能な場合、<a class="reference internal" href="gzip.html#module-gzip" title="gzip: Interfaces for gzip compression and decompression using file objects."><code class="xref py py-mod docutils literal"><span class="pre">gzip</span></code></a>、<a class="reference internal" href="bz2.html#module-bz2" title="bz2: Interfaces for bzip2 compression and decompression."><code class="xref py py-mod docutils literal"><span class="pre">bz2</span></code></a> ならびに <a class="reference internal" href="lzma.html#module-lzma" title="lzma: A Python wrapper for the liblzma compression library."><code class="xref py py-mod docutils literal"><span class="pre">lzma</span></code></a> で圧縮されたアーカイブを読み書きします。</li>
+<li>POSIX.1-1988 (ustar) フォーマットの読み書きをサポートしています。</li>
+<li><em>longname</em> および <em>longlink</em> 拡張を含む GNU tar フォーマットの読み書きをサポートしています。スパースファイルの復元を含む <em>sparse</em> 拡張は読み込みのみサポートしています。</li>
+<li>POSIX.1-2001 (pax) フォーマットの読み書きをサポートしています。</li>
+<li>ディレクトリ、一般ファイル、ハードリンク、シンボリックリンク、fifo、キャラクターデバイスおよびブロックデバイスを処理します。また、タイムスタンプ、アクセス許可や所有者のようなファイル情報の取得および保存が可能です。</li>
 </ul>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.3 で変更: </span><a class="reference internal" href="lzma.html#module-lzma" title="lzma: A Python wrapper for the liblzma compression library."><code class="xref py py-mod docutils literal"><span class="pre">lzma</span></code></a> 圧縮をサポートしました。</p>
@@ -140,65 +131,48 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><p class="first last"><code class="docutils literal"><span class="pre">'r'</span> <span class="pre">または</span> <span class="pre">'r:*'</span></code></p>
-</td>
-<td><p class="first last">圧縮方法に関して透過的に、読み込み用にオープンします (推奨)。</p>
-</td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">'r'</span> <span class="pre">または</span> <span class="pre">'r:*'</span></code></td>
+<td>圧縮方法に関して透過的に、読み込み用にオープンします (推奨)。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'r:'</span></code></td>
-<td><p class="first last">非圧縮で読み込み用に排他的にオープンします。</p>
-</td>
+<td>非圧縮で読み込み用に排他的にオープンします。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'r:gz'</span></code></td>
-<td><p class="first last">gzip 圧縮で読み込み用にオープンします。</p>
-</td>
+<td>gzip 圧縮で読み込み用にオープンします。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'r:bz2'</span></code></td>
-<td><p class="first last">bzip2 圧縮で読み込み用にオープンします。</p>
-</td>
+<td>bzip2 圧縮で読み込み用にオープンします。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'r:xz'</span></code></td>
-<td><p class="first last">lzma 圧縮で読み込み用にオープンします。</p>
-</td>
+<td>lzma 圧縮で読み込み用にオープンします。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'x'</span></code> or
 <code class="docutils literal"><span class="pre">'x:'</span></code></td>
-<td><p class="first last">圧縮せずに tarfile を排他的に作成します。tarfile が既存の場合 <a class="reference internal" href="exceptions.html#FileExistsError" title="FileExistsError"><code class="xref py py-exc docutils literal"><span class="pre">FileExistsError</span></code></a> 例外を送出します。</p>
-</td>
+<td>圧縮せずに tarfile を排他的に作成します。tarfile が既存の場合 <a class="reference internal" href="exceptions.html#FileExistsError" title="FileExistsError"><code class="xref py py-exc docutils literal"><span class="pre">FileExistsError</span></code></a> 例外を送出します。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'x:gz'</span></code></td>
-<td><p class="first last">gzip 圧縮で tarfile を作成します。tarfile が既存の場合 <a class="reference internal" href="exceptions.html#FileExistsError" title="FileExistsError"><code class="xref py py-exc docutils literal"><span class="pre">FileExistsError</span></code></a> 例外を送出します。</p>
-</td>
+<td>gzip 圧縮で tarfile を作成します。tarfile が既存の場合 <a class="reference internal" href="exceptions.html#FileExistsError" title="FileExistsError"><code class="xref py py-exc docutils literal"><span class="pre">FileExistsError</span></code></a> 例外を送出します。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'x:bz2'</span></code></td>
-<td><p class="first last">bzip2 圧縮で tarfile を作成します。tarfile が既存の場合 <a class="reference internal" href="exceptions.html#FileExistsError" title="FileExistsError"><code class="xref py py-exc docutils literal"><span class="pre">FileExistsError</span></code></a> 例外を送出します。</p>
-</td>
+<td>bzip2 圧縮で tarfile を作成します。tarfile が既存の場合 <a class="reference internal" href="exceptions.html#FileExistsError" title="FileExistsError"><code class="xref py py-exc docutils literal"><span class="pre">FileExistsError</span></code></a> 例外を送出します。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'x:xz'</span></code></td>
-<td><p class="first last">lzma 圧縮で tarfile を作成します。tarfile が既存の場合 <a class="reference internal" href="exceptions.html#FileExistsError" title="FileExistsError"><code class="xref py py-exc docutils literal"><span class="pre">FileExistsError</span></code></a> 例外を送出します。</p>
-</td>
+<td>lzma 圧縮で tarfile を作成します。tarfile が既存の場合 <a class="reference internal" href="exceptions.html#FileExistsError" title="FileExistsError"><code class="xref py py-exc docutils literal"><span class="pre">FileExistsError</span></code></a> 例外を送出します。</td>
 </tr>
-<tr class="row-odd"><td><p class="first last"><code class="docutils literal"><span class="pre">'a'</span> <span class="pre">または</span> <span class="pre">'a:'</span></code></p>
-</td>
-<td><p class="first last">非圧縮で追記用にオープンします。ファイルが存在しない場合は新たに作成されます。</p>
-</td>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">'a'</span> <span class="pre">または</span> <span class="pre">'a:'</span></code></td>
+<td>非圧縮で追記用にオープンします。ファイルが存在しない場合は新たに作成されます。</td>
 </tr>
-<tr class="row-even"><td><p class="first last"><code class="docutils literal"><span class="pre">'w'</span> <span class="pre">または</span> <span class="pre">'w:'</span></code></p>
-</td>
-<td><p class="first last">非圧縮で書き込み用にオープンします。</p>
-</td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">'w'</span> <span class="pre">または</span> <span class="pre">'w:'</span></code></td>
+<td>非圧縮で書き込み用にオープンします。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'w:gz'</span></code></td>
-<td><p class="first last">gzip 圧縮で書き込み用にオープンします。</p>
-</td>
+<td>gzip 圧縮で書き込み用にオープンします。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'w:bz2'</span></code></td>
-<td><p class="first last">bzip2 圧縮で書き込み用にオープンします。</p>
-</td>
+<td>bzip2 圧縮で書き込み用にオープンします。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'w:xz'</span></code></td>
-<td><p class="first last">lzma 圧縮で書き込み用にオープンします。</p>
-</td>
+<td>lzma 圧縮で書き込み用にオープンします。</td>
 </tr>
 </tbody>
 </table>
@@ -212,48 +186,37 @@
 <col width="77%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">モード</p>
-</th>
-<th class="head"><p class="first last">動作</p>
-</th>
+<tr class="row-odd"><th class="head">モード</th>
+<th class="head">動作</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'r|*'</span></code></td>
-<td><p class="first last">tar ブロックの <em>stream</em> を圧縮方法に関して透過的に読み込み用にオープンします。</p>
-</td>
+<td>tar ブロックの <em>stream</em> を圧縮方法に関して透過的に読み込み用にオープンします。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'r|'</span></code></td>
-<td><p class="first last">非圧縮 tar ブロックの <em>stream</em> を読み込み用にオープンします。</p>
-</td>
+<td>非圧縮 tar ブロックの <em>stream</em> を読み込み用にオープンします。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'r|gz'</span></code></td>
-<td><p class="first last">gzip 圧縮の <em>stream</em> を読み込み用にオープンします。</p>
-</td>
+<td>gzip 圧縮の <em>stream</em> を読み込み用にオープンします。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'r|bz2'</span></code></td>
-<td><p class="first last">bzip2 圧縮の <em>stream</em> を読み込み用にオープンします。</p>
-</td>
+<td>bzip2 圧縮の <em>stream</em> を読み込み用にオープンします。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'r|xz'</span></code></td>
-<td><p class="first last">lzma 圧縮の <em>stream</em> を読み込み用にオープンします。</p>
-</td>
+<td>lzma 圧縮の <em>stream</em> を読み込み用にオープンします。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'w|'</span></code></td>
-<td><p class="first last">非圧縮の <em>stream</em> を書き込み用にオープンします。</p>
-</td>
+<td>非圧縮の <em>stream</em> を書き込み用にオープンします。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'w|gz'</span></code></td>
-<td><p class="first last">gzip 圧縮の <em>stream</em> を書き込み用にオープンします。</p>
-</td>
+<td>gzip 圧縮の <em>stream</em> を書き込み用にオープンします。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">'w|bz2'</span></code></td>
-<td><p class="first last">bzip2 圧縮の <em>stream</em> を書き込み用にオープンします。</p>
-</td>
+<td>bzip2 圧縮の <em>stream</em> を書き込み用にオープンします。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">'w|xz'</span></code></td>
-<td><p class="first last">lzma 圧縮の <em>stream</em> を書き込み用にオープンします。</p>
-</td>
+<td>lzma 圧縮の <em>stream</em> を書き込み用にオープンします。</td>
 </tr>
 </tbody>
 </table>
@@ -350,14 +313,11 @@
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
 <dt><a class="reference internal" href="zipfile.html#module-zipfile" title="zipfile: Read and write ZIP-format archive files."><code class="xref py py-mod docutils literal"><span class="pre">zipfile</span></code></a> モジュール</dt>
-<dd><p class="first last"><a class="reference internal" href="zipfile.html#module-zipfile" title="zipfile: Read and write ZIP-format archive files."><code class="xref py py-mod docutils literal"><span class="pre">zipfile</span></code></a> 標準モジュールのドキュメント。</p>
-</dd>
+<dd><a class="reference internal" href="zipfile.html#module-zipfile" title="zipfile: Read and write ZIP-format archive files."><code class="xref py py-mod docutils literal"><span class="pre">zipfile</span></code></a> 標準モジュールのドキュメント。</dd>
 <dt><a class="reference internal" href="shutil.html#archiving-operations"><span class="std std-ref">アーカイブ化操作</span></a></dt>
-<dd><p class="first last"><a class="reference internal" href="shutil.html#module-shutil" title="shutil: High-level file operations, including copying."><code class="xref py py-mod docutils literal"><span class="pre">shutil</span></code></a> が提供するより高水準のアーカイブ機能についてのドキュメント。</p>
-</dd>
+<dd><a class="reference internal" href="shutil.html#module-shutil" title="shutil: High-level file operations, including copying."><code class="xref py py-mod docutils literal"><span class="pre">shutil</span></code></a> が提供するより高水準のアーカイブ機能についてのドキュメント。</dd>
 <dt><a class="reference external" href="https://www.gnu.org/software/tar/manual/html_node/Standard.html">GNU tar manual, Basic Tar Format</a></dt>
-<dd><p class="first last">GNU tar 拡張機能を含む、tar アーカイブファイルのためのドキュメント。</p>
-</dd>
+<dd>GNU tar 拡張機能を含む、tar アーカイブファイルのためのドキュメント。</dd>
 </dl>
 </div>
 <div class="section" id="tarfile-objects">
@@ -717,38 +677,38 @@
 <dl class="cmdoption">
 <dt id="cmdoption-tarfile-l">
 <code class="descname">-l</code><code class="descclassname"> &lt;tarfile&gt;</code><a class="headerlink" href="#cmdoption-tarfile-l" title="この定義へのパーマリンク">¶</a></dt>
-<dt id="cmdoption-tarfile--list">
-<code class="descname">--list</code><code class="descclassname"> &lt;tarfile&gt;</code><a class="headerlink" href="#cmdoption-tarfile--list" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="cmdoption-tarfile-list">
+<code class="descname">--list</code><code class="descclassname"> &lt;tarfile&gt;</code><a class="headerlink" href="#cmdoption-tarfile-list" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>tarfile 内のファイル一覧を表示します。</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-tarfile-c">
 <code class="descname">-c</code><code class="descclassname"> &lt;tarfile&gt; &lt;source1&gt; ... &lt;sourceN&gt;</code><a class="headerlink" href="#cmdoption-tarfile-c" title="この定義へのパーマリンク">¶</a></dt>
-<dt id="cmdoption-tarfile--create">
-<code class="descname">--create</code><code class="descclassname"> &lt;tarfile&gt; &lt;source1&gt; ... &lt;sourceN&gt;</code><a class="headerlink" href="#cmdoption-tarfile--create" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="cmdoption-tarfile-create">
+<code class="descname">--create</code><code class="descclassname"> &lt;tarfile&gt; &lt;source1&gt; ... &lt;sourceN&gt;</code><a class="headerlink" href="#cmdoption-tarfile-create" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>ソースファイルから tarfile を作成します。</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-tarfile-e">
 <code class="descname">-e</code><code class="descclassname"> &lt;tarfile&gt; [&lt;output_dir&gt;]</code><a class="headerlink" href="#cmdoption-tarfile-e" title="この定義へのパーマリンク">¶</a></dt>
-<dt id="cmdoption-tarfile--extract">
-<code class="descname">--extract</code><code class="descclassname"> &lt;tarfile&gt; [&lt;output_dir&gt;]</code><a class="headerlink" href="#cmdoption-tarfile--extract" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="cmdoption-tarfile-extract">
+<code class="descname">--extract</code><code class="descclassname"> &lt;tarfile&gt; [&lt;output_dir&gt;]</code><a class="headerlink" href="#cmdoption-tarfile-extract" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><em>output_dir</em> が指定されていない場合、カレントディレクトリに tarfile を展開します。</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-tarfile-t">
 <code class="descname">-t</code><code class="descclassname"> &lt;tarfile&gt;</code><a class="headerlink" href="#cmdoption-tarfile-t" title="この定義へのパーマリンク">¶</a></dt>
-<dt id="cmdoption-tarfile--test">
-<code class="descname">--test</code><code class="descclassname"> &lt;tarfile&gt;</code><a class="headerlink" href="#cmdoption-tarfile--test" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="cmdoption-tarfile-test">
+<code class="descname">--test</code><code class="descclassname"> &lt;tarfile&gt;</code><a class="headerlink" href="#cmdoption-tarfile-test" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>tarfile が有効かどうか調べます。</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-tarfile-v">
-<span id="cmdoption-tarfile--verbose"></span><code class="descname">-v</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--verbose</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-tarfile-v" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">-v</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--verbose</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-tarfile-v" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>詳細も出力します。</p>
 </dd></dl>
 
@@ -832,10 +792,8 @@
 </ul>
 <p>他にも、読み込みのみサポートしている tar フォーマットがいくつかあります:</p>
 <ul class="simple">
-<li><p class="first">ancient V7 フォーマット。これは Unix 7th Edition から存在する、最初の tar フォーマットです。通常のファイルとディレクトリのみ保存します。名前は 100 文字を超えてはならず、ユーザー/グループ名に関する情報は保存されません。いくつかのアーカイブは、フィールドが ASCII でない文字を含む場合に、ヘッダーのチェックサムの計算を誤ります。</p>
-</li>
-<li><p class="first">SunOS tar 拡張フォーマット。POSIX.1-2001 pax フォーマットの亜流ですが、互換性がありません。</p>
-</li>
+<li>ancient V7 フォーマット。これは Unix 7th Edition から存在する、最初の tar フォーマットです。通常のファイルとディレクトリのみ保存します。名前は 100 文字を超えてはならず、ユーザー/グループ名に関する情報は保存されません。いくつかのアーカイブは、フィールドが ASCII でない文字を含む場合に、ヘッダーのチェックサムの計算を誤ります。</li>
+<li>SunOS tar 拡張フォーマット。POSIX.1-2001 pax フォーマットの亜流ですが、互換性がありません。</li>
 </ul>
 </div>
 <div class="section" id="unicode-issues">
@@ -856,7 +814,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">13.6. <code class="docutils literal"><span class="pre">tarfile</span></code> &#8212; tar アーカイブファイルの読み書き</a><ul>
+<li><a class="reference internal" href="#">13.6. <code class="docutils literal"><span class="pre">tarfile</span></code> — tar アーカイブファイルの読み書き</a><ul>
 <li><a class="reference internal" href="#tarfile-objects">13.6.1. TarFile オブジェクト</a></li>
 <li><a class="reference internal" href="#tarinfo-objects">13.6.2. TarInfo オブジェクト</a></li>
 <li><a class="reference internal" href="#command-line-interface">13.6.3. コマンドラインインターフェイス</a><ul>
@@ -872,7 +830,7 @@
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="zipfile.html"
-                        title="前の章へ">13.5. <code class="docutils literal"><span class="pre">zipfile</span></code> &#8212; ZIP アーカイブの処理</a></p>
+                        title="前の章へ">13.5. <code class="docutils literal"><span class="pre">zipfile</span></code> — ZIP アーカイブの処理</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="fileformats.html"
                         title="次の章へ">14. ファイルフォーマット</a></p>
@@ -881,7 +839,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/tarfile.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/tarfile.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -942,7 +900,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>35.6. termios — POSIX スタイルの端末制御 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="35. Unix 固有のサービス" href="unix.html" />
     <link rel="next" title="35.7. tty — 端末制御のための関数群" href="tty.html" />
     <link rel="prev" title="35.5. crypt — Unix パスワードをチェックするための関数" href="crypt.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,7 +100,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-termios">
-<span id="termios-posix-style-tty-control"></span><h1>35.6. <a class="reference internal" href="#module-termios" title="termios: POSIX style tty control. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">termios</span></code></a> &#8212; POSIX スタイルの端末制御<a class="headerlink" href="#module-termios" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="termios-posix-style-tty-control"></span><h1>35.6. <a class="reference internal" href="#module-termios" title="termios: POSIX style tty control. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">termios</span></code></a> — POSIX スタイルの端末制御<a class="headerlink" href="#module-termios" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <hr class="docutils" id="index-0" />
 <p>このモジュールでは端末 I/O 制御のための POSIX 準拠の関数呼び出しインタフェースを提供します。これら呼び出しのための完全な記述については、 Unix マニュアルページの <em class="manpage">termios(2)</em> を参照してください。これは POSIX <em>termios</em> 形式の端末制御をサポートしていてインストール時に有効にした Unix のバージョンでのみ利用可能です。</p>
 <p>このモジュールの関数は全て、ファイル記述子 <em>fd</em> を最初の引数としてとります。この値は、 <code class="docutils literal"><span class="pre">sys.stdin.fileno()</span></code> が返すような整数のファイル記述子でも、 <code class="docutils literal"><span class="pre">sys.stdin</span></code> 自体のような <a class="reference internal" href="../glossary.html#term-file-object"><span class="xref std std-term">file object</span></a> でもかまいません。</p>
@@ -125,7 +121,7 @@
 <dl class="function">
 <dt id="termios.tcsendbreak">
 <code class="descclassname">termios.</code><code class="descname">tcsendbreak</code><span class="sig-paren">(</span><em>fd</em>, <em>duration</em><span class="sig-paren">)</span><a class="headerlink" href="#termios.tcsendbreak" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>ファイル記述子 <em>fd</em> にブレークを送信します。<em>duration</em> をゼロにすると、0.25&#8211;0.5 秒間のブレークを送信します; <em>duration</em> の値がゼロでない場合、その意味はシステム依存です。</p>
+<dd><p>ファイル記述子 <em>fd</em> にブレークを送信します。<em>duration</em> をゼロにすると、0.25–0.5 秒間のブレークを送信します; <em>duration</em> の値がゼロでない場合、その意味はシステム依存です。</p>
 </dd></dl>
 
 <dl class="function">
@@ -150,13 +146,12 @@
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
 <dt><a class="reference internal" href="tty.html#module-tty" title="tty: Utility functions that perform common terminal control operations. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">tty</span></code></a> モジュール</dt>
-<dd><p class="first last">一般的な端末制御操作のための便利な関数。</p>
-</dd>
+<dd>一般的な端末制御操作のための便利な関数。</dd>
 </dl>
 </div>
 <div class="section" id="example">
 <span id="termios-example"></span><h2>35.6.1. 使用例<a class="headerlink" href="#example" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>以下はエコーバックを切った状態でパスワード入力を促す関数です。ユーザの入力に関わらず以前の端末属性を正確に回復するために、二つの <a class="reference internal" href="#termios.tcgetattr" title="termios.tcgetattr"><code class="xref py py-func docutils literal"><span class="pre">tcgetattr()</span></code></a> と <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a> ... <a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal"><span class="pre">finally</span></code></a> 文によるテクニックが使われています:</p>
+<p>以下はエコーバックを切った状態でパスワード入力を促す関数です。ユーザの入力に関わらず以前の端末属性を正確に回復するために、二つの <a class="reference internal" href="#termios.tcgetattr" title="termios.tcgetattr"><code class="xref py py-func docutils literal"><span class="pre">tcgetattr()</span></code></a> と <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a> … <a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal"><span class="pre">finally</span></code></a> 文によるテクニックが使われています:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">getpass</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s2">&quot;Password: &quot;</span><span class="p">):</span>
     <span class="kn">import</span> <span class="nn">termios</span><span class="o">,</span> <span class="nn">sys</span>
     <span class="n">fd</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">fileno</span><span class="p">()</span>
@@ -182,7 +177,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">35.6. <code class="docutils literal"><span class="pre">termios</span></code> &#8212; POSIX スタイルの端末制御</a><ul>
+<li><a class="reference internal" href="#">35.6. <code class="docutils literal"><span class="pre">termios</span></code> — POSIX スタイルの端末制御</a><ul>
 <li><a class="reference internal" href="#example">35.6.1. 使用例</a></li>
 </ul>
 </li>
@@ -190,16 +185,16 @@
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="crypt.html"
-                        title="前の章へ">35.5. <code class="docutils literal"><span class="pre">crypt</span></code> &#8212; Unix パスワードをチェックするための関数</a></p>
+                        title="前の章へ">35.5. <code class="docutils literal"><span class="pre">crypt</span></code> — Unix パスワードをチェックするための関数</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="tty.html"
-                        title="次の章へ">35.7. <code class="docutils literal"><span class="pre">tty</span></code> &#8212; 端末制御のための関数群</a></p>
+                        title="次の章へ">35.7. <code class="docutils literal"><span class="pre">tty</span></code> — 端末制御のための関数群</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/termios.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/termios.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -260,7 +255,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

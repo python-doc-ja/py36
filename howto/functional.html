@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>関数型プログラミング HOWTO &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="Python HOWTO" href="index.html" />
     <link rel="next" title="Logging HOWTO" href="logging.html" />
     <link rel="prev" title="デスクリプタ HowTo ガイド" href="descriptor.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -120,14 +116,10 @@
 <p>この章は関数型プログラミングの基本概念を説明します; Python の言語機能についてだけ知りたい人は、次の章の <a class="reference internal" href="#functional-howto-iterators"><span class="std std-ref">イテレータ (iterator)</span></a> まで飛ばしてください。</p>
 <p>プログラミング言語とは問題を分解するものですが、各言語がサポートする分解方法にはいくつかの種類があります:</p>
 <ul class="simple">
-<li><p class="first">ほとんどのプログラミング言語は <strong>手続き型</strong> です: プログラムは、入力に対して行うべきことをコンピュータに教える指示リストとなります。 C, Pascal, さらには Unix シェルまでもが手続き型言語に入ります。</p>
-</li>
-<li><p class="first"><strong>宣言型</strong> 言語で書くのは、解くべき問題を説明する仕様書であって、それを効率的に計算処理する方法を見付けるのは言語実装の役目です。SQL はおそらく一番よく知られた宣言型言語です; SQL のクエリは取得したいデータセットを説明しているだけで、テーブルを走査するかインデックスを使うか、どのサブクローズから実行するか等々を決めるのは SQL エンジンなのです。</p>
-</li>
-<li><p class="first"><strong>オブジェクト指向</strong> プログラムはオブジェクトの集まりを操作します。オブジェクトには内部状態があり、その状態を調べたり色々と変更したりするためのメソッドがあります。Smalltalk や Java はオブジェクト指向言語です。 C++ と Python はオブジェクト指向プログラミングをサポートしていますが、関連する機能を使わなくても構わないようになっています。</p>
-</li>
-<li><p class="first"><strong>関数型</strong> プログラミングは問題をいくつかの関数にわけて考えます。理想的に言うと、関数は入力を受けて出力を吐くだけで、同じ入力に対して異なる出力をするような内部状態を一切持ちません。有名な関数型言語には ML 一家 (Standard ML, OCaml 等々) と Haskell があります。</p>
-</li>
+<li>ほとんどのプログラミング言語は <strong>手続き型</strong> です: プログラムは、入力に対して行うべきことをコンピュータに教える指示リストとなります。 C, Pascal, さらには Unix シェルまでもが手続き型言語に入ります。</li>
+<li><strong>宣言型</strong> 言語で書くのは、解くべき問題を説明する仕様書であって、それを効率的に計算処理する方法を見付けるのは言語実装の役目です。SQL はおそらく一番よく知られた宣言型言語です; SQL のクエリは取得したいデータセットを説明しているだけで、テーブルを走査するかインデックスを使うか、どのサブクローズから実行するか等々を決めるのは SQL エンジンなのです。</li>
+<li><strong>オブジェクト指向</strong> プログラムはオブジェクトの集まりを操作します。オブジェクトには内部状態があり、その状態を調べたり色々と変更したりするためのメソッドがあります。Smalltalk や Java はオブジェクト指向言語です。 C++ と Python はオブジェクト指向プログラミングをサポートしていますが、関連する機能を使わなくても構わないようになっています。</li>
+<li><strong>関数型</strong> プログラミングは問題をいくつかの関数にわけて考えます。理想的に言うと、関数は入力を受けて出力を吐くだけで、同じ入力に対して異なる出力をするような内部状態を一切持ちません。有名な関数型言語には ML 一家 (Standard ML, OCaml 等々) と Haskell があります。</li>
 </ul>
 <p>設計者が特定のアプローチを強調することにした言語もありますが、そうすると大抵は、別のアプローチを使うプログラムを書きにくくなります。複数のアプローチに対応した言語もあり、Lisp, C++, Python はそうしたマルチパラダイム言語です; この中のどれを使っても、基本的に手続き型な、または基本的にオブジェクト指向な、とか、基本的に関数型なプログラムやライブラリを書くことができます。大きなプログラムでは、各部で別々のアプローチを使って書くことがあるかもしれません; GUI はオブジェクト指向で、でも処理ロジックは手続き型や関数型で、といったようにです。</p>
 <p>関数型プログラムでは、入力は一連の関数を通って流れていきます。それぞれの関数は入力に何らかの作業をして出力します。関数型スタイルにおいては、内部状態を変えてしまったり、返り値に現れない変更をしたりといった副作用のある関数はやめるように言われています。副作用のまったくない関数は <strong>純粋関数型</strong> であるとされます。副作用をなくすということは、プログラムの実行中に順次変化していくデータ構造を持たない、つまり各関数の出力はその入力にしか影響を受けてはいけないということです。</p>
@@ -136,20 +128,16 @@
 <p>関数型プログラミングはオブジェクト指向プログラミングの反対と考えることもできます。オブジェクト指向において、オブジェクトは内部状態とそれを変更するメソッドコールの入ったカプセルであり、プログラムはその状態を適正に変化させていく手順です。一方で、関数型プログラミングは可能なかぎり状態の変更を避け、関数どうしの間を流れるデータだけを扱おうとします。Python ではこの二つのアプローチを結び合わせることができます。アプリケーション内のオブジェクト (メール、トランザクション、等々) を表現したインスタンスを、関数が受け渡しするようにするのです。</p>
 <p>関数型デザインは、わけのわからない制約に見えるかもしれません。どうしてオブジェクトも副作用もないほうが良いのでしょうか。実は、関数型スタイルには理論と実践に基づく次の利点があるのです:</p>
 <ul class="simple">
-<li><p class="first">形式的証明可能性。</p>
-</li>
-<li><p class="first">モジュラー性。</p>
-</li>
-<li><p class="first">結合性。</p>
-</li>
-<li><p class="first">デバッグやテストの簡単さ。</p>
-</li>
+<li>形式的証明可能性。</li>
+<li>モジュラー性。</li>
+<li>結合性。</li>
+<li>デバッグやテストの簡単さ。</li>
 </ul>
 <div class="section" id="formal-provability">
 <h3>形式的証明可能性<a class="headerlink" href="#formal-provability" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>理論面の利点としては、プログラムが正しいことの数学的証明を他より簡単に構築できるという点があります。</p>
 <p>研究者たちは長いあいだ、プログラムが正しいことを数学的に証明する方法の発見に血道をあげてきました。これは、色々な入力でテストして出力が正しかったからまあ正しいだろう、と結論するのとも違いますし、ソースコードを読んで「間違いはなさそうだ」と言うのとも別の話です; 目指すのは、出現しうる入力すべてに対してプログラムが正しい結果を出すことの厳密な証明なのです。</p>
-<p>プログラムを証明するために使われているのは <strong>不変式</strong> を書き出していくというテクニックで、不変式とは入力データやプログラム変数のうち常に真である性質のことです。コードの一行一行で、 <strong>実行前</strong> の不変式 X と Y が真なら <strong>実行後に</strong> ちょっと違う不変式 X&#8217; と Y&#8217; が真になることを示していき、これをプログラムの終わりまで続けるわけです。すると最終的な不変式はプログラムの出力に合った条件になっているはずです。</p>
+<p>プログラムを証明するために使われているのは <strong>不変式</strong> を書き出していくというテクニックで、不変式とは入力データやプログラム変数のうち常に真である性質のことです。コードの一行一行で、 <strong>実行前</strong> の不変式 X と Y が真なら <strong>実行後に</strong> ちょっと違う不変式 X』 と Y』 が真になることを示していき、これをプログラムの終わりまで続けるわけです。すると最終的な不変式はプログラムの出力に合った条件になっているはずです。</p>
 <p>関数型プログラミングが代入を嫌うのは、この不変式テクニックでは代入を扱いにくいからです; 代入は、それまで真だった不変式を壊しておいて、自分は次の行に伝えてゆける不変式を生み出さないことがあるのです。</p>
 <p>残念ながら、プログラムの証明はだいたい実際的でもありませんし、Python ソフトウェアにも関係ありません。本当に簡単なプログラムでも、証明には数ページにわたる論文が必要なのです; ある程度の複雑なプログラムではもう尋常でない長さになってしまうので、日常で使っているプログラム (Python インタプリタ、XML パーサ、ウェブブラウザ) はほとんど、あるいはすべて、正しさを証明するのは不可能でしょう。仮に証明を書き出したり生成したりしても、その証明を検証するための疑いが残ります; 証明に間違いがあるかもしれず、その場合は証明したと自分で勝手に思い込んでいただけになるのです。</p>
 </div>
@@ -281,7 +269,7 @@
 </pre></div>
 </div>
 <p>リスト内包表記を使うと Python リストが返って来ます; <code class="docutils literal"><span class="pre">stripped_list</span></code> は実行結果の行が入ったリストであって、イテレータではありません。ジェネレータ式はイテレータを返し、これだと必要に応じてだけ値を算出しますので、すべての値を一度に出す必要がありません。つまりリスト内包表記のほうは、無限長ストリームや膨大なデータを返すようなイテレータを扱う際には、あまり役に立たないということです。そういった状況ではジェネレータ式のほうが好ましいと言えます。</p>
-<p>ジェネレータ式は丸括弧 &#8220;()&#8221; で囲まれ、リスト内包表記は角括弧 &#8220;[]&#8221; で囲まれます。ジェネレータ式の形式は次のとおりです:</p>
+<p>ジェネレータ式は丸括弧 「()」 で囲まれ、リスト内包表記は角括弧 「[]」 で囲まれます。ジェネレータ式の形式は次のとおりです:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="p">(</span> <span class="n">expression</span> <span class="k">for</span> <span class="n">expr</span> <span class="ow">in</span> <span class="n">sequence1</span>
              <span class="k">if</span> <span class="n">condition1</span>
              <span class="k">for</span> <span class="n">expr2</span> <span class="ow">in</span> <span class="n">sequence2</span>
@@ -525,14 +513,10 @@
 <p><a class="reference internal" href="../library/itertools.html#module-itertools" title="itertools: Functions creating iterators for efficient looping."><code class="xref py py-mod docutils literal"><span class="pre">itertools</span></code></a> モジュールには、よく使うイテレータや、イテレータ同士の連結に使う関数がたくさん含まれています。この章では、そのモジュールの内容を小さな例で紹介していきたいと思います。</p>
 <p>このモジュールの関数を大まかに分けるとこうなります:</p>
 <ul class="simple">
-<li><p class="first">既存のイテレータに基づいて新しいイテレータを作る関数。</p>
-</li>
-<li><p class="first">イテレータの要素を引数として扱う関数。</p>
-</li>
-<li><p class="first">イテレータの出力から一部を取り出す関数。</p>
-</li>
-<li><p class="first">イテレータの出力をグループ分けする関数。</p>
-</li>
+<li>既存のイテレータに基づいて新しいイテレータを作る関数。</li>
+<li>イテレータの要素を引数として扱う関数。</li>
+<li>イテレータの出力から一部を取り出す関数。</li>
+<li>イテレータの出力をグループ分けする関数。</li>
 </ul>
 <div class="section" id="creating-new-iterators">
 <h3>新しいイテレータを作る<a class="headerlink" href="#creating-new-iterators" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -662,7 +646,7 @@
   <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>全く同じタプル <code class="docutils literal"><span class="pre">('a',</span> <span class="pre">'a',</span> <span class="pre">'b')</span></code> が 2度現れていますが、これは 2つの &#8216;a&#8217; が別の位置からのものだからです。</p>
+<p>全く同じタプル <code class="docutils literal"><span class="pre">('a',</span> <span class="pre">'a',</span> <span class="pre">'b')</span></code> が 2度現れていますが、これは 2つの 『a』 が別の位置からのものだからです。</p>
 <p><a class="reference internal" href="../library/itertools.html#itertools.combinations_with_replacement" title="itertools.combinations_with_replacement"><code class="xref py py-func docutils literal"><span class="pre">itertools.combinations_with_replacement(iterable,</span> <span class="pre">r)</span></code></a> 関数は別の制約を取り払います: 一回の選択で同じ要素を繰り返し選んでも良い。概念的には、それぞれのタプルの最初のものとして一つ要素が選ばれ、続いて 2つ目の選択のかわりにそれで置き換わります</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations_with_replacement</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=&gt;</span>
   <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
@@ -768,16 +752,11 @@
 <p><a class="reference internal" href="../library/operator.html#module-operator" title="operator: Functions corresponding to the standard operators."><code class="xref py py-mod docutils literal"><span class="pre">operator</span></code></a> モジュールは、既に取り上げましたが、Python の演算子に対応する関数が入っているモジュールです。関数型スタイルのコードにおいて、演算を一つ実行するだけのくだらない関数を書かずに済むので、よく世話になります。</p>
 <p>このモジュールの関数を一部だけ紹介しましょう:</p>
 <ul class="simple">
-<li><p class="first">数学演算子: <code class="docutils literal"><span class="pre">add()</span></code>, <code class="docutils literal"><span class="pre">sub()</span></code>, <code class="docutils literal"><span class="pre">mul()</span></code>, <code class="docutils literal"><span class="pre">floordiv()</span></code>, <code class="docutils literal"><span class="pre">abs()</span></code>, ...</p>
-</li>
-<li><p class="first">論理演算子: <code class="docutils literal"><span class="pre">not_()</span></code>, <code class="docutils literal"><span class="pre">truth()</span></code></p>
-</li>
-<li><p class="first">ビット演算子: <code class="docutils literal"><span class="pre">and_()</span></code>, <code class="docutils literal"><span class="pre">or_()</span></code>, <code class="docutils literal"><span class="pre">invert()</span></code></p>
-</li>
-<li><p class="first">比較: <code class="docutils literal"><span class="pre">eq()</span></code>, <code class="docutils literal"><span class="pre">ne()</span></code>, <code class="docutils literal"><span class="pre">lt()</span></code>, <code class="docutils literal"><span class="pre">le()</span></code>, <code class="docutils literal"><span class="pre">gt()</span></code>, <code class="docutils literal"><span class="pre">ge()</span></code></p>
-</li>
-<li><p class="first">オブジェクト識別: <code class="docutils literal"><span class="pre">is_()</span></code>, <code class="docutils literal"><span class="pre">is_not()</span></code></p>
-</li>
+<li>数学演算子: <code class="docutils literal"><span class="pre">add()</span></code>, <code class="docutils literal"><span class="pre">sub()</span></code>, <code class="docutils literal"><span class="pre">mul()</span></code>, <code class="docutils literal"><span class="pre">floordiv()</span></code>, <code class="docutils literal"><span class="pre">abs()</span></code>, …</li>
+<li>論理演算子: <code class="docutils literal"><span class="pre">not_()</span></code>, <code class="docutils literal"><span class="pre">truth()</span></code></li>
+<li>ビット演算子: <code class="docutils literal"><span class="pre">and_()</span></code>, <code class="docutils literal"><span class="pre">or_()</span></code>, <code class="docutils literal"><span class="pre">invert()</span></code></li>
+<li>比較: <code class="docutils literal"><span class="pre">eq()</span></code>, <code class="docutils literal"><span class="pre">ne()</span></code>, <code class="docutils literal"><span class="pre">lt()</span></code>, <code class="docutils literal"><span class="pre">le()</span></code>, <code class="docutils literal"><span class="pre">gt()</span></code>, <code class="docutils literal"><span class="pre">ge()</span></code></li>
+<li>オブジェクト識別: <code class="docutils literal"><span class="pre">is_()</span></code>, <code class="docutils literal"><span class="pre">is_not()</span></code></li>
 </ul>
 <p>ちゃんとした一覧は operator モジュールの文書でご覧ください。</p>
 </div>
@@ -831,16 +810,11 @@
 <p>多くの場合、 <a class="reference internal" href="../library/functools.html#functools.reduce" title="functools.reduce"><code class="xref py py-func docutils literal"><span class="pre">functools.reduce()</span></code></a> を使っているところは <code class="docutils literal"><span class="pre">for</span></code> ループに 書き直したほうが見やすいです。</p>
 <p>Fredrik Lundh は以前 <code class="docutils literal"><span class="pre">lambda</span></code> 利用のリファクタリングに関して以下の指針を提案したことがあります:</p>
 <ol class="arabic simple">
-<li><p class="first">ラムダ関数を書く。</p>
-</li>
-<li><p class="first">そのラムダが一体ぜんたい何をしているのかコメントで説明する。</p>
-</li>
-<li><p class="first">そのコメントをしばらく研究して、本質をとらえた名前を考える。</p>
-</li>
-<li><p class="first">ラムダをその名前で def 文に書き換える。</p>
-</li>
-<li><p class="first">コメントを消す。</p>
-</li>
+<li>ラムダ関数を書く。</li>
+<li>そのラムダが一体ぜんたい何をしているのかコメントで説明する。</li>
+<li>そのコメントをしばらく研究して、本質をとらえた名前を考える。</li>
+<li>ラムダをその名前で def 文に書き換える。</li>
+<li>コメントを消す。</li>
 </ol>
 <p>著者はこの指針を本当に気に入っていますが、こうしたラムダなしスタイルが他より優れているかどうかについて、異論は認めます。</p>
 </div>
@@ -867,15 +841,15 @@ Winter; adds short section on the operator module; a few other edits.</p>
 </div>
 <div class="section" id="python-specific">
 <h3>Python 特有の話<a class="headerlink" href="#python-specific" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p><a class="reference external" href="http://gnosis.cx/TPiP/">http://gnosis.cx/TPiP/</a>: David Mertz&#8217;s の本の最初の章 <cite>Text Processing in Python</cite> では文書処理のための関数プログラミングについて議論しています、この議論の節には &#8220;Utilizing Higher-Order Functions in Text Processing&#8221; というタイトルがついています。</p>
+<p><a class="reference external" href="http://gnosis.cx/TPiP/">http://gnosis.cx/TPiP/</a>: David Mertz’s の本の最初の章 <cite>Text Processing in Python</cite> では文書処理のための関数プログラミングについて議論しています、この議論の節には 「Utilizing Higher-Order Functions in Text Processing」 というタイトルがついています。</p>
 <p>Mertz は IBM の DeveloperWorks サイトにも関数型プログラミングに関する 3 部構成の記事を書いています; <a class="reference external" href="https://www.ibm.com/developerworks/linux/library/l-prog/index.html">part 1</a>, <a class="reference external" href="https://www.ibm.com/developerworks/linux/library/l-prog2/index.html">part 2</a>, <a class="reference external" href="https://www.ibm.com/developerworks/linux/library/l-prog3/index.html">part 3</a>,</p>
 </div>
 <div class="section" id="python-documentation">
 <h3>Python 文書<a class="headerlink" href="#python-documentation" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p><a class="reference internal" href="../library/itertools.html#module-itertools" title="itertools: Functions creating iterators for efficient looping."><code class="xref py py-mod docutils literal"><span class="pre">itertools</span></code></a> モジュールの文書。</p>
 <p><a class="reference internal" href="../library/operator.html#module-operator" title="operator: Functions corresponding to the standard operators."><code class="xref py py-mod docutils literal"><span class="pre">operator</span></code></a> モジュールの文書。</p>
-<p><span class="target" id="index-1"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0289"><strong>PEP 289</strong></a>: &#8220;Generator Expressions&#8221;</p>
-<p><span class="target" id="index-2"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0342"><strong>PEP 342</strong></a>: &#8220;Coroutines via Enhanced Generators&#8221; describes the new generator
+<p><span class="target" id="index-1"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0289"><strong>PEP 289</strong></a>: 「Generator Expressions」</p>
+<p><span class="target" id="index-2"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0342"><strong>PEP 342</strong></a>: 「Coroutines via Enhanced Generators」 describes the new generator
 features in Python 2.5.</p>
 </div>
 </div>
@@ -942,7 +916,7 @@ features in Python 2.5.</p>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/functional.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/functional.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -1002,7 +976,7 @@ features in Python 2.5.</p>
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

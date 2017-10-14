@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>18.5.1. 基底イベントループ &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="18.5. asyncio — 非同期 I/O、イベントループ、コルーチンおよびタスク" href="asyncio.html" />
     <link rel="next" title="18.5.2. イベントループ" href="asyncio-eventloops.html" />
     <link rel="prev" title="18.5. asyncio — 非同期 I/O、イベントループ、コルーチンおよびタスク" href="asyncio.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -80,7 +76,7 @@
 
           <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="asyncio.html" accesskey="U">18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" accesskey="U">18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> — 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
     <li class="right">
         
 
@@ -108,14 +104,10 @@
 <span id="asyncio-event-loop"></span><h1>18.5.1. 基底イベントループ<a class="headerlink" href="#base-event-loop" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p>イベントループは <a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a>  が提供する中心実行デバイスです。以下の多くの機能を提供しています:</p>
 <ul class="simple">
-<li><p class="first">遅延呼び出しの登録、実行およびキャンセル (タイムアウト)。</p>
-</li>
-<li><p class="first">さまざまな種類の通信のためのクライアントおよびサーバー <a class="reference internal" href="asyncio-protocol.html#asyncio-transport"><span class="std std-ref">トランスポート</span></a> の作成。</p>
-</li>
-<li><p class="first">外部プログラムとの通信のためのサブプロセスおよび関連する <a class="reference internal" href="asyncio-protocol.html#asyncio-transport"><span class="std std-ref">トランスポート</span></a> の起動。</p>
-</li>
-<li><p class="first">スレッドのプールへ呼び出す、コストの大きい関数の委譲。</p>
-</li>
+<li>遅延呼び出しの登録、実行およびキャンセル (タイムアウト)。</li>
+<li>さまざまな種類の通信のためのクライアントおよびサーバー <a class="reference internal" href="asyncio-protocol.html#asyncio-transport"><span class="std std-ref">トランスポート</span></a> の作成。</li>
+<li>外部プログラムとの通信のためのサブプロセスおよび関連する <a class="reference internal" href="asyncio-protocol.html#asyncio-transport"><span class="std std-ref">トランスポート</span></a> の起動。</li>
+<li>スレッドのプールへ呼び出す、コストの大きい関数の委譲。</li>
 </ul>
 <dl class="class">
 <dt id="asyncio.BaseEventLoop">
@@ -324,14 +316,10 @@
 <p>このメソッドはバックグラウンドでコネクションの確立を試みる <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。成功すると、コルーチンは <code class="docutils literal"><span class="pre">(トランスポート,</span> <span class="pre">プロトコル)</span></code> のペアを返します。</p>
 <p>時系列での下層処理の概要は以下のとおりです:</p>
 <ol class="arabic simple">
-<li><p class="first">コネクションを確立し、それを表す <a class="reference internal" href="asyncio-protocol.html#asyncio-transport"><span class="std std-ref">トランスポート</span></a> が作成される。</p>
-</li>
-<li><p class="first"><em>protocol_factory</em> が引数なしで呼び出され、<a class="reference internal" href="asyncio-protocol.html#asyncio-protocol"><span class="std std-ref">プロトコル</span></a> のインスタンスを返す。</p>
-</li>
-<li><p class="first">プロトコルインスタンスはトランスポートと紐付けられ、それの <code class="xref py py-meth docutils literal"><span class="pre">connection_made()</span></code> メソッドが呼び出される。</p>
-</li>
-<li><p class="first">コルーチンは <code class="docutils literal"><span class="pre">(トランスポート,</span> <span class="pre">プロトコル)</span></code> のペアを返す。</p>
-</li>
+<li>コネクションを確立し、それを表す <a class="reference internal" href="asyncio-protocol.html#asyncio-transport"><span class="std std-ref">トランスポート</span></a> が作成される。</li>
+<li><em>protocol_factory</em> が引数なしで呼び出され、<a class="reference internal" href="asyncio-protocol.html#asyncio-protocol"><span class="std std-ref">プロトコル</span></a> のインスタンスを返す。</li>
+<li>プロトコルインスタンスはトランスポートと紐付けられ、それの <code class="xref py py-meth docutils literal"><span class="pre">connection_made()</span></code> メソッドが呼び出される。</li>
+<li>コルーチンは <code class="docutils literal"><span class="pre">(トランスポート,</span> <span class="pre">プロトコル)</span></code> のペアを返す。</li>
 </ol>
 <p>作成されたトランスポートは実装依存の双方向ストリームです。</p>
 <div class="admonition note">
@@ -372,20 +360,13 @@
 <p>このメソッドはバックグラウンドでコネクションの確立を試みる <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。成功すると、コルーチンは <code class="docutils literal"><span class="pre">(トランスポート,</span> <span class="pre">プロトコル)</span></code> のペアを返します。</p>
 <p>コネクションの作成方法を変更するオプションは以下の通りです:</p>
 <ul class="simple">
-<li><p class="first"><em>local_addr</em> が指定される場合、<code class="docutils literal"><span class="pre">(local_host,</span> <span class="pre">local_port)</span></code> のタプルで、ソケットをローカルで束縛するために使用されます。<em>local_host</em> と <em>local_port</em> は <a class="reference internal" href="#asyncio.AbstractEventLoop.getaddrinfo" title="asyncio.AbstractEventLoop.getaddrinfo"><code class="xref py py-meth docutils literal"><span class="pre">getaddrinfo()</span></code></a> を使用して検索されます。</p>
-</li>
-<li><p class="first"><em>remote_addr</em> が指定される場合、<code class="docutils literal"><span class="pre">(remote_host,</span> <span class="pre">remote_por)</span></code> のタプルで、ソケットをリモートアドレスに束縛するために使用されます。<em>remote_host</em> と <em>remote_port</em> は <a class="reference internal" href="#asyncio.AbstractEventLoop.getaddrinfo" title="asyncio.AbstractEventLoop.getaddrinfo"><code class="xref py py-meth docutils literal"><span class="pre">getaddrinfo()</span></code></a> を使用して検索されます。</p>
-</li>
-<li><p class="first"><em>family</em>, <em>proto</em>, <em>flags</em> は任意のアドレスファミリです。これらのファミリ、プロトコル、フラグは、<em>host</em> 解決のため <a class="reference internal" href="#asyncio.AbstractEventLoop.getaddrinfo" title="asyncio.AbstractEventLoop.getaddrinfo"><code class="xref py py-meth docutils literal"><span class="pre">getaddrinfo()</span></code></a> 経由でオプションで渡されます。これらのオプションを指定する場合、すべて <a class="reference internal" href="socket.html#module-socket" title="socket: Low-level networking interface."><code class="xref py py-mod docutils literal"><span class="pre">socket</span></code></a> モジュール定数に従った整数でなければなりません。</p>
-</li>
-<li><p class="first"><em>reuse_address</em> は、 TIME_WAIT 状態にあるローカルソケットを、その状態が自然にタイムアウトするのを待つことなく再利用するようカーネルに指示します（訳註: ソケットのオプション SO_REUSEADDR を使用します）。指定しない場合、UNIX では自動的に <code class="docutils literal"><span class="pre">True</span></code> が設定されます。</p>
-</li>
-<li><p class="first"><em>reuse_port</em> は、同じポートにバインドされた既存の端点すべてがこのフラグを設定して生成されている場合に限り、この端点を既存の端点と同じポートにバインドすることをカーネルに許可します（訳註: ソケットのオプション SO_REUSEPORT を使用します）。このオプションは、Windows やいくつかの UNIX システムではサポートされません。もし定数 <code class="xref py py-data docutils literal"><span class="pre">SO_REUSEPORT</span></code> が定義されていなければ、この機能はサポートされません。</p>
-</li>
-<li><p class="first"><em>allow_broadcast</em> は、カーネルに、このエンドポイントがブロードキャストアドレスにメッセージを送信することを許可するように指示します。</p>
-</li>
-<li><p class="first">オプションの <em>sock</em> を指定することで、既存の、すでに接続されている <a class="reference internal" href="socket.html#socket.socket" title="socket.socket"><code class="xref py py-class docutils literal"><span class="pre">socket.socket</span></code></a> をトランスポートで使用することができます。このオプションを使用する場合、<em>local_addr</em> と <em>remote_addr</em> は省略してください (<a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> でなければなりません)。</p>
-</li>
+<li><em>local_addr</em> が指定される場合、<code class="docutils literal"><span class="pre">(local_host,</span> <span class="pre">local_port)</span></code> のタプルで、ソケットをローカルで束縛するために使用されます。<em>local_host</em> と <em>local_port</em> は <a class="reference internal" href="#asyncio.AbstractEventLoop.getaddrinfo" title="asyncio.AbstractEventLoop.getaddrinfo"><code class="xref py py-meth docutils literal"><span class="pre">getaddrinfo()</span></code></a> を使用して検索されます。</li>
+<li><em>remote_addr</em> が指定される場合、<code class="docutils literal"><span class="pre">(remote_host,</span> <span class="pre">remote_por)</span></code> のタプルで、ソケットをリモートアドレスに束縛するために使用されます。<em>remote_host</em> と <em>remote_port</em> は <a class="reference internal" href="#asyncio.AbstractEventLoop.getaddrinfo" title="asyncio.AbstractEventLoop.getaddrinfo"><code class="xref py py-meth docutils literal"><span class="pre">getaddrinfo()</span></code></a> を使用して検索されます。</li>
+<li><em>family</em>, <em>proto</em>, <em>flags</em> は任意のアドレスファミリです。これらのファミリ、プロトコル、フラグは、<em>host</em> 解決のため <a class="reference internal" href="#asyncio.AbstractEventLoop.getaddrinfo" title="asyncio.AbstractEventLoop.getaddrinfo"><code class="xref py py-meth docutils literal"><span class="pre">getaddrinfo()</span></code></a> 経由でオプションで渡されます。これらのオプションを指定する場合、すべて <a class="reference internal" href="socket.html#module-socket" title="socket: Low-level networking interface."><code class="xref py py-mod docutils literal"><span class="pre">socket</span></code></a> モジュール定数に従った整数でなければなりません。</li>
+<li><em>reuse_address</em> は、 TIME_WAIT 状態にあるローカルソケットを、その状態が自然にタイムアウトするのを待つことなく再利用するようカーネルに指示します（訳註: ソケットのオプション SO_REUSEADDR を使用します）。指定しない場合、UNIX では自動的に <code class="docutils literal"><span class="pre">True</span></code> が設定されます。</li>
+<li><em>reuse_port</em> は、同じポートにバインドされた既存の端点すべてがこのフラグを設定して生成されている場合に限り、この端点を既存の端点と同じポートにバインドすることをカーネルに許可します（訳註: ソケットのオプション SO_REUSEPORT を使用します）。このオプションは、Windows やいくつかの UNIX システムではサポートされません。もし定数 <code class="xref py py-data docutils literal"><span class="pre">SO_REUSEPORT</span></code> が定義されていなければ、この機能はサポートされません。</li>
+<li><em>allow_broadcast</em> は、カーネルに、このエンドポイントがブロードキャストアドレスにメッセージを送信することを許可するように指示します。</li>
+<li>オプションの <em>sock</em> を指定することで、既存の、すでに接続されている <a class="reference internal" href="socket.html#socket.socket" title="socket.socket"><code class="xref py py-class docutils literal"><span class="pre">socket.socket</span></code></a> をトランスポートで使用することができます。このオプションを使用する場合、<em>local_addr</em> と <em>remote_addr</em> は省略してください (<a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> でなければなりません)。</li>
 </ul>
 <p>Windows の <a class="reference internal" href="asyncio-eventloops.html#asyncio.ProactorEventLoop" title="asyncio.ProactorEventLoop"><code class="xref py py-class docutils literal"><span class="pre">ProactorEventLoop</span></code></a> では、このメソッドはサポートされていません。</p>
 <p><a class="reference internal" href="asyncio-protocol.html#asyncio-udp-echo-client-protocol"><span class="std std-ref">UDP echo クライアントプロトコル</span></a> および <a class="reference internal" href="asyncio-protocol.html#asyncio-udp-echo-server-protocol"><span class="std std-ref">UDP echo サーバープロトコル</span></a> の例を参照してください。</p>
@@ -411,26 +392,18 @@
 <p><a class="reference internal" href="#asyncio.Server" title="asyncio.Server"><code class="xref py py-class docutils literal"><span class="pre">Server</span></code></a> オブジェクトを返します。これの <a class="reference internal" href="#asyncio.Server.sockets" title="asyncio.Server.sockets"><code class="xref py py-attr docutils literal"><span class="pre">sockets</span></code></a> 属性には作成されたソケットが含まれています。サーバーを停止するには <a class="reference internal" href="#asyncio.Server.close" title="asyncio.Server.close"><code class="xref py py-meth docutils literal"><span class="pre">Server.close()</span></code></a> メソッドを使用します: 待受中のソケットを閉じます。</p>
 <p>引数:</p>
 <ul class="simple">
-<li><p class="first"><em>host</em> 引数には文字列を渡すことが出来ます。
+<li><em>host</em> 引数には文字列を渡すことが出来ます。
 その場合、TCP サーバは <em>host</em> と <em>port</em> に束縛されます。
 <em>host</em> 引数には文字列のシーケンスを渡すことも出来ます。
 その場合 TCP サーバはシーケンスの全ホストに束縛されます。
-<em>host</em> が空の文字列や <code class="docutils literal"><span class="pre">None</span></code> の場合、全インターフェイスが想定され、複数のソケットからなるリストを返します (最も近いのは IPv4 や IPv6 のものです)。</p>
-</li>
-<li><p class="first"><em>family</em> には <a class="reference internal" href="socket.html#socket.AF_INET" title="socket.AF_INET"><code class="xref py py-data docutils literal"><span class="pre">socket.AF_INET</span></code></a> または <a class="reference internal" href="socket.html#socket.AF_INET6" title="socket.AF_INET6"><code class="xref py py-data docutils literal"><span class="pre">AF_INET6</span></code></a> を指定し、ソケットで IPv4 を使用するか IPv6 を使用するか強制的に設定できます。設定されない場合ホストから決定されます (<code class="xref py py-data docutils literal"><span class="pre">socket.AF_UNSPEC</span></code> がデフォルトになります)。</p>
-</li>
-<li><p class="first"><em>flags</em> は <a class="reference internal" href="#asyncio.AbstractEventLoop.getaddrinfo" title="asyncio.AbstractEventLoop.getaddrinfo"><code class="xref py py-meth docutils literal"><span class="pre">getaddrinfo()</span></code></a> のためのビットマスクになります。</p>
-</li>
-<li><p class="first">任意の引数 <em>sock</em> には、既存のソケットオブジェクトの使用順を指定できます。指定した場合、<em>host</em> および <em>port</em> を指定してはなりません (<a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> でなければなりません)。</p>
-</li>
-<li><p class="first"><em>backlog</em> は <a class="reference internal" href="socket.html#socket.socket.listen" title="socket.socket.listen"><code class="xref py py-meth docutils literal"><span class="pre">listen()</span></code></a> に渡される、キューに入るコネクションの最大数になります (デフォルトは 100)。</p>
-</li>
-<li><p class="first"><em>ssl</em> には <a class="reference internal" href="ssl.html#ssl.SSLContext" title="ssl.SSLContext"><code class="xref py py-class docutils literal"><span class="pre">SSLContext</span></code></a> を指定できます。指定すると、受け付けたコネクション上での SSL を有効にします。</p>
-</li>
-<li><p class="first"><em>reuse_address</em> は、 TIME_WAIT 状態にあるローカルソケットを、その状態が自然にタイムアウトするのを待つことなく再利用するようカーネルに指示します（訳註: ソケットのオプション SO_REUSEADDR を使用します）。指定しない場合、UNIX では自動的に <code class="docutils literal"><span class="pre">True</span></code> が設定されます。</p>
-</li>
-<li><p class="first"><em>reuse_port</em> は、同じポートにバインドされた既存の端点すべてがこのフラグを設定して生成されている場合に限り、この端点を既存の端点と同じポートにバインドすることを許可するよう、カーネルに指示します（訳註: ソケットのオプション SO_REUSEPORT を使用します）。このオプションは、Windows ではサポートされていません。</p>
-</li>
+<em>host</em> が空の文字列や <code class="docutils literal"><span class="pre">None</span></code> の場合、全インターフェイスが想定され、複数のソケットからなるリストを返します (最も近いのは IPv4 や IPv6 のものです)。</li>
+<li><em>family</em> には <a class="reference internal" href="socket.html#socket.AF_INET" title="socket.AF_INET"><code class="xref py py-data docutils literal"><span class="pre">socket.AF_INET</span></code></a> または <a class="reference internal" href="socket.html#socket.AF_INET6" title="socket.AF_INET6"><code class="xref py py-data docutils literal"><span class="pre">AF_INET6</span></code></a> を指定し、ソケットで IPv4 を使用するか IPv6 を使用するか強制的に設定できます。設定されない場合ホストから決定されます (<code class="xref py py-data docutils literal"><span class="pre">socket.AF_UNSPEC</span></code> がデフォルトになります)。</li>
+<li><em>flags</em> は <a class="reference internal" href="#asyncio.AbstractEventLoop.getaddrinfo" title="asyncio.AbstractEventLoop.getaddrinfo"><code class="xref py py-meth docutils literal"><span class="pre">getaddrinfo()</span></code></a> のためのビットマスクになります。</li>
+<li>任意の引数 <em>sock</em> には、既存のソケットオブジェクトの使用順を指定できます。指定した場合、<em>host</em> および <em>port</em> を指定してはなりません (<a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> でなければなりません)。</li>
+<li><em>backlog</em> は <a class="reference internal" href="socket.html#socket.socket.listen" title="socket.socket.listen"><code class="xref py py-meth docutils literal"><span class="pre">listen()</span></code></a> に渡される、キューに入るコネクションの最大数になります (デフォルトは 100)。</li>
+<li><em>ssl</em> には <a class="reference internal" href="ssl.html#ssl.SSLContext" title="ssl.SSLContext"><code class="xref py py-class docutils literal"><span class="pre">SSLContext</span></code></a> を指定できます。指定すると、受け付けたコネクション上での SSL を有効にします。</li>
+<li><em>reuse_address</em> は、 TIME_WAIT 状態にあるローカルソケットを、その状態が自然にタイムアウトするのを待つことなく再利用するようカーネルに指示します（訳註: ソケットのオプション SO_REUSEADDR を使用します）。指定しない場合、UNIX では自動的に <code class="docutils literal"><span class="pre">True</span></code> が設定されます。</li>
+<li><em>reuse_port</em> は、同じポートにバインドされた既存の端点すべてがこのフラグを設定して生成されている場合に限り、この端点を既存の端点と同じポートにバインドすることを許可するよう、カーネルに指示します（訳註: ソケットのオプション SO_REUSEPORT を使用します）。このオプションは、Windows ではサポートされていません。</li>
 </ul>
 <p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">コルーチン</span></a> です。</p>
 <div class="versionchanged">
@@ -460,10 +433,8 @@
 <p>asyncio の範囲外で接続を受け付けるが、asyncio を使用してそれらを扱うサーバにより使用されます。</p>
 <p>引数:</p>
 <ul class="simple">
-<li><p class="first"><em>sock</em> は、 <code class="docutils literal"><span class="pre">accept</span></code> 呼び出しが返す既存のソケットオブジェクトです。</p>
-</li>
-<li><p class="first"><em>ssl</em> には <a class="reference internal" href="ssl.html#ssl.SSLContext" title="ssl.SSLContext"><code class="xref py py-class docutils literal"><span class="pre">SSLContext</span></code></a> を指定できます。指定すると、受け付けたコネクション上での SSL を有効にします。</p>
-</li>
+<li><em>sock</em> は、 <code class="docutils literal"><span class="pre">accept</span></code> 呼び出しが返す既存のソケットオブジェクトです。</li>
+<li><em>ssl</em> には <a class="reference internal" href="ssl.html#ssl.SSLContext" title="ssl.SSLContext"><code class="xref py py-class docutils literal"><span class="pre">SSLContext</span></code></a> を指定できます。指定すると、受け付けたコネクション上での SSL を有効にします。</li>
 </ul>
 <p>このメソッドは <a class="reference internal" href="asyncio-task.html#coroutine"><span class="std std-ref">coroutine</span></a> です。完了すると、このコルーチンは <code class="docutils literal"><span class="pre">(transport,</span> <span class="pre">protocol)</span></code> のペアを返します。</p>
 </dd></dl>
@@ -681,20 +652,13 @@
 <dd><p>現在のイベントループ例外ハンドラーを呼び出します。</p>
 <p><em>context</em> は以下のキーを含む <code class="docutils literal"><span class="pre">dict</span></code> オブジェクトです (新しいキーは後で導入されます):</p>
 <ul class="simple">
-<li><p class="first">&#8216;message&#8217;: エラーメッセージ;</p>
-</li>
-<li><p class="first">&#8216;exception&#8217; (任意): 例外オブジェクト;</p>
-</li>
-<li><p class="first">&#8216;future&#8217; (任意): <a class="reference internal" href="asyncio-task.html#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">asyncio.Future</span></code></a> インスタンス;</p>
-</li>
-<li><p class="first">&#8216;handle&#8217; (任意): <a class="reference internal" href="#asyncio.Handle" title="asyncio.Handle"><code class="xref py py-class docutils literal"><span class="pre">asyncio.Handle</span></code></a> インスタンス;</p>
-</li>
-<li><p class="first">&#8216;protocol&#8217; (任意): <a class="reference internal" href="asyncio-protocol.html#asyncio-protocol"><span class="std std-ref">プロトコル</span></a> インスタンス;</p>
-</li>
-<li><p class="first">&#8216;transport&#8217; (任意): <a class="reference internal" href="asyncio-protocol.html#asyncio-transport"><span class="std std-ref">トランスポート</span></a> インスタンス;</p>
-</li>
-<li><p class="first">&#8216;socket&#8217; (任意): <a class="reference internal" href="socket.html#socket.socket" title="socket.socket"><code class="xref py py-class docutils literal"><span class="pre">socket.socket</span></code></a> インスタンス;</p>
-</li>
+<li>『message』: エラーメッセージ;</li>
+<li>『exception』 (任意): 例外オブジェクト;</li>
+<li>『future』 (任意): <a class="reference internal" href="asyncio-task.html#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">asyncio.Future</span></code></a> インスタンス;</li>
+<li>『handle』 (任意): <a class="reference internal" href="#asyncio.Handle" title="asyncio.Handle"><code class="xref py py-class docutils literal"><span class="pre">asyncio.Handle</span></code></a> インスタンス;</li>
+<li>『protocol』 (任意): <a class="reference internal" href="asyncio-protocol.html#asyncio-protocol"><span class="std std-ref">プロトコル</span></a> インスタンス;</li>
+<li>『transport』 (任意): <a class="reference internal" href="asyncio-protocol.html#asyncio-transport"><span class="std std-ref">トランスポート</span></a> インスタンス;</li>
+<li>『socket』 (任意): <a class="reference internal" href="socket.html#socket.socket" title="socket.socket"><code class="xref py py-class docutils literal"><span class="pre">socket.socket</span></code></a> インスタンス;</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
@@ -942,7 +906,7 @@
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="asyncio.html"
-                        title="前の章へ">18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a></p>
+                        title="前の章へ">18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> — 非同期 I/O、イベントループ、コルーチンおよびタスク</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="asyncio-eventloops.html"
                         title="次の章へ">18.5.2. イベントループ</a></p>
@@ -951,7 +915,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio-eventloop.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio-eventloop.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -986,7 +950,7 @@
 
           <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="asyncio.html" >18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" >18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> — 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
     <li class="right">
         
 
@@ -1013,7 +977,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

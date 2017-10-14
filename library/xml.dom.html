@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>20.6. xml.dom — 文書オブジェクトモデル (DOM) API &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="20. 構造化マークアップツール" href="markup.html" />
     <link rel="next" title="20.7. xml.dom.minidom — 最小限の DOM の実装" href="xml.dom.minidom.html" />
     <link rel="prev" title="20.5. xml.etree.ElementTree — ElementTree XML API" href="xml.etree.elementtree.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,13 +100,13 @@
           <div class="body" role="main">
             
   <div class="section" id="module-xml.dom">
-<span id="xml-dom-the-document-object-model-api"></span><h1>20.6. <a class="reference internal" href="#module-xml.dom" title="xml.dom: Document Object Model API for Python."><code class="xref py py-mod docutils literal"><span class="pre">xml.dom</span></code></a> &#8212; 文書オブジェクトモデル (DOM) API<a class="headerlink" href="#module-xml.dom" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="xml-dom-the-document-object-model-api"></span><h1>20.6. <a class="reference internal" href="#module-xml.dom" title="xml.dom: Document Object Model API for Python."><code class="xref py py-mod docutils literal"><span class="pre">xml.dom</span></code></a> — 文書オブジェクトモデル (DOM) API<a class="headerlink" href="#module-xml.dom" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/xml/dom/__init__.py">Lib/xml/dom/__init__.py</a></p>
 <hr class="docutils" />
-<p>文書オブジェクトモデル (Document Object Model)、すなわち &#8220;DOM&#8221; は、ワールドワイドウェブコンソーシアム (World Wide Web Consortium, W3C) による、XML ドキュメントにアクセスしたり変更を加えたりするための、プログラミング言語間共通の API です。DOM 実装によって、XML ドキュメントはツリー構造として表現されます。また、クライアントコード側でツリー構造をゼロから構築できるようになります。さらに、前述の構造に対して、よく知られたインタフェースをもつ一連のオブジェクトを通したアクセス手段も提供します。</p>
+<p>文書オブジェクトモデル (Document Object Model)、すなわち 「DOM」 は、ワールドワイドウェブコンソーシアム (World Wide Web Consortium, W3C) による、XML ドキュメントにアクセスしたり変更を加えたりするための、プログラミング言語間共通の API です。DOM 実装によって、XML ドキュメントはツリー構造として表現されます。また、クライアントコード側でツリー構造をゼロから構築できるようになります。さらに、前述の構造に対して、よく知られたインタフェースをもつ一連のオブジェクトを通したアクセス手段も提供します。</p>
 <p>DOM はランダムアクセスを行うアプリケーションで非常に有用です。SAX では、一度に閲覧することができるのはドキュメントのほんの一部分です。ある SAX 要素に注目している際には、別の要素をアクセスすることはできません。またテキストノードに注目しているときには、その中に入っている要素をアクセスすることができません。SAX によるアプリケーションを書くときには、プログラムがドキュメント内のどこを処理しているのかを追跡するよう、コードのどこかに記述する必要があります。SAX 自体がその作業を行ってくれることはありません。さらに、XML ドキュメントに対する先読み (look ahead) が必要だとすると不運なことになります。</p>
 <p>アプリケーションによっては、ツリーにアクセスできなければイベント駆動モデルを実現できません。もちろん、何らかのツリーを SAX イベントに応じて自分で構築することもできるでしょうが、DOM ではそのようなコードを書かなくてもよくなります。DOM は XML データに対する標準的なツリー表現なのです。</p>
-<p>文書オブジェクトモデルは、W3C によっていくつかの段階、W3C の用語で言えば &#8220;レベル (level)&#8221; で定義されています。Python においては、DOM API への対応付けは実質的には DOM レベル 2 勧告に基づいています。</p>
+<p>文書オブジェクトモデルは、W3C によっていくつかの段階、W3C の用語で言えば 「レベル (level)」 で定義されています。Python においては、DOM API への対応付けは実質的には DOM レベル 2 勧告に基づいています。</p>
 <p>DOM アプリケーションは、普通は XML を DOM に解析するところから始まります。どのようにして解析を行うかについては DOM レベル 1 では全くカバーしておらず、レベル 2 では限定的な改良だけが行われました: レベル 2 では <code class="xref py py-class docutils literal"><span class="pre">Document</span></code> を生成するメソッドを提供する <code class="xref py py-class docutils literal"><span class="pre">DOMImplementation</span></code> オブジェクトクラスがありますが、実装に依存しない方法で XML リーダ(reader)/パーザ(parser)/文書ビルダ (Document builder) にアクセスする方法はありません。また、既存の <code class="xref py py-class docutils literal"><span class="pre">Document</span></code> オブジェクトなしにこれらのメソッドにアクセスするような、よく定義された方法もありません。 Python では、各々の DOM 実装で <a class="reference internal" href="#xml.dom.getDOMImplementation" title="xml.dom.getDOMImplementation"><code class="xref py py-func docutils literal"><span class="pre">getDOMImplementation()</span></code></a> が定義されているはずです。 DOM レベル 3 ではロード(Load)/ストア(Store) 仕様が追加され、リーダのインタフェースにを定義していますが、Python 標準ライブラリではまだ利用することができません。</p>
 <p>DOM 文書オブジェクトを生成したら、そのプロパティとメソッドを使って XML 文書の一部にアクセスできます。これらのプロパティは DOM 仕様で定義されています; 本リファレンスマニュアルでは、Python において DOM 仕様がどのように解釈されているかを記述しています。</p>
 <p>W3C から提供されている仕様は、 DOM API を Java、ECMAScript、および OMG IDL で定義しています。ここで定義されている Python での対応づけは、大部分がこの仕様の IDL 版に基づいていますが、厳密な準拠は必要とされていません (実装で IDL の厳密な対応付けをサポートするのは自由ですが)。API への対応付けに関する詳細な議論は <a class="reference internal" href="#dom-conformance"><span class="std std-ref">適合性</span></a> を参照してください。</p>
@@ -118,14 +114,11 @@
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
 <dt><a class="reference external" href="https://www.w3.org/TR/DOM-Level-2-Core/">Document Object Model (DOM) Level 2 Specification</a></dt>
-<dd><p class="first last">Python DOM API が準拠している W3C 勧告。</p>
-</dd>
+<dd>Python DOM API が準拠している W3C 勧告。</dd>
 <dt><a class="reference external" href="https://www.w3.org/TR/REC-DOM-Level-1/">Document Object Model (DOM) Level 1 Specification</a></dt>
-<dd><p class="first last"><a class="reference internal" href="xml.dom.minidom.html#module-xml.dom.minidom" title="xml.dom.minidom: Minimal Document Object Model (DOM) implementation."><code class="xref py py-mod docutils literal"><span class="pre">xml.dom.minidom</span></code></a> でサポートされている W3C の DOM に関する勧告。</p>
-</dd>
+<dd><a class="reference internal" href="xml.dom.minidom.html#module-xml.dom.minidom" title="xml.dom.minidom: Minimal Document Object Model (DOM) implementation."><code class="xref py py-mod docutils literal"><span class="pre">xml.dom.minidom</span></code></a> でサポートされている W3C の DOM に関する勧告。</dd>
 <dt><a class="reference external" href="http://www.omg.org/spec/PYTH/1.2/PDF">Python Language Mapping Specification</a></dt>
-<dd><p class="first last">このドキュメントでは OMG IDL から Python への対応付けを記述しています。</p>
-</dd>
+<dd>このドキュメントでは OMG IDL から Python への対応付けを記述しています。</dd>
 </dl>
 </div>
 <div class="section" id="module-contents">
@@ -182,64 +175,51 @@
 <col width="33%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">インタフェース</p>
-</th>
-<th class="head"><p class="first last">節</p>
-</th>
-<th class="head"><p class="first last">目的</p>
-</th>
+<tr class="row-odd"><th class="head">インタフェース</th>
+<th class="head">節</th>
+<th class="head">目的</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="xref py py-class docutils literal"><span class="pre">DOMImplementation</span></code></td>
 <td><a class="reference internal" href="#dom-implementation-objects"><span class="std std-ref">DOMImplementation オブジェクト</span></a></td>
-<td><p class="first last">根底にある実装へのインタフェース。</p>
-</td>
+<td>根底にある実装へのインタフェース。</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-class docutils literal"><span class="pre">Node</span></code></td>
 <td><a class="reference internal" href="#dom-node-objects"><span class="std std-ref">Node オブジェクト</span></a></td>
-<td><p class="first last">ドキュメント内の大部分のオブジェクトに対する基底インタフェース。</p>
-</td>
+<td>ドキュメント内の大部分のオブジェクトに対する基底インタフェース。</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-class docutils literal"><span class="pre">NodeList</span></code></td>
 <td><a class="reference internal" href="#dom-nodelist-objects"><span class="std std-ref">NodeList オブジェクト</span></a></td>
-<td><p class="first last">ノード列に対するインタフェース。</p>
-</td>
+<td>ノード列に対するインタフェース。</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-class docutils literal"><span class="pre">DocumentType</span></code></td>
 <td><a class="reference internal" href="#dom-documenttype-objects"><span class="std std-ref">DocumentType オブジェクト</span></a></td>
-<td><p class="first last">ドキュメントの処理に必要な宣言についての情報。</p>
-</td>
+<td>ドキュメントの処理に必要な宣言についての情報。</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-class docutils literal"><span class="pre">Document</span></code></td>
 <td><a class="reference internal" href="#dom-document-objects"><span class="std std-ref">Document オブジェクト</span></a></td>
-<td><p class="first last">ドキュメント全体を表現するオブジェクト。</p>
-</td>
+<td>ドキュメント全体を表現するオブジェクト。</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-class docutils literal"><span class="pre">Element</span></code></td>
 <td><a class="reference internal" href="#dom-element-objects"><span class="std std-ref">Element オブジェクト</span></a></td>
-<td><p class="first last">ドキュメント階層内の要素ノード。</p>
-</td>
+<td>ドキュメント階層内の要素ノード。</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-class docutils literal"><span class="pre">Attr</span></code></td>
 <td><a class="reference internal" href="#dom-attr-objects"><span class="std std-ref">Attr オブジェクト</span></a></td>
-<td><p class="first last">要素ノード上の属性値ノード。</p>
-</td>
+<td>要素ノード上の属性値ノード。</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-class docutils literal"><span class="pre">Comment</span></code></td>
 <td><a class="reference internal" href="#dom-comment-objects"><span class="std std-ref">Comment オブジェクト</span></a></td>
-<td><p class="first last">ソースドキュメント内のコメント表現。</p>
-</td>
+<td>ソースドキュメント内のコメント表現。</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-class docutils literal"><span class="pre">Text</span></code></td>
 <td><a class="reference internal" href="#dom-text-objects"><span class="std std-ref">Text オブジェクトおよび CDATASection オブジェクト</span></a></td>
-<td><p class="first last">ドキュメント内のテキスト記述を含むノード。</p>
-</td>
+<td>ドキュメント内のテキスト記述を含むノード。</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-class docutils literal"><span class="pre">ProcessingInstruction</span></code></td>
 <td><a class="reference internal" href="#dom-pi-objects"><span class="std std-ref">ProcessingInstruction オブジェクト</span></a></td>
-<td><p class="first last">処理命令 (processing instruction) 表現。</p>
-</td>
+<td>処理命令 (processing instruction) 表現。</td>
 </tr>
 </tbody>
 </table>
@@ -365,7 +345,7 @@
 <dd><p><em>other</em> がこのノードと同じノードを参照している場合に真を返します。このメソッドは、何らかのプロキシ (proxy) 機構を利用するような DOM 実装で特に便利です (一つ以上のオブジェクトが同じノードを参照するかもしれないからです)。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last">このメソッドは DOM レベル 3 API の提案に基づいたもので、まだ &#8220;ワーキングドラフト(working draft)&#8221; の段階です。しかし、このインタフェースには異論は出ないと考えられます。W3C による変更があっても、必ずしも Python DOM インタフェースにおけるこのメソッドに影響するとは限りません (ただしこのメソッドに対する何らかの新しい W3C API もサポートされるかもしれません)。</p>
+<p class="last">このメソッドは DOM レベル 3 API の提案に基づいたもので、まだ 「ワーキングドラフト(working draft)」 の段階です。しかし、このインタフェースには異論は出ないと考えられます。W3C による変更があっても、必ずしも Python DOM インタフェースにおけるこのメソッドに影響するとは限りません (ただしこのメソッドに対する何らかの新しい W3C API もサポートされるかもしれません)。</p>
 </div>
 </dd></dl>
 
@@ -825,10 +805,8 @@
 <col width="46%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">定数</p>
-</th>
-<th class="head"><p class="first last">例外</p>
-</th>
+<tr class="row-odd"><th class="head">定数</th>
+<th class="head">例外</th>
 </tr>
 </thead>
 <tbody valign="top">
@@ -893,16 +871,13 @@
 <col width="70%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">IDL 型</p>
-</th>
-<th class="head"><p class="first last">Python の型</p>
-</th>
+<tr class="row-odd"><th class="head">IDL 型</th>
+<th class="head">Python の型</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">boolean</span></code></td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">bool</span></code> または <code class="docutils literal"><span class="pre">int</span></code></p>
-</td>
+<td><code class="docutils literal"><span class="pre">bool</span></code> または <code class="docutils literal"><span class="pre">int</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">int</span></code></td>
 <td><code class="docutils literal"><span class="pre">int</span></code></td>
@@ -914,8 +889,7 @@
 <td><code class="docutils literal"><span class="pre">int</span></code></td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">DOMString</span></code></td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">str</span></code> または <code class="docutils literal"><span class="pre">bytes</span></code></p>
-</td>
+<td><code class="docutils literal"><span class="pre">str</span></code> または <code class="docutils literal"><span class="pre">bytes</span></code></td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">null</span></code></td>
 <td><code class="docutils literal"><span class="pre">None</span></code></td>
@@ -930,10 +904,10 @@
          <span class="n">attribute</span> <span class="n">string</span> <span class="n">anotherValue</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>は、三つのアクセサ関数: <code class="xref py py-attr docutils literal"><span class="pre">someValue</span></code> に対する &#8220;get&#8221; メソッド (<code class="xref py py-meth docutils literal"><span class="pre">_get_someValue()</span></code>)、そして <code class="xref py py-attr docutils literal"><span class="pre">anotherValue</span></code> に対する &#8220;get&#8221; および &#8220;set&#8221; メソッド (<code class="xref py py-meth docutils literal"><span class="pre">_get_anotherValue()</span></code> および <code class="xref py py-meth docutils literal"><span class="pre">_set_anotherValue()</span></code>) を生成します。とりわけ、対応付けでは、IDL 属性が通常の Python 属性としてアクセス可能であることは必須ではありません: <code class="docutils literal"><span class="pre">object.someValue</span></code> が動作することは必須 <em>ではなく</em> 、 <a class="reference internal" href="exceptions.html#AttributeError" title="AttributeError"><code class="xref py py-exc docutils literal"><span class="pre">AttributeError</span></code></a> を送出してもかまいません。</p>
+<p>は、三つのアクセサ関数: <code class="xref py py-attr docutils literal"><span class="pre">someValue</span></code> に対する 「get」 メソッド (<code class="xref py py-meth docutils literal"><span class="pre">_get_someValue()</span></code>)、そして <code class="xref py py-attr docutils literal"><span class="pre">anotherValue</span></code> に対する 「get」 および 「set」 メソッド (<code class="xref py py-meth docutils literal"><span class="pre">_get_anotherValue()</span></code> および <code class="xref py py-meth docutils literal"><span class="pre">_set_anotherValue()</span></code>) を生成します。とりわけ、対応付けでは、IDL 属性が通常の Python 属性としてアクセス可能であることは必須ではありません: <code class="docutils literal"><span class="pre">object.someValue</span></code> が動作することは必須 <em>ではなく</em> 、 <a class="reference internal" href="exceptions.html#AttributeError" title="AttributeError"><code class="xref py py-exc docutils literal"><span class="pre">AttributeError</span></code></a> を送出してもかまいません。</p>
 <p>しかしながら、Python DOM API では、通常の属性アクセスが動作することが必須です。これは、Python IDL コンパイラによって生成された典型的な代用物はまず動作することはなく、DOM オブジェクトが CORBA を介してアクセスされる場合には、クライアント上でラッパオブジェクトが必要であることを意味します。CORBA DOM クライアントでは他にもいくつか考慮すべきことがある一方で、Python から CORBA を介して DOM を使った経験を持つ実装者はこのことを問題視していません。<code class="docutils literal"><span class="pre">readonly</span></code> であると宣言された属性は、全ての DOM 実装で書き込みアクセスを制限しているとは限りません。</p>
-<p>Python DOM API では、アクセサ関数は必須ではありません。アクセサ関数が提供された場合、Python IDL 対応付けによって定義された形式をとらなければなりませんが、属性は Python から直接アクセスすることができるので、それらのメソッドは必須ではないと考えられます。<code class="docutils literal"><span class="pre">readonly</span></code> であると宣言された属性に対しては、 &#8220;set&#8221; アクセサを提供してはなりません。</p>
-<p>このIDLでの定義はW3C DOM APIの全ての要件を実装しているわけではありません。例えば、一部のオブジェクトの概念や <code class="xref py py-meth docutils literal"><span class="pre">getElementsByTagName()</span></code> が &#8220;live&#8221; であることなどです。 Python DOM API はこれらの要件を実装することを強制しません。</p>
+<p>Python DOM API では、アクセサ関数は必須ではありません。アクセサ関数が提供された場合、Python IDL 対応付けによって定義された形式をとらなければなりませんが、属性は Python から直接アクセスすることができるので、それらのメソッドは必須ではないと考えられます。<code class="docutils literal"><span class="pre">readonly</span></code> であると宣言された属性に対しては、 「set」 アクセサを提供してはなりません。</p>
+<p>このIDLでの定義はW3C DOM APIの全ての要件を実装しているわけではありません。例えば、一部のオブジェクトの概念や <code class="xref py py-meth docutils literal"><span class="pre">getElementsByTagName()</span></code> が 「live」 であることなどです。 Python DOM API はこれらの要件を実装することを強制しません。</p>
 </div>
 </div>
 </div>
@@ -946,7 +920,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">20.6. <code class="docutils literal"><span class="pre">xml.dom</span></code> &#8212; 文書オブジェクトモデル (DOM) API</a><ul>
+<li><a class="reference internal" href="#">20.6. <code class="docutils literal"><span class="pre">xml.dom</span></code> — 文書オブジェクトモデル (DOM) API</a><ul>
 <li><a class="reference internal" href="#module-contents">20.6.1. モジュールコンテンツ</a></li>
 <li><a class="reference internal" href="#objects-in-the-dom">20.6.2. DOM 内のオブジェクト</a><ul>
 <li><a class="reference internal" href="#domimplementation-objects">20.6.2.1. DOMImplementation オブジェクト</a></li>
@@ -974,16 +948,16 @@
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="xml.etree.elementtree.html"
-                        title="前の章へ">20.5. <code class="docutils literal"><span class="pre">xml.etree.ElementTree</span></code> &#8212; ElementTree XML API</a></p>
+                        title="前の章へ">20.5. <code class="docutils literal"><span class="pre">xml.etree.ElementTree</span></code> — ElementTree XML API</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="xml.dom.minidom.html"
-                        title="次の章へ">20.7. <code class="docutils literal"><span class="pre">xml.dom.minidom</span></code> &#8212; 最小限の DOM の実装</a></p>
+                        title="次の章へ">20.7. <code class="docutils literal"><span class="pre">xml.dom.minidom</span></code> — 最小限の DOM の実装</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/xml.dom.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/xml.dom.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -1044,7 +1018,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

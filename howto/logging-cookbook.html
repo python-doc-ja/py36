@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Logging クックブック &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="Python HOWTO" href="index.html" />
     <link rel="next" title="正規表現 HOWTO" href="regex.html" />
     <link rel="prev" title="Logging HOWTO" href="logging.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -274,7 +270,7 @@
 <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s1">&#39;critical message&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>&#8216;application&#8217; 部分のコードは複数の handler について何も気にしていないことに注目してください。変更した箇所は新しい <em>fh</em> という名の handler を追加して設定したところがすべてです。</p>
+<p>『application』 部分のコードは複数の handler について何も気にしていないことに注目してください。変更した箇所は新しい <em>fh</em> という名の handler を追加して設定したところがすべてです。</p>
 <p>新しい handler を、異なる深刻度に対する filter と共に生成できることは、アプリケーションを書いてテストを行うときとても助けになります。デバッグ用にたくさんの <code class="docutils literal"><span class="pre">print</span></code> 文を使う代わりに <code class="docutils literal"><span class="pre">logger.debug</span></code> を使いましょう。あとで消したりコメントアウトしたりしなければならない print 文と違って、logger.debug 命令はソースコードの中にそのまま残しておいて再び必要になるまで休眠させておけます。その時必要になるのはただ logger および/または handler の深刻度の設定をいじることだけです。</p>
 </div>
 <div class="section" id="logging-to-multiple-destinations">
@@ -559,8 +555,8 @@
     <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><code class="xref py py-class docutils literal"><span class="pre">LoggerAdapter</span></code> の <code class="xref py py-meth docutils literal"><span class="pre">process()</span></code> メソッドがコンテキスト情報をログ出力に加える場所です。そこではログ記録呼び出しのメッセージとキーワード引数が渡され、加工された (可能性のある) それらの情報を配下のロガーへの呼び出しに渡し直します。このメソッドのデフォルト実装ではメッセージは元のままですが、キーワード引数にはコンストラクタに渡された辞書風オブジェクトを値として &#8220;extra&#8221; キーが挿入されます。もちろん、呼び出し時に &#8220;extra&#8221; キーワードを使った場合には何事もなかったかのように上書きされます。</p>
-<p>&#8220;extra&#8221; を用いる利点は辞書風オブジェクトの中の値が <code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code> インスタンスの __dict__ にマージされることで、辞書風オブジェクトのキーを知っている <code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code> を用意して文字列をカスタマイズするようにできることです。それ以外のメソッドが必要なとき、たとえばコンテキスト情報をメッセージの前や後ろにつなげたい場合には、 <code class="xref py py-class docutils literal"><span class="pre">LoggerAdapter</span></code> から <code class="xref py py-meth docutils literal"><span class="pre">process()</span></code> を望むようにオーバライドしたサブクラスを作ることが必要なだけです。次に挙げるのはこのクラスを使った例で、コンストラクタで使われる「辞書風」オブジェクトにどの振る舞いが必要なのかも示しています:</p>
+<p><code class="xref py py-class docutils literal"><span class="pre">LoggerAdapter</span></code> の <code class="xref py py-meth docutils literal"><span class="pre">process()</span></code> メソッドがコンテキスト情報をログ出力に加える場所です。そこではログ記録呼び出しのメッセージとキーワード引数が渡され、加工された (可能性のある) それらの情報を配下のロガーへの呼び出しに渡し直します。このメソッドのデフォルト実装ではメッセージは元のままですが、キーワード引数にはコンストラクタに渡された辞書風オブジェクトを値として 「extra」 キーが挿入されます。もちろん、呼び出し時に 「extra」 キーワードを使った場合には何事もなかったかのように上書きされます。</p>
+<p>「extra」 を用いる利点は辞書風オブジェクトの中の値が <code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code> インスタンスの __dict__ にマージされることで、辞書風オブジェクトのキーを知っている <code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code> を用意して文字列をカスタマイズするようにできることです。それ以外のメソッドが必要なとき、たとえばコンテキスト情報をメッセージの前や後ろにつなげたい場合には、 <code class="xref py py-class docutils literal"><span class="pre">LoggerAdapter</span></code> から <code class="xref py py-meth docutils literal"><span class="pre">process()</span></code> を望むようにオーバライドしたサブクラスを作ることが必要なだけです。次に挙げるのはこのクラスを使った例で、コンストラクタで使われる「辞書風」オブジェクトにどの振る舞いが必要なのかも示しています:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">CustomAdapter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">LoggerAdapter</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This example adapter expects the passed in dict-like object to have a</span>
@@ -584,7 +580,7 @@
 <div class="section" id="using-filters-to-impart-contextual-information">
 <span id="filters-contextual"></span><h3>Filter を使ったコンテキスト情報の伝達<a class="headerlink" href="#using-filters-to-impart-contextual-information" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>ユーザ定義の <code class="xref py py-class docutils literal"><span class="pre">Filter</span></code> を使ってログ出力にコンテキスト情報を加えることもできます。 <code class="docutils literal"><span class="pre">Filter</span></code> インスタンスは、渡された <code class="docutils literal"><span class="pre">LogRecords</span></code> を修正することができます。これにより、適切なフォーマット文字列や必要なら <code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code> を使って、出力となる属性を新しく追加することも出来ます。</p>
-<p>例えば、web アプリケーションで、処理されるリクエスト (または、少なくともその重要な部分) は、スレッドローカル (<a class="reference internal" href="../library/threading.html#threading.local" title="threading.local"><code class="xref py py-class docutils literal"><span class="pre">threading.local</span></code></a>) な変数に保存して、 <code class="docutils literal"><span class="pre">Filter</span></code> からアクセスすることで、 <code class="docutils literal"><span class="pre">LogRecord</span></code> にリクエストの情報を追加できます。例えば、リモート IP アドレスやリモートユーザのユーザ名にアクセスしたいなら、上述の <code class="docutils literal"><span class="pre">LoggerAdapter</span></code> の例のように属性名 &#8216;ip&#8217; や &#8216;user&#8217; を使うといったようにです。その場合、同じフォーマット文字列を使って以下に示すように似たような出力を得られます。これはスクリプトの例です:</p>
+<p>例えば、web アプリケーションで、処理されるリクエスト (または、少なくともその重要な部分) は、スレッドローカル (<a class="reference internal" href="../library/threading.html#threading.local" title="threading.local"><code class="xref py py-class docutils literal"><span class="pre">threading.local</span></code></a>) な変数に保存して、 <code class="docutils literal"><span class="pre">Filter</span></code> からアクセスすることで、 <code class="docutils literal"><span class="pre">LogRecord</span></code> にリクエストの情報を追加できます。例えば、リモート IP アドレスやリモートユーザのユーザ名にアクセスしたいなら、上述の <code class="docutils literal"><span class="pre">LoggerAdapter</span></code> の例のように属性名 『ip』 や 『user』 を使うといったようにです。その場合、同じフォーマット文字列を使って以下に示すように似たような出力を得られます。これはスクリプトの例です:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">choice</span>
 
@@ -943,7 +939,7 @@
         <span class="k">return</span> <span class="n">Template</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fmt</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>どちらのクラスも format 文字列の代わりに利用して、 {} や $ を使って実際のログの &#8220;%(message)s&#8221;, &#8220;{message}&#8221;, &#8220;$message&#8221; で指定された &#8220;message&#8221; 部分を生成することができます。これは何かログを取りたいときに常に使うには使いにくいクラス名ですが、 __ (アンダースコア2つ &#8212; <a class="reference internal" href="../library/gettext.html#gettext.gettext" title="gettext.gettext"><code class="xref py py-func docutils literal"><span class="pre">gettext.gettext()</span></code></a> やその仲間によくエイリアスとして使われるアンダースコア1つと混同しないように) などの使いやすいエイリアスを使うことができます。</p>
+<p>どちらのクラスも format 文字列の代わりに利用して、 {} や $ を使って実際のログの 「%(message)s」, 「{message}」, 「$message」 で指定された 「message」 部分を生成することができます。これは何かログを取りたいときに常に使うには使いにくいクラス名ですが、 __ (アンダースコア2つ — <a class="reference internal" href="../library/gettext.html#gettext.gettext" title="gettext.gettext"><code class="xref py py-func docutils literal"><span class="pre">gettext.gettext()</span></code></a> やその仲間によくエイリアスとして使われるアンダースコア1つと混同しないように) などの使いやすいエイリアスを使うことができます。</p>
 <p>上のクラスは Python には含まれませんが、自分のコードにコピペして使うのは簡単です。これらは次の例のようにして利用できます。(上のクラスが <code class="docutils literal"><span class="pre">wherever</span></code> というモジュールで定義されていると仮定します):</p>
 <div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wherever</span> <span class="kn">import</span> <span class="n">BraceMessage</span> <span class="k">as</span> <span class="n">__</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="s1">&#39;Message with {0} {name}&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;placeholders&#39;</span><span class="p">))</span>
@@ -1000,24 +996,20 @@
 <span id="custom-logrecord"></span><h2><code class="docutils literal"><span class="pre">LogRecord</span></code> のカスタマイズ<a class="headerlink" href="#customizing-logrecord" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>全ての logging イベントは <a class="reference internal" href="../library/logging.html#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> のインスタンスとして表現されます。イベントのログが取られて logger のレベルでフィルタされなかった場合、イベントの情報を含む <a class="reference internal" href="../library/logging.html#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> が生成され、その logger (と、 propagate が無効になるまでの上位 logger) の handler に渡されます。 Python 3.2 までは、この生成が行われているのは2箇所だけでした:</p>
 <ul class="simple">
-<li><p class="first"><a class="reference internal" href="../library/logging.html#logging.Logger.makeRecord" title="logging.Logger.makeRecord"><code class="xref py py-meth docutils literal"><span class="pre">Logger.makeRecord()</span></code></a>: 通常のイベント logging プロセスで呼ばれます。これは <a class="reference internal" href="../library/logging.html#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> を直接読んでインスタンスを生成します。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.html#logging.makeLogRecord" title="logging.makeLogRecord"><code class="xref py py-func docutils literal"><span class="pre">makeLogRecord()</span></code></a>: LogRecord に追加される属性を含む辞書を渡して呼び出されます。これはネットワーク越しに (pickle 形式で <a class="reference internal" href="../library/logging.handlers.html#logging.handlers.SocketHandler" title="logging.handlers.SocketHandler"><code class="xref py py-class docutils literal"><span class="pre">SocketHandler</span></code></a> 経由で、あるいは JSON 形式で <a class="reference internal" href="../library/logging.handlers.html#logging.handlers.HTTPHandler" title="logging.handlers.HTTPHandler"><code class="xref py py-class docutils literal"><span class="pre">HTTPHandler</span></code></a> 経由で) 辞書を受け取った場合などに利用されます。</p>
-</li>
+<li><a class="reference internal" href="../library/logging.html#logging.Logger.makeRecord" title="logging.Logger.makeRecord"><code class="xref py py-meth docutils literal"><span class="pre">Logger.makeRecord()</span></code></a>: 通常のイベント logging プロセスで呼ばれます。これは <a class="reference internal" href="../library/logging.html#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> を直接読んでインスタンスを生成します。</li>
+<li><a class="reference internal" href="../library/logging.html#logging.makeLogRecord" title="logging.makeLogRecord"><code class="xref py py-func docutils literal"><span class="pre">makeLogRecord()</span></code></a>: LogRecord に追加される属性を含む辞書を渡して呼び出されます。これはネットワーク越しに (pickle 形式で <a class="reference internal" href="../library/logging.handlers.html#logging.handlers.SocketHandler" title="logging.handlers.SocketHandler"><code class="xref py py-class docutils literal"><span class="pre">SocketHandler</span></code></a> 経由で、あるいは JSON 形式で <a class="reference internal" href="../library/logging.handlers.html#logging.handlers.HTTPHandler" title="logging.handlers.HTTPHandler"><code class="xref py py-class docutils literal"><span class="pre">HTTPHandler</span></code></a> 経由で) 辞書を受け取った場合などに利用されます。</li>
 </ul>
 <p>そのために <a class="reference internal" href="../library/logging.html#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> で何か特別なことをしたい場合は、次のどちらかをしなければなりません。</p>
 <ul class="simple">
-<li><p class="first"><a class="reference internal" href="../library/logging.html#logging.Logger.makeRecord" title="logging.Logger.makeRecord"><code class="xref py py-meth docutils literal"><span class="pre">Logger.makeRecord()</span></code></a> をオーバーライドした独自の <a class="reference internal" href="../library/logging.html#logging.Logger" title="logging.Logger"><code class="xref py py-class docutils literal"><span class="pre">Logger</span></code></a> のサブクラスを作り、利用したい logger のどれかがインスタンス化される前に、それを <a class="reference internal" href="../library/logging.html#logging.setLoggerClass" title="logging.setLoggerClass"><code class="xref py py-func docutils literal"><span class="pre">setLoggerClass()</span></code></a> を使って登録する。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.html#logging.Filter.filter" title="logging.Filter.filter"><code class="xref py py-meth docutils literal"><span class="pre">filter()</span></code></a> メソッドで必要な特殊な処理を行う <a class="reference internal" href="../library/logging.html#logging.Filter" title="logging.Filter"><code class="xref py py-class docutils literal"><span class="pre">Filter</span></code></a> を logger か handler に追加する。</p>
-</li>
+<li><a class="reference internal" href="../library/logging.html#logging.Logger.makeRecord" title="logging.Logger.makeRecord"><code class="xref py py-meth docutils literal"><span class="pre">Logger.makeRecord()</span></code></a> をオーバーライドした独自の <a class="reference internal" href="../library/logging.html#logging.Logger" title="logging.Logger"><code class="xref py py-class docutils literal"><span class="pre">Logger</span></code></a> のサブクラスを作り、利用したい logger のどれかがインスタンス化される前に、それを <a class="reference internal" href="../library/logging.html#logging.setLoggerClass" title="logging.setLoggerClass"><code class="xref py py-func docutils literal"><span class="pre">setLoggerClass()</span></code></a> を使って登録する。</li>
+<li><a class="reference internal" href="../library/logging.html#logging.Filter.filter" title="logging.Filter.filter"><code class="xref py py-meth docutils literal"><span class="pre">filter()</span></code></a> メソッドで必要な特殊な処理を行う <a class="reference internal" href="../library/logging.html#logging.Filter" title="logging.Filter"><code class="xref py py-class docutils literal"><span class="pre">Filter</span></code></a> を logger か handler に追加する。</li>
 </ul>
 <p>最初の方法は、複数の異なるライブラリが別々のことをしようとした場合にうまく行きません。各ライブラリが独自の <a class="reference internal" href="../library/logging.html#logging.Logger" title="logging.Logger"><code class="xref py py-class docutils literal"><span class="pre">Logger</span></code></a> のサブクラスを登録しようとして、最後に登録されたライブラリが生き残ります。</p>
 <p>2つ目の方法はほとんどのケースでうまくいきますが、たとえば <a class="reference internal" href="../library/logging.html#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> を特殊化したサブクラスを使うことなどはできません。ライブラリの開発者は利用している logger に適切な filter を設定できますが、新しい logger を作るたびに忘れずに設定しないといけなくなります。 (新しいパッケージやモジュールを追加し、モジュールレベルで次の式を実行することで、新しい logger が作られます)</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>これでは考えることが余計に1つ増えてしまうでしょう。開発者は、最も高いレベルのロガーに取り付けられた <a class="reference internal" href="../library/logging.handlers.html#logging.NullHandler" title="logging.NullHandler"><code class="xref py py-class docutils literal"><span class="pre">NullHandler</span></code></a> に、フィルタを追加することもできますが、アプリケーション開発者が、より低いレベルに対するライブラリのロガーにハンドラを取り付けた場合、フィルタは呼び出されません &#8212; 従って、そのハンドラからの出力はライブラリ開発者の意図を反映したものにはなりません。</p>
+<p>これでは考えることが余計に1つ増えてしまうでしょう。開発者は、最も高いレベルのロガーに取り付けられた <a class="reference internal" href="../library/logging.handlers.html#logging.NullHandler" title="logging.NullHandler"><code class="xref py py-class docutils literal"><span class="pre">NullHandler</span></code></a> に、フィルタを追加することもできますが、アプリケーション開発者が、より低いレベルに対するライブラリのロガーにハンドラを取り付けた場合、フィルタは呼び出されません — 従って、そのハンドラからの出力はライブラリ開発者の意図を反映したものにはなりません。</p>
 <p>Python 3.2 以降では、 <a class="reference internal" href="../library/logging.html#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> の生成は、指定できるファクトリ経由になります。ファクトリは callable で、 <a class="reference internal" href="../library/logging.html#logging.setLogRecordFactory" title="logging.setLogRecordFactory"><code class="xref py py-func docutils literal"><span class="pre">setLogRecordFactory()</span></code></a> で登録でき、 <a class="reference internal" href="../library/logging.html#logging.getLogRecordFactory" title="logging.getLogRecordFactory"><code class="xref py py-func docutils literal"><span class="pre">getLogRecordFactory()</span></code></a> で現在のファクトリを取得できます。ファクトリは <a class="reference internal" href="../library/logging.html#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> コンストラクタと同じシグネチャで呼び出され、 <a class="reference internal" href="../library/logging.html#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> がデフォルトのファクトリとして設定されています。</p>
 <p>このアプローチはカスタムのファクトリが LogRecord の生成のすべての面を制御できるようにしています。たとえば、サブクラスを返したり、次のようなパターンを使って単に属性を追加することができます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">old_factory</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogRecordFactory</span><span class="p">()</span>
@@ -1034,7 +1026,7 @@
 </div>
 <div class="section" id="subclassing-queuehandler-a-zeromq-example">
 <span id="zeromq-handlers"></span><h2>QueueHandler を継承する - ZeroMQ を使う例<a class="headerlink" href="#subclassing-queuehandler-a-zeromq-example" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p><code class="xref py py-class docutils literal"><span class="pre">QueueHandler</span></code> のサブクラスを作ってメッセージを他のキュー、例えば ZeroMQ の &#8216;publish&#8217; ソケットに送信することができます。下の例では、ソケットを別に作ってそれを handler に (&#8216;queue&#8217; として) 渡します:</p>
+<p><code class="xref py py-class docutils literal"><span class="pre">QueueHandler</span></code> のサブクラスを作ってメッセージを他のキュー、例えば ZeroMQ の 『publish』 ソケットに送信することができます。下の例では、ソケットを別に作ってそれを handler に (『queue』 として) 渡します:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">zmq</span>   <span class="c1"># using pyzmq, the Python binding for ZeroMQ</span>
 <span class="kn">import</span> <span class="nn">json</span>  <span class="c1"># for serializing records portably</span>
 
@@ -1069,7 +1061,7 @@
 </div>
 <div class="section" id="subclassing-queuelistener-a-zeromq-example">
 <h2>QueueListener のサブクラスを作る - ZeroMQ を使う例<a class="headerlink" href="#subclassing-queuelistener-a-zeromq-example" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p><code class="xref py py-class docutils literal"><span class="pre">QueueListener</span></code> のサブクラスを作って、メッセージを他のキュー、例えば ZeroMQ の &#8216;subscribe&#8217; ソケットから取得する事もできます。サンプルです:</p>
+<p><code class="xref py py-class docutils literal"><span class="pre">QueueListener</span></code> のサブクラスを作って、メッセージを他のキュー、例えば ZeroMQ の 『subscribe』 ソケットから取得する事もできます。サンプルです:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ZeroMQSocketListener</span><span class="p">(</span><span class="n">QueueListener</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uri</span><span class="p">,</span> <span class="o">*</span><span class="n">handlers</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ctx</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ctx&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">zmq</span><span class="o">.</span><span class="n">Context</span><span class="p">()</span>
@@ -1086,14 +1078,11 @@
 <p class="first admonition-title">参考</p>
 <dl class="docutils">
 <dt><a class="reference internal" href="../library/logging.html#module-logging" title="logging: Flexible event logging system for applications."><code class="xref py py-mod docutils literal"><span class="pre">logging</span></code></a> モジュール</dt>
-<dd><p class="first last">logging モジュールの API リファレンス。</p>
-</dd>
+<dd>logging モジュールの API リファレンス。</dd>
 <dt><a class="reference internal" href="../library/logging.config.html#module-logging.config" title="logging.config: Configuration of the logging module."><code class="xref py py-mod docutils literal"><span class="pre">logging.config</span></code></a> モジュール</dt>
-<dd><p class="first last">logging モジュールの環境設定 API です。</p>
-</dd>
+<dd>logging モジュールの環境設定 API です。</dd>
 <dt><a class="reference internal" href="../library/logging.handlers.html#module-logging.handlers" title="logging.handlers: Handlers for the logging module."><code class="xref py py-mod docutils literal"><span class="pre">logging.handlers</span></code></a> モジュール</dt>
-<dd><p class="first last">logging モジュールに含まれる、便利なハンドラです。</p>
-</dd>
+<dd>logging モジュールに含まれる、便利なハンドラです。</dd>
 </dl>
 <p><a class="reference internal" href="logging.html#logging-basic-tutorial"><span class="std std-ref">logging 基本チュートリアル</span></a></p>
 <p class="last"><a class="reference internal" href="logging.html#logging-advanced-tutorial"><span class="std std-ref">logging 上級チュートリアル</span></a></p>
@@ -1176,7 +1165,7 @@
 <span class="n">rh</span><span class="o">.</span><span class="n">namer</span> <span class="o">=</span> <span class="n">namer</span>
 </pre></div>
 </div>
-<p>これは本当の .gz ファイルではなく、実際の gzip ファイルが持っている &#8220;コンテナ&#8221; がない生の圧縮データです。このスニペットはただの解説用です。</p>
+<p>これは本当の .gz ファイルではなく、実際の gzip ファイルが持っている 「コンテナ」 がない生の圧縮データです。このスニペットはただの解説用です。</p>
 </div>
 <div class="section" id="a-more-elaborate-multiprocessing-example">
 <h2>より手の込んだ multiprocessing の例<a class="headerlink" href="#a-more-elaborate-multiprocessing-example" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -1402,7 +1391,7 @@
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="s1">&#39;ASCII section</span><span class="se">\ufeff</span><span class="s1">Unicode section&#39;</span>
 </pre></div>
 </div>
-<p>Unicode のコードポイント U+FEFF は、UTF-8 でエンコードすると BOM &#8211; <code class="docutils literal"><span class="pre">b'\xef\xbb\xbf'</span></code> &#8211; になります。</p>
+<p>Unicode のコードポイント U+FEFF は、UTF-8 でエンコードすると BOM – <code class="docutils literal"><span class="pre">b'\xef\xbb\xbf'</span></code> – になります。</p>
 </li>
 <li><p class="first">ASCII セクションを好きなプレースホルダに変更する。ただしその部分の置換結果が常に ASCII になるように注意する(UTF-8 でエンコードされてもその部分が変化しないようにする)。</p>
 </li>
@@ -1623,7 +1612,7 @@
         <span class="k">return</span> <span class="n">Template</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fmt</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>どちらのクラスも format 文字列の代わりに利用して、 {} や $ を使って実際のログの “%(message)s”, “{message}”, “$message” で指定された &#8220;message&#8221; 部分を生成することができます。これは何かログを取りたいときに常に使うには使いにくいクラス名ですが、使いやすいようにエイリアスを作れば良いでしょう、 <code class="docutils literal"><span class="pre">M</span></code> であるとか <code class="docutils literal"><span class="pre">_</span></code> のような(あるいは地域化のために既に <code class="docutils literal"><span class="pre">_</span></code> を使っているのであれば <code class="docutils literal"><span class="pre">__</span></code> が良いかもしれません)。</p>
+<p>どちらのクラスも format 文字列の代わりに利用して、 {} や $ を使って実際のログの “%(message)s”, “{message}”, “$message” で指定された 「message」 部分を生成することができます。これは何かログを取りたいときに常に使うには使いにくいクラス名ですが、使いやすいようにエイリアスを作れば良いでしょう、 <code class="docutils literal"><span class="pre">M</span></code> であるとか <code class="docutils literal"><span class="pre">_</span></code> のような(あるいは地域化のために既に <code class="docutils literal"><span class="pre">_</span></code> を使っているのであれば <code class="docutils literal"><span class="pre">__</span></code> が良いかもしれません)。</p>
 <p>このアプローチによる例をお見せします。最初は <a class="reference internal" href="../library/stdtypes.html#str.format" title="str.format"><code class="xref py py-meth docutils literal"><span class="pre">str.format()</span></code></a> を使ってフォーマットする例です:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">__</span> <span class="o">=</span> <span class="n">BraceMessage</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="s1">&#39;Message with </span><span class="si">{0}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;placeholders&#39;</span><span class="p">))</span>
@@ -1700,10 +1689,8 @@
 <p>設定した通りに動いていますね。</p>
 <p>ほかにもいくつか特筆すべき点があります:</p>
 <ul class="simple">
-<li><p class="first">設定内で直接その callable を参照出来ない場合(例えばそれが異なるモジュール内にあり、設定辞書のある場所からそれを直接インポート出来ない、など)には、 <a class="reference internal" href="../library/logging.config.html#logging-config-dict-externalobj"><span class="std std-ref">外部オブジェクトへのアクセス</span></a> に記述されている <code class="docutils literal"><span class="pre">ext://...</span></code> 形式を使えます。例えば、上記例のように <code class="docutils literal"><span class="pre">MyFilter</span></code> と指定する代わりに、 <code class="docutils literal"><span class="pre">'ext://__main__.MyFilter'</span></code> と記述することが出来ます。</p>
-</li>
-<li><p class="first">フィルタについてとともに、このテクニックは、カスタムハンドラ、カスタムフォーマッタに対しても同様に使えます。ロギングが設定において、どのようにユーザ定義のオブジェクトをサポートするのかについてのさらなる詳細については、 <a class="reference internal" href="../library/logging.config.html#logging-config-dict-userdef"><span class="std std-ref">ユーザ定義オブジェクト</span></a> と、本クックブックの上の方のレシピ <a class="reference internal" href="#custom-handlers"><span class="std std-ref">handler を dictConfig() を使ってカスタマイズする</span></a> を参照してください。</p>
-</li>
+<li>設定内で直接その callable を参照出来ない場合(例えばそれが異なるモジュール内にあり、設定辞書のある場所からそれを直接インポート出来ない、など)には、 <a class="reference internal" href="../library/logging.config.html#logging-config-dict-externalobj"><span class="std std-ref">外部オブジェクトへのアクセス</span></a> に記述されている <code class="docutils literal"><span class="pre">ext://...</span></code> 形式を使えます。例えば、上記例のように <code class="docutils literal"><span class="pre">MyFilter</span></code> と指定する代わりに、 <code class="docutils literal"><span class="pre">'ext://__main__.MyFilter'</span></code> と記述することが出来ます。</li>
+<li>フィルタについてとともに、このテクニックは、カスタムハンドラ、カスタムフォーマッタに対しても同様に使えます。ロギングが設定において、どのようにユーザ定義のオブジェクトをサポートするのかについてのさらなる詳細については、 <a class="reference internal" href="../library/logging.config.html#logging-config-dict-userdef"><span class="std std-ref">ユーザ定義オブジェクト</span></a> と、本クックブックの上の方のレシピ <a class="reference internal" href="#custom-handlers"><span class="std std-ref">handler を dictConfig() を使ってカスタマイズする</span></a> を参照してください。</li>
 </ul>
 </div>
 <div class="section" id="customized-exception-formatting">
@@ -1786,7 +1773,7 @@
     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </pre></div>
 </div>
-<p>実行すれば、女性の声で &#8220;Hello&#8221; に続き &#8220;Goodbye&#8221; と喋るはずです。</p>
+<p>実行すれば、女性の声で 「Hello」 に続き 「Goodbye」 と喋るはずです。</p>
 <p>このアプローチは、もちろんほかの TTS システムにも採用出来ますし、メッセージをコマンドライン経由で外部プログラムに渡せるようなものであれば、ほかのシステムであっても全く同じです。</p>
 </div>
 <div class="section" id="buffering-logging-messages-and-outputting-them-conditionally">
@@ -2099,7 +2086,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/logging-cookbook.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/logging-cookbook.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -2159,7 +2146,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

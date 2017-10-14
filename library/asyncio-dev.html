@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>18.5.9. asyncio での開発 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="18.5. asyncio — 非同期 I/O、イベントループ、コルーチンおよびタスク" href="asyncio.html" />
     <link rel="next" title="18.6. asyncore — 非同期ソケットハンドラ" href="asyncore.html" />
     <link rel="prev" title="18.5.8. キュー" href="asyncio-queue.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -80,7 +76,7 @@
 
           <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="asyncio.html" accesskey="U">18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" accesskey="U">18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> — 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
     <li class="right">
         
 
@@ -106,31 +102,23 @@
             
   <div class="section" id="develop-with-asyncio">
 <span id="asyncio-dev"></span><h1>18.5.9. asyncio での開発<a class="headerlink" href="#develop-with-asyncio" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<p>非同期プログラミングは古典的な &#8220;逐次&#8221; プログラミングとは異なります。このページでは非同期プログラミングで陥りやすい落とし穴の一覧とその回避方法について説明しています。</p>
+<p>非同期プログラミングは古典的な 「逐次」 プログラミングとは異なります。このページでは非同期プログラミングで陥りやすい落とし穴の一覧とその回避方法について説明しています。</p>
 <div class="section" id="debug-mode-of-asyncio">
 <span id="asyncio-debug-mode"></span><h2>18.5.9.1. asyncio のデバッグモード<a class="headerlink" href="#debug-mode-of-asyncio" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p><a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> の実装では、パフォーマンスが重視されています。非同期コードの開発を行いやすくするには、 <em>デバッグモード</em>  を有効にするとよいかもしれません。</p>
 <p>アプリケーションで全てのデバッグチェックを有効にするには:</p>
 <ul class="simple">
-<li><p class="first">環境変数 <span class="target" id="index-2"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONASYNCIODEBUG"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONASYNCIODEBUG</span></code></a> を <code class="docutils literal"><span class="pre">1</span></code> に設定するか、 <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.set_debug" title="asyncio.AbstractEventLoop.set_debug"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.set_debug()</span></code></a> を呼び出すと、asyncio&nbsp; デバッグモードがグローバルに有効になります。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="#asyncio-logger"><span class="std std-ref">asyncio logger</span></a> のトップレベルを <code class="xref py py-data docutils literal"><span class="pre">logging.DEBUG</span></code> に設定します。例えば、起動時に <code class="docutils literal"><span class="pre">logging.basicConfig(level=logging.DEBUG)</span></code> を呼び出します。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="warnings.html#module-warnings" title="warnings: Issue warning messages and control their disposition."><code class="xref py py-mod docutils literal"><span class="pre">warnings</span></code></a> モジュールを構成して、 <a class="reference internal" href="exceptions.html#ResourceWarning" title="ResourceWarning"><code class="xref py py-exc docutils literal"><span class="pre">ResourceWarning</span></code></a> 警告が表示されるようにします。例えば、Python の <code class="docutils literal"><span class="pre">-Wdefault</span></code> コマンドラインオプションを使用して、それらを表示します。</p>
-</li>
+<li>環境変数 <span class="target" id="index-2"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONASYNCIODEBUG"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONASYNCIODEBUG</span></code></a> を <code class="docutils literal"><span class="pre">1</span></code> に設定するか、 <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.set_debug" title="asyncio.AbstractEventLoop.set_debug"><code class="xref py py-meth docutils literal"><span class="pre">AbstractEventLoop.set_debug()</span></code></a> を呼び出すと、asyncio&nbsp; デバッグモードがグローバルに有効になります。</li>
+<li><a class="reference internal" href="#asyncio-logger"><span class="std std-ref">asyncio logger</span></a> のトップレベルを <code class="xref py py-data docutils literal"><span class="pre">logging.DEBUG</span></code> に設定します。例えば、起動時に <code class="docutils literal"><span class="pre">logging.basicConfig(level=logging.DEBUG)</span></code> を呼び出します。</li>
+<li><a class="reference internal" href="warnings.html#module-warnings" title="warnings: Issue warning messages and control their disposition."><code class="xref py py-mod docutils literal"><span class="pre">warnings</span></code></a> モジュールを構成して、 <a class="reference internal" href="exceptions.html#ResourceWarning" title="ResourceWarning"><code class="xref py py-exc docutils literal"><span class="pre">ResourceWarning</span></code></a> 警告が表示されるようにします。例えば、Python の <code class="docutils literal"><span class="pre">-Wdefault</span></code> コマンドラインオプションを使用して、それらを表示します。</li>
 </ul>
 <p>デバッグチェックの例:</p>
 <ul class="simple">
-<li><p class="first"><a class="reference internal" href="#asyncio-coroutine-not-scheduled"><span class="std std-ref">定義されているが &#8220;yielded from&#8221; されなかったコルーチン</span></a> のログを取ります</p>
-</li>
-<li><p class="first">誤ったスレッドから呼ばれた場合、 <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.call_soon" title="asyncio.AbstractEventLoop.call_soon"><code class="xref py py-meth docutils literal"><span class="pre">call_soon()</span></code></a> や  <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.call_at" title="asyncio.AbstractEventLoop.call_at"><code class="xref py py-meth docutils literal"><span class="pre">call_at()</span></code></a> メソッドが例外を送出します</p>
-</li>
-<li><p class="first">セレクターの実行時間のログを取ります</p>
-</li>
-<li><p class="first">実行時間が 100 ms を超えるコールバックのログ。<code class="xref py py-attr docutils literal"><span class="pre">AbstractEventLoop.slow_callback_duration</span></code> 属性には &#8220;遅い&#8221; コールバックとみなす最小時間を秒で指定できます。</p>
-</li>
-<li><p class="first">トランスポートとイベントループが <a class="reference internal" href="#asyncio-close-transports"><span class="std std-ref">明示的に閉じられなかった</span></a> 場合、 <a class="reference internal" href="exceptions.html#ResourceWarning" title="ResourceWarning"><code class="xref py py-exc docutils literal"><span class="pre">ResourceWarning</span></code></a> 警告が出ます。</p>
-</li>
+<li><a class="reference internal" href="#asyncio-coroutine-not-scheduled"><span class="std std-ref">定義されているが 「yielded from」 されなかったコルーチン</span></a> のログを取ります</li>
+<li>誤ったスレッドから呼ばれた場合、 <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.call_soon" title="asyncio.AbstractEventLoop.call_soon"><code class="xref py py-meth docutils literal"><span class="pre">call_soon()</span></code></a> や  <a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop.call_at" title="asyncio.AbstractEventLoop.call_at"><code class="xref py py-meth docutils literal"><span class="pre">call_at()</span></code></a> メソッドが例外を送出します</li>
+<li>セレクターの実行時間のログを取ります</li>
+<li>実行時間が 100 ms を超えるコールバックのログ。<code class="xref py py-attr docutils literal"><span class="pre">AbstractEventLoop.slow_callback_duration</span></code> 属性には 「遅い」 コールバックとみなす最小時間を秒で指定できます。</li>
+<li>トランスポートとイベントループが <a class="reference internal" href="#asyncio-close-transports"><span class="std std-ref">明示的に閉じられなかった</span></a> 場合、 <a class="reference internal" href="exceptions.html#ResourceWarning" title="ResourceWarning"><code class="xref py py-exc docutils literal"><span class="pre">ResourceWarning</span></code></a> 警告が出ます。</li>
 </ul>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
@@ -433,13 +421,13 @@ task: &lt;Task pending coro=&lt;kill_me() done, defined at test.py:5&gt; wait_fo
                         title="前の章へ">18.5.8. キュー</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="asyncore.html"
-                        title="次の章へ">18.6. <code class="docutils literal"><span class="pre">asyncore</span></code> &#8212; 非同期ソケットハンドラ</a></p>
+                        title="次の章へ">18.6. <code class="docutils literal"><span class="pre">asyncore</span></code> — 非同期ソケットハンドラ</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio-dev.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio-dev.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -474,7 +462,7 @@ task: &lt;Task pending coro=&lt;kill_me() done, defined at test.py:5&gt; wait_fo
 
           <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="asyncio.html" >18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" >18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> — 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
     <li class="right">
         
 
@@ -501,7 +489,7 @@ task: &lt;Task pending coro=&lt;kill_me() done, defined at test.py:5&gt; wait_fo
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

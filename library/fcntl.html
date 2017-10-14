@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>35.9. fcntl — fcntl および ioctl システムコール &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="35. Unix 固有のサービス" href="unix.html" />
     <link rel="next" title="35.10. pipes — シェルパイプラインへのインタフェース" href="pipes.html" />
     <link rel="prev" title="35.8. pty — 擬似端末ユーティリティ" href="pty.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,7 +100,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-fcntl">
-<span id="fcntl-the-fcntl-and-ioctl-system-calls"></span><h1>35.9. <a class="reference internal" href="#module-fcntl" title="fcntl: The fcntl() and ioctl() system calls. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">fcntl</span></code></a> &#8212; <code class="docutils literal"><span class="pre">fcntl</span></code> および <code class="docutils literal"><span class="pre">ioctl</span></code> システムコール<a class="headerlink" href="#module-fcntl" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="fcntl-the-fcntl-and-ioctl-system-calls"></span><h1>35.9. <a class="reference internal" href="#module-fcntl" title="fcntl: The fcntl() and ioctl() system calls. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">fcntl</span></code></a> — <code class="docutils literal"><span class="pre">fcntl</span></code> および <code class="docutils literal"><span class="pre">ioctl</span></code> システムコール<a class="headerlink" href="#module-fcntl" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <hr class="docutils" id="index-0" />
 <p>このモジュールでは、ファイル記述子 (file descriptor) に基づいたファイル制御および I/O 制御を実現します。
 このモジュールは、 Unix のルーチンである <code class="xref c c-func docutils literal"><span class="pre">fcntl()</span></code> および <code class="xref c c-func docutils literal"><span class="pre">ioctl()</span></code> へのインタフェースです。
@@ -153,8 +149,8 @@ read-only buffer interface (like <a class="reference internal" href="functions.h
 the read-write buffer interface (like <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a>).</p>
 <p>最後の型のオブジェクトを除き、動作は <a class="reference internal" href="#fcntl.fcntl" title="fcntl.fcntl"><code class="xref py py-func docutils literal"><span class="pre">fcntl()</span></code></a> 関数と同じです。</p>
 <p>可変なバッファが渡された場合、動作は <em>mutate_flag</em> 引数の値で決定されます。</p>
-<p>If it is false, the buffer&#8217;s mutability is ignored and behaviour is as for a
-read-only buffer, except that the 1024 byte limit mentioned above is avoided &#8211;
+<p>If it is false, the buffer’s mutability is ignored and behaviour is as for a
+read-only buffer, except that the 1024 byte limit mentioned above is avoided –
 so long as the buffer you pass is at least as long as what the operating system
 wants to put there, things should work.</p>
 <p><em>mutate_flag</em> が真 (デフォルト) の場合、バッファは (実際には) 根底にある <a class="reference internal" href="#fcntl.ioctl" title="fcntl.ioctl"><code class="xref py py-func docutils literal"><span class="pre">ioctl()</span></code></a> システムコールに渡され、後者の戻り値が呼び出し側の Python に引き渡され、バッファの新たな内容は  <a class="reference internal" href="#fcntl.ioctl" title="fcntl.ioctl"><code class="xref py py-func docutils literal"><span class="pre">ioctl()</span></code></a> の動作を反映します。この説明はやや単純化されています。というのは、与えられたバッファが 1024 バイト長よりも短い場合、バッファはまず 1024 バイト長の静的なバッファにコピーされてから <a class="reference internal" href="#fcntl.ioctl" title="fcntl.ioctl"><code class="xref py py-func docutils literal"><span class="pre">ioctl()</span></code></a> に渡され、その後引数で与えたバッファに戻しコピーされるからです。</p>
@@ -191,12 +187,9 @@ using <code class="xref c c-func docutils literal"><span class="pre">fcntl()</sp
 <em>fd</em> is the file descriptor of the file to lock or unlock, and <em>cmd</em>
 is one of the following values:</p>
 <ul class="simple">
-<li><p class="first"><code class="xref py py-const docutils literal"><span class="pre">LOCK_UN</span></code> &#8211; アンロック</p>
-</li>
-<li><p class="first"><code class="xref py py-const docutils literal"><span class="pre">LOCK_SH</span></code> &#8211; 共有ロックを取得</p>
-</li>
-<li><p class="first"><code class="xref py py-const docutils literal"><span class="pre">LOCK_EX</span></code> &#8211; 排他的ロックを取得</p>
-</li>
+<li><code class="xref py py-const docutils literal"><span class="pre">LOCK_UN</span></code> – アンロック</li>
+<li><code class="xref py py-const docutils literal"><span class="pre">LOCK_SH</span></code> – 共有ロックを取得</li>
+<li><code class="xref py py-const docutils literal"><span class="pre">LOCK_EX</span></code> – 排他的ロックを取得</li>
 </ul>
 <p>When <em>cmd</em> is <code class="xref py py-const docutils literal"><span class="pre">LOCK_SH</span></code> or <code class="xref py py-const docutils literal"><span class="pre">LOCK_EX</span></code>, it can also be
 bitwise ORed with <code class="xref py py-const docutils literal"><span class="pre">LOCK_NB</span></code> to avoid blocking on lock acquisition.
@@ -210,12 +203,9 @@ file opened for writing.</p>
 which the lock starts, relative to <em>whence</em>, and <em>whence</em> is as with
 <a class="reference internal" href="io.html#io.IOBase.seek" title="io.IOBase.seek"><code class="xref py py-func docutils literal"><span class="pre">io.IOBase.seek()</span></code></a>, specifically:</p>
 <ul class="simple">
-<li><p class="first"><code class="xref py py-const docutils literal"><span class="pre">0</span></code> &#8211; ファイル先頭からの相対位置 (<a class="reference internal" href="os.html#os.SEEK_SET" title="os.SEEK_SET"><code class="xref py py-data docutils literal"><span class="pre">os.SEEK_SET</span></code></a>)</p>
-</li>
-<li><p class="first"><code class="xref py py-const docutils literal"><span class="pre">1</span></code> &#8211; 現在のバッファ位置からの相対位置 (<a class="reference internal" href="os.html#os.SEEK_CUR" title="os.SEEK_CUR"><code class="xref py py-data docutils literal"><span class="pre">os.SEEK_CUR</span></code></a>)</p>
-</li>
-<li><p class="first"><code class="xref py py-const docutils literal"><span class="pre">2</span></code> &#8211; ファイルの末尾からの相対位置 (<a class="reference internal" href="os.html#os.SEEK_END" title="os.SEEK_END"><code class="xref py py-data docutils literal"><span class="pre">os.SEEK_END</span></code></a>)</p>
-</li>
+<li><code class="xref py py-const docutils literal"><span class="pre">0</span></code> – ファイル先頭からの相対位置 (<a class="reference internal" href="os.html#os.SEEK_SET" title="os.SEEK_SET"><code class="xref py py-data docutils literal"><span class="pre">os.SEEK_SET</span></code></a>)</li>
+<li><code class="xref py py-const docutils literal"><span class="pre">1</span></code> – 現在のバッファ位置からの相対位置 (<a class="reference internal" href="os.html#os.SEEK_CUR" title="os.SEEK_CUR"><code class="xref py py-data docutils literal"><span class="pre">os.SEEK_CUR</span></code></a>)</li>
+<li><code class="xref py py-const docutils literal"><span class="pre">2</span></code> – ファイルの末尾からの相対位置 (<a class="reference internal" href="os.html#os.SEEK_END" title="os.SEEK_END"><code class="xref py py-data docutils literal"><span class="pre">os.SEEK_END</span></code></a>)</li>
 </ul>
 <p>The default for <em>start</em> is 0, which means to start at the beginning of the file.
 The default for <em>len</em> is 0 which means to lock to the end of the file.  The
@@ -234,14 +224,13 @@ default for <em>whence</em> is also 0.</p>
 </div>
 <p>Note that in the first example the return value variable <em>rv</em> will hold an
 integer value; in the second example it will hold a <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> object.  The
-structure lay-out for the <em>lockdata</em> variable is system dependent &#8212; therefore
+structure lay-out for the <em>lockdata</em> variable is system dependent — therefore
 using the <a class="reference internal" href="#fcntl.flock" title="fcntl.flock"><code class="xref py py-func docutils literal"><span class="pre">flock()</span></code></a> call may be better.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
 <dt><a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a> モジュール</dt>
-<dd><p class="first last">もし <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a> モジュールに <a class="reference internal" href="os.html#os.O_SHLOCK" title="os.O_SHLOCK"><code class="xref py py-data docutils literal"><span class="pre">os.O_SHLOCK</span></code></a> と <a class="reference internal" href="os.html#os.O_EXLOCK" title="os.O_EXLOCK"><code class="xref py py-data docutils literal"><span class="pre">os.O_EXLOCK</span></code></a> が 存在する場合 (BSD のみ)、 <a class="reference internal" href="os.html#os.open" title="os.open"><code class="xref py py-func docutils literal"><span class="pre">os.open()</span></code></a> 関数は <a class="reference internal" href="#fcntl.lockf" title="fcntl.lockf"><code class="xref py py-func docutils literal"><span class="pre">lockf()</span></code></a> や <a class="reference internal" href="#fcntl.flock" title="fcntl.flock"><code class="xref py py-func docutils literal"><span class="pre">flock()</span></code></a> 関数を代替できます。</p>
-</dd>
+<dd>もし <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a> モジュールに <a class="reference internal" href="os.html#os.O_SHLOCK" title="os.O_SHLOCK"><code class="xref py py-data docutils literal"><span class="pre">os.O_SHLOCK</span></code></a> と <a class="reference internal" href="os.html#os.O_EXLOCK" title="os.O_EXLOCK"><code class="xref py py-data docutils literal"><span class="pre">os.O_EXLOCK</span></code></a> が 存在する場合 (BSD のみ)、 <a class="reference internal" href="os.html#os.open" title="os.open"><code class="xref py py-func docutils literal"><span class="pre">os.open()</span></code></a> 関数は <a class="reference internal" href="#fcntl.lockf" title="fcntl.lockf"><code class="xref py py-func docutils literal"><span class="pre">lockf()</span></code></a> や <a class="reference internal" href="#fcntl.flock" title="fcntl.flock"><code class="xref py py-func docutils literal"><span class="pre">flock()</span></code></a> 関数を代替できます。</dd>
 </dl>
 </div>
 </div>
@@ -254,16 +243,16 @@ using the <a class="reference internal" href="#fcntl.flock" title="fcntl.flock">
         <div class="sphinxsidebarwrapper">
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="pty.html"
-                        title="前の章へ">35.8. <code class="docutils literal"><span class="pre">pty</span></code> &#8212; 擬似端末ユーティリティ</a></p>
+                        title="前の章へ">35.8. <code class="docutils literal"><span class="pre">pty</span></code> — 擬似端末ユーティリティ</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="pipes.html"
-                        title="次の章へ">35.10. <code class="docutils literal"><span class="pre">pipes</span></code> &#8212; シェルパイプラインへのインタフェース</a></p>
+                        title="次の章へ">35.10. <code class="docutils literal"><span class="pre">pipes</span></code> — シェルパイプラインへのインタフェース</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/fcntl.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/fcntl.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -324,7 +313,7 @@ using the <a class="reference internal" href="#fcntl.flock" title="fcntl.flock">
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

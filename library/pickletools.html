@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>32.13. pickletools — pickle 開発者のためのツール群 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="32. Python言語サービス" href="language.html" />
     <link rel="next" title="33. 各種サービス" href="misc.html" />
     <link rel="prev" title="32.12. dis — Python バイトコードの逆アセンブラ" href="dis.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,7 +100,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-pickletools">
-<span id="pickletools-tools-for-pickle-developers"></span><h1>32.13. <a class="reference internal" href="#module-pickletools" title="pickletools: Contains extensive comments about the pickle protocols and pickle-machine opcodes, as well as some useful functions."><code class="xref py py-mod docutils literal"><span class="pre">pickletools</span></code></a> &#8212; pickle 開発者のためのツール群<a class="headerlink" href="#module-pickletools" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="pickletools-tools-for-pickle-developers"></span><h1>32.13. <a class="reference internal" href="#module-pickletools" title="pickletools: Contains extensive comments about the pickle protocols and pickle-machine opcodes, as well as some useful functions."><code class="xref py py-mod docutils literal"><span class="pre">pickletools</span></code></a> — pickle 開発者のためのツール群<a class="headerlink" href="#module-pickletools" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/pickletools.py">Lib/pickletools.py</a></p>
 <hr class="docutils" />
 <p>このモジュールには、 <a class="reference internal" href="pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code></a> モジュールの詳細に関わる様々な定数や実装に関する長大なコメント、そして pickle 化されたデータを解析する上で有用な関数をいくつか定義しています。このモジュールの内容は <a class="reference internal" href="pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code></a> の実装に関わっている Python コア開発者にとって有用なものです; 普通の <a class="reference internal" href="pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code></a> 利用者にとっては、 <a class="reference internal" href="#module-pickletools" title="pickletools: Contains extensive comments about the pickle protocols and pickle-machine opcodes, as well as some useful functions."><code class="xref py py-mod docutils literal"><span class="pre">pickletools</span></code></a> モジュールはおそらく関係ないものでしょう。</p>
@@ -132,31 +128,31 @@
 <h3>32.13.1.1. コマンドラインオプション<a class="headerlink" href="#command-line-options" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <dl class="cmdoption">
 <dt id="cmdoption-pickletools-a">
-<span id="cmdoption-pickletools--annotate"></span><code class="descname">-a</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--annotate</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pickletools-a" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">-a</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--annotate</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pickletools-a" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>注釈として短い命令コードの説明を各行に表示します。</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-pickletools-o">
-<span id="cmdoption-pickletools--output"></span><code class="descname">-o</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--output</code><code class="descclassname">=&lt;file&gt;</code><a class="headerlink" href="#cmdoption-pickletools-o" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">-o</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--output</code><code class="descclassname">=&lt;file&gt;</code><a class="headerlink" href="#cmdoption-pickletools-o" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>出力結果を書き込むファイル名。</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-pickletools-l">
-<span id="cmdoption-pickletools--indentlevel"></span><code class="descname">-l</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--indentlevel</code><code class="descclassname">=&lt;num&gt;</code><a class="headerlink" href="#cmdoption-pickletools-l" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">-l</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--indentlevel</code><code class="descclassname">=&lt;num&gt;</code><a class="headerlink" href="#cmdoption-pickletools-l" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>新しい MARK レベルのインデントに使われる空白の数。</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-pickletools-m">
-<span id="cmdoption-pickletools--memo"></span><code class="descname">-m</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--memo</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pickletools-m" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">-m</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--memo</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pickletools-m" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>複数のオブジェクトが逆アセンブルされたとき、逆アセンブリ間でメモを保持します。</p>
 </dd></dl>
 
 <dl class="cmdoption">
 <dt id="cmdoption-pickletools-p">
-<span id="cmdoption-pickletools--preamble"></span><code class="descname">-p</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--preamble</code><code class="descclassname">=&lt;preamble&gt;</code><a class="headerlink" href="#cmdoption-pickletools-p" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">-p</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--preamble</code><code class="descclassname">=&lt;preamble&gt;</code><a class="headerlink" href="#cmdoption-pickletools-p" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>複数の pickle ファイルが指定されたとき、各逆アセンブリの前に与えられたプリアンブルを表示します。</p>
 </dd></dl>
 
@@ -196,7 +192,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">32.13. <code class="docutils literal"><span class="pre">pickletools</span></code> &#8212; pickle 開発者のためのツール群</a><ul>
+<li><a class="reference internal" href="#">32.13. <code class="docutils literal"><span class="pre">pickletools</span></code> — pickle 開発者のためのツール群</a><ul>
 <li><a class="reference internal" href="#command-line-usage">32.13.1. コマンドラインの使い方</a><ul>
 <li><a class="reference internal" href="#command-line-options">32.13.1.1. コマンドラインオプション</a></li>
 </ul>
@@ -208,7 +204,7 @@
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="dis.html"
-                        title="前の章へ">32.12. <code class="docutils literal"><span class="pre">dis</span></code> &#8212; Python バイトコードの逆アセンブラ</a></p>
+                        title="前の章へ">32.12. <code class="docutils literal"><span class="pre">dis</span></code> — Python バイトコードの逆アセンブラ</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="misc.html"
                         title="次の章へ">33. 各種サービス</a></p>
@@ -217,7 +213,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/pickletools.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/pickletools.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -278,7 +274,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

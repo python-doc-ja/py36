@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>18.5.4. トランスポートとプロトコル (コールバックベースの API) &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="18.5. asyncio — 非同期 I/O、イベントループ、コルーチンおよびタスク" href="asyncio.html" />
     <link rel="next" title="18.5.5. ストリーム (コルーチンベースの API)" href="asyncio-stream.html" />
     <link rel="prev" title="18.5.3. タスクとコルーチン" href="asyncio-task.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -80,7 +76,7 @@
 
           <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="asyncio.html" accesskey="U">18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" accesskey="U">18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> — 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
     <li class="right">
         
 
@@ -142,40 +138,26 @@
 <dd><p>オプションのトランスポート情報を返します。<em>name</em> は取得したトランスポート固有の情報を表す文字列で、<em>default</em> は情報が存在しなかったときに返す値になります。</p>
 <p>このメソッドはトランスポートの実装に容易にチャンネル固有の情報を渡すことができます。</p>
 <ul class="simple">
-<li><p class="first">ソケット:</p>
-<ul>
-<li><p class="first"><code class="docutils literal"><span class="pre">'peername'</span></code>: ソケットが接続されているリモートアドレスで、<a class="reference internal" href="socket.html#socket.socket.getpeername" title="socket.socket.getpeername"><code class="xref py py-meth docutils literal"><span class="pre">socket.socket.getpeername()</span></code></a> の結果になります (エラーのときは <code class="docutils literal"><span class="pre">None</span></code>)</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">'socket'</span></code>: <a class="reference internal" href="socket.html#socket.socket" title="socket.socket"><code class="xref py py-class docutils literal"><span class="pre">socket.socket</span></code></a> のインスタンスになります</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">'sockname'</span></code>: ソケット自身のアドレスで、<a class="reference internal" href="socket.html#socket.socket.getsockname" title="socket.socket.getsockname"><code class="xref py py-meth docutils literal"><span class="pre">socket.socket.getsockname()</span></code></a> の結果になります</p>
-</li>
+<li>ソケット:<ul>
+<li><code class="docutils literal"><span class="pre">'peername'</span></code>: ソケットが接続されているリモートアドレスで、<a class="reference internal" href="socket.html#socket.socket.getpeername" title="socket.socket.getpeername"><code class="xref py py-meth docutils literal"><span class="pre">socket.socket.getpeername()</span></code></a> の結果になります (エラーのときは <code class="docutils literal"><span class="pre">None</span></code>)</li>
+<li><code class="docutils literal"><span class="pre">'socket'</span></code>: <a class="reference internal" href="socket.html#socket.socket" title="socket.socket"><code class="xref py py-class docutils literal"><span class="pre">socket.socket</span></code></a> のインスタンスになります</li>
+<li><code class="docutils literal"><span class="pre">'sockname'</span></code>: ソケット自身のアドレスで、<a class="reference internal" href="socket.html#socket.socket.getsockname" title="socket.socket.getsockname"><code class="xref py py-meth docutils literal"><span class="pre">socket.socket.getsockname()</span></code></a> の結果になります</li>
 </ul>
 </li>
-<li><p class="first">SSL ソケット:</p>
-<ul>
-<li><p class="first"><code class="docutils literal"><span class="pre">'compression'</span></code>: 圧縮アルゴリズムで、<a class="reference internal" href="ssl.html#ssl.SSLSocket.compression" title="ssl.SSLSocket.compression"><code class="xref py py-meth docutils literal"><span class="pre">ssl.SSLSocket.compression()</span></code></a> の結果になります。圧縮されていないときは <code class="docutils literal"><span class="pre">None</span></code> になります</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">'cipher'</span></code>: 3 個の値 (使用されている暗号アルゴリズムの名称、使用が定義されている SSL プロトコルのバージョン、および使用されている秘密鍵のビット数) からなるタプルで、<a class="reference internal" href="ssl.html#ssl.SSLSocket.cipher" title="ssl.SSLSocket.cipher"><code class="xref py py-meth docutils literal"><span class="pre">ssl.SSLSocket.cipher()</span></code></a> の結果になります</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">'peercert'</span></code>: ピアの証明書で、<a class="reference internal" href="ssl.html#ssl.SSLSocket.getpeercert" title="ssl.SSLSocket.getpeercert"><code class="xref py py-meth docutils literal"><span class="pre">ssl.SSLSocket.getpeercert()</span></code></a> の結果になります</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">'sslcontext'</span></code>: <a class="reference internal" href="ssl.html#ssl.SSLContext" title="ssl.SSLContext"><code class="xref py py-class docutils literal"><span class="pre">ssl.SSLContext</span></code></a> のインスタンスになります</p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">'ssl_object'</span></code>: <a class="reference internal" href="ssl.html#ssl.SSLObject" title="ssl.SSLObject"><code class="xref py py-class docutils literal"><span class="pre">ssl.SSLObject</span></code></a> または <a class="reference internal" href="ssl.html#ssl.SSLSocket" title="ssl.SSLSocket"><code class="xref py py-class docutils literal"><span class="pre">ssl.SSLSocket</span></code></a> インスタンス</p>
-</li>
+<li>SSL ソケット:<ul>
+<li><code class="docutils literal"><span class="pre">'compression'</span></code>: 圧縮アルゴリズムで、<a class="reference internal" href="ssl.html#ssl.SSLSocket.compression" title="ssl.SSLSocket.compression"><code class="xref py py-meth docutils literal"><span class="pre">ssl.SSLSocket.compression()</span></code></a> の結果になります。圧縮されていないときは <code class="docutils literal"><span class="pre">None</span></code> になります</li>
+<li><code class="docutils literal"><span class="pre">'cipher'</span></code>: 3 個の値 (使用されている暗号アルゴリズムの名称、使用が定義されている SSL プロトコルのバージョン、および使用されている秘密鍵のビット数) からなるタプルで、<a class="reference internal" href="ssl.html#ssl.SSLSocket.cipher" title="ssl.SSLSocket.cipher"><code class="xref py py-meth docutils literal"><span class="pre">ssl.SSLSocket.cipher()</span></code></a> の結果になります</li>
+<li><code class="docutils literal"><span class="pre">'peercert'</span></code>: ピアの証明書で、<a class="reference internal" href="ssl.html#ssl.SSLSocket.getpeercert" title="ssl.SSLSocket.getpeercert"><code class="xref py py-meth docutils literal"><span class="pre">ssl.SSLSocket.getpeercert()</span></code></a> の結果になります</li>
+<li><code class="docutils literal"><span class="pre">'sslcontext'</span></code>: <a class="reference internal" href="ssl.html#ssl.SSLContext" title="ssl.SSLContext"><code class="xref py py-class docutils literal"><span class="pre">ssl.SSLContext</span></code></a> のインスタンスになります</li>
+<li><code class="docutils literal"><span class="pre">'ssl_object'</span></code>: <a class="reference internal" href="ssl.html#ssl.SSLObject" title="ssl.SSLObject"><code class="xref py py-class docutils literal"><span class="pre">ssl.SSLObject</span></code></a> または <a class="reference internal" href="ssl.html#ssl.SSLSocket" title="ssl.SSLSocket"><code class="xref py py-class docutils literal"><span class="pre">ssl.SSLSocket</span></code></a> インスタンス</li>
 </ul>
 </li>
-<li><p class="first">パイプ:</p>
-<ul>
-<li><p class="first"><code class="docutils literal"><span class="pre">'pipe'</span></code>: パイプオブジェクトです</p>
-</li>
+<li>パイプ:<ul>
+<li><code class="docutils literal"><span class="pre">'pipe'</span></code>: パイプオブジェクトです</li>
 </ul>
 </li>
-<li><p class="first">サブプロセス:</p>
-<ul>
-<li><p class="first"><code class="docutils literal"><span class="pre">'subprocess'</span></code>: <a class="reference internal" href="subprocess.html#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">subprocess.Popen</span></code></a> のインスタンスになります</p>
-</li>
+<li>サブプロセス:<ul>
+<li><code class="docutils literal"><span class="pre">'subprocess'</span></code>: <a class="reference internal" href="subprocess.html#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal"><span class="pre">subprocess.Popen</span></code></a> のインスタンスになります</li>
 </ul>
 </li>
 </ul>
@@ -324,14 +306,10 @@
 <code class="descname">get_pipe_transport</code><span class="sig-paren">(</span><em>fd</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.BaseSubprocessTransport.get_pipe_transport" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>整数のファイル記述子 <em>fd</em> に該当する通信パイプのトランスポートを返します:</p>
 <ul class="simple">
-<li><p class="first"><code class="docutils literal"><span class="pre">0</span></code>: 標準入力 (<em>stdin</em>) の読み込み可能ストリーミングトランスポート。サブプロセスが <code class="docutils literal"><span class="pre">stdin=PIPE</span></code> で作成されていない場合は <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a></p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">1</span></code>: 標準出力 (<em>stdout</em>) の書き込み可能ストリーミングトランスポート。サブプロセスが <code class="docutils literal"><span class="pre">stdout=PIPE</span></code> で作成されていない場合は <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a></p>
-</li>
-<li><p class="first"><code class="docutils literal"><span class="pre">2</span></code>: 標準エラー出力 (<em>stderr</em>) の書き込み可能ストリーミングトランスポート。サブプロセスが <code class="docutils literal"><span class="pre">stderr=PIPE</span></code> で作成されていない場合は <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a></p>
-</li>
-<li><p class="first">その他の <em>fd</em>: <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a></p>
-</li>
+<li><code class="docutils literal"><span class="pre">0</span></code>: 標準入力 (<em>stdin</em>) の読み込み可能ストリーミングトランスポート。サブプロセスが <code class="docutils literal"><span class="pre">stdin=PIPE</span></code> で作成されていない場合は <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a></li>
+<li><code class="docutils literal"><span class="pre">1</span></code>: 標準出力 (<em>stdout</em>) の書き込み可能ストリーミングトランスポート。サブプロセスが <code class="docutils literal"><span class="pre">stdout=PIPE</span></code> で作成されていない場合は <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a></li>
+<li><code class="docutils literal"><span class="pre">2</span></code>: 標準エラー出力 (<em>stderr</em>) の書き込み可能ストリーミングトランスポート。サブプロセスが <code class="docutils literal"><span class="pre">stderr=PIPE</span></code> で作成されていない場合は <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a></li>
+<li>その他の <em>fd</em>: <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a></li>
 </ul>
 </dd></dl>
 
@@ -465,8 +443,7 @@
 <p>接続中、<code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code> は複数回呼び出されえます。<code class="xref py py-meth docutils literal"><span class="pre">eof_received()</span></code> が呼び出されるのは 1 回で、1 度呼び出されると、その後 <code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code> が呼び出されることはありません。</p>
 <p>ステートマシン:</p>
 <blockquote>
-<div><p>開始状態 -&gt; <a class="reference internal" href="#asyncio.BaseProtocol.connection_made" title="asyncio.BaseProtocol.connection_made"><code class="xref py py-meth docutils literal"><span class="pre">connection_made()</span></code></a> [-&gt; <a class="reference internal" href="#asyncio.Protocol.data_received" title="asyncio.Protocol.data_received"><code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code></a> *] [-&gt; <a class="reference internal" href="#asyncio.Protocol.eof_received" title="asyncio.Protocol.eof_received"><code class="xref py py-meth docutils literal"><span class="pre">eof_received()</span></code></a> ?] -&gt; <a class="reference internal" href="#asyncio.BaseProtocol.connection_lost" title="asyncio.BaseProtocol.connection_lost"><code class="xref py py-meth docutils literal"><span class="pre">connection_lost()</span></code></a> -&gt; 終了状態</p>
-</div></blockquote>
+<div>開始状態 -&gt; <a class="reference internal" href="#asyncio.BaseProtocol.connection_made" title="asyncio.BaseProtocol.connection_made"><code class="xref py py-meth docutils literal"><span class="pre">connection_made()</span></code></a> [-&gt; <a class="reference internal" href="#asyncio.Protocol.data_received" title="asyncio.Protocol.data_received"><code class="xref py py-meth docutils literal"><span class="pre">data_received()</span></code></a> *] [-&gt; <a class="reference internal" href="#asyncio.Protocol.eof_received" title="asyncio.Protocol.eof_received"><code class="xref py py-meth docutils literal"><span class="pre">eof_received()</span></code></a> ?] -&gt; <a class="reference internal" href="#asyncio.BaseProtocol.connection_lost" title="asyncio.BaseProtocol.connection_lost"><code class="xref py py-meth docutils literal"><span class="pre">connection_lost()</span></code></a> -&gt; 終了状態</div></blockquote>
 </div>
 <div class="section" id="datagram-protocols">
 <h3>18.5.4.2.4. データグラムプロトコル<a class="headerlink" href="#datagram-protocols" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -500,14 +477,14 @@
 <dd><p>トランスポートのバッファーサイズが最低水位点 (Low-Water Mark) に達したきに呼び出されます。</p>
 </dd></dl>
 
-<p><code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> および <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> の呼び出しは対になります。&#8211; <code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> はバッファーが完全に最高水位点を超えたとき (後続の書き込みがさらにバッファーサイズを増やすとしても) 1 度呼び出され、バッファーサイズが最終的に最低水位点に達したときに <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> が 1 度呼び出されます。</p>
+<p><code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> および <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> の呼び出しは対になります。– <code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> はバッファーが完全に最高水位点を超えたとき (後続の書き込みがさらにバッファーサイズを増やすとしても) 1 度呼び出され、バッファーサイズが最終的に最低水位点に達したときに <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> が 1 度呼び出されます。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last">バッファーサイズが最高水位点と等しくなった時点では <code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> は呼び出されません &#8211; 完全に超えなければなりません。対して、バッファーサイズが最低水位点と等しくなったときは <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> は呼び出されます。これら端末条件は各点がゼロになったとき予定通りに動作するかどうか確認するために重要です。</p>
+<p class="last">バッファーサイズが最高水位点と等しくなった時点では <code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> は呼び出されません – 完全に超えなければなりません。対して、バッファーサイズが最低水位点と等しくなったときは <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> は呼び出されます。これら端末条件は各点がゼロになったとき予定通りに動作するかどうか確認するために重要です。</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last">BSD システム (OS X、FreeBSD など) では、<a class="reference internal" href="#asyncio.DatagramProtocol" title="asyncio.DatagramProtocol"><code class="xref py py-class docutils literal"><span class="pre">DatagramProtocol</span></code></a> でのフロー制御は、大量のパケット送信による送信失敗を検知するのが容易ではないためサポートされていません。ソケットは常に &#8216;待機状態&#8217; のように見え、超過分のパケットは破棄されます; エラー番号 <a class="reference internal" href="errno.html#errno.ENOBUFS" title="errno.ENOBUFS"><code class="xref py py-const docutils literal"><span class="pre">errno.ENOBUFS</span></code></a> が設定された <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-class docutils literal"><span class="pre">OSError</span></code></a> が送出されるときもあればされないときもあります; 送出された場合、<a class="reference internal" href="#asyncio.DatagramProtocol.error_received" title="asyncio.DatagramProtocol.error_received"><code class="xref py py-meth docutils literal"><span class="pre">DatagramProtocol.error_received()</span></code></a> に通知されますが、送出されないと無視されます。</p>
+<p class="last">BSD システム (OS X、FreeBSD など) では、<a class="reference internal" href="#asyncio.DatagramProtocol" title="asyncio.DatagramProtocol"><code class="xref py py-class docutils literal"><span class="pre">DatagramProtocol</span></code></a> でのフロー制御は、大量のパケット送信による送信失敗を検知するのが容易ではないためサポートされていません。ソケットは常に 『待機状態』 のように見え、超過分のパケットは破棄されます; エラー番号 <a class="reference internal" href="errno.html#errno.ENOBUFS" title="errno.ENOBUFS"><code class="xref py py-const docutils literal"><span class="pre">errno.ENOBUFS</span></code></a> が設定された <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-class docutils literal"><span class="pre">OSError</span></code></a> が送出されるときもあればされないときもあります; 送出された場合、<a class="reference internal" href="#asyncio.DatagramProtocol.error_received" title="asyncio.DatagramProtocol.error_received"><code class="xref py py-meth docutils literal"><span class="pre">DatagramProtocol.error_received()</span></code></a> に通知されますが、送出されないと無視されます。</p>
 </div>
 </div>
 <div class="section" id="coroutines-and-protocols">
@@ -777,7 +754,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio-protocol.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio-protocol.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -812,7 +789,7 @@
 
           <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="ipc.html" >18. プロセス間通信とネットワーク</a> &#187;</li>
-          <li class="nav-item nav-item-3"><a href="asyncio.html" >18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> &#8212; 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" >18.5. <code class="docutils literal"><span class="pre">asyncio</span></code> — 非同期 I/O、イベントループ、コルーチンおよびタスク</a> &#187;</li>
     <li class="right">
         
 
@@ -839,7 +816,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

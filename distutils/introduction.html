@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>1. Distutilsの紹介 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="Python モジュールの配布 (レガシーバージョン)" href="index.html" />
     <link rel="next" title="2. setup スクリプトを書く" href="setupscript.html" />
     <link rel="prev" title="Python モジュールの配布 (レガシーバージョン)" href="index.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -109,14 +105,10 @@
 <span id="distutils-concepts"></span><h2>1.1. 概念と用語<a class="headerlink" href="#concepts-terminology" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Distutils の使い方は、モジュール開発者とサードパーティ製のモジュールをインストールするユーザ/管理者のどちらにとってもきわめて単純です。開発者側のやるべきことは (もちろん、しっかりした実装で、詳しく文書化され、よくテストされたコードを書くことは別として！) 以下の項目になります:</p>
 <ul class="simple">
-<li><p class="first">setup スクリプト (<code class="file docutils literal"><span class="pre">setup.py</span></code> という名前にするのがならわし) を書く</p>
-</li>
-<li><p class="first">(必要があれば) setup 設定ファイルを書く</p>
-</li>
-<li><p class="first">ソースコード配布物を作成する</p>
-</li>
-<li><p class="first">(必要があれば) 一つまたはそれ以上のビルド済み (バイナリ) 形式の配布物を作成する</p>
-</li>
+<li>setup スクリプト (<code class="file docutils literal"><span class="pre">setup.py</span></code> という名前にするのがならわし) を書く</li>
+<li>(必要があれば) setup 設定ファイルを書く</li>
+<li>ソースコード配布物を作成する</li>
+<li>(必要があれば) 一つまたはそれ以上のビルド済み (バイナリ) 形式の配布物を作成する</li>
 </ul>
 <p>これらの作業については、いずれもこのドキュメントで扱っています。</p>
 <p>全てのモジュール開発者が複数の実行プラットフォームを利用できるわけではないので、全てのプラットフォーム向けにビルド済みの配布物を提供してもらえると期待するわけにはいきません。ですから、仲介を行う人々、いわゆる <em>パッケージ作成者 (packager)</em> がこの問題を解決すべく立ち上がってくれることが望ましいでしょう。パッケージ作成者はモジュール開発者がリリースしたソースコード配布物を、一つまたはそれ以上のプラットフォーム上でビルドして、得られたビルド済み配布物をリリースすることになります。したがって、ほとんどの一般的なプラットフォームにおけるユーザは、setup スクリプト一つ実行せず、コードを一行たりともコンパイルしなくても、使っているプラットフォーム向けのきわめて普通の方法でほとんどの一般的な Python モジュール配布物をインストールできるでしょう。</p>
@@ -134,14 +126,10 @@
 </div>
 <p>以下のことに注意してください:</p>
 <ul class="simple">
-<li><p class="first">Distutils に与えなければならない情報のほとんどは、 <code class="xref py py-func docutils literal"><span class="pre">setup()</span></code> 関数のキーワード引数として与えます</p>
-</li>
-<li><p class="first">キーワード引数は二つのカテゴリ: パッケージのメタデータ (パッケージ名、バージョン番号)、パッケージに何が収められているかの情報 (上の場合は pure Python モジュールのリスト)、に行き着きます</p>
-</li>
-<li><p class="first">モジュールはファイル名ではなく、モジュール名で指定します (パッケージと拡張モジュールについても同じです)</p>
-</li>
-<li><p class="first">作者名、電子メールアドレス、プロジェクトの URL といった追加のメタデータを入れておくよう奨めます (<a class="reference internal" href="setupscript.html#setup-script"><span class="std std-ref">setup スクリプトを書く</span></a> の例を参照してください)</p>
-</li>
+<li>Distutils に与えなければならない情報のほとんどは、 <code class="xref py py-func docutils literal"><span class="pre">setup()</span></code> 関数のキーワード引数として与えます</li>
+<li>キーワード引数は二つのカテゴリ: パッケージのメタデータ (パッケージ名、バージョン番号)、パッケージに何が収められているかの情報 (上の場合は pure Python モジュールのリスト)、に行き着きます</li>
+<li>モジュールはファイル名ではなく、モジュール名で指定します (パッケージと拡張モジュールについても同じです)</li>
+<li>作者名、電子メールアドレス、プロジェクトの URL といった追加のメタデータを入れておくよう奨めます (<a class="reference internal" href="setupscript.html#setup-script"><span class="std std-ref">setup スクリプトを書く</span></a> の例を参照してください)</li>
 </ul>
 <p>このモジュールのソース配布物を作成するには、上記のコードが書かれた setup スクリプト <code class="file docutils literal"><span class="pre">setup.py</span></code> を作成し、端末からこのコマンドを実行してください:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">sdist</span>
@@ -152,7 +140,7 @@
 </pre></div>
 </div>
 <p><strong class="command">sdist</strong> は、 setup スクリプト <code class="file docutils literal"><span class="pre">setup.py</span></code> とモジュール <code class="file docutils literal"><span class="pre">foo.py</span></code> を含むアーカイブファイル (例。 Unix の tarball や Windows の ZIP ファイル) を作成します。アーカイブファイルは <code class="file docutils literal"><span class="pre">foo-1.0.tar.gz</span></code> (あるいは <code class="file docutils literal"><span class="pre">.zip</span></code>) という名前になり、 <code class="file docutils literal"><span class="pre">foo-1.0</span></code> というディレクトリに展開されます。</p>
-<p>エンドユーザが <code class="xref py py-mod docutils literal"><span class="pre">foo</span></code> モジュールをインストールしたければ、 <code class="file docutils literal"><span class="pre">foo-1.0.tar.gz</span></code> (または <code class="file docutils literal"><span class="pre">.zip</span></code>) をダウンロードし、パッケージを展開して、以下のスクリプトを &#8212; <code class="file docutils literal"><span class="pre">foo-1.0</span></code> ディレクトリ中で &#8212; 実行します</p>
+<p>エンドユーザが <code class="xref py py-mod docutils literal"><span class="pre">foo</span></code> モジュールをインストールしたければ、 <code class="file docutils literal"><span class="pre">foo-1.0.tar.gz</span></code> (または <code class="file docutils literal"><span class="pre">.zip</span></code>) をダウンロードし、パッケージを展開して、以下のスクリプトを — <code class="file docutils literal"><span class="pre">foo-1.0</span></code> ディレクトリ中で — 実行します</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
@@ -178,20 +166,15 @@
 <p>このドキュメントを読んでいるのなら、モジュール (module)、拡張モジュール (extension) などが何を表すのかをよく知っているかもしれません。とはいえ、読者がみな共通のスタートポイントに立って Distutils の操作を始められるように、ここで一般的な Python 用語について以下のような用語集を示しておきます:</p>
 <dl class="docutils">
 <dt>module</dt>
-<dd><p class="first last">Python においてコードを再利用する際の基本単位: すなわち、他のコードから import されるひとかたまりのコードです。ここでは、三種類のモジュール: pure Python モジュール、拡張モジュール、パッケージが関わってきます。</p>
-</dd>
+<dd>Python においてコードを再利用する際の基本単位: すなわち、他のコードから import されるひとかたまりのコードです。ここでは、三種類のモジュール: pure Python モジュール、拡張モジュール、パッケージが関わってきます。</dd>
 <dt>pure Python モジュール</dt>
-<dd><p class="first last">Python で書かれ、単一の <code class="file docutils literal"><span class="pre">.py</span></code>  ファイル内に収められたモジュールです (<code class="file docutils literal"><span class="pre">.pyc</span></code> ファイルと関連があります) 。 &#8220;pure モジュール  (pure module)&#8221; と呼ばれることもあります。</p>
-</dd>
+<dd>Python で書かれ、単一の <code class="file docutils literal"><span class="pre">.py</span></code>  ファイル内に収められたモジュールです (<code class="file docutils literal"><span class="pre">.pyc</span></code> ファイルと関連があります) 。 「pure モジュール  (pure module)」 と呼ばれることもあります。</dd>
 <dt>extension module</dt>
-<dd><p class="first last">Python を実装している低水準言語: Python の場合は C/C++ 、 Jython の場合は Java 、で書かれたモジュールです。通常は、動的にロードできるコンパイル済みの単一のファイルに入っています。例えば、Unix向け Python 拡張のための共有オブジェクト (<code class="file docutils literal"><span class="pre">.so</span></code>) 、 Windows 向け Python 拡張のための DLL (<code class="file docutils literal"><span class="pre">.pyd</span></code> という拡張子が与えられています)、 Jython 拡張のための Java クラスといった具合です。 (現状では、 Distutils は Python 向けの C/C++ 拡張モジュールしか扱わないので注意してください。)</p>
-</dd>
+<dd>Python を実装している低水準言語: Python の場合は C/C++ 、 Jython の場合は Java 、で書かれたモジュールです。通常は、動的にロードできるコンパイル済みの単一のファイルに入っています。例えば、Unix向け Python 拡張のための共有オブジェクト (<code class="file docutils literal"><span class="pre">.so</span></code>) 、 Windows 向け Python 拡張のための DLL (<code class="file docutils literal"><span class="pre">.pyd</span></code> という拡張子が与えられています)、 Jython 拡張のための Java クラスといった具合です。 (現状では、 Distutils は Python 向けの C/C++ 拡張モジュールしか扱わないので注意してください。)</dd>
 <dt>package</dt>
-<dd><p class="first last">他のモジュールが入っているモジュールです; 通常、ファイルシステム内のあるディレクトリに収められ、 <code class="file docutils literal"><span class="pre">__init__.py</span></code> が入っていることで通常のディレクトリと区別できます。</p>
-</dd>
+<dd>他のモジュールが入っているモジュールです; 通常、ファイルシステム内のあるディレクトリに収められ、 <code class="file docutils literal"><span class="pre">__init__.py</span></code> が入っていることで通常のディレクトリと区別できます。</dd>
 <dt>ルートパッケージ</dt>
-<dd><p class="first last">階層的なパッケージの根 (root) の部分にあたるパッケージです。(この部分には <code class="file docutils literal"><span class="pre">__init__.py</span></code> ファイルがないので、本当のパッケージではありませんが、便宜上そう呼びます。) 標準ライブラリの大部分はルートパッケージに入っています、また、多くの小規模な単体のサードパーティモジュールで、他の大規模なモジュールコレクションに属していないものもここに入ります。正規のパッケージと違い、ルートパッケージ上のモジュールの実体は様々なディレクトリにあります: 実際は、 <code class="docutils literal"><span class="pre">sys.path</span></code> に列挙されているディレクトリ全てが、ルートパッケージに配置されるモジュールの内容に影響します。</p>
-</dd>
+<dd>階層的なパッケージの根 (root) の部分にあたるパッケージです。(この部分には <code class="file docutils literal"><span class="pre">__init__.py</span></code> ファイルがないので、本当のパッケージではありませんが、便宜上そう呼びます。) 標準ライブラリの大部分はルートパッケージに入っています、また、多くの小規模な単体のサードパーティモジュールで、他の大規模なモジュールコレクションに属していないものもここに入ります。正規のパッケージと違い、ルートパッケージ上のモジュールの実体は様々なディレクトリにあります: 実際は、 <code class="docutils literal"><span class="pre">sys.path</span></code> に列挙されているディレクトリ全てが、ルートパッケージに配置されるモジュールの内容に影響します。</dd>
 </dl>
 </div>
 <div class="section" id="distutils-specific-terminology">
@@ -199,17 +182,13 @@
 <p>以下は Distutils を使って Python モジュールを配布する際に使われる特有の用語です:</p>
 <dl class="docutils">
 <dt>モジュール配布物</dt>
-<dd><p class="first last">単一のダウンロード可能なリソースとして配布され、<em>一纏めに</em> インストールできる Python モジュールの集まりです。よく知られているモジュール配布物の例は NumPy、SciPy、PIL (the Python Imaging Library)、mxBase です。(Python の文脈で既に使われてるとき以外は、これは <em>パッケージ</em> と呼ばれます: 1 つのモジュール配布物は 0 個か 1 個かもっと多くの Python パッケージを含みます。)</p>
-</dd>
+<dd>単一のダウンロード可能なリソースとして配布され、<em>一纏めに</em> インストールできる Python モジュールの集まりです。よく知られているモジュール配布物の例は NumPy、SciPy、PIL (the Python Imaging Library)、mxBase です。(Python の文脈で既に使われてるとき以外は、これは <em>パッケージ</em> と呼ばれます: 1 つのモジュール配布物は 0 個か 1 個かもっと多くの Python パッケージを含みます。)</dd>
 <dt>pure module distribution</dt>
-<dd><p class="first last">pure Python モジュールやパッケージだけが入ったモジュール配布物です。&#8221;pure 配布物 (pure distribution)&#8221; とも呼ばれます。</p>
-</dd>
+<dd>pure Python モジュールやパッケージだけが入ったモジュール配布物です。」pure 配布物 (pure distribution)」 とも呼ばれます。</dd>
 <dt>non-pure module distribution</dt>
-<dd><p class="first last">少なくとも一つの拡張モジュールが入ったモジュール配布物です。&#8221;非 pure 配布物&#8221;とも呼びます。</p>
-</dd>
+<dd>少なくとも一つの拡張モジュールが入ったモジュール配布物です。」非 pure 配布物」とも呼びます。</dd>
 <dt>配布物ルート</dt>
-<dd><p class="first last">ソースコードツリー (またはソース配布物) ディレクトリの最上階層で、 <code class="file docutils literal"><span class="pre">setup.py</span></code> のある場所です。一般的には、 <code class="file docutils literal"><span class="pre">setup.py</span></code> はこのディレクトリ上で実行します。</p>
-</dd>
+<dd>ソースコードツリー (またはソース配布物) ディレクトリの最上階層で、 <code class="file docutils literal"><span class="pre">setup.py</span></code> のある場所です。一般的には、 <code class="file docutils literal"><span class="pre">setup.py</span></code> はこのディレクトリ上で実行します。</dd>
 </dl>
 </div>
 </div>
@@ -242,7 +221,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/distutils/introduction.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/distutils/introduction.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -302,7 +281,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

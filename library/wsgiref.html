@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>21.4. wsgiref — WSGI ユーティリティとリファレンス実装 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="21. インターネットプロトコルとサポート" href="internet.html" />
     <link rel="next" title="21.5. urllib — URL を扱うモジュール群" href="urllib.html" />
     <link rel="prev" title="21.3. cgitb — CGI スクリプトのトレースバック管理機構" href="cgitb.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -104,26 +100,26 @@
           <div class="body" role="main">
             
   <div class="section" id="module-wsgiref">
-<span id="wsgiref-wsgi-utilities-and-reference-implementation"></span><h1>21.4. <a class="reference internal" href="#module-wsgiref" title="wsgiref: WSGI Utilities and Reference Implementation."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref</span></code></a> &#8212; WSGI ユーティリティとリファレンス実装<a class="headerlink" href="#module-wsgiref" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<span id="wsgiref-wsgi-utilities-and-reference-implementation"></span><h1>21.4. <a class="reference internal" href="#module-wsgiref" title="wsgiref: WSGI Utilities and Reference Implementation."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref</span></code></a> — WSGI ユーティリティとリファレンス実装<a class="headerlink" href="#module-wsgiref" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <hr class="docutils" />
 <p>Web Server Gateway Interface (WSGI) は、Web サーバソフトウェアと Python で記述された Web アプリケーションとの標準インターフェースです。標準インターフェースを持つことで、WSGI をサポートするアプリケーションを幾つもの異なる Web サーバで使うことが容易になります。</p>
 <p>Web サーバとプログラミングフレームワークの作者だけが、WSGI デザインのあらゆる細部や特例などを知る必要があります。WSGI アプリケーションをインストールしたり、既存のフレームワークを使ったアプリケーションを記述するだけの皆さんは、すべてについて理解する必要はありません。</p>
 <p><a class="reference internal" href="#module-wsgiref" title="wsgiref: WSGI Utilities and Reference Implementation."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref</span></code></a> は WSGI 仕様のリファレンス実装で、これは Web サーバやフレームワークに WSGI サポートを加えるのに利用できます。これは WSGI 環境変数やレスポンスヘッダを操作するユーティリティ、 WSGI サーバ実装時のベースクラス、WSGI アプリケーションを提供する  デモ用 HTTP サーバ、それと WSGI サーバとアプリケーションの WSGI 仕様 (<span class="target" id="index-30"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3333"><strong>PEP 3333</strong></a>) 準拠のバリデーションツールを提供します。</p>
 <p><a class="reference external" href="https://wsgi.readthedocs.org/">https://wsgi.readthedocs.org/</a> に、WSGIに関するさらなる情報と、チュートリアルやその他のリソースへのリンクがあります。</p>
 <div class="section" id="module-wsgiref.util">
-<span id="wsgiref-util-wsgi-environment-utilities"></span><h2>21.4.1. <a class="reference internal" href="#module-wsgiref.util" title="wsgiref.util: WSGI environment utilities."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.util</span></code></a> &#8211; WSGI 環境のユーティリティ<a class="headerlink" href="#module-wsgiref.util" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<span id="wsgiref-util-wsgi-environment-utilities"></span><h2>21.4.1. <a class="reference internal" href="#module-wsgiref.util" title="wsgiref.util: WSGI environment utilities."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.util</span></code></a> – WSGI 環境のユーティリティ<a class="headerlink" href="#module-wsgiref.util" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>このモジュールは WSGI 環境で使う様々なユーティリティ関数を提供します。 WSGI 環境は <span class="target" id="index-31"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3333"><strong>PEP 3333</strong></a> で記述されているような HTTP リクエスト変数を含む辞書です。すべての <em>environ</em> パラメータを取る関数は WSGI 準拠の辞書を与えられることを期待しています; 細かい仕様については <span class="target" id="index-32"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3333"><strong>PEP 3333</strong></a> を参照してください。</p>
 <dl class="function">
 <dt id="wsgiref.util.guess_scheme">
 <code class="descclassname">wsgiref.util.</code><code class="descname">guess_scheme</code><span class="sig-paren">(</span><em>environ</em><span class="sig-paren">)</span><a class="headerlink" href="#wsgiref.util.guess_scheme" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><em>environ</em> 辞書の <code class="docutils literal"><span class="pre">HTTPS</span></code> 環境変数を調べることで <code class="docutils literal"><span class="pre">wsgi.url_scheme</span></code> が &#8220;http&#8221; か &#8220;https&#8221; のどちらであるべきか推測し、その結果を返します。戻り値は文字列です。</p>
-<p>この関数は、CGI や FastCGI のような CGI に似たプロトコルをラップするゲートウェイを作成する場合に便利です。典型的には、それらのプロトコルを提供するサーバが SSL 経由でリクエストを受け取った場合には <code class="docutils literal"><span class="pre">HTTPS</span></code> 変数に値 &#8220;1&#8221; &#8220;yes&#8221;、または &#8220;on&#8221; を持つでしょう。そのため、この関数はそのような値が見つかった場合には &#8220;https&#8221; を返し、そうでなければ &#8220;http&#8221; を返します。</p>
+<dd><p><em>environ</em> 辞書の <code class="docutils literal"><span class="pre">HTTPS</span></code> 環境変数を調べることで <code class="docutils literal"><span class="pre">wsgi.url_scheme</span></code> が 「http」 か 「https」 のどちらであるべきか推測し、その結果を返します。戻り値は文字列です。</p>
+<p>この関数は、CGI や FastCGI のような CGI に似たプロトコルをラップするゲートウェイを作成する場合に便利です。典型的には、それらのプロトコルを提供するサーバが SSL 経由でリクエストを受け取った場合には <code class="docutils literal"><span class="pre">HTTPS</span></code> 変数に値 「1」 「yes」、または 「on」 を持つでしょう。そのため、この関数はそのような値が見つかった場合には 「https」 を返し、そうでなければ 「http」 を返します。</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="wsgiref.util.request_uri">
 <code class="descclassname">wsgiref.util.</code><code class="descname">request_uri</code><span class="sig-paren">(</span><em>environ</em>, <em>include_query=True</em><span class="sig-paren">)</span><a class="headerlink" href="#wsgiref.util.request_uri" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>リクエスト URI 全体 (オプションでクエリ文字列を含む) を、 <span class="target" id="index-33"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3333"><strong>PEP 3333</strong></a> の &#8220;URL 再構築(URL Reconstruction)&#8221; にあるアルゴリズムを使って返します。 <em>include_query</em> が false の場合、クエリ文字列は結果となる文字列には含まれません。</p>
+<dd><p>リクエスト URI 全体 (オプションでクエリ文字列を含む) を、 <span class="target" id="index-33"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3333"><strong>PEP 3333</strong></a> の 「URL 再構築(URL Reconstruction)」 にあるアルゴリズムを使って返します。 <em>include_query</em> が false の場合、クエリ文字列は結果となる文字列には含まれません。</p>
 </dd></dl>
 
 <dl class="function">
@@ -137,8 +133,8 @@
 <code class="descclassname">wsgiref.util.</code><code class="descname">shift_path_info</code><span class="sig-paren">(</span><em>environ</em><span class="sig-paren">)</span><a class="headerlink" href="#wsgiref.util.shift_path_info" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">PATH_INFO</span></code> から <code class="docutils literal"><span class="pre">SCRIPT_NAME</span></code> に一つの名前をシフトしてその名前を返します。<em>environ</em> 辞書は <em>変更されます</em> 。<code class="docutils literal"><span class="pre">PATH_INFO</span></code> や <code class="docutils literal"><span class="pre">SCRIPT_NAME</span></code> のオリジナルをそのまま残したい場合にはコピーを使ってください。</p>
 <p><code class="docutils literal"><span class="pre">PATH_INFO</span></code> にパスセグメントが何も残っていなければ、<code class="docutils literal"><span class="pre">None</span></code> が返されます。</p>
-<p>典型的なこのルーチンの使い方はリクエスト URI のそれぞれの要素の処理で、例えばパスを一連の辞書のキーとして取り扱う場合です。このルーチンは、渡された環境を、ターゲット URL で示される別の WSGI アプリケーションの呼び出しに合うように調整します。例えば、 <code class="docutils literal"><span class="pre">/foo</span></code> に WSGI アプリケーションがあったとして、そしてリクエスト URL パスが <code class="docutils literal"><span class="pre">/foo/bar/baz</span></code> で、 <code class="docutils literal"><span class="pre">/foo</span></code> の WSGI アプリケーションが <a class="reference internal" href="#wsgiref.util.shift_path_info" title="wsgiref.util.shift_path_info"><code class="xref py py-func docutils literal"><span class="pre">shift_path_info()</span></code></a> を呼んだ場合、これは &#8220;bar&#8221; 文字列を受け取り、 environ は <code class="docutils literal"><span class="pre">/foo/bar</span></code> の WSGI アプリケーションへの受け渡しに適するように更新されます。つまり、 <code class="docutils literal"><span class="pre">SCRIPT_NAME</span></code> は <code class="docutils literal"><span class="pre">/foo</span></code> から <code class="docutils literal"><span class="pre">/foo/bar</span></code> に変わって、 <code class="docutils literal"><span class="pre">PATH_INFO</span></code> は <code class="docutils literal"><span class="pre">/bar/baz</span></code> から <code class="docutils literal"><span class="pre">/baz</span></code> に変化するのです。</p>
-<p><code class="docutils literal"><span class="pre">PATH_INFO</span></code> が単に &#8220;/&#8221; の場合、このルーチンは空の文字列を返し、<code class="docutils literal"><span class="pre">SCRIPT_NAME</span></code> の末尾にスラッシュを加えます、これはたとえ空のパスセグメントが通常は無視され、そして <code class="docutils literal"><span class="pre">SCRIPT_NAME</span></code> は通常スラッシュで終わる事が無かったとしてもです。これは意図的な振る舞いで、このルーチンでオブジェクト巡回(object traversal) をした場合に <code class="docutils literal"><span class="pre">/x</span></code> で終わる URI と <code class="docutils literal"><span class="pre">/x/</span></code> で終わるものをアプリケーションが識別できることを保証するためのものです。</p>
+<p>典型的なこのルーチンの使い方はリクエスト URI のそれぞれの要素の処理で、例えばパスを一連の辞書のキーとして取り扱う場合です。このルーチンは、渡された環境を、ターゲット URL で示される別の WSGI アプリケーションの呼び出しに合うように調整します。例えば、 <code class="docutils literal"><span class="pre">/foo</span></code> に WSGI アプリケーションがあったとして、そしてリクエスト URL パスが <code class="docutils literal"><span class="pre">/foo/bar/baz</span></code> で、 <code class="docutils literal"><span class="pre">/foo</span></code> の WSGI アプリケーションが <a class="reference internal" href="#wsgiref.util.shift_path_info" title="wsgiref.util.shift_path_info"><code class="xref py py-func docutils literal"><span class="pre">shift_path_info()</span></code></a> を呼んだ場合、これは 「bar」 文字列を受け取り、 environ は <code class="docutils literal"><span class="pre">/foo/bar</span></code> の WSGI アプリケーションへの受け渡しに適するように更新されます。つまり、 <code class="docutils literal"><span class="pre">SCRIPT_NAME</span></code> は <code class="docutils literal"><span class="pre">/foo</span></code> から <code class="docutils literal"><span class="pre">/foo/bar</span></code> に変わって、 <code class="docutils literal"><span class="pre">PATH_INFO</span></code> は <code class="docutils literal"><span class="pre">/bar/baz</span></code> から <code class="docutils literal"><span class="pre">/baz</span></code> に変化するのです。</p>
+<p><code class="docutils literal"><span class="pre">PATH_INFO</span></code> が単に 「/」 の場合、このルーチンは空の文字列を返し、<code class="docutils literal"><span class="pre">SCRIPT_NAME</span></code> の末尾にスラッシュを加えます、これはたとえ空のパスセグメントが通常は無視され、そして <code class="docutils literal"><span class="pre">SCRIPT_NAME</span></code> は通常スラッシュで終わる事が無かったとしてもです。これは意図的な振る舞いで、このルーチンでオブジェクト巡回(object traversal) をした場合に <code class="docutils literal"><span class="pre">/x</span></code> で終わる URI と <code class="docutils literal"><span class="pre">/x/</span></code> で終わるものをアプリケーションが識別できることを保証するためのものです。</p>
 </dd></dl>
 
 <dl class="function">
@@ -176,7 +172,7 @@
 <dl class="function">
 <dt id="wsgiref.util.is_hop_by_hop">
 <code class="descclassname">wsgiref.util.</code><code class="descname">is_hop_by_hop</code><span class="sig-paren">(</span><em>header_name</em><span class="sig-paren">)</span><a class="headerlink" href="#wsgiref.util.is_hop_by_hop" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>&#8216;header_name&#8217; が <span class="target" id="index-35"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2616.html"><strong>RFC 2616</strong></a> で定義されている HTTP/1.1 の &#8220;Hop-by-Hop&#8221; ヘッダの場合に true を返します。</p>
+<dd><p>『header_name』 が <span class="target" id="index-35"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2616.html"><strong>RFC 2616</strong></a> で定義されている HTTP/1.1 の 「Hop-by-Hop」 ヘッダの場合に true を返します。</p>
 </dd></dl>
 
 <dl class="class">
@@ -200,7 +196,7 @@
 
 </div>
 <div class="section" id="module-wsgiref.headers">
-<span id="wsgiref-headers-wsgi-response-header-tools"></span><h2>21.4.2. <a class="reference internal" href="#module-wsgiref.headers" title="wsgiref.headers: WSGI response header tools."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.headers</span></code></a> &#8211; WSGI レスポンスヘッダツール群<a class="headerlink" href="#module-wsgiref.headers" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<span id="wsgiref-headers-wsgi-response-header-tools"></span><h2>21.4.2. <a class="reference internal" href="#module-wsgiref.headers" title="wsgiref.headers: WSGI response header tools."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.headers</span></code></a> – WSGI レスポンスヘッダツール群<a class="headerlink" href="#module-wsgiref.headers" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>このモジュールは単一のクラス、 <a class="reference internal" href="#wsgiref.headers.Headers" title="wsgiref.headers.Headers"><code class="xref py py-class docutils literal"><span class="pre">Headers</span></code></a> を提供し、WSGI レスポンスヘッダの操作をマップに似たインターフェースで便利にします。</p>
 <dl class="class">
 <dt id="wsgiref.headers.Headers">
@@ -239,7 +235,7 @@
 
 </div>
 <div class="section" id="module-wsgiref.simple_server">
-<span id="wsgiref-simple-server-a-simple-wsgi-http-server"></span><h2>21.4.3. <a class="reference internal" href="#module-wsgiref.simple_server" title="wsgiref.simple_server: A simple WSGI HTTP server."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.simple_server</span></code></a> &#8211; シンプルな WSGI HTTP サーバ<a class="headerlink" href="#module-wsgiref.simple_server" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<span id="wsgiref-simple-server-a-simple-wsgi-http-server"></span><h2>21.4.3. <a class="reference internal" href="#module-wsgiref.simple_server" title="wsgiref.simple_server: A simple WSGI HTTP server."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.simple_server</span></code></a> – シンプルな WSGI HTTP サーバ<a class="headerlink" href="#module-wsgiref.simple_server" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>このモジュールは WSGI アプリケーションを提供するシンプルな HTTP サーバです (<a class="reference internal" href="http.server.html#module-http.server" title="http.server: HTTP server and request handlers."><code class="xref py py-mod docutils literal"><span class="pre">http.server</span></code></a> がベースです)。個々のサーバインスタンスは単一の WSGI アプリケーションを、特定のホストとポート上で提供します。もし一つのホストとポート上で複数のアプリケーションを提供したいならば、 <code class="docutils literal"><span class="pre">PATH_INFO</span></code> をパースして個々のリクエストでどのアプリケーションを呼び出すか選択するような WSGI アプリケーションを作る必要があります。（例えば、 <a class="reference internal" href="#module-wsgiref.util" title="wsgiref.util: WSGI environment utilities."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.util</span></code></a> から <code class="xref py py-func docutils literal"><span class="pre">shift_path_info()</span></code> を利用します。）</p>
 <dl class="function">
 <dt id="wsgiref.simple_server.make_server">
@@ -263,7 +259,7 @@
 <dl class="function">
 <dt id="wsgiref.simple_server.demo_app">
 <code class="descclassname">wsgiref.simple_server.</code><code class="descname">demo_app</code><span class="sig-paren">(</span><em>environ</em>, <em>start_response</em><span class="sig-paren">)</span><a class="headerlink" href="#wsgiref.simple_server.demo_app" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この関数は小規模ながら完全な WSGI アプリケーションで、 &#8220;Hello world!&#8221; メッセージと、 <em>environ</em> パラメータに提供されているキー／値のペアを含むテキストページを返します。これは WSGI サーバ (<a class="reference internal" href="#module-wsgiref.simple_server" title="wsgiref.simple_server: A simple WSGI HTTP server."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.simple_server</span></code></a> のような) がシンプルな WSGI アプリケーションを正しく実行できるかを確かめるのに便利です。</p>
+<dd><p>この関数は小規模ながら完全な WSGI アプリケーションで、 「Hello world!」 メッセージと、 <em>environ</em> パラメータに提供されているキー／値のペアを含むテキストページを返します。これは WSGI サーバ (<a class="reference internal" href="#module-wsgiref.simple_server" title="wsgiref.simple_server: A simple WSGI HTTP server."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.simple_server</span></code></a> のような) がシンプルな WSGI アプリケーションを正しく実行できるかを確かめるのに便利です。</p>
 </dd></dl>
 
 <dl class="class">
@@ -314,10 +310,10 @@
 
 </div>
 <div class="section" id="module-wsgiref.validate">
-<span id="wsgiref-validate-wsgi-conformance-checker"></span><h2>21.4.4. <a class="reference internal" href="#module-wsgiref.validate" title="wsgiref.validate: WSGI conformance checker."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.validate</span></code></a> &#8212; WSGI 準拠チェッカー<a class="headerlink" href="#module-wsgiref.validate" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<span id="wsgiref-validate-wsgi-conformance-checker"></span><h2>21.4.4. <a class="reference internal" href="#module-wsgiref.validate" title="wsgiref.validate: WSGI conformance checker."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.validate</span></code></a> — WSGI 準拠チェッカー<a class="headerlink" href="#module-wsgiref.validate" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>WSGI アプリケーションのオブジェクト、フレームワーク、サーバまたはミドルウェアの作成時には、その新規のコードを <a class="reference internal" href="#module-wsgiref.validate" title="wsgiref.validate: WSGI conformance checker."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.validate</span></code></a> を使って準拠の検証をすると便利です。このモジュールは WSGI サーバやゲートウェイと WSGI アプリケーションオブジェクト間の通信を検証する WSGI アプリケーションオブジェクトを作成する関数を提供し、双方のプロトコル準拠をチェックします。</p>
 <p>このユーティリティは完全な <span class="target" id="index-39"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3333"><strong>PEP 3333</strong></a> 準拠を保証するものでないことは注意してください; このモジュールでエラーが出ないことは必ずしもエラーが存在しないことを意味しません。しかしこのモジュールがエラーを出したならば、ほぼ確実にサーバかアプリケーションのどちらかが 100% 準拠ではありません。</p>
-<p>このモジュールは lan Bicking の &#8220;Python Paste&#8221; ライブラリの <code class="xref py py-mod docutils literal"><span class="pre">paste.lint</span></code> モジュールをベースにしています。</p>
+<p>このモジュールは lan Bicking の 「Python Paste」 ライブラリの <code class="xref py py-mod docutils literal"><span class="pre">paste.lint</span></code> モジュールをベースにしています。</p>
 <dl class="function">
 <dt id="wsgiref.validate.validator">
 <code class="descclassname">wsgiref.validate.</code><code class="descname">validator</code><span class="sig-paren">(</span><em>application</em><span class="sig-paren">)</span><a class="headerlink" href="#wsgiref.validate.validator" title="この定義へのパーマリンク">¶</a></dt>
@@ -351,7 +347,7 @@
 
 </div>
 <div class="section" id="module-wsgiref.handlers">
-<span id="wsgiref-handlers-server-gateway-base-classes"></span><h2>21.4.5. <a class="reference internal" href="#module-wsgiref.handlers" title="wsgiref.handlers: WSGI server/gateway base classes."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.handlers</span></code></a> &#8211; サーバ／ゲートウェイのベースクラス<a class="headerlink" href="#module-wsgiref.handlers" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<span id="wsgiref-handlers-server-gateway-base-classes"></span><h2>21.4.5. <a class="reference internal" href="#module-wsgiref.handlers" title="wsgiref.handlers: WSGI server/gateway base classes."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.handlers</span></code></a> – サーバ／ゲートウェイのベースクラス<a class="headerlink" href="#module-wsgiref.handlers" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>このモジュールは WSGI サーバとゲートウェイ実装のベースハンドラクラスを提供します。これらのベースクラスは、CGI 風の環境と、それに加えて入力、出力そしてエラーストリームが与えられることで、WSGI アプリケーションとの通信の大部分を処理します。</p>
 <dl class="class">
 <dt id="wsgiref.handlers.CGIHandler">
@@ -387,7 +383,7 @@ separate handler class is provided.  It is used in the same way as
 <dt id="wsgiref.handlers.BaseCGIHandler">
 <em class="property">class </em><code class="descclassname">wsgiref.handlers.</code><code class="descname">BaseCGIHandler</code><span class="sig-paren">(</span><em>stdin</em>, <em>stdout</em>, <em>stderr</em>, <em>environ</em>, <em>multithread=True</em>, <em>multiprocess=False</em><span class="sig-paren">)</span><a class="headerlink" href="#wsgiref.handlers.BaseCGIHandler" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><a class="reference internal" href="#wsgiref.handlers.CGIHandler" title="wsgiref.handlers.CGIHandler"><code class="xref py py-class docutils literal"><span class="pre">CGIHandler</span></code></a> に似ていますが、 <a class="reference internal" href="sys.html#module-sys" title="sys: Access system-specific parameters and functions."><code class="xref py py-mod docutils literal"><span class="pre">sys</span></code></a> と <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal"><span class="pre">os</span></code></a> モジュールを使う代わりに CGI 環境と I/O ストリームを明示的に指定します。 <em>multithread</em> と <em>multiprocess</em> の値は、ハンドラインスタンスにより実行されるアプリケーションの <code class="docutils literal"><span class="pre">wsgi.multithread</span></code> と <code class="docutils literal"><span class="pre">wsgi.multiprocess</span></code> フラグの設定に使われます。</p>
-<p>このクラスは <a class="reference internal" href="#wsgiref.handlers.SimpleHandler" title="wsgiref.handlers.SimpleHandler"><code class="xref py py-class docutils literal"><span class="pre">SimpleHandler</span></code></a> のサブクラスで、HTTP の &#8220;本サーバ&#8221; でないソフトウェアと使うことを意図しています。もしあなたが <code class="docutils literal"><span class="pre">Status:</span></code> ヘッダを HTTP ステータスを送信するのに使うようなゲートウェイプロトコルの実装（CGI、FastCGI、SCGIなど）を書いている場合、おそらく <a class="reference internal" href="#wsgiref.handlers.SimpleHandler" title="wsgiref.handlers.SimpleHandler"><code class="xref py py-class docutils literal"><span class="pre">SimpleHandler</span></code></a> ではなくこのクラスをサブクラス化するとよいでしょう。</p>
+<p>このクラスは <a class="reference internal" href="#wsgiref.handlers.SimpleHandler" title="wsgiref.handlers.SimpleHandler"><code class="xref py py-class docutils literal"><span class="pre">SimpleHandler</span></code></a> のサブクラスで、HTTP の 「本サーバ」 でないソフトウェアと使うことを意図しています。もしあなたが <code class="docutils literal"><span class="pre">Status:</span></code> ヘッダを HTTP ステータスを送信するのに使うようなゲートウェイプロトコルの実装（CGI、FastCGI、SCGIなど）を書いている場合、おそらく <a class="reference internal" href="#wsgiref.handlers.SimpleHandler" title="wsgiref.handlers.SimpleHandler"><code class="xref py py-class docutils literal"><span class="pre">SimpleHandler</span></code></a> ではなくこのクラスをサブクラス化するとよいでしょう。</p>
 </dd></dl>
 
 <dl class="class">
@@ -473,14 +469,14 @@ each chunk in full, like <a class="reference internal" href="io.html#io.Buffered
 <code class="descname">server_software</code><a class="headerlink" href="#wsgiref.handlers.BaseHandler.server_software" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><a class="reference internal" href="#wsgiref.handlers.BaseHandler.origin_server" title="wsgiref.handlers.BaseHandler.origin_server"><code class="xref py py-attr docutils literal"><span class="pre">origin_server</span></code></a> 属性が設定されている場合、この属性の値がデフォルトの <code class="docutils literal"><span class="pre">SERVER_SOFTWARE</span></code> WSGI 環境変数の設定や HTTP レスポンス中のデフォルトの <code class="docutils literal"><span class="pre">Server:</span></code> ヘッダの設定に使われます。これは (<a class="reference internal" href="#wsgiref.handlers.BaseCGIHandler" title="wsgiref.handlers.BaseCGIHandler"><code class="xref py py-class docutils literal"><span class="pre">BaseCGIHandler</span></code></a> や <a class="reference internal" href="#wsgiref.handlers.CGIHandler" title="wsgiref.handlers.CGIHandler"><code class="xref py py-class docutils literal"><span class="pre">CGIHandler</span></code></a> のような) HTTP オリジンサーバでないハンドラでは無視されます。</p>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.3 で変更: </span>&#8220;Python&#8221; という語は &#8220;CPython&#8221; や &#8220;Jython&#8221; などのような個別実装の語に置き換えられました。</p>
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>「Python」 という語は 「CPython」 や 「Jython」 などのような個別実装の語に置き換えられました。</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="wsgiref.handlers.BaseHandler.get_scheme">
 <code class="descname">get_scheme</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wsgiref.handlers.BaseHandler.get_scheme" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>現在のリクエストで使われている URL スキームを返します。デフォルト実装は <a class="reference internal" href="#module-wsgiref.util" title="wsgiref.util: WSGI environment utilities."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.util</span></code></a> の <code class="xref py py-func docutils literal"><span class="pre">guess_scheme()</span></code> を使い、現在のリクエストの <code class="xref py py-attr docutils literal"><span class="pre">environ</span></code> 変数に基づいてスキームが&#8221;http&#8221; か &#8220;https&#8221; かを推測します。</p>
+<dd><p>現在のリクエストで使われている URL スキームを返します。デフォルト実装は <a class="reference internal" href="#module-wsgiref.util" title="wsgiref.util: WSGI environment utilities."><code class="xref py py-mod docutils literal"><span class="pre">wsgiref.util</span></code></a> の <code class="xref py py-func docutils literal"><span class="pre">guess_scheme()</span></code> を使い、現在のリクエストの <code class="xref py py-attr docutils literal"><span class="pre">environ</span></code> 変数に基づいてスキームが」http」 か 「https」 かを推測します。</p>
 </dd></dl>
 
 <dl class="method">
@@ -506,7 +502,7 @@ each chunk in full, like <a class="reference internal" href="io.html#io.Buffered
 <dt id="wsgiref.handlers.BaseHandler.error_output">
 <code class="descname">error_output</code><span class="sig-paren">(</span><em>environ</em>, <em>start_response</em><span class="sig-paren">)</span><a class="headerlink" href="#wsgiref.handlers.BaseHandler.error_output" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>このメソッドは、ユーザに対してエラーページを出力する WSGI アプリケーションです。これはクライアントにヘッダが送出される前にエラーが発生した場合にのみ呼び出されます。</p>
-<p>このメソッドは <code class="docutils literal"><span class="pre">sys.exc_info()</span></code> を使って現在のエラー情報にアクセスでき、その情報はこれを呼ぶときに <em>start_response</em> に渡すべきです (<span class="target" id="index-41"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3333"><strong>PEP 3333</strong></a> の &#8220;Error Handling&#8221; セクションに記述があります)。</p>
+<p>このメソッドは <code class="docutils literal"><span class="pre">sys.exc_info()</span></code> を使って現在のエラー情報にアクセスでき、その情報はこれを呼ぶときに <em>start_response</em> に渡すべきです (<span class="target" id="index-41"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3333"><strong>PEP 3333</strong></a> の 「Error Handling」 セクションに記述があります)。</p>
 <p>デフォルト実装は単に <a class="reference internal" href="#wsgiref.handlers.BaseHandler.error_status" title="wsgiref.handlers.BaseHandler.error_status"><code class="xref py py-attr docutils literal"><span class="pre">error_status</span></code></a> 、 <a class="reference internal" href="#wsgiref.handlers.BaseHandler.error_headers" title="wsgiref.handlers.BaseHandler.error_headers"><code class="xref py py-attr docutils literal"><span class="pre">error_headers</span></code></a> 、 <a class="reference internal" href="#wsgiref.handlers.BaseHandler.error_body" title="wsgiref.handlers.BaseHandler.error_body"><code class="xref py py-attr docutils literal"><span class="pre">error_body</span></code></a> 属性を出力ページの生成に使います。サブクラスではこれをオーバーライドしてもっと動的なエラー出力をすることができます。</p>
 <p>しかし、セキュリティの観点からは診断をあらゆるユーザに吐き出すことは推奨されないことに気をつけてください; 理想的には、診断的な出力を有効にするには何らかの特別なことをする必要があるようにすべきで、これがデフォルト実装では何も含まれていない理由です。</p>
 </dd></dl>
@@ -526,10 +522,10 @@ each chunk in full, like <a class="reference internal" href="io.html#io.Buffered
 <dl class="attribute">
 <dt id="wsgiref.handlers.BaseHandler.error_body">
 <code class="descname">error_body</code><a class="headerlink" href="#wsgiref.handlers.BaseHandler.error_body" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>エラーレスポンスボディ。これは HTTP レスポンスのボディバイト文字列であるべきです。これはデフォルトではプレーンテキストで &#8220;A server error occurred.  Please contact the administrator.&#8221; です。</p>
+<dd><p>エラーレスポンスボディ。これは HTTP レスポンスのボディバイト文字列であるべきです。これはデフォルトではプレーンテキストで 「A server error occurred.  Please contact the administrator.」 です。</p>
 </dd></dl>
 
-<p><span class="target" id="index-44"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3333"><strong>PEP 3333</strong></a> の &#8220;オプションのプラットフォーム固有のファイルハンドリング&#8221; 機能のためのメソッドと属性:</p>
+<p><span class="target" id="index-44"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3333"><strong>PEP 3333</strong></a> の 「オプションのプラットフォーム固有のファイルハンドリング」 機能のためのメソッドと属性:</p>
 <dl class="attribute">
 <dt id="wsgiref.handlers.BaseHandler.wsgi_file_wrapper">
 <code class="descname">wsgi_file_wrapper</code><a class="headerlink" href="#wsgiref.handlers.BaseHandler.wsgi_file_wrapper" title="この定義へのパーマリンク">¶</a></dt>
@@ -561,11 +557,11 @@ each chunk in full, like <a class="reference internal" href="io.html#io.Buffered
 <dl class="function">
 <dt id="wsgiref.handlers.read_environ">
 <code class="descclassname">wsgiref.handlers.</code><code class="descname">read_environ</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wsgiref.handlers.read_environ" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Transcode CGI variables from <code class="docutils literal"><span class="pre">os.environ</span></code> to PEP 3333 &#8220;bytes in unicode&#8221;
+<dd><p>Transcode CGI variables from <code class="docutils literal"><span class="pre">os.environ</span></code> to PEP 3333 「bytes in unicode」
 strings, returning a new dictionary.  This function is used by
 <a class="reference internal" href="#wsgiref.handlers.CGIHandler" title="wsgiref.handlers.CGIHandler"><code class="xref py py-class docutils literal"><span class="pre">CGIHandler</span></code></a> and <a class="reference internal" href="#wsgiref.handlers.IISCGIHandler" title="wsgiref.handlers.IISCGIHandler"><code class="xref py py-class docutils literal"><span class="pre">IISCGIHandler</span></code></a> in place of directly using
 <code class="docutils literal"><span class="pre">os.environ</span></code>, which is not necessarily WSGI-compliant on all platforms
-and web servers using Python 3 &#8211; specifically, ones where the OS&#8217;s
+and web servers using Python 3 – specifically, ones where the OS’s
 actual environment is Unicode (i.e. Windows), or ones where the environment
 is bytes, but the system encoding used by Python to decode it is anything
 other than ISO-8859-1 (e.g. Unix systems using UTF-8).</p>
@@ -580,7 +576,7 @@ directly.</p>
 </div>
 <div class="section" id="examples">
 <h2>21.4.6. 使用例<a class="headerlink" href="#examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>これは動作する &#8220;Hello World&#8221; WSGIアプリケーションです:</p>
+<p>これは動作する 「Hello World」 WSGIアプリケーションです:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wsgiref.simple_server</span> <span class="k">import</span> <span class="n">make_server</span>
 
 <span class="c1"># Every WSGI application must have an application object - a callable</span>
@@ -615,12 +611,12 @@ directly.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">21.4. <code class="docutils literal"><span class="pre">wsgiref</span></code> &#8212; WSGI ユーティリティとリファレンス実装</a><ul>
-<li><a class="reference internal" href="#module-wsgiref.util">21.4.1. <code class="docutils literal"><span class="pre">wsgiref.util</span></code> &#8211; WSGI 環境のユーティリティ</a></li>
-<li><a class="reference internal" href="#module-wsgiref.headers">21.4.2. <code class="docutils literal"><span class="pre">wsgiref.headers</span></code> &#8211; WSGI レスポンスヘッダツール群</a></li>
-<li><a class="reference internal" href="#module-wsgiref.simple_server">21.4.3. <code class="docutils literal"><span class="pre">wsgiref.simple_server</span></code> &#8211; シンプルな WSGI HTTP サーバ</a></li>
-<li><a class="reference internal" href="#module-wsgiref.validate">21.4.4. <code class="docutils literal"><span class="pre">wsgiref.validate</span></code> &#8212; WSGI 準拠チェッカー</a></li>
-<li><a class="reference internal" href="#module-wsgiref.handlers">21.4.5. <code class="docutils literal"><span class="pre">wsgiref.handlers</span></code> &#8211; サーバ／ゲートウェイのベースクラス</a></li>
+<li><a class="reference internal" href="#">21.4. <code class="docutils literal"><span class="pre">wsgiref</span></code> — WSGI ユーティリティとリファレンス実装</a><ul>
+<li><a class="reference internal" href="#module-wsgiref.util">21.4.1. <code class="docutils literal"><span class="pre">wsgiref.util</span></code> – WSGI 環境のユーティリティ</a></li>
+<li><a class="reference internal" href="#module-wsgiref.headers">21.4.2. <code class="docutils literal"><span class="pre">wsgiref.headers</span></code> – WSGI レスポンスヘッダツール群</a></li>
+<li><a class="reference internal" href="#module-wsgiref.simple_server">21.4.3. <code class="docutils literal"><span class="pre">wsgiref.simple_server</span></code> – シンプルな WSGI HTTP サーバ</a></li>
+<li><a class="reference internal" href="#module-wsgiref.validate">21.4.4. <code class="docutils literal"><span class="pre">wsgiref.validate</span></code> — WSGI 準拠チェッカー</a></li>
+<li><a class="reference internal" href="#module-wsgiref.handlers">21.4.5. <code class="docutils literal"><span class="pre">wsgiref.handlers</span></code> – サーバ／ゲートウェイのベースクラス</a></li>
 <li><a class="reference internal" href="#examples">21.4.6. 使用例</a></li>
 </ul>
 </li>
@@ -628,16 +624,16 @@ directly.</p>
 
   <h4>前のトピックへ</h4>
   <p class="topless"><a href="cgitb.html"
-                        title="前の章へ">21.3. <code class="docutils literal"><span class="pre">cgitb</span></code> &#8212; CGI スクリプトのトレースバック管理機構</a></p>
+                        title="前の章へ">21.3. <code class="docutils literal"><span class="pre">cgitb</span></code> — CGI スクリプトのトレースバック管理機構</a></p>
   <h4>次のトピックへ</h4>
   <p class="topless"><a href="urllib.html"
-                        title="次の章へ">21.5. <code class="docutils literal"><span class="pre">urllib</span></code> &#8212; URL を扱うモジュール群</a></p>
+                        title="次の章へ">21.5. <code class="docutils literal"><span class="pre">urllib</span></code> — URL を扱うモジュール群</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/wsgiref.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/wsgiref.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -698,7 +694,7 @@ directly.</p>
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

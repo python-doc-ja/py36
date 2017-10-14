@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Python 3 への拡張モジュール移植 &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="Python HOWTO" href="index.html" />
     <link rel="next" title="Python で Curses プログラミング" href="curses.html" />
     <link rel="prev" title="Python 2 から Python 3 への移植" href="pyporting.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -113,7 +109,7 @@
 </tbody>
 </table>
 <div class="topic">
-<p class="topic-title first">概要</p>
+<p class="topic-title first">Abstract</p>
 <p>C-API の変更は Python 3 の目標には入っていませんでしたが、Python レベルでの変更がたくさんあったので、Python 2 の API を無傷で済ませることはできませんでした。実際、 <a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-func docutils literal"><span class="pre">int()</span></code></a> と <code class="xref py py-func docutils literal"><span class="pre">long()</span></code> の統合などは C レベルのほうが目立ちます。この文書では、なくなった互換性と、その対処方法について記述しようと思います。</p>
 </div>
 <div class="section" id="conditional-compilation">
@@ -270,17 +266,13 @@ C-API では <code class="docutils literal"><span class="pre">PyInt_*</span></co
 <p>Python 3.1 と 2.7 に <code class="xref c c-type docutils literal"><span class="pre">Capsule</span></code> オブジェクトが導入されました。これは <code class="xref c c-type docutils literal"><span class="pre">CObject</span></code> のかわりになるものです。  CObject は便利でしたが、 <code class="xref c c-type docutils literal"><span class="pre">CObject</span></code> API には問題がありました: 有効な CObject であればそれ以上の識別が不可能なので、合わない CObject を混ぜて使うとインタープリタをクラッシュさせかねなかったこと、そして API の一部が C の未定義な挙動に依存していたことです。 (Capsule の背景について詳しくは <a class="reference external" href="https://bugs.python.org/issue5630">bpo-5630</a> をご覧ください。)</p>
 <p>現時点で CObject を使っているのであれば、3.1 以降へ移行するには Capsule へ切り換える必要があります。 <code class="xref c c-type docutils literal"><span class="pre">CObject</span></code> は 3.1 および 2.7 で非推奨となり、Python 3.2 では完全に削除されたからです。  2.7 と 3.1 以上だけの対応でいいなら、単に <code class="xref c c-type docutils literal"><span class="pre">Capsule</span></code> へ切り換えるだけです。  しかし Python 3.0 や、あるいは 2.7 未満のバージョンに対応しなければならない場合は、CObject と Capsule の両方に対応する必要が出てきます。(ただし Python 3.0 はサポートが終了しているため現場利用には推奨されません。)</p>
 <p>そうした問題は、下に例示する <code class="file docutils literal"><span class="pre">capsulethunk.h</span></code> ヘッダファイルで解決できるかもしれません。  必要な作業は、 <code class="xref c c-type docutils literal"><span class="pre">Capsule</span></code> API でコードを書き、このヘッダファイルを <code class="file docutils literal"><span class="pre">Python.h</span></code> の後でインクルードするだけです。  すると自動的に、Capsule のあるバージョンの Python では Capsule を使い、なければ CObject を使うようになります。</p>
-<p>その場合 <code class="file docutils literal"><span class="pre">capsulethunk.h</span></code> は CObject を使って Capsule をシミュレートします。  しかし <code class="xref c c-type docutils literal"><span class="pre">CObject</span></code> には capsule の &#8220;name&#8221; を保持する余地がありません。  よって、 <code class="file docutils literal"><span class="pre">capsulethunk.h</span></code> でシミュレートされた <code class="xref c c-type docutils literal"><span class="pre">Capsule</span></code> オブジェクトの動作は、本物の Capsule とは少し異なります。  具体的には:</p>
+<p>その場合 <code class="file docutils literal"><span class="pre">capsulethunk.h</span></code> は CObject を使って Capsule をシミュレートします。  しかし <code class="xref c c-type docutils literal"><span class="pre">CObject</span></code> には capsule の 「name」 を保持する余地がありません。  よって、 <code class="file docutils literal"><span class="pre">capsulethunk.h</span></code> でシミュレートされた <code class="xref c c-type docutils literal"><span class="pre">Capsule</span></code> オブジェクトの動作は、本物の Capsule とは少し異なります。  具体的には:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p class="first"><a class="reference internal" href="../c-api/capsule.html#c.PyCapsule_New" title="PyCapsule_New"><code class="xref c c-func docutils literal"><span class="pre">PyCapsule_New()</span></code></a> に渡された name 引数は無視されます。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../c-api/capsule.html#c.PyCapsule_IsValid" title="PyCapsule_IsValid"><code class="xref c c-func docutils literal"><span class="pre">PyCapsule_IsValid()</span></code></a> および <a class="reference internal" href="../c-api/capsule.html#c.PyCapsule_GetPointer" title="PyCapsule_GetPointer"><code class="xref c c-func docutils literal"><span class="pre">PyCapsule_GetPointer()</span></code></a> に渡された name 引数は無視され、name のエラーチェックも実行されません。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../c-api/capsule.html#c.PyCapsule_GetName" title="PyCapsule_GetName"><code class="xref c c-func docutils literal"><span class="pre">PyCapsule_GetName()</span></code></a> は常に NULL を返します。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../c-api/capsule.html#c.PyCapsule_SetName" title="PyCapsule_SetName"><code class="xref c c-func docutils literal"><span class="pre">PyCapsule_SetName()</span></code></a> は常に例外を送出して、失敗を返します。 (CObject に名前を格納する方法がないので、ここでは <a class="reference internal" href="../c-api/capsule.html#c.PyCapsule_SetName" title="PyCapsule_SetName"><code class="xref c c-func docutils literal"><span class="pre">PyCapsule_SetName()</span></code></a> のうるさい失敗は暗黙の失敗より好ましいと考えられました。これが不便な場合は、適切と思うやり方で自由にローカルコピーを修正してください。)</p>
-</li>
+<li><a class="reference internal" href="../c-api/capsule.html#c.PyCapsule_New" title="PyCapsule_New"><code class="xref c c-func docutils literal"><span class="pre">PyCapsule_New()</span></code></a> に渡された name 引数は無視されます。</li>
+<li><a class="reference internal" href="../c-api/capsule.html#c.PyCapsule_IsValid" title="PyCapsule_IsValid"><code class="xref c c-func docutils literal"><span class="pre">PyCapsule_IsValid()</span></code></a> および <a class="reference internal" href="../c-api/capsule.html#c.PyCapsule_GetPointer" title="PyCapsule_GetPointer"><code class="xref c c-func docutils literal"><span class="pre">PyCapsule_GetPointer()</span></code></a> に渡された name 引数は無視され、name のエラーチェックも実行されません。</li>
+<li><a class="reference internal" href="../c-api/capsule.html#c.PyCapsule_GetName" title="PyCapsule_GetName"><code class="xref c c-func docutils literal"><span class="pre">PyCapsule_GetName()</span></code></a> は常に NULL を返します。</li>
+<li><a class="reference internal" href="../c-api/capsule.html#c.PyCapsule_SetName" title="PyCapsule_SetName"><code class="xref c c-func docutils literal"><span class="pre">PyCapsule_SetName()</span></code></a> は常に例外を送出して、失敗を返します。 (CObject に名前を格納する方法がないので、ここでは <a class="reference internal" href="../c-api/capsule.html#c.PyCapsule_SetName" title="PyCapsule_SetName"><code class="xref c c-func docutils literal"><span class="pre">PyCapsule_SetName()</span></code></a> のうるさい失敗は暗黙の失敗より好ましいと考えられました。これが不便な場合は、適切と思うやり方で自由にローカルコピーを修正してください。)</li>
 </ul>
 </div></blockquote>
 <p><code class="file docutils literal"><span class="pre">capsulethunk.h</span></code> は Python のソースの中に <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Doc/includes/capsulethunk.h">Doc/includes/capsulethunk.h</a> という名前で入っています。  読者の便宜のため、ここにも引用しておきましょう:</p>
@@ -460,7 +452,7 @@ C-API では <code class="docutils literal"><span class="pre">PyInt_*</span></co
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/cporting.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/cporting.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -520,7 +512,7 @@ C-API では <code class="docutils literal"><span class="pre">PyInt_*</span></co
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

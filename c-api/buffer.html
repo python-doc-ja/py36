@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>バッファプロトコル (buffer Protocol) &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="抽象オブジェクトレイヤ (abstract objects layer)" href="abstract.html" />
     <link rel="next" title="古いバッファプロトコル" href="objbuffer.html" />
     <link rel="prev" title="イテレータプロトコル (iterator protocol)" href="iter.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -109,25 +105,21 @@
 <p>それぞれの型はそれ自身のセマンティクスを持ちますが、おそらく大きなメモリバッファからなるという共通の特徴を共有します。いくつかの状況では仲介するコピーを行うことなく直接バッファにアクセスすることが望まれます。</p>
 <p>Pythonは <a class="reference internal" href="#bufferobjects"><span class="std std-ref">buffer protocol</span></a> の形式で C レベルの仕組みを提供します。このプロトコルには二つの側面があります:</p>
 <ul class="simple" id="index-1">
-<li><p class="first">提供する側では、ある型は、そのオブジェクトの下層にあるバッファに関する情報を提供できる &#8220;buffer インタフェース&#8221; をエクスポートすることができます。このインタフェースは <a class="reference internal" href="typeobj.html#buffer-structs"><span class="std std-ref">バッファオブジェクト構造体 (buffer object structure)</span></a> の節で説明します。</p>
-</li>
-<li><p class="first">利用する側では、オブジェクトの下層にある生データへのポインタを得るいくつかの手段が利用できます（たとえばメソッド引数）。</p>
-</li>
+<li>提供する側では、ある型は、そのオブジェクトの下層にあるバッファに関する情報を提供できる 「buffer インタフェース」 をエクスポートすることができます。このインタフェースは <a class="reference internal" href="typeobj.html#buffer-structs"><span class="std std-ref">バッファオブジェクト構造体 (buffer object structure)</span></a> の節で説明します。</li>
+<li>利用する側では、オブジェクトの下層にある生データへのポインタを得るいくつかの手段が利用できます（たとえばメソッド引数）。</li>
 </ul>
 <p><a class="reference internal" href="../library/functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> や <a class="reference internal" href="../library/functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> などのシンプルなオブジェクトは、内部のバッファーをバイト列の形式で公開します。
 バイト列以外の形式も利用可能です。例えば、 <a class="reference internal" href="../library/array.html#array.array" title="array.array"><code class="xref py py-class docutils literal"><span class="pre">array.array</span></code></a> が公開する要素はマルチバイト値になることがあります。</p>
 <p>bufferインタフェースの利用者の一例は、ファイルオブジェクトの <a class="reference internal" href="../library/io.html#io.BufferedIOBase.write" title="io.BufferedIOBase.write"><code class="xref py py-meth docutils literal"><span class="pre">write()</span></code></a>  メソッドです: bufferインタフェースを通して一連のバイト列を提供できるどんなオブジェクトでもファイルに書き込むことができます。  <code class="xref py py-meth docutils literal"><span class="pre">write()</span></code> は、その引数として渡されたオブジェクトの内部要素に対する読み取り専用アクセスのみを必要としますが、 <a class="reference internal" href="../library/io.html#io.BufferedIOBase.readinto" title="io.BufferedIOBase.readinto"><code class="xref py py-meth docutils literal"><span class="pre">readinto()</span></code></a> のような他のメソッドでは、その引数の内容に対する書き込みアクセスが必要です。bufferインタフェースにより、オブジェクトは読み書き両方、読み取り専用バッファへのアクセスを許可するかそれとも拒否するか選択することができます。</p>
 <p>bufferインタフェースの利用者には、対象となるオブジェクトのバッファを得る二つの方法があります:</p>
 <ul class="simple">
-<li><p class="first">正しい引数で <a class="reference internal" href="#c.PyObject_GetBuffer" title="PyObject_GetBuffer"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GetBuffer()</span></code></a> を呼び出す;</p>
-</li>
-<li><p class="first"><a class="reference internal" href="arg.html#c.PyArg_ParseTuple" title="PyArg_ParseTuple"><code class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></code></a> (またはその同族のひとつ) を <code class="docutils literal"><span class="pre">y*</span></code> 、 <code class="docutils literal"><span class="pre">w*</span></code> または <code class="docutils literal"><span class="pre">s*</span></code> <a class="reference internal" href="arg.html#arg-parsing"><span class="std std-ref">format codes</span></a> のいずれかとともに呼び出す。</p>
-</li>
+<li>正しい引数で <a class="reference internal" href="#c.PyObject_GetBuffer" title="PyObject_GetBuffer"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GetBuffer()</span></code></a> を呼び出す;</li>
+<li><a class="reference internal" href="arg.html#c.PyArg_ParseTuple" title="PyArg_ParseTuple"><code class="xref c c-func docutils literal"><span class="pre">PyArg_ParseTuple()</span></code></a> (またはその同族のひとつ) を <code class="docutils literal"><span class="pre">y*</span></code> 、 <code class="docutils literal"><span class="pre">w*</span></code> または <code class="docutils literal"><span class="pre">s*</span></code> <a class="reference internal" href="arg.html#arg-parsing"><span class="std std-ref">format codes</span></a> のいずれかとともに呼び出す。</li>
 </ul>
 <p>どちらのケースでも、bufferが必要なくなった時に <a class="reference internal" href="#c.PyBuffer_Release" title="PyBuffer_Release"><code class="xref c c-func docutils literal"><span class="pre">PyBuffer_Release()</span></code></a> を呼び出さなければなりません。これを怠ると、リソースリークのような様々な問題につながる恐れがあります。</p>
 <div class="section" id="buffer-structure">
 <span id="id1"></span><h2>buffer 構造体<a class="headerlink" href="#buffer-structure" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>バッファ構造体（または単純に &#8220;buffers&#8221;）は別のオブジェクトのバイナリデータをPythonプログラマに提供するのに便利です。これはまた、ゼロコピースライシング機構としても使用できます。このメモリブロックを参照する機能を使うことで、どんなデータでもとても簡単にPythonプログラマに提供することができます。メモリは、C 拡張の大きな配列定数かもしれませんし、オペレーティングシステムライブラリに渡す前のメモリブロックかもしれませんし、構造化データをネイティブのインメモリ形式受け渡すのに使用されるかもしれません。</p>
+<p>バッファ構造体（または単純に 「buffers」）は別のオブジェクトのバイナリデータをPythonプログラマに提供するのに便利です。これはまた、ゼロコピースライシング機構としても使用できます。このメモリブロックを参照する機能を使うことで、どんなデータでもとても簡単にPythonプログラマに提供することができます。メモリは、C 拡張の大きな配列定数かもしれませんし、オペレーティングシステムライブラリに渡す前のメモリブロックかもしれませんし、構造化データをネイティブのインメモリ形式受け渡すのに使用されるかもしれません。</p>
 <p>Pythonインタプリタによって提供される多くのデータ型とは異なり、バッファは <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject</span></code></a> ポインタではなく、シンプルなC 構造体です。そのため、作成とコピーが非常に簡単に行えます。バッファの一般的なラッパーが必要なときは、 <a class="reference internal" href="memoryview.html#memoryview-objects"><span class="std std-ref">memoryview</span></a> オブジェクトが作成されます。</p>
 <p>エクスポートされるオブジェクトを書く方法の短い説明には、 <a class="reference internal" href="typeobj.html#buffer-structs"><span class="std std-ref">Buffer Object Structures</span></a> を参照してください。バッファを取得するには、 <a class="reference internal" href="#c.PyObject_GetBuffer" title="PyObject_GetBuffer"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GetBuffer()</span></code></a> を参照してください。</p>
 <dl class="type">
@@ -268,8 +260,7 @@ void *<code class="descname">internal</code><a class="headerlink" href="#c.Py_bu
 <col width="21%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">リクエスト</p>
-</th>
+<tr class="row-odd"><th class="head">リクエスト</th>
 <th class="head">shape</th>
 <th class="head">strides</th>
 <th class="head">suboffsets</th>
@@ -284,8 +275,7 @@ void *<code class="descname">internal</code><a class="headerlink" href="#c.Py_bu
 </td>
 <td>yes</td>
 <td>yes</td>
-<td><p class="first last">必要な場合</p>
-</td>
+<td>必要な場合</td>
 </tr>
 <tr class="row-odd"><td><dl class="first last macro">
 <dt id="c.PyBUF_STRIDES">
@@ -333,8 +323,7 @@ void *<code class="descname">internal</code><a class="headerlink" href="#c.Py_bu
 <col width="11%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">リクエスト</p>
-</th>
+<tr class="row-odd"><th class="head">リクエスト</th>
 <th class="head">shape</th>
 <th class="head">strides</th>
 <th class="head">suboffsets</th>
@@ -373,8 +362,7 @@ void *<code class="descname">internal</code><a class="headerlink" href="#c.Py_bu
 <td>yes</td>
 <td>yes</td>
 <td>NULL</td>
-<td><p class="first last">C か F</p>
-</td>
+<td>C か F</td>
 </tr>
 <tr class="row-odd"><td><dl class="first last macro">
 <dt>
@@ -407,8 +395,7 @@ void *<code class="descname">internal</code><a class="headerlink" href="#c.Py_bu
 <col width="9%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">リクエスト</p>
-</th>
+<tr class="row-odd"><th class="head">リクエスト</th>
 <th class="head">shape</th>
 <th class="head">strides</th>
 <th class="head">suboffsets</th>
@@ -426,8 +413,7 @@ void *<code class="descname">internal</code><a class="headerlink" href="#c.Py_bu
 </td>
 <td>yes</td>
 <td>yes</td>
-<td><p class="first last">必要な場合</p>
-</td>
+<td>必要な場合</td>
 <td>U</td>
 <td>0</td>
 <td>yes</td>
@@ -440,11 +426,9 @@ void *<code class="descname">internal</code><a class="headerlink" href="#c.Py_bu
 </td>
 <td>yes</td>
 <td>yes</td>
-<td><p class="first last">必要な場合</p>
-</td>
+<td>必要な場合</td>
 <td>U</td>
-<td><p class="first last">1 か 0</p>
-</td>
+<td>1 か 0</td>
 <td>yes</td>
 </tr>
 <tr class="row-even"><td><dl class="first last macro">
@@ -470,8 +454,7 @@ void *<code class="descname">internal</code><a class="headerlink" href="#c.Py_bu
 <td>yes</td>
 <td>NULL</td>
 <td>U</td>
-<td><p class="first last">1 か 0</p>
-</td>
+<td>1 か 0</td>
 <td>yes</td>
 </tr>
 <tr class="row-even"><td><dl class="first last macro">
@@ -497,8 +480,7 @@ void *<code class="descname">internal</code><a class="headerlink" href="#c.Py_bu
 <td>yes</td>
 <td>NULL</td>
 <td>U</td>
-<td><p class="first last">1 か 0</p>
-</td>
+<td>1 か 0</td>
 <td>NULL</td>
 </tr>
 <tr class="row-even"><td><dl class="first last macro">
@@ -524,8 +506,7 @@ void *<code class="descname">internal</code><a class="headerlink" href="#c.Py_bu
 <td>NULL</td>
 <td>NULL</td>
 <td>C</td>
-<td><p class="first last">1 か 0</p>
-</td>
+<td>1 か 0</td>
 <td>NULL</td>
 </tr>
 </tbody>
@@ -697,7 +678,7 @@ int <code class="descname">PyBuffer_FillInfo</code><span class="sig-paren">(</sp
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/buffer.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/buffer.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -758,7 +739,7 @@ int <code class="descname">PyBuffer_FillInfo</code><span class="sig-paren">(</sp
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

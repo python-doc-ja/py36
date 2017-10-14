@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>モジュールオブジェクト (module object) &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="具象オブジェクト (concrete object) レイヤ" href="concrete.html" />
     <link rel="next" title="イテレータオブジェクト (iterator object)" href="iterator.html" />
     <link rel="prev" title="ファイルオブジェクト" href="file.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -170,7 +166,7 @@ char* <code class="descname">PyModule_GetName</code><span class="sig-paren">(</s
 <dl class="function">
 <dt id="c.PyModule_GetState">
 void* <code class="descname">PyModule_GetState</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*module</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_GetState" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>モジュールの &#8220;state&#8221;(モジュールを生成したタイミングで確保されるメモリブロックへのポインター) か、なければ <em>NULL</em> を返します。 <a class="reference internal" href="#c.PyModuleDef.m_size" title="PyModuleDef.m_size"><code class="xref c c-member docutils literal"><span class="pre">PyModuleDef.m_size</span></code></a> を参照してください。</p>
+<dd><p>モジュールの 「state」(モジュールを生成したタイミングで確保されるメモリブロックへのポインター) か、なければ <em>NULL</em> を返します。 <a class="reference internal" href="#c.PyModuleDef.m_size" title="PyModuleDef.m_size"><code class="xref c c-member docutils literal"><span class="pre">PyModuleDef.m_size</span></code></a> を参照してください。</p>
 </dd></dl>
 
 <dl class="function">
@@ -192,7 +188,7 @@ void* <code class="descname">PyModule_GetState</code><span class="sig-paren">(</
 <dl class="function">
 <dt id="c.PyModule_GetFilename">
 char* <code class="descname">PyModule_GetFilename</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*module</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_GetFilename" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><a class="reference internal" href="#c.PyModule_GetFilenameObject" title="PyModule_GetFilenameObject"><code class="xref c c-func docutils literal"><span class="pre">PyModule_GetFilenameObject()</span></code></a> と似ていますが、 &#8216;utf-8&#8217; でエンコードされたファイル名を返します。</p>
+<dd><p><a class="reference internal" href="#c.PyModule_GetFilenameObject" title="PyModule_GetFilenameObject"><code class="xref c c-func docutils literal"><span class="pre">PyModule_GetFilenameObject()</span></code></a> と似ていますが、 『utf-8』 でエンコードされたファイル名を返します。</p>
 <div class="deprecated">
 <p><span class="versionmodified">バージョン 3.2 で撤廃: </span><a class="reference internal" href="#c.PyModule_GetFilename" title="PyModule_GetFilename"><code class="xref c c-func docutils literal"><span class="pre">PyModule_GetFilename()</span></code></a> はエンコードできないファイル名に対しては <code class="xref c c-type docutils literal"><span class="pre">UnicodeEncodeError</span></code> を送出します。これの代わりに <a class="reference internal" href="#c.PyModule_GetFilenameObject" title="PyModule_GetFilenameObject"><code class="xref c c-func docutils literal"><span class="pre">PyModule_GetFilenameObject()</span></code></a> を使用してください。</p>
 </div>
@@ -202,7 +198,7 @@ char* <code class="descname">PyModule_GetFilename</code><span class="sig-paren">
 <span id="initializing-modules"></span><h2>Cモジュールの初期化<a class="headerlink" href="#initializing-c-modules" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>通常、モジュールオブジェクトは拡張モジュール (初期化関数をエクスポートしている共有ライブラリ) または組み込まれたモジュール (<a class="reference internal" href="import.html#c.PyImport_AppendInittab" title="PyImport_AppendInittab"><code class="xref c c-func docutils literal"><span class="pre">PyImport_AppendInittab()</span></code></a> を使って初期化関数が追加されているモジュール) から作られます。
 詳細については <a class="reference internal" href="../extending/building.html#building"><span class="std std-ref">C および C++ 拡張のビルド</span></a> または <a class="reference internal" href="../extending/embedding.html#extending-with-embedding"><span class="std std-ref">埋め込まれた Python の拡張</span></a> を見てください。</p>
-<p>初期化関数は、モジュール定義のインスタンスを <a class="reference internal" href="#c.PyModule_Create" title="PyModule_Create"><code class="xref c c-func docutils literal"><span class="pre">PyModule_Create()</span></code></a> に渡して出来上がったモジュールオブジェクトを返してもよいですし、もしくは定義構造体そのものを返し&#8221;多段階初期化&#8221;を要求しても構いません。</p>
+<p>初期化関数は、モジュール定義のインスタンスを <a class="reference internal" href="#c.PyModule_Create" title="PyModule_Create"><code class="xref c c-func docutils literal"><span class="pre">PyModule_Create()</span></code></a> に渡して出来上がったモジュールオブジェクトを返してもよいですし、もしくは定義構造体そのものを返し」多段階初期化」を要求しても構いません。</p>
 <dl class="type">
 <dt id="c.PyModuleDef">
 <code class="descname">PyModuleDef</code><a class="headerlink" href="#c.PyModuleDef" title="この定義へのパーマリンク">¶</a></dt>
@@ -284,7 +280,7 @@ freefunc <code class="descname">m_free</code><a class="headerlink" href="#c.PyMo
 <div class="section" id="single-phase-initialization">
 <h3>一段階初期化<a class="headerlink" href="#single-phase-initialization" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>モジュールの初期化関数が直接モジュールオブジェクトを生成して返す場合があります。
-これは&#8221;一段階初期化&#8221;と呼ばれ、次の2つのモジュール生成関数のどちらか1つを使います:</p>
+これは」一段階初期化」と呼ばれ、次の2つのモジュール生成関数のどちらか1つを使います:</p>
 <dl class="function">
 <dt id="c.PyModule_Create">
 <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyModule_Create</code><span class="sig-paren">(</span><a class="reference internal" href="#c.PyModuleDef" title="PyModuleDef">PyModuleDef</a><em>&nbsp;*def</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_Create" title="この定義へのパーマリンク">¶</a></dt>
@@ -307,7 +303,7 @@ freefunc <code class="descname">m_free</code><a class="headerlink" href="#c.PyMo
 </div>
 <div class="section" id="multi-phase-initialization">
 <span id="id1"></span><h3>多段階初期化<a class="headerlink" href="#multi-phase-initialization" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>拡張を直接生成するもう1つのやり方は、&#8221;多段階初期化&#8221;を要求する方法です。
+<p>拡張を直接生成するもう1つのやり方は、」多段階初期化」を要求する方法です。
 この方法で作られる拡張モジュールは、よりPythonモジュールに近い振る舞いをします:
 初期化処理は、モジュールオブジェクトを生成する <em>生成段階</em> とメンバを所属させる <em>実行段階</em> に分割されます。
 この区別はクラスの <a class="reference internal" href="../reference/datamodel.html#object.__new__" title="object.__new__"><code class="xref py py-meth docutils literal"><span class="pre">__new__()</span></code></a> メソッドと <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a> メソッドに似ています。</p>
@@ -444,7 +440,7 @@ int <code class="descname">PyModule_SetDocString</code><span class="sig-paren">(
 <dt id="c.PyModule_AddFunctions">
 int <code class="descname">PyModule_AddFunctions</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*module</em>, <a class="reference internal" href="structures.html#c.PyMethodDef" title="PyMethodDef">PyMethodDef</a><em>&nbsp;*functions</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyModule_AddFunctions" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>終端が <em>NULL</em> になっている <em>functions</em> 配列にある関数を <em>module</em> に追加します。
-<a class="reference internal" href="structures.html#c.PyMethodDef" title="PyMethodDef"><code class="xref c c-type docutils literal"><span class="pre">PyMethodDef</span></code></a> 構造体の個々のエントリについては PyMethodDef の説明を参照してください (モジュールの名前空間が共有されていないので、 C で実装されたモジュールレベル &#8220;関数&#8221; はたいていモジュールを1つ目の引数として受け取り、 Python クラスのインスタンスメソッドに似た形にします)。
+<a class="reference internal" href="structures.html#c.PyMethodDef" title="PyMethodDef"><code class="xref c c-type docutils literal"><span class="pre">PyMethodDef</span></code></a> 構造体の個々のエントリについては PyMethodDef の説明を参照してください (モジュールの名前空間が共有されていないので、 C で実装されたモジュールレベル 「関数」 はたいていモジュールを1つ目の引数として受け取り、 Python クラスのインスタンスメソッドに似た形にします)。
 この関数は、 <code class="docutils literal"><span class="pre">PyModuleDef</span></code> から <code class="docutils literal"><span class="pre">PyModule_Create</span></code> もしくは <code class="docutils literal"><span class="pre">PyModule_FromDefAndSpec</span></code> を使ってモジュールを生成するときに自動的に呼び出されます。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
@@ -558,7 +554,7 @@ int <code class="descname">PyState_RemoveModule</code><span class="sig-paren">(<
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/module.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/module.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -619,7 +615,7 @@ int <code class="descname">PyState_RemoveModule</code><span class="sig-paren">(<
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>

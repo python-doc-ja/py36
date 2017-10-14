@@ -1,23 +1,21 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Logging HOWTO &#8212; Python 3.6.1 ドキュメント</title>
-    
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '3.6.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
@@ -32,8 +30,6 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="top" title="Python 3.6.1 ドキュメント" href="../contents.html" />
-    <link rel="up" title="Python HOWTO" href="index.html" />
     <link rel="next" title="Logging クックブック" href="logging-cookbook.html" />
     <link rel="prev" title="関数型プログラミング HOWTO" href="functional.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
@@ -54,7 +50,7 @@
  
 
   </head>
-  <body role="document">  
+  <body>  
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>ナビゲーション</h3>
       <ul>
@@ -124,37 +120,27 @@
 <col width="51%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">行いたいタスク</p>
-</th>
-<th class="head"><p class="first last">そのタスクに最適なツール</p>
-</th>
+<tr class="row-odd"><th class="head">行いたいタスク</th>
+<th class="head">そのタスクに最適なツール</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><p class="first last">コマンドラインスクリプトやプログラムで普通に使う、コンソール出力の表示</p>
-</td>
+<tr class="row-even"><td>コマンドラインスクリプトやプログラムで普通に使う、コンソール出力の表示</td>
 <td><a class="reference internal" href="../library/functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a></td>
 </tr>
-<tr class="row-odd"><td><p class="first last">プログラムの通常の操作中に発生したイベントの報告 (例えば、状態の監視や障害の分析)</p>
-</td>
-<td><p class="first last"><a class="reference internal" href="../library/logging.html#logging.info" title="logging.info"><code class="xref py py-func docutils literal"><span class="pre">logging.info()</span></code></a> (または、診断のための特に詳細な出力には <a class="reference internal" href="../library/logging.html#logging.debug" title="logging.debug"><code class="xref py py-func docutils literal"><span class="pre">logging.debug()</span></code></a>)</p>
-</td>
+<tr class="row-odd"><td>プログラムの通常の操作中に発生したイベントの報告 (例えば、状態の監視や障害の分析)</td>
+<td><a class="reference internal" href="../library/logging.html#logging.info" title="logging.info"><code class="xref py py-func docutils literal"><span class="pre">logging.info()</span></code></a> (または、診断のための特に詳細な出力には <a class="reference internal" href="../library/logging.html#logging.debug" title="logging.debug"><code class="xref py py-func docutils literal"><span class="pre">logging.debug()</span></code></a>)</td>
 </tr>
-<tr class="row-even"><td><p class="first last">特定のランタイムイベントに関わる警告の発行</p>
-</td>
+<tr class="row-even"><td>特定のランタイムイベントに関わる警告の発行</td>
 <td><p class="first">その発行が避けられるもので、クライアントアプリケーションを修正してその警告を排除するべきなら <a class="reference internal" href="../library/warnings.html#warnings.warn" title="warnings.warn"><code class="xref py py-func docutils literal"><span class="pre">warnings.warn()</span></code></a></p>
 <p class="last">アプリケーションにできることはないが、それでもイベントを記録するべきなら <a class="reference internal" href="../library/logging.html#logging.warning" title="logging.warning"><code class="xref py py-func docutils literal"><span class="pre">logging.warning()</span></code></a></p>
 </td>
 </tr>
-<tr class="row-odd"><td><p class="first last">特定のランタイムイベントに関わるエラーの報告</p>
-</td>
-<td><p class="first last">例外の送出</p>
-</td>
+<tr class="row-odd"><td>特定のランタイムイベントに関わるエラーの報告</td>
+<td>例外の送出</td>
 </tr>
-<tr class="row-even"><td><p class="first last">例外の送出をしないエラーの抑制 (例えば、長期のサーバプロセス中のエラーハンドラ)</p>
-</td>
-<td><p class="first last">特定のエラーやアプリケーションドメインに応じて <a class="reference internal" href="../library/logging.html#logging.error" title="logging.error"><code class="xref py py-func docutils literal"><span class="pre">logging.error()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.exception" title="logging.exception"><code class="xref py py-func docutils literal"><span class="pre">logging.exception()</span></code></a> または <a class="reference internal" href="../library/logging.html#logging.critical" title="logging.critical"><code class="xref py py-func docutils literal"><span class="pre">logging.critical()</span></code></a></p>
-</td>
+<tr class="row-even"><td>例外の送出をしないエラーの抑制 (例えば、長期のサーバプロセス中のエラーハンドラ)</td>
+<td>特定のエラーやアプリケーションドメインに応じて <a class="reference internal" href="../library/logging.html#logging.error" title="logging.error"><code class="xref py py-func docutils literal"><span class="pre">logging.error()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.exception" title="logging.exception"><code class="xref py py-func docutils literal"><span class="pre">logging.exception()</span></code></a> または <a class="reference internal" href="../library/logging.html#logging.critical" title="logging.critical"><code class="xref py py-func docutils literal"><span class="pre">logging.critical()</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -165,32 +151,25 @@
 <col width="76%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">レベル</p>
-</th>
-<th class="head"><p class="first last">いつ使うか</p>
-</th>
+<tr class="row-odd"><th class="head">レベル</th>
+<th class="head">いつ使うか</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">DEBUG</span></code></td>
-<td><p class="first last">おもに問題を診断するときにのみ関心があるような、詳細な情報。</p>
-</td>
+<td>おもに問題を診断するときにのみ関心があるような、詳細な情報。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">INFO</span></code></td>
-<td><p class="first last">想定された通りのことが起こったことの確認。</p>
-</td>
+<td>想定された通りのことが起こったことの確認。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">WARNING</span></code></td>
-<td><p class="first last">想定外のことが起こった、または問題が近く起こりそうである (例えば、&#8217;disk space low&#8217;) ことの表示。</p>
-</td>
+<td>想定外のことが起こった、または問題が近く起こりそうである (例えば、』disk space low』) ことの表示。</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">ERROR</span></code></td>
-<td><p class="first last">より重大な問題により、ソフトウェアがある機能を実行できないこと。</p>
-</td>
+<td>より重大な問題により、ソフトウェアがある機能を実行できないこと。</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">CRITICAL</span></code></td>
-<td><p class="first last">プログラム自体が実行を続けられないことを表す、重大なエラー。</p>
-</td>
+<td>プログラム自体が実行を続けられないことを表す、重大なエラー。</td>
 </tr>
 </tbody>
 </table>
@@ -209,7 +188,7 @@
 <div class="highlight-none"><div class="highlight"><pre><span></span>WARNING:root:Watch out!
 </pre></div>
 </div>
-<p>デフォルトのレベルは <code class="docutils literal"><span class="pre">WARNING</span></code> なので、<code class="docutils literal"><span class="pre">INFO</span></code> メッセージは現れません。表示されたメッセージには、レベルの表示と、ロギングの呼び出しで提供された、イベントの説明すなわち &#8216;Watch out!&#8217; が含まれます。&#8217;root&#8217; の部分は今は気にしないでください。あとで説明します。実際の出力は、必要に応じてかなり柔軟に書式化できます。書式化操作もあとで説明します。</p>
+<p>デフォルトのレベルは <code class="docutils literal"><span class="pre">WARNING</span></code> なので、<code class="docutils literal"><span class="pre">INFO</span></code> メッセージは現れません。表示されたメッセージには、レベルの表示と、ロギングの呼び出しで提供された、イベントの説明すなわち 『Watch out!』 が含まれます。』root』 の部分は今は気にしないでください。あとで説明します。実際の出力は、必要に応じてかなり柔軟に書式化できます。書式化操作もあとで説明します。</p>
 </div>
 <div class="section" id="logging-to-a-file">
 <h3>ファイルへの logging<a class="headerlink" href="#logging-to-a-file" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -283,7 +262,7 @@
 <span class="n">INFO</span><span class="p">:</span><span class="n">root</span><span class="p">:</span><span class="n">Finished</span>
 </pre></div>
 </div>
-<p>この <em>mylib.py</em> でのパターンは、複数のモジュールに一般化できます。なお、この簡単な使用パターンでは、ログファイルを見ることで、イベントの説明は見られますが、アプリケーションの <em>どこから</em> メッセージが来たのかを知ることはできません。メッセージの位置を追跡したいなら、このチュートリアルレベルを超えたドキュメントが必要になります &#8211; <a class="reference internal" href="#logging-advanced-tutorial"><span class="std std-ref">上級ロギングチュートリアル</span></a> を参照してください。</p>
+<p>この <em>mylib.py</em> でのパターンは、複数のモジュールに一般化できます。なお、この簡単な使用パターンでは、ログファイルを見ることで、イベントの説明は見られますが、アプリケーションの <em>どこから</em> メッセージが来たのかを知ることはできません。メッセージの位置を追跡したいなら、このチュートリアルレベルを超えたドキュメントが必要になります – <a class="reference internal" href="#logging-advanced-tutorial"><span class="std std-ref">上級ロギングチュートリアル</span></a> を参照してください。</p>
 </div>
 <div class="section" id="logging-variable-data">
 <h3>変数データのロギング<a class="headerlink" href="#logging-variable-data" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -314,11 +293,11 @@
 <span class="n">WARNING</span><span class="p">:</span><span class="n">And</span> <span class="n">this</span><span class="p">,</span> <span class="n">too</span>
 </pre></div>
 </div>
-<p>ご覧の通り、先の例に現れた &#8216;root&#8217; が消失しています。フォーマット文字列に含めることができるものの一覧は、 <a class="reference internal" href="../library/logging.html#logrecord-attributes"><span class="std std-ref">LogRecord 属性</span></a> のドキュメントから参照できますが、単純な用途では、必要なものは <em>levelname</em> (重大度)、 <em>message</em> (変数データを含むイベント記述)、それともしかしたら、イベントがいつ起こったかという表示だけです。これは次の節で解説します。</p>
+<p>ご覧の通り、先の例に現れた 『root』 が消失しています。フォーマット文字列に含めることができるものの一覧は、 <a class="reference internal" href="../library/logging.html#logrecord-attributes"><span class="std std-ref">LogRecord 属性</span></a> のドキュメントから参照できますが、単純な用途では、必要なものは <em>levelname</em> (重大度)、 <em>message</em> (変数データを含むイベント記述)、それともしかしたら、イベントがいつ起こったかという表示だけです。これは次の節で解説します。</p>
 </div>
 <div class="section" id="displaying-the-date-time-in-messages">
 <h3>メッセージ内での日付と時刻の表示<a class="headerlink" href="#displaying-the-date-time-in-messages" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>イベントの日付と時刻を表示するには、フォーマット文字列に &#8216;%(asctime)s&#8217; を置いてください:</p>
+<p>イベントの日付と時刻を表示するには、フォーマット文字列に 『%(asctime)s』 を置いてください:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;is when this event was logged.&#39;</span><span class="p">)</span>
@@ -351,23 +330,19 @@
 <span id="logging-advanced-tutorial"></span><h2>上級ロギングチュートリアル<a class="headerlink" href="#advanced-logging-tutorial" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>logging ライブラリはモジュール方式のアプローチを取り、いくつかのカテゴリの部品を提供します。ロガー、ハンドラ、フィルタ、フォーマッタです。</p>
 <ul class="simple">
-<li><p class="first">ロガーは、アプリケーションコードが直接使うインタフェースを公開します。</p>
-</li>
-<li><p class="first">ハンドラは、(ロガーによって生成された) ログ記録を適切な送信先に送ります。</p>
-</li>
-<li><p class="first">フィルタは、どのログ記録を出力するかを決定する、きめ細かい機能を提供します。</p>
-</li>
-<li><p class="first">フォーマッタは、ログ記録が最終的に出力されるレイアウトを指定します。</p>
-</li>
+<li>ロガーは、アプリケーションコードが直接使うインタフェースを公開します。</li>
+<li>ハンドラは、(ロガーによって生成された) ログ記録を適切な送信先に送ります。</li>
+<li>フィルタは、どのログ記録を出力するかを決定する、きめ細かい機能を提供します。</li>
+<li>フォーマッタは、ログ記録が最終的に出力されるレイアウトを指定します。</li>
 </ul>
 <p>ログイベント情報は <a class="reference internal" href="../library/logging.html#logging.LogRecord" title="logging.LogRecord"><code class="xref py py-class docutils literal"><span class="pre">LogRecord</span></code></a> インスタンスの形で、 logger, handler, filter, formatter の間でやりとりされます。</p>
-<p>ロギングは、 <a class="reference internal" href="../library/logging.html#logging.Logger" title="logging.Logger"><code class="xref py py-class docutils literal"><span class="pre">Logger</span></code></a> クラスのインスタンス (以下 <em class="dfn">ロガー</em>) にメソッドを呼び出すことで実行されます。各インスタンスには名前があり、名前空間階層構造に、ドット (ピリオド) をセパレータとして、概念的に並べられています。例えば、 &#8216;scan&#8217; という名前のロガーは、ロガー &#8216;scan.text&#8217;, &#8216;scan.html&#8217; および &#8216;scan.pdf&#8217;の親です。ロガー名は、何でも望むものにでき、ロギングされたメッセージが発生した場所を指し示します。</p>
+<p>ロギングは、 <a class="reference internal" href="../library/logging.html#logging.Logger" title="logging.Logger"><code class="xref py py-class docutils literal"><span class="pre">Logger</span></code></a> クラスのインスタンス (以下 <em class="dfn">ロガー</em>) にメソッドを呼び出すことで実行されます。各インスタンスには名前があり、名前空間階層構造に、ドット (ピリオド) をセパレータとして、概念的に並べられています。例えば、 『scan』 という名前のロガーは、ロガー 『scan.text』, 『scan.html』 および 『scan.pdf’の親です。ロガー名は、何でも望むものにでき、ロギングされたメッセージが発生した場所を指し示します。</p>
 <p>ロガーに名前をつけるときの良い習慣は、ロギングを使う各モジュールに、以下のように名付けられた、モジュールレベルロガーを使うことです:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>これにより、ロガー名はパッケージ/モジュール階層をなぞり、ロガー名だけで、どこでイベントのログが取られたか、直感的に明らかになります。</p>
-<p>ロガーの階層構造の根源は、ルートロガーと呼ばれます。それが、関数 <a class="reference internal" href="../library/logging.html#logging.debug" title="logging.debug"><code class="xref py py-func docutils literal"><span class="pre">debug()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.info" title="logging.info"><code class="xref py py-func docutils literal"><span class="pre">info()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.warning" title="logging.warning"><code class="xref py py-func docutils literal"><span class="pre">warning()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.error" title="logging.error"><code class="xref py py-func docutils literal"><span class="pre">error()</span></code></a> および <a class="reference internal" href="../library/logging.html#logging.critical" title="logging.critical"><code class="xref py py-func docutils literal"><span class="pre">critical()</span></code></a> によって使われるロガーとなります。これらの関数は単に、ルートロガーの同名のメソッドを呼び出します。これらの関数とメソッドは、同じ署名をもっています。ルートロガーの名前は、ログ出力では &#8216;root&#8217; と表示されます。</p>
+<p>ロガーの階層構造の根源は、ルートロガーと呼ばれます。それが、関数 <a class="reference internal" href="../library/logging.html#logging.debug" title="logging.debug"><code class="xref py py-func docutils literal"><span class="pre">debug()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.info" title="logging.info"><code class="xref py py-func docutils literal"><span class="pre">info()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.warning" title="logging.warning"><code class="xref py py-func docutils literal"><span class="pre">warning()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.error" title="logging.error"><code class="xref py py-func docutils literal"><span class="pre">error()</span></code></a> および <a class="reference internal" href="../library/logging.html#logging.critical" title="logging.critical"><code class="xref py py-func docutils literal"><span class="pre">critical()</span></code></a> によって使われるロガーとなります。これらの関数は単に、ルートロガーの同名のメソッドを呼び出します。これらの関数とメソッドは、同じ署名をもっています。ルートロガーの名前は、ログ出力では 『root』 と表示されます。</p>
 <p>もちろん、メッセージを異なる送信先に記録することも出来ます。このパッケージでは、ファイルへ、 HTTP GET/POST 先へ、 SMTP 経由で電子メールへ、汎用のソケットへ、キューへ、または Windows NT イベントログのような OS 毎のログ記録機構への、ログメッセージの書きこみがサポートされています。送信先は、 <em class="dfn">handler</em> クラスによって取り扱われます。組み込みのハンドラクラスでは満たせないような、特殊な要件があるなら、独自のログ送信先を生成できます。</p>
 <p>デフォルトでは、どのロギングメッセージに対しても、送信先は設定されていません。チュートリアルの例のように、 <a class="reference internal" href="../library/logging.html#logging.basicConfig" title="logging.basicConfig"><code class="xref py py-func docutils literal"><span class="pre">basicConfig()</span></code></a> を使って、送信先 (コンソールやファイルなど) を指定できます。関数 <a class="reference internal" href="../library/logging.html#logging.debug" title="logging.debug"><code class="xref py py-func docutils literal"><span class="pre">debug()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.info" title="logging.info"><code class="xref py py-func docutils literal"><span class="pre">info()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.warning" title="logging.warning"><code class="xref py py-func docutils literal"><span class="pre">warning()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.error" title="logging.error"><code class="xref py py-func docutils literal"><span class="pre">error()</span></code></a> および <a class="reference internal" href="../library/logging.html#logging.critical" title="logging.critical"><code class="xref py py-func docutils literal"><span class="pre">critical()</span></code></a> を呼び出すと、それらは送信先が設定されていないかを調べます。そして設定されていなければ、ルートロガーに委譲して実際にメッセージを出力する前に、コンソール (<code class="docutils literal"><span class="pre">sys.stderr</span></code>) を送信先に、デフォルトのフォーマットを表示されるメッセージに設定します。</p>
 <p><a class="reference internal" href="../library/logging.html#logging.basicConfig" title="logging.basicConfig"><code class="xref py py-func docutils literal"><span class="pre">basicConfig()</span></code></a> によって設定される、メッセージのデフォルトのフォーマットはこうです:</p>
@@ -386,22 +361,16 @@
 <p>とりわけ広く使われるロガーオブジェクトのメソッドは、二つのカテゴリーに分類できます: 設定とメッセージ送信です。</p>
 <p>これらが設定メソッドの中でよく使われます:</p>
 <ul class="simple">
-<li><p class="first"><a class="reference internal" href="../library/logging.html#logging.Logger.setLevel" title="logging.Logger.setLevel"><code class="xref py py-meth docutils literal"><span class="pre">Logger.setLevel()</span></code></a> はロガーが扱うログメッセージの最も低い深刻度を指定します。組み込みの深刻度の中では DEBUG が一番低く、 CRITICAL が一番高くなります。たとえば、深刻度が INFO と設定されたロガーは INFO, WARNING, ERROR, CRITICAL のメッセージしか扱わず、 DEBUG メッセージは無視します。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.html#logging.Logger.addHandler" title="logging.Logger.addHandler"><code class="xref py py-meth docutils literal"><span class="pre">Logger.addHandler()</span></code></a> と <a class="reference internal" href="../library/logging.html#logging.Logger.removeHandler" title="logging.Logger.removeHandler"><code class="xref py py-meth docutils literal"><span class="pre">Logger.removeHandler()</span></code></a> は、ハンドラオブジェクトをロガーオブジェクトから追加または削除します。ハンドラについては、 <a class="reference internal" href="#handler-basic"><span class="std std-ref">ハンドラ</span></a> で詳しく述べます。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.html#logging.Logger.addFilter" title="logging.Logger.addFilter"><code class="xref py py-meth docutils literal"><span class="pre">Logger.addFilter()</span></code></a> と <a class="reference internal" href="../library/logging.html#logging.Logger.removeFilter" title="logging.Logger.removeFilter"><code class="xref py py-meth docutils literal"><span class="pre">Logger.removeFilter()</span></code></a> はロガーオブジェクトにフィルタオブジェクトを追加または削除します。フィルタについては、 <a class="reference internal" href="../library/logging.html#filter"><span class="std std-ref">フィルタオブジェクト</span></a> で詳しく述べます。</p>
-</li>
+<li><a class="reference internal" href="../library/logging.html#logging.Logger.setLevel" title="logging.Logger.setLevel"><code class="xref py py-meth docutils literal"><span class="pre">Logger.setLevel()</span></code></a> はロガーが扱うログメッセージの最も低い深刻度を指定します。組み込みの深刻度の中では DEBUG が一番低く、 CRITICAL が一番高くなります。たとえば、深刻度が INFO と設定されたロガーは INFO, WARNING, ERROR, CRITICAL のメッセージしか扱わず、 DEBUG メッセージは無視します。</li>
+<li><a class="reference internal" href="../library/logging.html#logging.Logger.addHandler" title="logging.Logger.addHandler"><code class="xref py py-meth docutils literal"><span class="pre">Logger.addHandler()</span></code></a> と <a class="reference internal" href="../library/logging.html#logging.Logger.removeHandler" title="logging.Logger.removeHandler"><code class="xref py py-meth docutils literal"><span class="pre">Logger.removeHandler()</span></code></a> は、ハンドラオブジェクトをロガーオブジェクトから追加または削除します。ハンドラについては、 <a class="reference internal" href="#handler-basic"><span class="std std-ref">ハンドラ</span></a> で詳しく述べます。</li>
+<li><a class="reference internal" href="../library/logging.html#logging.Logger.addFilter" title="logging.Logger.addFilter"><code class="xref py py-meth docutils literal"><span class="pre">Logger.addFilter()</span></code></a> と <a class="reference internal" href="../library/logging.html#logging.Logger.removeFilter" title="logging.Logger.removeFilter"><code class="xref py py-meth docutils literal"><span class="pre">Logger.removeFilter()</span></code></a> はロガーオブジェクトにフィルタオブジェクトを追加または削除します。フィルタについては、 <a class="reference internal" href="../library/logging.html#filter"><span class="std std-ref">フィルタオブジェクト</span></a> で詳しく述べます。</li>
 </ul>
 <p>これらのメソッドを、生成したすべてのロガーに毎回呼び出さなければならないわけではありません。最後の 2 段落を参照してください。</p>
 <p>ロガーオブジェクトが設定されれば、以下のメソッドがログメッセージを生成します:</p>
 <ul class="simple">
-<li><p class="first"><a class="reference internal" href="../library/logging.html#logging.Logger.debug" title="logging.Logger.debug"><code class="xref py py-meth docutils literal"><span class="pre">Logger.debug()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.Logger.info" title="logging.Logger.info"><code class="xref py py-meth docutils literal"><span class="pre">Logger.info()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.Logger.warning" title="logging.Logger.warning"><code class="xref py py-meth docutils literal"><span class="pre">Logger.warning()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.Logger.error" title="logging.Logger.error"><code class="xref py py-meth docutils literal"><span class="pre">Logger.error()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.Logger.critical" title="logging.Logger.critical"><code class="xref py py-meth docutils literal"><span class="pre">Logger.critical()</span></code></a> はすべて、メッセージとメソッド名に対応したレベルでログ記録を作り出します。メッセージは実際にはフォーマット文字列であり、通常の文字列代入に使う <code class="docutils literal"><span class="pre">%s</span></code>, <code class="docutils literal"><span class="pre">%d</span></code>, <code class="docutils literal"><span class="pre">%f</span></code> などを含むことができます。残りの引数はメッセージの代入される位置に対応するオブジェクトのリストです。 <code class="docutils literal"><span class="pre">**kwargs</span></code> については、ログ記録メソッドが気にするキーワードは <code class="docutils literal"><span class="pre">exc_info</span></code> だけで、例外の情報をログに記録するかを決定するのに使います。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.html#logging.Logger.exception" title="logging.Logger.exception"><code class="xref py py-meth docutils literal"><span class="pre">Logger.exception()</span></code></a> は <a class="reference internal" href="../library/logging.html#logging.Logger.error" title="logging.Logger.error"><code class="xref py py-meth docutils literal"><span class="pre">Logger.error()</span></code></a> と似たログメッセージを作成します。違いは <a class="reference internal" href="../library/logging.html#logging.Logger.exception" title="logging.Logger.exception"><code class="xref py py-meth docutils literal"><span class="pre">Logger.exception()</span></code></a> がスタックトレースを一緒にダンプすることです。例外ハンドラでだけ使うようにしてください。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.html#logging.Logger.log" title="logging.Logger.log"><code class="xref py py-meth docutils literal"><span class="pre">Logger.log()</span></code></a> はログレベルを明示的な引数として受け取ります。これは上に挙げた便宜的なログレベル毎のメソッドを使うより少しコード量が多くなりますが、独自のログレベルを使うことができます。</p>
-</li>
+<li><a class="reference internal" href="../library/logging.html#logging.Logger.debug" title="logging.Logger.debug"><code class="xref py py-meth docutils literal"><span class="pre">Logger.debug()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.Logger.info" title="logging.Logger.info"><code class="xref py py-meth docutils literal"><span class="pre">Logger.info()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.Logger.warning" title="logging.Logger.warning"><code class="xref py py-meth docutils literal"><span class="pre">Logger.warning()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.Logger.error" title="logging.Logger.error"><code class="xref py py-meth docutils literal"><span class="pre">Logger.error()</span></code></a>, <a class="reference internal" href="../library/logging.html#logging.Logger.critical" title="logging.Logger.critical"><code class="xref py py-meth docutils literal"><span class="pre">Logger.critical()</span></code></a> はすべて、メッセージとメソッド名に対応したレベルでログ記録を作り出します。メッセージは実際にはフォーマット文字列であり、通常の文字列代入に使う <code class="docutils literal"><span class="pre">%s</span></code>, <code class="docutils literal"><span class="pre">%d</span></code>, <code class="docutils literal"><span class="pre">%f</span></code> などを含むことができます。残りの引数はメッセージの代入される位置に対応するオブジェクトのリストです。 <code class="docutils literal"><span class="pre">**kwargs</span></code> については、ログ記録メソッドが気にするキーワードは <code class="docutils literal"><span class="pre">exc_info</span></code> だけで、例外の情報をログに記録するかを決定するのに使います。</li>
+<li><a class="reference internal" href="../library/logging.html#logging.Logger.exception" title="logging.Logger.exception"><code class="xref py py-meth docutils literal"><span class="pre">Logger.exception()</span></code></a> は <a class="reference internal" href="../library/logging.html#logging.Logger.error" title="logging.Logger.error"><code class="xref py py-meth docutils literal"><span class="pre">Logger.error()</span></code></a> と似たログメッセージを作成します。違いは <a class="reference internal" href="../library/logging.html#logging.Logger.exception" title="logging.Logger.exception"><code class="xref py py-meth docutils literal"><span class="pre">Logger.exception()</span></code></a> がスタックトレースを一緒にダンプすることです。例外ハンドラでだけ使うようにしてください。</li>
+<li><a class="reference internal" href="../library/logging.html#logging.Logger.log" title="logging.Logger.log"><code class="xref py py-meth docutils literal"><span class="pre">Logger.log()</span></code></a> はログレベルを明示的な引数として受け取ります。これは上に挙げた便宜的なログレベル毎のメソッドを使うより少しコード量が多くなりますが、独自のログレベルを使うことができます。</li>
 </ul>
 <p><a class="reference internal" href="../library/logging.html#logging.getLogger" title="logging.getLogger"><code class="xref py py-func docutils literal"><span class="pre">getLogger()</span></code></a> は、指定されればその特定の名前の、そうでなければ <code class="docutils literal"><span class="pre">root</span></code> のロガーインスタンスへの参照を返します。ロガーの名前はピリオド区切りの階層構造を表します。同じ名前で <a class="reference internal" href="../library/logging.html#logging.getLogger" title="logging.getLogger"><code class="xref py py-func docutils literal"><span class="pre">getLogger()</span></code></a> を複数回呼び出した場合、同一のロガーオブジェクトへの参照が返されます。階層リストを下ったロガーはリスト上位のロガーの子です。たとえば、名前が <code class="docutils literal"><span class="pre">foo</span></code> であるロガーがあったとして、 <code class="docutils literal"><span class="pre">foo.bar</span></code>, <code class="docutils literal"><span class="pre">foo.bar.baz</span></code>, <code class="docutils literal"><span class="pre">foo.bam</span></code> といった名前のロガーはすべて <code class="docutils literal"><span class="pre">foo</span></code> の子孫になります。</p>
 <p>ロガーには、<em>有効レベル (effective level)</em> の概念があります。ロガーにレベルが明示的に設定されていなければ、代わりに親のレベルがその有効レベルとして使われます。親のレベルが設定されなければ、<em>その</em> 親のレベルが確かめられ、以下同様に、明示的に設定されたレベルが見つかるまで祖先が探されます。ルートロガーは、必ず明示的なレベルが設定されています (デフォルトでは <code class="docutils literal"><span class="pre">WARNING</span></code> です)。イベントを処理するかを決定するとき、ロガーの有効レベルを使って、イベントがロガーのハンドラに渡されるかが決められます。</p>
@@ -413,18 +382,15 @@
 <p>このライブラリには多くのハンドラが用意されています (<a class="reference internal" href="#useful-handlers"><span class="std std-ref">便利なハンドラ</span></a> を参照してください) が、このチュートリアルでは <a class="reference internal" href="../library/logging.handlers.html#logging.StreamHandler" title="logging.StreamHandler"><code class="xref py py-class docutils literal"><span class="pre">StreamHandler</span></code></a> と <a class="reference internal" href="../library/logging.handlers.html#logging.FileHandler" title="logging.FileHandler"><code class="xref py py-class docutils literal"><span class="pre">FileHandler</span></code></a> だけを例に取り上げます。</p>
 <p>アプリケーション開発者にとってハンドラを扱う上で気にするべきメソッドは極々限られています。組み込みのハンドラオブジェクトを使う (つまり自作ハンドラを作らない) 開発者に関係あるハンドラのメソッドは、次の設定用のメソッドだけでしょう:</p>
 <ul class="simple">
-<li><p class="first"><a class="reference internal" href="../library/logging.html#logging.Handler.setLevel" title="logging.Handler.setLevel"><code class="xref py py-meth docutils literal"><span class="pre">setLevel()</span></code></a> メソッドは、ロガーオブジェクトの場合と同様に、適切な出力先に振り分けられるべき最も低い深刻度を指定します。なぜ 2 つも <code class="xref py py-func docutils literal"><span class="pre">setLevel()</span></code> メソッドがあるのでしょうか? ロガーで設定されるレベルは、付随するハンドラにどんな深刻度のメッセージを渡すか決めます。ハンドラで設定されるレベルは、ハンドラがどのメッセージを送るべきか決めます。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.html#logging.Handler.setFormatter" title="logging.Handler.setFormatter"><code class="xref py py-meth docutils literal"><span class="pre">setFormatter()</span></code></a> でこのハンドラが使用する Formatter オブジェクトを選択します。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.html#logging.Handler.addFilter" title="logging.Handler.addFilter"><code class="xref py py-meth docutils literal"><span class="pre">addFilter()</span></code></a> および <a class="reference internal" href="../library/logging.html#logging.Handler.removeFilter" title="logging.Handler.removeFilter"><code class="xref py py-meth docutils literal"><span class="pre">removeFilter()</span></code></a> はそれぞれハンドラへのフィルタオブジェクトの設定と解除を行います。</p>
-</li>
+<li><a class="reference internal" href="../library/logging.html#logging.Handler.setLevel" title="logging.Handler.setLevel"><code class="xref py py-meth docutils literal"><span class="pre">setLevel()</span></code></a> メソッドは、ロガーオブジェクトの場合と同様に、適切な出力先に振り分けられるべき最も低い深刻度を指定します。なぜ 2 つも <code class="xref py py-func docutils literal"><span class="pre">setLevel()</span></code> メソッドがあるのでしょうか? ロガーで設定されるレベルは、付随するハンドラにどんな深刻度のメッセージを渡すか決めます。ハンドラで設定されるレベルは、ハンドラがどのメッセージを送るべきか決めます。</li>
+<li><a class="reference internal" href="../library/logging.html#logging.Handler.setFormatter" title="logging.Handler.setFormatter"><code class="xref py py-meth docutils literal"><span class="pre">setFormatter()</span></code></a> でこのハンドラが使用する Formatter オブジェクトを選択します。</li>
+<li><a class="reference internal" href="../library/logging.html#logging.Handler.addFilter" title="logging.Handler.addFilter"><code class="xref py py-meth docutils literal"><span class="pre">addFilter()</span></code></a> および <a class="reference internal" href="../library/logging.html#logging.Handler.removeFilter" title="logging.Handler.removeFilter"><code class="xref py py-meth docutils literal"><span class="pre">removeFilter()</span></code></a> はそれぞれハンドラへのフィルタオブジェクトの設定と解除を行います。</li>
 </ul>
 <p>アプリケーションのコード中では <code class="xref py py-class docutils literal"><span class="pre">Handler</span></code> のインスタンスを直接インスタンス化して使ってはなりません。代わりに、 <code class="xref py py-class docutils literal"><span class="pre">Handler</span></code> クラスはすべてのハンドラが持つべきインターフェイスを定義し、子クラスが使える (もしくはオーバライドできる) いくつかのデフォルトの振る舞いを規定します。</p>
 </div>
 <div class="section" id="formatters">
 <h3>フォーマッタ<a class="headerlink" href="#formatters" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>フォーマッタオブジェクトは最終的なログメッセージの順序、構造および内容を設定します。基底クラスである <code class="xref py py-class docutils literal"><span class="pre">logging.Handler</span></code> とは違って、アプリケーションのコードはフォーマッタクラスをインスタンス化しても構いません。特別な振る舞いをさせたいアプリケーションではフォーマッタのサブクラスを使う可能性もあります。コンストラクタは三つのオプション引数を取ります &#8211; メッセージのフォーマット文字列、日付のフォーマット文字列、スタイル標識です。</p>
+<p>フォーマッタオブジェクトは最終的なログメッセージの順序、構造および内容を設定します。基底クラスである <code class="xref py py-class docutils literal"><span class="pre">logging.Handler</span></code> とは違って、アプリケーションのコードはフォーマッタクラスをインスタンス化しても構いません。特別な振る舞いをさせたいアプリケーションではフォーマッタのサブクラスを使う可能性もあります。コンストラクタは三つのオプション引数を取ります – メッセージのフォーマット文字列、日付のフォーマット文字列、スタイル標識です。</p>
 <dl class="method">
 <dt id="logging.logging.Formatter.__init__">
 <code class="descclassname">logging.Formatter.</code><code class="descname">__init__</code><span class="sig-paren">(</span><em>fmt=None</em>, <em>datefmt=None</em>, <em>style='%'</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.logging.Formatter.__init__" title="この定義へのパーマリンク">¶</a></dt>
@@ -434,8 +400,8 @@
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">Y</span><span class="o">-%</span><span class="n">m</span><span class="o">-%</span><span class="n">d</span> <span class="o">%</span><span class="n">H</span><span class="p">:</span><span class="o">%</span><span class="n">M</span><span class="p">:</span><span class="o">%</span><span class="n">S</span>
 </pre></div>
 </div>
-<p>で、最後にミリ秒が付きます。<code class="docutils literal"><span class="pre">style</span></code> は &#8216;%&#8217;, &#8216;{&#8216;, &#8216;$&#8217; のいずれかです。一つ指定されなければ、&#8217;%&#8217; が使われます。</p>
-<p><code class="docutils literal"><span class="pre">style</span></code> が &#8216;%&#8217; の場合、メッセージフォーマット文字列では <code class="docutils literal"><span class="pre">%(&lt;dictionary</span> <span class="pre">key&gt;)s</span></code> 形式の置換文字列が使われます; キーに指定できる属性名は <a class="reference internal" href="../library/logging.html#logrecord-attributes"><span class="std std-ref">LogRecord 属性</span></a> に文書化されています。 style が &#8216;{&#8216; の場合、メッセージフォーマット文字列は (キーワード引数を使う) <a class="reference internal" href="../library/stdtypes.html#str.format" title="str.format"><code class="xref py py-meth docutils literal"><span class="pre">str.format()</span></code></a> と互換となります。 style が &#8216;$&#8217; の場合、メッセージフォーマット文字列は <a class="reference internal" href="../library/string.html#string.Template.substitute" title="string.Template.substitute"><code class="xref py py-meth docutils literal"><span class="pre">string.Template.substitute()</span></code></a> で期待されているものと一致します。</p>
+<p>で、最後にミリ秒が付きます。<code class="docutils literal"><span class="pre">style</span></code> は 『%』, 『{『, 『$』 のいずれかです。一つ指定されなければ、』%』 が使われます。</p>
+<p><code class="docutils literal"><span class="pre">style</span></code> が 『%』 の場合、メッセージフォーマット文字列では <code class="docutils literal"><span class="pre">%(&lt;dictionary</span> <span class="pre">key&gt;)s</span></code> 形式の置換文字列が使われます; キーに指定できる属性名は <a class="reference internal" href="../library/logging.html#logrecord-attributes"><span class="std std-ref">LogRecord 属性</span></a> に文書化されています。 style が 『{『 の場合、メッセージフォーマット文字列は (キーワード引数を使う) <a class="reference internal" href="../library/stdtypes.html#str.format" title="str.format"><code class="xref py py-meth docutils literal"><span class="pre">str.format()</span></code></a> と互換となります。 style が 『$』 の場合、メッセージフォーマット文字列は <a class="reference internal" href="../library/string.html#string.Template.substitute" title="string.Template.substitute"><code class="xref py py-meth docutils literal"><span class="pre">string.Template.substitute()</span></code></a> で期待されているものと一致します。</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.2 で変更: </span><code class="docutils literal"><span class="pre">style</span></code> パラメータが追加されました。</p>
 </div>
@@ -449,12 +415,9 @@
 <h3>ロギングの環境設定<a class="headerlink" href="#configuring-logging" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>プログラマは、ロギングを 3 種類の方法で設定できます:</p>
 <ol class="arabic simple">
-<li><p class="first">上述の設定メソッドを呼び出す Python コードを明示的に使って、ロガー、ハンドラ、そしてフォーマッタを生成する。</p>
-</li>
-<li><p class="first">ロギング設定ファイルを作り、それを <a class="reference internal" href="../library/logging.config.html#logging.config.fileConfig" title="logging.config.fileConfig"><code class="xref py py-func docutils literal"><span class="pre">fileConfig()</span></code></a> 関数を使って読み込む。</p>
-</li>
-<li><p class="first">設定情報の辞書を作り、それを <a class="reference internal" href="../library/logging.config.html#logging.config.dictConfig" title="logging.config.dictConfig"><code class="xref py py-func docutils literal"><span class="pre">dictConfig()</span></code></a> 関数に渡す。</p>
-</li>
+<li>上述の設定メソッドを呼び出す Python コードを明示的に使って、ロガー、ハンドラ、そしてフォーマッタを生成する。</li>
+<li>ロギング設定ファイルを作り、それを <a class="reference internal" href="../library/logging.config.html#logging.config.fileConfig" title="logging.config.fileConfig"><code class="xref py py-func docutils literal"><span class="pre">fileConfig()</span></code></a> 関数を使って読み込む。</li>
+<li>設定情報の辞書を作り、それを <a class="reference internal" href="../library/logging.config.html#logging.config.dictConfig" title="logging.config.dictConfig"><code class="xref py py-func docutils literal"><span class="pre">dictConfig()</span></code></a> 関数に渡す。</li>
 </ol>
 <p>最後の2つの選択肢については、 <a class="reference internal" href="../library/logging.config.html#logging-config-api"><span class="std std-ref">環境設定のための関数</span></a> で解説しています。以下の例では、Python コードを使って、とても簡単なロガー、コンソールハンドラ、そして簡単なフォーマッタを設定しています:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
@@ -586,15 +549,12 @@
 <p>ロギング環境設定を与えられないと、ロギングイベントを出力しなければならないのに、イベントを出力するハンドラが見つからないことがあります。この状況での logging パッケージの振る舞いは、Python のバージョンに依ります。</p>
 <p>Python 3.2 より前のバージョンでは、振る舞いは以下の通りです:</p>
 <ul class="simple">
-<li><p class="first"><em>logging.raiseExceptions</em> が <code class="docutils literal"><span class="pre">False</span></code> (製品モード) なら、イベントは黙って捨てられます。</p>
-</li>
-<li><p class="first"><em>logging.raiseExceptions</em> が <code class="docutils literal"><span class="pre">True</span></code> (開発モード) なら、メッセージ &#8216;No handlers could be found for logger X.Y.Z&#8217; が一度表示されます。</p>
-</li>
+<li><em>logging.raiseExceptions</em> が <code class="docutils literal"><span class="pre">False</span></code> (製品モード) なら、イベントは黙って捨てられます。</li>
+<li><em>logging.raiseExceptions</em> が <code class="docutils literal"><span class="pre">True</span></code> (開発モード) なら、メッセージ 『No handlers could be found for logger X.Y.Z』 が一度表示されます。</li>
 </ul>
 <p>Python 3.2 以降バージョンでは、振る舞いは以下の通りです:</p>
 <ul class="simple">
-<li><p class="first">イベントは、 <code class="docutils literal"><span class="pre">logging.lastResort</span></code> に格納された「最終手段ハンドラ」を使用して出力されます。この内部的なハンドラはどんなロガーにも関係しておらず、イベント記述メッセージを現在の <code class="docutils literal"><span class="pre">sys.stderr</span></code> の値に書く <a class="reference internal" href="../library/logging.handlers.html#logging.StreamHandler" title="logging.StreamHandler"><code class="xref py py-class docutils literal"><span class="pre">StreamHandler</span></code></a> のように動作します (したがって、あらゆるリダイレクトの効果が反映されます)。メッセージに対してフォーマットは行われません - 裸のイベント記述メッセージだけが印刷されます。ハンドラのレベルは <code class="docutils literal"><span class="pre">WARNING</span></code> にセットされ、これより重大度が大きなすべてのイベントが出力されます。</p>
-</li>
+<li>イベントは、 <code class="docutils literal"><span class="pre">logging.lastResort</span></code> に格納された「最終手段ハンドラ」を使用して出力されます。この内部的なハンドラはどんなロガーにも関係しておらず、イベント記述メッセージを現在の <code class="docutils literal"><span class="pre">sys.stderr</span></code> の値に書く <a class="reference internal" href="../library/logging.handlers.html#logging.StreamHandler" title="logging.StreamHandler"><code class="xref py py-class docutils literal"><span class="pre">StreamHandler</span></code></a> のように動作します (したがって、あらゆるリダイレクトの効果が反映されます)。メッセージに対してフォーマットは行われません - 裸のイベント記述メッセージだけが印刷されます。ハンドラのレベルは <code class="docutils literal"><span class="pre">WARNING</span></code> にセットされ、これより重大度が大きなすべてのイベントが出力されます。</li>
 </ul>
 <p>3.2 より前の動作にするために、<code class="docutils literal"><span class="pre">logging.lastResort</span></code> を <code class="docutils literal"><span class="pre">None</span></code> に設定することもできます。</p>
 </div>
@@ -602,15 +562,15 @@
 <span id="library-config"></span><h3>ライブラリのためのロギングの設定<a class="headerlink" href="#configuring-logging-for-a-library" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>ロギングを使うライブラリを開発するときは、ライブラリがどのようにロギングを使うのか、例えば使われているロガーの名前などを、ドキュメントにしておくべきです。ロギングの設定については、いくつか考えておくべきこともあります。使っているアプリケーションがロギングを使っていなくて、ライブラリコードがロギングを呼び出すと、(前の節で解説したように) 重大度 <code class="docutils literal"><span class="pre">WARNING</span></code> 以上のイベントが、<code class="docutils literal"><span class="pre">sys.stderr</span></code> に表示されます。これが最高のデフォルトの振る舞いと見なされます。</p>
 <p>何らかの理由で、ロギング設定がなされていないときにメッセージを表示 <em>させたくない</em> なら、あなたのライブラリのトップレベルロガーに何もしないハンドラを取り付けられます。このハンドラは何も処理しないというだけで、全てのライブラリイベントに対してハンドラが見つかるので、メッセージが表示されることを防げます。ライブラリのユーザがアプリケーションでの使用のためにロギングを設定したら、それはおそらくハンドラを追加する設定でしょうが、そしてレベルが適切に設定されたら、ライブラリコード内でなされたロギングの呼び出しは、通常通りそのハンドラに出力を送るようになります。</p>
-<p>何もしないハンドラ <a class="reference internal" href="../library/logging.handlers.html#logging.NullHandler" title="logging.NullHandler"><code class="xref py py-class docutils literal"><span class="pre">NullHandler</span></code></a> (Python 3.1 以降) は、 logging パッケージに含まれます。このハンドラのインスタンスを、 (ロギング設定がなされていないときにライブラリのログイベントを <code class="docutils literal"><span class="pre">sys.stderr</span></code> に出力させたく <em>ないなら</em>) ライブラリの名前空間で使われるトップレベルロガーに取り付けられます。ライブラリ <em>foo</em> によるすべてのロギングが、 &#8216;foo.x&#8217;, &#8216;foo.x.y&#8217; その他に該当する名前のロガーによってなされるなら:</p>
+<p>何もしないハンドラ <a class="reference internal" href="../library/logging.handlers.html#logging.NullHandler" title="logging.NullHandler"><code class="xref py py-class docutils literal"><span class="pre">NullHandler</span></code></a> (Python 3.1 以降) は、 logging パッケージに含まれます。このハンドラのインスタンスを、 (ロギング設定がなされていないときにライブラリのログイベントを <code class="docutils literal"><span class="pre">sys.stderr</span></code> に出力させたく <em>ないなら</em>) ライブラリの名前空間で使われるトップレベルロガーに取り付けられます。ライブラリ <em>foo</em> によるすべてのロギングが、 『foo.x』, 『foo.x.y』 その他に該当する名前のロガーによってなされるなら:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">NullHandler</span><span class="p">())</span>
 </pre></div>
 </div>
-<p>とすれば望んだ効果が得られるでしょう。組織が複数のライブラリを作り出すなら、指定されるロガー名は単に &#8216;foo&#8217; ではなく、&#8217;orgname.foo&#8217; になります。</p>
+<p>とすれば望んだ効果が得られるでしょう。組織が複数のライブラリを作り出すなら、指定されるロガー名は単に 『foo』 ではなく、』orgname.foo』 になります。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last"><em>ライブラリのロガーには、</em> <a class="reference internal" href="../library/logging.handlers.html#logging.NullHandler" title="logging.NullHandler"><code class="xref py py-class docutils literal"><span class="pre">NullHandler</span></code></a> <em>以外のハンドラを追加しない</em> ことを強く推奨します。これは、ハンドラの設定が、あなたのライブラリを使うアプリケーション開発者にも伝播するからです。アプリケーション開発者は、対象となる聴衆と、そのアプリケーションにどのハンドラが最も適しているかを知っています。ハンドラを &#8216;ボンネットの中で&#8217; 加えてしまうと、ユニットテストをして必要に応じたログを送達する能力に干渉しかねません。</p>
+<p class="last"><em>ライブラリのロガーには、</em> <a class="reference internal" href="../library/logging.handlers.html#logging.NullHandler" title="logging.NullHandler"><code class="xref py py-class docutils literal"><span class="pre">NullHandler</span></code></a> <em>以外のハンドラを追加しない</em> ことを強く推奨します。これは、ハンドラの設定が、あなたのライブラリを使うアプリケーション開発者にも伝播するからです。アプリケーション開発者は、対象となる聴衆と、そのアプリケーションにどのハンドラが最も適しているかを知っています。ハンドラを 『ボンネットの中で』 加えてしまうと、ユニットテストをして必要に応じたログを送達する能力に干渉しかねません。</p>
 </div>
 </div>
 </div>
@@ -623,10 +583,8 @@
 <col width="52%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">レベル</p>
-</th>
-<th class="head"><p class="first last">数値</p>
-</th>
+<tr class="row-odd"><th class="head">レベル</th>
+<th class="head">数値</th>
 </tr>
 </thead>
 <tbody valign="top">
@@ -663,36 +621,21 @@
 <span id="id2"></span><h2>便利なハンドラ<a class="headerlink" href="#useful-handlers" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>基底の <code class="xref py py-class docutils literal"><span class="pre">Handler</span></code> クラスに加え、多くの便利なサブクラスが提供されています:</p>
 <ol class="arabic simple">
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.StreamHandler" title="logging.StreamHandler"><code class="xref py py-class docutils literal"><span class="pre">StreamHandler</span></code></a> インスタンスは、メッセージをストリーム (ファイル風オブジェクト) に送ります。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.FileHandler" title="logging.FileHandler"><code class="xref py py-class docutils literal"><span class="pre">FileHandler</span></code></a> インスタンスは、メッセージをディスクファイルに送ります。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.BaseRotatingHandler" title="logging.handlers.BaseRotatingHandler"><code class="xref py py-class docutils literal"><span class="pre">BaseRotatingHandler</span></code></a> は、ある地点でログファイルを循環させるハンドラの基底クラスです。これを直接インスタンス化することは意図されていません。代わりに、 <a class="reference internal" href="../library/logging.handlers.html#logging.handlers.RotatingFileHandler" title="logging.handlers.RotatingFileHandler"><code class="xref py py-class docutils literal"><span class="pre">RotatingFileHandler</span></code></a> や <a class="reference internal" href="../library/logging.handlers.html#logging.handlers.TimedRotatingFileHandler" title="logging.handlers.TimedRotatingFileHandler"><code class="xref py py-class docutils literal"><span class="pre">TimedRotatingFileHandler</span></code></a> を使用してください。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.RotatingFileHandler" title="logging.handlers.RotatingFileHandler"><code class="xref py py-class docutils literal"><span class="pre">RotatingFileHandler</span></code></a> インスタンスは、メッセージをディスクファイルに送り、最大ログファイル数とログファイル循環をサポートします。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.TimedRotatingFileHandler" title="logging.handlers.TimedRotatingFileHandler"><code class="xref py py-class docutils literal"><span class="pre">TimedRotatingFileHandler</span></code></a> インスタンスは、メッセージをディスクファイルに送り、ログファイルを特定時間のインターバルで循環します。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.SocketHandler" title="logging.handlers.SocketHandler"><code class="xref py py-class docutils literal"><span class="pre">SocketHandler</span></code></a> インスタンスは、 TCP/IP ソケットにメッセージを送ります。バージョン3.4　から、 Unixドメインソケットもサポートされます。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.DatagramHandler" title="logging.handlers.DatagramHandler"><code class="xref py py-class docutils literal"><span class="pre">DatagramHandler</span></code></a> インスタンスは UDP ソケットにメッセージを送ります。バージョン 3.4 から、Unix ドメインソケットもサポートされます。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.SMTPHandler" title="logging.handlers.SMTPHandler"><code class="xref py py-class docutils literal"><span class="pre">SMTPHandler</span></code></a> インスタンスは、メッセージを指示された email アドレスに送ります。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.SysLogHandler" title="logging.handlers.SysLogHandler"><code class="xref py py-class docutils literal"><span class="pre">SysLogHandler</span></code></a> インスタンスは、メッセージを、必要ならばリモートマシンの、Unix syslog daemon に送ります。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.NTEventLogHandler" title="logging.handlers.NTEventLogHandler"><code class="xref py py-class docutils literal"><span class="pre">NTEventLogHandler</span></code></a> インスタンスは、メッセージを Windows NT/2000/XP イベントログに送ります。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.MemoryHandler" title="logging.handlers.MemoryHandler"><code class="xref py py-class docutils literal"><span class="pre">MemoryHandler</span></code></a> インスタンスは、メッセージを、特定の基準が満たされる度に流される、メモリ中のバッファに送ります。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.HTTPHandler" title="logging.handlers.HTTPHandler"><code class="xref py py-class docutils literal"><span class="pre">HTTPHandler</span></code></a> インスタンスは、メッセージを、 <code class="docutils literal"><span class="pre">GET</span></code> または <code class="docutils literal"><span class="pre">POST</span></code> セマンティクスを使って、HTTP サーバに送ります。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.WatchedFileHandler" title="logging.handlers.WatchedFileHandler"><code class="xref py py-class docutils literal"><span class="pre">WatchedFileHandler</span></code></a> インスタンスは、ロギングする先のファイルを監視します。ファイルが変更されると、そのファイルは閉じられ、ファイル名を使って再び開かれます。このハンドラは Unix 系のシステムにのみ便利です。Windows は、使われている基の機構をサポートしていません。</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.QueueHandler" title="logging.handlers.QueueHandler"><code class="xref py py-class docutils literal"><span class="pre">QueueHandler</span></code></a> インスタンスは、 <a class="reference internal" href="../library/queue.html#module-queue" title="queue: A synchronized queue class."><code class="xref py py-mod docutils literal"><span class="pre">queue</span></code></a> モジュールや <a class="reference internal" href="../library/multiprocessing.html#module-multiprocessing" title="multiprocessing: Process-based parallelism."><code class="xref py py-mod docutils literal"><span class="pre">multiprocessing</span></code></a> モジュールなどで実装されているキューにメッセージを送ります。 instances send messages to a queue, such as those implemented in the <a class="reference internal" href="../library/queue.html#module-queue" title="queue: A synchronized queue class."><code class="xref py py-mod docutils literal"><span class="pre">queue</span></code></a> or <a class="reference internal" href="../library/multiprocessing.html#module-multiprocessing" title="multiprocessing: Process-based parallelism."><code class="xref py py-mod docutils literal"><span class="pre">multiprocessing</span></code></a> modules.</p>
-</li>
-<li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.NullHandler" title="logging.NullHandler"><code class="xref py py-class docutils literal"><span class="pre">NullHandler</span></code></a> インスタンスは、エラーメッセージに対して何もしません。これは、ライブラリ開発者がロギングを使いたいが、ライブラリのユーザがロギングを設定してなくても &#8216;No handlers could be found for logger XXX&#8217; メッセージを表示させたくない場合に使われます。詳しい情報は <a class="reference internal" href="#library-config"><span class="std std-ref">ライブラリのためのロギングの設定</span></a> を参照してください。</p>
-</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.StreamHandler" title="logging.StreamHandler"><code class="xref py py-class docutils literal"><span class="pre">StreamHandler</span></code></a> インスタンスは、メッセージをストリーム (ファイル風オブジェクト) に送ります。</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.FileHandler" title="logging.FileHandler"><code class="xref py py-class docutils literal"><span class="pre">FileHandler</span></code></a> インスタンスは、メッセージをディスクファイルに送ります。</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.BaseRotatingHandler" title="logging.handlers.BaseRotatingHandler"><code class="xref py py-class docutils literal"><span class="pre">BaseRotatingHandler</span></code></a> は、ある地点でログファイルを循環させるハンドラの基底クラスです。これを直接インスタンス化することは意図されていません。代わりに、 <a class="reference internal" href="../library/logging.handlers.html#logging.handlers.RotatingFileHandler" title="logging.handlers.RotatingFileHandler"><code class="xref py py-class docutils literal"><span class="pre">RotatingFileHandler</span></code></a> や <a class="reference internal" href="../library/logging.handlers.html#logging.handlers.TimedRotatingFileHandler" title="logging.handlers.TimedRotatingFileHandler"><code class="xref py py-class docutils literal"><span class="pre">TimedRotatingFileHandler</span></code></a> を使用してください。</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.RotatingFileHandler" title="logging.handlers.RotatingFileHandler"><code class="xref py py-class docutils literal"><span class="pre">RotatingFileHandler</span></code></a> インスタンスは、メッセージをディスクファイルに送り、最大ログファイル数とログファイル循環をサポートします。</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.TimedRotatingFileHandler" title="logging.handlers.TimedRotatingFileHandler"><code class="xref py py-class docutils literal"><span class="pre">TimedRotatingFileHandler</span></code></a> インスタンスは、メッセージをディスクファイルに送り、ログファイルを特定時間のインターバルで循環します。</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.SocketHandler" title="logging.handlers.SocketHandler"><code class="xref py py-class docutils literal"><span class="pre">SocketHandler</span></code></a> インスタンスは、 TCP/IP ソケットにメッセージを送ります。バージョン3.4　から、 Unixドメインソケットもサポートされます。</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.DatagramHandler" title="logging.handlers.DatagramHandler"><code class="xref py py-class docutils literal"><span class="pre">DatagramHandler</span></code></a> インスタンスは UDP ソケットにメッセージを送ります。バージョン 3.4 から、Unix ドメインソケットもサポートされます。</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.SMTPHandler" title="logging.handlers.SMTPHandler"><code class="xref py py-class docutils literal"><span class="pre">SMTPHandler</span></code></a> インスタンスは、メッセージを指示された email アドレスに送ります。</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.SysLogHandler" title="logging.handlers.SysLogHandler"><code class="xref py py-class docutils literal"><span class="pre">SysLogHandler</span></code></a> インスタンスは、メッセージを、必要ならばリモートマシンの、Unix syslog daemon に送ります。</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.NTEventLogHandler" title="logging.handlers.NTEventLogHandler"><code class="xref py py-class docutils literal"><span class="pre">NTEventLogHandler</span></code></a> インスタンスは、メッセージを Windows NT/2000/XP イベントログに送ります。</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.MemoryHandler" title="logging.handlers.MemoryHandler"><code class="xref py py-class docutils literal"><span class="pre">MemoryHandler</span></code></a> インスタンスは、メッセージを、特定の基準が満たされる度に流される、メモリ中のバッファに送ります。</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.HTTPHandler" title="logging.handlers.HTTPHandler"><code class="xref py py-class docutils literal"><span class="pre">HTTPHandler</span></code></a> インスタンスは、メッセージを、 <code class="docutils literal"><span class="pre">GET</span></code> または <code class="docutils literal"><span class="pre">POST</span></code> セマンティクスを使って、HTTP サーバに送ります。</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.WatchedFileHandler" title="logging.handlers.WatchedFileHandler"><code class="xref py py-class docutils literal"><span class="pre">WatchedFileHandler</span></code></a> インスタンスは、ロギングする先のファイルを監視します。ファイルが変更されると、そのファイルは閉じられ、ファイル名を使って再び開かれます。このハンドラは Unix 系のシステムにのみ便利です。Windows は、使われている基の機構をサポートしていません。</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.QueueHandler" title="logging.handlers.QueueHandler"><code class="xref py py-class docutils literal"><span class="pre">QueueHandler</span></code></a> インスタンスは、 <a class="reference internal" href="../library/queue.html#module-queue" title="queue: A synchronized queue class."><code class="xref py py-mod docutils literal"><span class="pre">queue</span></code></a> モジュールや <a class="reference internal" href="../library/multiprocessing.html#module-multiprocessing" title="multiprocessing: Process-based parallelism."><code class="xref py py-mod docutils literal"><span class="pre">multiprocessing</span></code></a> モジュールなどで実装されているキューにメッセージを送ります。 instances send messages to a queue, such as those implemented in the <a class="reference internal" href="../library/queue.html#module-queue" title="queue: A synchronized queue class."><code class="xref py py-mod docutils literal"><span class="pre">queue</span></code></a> or <a class="reference internal" href="../library/multiprocessing.html#module-multiprocessing" title="multiprocessing: Process-based parallelism."><code class="xref py py-mod docutils literal"><span class="pre">multiprocessing</span></code></a> modules.</li>
+<li><a class="reference internal" href="../library/logging.handlers.html#logging.NullHandler" title="logging.NullHandler"><code class="xref py py-class docutils literal"><span class="pre">NullHandler</span></code></a> インスタンスは、エラーメッセージに対して何もしません。これは、ライブラリ開発者がロギングを使いたいが、ライブラリのユーザがロギングを設定してなくても 『No handlers could be found for logger XXX』 メッセージを表示させたくない場合に使われます。詳しい情報は <a class="reference internal" href="#library-config"><span class="std std-ref">ライブラリのためのロギングの設定</span></a> を参照してください。</li>
 </ol>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.1 で追加: </span><a class="reference internal" href="../library/logging.handlers.html#logging.NullHandler" title="logging.NullHandler"><code class="xref py py-class docutils literal"><span class="pre">NullHandler</span></code></a> クラス。</p>
@@ -740,27 +683,19 @@
 <col width="46%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><p class="first last">不要な情報</p>
-</th>
-<th class="head"><p class="first last">それを避ける方法</p>
-</th>
+<tr class="row-odd"><th class="head">不要な情報</th>
+<th class="head">それを避ける方法</th>
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><p class="first last">呼び出しがどこから行われたかに関する情報。</p>
-</td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">logging._srcfile</span></code> を <code class="docutils literal"><span class="pre">None</span></code> にする。このことにより <a class="reference internal" href="../library/sys.html#sys._getframe" title="sys._getframe"><code class="xref py py-func docutils literal"><span class="pre">sys._getframe()</span></code></a> 呼び出しを避けることが出来、PyPy のような環境(<a class="reference internal" href="../library/sys.html#sys._getframe" title="sys._getframe"><code class="xref py py-func docutils literal"><span class="pre">sys._getframe()</span></code></a> の高速化が出来ない)において高速化の役に立ちます。PyPy が Python 3.x をサポートすれば、ですが。</p>
-</td>
+<tr class="row-even"><td>呼び出しがどこから行われたかに関する情報。</td>
+<td><code class="docutils literal"><span class="pre">logging._srcfile</span></code> を <code class="docutils literal"><span class="pre">None</span></code> にする。このことにより <a class="reference internal" href="../library/sys.html#sys._getframe" title="sys._getframe"><code class="xref py py-func docutils literal"><span class="pre">sys._getframe()</span></code></a> 呼び出しを避けることが出来、PyPy のような環境(<a class="reference internal" href="../library/sys.html#sys._getframe" title="sys._getframe"><code class="xref py py-func docutils literal"><span class="pre">sys._getframe()</span></code></a> の高速化が出来ない)において高速化の役に立ちます。PyPy が Python 3.x をサポートすれば、ですが。</td>
 </tr>
-<tr class="row-odd"><td><p class="first last">スレッド情報。</p>
-</td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">logging.logThreads</span></code> を <code class="docutils literal"><span class="pre">0</span></code> にする。</p>
-</td>
+<tr class="row-odd"><td>スレッド情報。</td>
+<td><code class="docutils literal"><span class="pre">logging.logThreads</span></code> を <code class="docutils literal"><span class="pre">0</span></code> にする。</td>
 </tr>
-<tr class="row-even"><td><p class="first last">プロセス情報。</p>
-</td>
-<td><p class="first last"><code class="docutils literal"><span class="pre">logging.logProcesses</span></code> を <code class="docutils literal"><span class="pre">0</span></code> にする。</p>
-</td>
+<tr class="row-even"><td>プロセス情報。</td>
+<td><code class="docutils literal"><span class="pre">logging.logProcesses</span></code> を <code class="docutils literal"><span class="pre">0</span></code> にする。</td>
 </tr>
 </tbody>
 </table>
@@ -769,14 +704,11 @@
 <p class="first admonition-title">参考</p>
 <dl class="docutils">
 <dt><a class="reference internal" href="../library/logging.html#module-logging" title="logging: Flexible event logging system for applications."><code class="xref py py-mod docutils literal"><span class="pre">logging</span></code></a> モジュール</dt>
-<dd><p class="first last">logging モジュールの API リファレンス。</p>
-</dd>
+<dd>logging モジュールの API リファレンス。</dd>
 <dt><a class="reference internal" href="../library/logging.config.html#module-logging.config" title="logging.config: Configuration of the logging module."><code class="xref py py-mod docutils literal"><span class="pre">logging.config</span></code></a> モジュール</dt>
-<dd><p class="first last">logging モジュールの環境設定 API です。</p>
-</dd>
+<dd>logging モジュールの環境設定 API です。</dd>
 <dt><a class="reference internal" href="../library/logging.handlers.html#module-logging.handlers" title="logging.handlers: Handlers for the logging module."><code class="xref py py-mod docutils literal"><span class="pre">logging.handlers</span></code></a> モジュール</dt>
-<dd><p class="first last">logging モジュールに含まれる、便利なハンドラです。</p>
-</dd>
+<dd>logging モジュールに含まれる、便利なハンドラです。</dd>
 </dl>
 <p class="last"><a class="reference internal" href="logging-cookbook.html#logging-cookbook"><span class="std std-ref">ロギングクックブック</span></a></p>
 </div>
@@ -836,7 +768,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/logging.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/logging.rst.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -896,7 +828,7 @@
     最終更新日時: 10月 14, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
-    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.4.9 を使って作成されました。
+    このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
     </div>
 
   </body>
