@@ -237,7 +237,7 @@
 </pre></div>
 </div>
 <p><code class="docutils literal"><span class="pre">mock.connection.cursor().execute(&quot;SELECT</span> <span class="pre">1&quot;)</span></code> のような複雑なケースでモックを使いたい場合もあります。この呼出があるリストを返すようにしたい場合、このネストした呼び出しを構成しなければなりません。</p>
-<p><a class="reference internal" href="unittest.mock.html#unittest.mock.call" title="unittest.mock.call"><code class="xref py py-data docutils literal"><span class="pre">call</span></code></a> を使って 「chained call」 内の呼び出しを構成して、 assert で使うことができます:</p>
+<p><a class="reference internal" href="unittest.mock.html#unittest.mock.call" title="unittest.mock.call"><code class="xref py py-data docutils literal"><span class="pre">call</span></code></a> を使って &quot;chained call&quot; 内の呼び出しを構成して、 assert で使うことができます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mock</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cursor</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">cursor</span><span class="o">.</span><span class="n">return_value</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;foo&#39;</span><span class="p">]</span>
@@ -322,7 +322,7 @@ you can use <a class="reference internal" href="unittest.mock.html#auto-speccing
 <p class="last"><a class="reference internal" href="unittest.mock.html#unittest.mock.patch" title="unittest.mock.patch"><code class="xref py py-func docutils literal"><span class="pre">patch()</span></code></a> では探索される名前空間内のオブジェクトにパッチをあてることが重要です。通常は単純ですが、クイックガイドには <a class="reference internal" href="unittest.mock.html#where-to-patch"><span class="std std-ref">where-to-patch</span></a> を読んでください。</p>
 </div>
 <p>テストの中でクラス属性やモジュール属性、例えば組み込み関数や、テスト対象モジュールにあるインスタンス化されるクラスに対してパッチしたいことがあります。モジュールやクラスは実際はグローバルなので、パッチするときは必ずテスト後にパッチを解除しないと、そのパッチが永続化されて他のテストに影響を与え、解析しにくい問題になります。</p>
-<p>mock はこのために3つの便利なデコレータを提供しています: <a class="reference internal" href="unittest.mock.html#unittest.mock.patch" title="unittest.mock.patch"><code class="xref py py-func docutils literal"><span class="pre">patch()</span></code></a>, <a class="reference internal" href="unittest.mock.html#unittest.mock.patch.object" title="unittest.mock.patch.object"><code class="xref py py-func docutils literal"><span class="pre">patch.object()</span></code></a>, <a class="reference internal" href="unittest.mock.html#unittest.mock.patch.dict" title="unittest.mock.patch.dict"><code class="xref py py-func docutils literal"><span class="pre">patch.dict()</span></code></a> です。<code class="docutils literal"><span class="pre">patch</span></code> はパッチ対象を指定する <code class="docutils literal"><span class="pre">package.module.Class.attribute</span></code> の形式の文字列を引数に取ります。オプションでその属性 (やクラスなど) を置き換えるオブジェクトを渡すことができます。 『patch.object』 はオブジェクトとパッチしたい属性名、それにオプションで置き換えるオブジェクトを受け取ります。</p>
+<p>mock はこのために3つの便利なデコレータを提供しています: <a class="reference internal" href="unittest.mock.html#unittest.mock.patch" title="unittest.mock.patch"><code class="xref py py-func docutils literal"><span class="pre">patch()</span></code></a>, <a class="reference internal" href="unittest.mock.html#unittest.mock.patch.object" title="unittest.mock.patch.object"><code class="xref py py-func docutils literal"><span class="pre">patch.object()</span></code></a>, <a class="reference internal" href="unittest.mock.html#unittest.mock.patch.dict" title="unittest.mock.patch.dict"><code class="xref py py-func docutils literal"><span class="pre">patch.dict()</span></code></a> です。<code class="docutils literal"><span class="pre">patch</span></code> はパッチ対象を指定する <code class="docutils literal"><span class="pre">package.module.Class.attribute</span></code> の形式の文字列を引数に取ります。オプションでその属性 (やクラスなど) を置き換えるオブジェクトを渡すことができます。 'patch.object' はオブジェクトとパッチしたい属性名、それにオプションで置き換えるオブジェクトを受け取ります。</p>
 <p><code class="docutils literal"><span class="pre">patch.object</span></code>:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">original</span> <span class="o">=</span> <span class="n">SomeClass</span><span class="o">.</span><span class="n">attribute</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nd">@patch</span><span class="o">.</span><span class="n">object</span><span class="p">(</span><span class="n">SomeClass</span><span class="p">,</span> <span class="s1">&#39;attribute&#39;</span><span class="p">,</span> <span class="n">sentinel</span><span class="o">.</span><span class="n">attribute</span><span class="p">)</span>
@@ -415,7 +415,7 @@ you can use <a class="reference internal" href="unittest.mock.html#auto-speccing
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mock_method</span><span class="o">.</span><span class="n">assert_called_with</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>他の方法として、<code class="docutils literal"><span class="pre">patch</span></code>, <code class="docutils literal"><span class="pre">patch.object</span></code>, <code class="docutils literal"><span class="pre">patch.dict</span></code> はクラスデコレータとしても利用できます。その場合、」test」 で始まる全てのメソッドにデコレータを適用するのと同じになります。</p>
+<p>他の方法として、<code class="docutils literal"><span class="pre">patch</span></code>, <code class="docutils literal"><span class="pre">patch.object</span></code>, <code class="docutils literal"><span class="pre">patch.dict</span></code> はクラスデコレータとしても利用できます。その場合、&quot;test&quot; で始まる全てのメソッドにデコレータを適用するのと同じになります。</p>
 </div>
 <div class="section" id="further-examples">
 <span id="id1"></span><h2>26.6.3. さらなる例<a class="headerlink" href="#further-examples" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -441,7 +441,7 @@ you can use <a class="reference internal" href="unittest.mock.html#auto-speccing
 </pre></div>
 </div>
 <p><code class="docutils literal"><span class="pre">BackendProvider</span></code> はすでに十分テストされているとします。<code class="docutils literal"><span class="pre">method()</span></code> をどうテストしましょうか？特に、response オブジェクトを使う <code class="docutils literal"><span class="pre">#</span> <span class="pre">more</span> <span class="pre">code</span></code> の部分のコードをテストしたいとします。</p>
-<p>この chained call はインスタンス属性を起点にしているので、 <code class="docutils literal"><span class="pre">Something</span></code> インスタンスの <code class="docutils literal"><span class="pre">backend</span></code> 属性に対してモンキーパッチすることができます。今回の場合だと、最後の <code class="docutils literal"><span class="pre">start_call</span></code> の呼び出しが返す値にだけ興味があるので、あまり多くの構成は必要ありません。このメソッドが返すのが 『file-like』 オブジェクトだとしましょう。そうすると、 response オブジェクトは組み込みの <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> を <code class="docutils literal"><span class="pre">spec</span></code> として利用できます。</p>
+<p>この chained call はインスタンス属性を起点にしているので、 <code class="docutils literal"><span class="pre">Something</span></code> インスタンスの <code class="docutils literal"><span class="pre">backend</span></code> 属性に対してモンキーパッチすることができます。今回の場合だと、最後の <code class="docutils literal"><span class="pre">start_call</span></code> の呼び出しが返す値にだけ興味があるので、あまり多くの構成は必要ありません。このメソッドが返すのが 'file-like' オブジェクトだとしましょう。そうすると、 response オブジェクトは組み込みの <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> を <code class="docutils literal"><span class="pre">spec</span></code> として利用できます。</p>
 <p>これをするために、backend のモックとしてモックインスタンスを作成し、それに対するモックの response オブジェクトを作成します。最終的な <code class="docutils literal"><span class="pre">start_call</span></code> の返り値として response をセットすると、このようにすることができます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">mock_backend</span><span class="o">.</span><span class="n">get_endpoint</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">create_call</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">start_call</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_response</span>
 </pre></div>
@@ -500,7 +500,7 @@ to return a series of values when iterated over <a class="footnote-reference" hr
 the generator object that is then iterated over. The protocol method for
 iteration is <a class="reference internal" href="stdtypes.html#container.__iter__" title="container.__iter__"><code class="xref py py-meth docutils literal"><span class="pre">__iter__()</span></code></a>, so we can
 mock this using a <a class="reference internal" href="unittest.mock.html#unittest.mock.MagicMock" title="unittest.mock.MagicMock"><code class="xref py py-class docutils literal"><span class="pre">MagicMock</span></code></a>.</p>
-<p>Here’s an example class with an 「iter」 method implemented as a generator:</p>
+<p>Here’s an example class with an &quot;iter&quot; method implemented as a generator:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
@@ -511,7 +511,7 @@ mock this using a <a class="reference internal" href="unittest.mock.html#unittes
 <span class="go">[1, 2, 3]</span>
 </pre></div>
 </div>
-<p>How would we mock this class, and in particular its 「iter」 method?</p>
+<p>How would we mock this class, and in particular its &quot;iter&quot; method?</p>
 <p>To configure the values returned from the iteration (implicit in the call to
 <a class="reference internal" href="stdtypes.html#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a>), we need to configure the object returned by the call to <code class="docutils literal"><span class="pre">foo.iter()</span></code>.</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mock_foo</span> <span class="o">=</span> <span class="n">MagicMock</span><span class="p">()</span>
@@ -571,7 +571,7 @@ These allow you to move the patching into your <code class="docutils literal"><s
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MyTest</span><span class="p">(</span><span class="s1">&#39;test_foo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>If you use this technique you must ensure that the patching is 「undone」 by
+<p>If you use this technique you must ensure that the patching is &quot;undone&quot; by
 calling <code class="docutils literal"><span class="pre">stop</span></code>. This can be fiddlier than you might think, because if an
 exception is raised in the setUp then tearDown is not called.
 <a class="reference internal" href="unittest.html#unittest.TestCase.addCleanup" title="unittest.TestCase.addCleanup"><code class="xref py py-meth docutils literal"><span class="pre">unittest.TestCase.addCleanup()</span></code></a> makes this easier:</p>
@@ -672,7 +672,7 @@ mutable arguments. <code class="docutils literal"><span class="pre">call_args</s
 arguments. If the arguments are mutated by the code under test then you can no
 longer make assertions about what the values were when the mock was called.</p>
 <p>Here’s some example code that shows the problem. Imagine the following functions
-defined in 『mymodule』:</p>
+defined in 'mymodule':</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">frob</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
     <span class="k">pass</span>
 
@@ -934,7 +934,7 @@ subclass.</p>
 created a <a class="reference external" href="https://twistedmatrix.com/documents/11.0.0/api/twisted.python.components.html">Twisted adaptor</a>.
 Having this applied to attributes too actually causes errors.</p>
 <p><code class="docutils literal"><span class="pre">Mock</span></code> (in all its flavours) uses a method called <code class="docutils literal"><span class="pre">_get_child_mock</span></code> to create
-these 「sub-mocks」 for attributes and return values. You can prevent your
+these &quot;sub-mocks&quot; for attributes and return values. You can prevent your
 subclass being used for attributes by overriding this method. The signature is
 that it takes arbitrary keyword arguments (<code class="docutils literal"><span class="pre">**kwargs</span></code>) which are then passed
 onto the mock constructor:</p>
@@ -966,7 +966,7 @@ a function. These are harder to mock because they aren’t using an object from
 the module namespace that we can patch out.</p>
 <p>Generally local imports are to be avoided. They are sometimes done to prevent
 circular dependencies, for which there is <em>usually</em> a much better way to solve
-the problem (refactor the code) or to prevent 「up front costs」 by delaying the
+the problem (refactor the code) or to prevent &quot;up front costs&quot; by delaying the
 import. This can also be solved in better ways than an unconditional local
 import (store the module as a class or module attribute and only do the import
 on first use).</p>
@@ -981,7 +981,7 @@ in <a class="reference internal" href="sys.html#sys.modules" title="sys.modules"
 When the patch is complete (the decorated function exits, the with statement
 body is complete or <code class="docutils literal"><span class="pre">patcher.stop()</span></code> is called) then whatever was there
 previously will be restored safely.</p>
-<p>Here’s an example that mocks out the 『fooble』 module.</p>
+<p>Here’s an example that mocks out the 'fooble' module.</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mock</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">patch</span><span class="o">.</span><span class="n">dict</span><span class="p">(</span><span class="s1">&#39;sys.modules&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;fooble&#39;</span><span class="p">:</span> <span class="n">mock</span><span class="p">}):</span>
 <span class="gp">... </span>   <span class="kn">import</span> <span class="nn">fooble</span>
@@ -992,7 +992,7 @@ previously will be restored safely.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mock</span><span class="o">.</span><span class="n">blob</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>As you can see the <code class="docutils literal"><span class="pre">import</span> <span class="pre">fooble</span></code> succeeds, but on exit there is no 『fooble』
+<p>As you can see the <code class="docutils literal"><span class="pre">import</span> <span class="pre">fooble</span></code> succeeds, but on exit there is no 'fooble'
 left in <a class="reference internal" href="sys.html#sys.modules" title="sys.modules"><code class="xref py py-data docutils literal"><span class="pre">sys.modules</span></code></a>.</p>
 <p>This also works for the <code class="docutils literal"><span class="pre">from</span> <span class="pre">module</span> <span class="pre">import</span> <span class="pre">name</span></code> form:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mock</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
@@ -1105,7 +1105,7 @@ defined classes). To use <a class="reference internal" href="unittest.mock.html#
 in the exact same object. If we are only interested in some of the attributes
 of this object then we can create a matcher that will check these attributes
 for us.</p>
-<p>You can see in this example how a 『standard』 call to <code class="docutils literal"><span class="pre">assert_called_with</span></code> isn’t
+<p>You can see in this example how a 'standard' call to <code class="docutils literal"><span class="pre">assert_called_with</span></code> isn’t
 sufficient:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>

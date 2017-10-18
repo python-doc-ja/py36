@@ -185,7 +185,7 @@ in-place version with the ungainly name <code class="xref py py-meth docutils li
 </div>
 <div class="section" id="pep-255-simple-generators">
 <span id="section-generators"></span><h2>PEP 255: 単純なジェネレータ<a class="headerlink" href="#pep-255-simple-generators" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>Python 2.2 では、ジェネレータが <code class="docutils literal"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span> <span class="pre">generators</span></code> ディレクティブで有効に出来るオプションの機能として追加されました。2.3 ではジェネレータは特別に有効化する必要なく、もうキーワード <a class="reference internal" href="../reference/simple_stmts.html#yield"><code class="xref std std-keyword docutils literal"><span class="pre">yield</span></code></a> として、いつでもそこにあります。このセクションの残りの部分は 「What’s New in Python 2.2」 のジェネレータの記述からの丸々コピーですので、2.2 のときに読んだなら読み飛ばしてもらって結構です。</p>
+<p>Python 2.2 では、ジェネレータが <code class="docutils literal"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span> <span class="pre">generators</span></code> ディレクティブで有効に出来るオプションの機能として追加されました。2.3 ではジェネレータは特別に有効化する必要なく、もうキーワード <a class="reference internal" href="../reference/simple_stmts.html#yield"><code class="xref std std-keyword docutils literal"><span class="pre">yield</span></code></a> として、いつでもそこにあります。このセクションの残りの部分は &quot;What’s New in Python 2.2&quot; のジェネレータの記述からの丸々コピーですので、2.2 のときに読んだなら読み飛ばしてもらって結構です。</p>
 <p>Python や C の標準的な関数コールについては、よくご存じに違いありません。関数を呼ぶと、ローカル変数を作るプライベートな名前空間ができますね。その関数が <a class="reference internal" href="../reference/simple_stmts.html#return"><code class="xref std std-keyword docutils literal"><span class="pre">return</span></code></a> 文まで来ると、ローカル変数が破壊されてから、返り値が呼び出し元に返ります。次に同じ関数をもう一度呼ぶと、新しいプライベート名前空間に新規のローカル変数が作られるのです。しかし、関数を出るときにローカル変数を捨てなければどうなるでしょうか。その出ていったところから関数を続行できたとしたら、どうでしょう。これこそジェネレータが提供する機能です; すなわち、ジェネレータは続行できる関数と考えることができます。</p>
 <p>ジェネレータ関数の最も単純な例です:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">generate_ints</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
@@ -226,12 +226,12 @@ in-place version with the ungainly name <code class="xref py py-meth docutils li
 </pre></div>
 </div>
 <p>ほかにも <code class="file docutils literal"><span class="pre">Lib/test/test_generators.py</span></code> には、N-Queens 問題 (N×N コマのチェス盤に、互いに攻撃できないような配置で N 個のクイーンを置く) やナイト・ツアー (N×N 盤の全コマをナイトが一度ずつ通るような経路を探す) の解を出す例が入っています。</p>
-<p>ジェネレータの発想はほかのプログラミング言語、特に Icon (<a class="reference external" href="https://www.cs.arizona.edu/icon/">https://www.cs.arizona.edu/icon/</a>) から着想しています。Icon ではジェネレータが言語の中枢になっています。Icon では、あらゆる式と関数がジェネレータのように振舞います。 <a class="reference external" href="https://www.cs.arizona.edu/icon/docs/ipd266.htm">https://www.cs.arizona.edu/icon/docs/ipd266.htm</a> の 「Icon プログラミング言語の概要」 の一つの例が、これがどのようなものであるのかを教えてくれます:</p>
+<p>ジェネレータの発想はほかのプログラミング言語、特に Icon (<a class="reference external" href="https://www.cs.arizona.edu/icon/">https://www.cs.arizona.edu/icon/</a>) から着想しています。Icon ではジェネレータが言語の中枢になっています。Icon では、あらゆる式と関数がジェネレータのように振舞います。 <a class="reference external" href="https://www.cs.arizona.edu/icon/docs/ipd266.htm">https://www.cs.arizona.edu/icon/docs/ipd266.htm</a> の &quot;Icon プログラミング言語の概要&quot; の一つの例が、これがどのようなものであるのかを教えてくれます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">sentence</span> <span class="p">:</span><span class="o">=</span> <span class="s2">&quot;Store it in the neighboring harbor&quot;</span>
 <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="p">:</span><span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="s2">&quot;or&quot;</span><span class="p">,</span> <span class="n">sentence</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">5</span> <span class="n">then</span> <span class="n">write</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Icon では <code class="xref py py-func docutils literal"><span class="pre">find()</span></code> 関数は部分文字列 「or」 が見つかる位置 3, 23, 33 を返します。 <a class="reference internal" href="../reference/compound_stmts.html#if"><code class="xref std std-keyword docutils literal"><span class="pre">if</span></code></a> 文内では <code class="docutils literal"><span class="pre">i</span></code> には最初 3 が代入されますが、これは 3 より小さいので比較は失敗し、Icon は次の値 23 を取り出します。 23 は 5 より大きいので比較は成功し、コードは 23 をスクリーンに表示します。</p>
+<p>Icon では <code class="xref py py-func docutils literal"><span class="pre">find()</span></code> 関数は部分文字列 &quot;or&quot; が見つかる位置 3, 23, 33 を返します。 <a class="reference internal" href="../reference/compound_stmts.html#if"><code class="xref std std-keyword docutils literal"><span class="pre">if</span></code></a> 文内では <code class="docutils literal"><span class="pre">i</span></code> には最初 3 が代入されますが、これは 3 より小さいので比較は失敗し、Icon は次の値 23 を取り出します。 23 は 5 より大きいので比較は成功し、コードは 23 をスクリーンに表示します。</p>
 <p>Python では Icon がそうするほどにはジェネレータを中心的概念に置きません。ジェネレータは Python 言語中核の新たな一面ではありますが、それらを学ぶのも使うのも誰しも行うべきだというものでもなく、そしてこれで解決できない何か問題があれば、忘れてしまっても良いものです。Icon と比較した特筆すべき Python インターフェイスの機能はジェネレータの状態が具象オブジェクト (イテレータ) で表現されることであり、それは他の関数に渡せますし、データ構造に記憶しておくことも出来ます。(—訳注: ジェネレータについてかなり控えめなのは、この時点で著者は将来の拡張を既に見据えていたから? かもしれませんね。PEP 342 と PEP 380 により今やジェネレータはこの頃より遥かに高機能になっており、今ではきっと「こんなものなくても困らない」なんて Python 使いはいないでしょう。—)</p>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
@@ -456,9 +456,9 @@ two-character sequence of a carriage return plus a newline.</p>
 </div>
 <div class="section" id="pep-293-codec-error-handling-callbacks">
 <h2>PEP 293: コーデックエラーを処理するコールバック<a class="headerlink" href="#pep-293-codec-error-handling-callbacks" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>Unicode 文字列をバイト文字列にエンコードする際には、エンコード出来ない文字に出会うことがあります。いまのところ Python は、そのエラー処理として 「strict」 (<a class="reference internal" href="../library/exceptions.html#UnicodeError" title="UnicodeError"><code class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></code></a> を発生させる)、  「ignore」 (その文字をスキップする)、 「replace」 (出力文字列ではクエッションマークに置換する)、のいずれか一つを指定出来て、 「strict」 がデフォルトの振る舞いになっています。その種のエラーのために、ほかの代わりとなる処理が望ましいかもしれません。例えば XML や HTML の実体参照に置き換えるなどの。</p>
+<p>Unicode 文字列をバイト文字列にエンコードする際には、エンコード出来ない文字に出会うことがあります。いまのところ Python は、そのエラー処理として &quot;strict&quot; (<a class="reference internal" href="../library/exceptions.html#UnicodeError" title="UnicodeError"><code class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></code></a> を発生させる)、  &quot;ignore&quot; (その文字をスキップする)、 &quot;replace&quot; (出力文字列ではクエッションマークに置換する)、のいずれか一つを指定出来て、 &quot;strict&quot; がデフォルトの振る舞いになっています。その種のエラーのために、ほかの代わりとなる処理が望ましいかもしれません。例えば XML や HTML の実体参照に置き換えるなどの。</p>
 <p>Python は今や、異なる処理戦略を追加する柔軟なフレームワークを手にしました。新しいエラーハンドラを <a class="reference internal" href="../library/codecs.html#codecs.register_error" title="codecs.register_error"><code class="xref py py-func docutils literal"><span class="pre">codecs.register_error()</span></code></a> で追加出来、コーデックは <a class="reference internal" href="../library/codecs.html#codecs.lookup_error" title="codecs.lookup_error"><code class="xref py py-func docutils literal"><span class="pre">codecs.lookup_error()</span></code></a> を使ってそのエラーハンドラにアクセス出来ます。等価な C API も C で書かれたコーデックのために追加されています。エラーハンドラは、変換すべき文字列、そのエラーが検出されたその文字列内での位置、ターゲットエンコーディングのような必要な状態情報を受け取ります。ハンドラは例外を投げるか、置換文字列を返せます。</p>
-<p>このフレームワークを使って 2 つのエラーハンドラが実装されました: 「backslashreplace」 はエンコード出来ない文字をバックスラッシュで引用し、 「xmlcharrefreplace」 は XML 文字参照を発行します。</p>
+<p>このフレームワークを使って 2 つのエラーハンドラが実装されました: &quot;backslashreplace&quot; はエンコード出来ない文字をバックスラッシュで引用し、 &quot;xmlcharrefreplace&quot; は XML 文字参照を発行します。</p>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
@@ -585,7 +585,7 @@ two-character sequence of a carriage return plus a newline.</p>
 </div>
 <div class="section" id="extended-slices">
 <span id="section-slices"></span><h2>拡張スライス<a class="headerlink" href="#extended-slices" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>Python 1.4 以来ずっと、スライシングの構文は省略可能な 3 つ目の引数 「step」 またの名を 「stride」 、をサポートしていたのです。例えばこれらは全て合法な Python 構文です: <code class="docutils literal"><span class="pre">L[1:10:2]</span></code>, <code class="docutils literal"><span class="pre">L[:-1:1]</span></code>, <code class="docutils literal"><span class="pre">L[::-1]</span></code> 。これはこの 3 つ目の引数を大々的に使う Numerical Python 開発者によって要望されたことで Python に追加されたものですが、Python ビルトインのリスト、タプル、文字列といったシーケンス型がこの機能をサポートすることはなく、これを試みると <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> を起こしていました。Michael Hudson がこの不徹底を修正するパッチを寄稿しました。</p>
+<p>Python 1.4 以来ずっと、スライシングの構文は省略可能な 3 つ目の引数 &quot;step&quot; またの名を &quot;stride&quot; 、をサポートしていたのです。例えばこれらは全て合法な Python 構文です: <code class="docutils literal"><span class="pre">L[1:10:2]</span></code>, <code class="docutils literal"><span class="pre">L[:-1:1]</span></code>, <code class="docutils literal"><span class="pre">L[::-1]</span></code> 。これはこの 3 つ目の引数を大々的に使う Numerical Python 開発者によって要望されたことで Python に追加されたものですが、Python ビルトインのリスト、タプル、文字列といったシーケンス型がこの機能をサポートすることはなく、これを試みると <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> を起こしていました。Michael Hudson がこの不徹底を修正するパッチを寄稿しました。</p>
 <p>例えば、今やリストの偶数番目要素を簡単に取り出せます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">L</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">L</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
@@ -741,10 +741,10 @@ use <a class="reference internal" href="../library/warnings.html#warnings.filter
 you’ll only notice the difference if you have a really complicated inheritance
 hierarchy.  Classic classes are unaffected by this change.  Python 2.2
 originally used a topological sort of a class’s ancestors, but 2.3 now uses the
-C3 algorithm as described in the paper <a class="reference external" href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.19.3910">「A Monotonic Superclass Linearization
-for Dylan」</a>. To
+C3 algorithm as described in the paper <a class="reference external" href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.19.3910">&quot;A Monotonic Superclass Linearization
+for Dylan&quot;</a>. To
 understand the motivation for this change,  read Michele Simionato’s article
-<a class="reference external" href="http://www.phyast.pitt.edu/~micheles/mro.html">「Python 2.3 Method Resolution Order」</a>, or
+<a class="reference external" href="http://www.phyast.pitt.edu/~micheles/mro.html">&quot;Python 2.3 Method Resolution Order&quot;</a>, or
 read the thread on python-dev starting with the message at
 <a class="reference external" href="https://mail.python.org/pipermail/python-dev/2002-October/029035.html">https://mail.python.org/pipermail/python-dev/2002-October/029035.html</a>. Samuele
 Pedroni first pointed out the problem and also implemented the fix by coding the
@@ -1094,7 +1094,7 @@ platforms.</p>
 </li>
 <li><p class="first">新規モジュール <code class="xref py py-mod docutils literal"><span class="pre">DocXMLRPCServer</span></code> は、セルフ-ドキュメンティング XML-RPC サーバを書くのに使えます。実際のところをみるためにはデモモード (つまりプログラムとして) 実行してみてください。ウェブブラウザを RPC サーバに向ければ pydoc スタイルのドキュメントを生成します。xmlrpclib をサーバに向ければ実際のメソッドを呼び出せます。(Contributed by Brian Quinlan.)</p>
 </li>
-<li><p class="first">internationalized domain names (RFC 3454, 3490, 3491, 3492) のサポートが追加されました。Unicode ドメイン名とその名前の ASCII 互換エンコーディング (ACE=ASCII-compatible encoding) の間の変換をするのに 「idna」 エンコーディングを使用出来ます:</p>
+<li><p class="first">internationalized domain names (RFC 3454, 3490, 3491, 3492) のサポートが追加されました。Unicode ドメイン名とその名前の ASCII 互換エンコーディング (ACE=ASCII-compatible encoding) の間の変換をするのに &quot;idna&quot; エンコーディングを使用出来ます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="o">&gt;</span><span class="p">{}</span><span class="o">&gt;</span><span class="p">{}</span><span class="o">&gt;</span> <span class="sa">u</span><span class="s2">&quot;www.Alliancefrançaise.nu&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;idna&quot;</span><span class="p">)</span>
 <span class="s1">&#39;www.xn--alliancefranaise-npb.nu&#39;</span>
 </pre></div>
@@ -1288,17 +1288,17 @@ source distribution, were updated for 2.3.  (Contributed by Sean Reifschneider.)
 <ul>
 <li><p class="first">環境変数 <span class="target" id="index-83"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONINSPECT"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONINSPECT</span></code></a> をセットしておくと、Python インタプリタが Python プログラム実行後に対話モードに入ります。これは Python を <a class="reference internal" href="../using/cmdline.html#cmdoption-i"><code class="xref std std-option docutils literal"><span class="pre">-i</span></code></a> で起動するのと同じです。環境変数は Python インタプリタ実行前にセットするか、Python プログラムのその実行の一部としてセットすることが出来ます。</p>
 </li>
-<li><p class="first">The <code class="file docutils literal"><span class="pre">regrtest.py</span></code> script now provides a way to allow 「all resources
-except <em>foo</em>.」  A resource name passed to the <code class="xref std std-option docutils literal"><span class="pre">-u</span></code> option can now be
-prefixed with a hyphen (<code class="docutils literal"><span class="pre">'-'</span></code>) to mean 「remove this resource.」  For example,
-the option 『<code class="docutils literal"><span class="pre">-uall,-bsddb</span></code>』 could be used to enable the use of all resources
+<li><p class="first">The <code class="file docutils literal"><span class="pre">regrtest.py</span></code> script now provides a way to allow &quot;all resources
+except <em>foo</em>.&quot;  A resource name passed to the <code class="xref std std-option docutils literal"><span class="pre">-u</span></code> option can now be
+prefixed with a hyphen (<code class="docutils literal"><span class="pre">'-'</span></code>) to mean &quot;remove this resource.&quot;  For example,
+the option '<code class="docutils literal"><span class="pre">-uall,-bsddb</span></code>' could be used to enable the use of all resources
 except <code class="docutils literal"><span class="pre">bsddb</span></code>.</p>
 </li>
 <li><p class="first">ドキュメントのビルドに使われるツールは今では Unix 同様に Cygwin でも動作します。</p>
 </li>
-<li><p class="first"><code class="docutils literal"><span class="pre">SET_LINENO</span></code> 命令コード (opcode) は削除されました。彼方の昔に戻れば、この命令コードはトレースバック内で行番号を生成し、トレース関数をサポートするのに必要でした (例えば <a class="reference internal" href="../library/pdb.html#module-pdb" title="pdb: The Python debugger for interactive interpreters."><code class="xref py py-mod docutils literal"><span class="pre">pdb</span></code></a> のために)。Python 1.5 より、トレースバック内の行番号は 「python -O」 で働くための異なったメカニズムを用いて計算で求められてきました。2.3 のためには Michael Hudson がトレース関数を呼ぶのに決定する似た方法を実装しましたので、 <code class="docutils literal"><span class="pre">SET_LINENO</span></code> の必要性は完全になくなりました。</p>
+<li><p class="first"><code class="docutils literal"><span class="pre">SET_LINENO</span></code> 命令コード (opcode) は削除されました。彼方の昔に戻れば、この命令コードはトレースバック内で行番号を生成し、トレース関数をサポートするのに必要でした (例えば <a class="reference internal" href="../library/pdb.html#module-pdb" title="pdb: The Python debugger for interactive interpreters."><code class="xref py py-mod docutils literal"><span class="pre">pdb</span></code></a> のために)。Python 1.5 より、トレースバック内の行番号は &quot;python -O&quot; で働くための異なったメカニズムを用いて計算で求められてきました。2.3 のためには Michael Hudson がトレース関数を呼ぶのに決定する似た方法を実装しましたので、 <code class="docutils literal"><span class="pre">SET_LINENO</span></code> の必要性は完全になくなりました。</p>
 <p>Python コードから何か異なる結果を見つけるのは、 <a class="reference internal" href="../using/cmdline.html#cmdoption-o"><code class="xref std std-option docutils literal"><span class="pre">-O</span></code></a> なしで Python を実行する際のわずかなスピードアップを別とすれば、困難かもしれません。</p>
-<p>フレームオブジェクトの <code class="xref py py-attr docutils literal"><span class="pre">f_lineno</span></code> フィールドにアクセスしている C 拡張は、代わりに <code class="docutils literal"><span class="pre">PyCode_Addr2Line(f-&gt;f_code,</span> <span class="pre">f-&gt;f_lasti)</span></code> を呼び出すべきです。これは以前の Python バージョンでも 「python -O」 のもとでコードが動作するのにも望ましい効果を持つでしょう。</p>
+<p>フレームオブジェクトの <code class="xref py py-attr docutils literal"><span class="pre">f_lineno</span></code> フィールドにアクセスしている C 拡張は、代わりに <code class="docutils literal"><span class="pre">PyCode_Addr2Line(f-&gt;f_code,</span> <span class="pre">f-&gt;f_lasti)</span></code> を呼び出すべきです。これは以前の Python バージョンでも &quot;python -O&quot; のもとでコードが動作するのにも望ましい効果を持つでしょう。</p>
 <p>気の利いた新機能としては、トレース関数は、今ではフレームオブジェクトの <code class="xref py py-attr docutils literal"><span class="pre">f_lineno</span></code> 属性を、次に実行される行に変更してセットします。 <a class="reference internal" href="../library/pdb.html#module-pdb" title="pdb: The Python debugger for interactive interpreters."><code class="xref py py-mod docutils literal"><span class="pre">pdb</span></code></a> デバッガにはこの新機能の恩恵を受けて <code class="docutils literal"><span class="pre">jump</span></code> コマンドが追加されています。 (Implemented by Richie Hindle.)</p>
 </li>
 </ul>

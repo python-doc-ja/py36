@@ -111,7 +111,7 @@
 <dd>最新のモジュールインストールのドキュメンテーション</dd>
 </dl>
 </div>
-<p>このドキュメントでは、Python モジュール配布ユーティリティ (Python Distribution Utilities, 「Distutils」) について、エンドユーザの視点に立ち、サードパーティ製のモジュールや拡張モジュールの構築やインストールによって標準の Python に機能を追加する方法について述べます。</p>
+<p>このドキュメントでは、Python モジュール配布ユーティリティ (Python Distribution Utilities, &quot;Distutils&quot;) について、エンドユーザの視点に立ち、サードパーティ製のモジュールや拡張モジュールの構築やインストールによって標準の Python に機能を追加する方法について述べます。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">このガイドは、Python のバージョンの一部として提供される拡張のビルドと配布についての基礎的なツールについてのみをカバーします。サードパーティによるツールが、容易に使えてもっと安全な代替として使えるでしょう。もっと詳しい情報は <a class="reference external" href="https://packaging.python.org/en/latest/current/">quick recommendations section</a> にある Python パッケージングユーザガイドから得られます。</p>
@@ -185,13 +185,13 @@ or
                temp.&lt;plat&gt;/
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">&lt;plat&gt;</span></code> は、現在の OS/ハードウェアプラットフォームと Python のバージョンを記述する短い文字列に展開されます。第一の <code class="file docutils literal"><span class="pre">lib</span></code> ディレクトリだけの形式は、 「pure モジュール配布物」 — すなわち、pure Python モジュールだけの入ったモジュール配布物 — の場合に使われます。モジュール配布物に何らかの拡張モジュール (C/C++ で書かれたモジュール) が入っている場合、第二の <code class="docutils literal"><span class="pre">&lt;plat&gt;</span></code> 付きディレクトリが二つある形式が使われます。この場合、  <code class="file docutils literal"><span class="pre">temp.</span><em><span class="pre">plat</span></em></code> ディレクトリには、コンパイル/リンク過程で生成され、実際にはインストールされない一時ファイルが収められます。どちらの場合にも、 <code class="file docutils literal"><span class="pre">lib</span></code> (または <code class="file docutils literal"><span class="pre">lib.</span><em><span class="pre">plat</span></em></code>)  ディレクトリには、最終的にインストールされることになる全ての Python  モジュール (pure Python モジュールおよび拡張モジュール) が入ります。</p>
+<p><code class="docutils literal"><span class="pre">&lt;plat&gt;</span></code> は、現在の OS/ハードウェアプラットフォームと Python のバージョンを記述する短い文字列に展開されます。第一の <code class="file docutils literal"><span class="pre">lib</span></code> ディレクトリだけの形式は、 &quot;pure モジュール配布物&quot; — すなわち、pure Python モジュールだけの入ったモジュール配布物 — の場合に使われます。モジュール配布物に何らかの拡張モジュール (C/C++ で書かれたモジュール) が入っている場合、第二の <code class="docutils literal"><span class="pre">&lt;plat&gt;</span></code> 付きディレクトリが二つある形式が使われます。この場合、  <code class="file docutils literal"><span class="pre">temp.</span><em><span class="pre">plat</span></em></code> ディレクトリには、コンパイル/リンク過程で生成され、実際にはインストールされない一時ファイルが収められます。どちらの場合にも、 <code class="file docutils literal"><span class="pre">lib</span></code> (または <code class="file docutils literal"><span class="pre">lib.</span><em><span class="pre">plat</span></em></code>)  ディレクトリには、最終的にインストールされることになる全ての Python  モジュール (pure Python モジュールおよび拡張モジュール) が入ります。</p>
 <p>今後、Python スクリプト、ドキュメント、バイナリ実行可能形式、その他 Python モジュールやアプリケーションのインストール作業に必要なディレクトリが追加されるかもしれません。</p>
 </div>
 <div class="section" id="how-installation-works">
 <span id="inst-how-install-works"></span><h3>インストールの仕組み<a class="headerlink" href="#how-installation-works" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p><strong class="command">build</strong> コマンドを実行した後 (明示的に実行した場合も、 <strong class="command">install</strong> コマンドが代わりに実行してくれた場合も) は、 <strong class="command">install</strong> コマンドの仕事は比較的単純なもの: <code class="file docutils literal"><span class="pre">build/lib</span></code> (または <code class="file docutils literal"><span class="pre">build/lib.</span><em><span class="pre">plat</span></em></code>) の下にあるもの全ての指定したインストールディレクトリへのコピー、になります。</p>
-<p>インストールディレクトリを選ばなかった場合 — すなわち、 <code class="docutils literal"><span class="pre">setup.py</span> <span class="pre">install</span></code> を実行しただけの場合 — には、 <strong class="command">install</strong> コマンドはサードパーティ製 Python モジュールを置くための標準の場所にインストールを行います。この場所は、プラットフォームや、Python 自体をどのようにビルド/インストールしたかで変わります。 Unix (と、Unix をベースとしたMac OS X) では、インストールしようとするモジュール配布物が pure Python なのか、拡張モジュールを含む (「非 pure」) のかによっても異なります:</p>
+<p>インストールディレクトリを選ばなかった場合 — すなわち、 <code class="docutils literal"><span class="pre">setup.py</span> <span class="pre">install</span></code> を実行しただけの場合 — には、 <strong class="command">install</strong> コマンドはサードパーティ製 Python モジュールを置くための標準の場所にインストールを行います。この場所は、プラットフォームや、Python 自体をどのようにビルド/インストールしたかで変わります。 Unix (と、Unix をベースとしたMac OS X) では、インストールしようとするモジュール配布物が pure Python なのか、拡張モジュールを含む (&quot;非 pure&quot;) のかによっても異なります:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="13%" />
@@ -311,7 +311,7 @@ Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;licen
 </div>
 <div class="section" id="alternate-installation-the-home-scheme">
 <span id="inst-alt-install-home"></span><h3>別の場所へのインストール: home スキーム<a class="headerlink" href="#alternate-installation-the-home-scheme" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>「home スキーム」 の背後にある考え方は、Python モジュールを個人用のモジュール置き場でビルドし、維持するというものです。このスキームの名前は Unixの「ホーム」ディレクトリの概念からとりました。というのも、 Unixのユーザにとって、自分のホームディレクトリを <code class="file docutils literal"><span class="pre">/usr/</span></code> や <code class="file docutils literal"><span class="pre">/usr/local/</span></code> のようにレイアウトするのはよくあることだからです。とはいえ、このスキームはどのオペレーティングシステムのユーザでも使えます。</p>
+<p>&quot;home スキーム&quot; の背後にある考え方は、Python モジュールを個人用のモジュール置き場でビルドし、維持するというものです。このスキームの名前は Unixの「ホーム」ディレクトリの概念からとりました。というのも、 Unixのユーザにとって、自分のホームディレクトリを <code class="file docutils literal"><span class="pre">/usr/</span></code> や <code class="file docutils literal"><span class="pre">/usr/local/</span></code> のようにレイアウトするのはよくあることだからです。とはいえ、このスキームはどのオペレーティングシステムのユーザでも使えます。</p>
 <p>新たなモジュールのインストールは単純で</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>python setup.py install --home=&lt;dir&gt;
 </pre></div>
@@ -353,8 +353,8 @@ Unix では、面倒臭がりの人は単にチルダ (<code class="docutils lit
 </div>
 <div class="section" id="alternate-installation-unix-the-prefix-scheme">
 <span id="inst-alt-install-prefix-unix"></span><h3>別の場所へのインストール: Unix (prefix スキーム)<a class="headerlink" href="#alternate-installation-unix-the-prefix-scheme" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>あるインストール済みの Python を使ってモジュールのビルド/インストールを (例えば setup スクリプトを実行して) 行いたいけれども、 別のインストール済みの Python のサードパーティ製モジュール置き場 (あるいは、そう見えるようなディレクトリ構造) に、ビルドされた モジュールをインストールしたい場合には、」prefix スキーム」 が便利です。そんな作業はまったくありえそうにない、と思うなら、確かにその通りです — 「home スキーム」 を先に説明したのもそのためです。とはいえ、prefix スキームが有用なケースは少なくとも二つあります。</p>
-<p>まず、多くの Linux ディストリビューションは、 Python を <code class="file docutils literal"><span class="pre">/usr/local</span></code> ではなく <code class="file docutils literal"><span class="pre">/usr</span></code> に置いていることを考えてください。この場合は、 Python はローカルの計算機ごとのアドオン (add-on) ではなく、」システム」 の一部となっているので、 <code class="file docutils literal"><span class="pre">/usr</span></code> に置くのは全く正当なことです。しかしながら、 Python モジュールをソースコードからインストールしていると、モジュールを <code class="file docutils literal"><span class="pre">/usr/lib/python2.</span><em><span class="pre">X</span></em></code> ではなく <code class="file docutils literal"><span class="pre">/usr/local/lib/python2.</span><em><span class="pre">X</span></em></code> に置きたいと思うかもしれません。これを行うには、以下のように指定します</p>
+<p>あるインストール済みの Python を使ってモジュールのビルド/インストールを (例えば setup スクリプトを実行して) 行いたいけれども、 別のインストール済みの Python のサードパーティ製モジュール置き場 (あるいは、そう見えるようなディレクトリ構造) に、ビルドされた モジュールをインストールしたい場合には、&quot;prefix スキーム&quot; が便利です。そんな作業はまったくありえそうにない、と思うなら、確かにその通りです — &quot;home スキーム&quot; を先に説明したのもそのためです。とはいえ、prefix スキームが有用なケースは少なくとも二つあります。</p>
+<p>まず、多くの Linux ディストリビューションは、 Python を <code class="file docutils literal"><span class="pre">/usr/local</span></code> ではなく <code class="file docutils literal"><span class="pre">/usr</span></code> に置いていることを考えてください。この場合は、 Python はローカルの計算機ごとのアドオン (add-on) ではなく、&quot;システム&quot; の一部となっているので、 <code class="file docutils literal"><span class="pre">/usr</span></code> に置くのは全く正当なことです。しかしながら、 Python モジュールをソースコードからインストールしていると、モジュールを <code class="file docutils literal"><span class="pre">/usr/lib/python2.</span><em><span class="pre">X</span></em></code> ではなく <code class="file docutils literal"><span class="pre">/usr/local/lib/python2.</span><em><span class="pre">X</span></em></code> に置きたいと思うかもしれません。これを行うには、以下のように指定します</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>/usr/bin/python setup.py install --prefix=/usr/local
 </pre></div>
 </div>
@@ -470,7 +470,7 @@ Unix では、面倒臭がりの人は単にチルダ (<code class="docutils lit
 </tr>
 </tbody>
 </table>
-<p>これらの上書きオプションには、相対パス、絶対パス、あるいはインストールのベースディレクトリの一つに関して明示的に定義されたものを指定できます。(2つのインストールのベースディレクトリがあり、普通それらは同じです — それらは Unix 「prefix scheme」 を使い、 <code class="docutils literal"><span class="pre">--prefix</span></code> と <code class="docutils literal"><span class="pre">--exec-prefix</span></code> に異なる値を与えた場合にのみ違ってきます; <code class="docutils literal"><span class="pre">--install-lib</span></code> を使うと、計算されたものあるいは <code class="docutils literal"><span class="pre">--install-purelib</span></code> と <code class="docutils literal"><span class="pre">--install-platlib</span></code> で与えられるものを上書きしますので、pure モジュールと拡張モジュールでの違いのないスキームではお奨めです。)</p>
+<p>これらの上書きオプションには、相対パス、絶対パス、あるいはインストールのベースディレクトリの一つに関して明示的に定義されたものを指定できます。(2つのインストールのベースディレクトリがあり、普通それらは同じです — それらは Unix &quot;prefix scheme&quot; を使い、 <code class="docutils literal"><span class="pre">--prefix</span></code> と <code class="docutils literal"><span class="pre">--exec-prefix</span></code> に異なる値を与えた場合にのみ違ってきます; <code class="docutils literal"><span class="pre">--install-lib</span></code> を使うと、計算されたものあるいは <code class="docutils literal"><span class="pre">--install-purelib</span></code> と <code class="docutils literal"><span class="pre">--install-platlib</span></code> で与えられるものを上書きしますので、pure モジュールと拡張モジュールでの違いのないスキームではお奨めです。)</p>
 <p>例えば、 Unix環境でモジュール配布物をホームディレクトリにインストールしたい — とはいえ、スクリプトは <code class="file docutils literal"><span class="pre">~/bin</span></code> ではなく <code class="file docutils literal"><span class="pre">~/scripts</span></code> に置きたい — とします。ご想像の通り、スクリプトを置くディレクトリは、 <code class="xref std std-option docutils literal"><span class="pre">--install-scripts</span></code> オプションで上書きできます; この場合は相対パスで指定もでき、インストールベースディレクトリ (この場合にはホームディレクトリ) からの相対パスとして解釈されます:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>python setup.py install --home=~ --install-scripts=scripts
 </pre></div>
@@ -479,7 +479,7 @@ Unix では、面倒臭がりの人は単にチルダ (<code class="docutils lit
 <div class="highlight-none"><div class="highlight"><pre><span></span>python setup.py install --install-scripts=/usr/local/bin
 </pre></div>
 </div>
-<p>(この操作を行うと、 「prefix スキーム」 を使ったインストールになり、 prefix は Python インタプリタがインストールされている場所 — この場合には <code class="file docutils literal"><span class="pre">/usr/local/python</span></code> になります。)</p>
+<p>(この操作を行うと、 &quot;prefix スキーム&quot; を使ったインストールになり、 prefix は Python インタプリタがインストールされている場所 — この場合には <code class="file docutils literal"><span class="pre">/usr/local/python</span></code> になります。)</p>
 <p>Windows 用の Python を管理しているのなら、サードパーティ製モジュールを <code class="file docutils literal"><em><span class="pre">prefix</span></em></code> そのものの下ではなく、 <code class="file docutils literal"><em><span class="pre">prefix</span></em></code> の下にあるサブディレクトリに置きたいと考えるかもしれません。この作業は、インストールディレクトリのカスタマイズとほぼ同じくらい簡単です — 覚えておかねばならないのは、モジュールには二つのタイプ、 pure モジュールと拡張モジュールがあるということです。ともにひとつのオプションで簡単にコントロール出来ます:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>python setup.py install --install-lib=Site
 </pre></div>
@@ -562,7 +562,7 @@ sys.path.append(&#39;/www/python/&#39;)
 </div>
 <div class="section" id="distutils-configuration-files">
 <span id="inst-config-files"></span><h2>Distutils 設定ファイル<a class="headerlink" href="#distutils-configuration-files" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>上で述べたように、Distutils 設定ファイルを使えば、任意の  Distutils オプションに対して個人的な設定やサイト全体の設定を記録できます。すなわち、任意のコマンドの任意のオプションを二つか三つ (プラットフォームによって異なります) の設定ファイルに保存でき、コマンドラインを解釈する前にオプションを問い合わせさせるようにできます。つまり、設定ファイルはデフォルトの値を上書きし、さらにコマンドライン上で与えた値が設定ファイルの内容を上書きするわけです。さらに、複数の設定ファイルが適用されると、」先に」 適用されたファイルに指定されていた値は 「後に」 適用されたファイル内の値で上書きされます。</p>
+<p>上で述べたように、Distutils 設定ファイルを使えば、任意の  Distutils オプションに対して個人的な設定やサイト全体の設定を記録できます。すなわち、任意のコマンドの任意のオプションを二つか三つ (プラットフォームによって異なります) の設定ファイルに保存でき、コマンドラインを解釈する前にオプションを問い合わせさせるようにできます。つまり、設定ファイルはデフォルトの値を上書きし、さらにコマンドライン上で与えた値が設定ファイルの内容を上書きするわけです。さらに、複数の設定ファイルが適用されると、&quot;先に&quot; 適用されたファイルに指定されていた値は &quot;後に&quot; 適用されたファイル内の値で上書きされます。</p>
 <div class="section" id="location-and-names-of-config-files">
 <span id="inst-config-filenames"></span><h3>設定ファイルの場所と名前<a class="headerlink" href="#location-and-names-of-config-files" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>設定ファイルの名前と場所は、非常にわずかですがプラットフォーム間で異なります。Unix と Mac OS X では、三種類の設定ファイルは以下のようになります (処理される順に並んでいます):</p>
@@ -621,13 +621,13 @@ sys.path.append(&#39;/www/python/&#39;)
 </tr>
 </tbody>
 </table>
-<p>全てのプラットフォームにおいて、」個人の」 ファイルは <cite>–no-user-cfg</cite> オプションを使って一時的に無効にすることができます。</p>
+<p>全てのプラットフォームにおいて、&quot;個人の&quot; ファイルは <cite>–no-user-cfg</cite> オプションを使って一時的に無効にすることができます。</p>
 <p>注釈:</p>
 <ol class="arabic simple">
 <li>厳密に言えば、システム全体向けの設定ファイルは、 Distutils がインストールされているディレクトリになります; Unixの Python 1.6 以降では、表の通りの場所になります。 Python 1.5.2 では、 Distutils は通常 <code class="file docutils literal"><em><span class="pre">prefix</span></em><span class="pre">/lib/python1.5/site-packages/distutils</span></code> にインストールされるため、 Python 1.5.2 では設定ファイルをそこに置かなければなりません。</li>
 <li>Unixでは、環境変数 <span class="target" id="index-27"></span><code class="xref std std-envvar docutils literal"><span class="pre">HOME</span></code> が定義されていない場合、標準モジュール <a class="reference internal" href="../library/pwd.html#module-pwd" title="pwd: The password database (getpwnam() and friends). (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">pwd</span></code></a> の <code class="xref py py-func docutils literal"><span class="pre">getpwuid()</span></code> 関数を使ってユーザのホームディレクトリを決定します。このとき同時に Distutils によって <a class="reference internal" href="../library/os.path.html#os.path.expanduser" title="os.path.expanduser"><code class="xref py py-func docutils literal"><span class="pre">os.path.expanduser()</span></code></a> が実行されます。</li>
 <li>現在のディレクトリ (通常は setup スクリプトがある場所) です。</li>
-<li>(注記 (1) も参照してください)  Python 1.6 およびそれ以降のバージョンでは、 Python のデフォルトの 「インストールプレフィクス」 は <code class="file docutils literal"><span class="pre">C:\Python</span></code> なので、システム設定ファイルは通常 <code class="file docutils literal"><span class="pre">C:\Python\Lib\distutils\distutils.cfg</span></code> になります。Python 1.5.2 ではデフォルトのプレフィクスは <code class="file docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\Python</span></code> であり、Distutils は標準ライブラリの一部ではありません — 従って、システム設定ファイルは、 Windows 用の標準の Python 1.5.2 では <code class="file docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\Python\distutils\distutils.cfg</span></code> になります。</li>
+<li>(注記 (1) も参照してください)  Python 1.6 およびそれ以降のバージョンでは、 Python のデフォルトの &quot;インストールプレフィクス&quot; は <code class="file docutils literal"><span class="pre">C:\Python</span></code> なので、システム設定ファイルは通常 <code class="file docutils literal"><span class="pre">C:\Python\Lib\distutils\distutils.cfg</span></code> になります。Python 1.5.2 ではデフォルトのプレフィクスは <code class="file docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\Python</span></code> であり、Distutils は標準ライブラリの一部ではありません — 従って、システム設定ファイルは、 Windows 用の標準の Python 1.5.2 では <code class="file docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\Python\distutils\distutils.cfg</span></code> になります。</li>
 <li>Windows では、環境変数 <span class="target" id="index-28"></span><code class="xref std std-envvar docutils literal"><span class="pre">HOME</span></code> が設定されていない場合、 <span class="target" id="index-29"></span><code class="xref std std-envvar docutils literal"><span class="pre">USERPROFILE</span></code> 、 <span class="target" id="index-30"></span><code class="xref std std-envvar docutils literal"><span class="pre">HOMEDRIVE</span></code> 、 <span class="target" id="index-31"></span><code class="xref std std-envvar docutils literal"><span class="pre">HOMEPATH</span></code> を順々に試します。このとき同時に Distutils によって <a class="reference internal" href="../library/os.path.html#os.path.expanduser" title="os.path.expanduser"><code class="xref py py-func docutils literal"><span class="pre">os.path.expanduser()</span></code></a> が実行されます。</li>
 </ol>
 </div>
@@ -640,7 +640,7 @@ verbose=0
 </pre></div>
 </div>
 <p>この内容のファイルがシステム全体用の設定ファイルとしてインストールされていれば、そのシステムの全てのユーザによる全ての Python モジュール配布物に対する処理に影響します。ファイルが (個人用の設定をサポートしているシステムで) 個人用の設定ファイルとしてインストールされていれば、そのユーザが処理するモジュール配布物にのみ影響します。この内容を特定のモジュール配布物の <code class="file docutils literal"><span class="pre">setup.cfg</span></code> として使えば、その配布物だけに影響します。</p>
-<p>以下のようにして、デフォルトの 「ビルドベース」 ディレクトリをオーバライドしたり、 <strong class="command">build*</strong> コマンドが常に強制的にリビルドを行うようにもできます:</p>
+<p>以下のようにして、デフォルトの &quot;ビルドベース&quot; ディレクトリをオーバライドしたり、 <strong class="command">build*</strong> コマンドが常に強制的にリビルドを行うようにもできます:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>[build]
 build-base=blib
 force=1
@@ -659,7 +659,7 @@ force=1
 <div class="highlight-none"><div class="highlight"><pre><span></span>python setup.py --help
 </pre></div>
 </div>
-<p>「Python モジュールの配布」 マニュアルの、」リファレンスマニュアル」 の節も参照してください。</p>
+<p>&quot;Python モジュールの配布&quot; マニュアルの、&quot;リファレンスマニュアル&quot; の節も参照してください。</p>
 </div>
 </div>
 <div class="section" id="building-extensions-tips-and-tricks">
@@ -741,7 +741,7 @@ force=1
 <div class="highlight-none"><div class="highlight"><pre><span></span>pexports python25.dll &gt;python25.def
 </pre></div>
 </div>
-<p>インストールされた <code class="file docutils literal"><span class="pre">python25.dll</span></code> の位置はインストールオプションと、 Windowsのバージョンと言語に依存します。」自分だけのため」のインストールの場合には、インストールディレクトリのルートに配置されます。共有インストールの場合にはシステムディレクトリに配置されます。</p>
+<p>インストールされた <code class="file docutils literal"><span class="pre">python25.dll</span></code> の位置はインストールオプションと、 Windowsのバージョンと言語に依存します。&quot;自分だけのため&quot;のインストールの場合には、インストールディレクトリのルートに配置されます。共有インストールの場合にはシステムディレクトリに配置されます。</p>
 <p>これで、上で得られた情報をもとに、gcc 用の import ライブラリを作成できます。</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>/cygwin/bin/dlltool --dllname python25.dll --def python25.def --output-lib libpython25.a
 </pre></div>

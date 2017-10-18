@@ -152,9 +152,9 @@ $ python myapp.pyz
 <dt id="cmdoption-zipapp-m">
 <code class="descname">-m</code><code class="descclassname"> &lt;mainfn&gt;</code><code class="descclassname">, </code><code class="descname">--main</code><code class="descclassname">=&lt;mainfn&gt;</code><a class="headerlink" href="#cmdoption-zipapp-m" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><em>mainfn</em> を実行するアーカイブへ <code class="docutils literal"><span class="pre">__main__.py</span></code> ファイルを書込んでください。
-<em>mainfn</em> 引数は 「pkg.mod:fn」 の形式で指定します。
-「pkg.mod」 の場所はアーカイブ内の package/module です。
-「fn」 は指定した module から呼出すことのできる関数です。
+<em>mainfn</em> 引数は &quot;pkg.mod:fn&quot; の形式で指定します。
+&quot;pkg.mod&quot; の場所はアーカイブ内の package/module です。
+&quot;fn&quot; は指定した module から呼出すことのできる関数です。
 <code class="docutils literal"><span class="pre">__main__.py</span></code> ファイルが module から呼出すことのできる関数を実行します。</p>
 <p>書庫をコピーする際、 <a class="reference internal" href="#cmdoption-zipapp-m"><code class="xref std std-option docutils literal"><span class="pre">--main</span></code></a> を指定することは出来ません。</p>
 </dd></dl>
@@ -203,7 +203,7 @@ and the target will be a file with the same name as the source, with
 a <code class="docutils literal"><span class="pre">.pyz</span></code> extension added.</li>
 </ul>
 <p><em>interpreter</em> 引数はアーカイブが実行時に使用する Python インタープリタの名前を指定します。
-インタープリタ名は 「シェバン」 行としてアーカイブの起点に書込まれます。
+インタープリタ名は &quot;シェバン&quot; 行としてアーカイブの起点に書込まれます。
 POSIX では OS によってシェバンが解釈され、
 Windows では Python ランチャーによって扱われます。
 シェバン行が書込まれていない場合は <em>interpreter</em> の結果を無視します。
@@ -211,8 +211,8 @@ interpreter が指定されており、 target がファイル名である場合
 target ファイルの実行可能ビットが設定されます。</p>
 <p><em>main</em> 引数はアーカイブのメインプログラムとして使用する callable の名前を指定します。
 <em>main</em> 引数は source がディレクトリであり、 source が既に <code class="docutils literal"><span class="pre">__main__.py</span></code> ファイルを保持していない場合に限り、指定することができます。
-<em>main</em> 引数は 「pkg.module:callable」 の形式を取り、
-アーカイブは 「pkg.module」 をインポートして実行され、
+<em>main</em> 引数は &quot;pkg.module:callable&quot; の形式を取り、
+アーカイブは &quot;pkg.module&quot; をインポートして実行され、
 指定した callable を引数なしで実行します。
 source がディレクトリであり、 <code class="docutils literal"><span class="pre">__main__.py</span></code> が含まれていない場合、
 <em>main</em> は無視すべきエラーとなり、
@@ -276,15 +276,15 @@ archive, you need to ensure that the interpreter used is portable.  The Python
 launcher for Windows supports most common forms of POSIX <code class="docutils literal"><span class="pre">#!</span></code> line, but there
 are other issues to consider:</p>
 <ul class="simple">
-<li>If you use 「/usr/bin/env python」 (or other forms of the 「python」 command,
-such as 「/usr/bin/python」), you need to consider that your users may have
+<li>If you use &quot;/usr/bin/env python&quot; (or other forms of the &quot;python&quot; command,
+such as &quot;/usr/bin/python&quot;), you need to consider that your users may have
 either Python 2 or Python 3 as their default, and write your code to work
 under both versions.</li>
-<li>If you use an explicit version, for example 「/usr/bin/env python3」 your
+<li>If you use an explicit version, for example &quot;/usr/bin/env python3&quot; your
 application will not work for users who do not have that version.  (This
 may be what you want if you have not made your code Python 2 compatible).</li>
-<li>There is no way to say 「python X.Y or later」, so be careful of using an
-exact version like 「/usr/bin/env python3.4」 as you will need to change your
+<li>There is no way to say &quot;python X.Y or later&quot;, so be careful of using an
+exact version like &quot;/usr/bin/env python3.4&quot; as you will need to change your
 shebang line for users of Python 3.5, for example.</li>
 </ul>
 </div>
@@ -297,18 +297,18 @@ will be run as the entry point for the application.  As usual for any Python
 script, the parent of the script (in this case the zip file) will be placed on
 <a class="reference internal" href="sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal"><span class="pre">sys.path</span></code></a> and thus further modules can be imported from the zip file.</p>
 <p>The zip file format allows arbitrary data to be prepended to a zip file.  The
-zip application format uses this ability to prepend a standard POSIX 「shebang」
+zip application format uses this ability to prepend a standard POSIX &quot;shebang&quot;
 line to the file (<code class="docutils literal"><span class="pre">#!/path/to/interpreter</span></code>).</p>
 <p>Formally, the Python zip application format is therefore:</p>
 <ol class="arabic simple">
 <li>An optional shebang line, containing the characters <code class="docutils literal"><span class="pre">b'#!'</span></code> followed by an
 interpreter name, and then a newline (<code class="docutils literal"><span class="pre">b'\n'</span></code>) character.  The interpreter
-name can be anything acceptable to the OS 「shebang」 processing, or the Python
+name can be anything acceptable to the OS &quot;shebang&quot; processing, or the Python
 launcher on Windows.  The interpreter should be encoded in UTF-8 on Windows,
 and in <a class="reference internal" href="sys.html#sys.getfilesystemencoding" title="sys.getfilesystemencoding"><code class="xref py py-func docutils literal"><span class="pre">sys.getfilesystemencoding()</span></code></a> on POSIX.</li>
 <li>Standard zipfile data, as generated by the <a class="reference internal" href="zipfile.html#module-zipfile" title="zipfile: Read and write ZIP-format archive files."><code class="xref py py-mod docutils literal"><span class="pre">zipfile</span></code></a> module.  The
 zipfile content <em>must</em> include a file called <code class="docutils literal"><span class="pre">__main__.py</span></code> (which must be
-in the 「root」 of the zipfile - i.e., it cannot be in a subdirectory).  The
+in the &quot;root&quot; of the zipfile - i.e., it cannot be in a subdirectory).  The
 zipfile data can be compressed or uncompressed.</li>
 </ol>
 <p>If an application archive has a shebang line, it may have the executable bit set

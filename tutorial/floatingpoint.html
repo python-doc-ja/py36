@@ -170,8 +170,8 @@
 <span class="go">True</span>
 </pre></div>
 </div>
-<p>2 進の浮動小数点数に対する算術演算は、このような意外性をたくさん持っています。 「0.1」 に関する問題は、以下の 「表現エラー」 の章で詳細に説明します。 2 進法の浮動小数点演算にともなうその他のよく知られた意外な事象に関しては <a class="reference external" href="http://www.lahey.com/float.htm">The Perils of Floating Point</a> を参照してください。</p>
-<p>究極的にいうと、」容易な答えはありません」。ですが、浮動小数点数のことを過度に警戒しないでください！ Python の float 型操作におけるエラーは浮動小数点処理ハードウェアから受けついたものであり、ほとんどのマシン上では一つの演算あたり高々 2**53 分の 1 です。この誤差はほとんどの作業で充分以上のものですが、浮動小数点演算は 10 進の演算ではなく、浮動小数点の演算を新たに行うと、新たな丸め誤差の影響を受けることを心にとどめておいてください。</p>
+<p>2 進の浮動小数点数に対する算術演算は、このような意外性をたくさん持っています。 &quot;0.1&quot; に関する問題は、以下の &quot;表現エラー&quot; の章で詳細に説明します。 2 進法の浮動小数点演算にともなうその他のよく知られた意外な事象に関しては <a class="reference external" href="http://www.lahey.com/float.htm">The Perils of Floating Point</a> を参照してください。</p>
+<p>究極的にいうと、&quot;容易な答えはありません&quot;。ですが、浮動小数点数のことを過度に警戒しないでください！ Python の float 型操作におけるエラーは浮動小数点処理ハードウェアから受けついたものであり、ほとんどのマシン上では一つの演算あたり高々 2**53 分の 1 です。この誤差はほとんどの作業で充分以上のものですが、浮動小数点演算は 10 進の演算ではなく、浮動小数点の演算を新たに行うと、新たな丸め誤差の影響を受けることを心にとどめておいてください。</p>
 <p>異常なケースが存在する一方で、普段の浮動小数点演算の利用では、単に最終的な結果の値を必要な 10 進の桁数に丸めて表示するのなら、最終的には期待通りの結果を得ることになるでしょう。たいては <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> で十分ですが、きめ細かな制御をしたければ、 <a class="reference internal" href="../library/string.html#formatstrings"><span class="std std-ref">書式指定文字列の文法</span></a> にある <a class="reference internal" href="../library/stdtypes.html#str.format" title="str.format"><code class="xref py py-meth docutils literal"><span class="pre">str.format()</span></code></a> メソッドのフォーマット仕様を参照してください。</p>
 <p>正確な10進数表現が必要となるような場合には、 <a class="reference internal" href="../library/decimal.html#module-decimal" title="decimal: Implementation of the General Decimal Arithmetic  Specification."><code class="xref py py-mod docutils literal"><span class="pre">decimal</span></code></a> モジュールを利用してみてください。このモジュールは会計アプリケーションや高精度の計算が求められるアプリケーションに適した、10進数の計算を実装しています。</p>
 <p>別の正確な計算方法として、 <a class="reference internal" href="../library/fractions.html#module-fractions" title="fractions: Rational numbers."><code class="xref py py-mod docutils literal"><span class="pre">fractions</span></code></a> モジュールが有理数に基づく計算を実装しています (1/3 のような数を正確に表すことができます)。</p>
@@ -198,7 +198,7 @@
 </pre></div>
 </div>
 <p>この16進数表現は正確なので、値を (プラットフォームにも依存せず) バージョンの異なるPython 間でやり取りしたり、他のこのフォーマットをサポートした言語 (Java や C99 など) と正確にやり取りするのに利用することができます。</p>
-<p>別の便利なツールとして、合計処理における精度のロスを緩和してくれる <a class="reference internal" href="../library/math.html#math.fsum" title="math.fsum"><code class="xref py py-func docutils literal"><span class="pre">math.fsum()</span></code></a> 関数があります。この関数は値を合計値に足し込みながら、 「失われた桁」 を管理します。これにより、誤差が最終的な合計値に影響を与えるまで蓄積されなくなり、結果が改善されます:</p>
+<p>別の便利なツールとして、合計処理における精度のロスを緩和してくれる <a class="reference internal" href="../library/math.html#math.fsum" title="math.fsum"><code class="xref py py-func docutils literal"><span class="pre">math.fsum()</span></code></a> 関数があります。この関数は値を合計値に足し込みながら、 &quot;失われた桁&quot; を管理します。これにより、誤差が最終的な合計値に影響を与えるまで蓄積されなくなり、結果が改善されます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">([</span><span class="mf">0.1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span> <span class="o">==</span> <span class="mf">1.0</span>
 <span class="go">False</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">math</span><span class="o">.</span><span class="n">fsum</span><span class="p">([</span><span class="mf">0.1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span> <span class="o">==</span> <span class="mf">1.0</span>
@@ -207,9 +207,9 @@
 </div>
 <div class="section" id="representation-error">
 <span id="tut-fp-error"></span><h2>15.1. 表現エラー<a class="headerlink" href="#representation-error" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>この章では、」0.1」 の例について詳細に説明し、このようなケースに対してどのようにすれば正確な分析を自分で行えるかを示します。ここでは、 2 進法表現の浮動小数点数についての基礎的な知識があるものとして話を進めます。</p>
+<p>この章では、&quot;0.1&quot; の例について詳細に説明し、このようなケースに対してどのようにすれば正確な分析を自分で行えるかを示します。ここでは、 2 進法表現の浮動小数点数についての基礎的な知識があるものとして話を進めます。</p>
 <p>表現エラー(<em class="dfn">Representation error</em>)は、いくつかの (実際にはほとんどの) 10 進の小数が 2 進法 (基数 2)の分数として表現できないという事実に関係しています。これは Python (あるいは Perl, C, C++, Java, Fortran. およびその他多く) が期待通りの正確な 10 進数を表示できない主要な理由です。</p>
-<p>なぜこうなるのでしょうか？ 1/10 は 2 進法の小数で厳密に表現することができません。今日 (2000年11月) のマシンは、ほとんどすべて IEEE-754 浮動小数点演算を使用しており、ほとんどすべてのプラットフォームでは Python の浮動小数点を IEEE-754 における 「倍精度(double precision)」 に対応付けます。754 の double には 53 ビットの精度を持つ数が入るので、計算機に入力を行おうとすると、可能な限り 0.1 を最も近い値の分数に変換し、<em>J</em>/2**<em>N</em> の形式にしようと努力します。<em>J</em> はちょうど 53 ビットの精度の整数です</p>
+<p>なぜこうなるのでしょうか？ 1/10 は 2 進法の小数で厳密に表現することができません。今日 (2000年11月) のマシンは、ほとんどすべて IEEE-754 浮動小数点演算を使用しており、ほとんどすべてのプラットフォームでは Python の浮動小数点を IEEE-754 における &quot;倍精度(double precision)&quot; に対応付けます。754 の double には 53 ビットの精度を持つ数が入るので、計算機に入力を行おうとすると、可能な限り 0.1 を最も近い値の分数に変換し、<em>J</em>/2**<em>N</em> の形式にしようと努力します。<em>J</em> はちょうど 53 ビットの精度の整数です</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="mi">1</span> <span class="o">/</span> <span class="mi">10</span> <span class="o">~=</span> <span class="n">J</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">N</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -243,7 +243,7 @@
 </div>
 <p>丸めたときに切り上げたので、この値は実際には 1/10 より少し大きいことに注目してください。
 もし切り捨てをした場合は、商は 1/10 よりもわずかに小さくなります。どちらにしろ <em>厳密な</em> 1/10 ではありません！</p>
-<p>つまり、計算機は 1/10 を 「理解する」 ことは決してありません。計算機が理解できるのは、上記のような厳密な分数であり、 754 の倍精度浮動小数点数で得られるもっともよい近似は以下になります:</p>
+<p>つまり、計算機は 1/10 を &quot;理解する&quot; ことは決してありません。計算機が理解できるのは、上記のような厳密な分数であり、 754 の倍精度浮動小数点数で得られるもっともよい近似は以下になります:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="mf">0.1</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">55</span>
 <span class="go">3602879701896397.0</span>
 </pre></div>

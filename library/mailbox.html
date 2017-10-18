@@ -302,8 +302,8 @@
 <dd><p>Maildir 形式のメールボックスのための <a class="reference internal" href="#mailbox.Mailbox" title="mailbox.Mailbox"><code class="xref py py-class docutils literal"><span class="pre">Mailbox</span></code></a> のサブクラス。パラメータ <em>factory</em> は呼び出し可能オブジェクトで (バイナリモードで開かれているかのように振る舞う)ファイル風メッセージ表現を受け付けて好みの表現を返すものです。 <em>factory</em> が <code class="docutils literal"><span class="pre">None</span></code> ならば、 <a class="reference internal" href="#mailbox.MaildirMessage" title="mailbox.MaildirMessage"><code class="xref py py-class docutils literal"><span class="pre">MaildirMessage</span></code></a> がデフォルトのメッセージ表現として使われます。 <em>create</em> が <code class="docutils literal"><span class="pre">True</span></code> ならばメールボックスが存在しないときには作成します。</p>
 <p><em>path</em> ではなく <em>dirname</em> と命名される歴史的な理由のためです。</p>
 <p>Maildir はディレクトリ型のメールボックス形式でメール転送エージェント qmail 用に発明され、現在では多くの他のプログラムでもサポートされているものです。Maildir メールボックス中のメッセージは共通のディレクトリ構造の下で個別のファイルに保存されます。このデザインにより、Maildir メールボックスは複数の無関係のプログラムからデータを失うことなくアクセスしたり変更したりできます。そのためロックは不要です。</p>
-<p>Maildir メールボックスには三つのサブディレクトリ <code class="file docutils literal"><span class="pre">tmp</span></code>, <code class="file docutils literal"><span class="pre">new</span></code>, <code class="file docutils literal"><span class="pre">cur</span></code> があります。メッセージはまず <code class="file docutils literal"><span class="pre">tmp</span></code> サブディレクトリに瞬間的に作られた後、 <code class="file docutils literal"><span class="pre">new</span></code> サブディレクトリに移動されて配送を完了します。メールユーザエージェントが引き続いて <code class="file docutils literal"><span class="pre">cur</span></code> サブディレクトリにメッセージを移動しメッセージの状態についての情報をファイル名に追加される特別な 「info」 セクションに保存することができます。</p>
-<p>Courier メール転送エージェントによって導入されたスタイルのフォルダもサポートされます。主たるメールボックスのサブディレクトリは <code class="docutils literal"><span class="pre">'.'</span></code> がファイル名の先頭であればフォルダと見なされます。フォルダ名は <a class="reference internal" href="#mailbox.Maildir" title="mailbox.Maildir"><code class="xref py py-class docutils literal"><span class="pre">Maildir</span></code></a> によって先頭の <code class="docutils literal"><span class="pre">'.'</span></code> を除いて表現されます。各フォルダはまた Maildir メールボックスですがさらにフォルダを含むことはできません。その代わり、論理的包含関係は例えば 「Archived.2005.07」 のような <code class="docutils literal"><span class="pre">'.'</span></code> を使ったレベル分けで表わされます。</p>
+<p>Maildir メールボックスには三つのサブディレクトリ <code class="file docutils literal"><span class="pre">tmp</span></code>, <code class="file docutils literal"><span class="pre">new</span></code>, <code class="file docutils literal"><span class="pre">cur</span></code> があります。メッセージはまず <code class="file docutils literal"><span class="pre">tmp</span></code> サブディレクトリに瞬間的に作られた後、 <code class="file docutils literal"><span class="pre">new</span></code> サブディレクトリに移動されて配送を完了します。メールユーザエージェントが引き続いて <code class="file docutils literal"><span class="pre">cur</span></code> サブディレクトリにメッセージを移動しメッセージの状態についての情報をファイル名に追加される特別な &quot;info&quot; セクションに保存することができます。</p>
+<p>Courier メール転送エージェントによって導入されたスタイルのフォルダもサポートされます。主たるメールボックスのサブディレクトリは <code class="docutils literal"><span class="pre">'.'</span></code> がファイル名の先頭であればフォルダと見なされます。フォルダ名は <a class="reference internal" href="#mailbox.Maildir" title="mailbox.Maildir"><code class="xref py py-class docutils literal"><span class="pre">Maildir</span></code></a> によって先頭の <code class="docutils literal"><span class="pre">'.'</span></code> を除いて表現されます。各フォルダはまた Maildir メールボックスですがさらにフォルダを含むことはできません。その代わり、論理的包含関係は例えば &quot;Archived.2005.07&quot; のような <code class="docutils literal"><span class="pre">'.'</span></code> を使ったレベル分けで表わされます。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p>本来の Maildir 仕様ではある種のメッセージのファイル名にコロン (<code class="docutils literal"><span class="pre">':'</span></code>) を使う必要があります。しかしながら、オペレーティングシステムによってはこの文字をファイル名に含めることができないことがあります。そういった環境で Maildir のような形式を使いたい場合、代わりに使われる文字を指定する必要があります。感嘆符 (<code class="docutils literal"><span class="pre">'!'</span></code>) を使うのが一般的な選択です。以下の例を見てください:</p>
@@ -392,7 +392,7 @@
 <dt><a class="reference external" href="http://www.qmail.org/man/man5/maildir.html">qmail の maildir マニュアルページ</a></dt>
 <dd>Maildir 形式のオリジナルの仕様。</dd>
 <dt><a class="reference external" href="https://cr.yp.to/proto/maildir.html">Using maildir format</a></dt>
-<dd>Maildir 形式の発明者による注意書き。更新された名前生成規則と 「info」 の解釈についても含まれます。</dd>
+<dd>Maildir 形式の発明者による注意書き。更新された名前生成規則と &quot;info&quot; の解釈についても含まれます。</dd>
 <dt><a class="reference external" href="http://www.courier-mta.org/maildir.html">Courier の maildir マニュアルページ</a></dt>
 <dd>Maildir 形式のもう一つの仕様。フォルダをサポートする一般的な拡張について記述されています。</dd>
 </dl>
@@ -404,8 +404,8 @@
 <dt id="mailbox.mbox">
 <em class="property">class </em><code class="descclassname">mailbox.</code><code class="descname">mbox</code><span class="sig-paren">(</span><em>path</em>, <em>factory=None</em>, <em>create=True</em><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.mbox" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>mbox 形式のメールボックスのための <a class="reference internal" href="#mailbox.Mailbox" title="mailbox.Mailbox"><code class="xref py py-class docutils literal"><span class="pre">Mailbox</span></code></a> のサブクラス。パラメータ <em>factory</em> は呼び出し可能オブジェクトで (バイナリモードで開かれているかのように振る舞う)ファイル風メッセージ表現を受け付けて好みの表現を返すものです。 <em>factory</em> が <code class="docutils literal"><span class="pre">None</span></code> ならば、 <a class="reference internal" href="#mailbox.mboxMessage" title="mailbox.mboxMessage"><code class="xref py py-class docutils literal"><span class="pre">mboxMessage</span></code></a> がデフォルトのメッセージ表現として使われます。 <em>create</em> が <code class="docutils literal"><span class="pre">True</span></code> ならばメールボックスが存在しないときには作成します。</p>
-<p>mbox 形式は Unixシステム上でメールを保存する古くからある形式です。mbox メールボックスでは全てのメッセージが一つのファイルに保存されておりそれぞれのメッセージは 「From 」 という5文字で始まる行を先頭に付けられています。</p>
-<p>mbox 形式には幾つかのバリエーションがあり、それぞれオリジナルの形式にあった欠点を克服すると主張しています。互換性のために、 <a class="reference internal" href="#mailbox.mbox" title="mailbox.mbox"><code class="xref py py-class docutils literal"><span class="pre">mbox</span></code></a> はオリジナルの(時に <em class="dfn">mboxo</em> と呼ばれる) 形式を実装しています。すなわち、 <em class="mailheader">Content-Length</em> ヘッダはもしあっても無視され、メッセージのボディにある行頭の 「From 」 はメッセージを保存する際に 「&gt;From 」 に変換されますが、この 「&gt;From 」 は読み出し時にも 「From 」 に変換されません。</p>
+<p>mbox 形式は Unixシステム上でメールを保存する古くからある形式です。mbox メールボックスでは全てのメッセージが一つのファイルに保存されておりそれぞれのメッセージは &quot;From &quot; という5文字で始まる行を先頭に付けられています。</p>
+<p>mbox 形式には幾つかのバリエーションがあり、それぞれオリジナルの形式にあった欠点を克服すると主張しています。互換性のために、 <a class="reference internal" href="#mailbox.mbox" title="mailbox.mbox"><code class="xref py py-class docutils literal"><span class="pre">mbox</span></code></a> はオリジナルの(時に <em class="dfn">mboxo</em> と呼ばれる) 形式を実装しています。すなわち、 <em class="mailheader">Content-Length</em> ヘッダはもしあっても無視され、メッセージのボディにある行頭の &quot;From &quot; はメッセージを保存する際に &quot;&gt;From &quot; に変換されますが、この &quot;&gt;From &quot; は読み出し時にも &quot;From &quot; に変換されません。</p>
 <p><a class="reference internal" href="#mailbox.mbox" title="mailbox.mbox"><code class="xref py py-class docutils literal"><span class="pre">mbox</span></code></a> で実装された <a class="reference internal" href="#mailbox.Mailbox" title="mailbox.Mailbox"><code class="xref py py-class docutils literal"><span class="pre">Mailbox</span></code></a> のいくつかのメソッドには特別な注意が必要です:</p>
 <dl class="method">
 <dt id="mailbox.mbox.get_file">
@@ -432,7 +432,7 @@
 <dd>もう一つの mbox 形式の仕様でロックについての詳細を含む。</dd>
 <dt><a class="reference external" href="https://www.jwz.org/doc/content-length.html">Configuring Netscape Mail on Unix: Why The Content-Length Format is Bad</a></dt>
 <dd>バリエーションの一つではなくオリジナルの mbox を使う理由。</dd>
-<dt><a class="reference external" href="http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/mail-mbox-formats.html">「mbox」 is a family of several mutually incompatible mailbox formats</a></dt>
+<dt><a class="reference external" href="http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/mail-mbox-formats.html">&quot;mbox&quot; is a family of several mutually incompatible mailbox formats</a></dt>
 <dd>mbox バリエーションの歴史。</dd>
 </dl>
 </div>
@@ -593,7 +593,7 @@
 <dt id="mailbox.MMDF">
 <em class="property">class </em><code class="descclassname">mailbox.</code><code class="descname">MMDF</code><span class="sig-paren">(</span><em>path</em>, <em>factory=None</em>, <em>create=True</em><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.MMDF" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>MMDF 形式のメールボックスのための <a class="reference internal" href="#mailbox.Mailbox" title="mailbox.Mailbox"><code class="xref py py-class docutils literal"><span class="pre">Mailbox</span></code></a> のサブクラス。パラメータ <em>factory</em> は呼び出し可能オブジェクトで (バイナリモードで開かれているかのように振る舞う)ファイル風メッセージ表現を受け付けて好みの表現を返すものです。 <em>factory</em> が <code class="docutils literal"><span class="pre">None</span></code> ならば、 <a class="reference internal" href="#mailbox.MMDFMessage" title="mailbox.MMDFMessage"><code class="xref py py-class docutils literal"><span class="pre">MMDFMessage</span></code></a> がデフォルトのメッセージ表現として使われます。 <em>create</em> が <code class="docutils literal"><span class="pre">True</span></code> ならばメールボックスが存在しないときには作成します。</p>
-<p>MMDF は単一ファイルのメールボックス形式で Multichannel Memorandum Distribution Facility というメール転送エージェント用に発明されたものです。各メッセージは mbox と同様の形式で収められますが、前後を4つの Control-A (<code class="docutils literal"><span class="pre">'\001'</span></code>) を含む行で挟んであります。mbox 形式と同じようにそれぞれのメッセージの開始は 「From 」 の5文字を含む行で示されますが、それ以外の場所での 「From 」 は格納の際 「&gt;From 」 には変えられません。それは追加されたメッセージ区切りによって新たなメッセージの開始と見間違うことが避けられるからです。</p>
+<p>MMDF は単一ファイルのメールボックス形式で Multichannel Memorandum Distribution Facility というメール転送エージェント用に発明されたものです。各メッセージは mbox と同様の形式で収められますが、前後を4つの Control-A (<code class="docutils literal"><span class="pre">'\001'</span></code>) を含む行で挟んであります。mbox 形式と同じようにそれぞれのメッセージの開始は &quot;From &quot; の5文字を含む行で示されますが、それ以外の場所での &quot;From &quot; は格納の際 &quot;&gt;From &quot; には変えられません。それは追加されたメッセージ区切りによって新たなメッセージの開始と見間違うことが避けられるからです。</p>
 <p><a class="reference internal" href="#mailbox.MMDF" title="mailbox.MMDF"><code class="xref py py-class docutils literal"><span class="pre">MMDF</span></code></a> で実装された <a class="reference internal" href="#mailbox.Mailbox" title="mailbox.Mailbox"><code class="xref py py-class docutils literal"><span class="pre">Mailbox</span></code></a> のいくつかのメソッドには特別な注意が必要です:</p>
 <dl class="method">
 <dt id="mailbox.MMDF.get_file">
@@ -639,7 +639,7 @@
 <dt id="mailbox.MaildirMessage">
 <em class="property">class </em><code class="descclassname">mailbox.</code><code class="descname">MaildirMessage</code><span class="sig-paren">(</span><em>message=None</em><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.MaildirMessage" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>Maildir 固有の動作をするメッセージ。引数 <em>message</em> は <a class="reference internal" href="#mailbox.Message" title="mailbox.Message"><code class="xref py py-class docutils literal"><span class="pre">Message</span></code></a> のコンストラクタと同じ意味を持ちます。</p>
-<p>通常、メールユーザエージェントは <code class="file docutils literal"><span class="pre">new</span></code> サブディレクトリにある全てのメッセージをユーザが最初にメールボックスを開くか閉じるかした後で <code class="file docutils literal"><span class="pre">cur</span></code> サブディレクトリに移動し、メッセージが実際に読まれたかどうかを記録します。 <code class="file docutils literal"><span class="pre">cur</span></code> にある各メッセージには状態情報を保存するファイル名に付け加えられた 「info」 セクションがあります。(メールリーダの中には 「info」 セクションを <code class="file docutils literal"><span class="pre">new</span></code> にあるメッセージに付けることもあります。) 「info」 セクションには二つの形式があります。一つは 「2,」 の後に標準化されたフラグのリストを付けたもの (たとえば 「2,FR」)、もう一つは 「1,」 の後にいわゆる実験的情報を付け加えるものです。 Maildir の標準的なフラグは以下の通りです:</p>
+<p>通常、メールユーザエージェントは <code class="file docutils literal"><span class="pre">new</span></code> サブディレクトリにある全てのメッセージをユーザが最初にメールボックスを開くか閉じるかした後で <code class="file docutils literal"><span class="pre">cur</span></code> サブディレクトリに移動し、メッセージが実際に読まれたかどうかを記録します。 <code class="file docutils literal"><span class="pre">cur</span></code> にある各メッセージには状態情報を保存するファイル名に付け加えられた &quot;info&quot; セクションがあります。(メールリーダの中には &quot;info&quot; セクションを <code class="file docutils literal"><span class="pre">new</span></code> にあるメッセージに付けることもあります。) &quot;info&quot; セクションには二つの形式があります。一つは &quot;2,&quot; の後に標準化されたフラグのリストを付けたもの (たとえば &quot;2,FR&quot;)、もう一つは &quot;1,&quot; の後にいわゆる実験的情報を付け加えるものです。 Maildir の標準的なフラグは以下の通りです:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="13%" />
@@ -683,7 +683,7 @@
 <dl class="method">
 <dt id="mailbox.MaildirMessage.get_subdir">
 <code class="descname">get_subdir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.MaildirMessage.get_subdir" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>「new」 (メッセージが <code class="file docutils literal"><span class="pre">new</span></code> サブディレクトリに保存されるべき場合) または 「cur」 (メッセージが <code class="file docutils literal"><span class="pre">cur</span></code> サブディレクトリに保存されるべき場合)のどちらかを返します。</p>
+<dd><p>&quot;new&quot; (メッセージが <code class="file docutils literal"><span class="pre">new</span></code> サブディレクトリに保存されるべき場合) または &quot;cur&quot; (メッセージが <code class="file docutils literal"><span class="pre">cur</span></code> サブディレクトリに保存されるべき場合)のどちらかを返します。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">メッセージは通常メールボックスがアクセスされた後、メッセージが読まれたかどうかに関わらず <code class="file docutils literal"><span class="pre">new</span></code> から <code class="file docutils literal"><span class="pre">cur</span></code> に移動されます。メッセージ <code class="docutils literal"><span class="pre">msg</span></code> は <code class="docutils literal"><span class="pre">&quot;S&quot;</span> <span class="pre">in</span> <span class="pre">msg.get_flags()</span></code> が <code class="docutils literal"><span class="pre">True</span></code> ならば読まれています。</p>
@@ -693,13 +693,13 @@
 <dl class="method">
 <dt id="mailbox.MaildirMessage.set_subdir">
 <code class="descname">set_subdir</code><span class="sig-paren">(</span><em>subdir</em><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.MaildirMessage.set_subdir" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>メッセージが保存されるべきサブディレクトリをセットします。パラメータ <em>subdir</em> は 「new」 または 「cur」 のいずれかでなければなりません。</p>
+<dd><p>メッセージが保存されるべきサブディレクトリをセットします。パラメータ <em>subdir</em> は &quot;new&quot; または &quot;cur&quot; のいずれかでなければなりません。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="mailbox.MaildirMessage.get_flags">
 <code class="descname">get_flags</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.MaildirMessage.get_flags" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>現在セットされているフラグを特定する文字列を返します。メッセージが標準 Maildir 形式に準拠しているならば、結果はアルファベット順に並べられたゼロまたは1回の <code class="docutils literal"><span class="pre">'D'</span></code>、<code class="docutils literal"><span class="pre">'F'</span></code>、<code class="docutils literal"><span class="pre">'P'</span></code>、<code class="docutils literal"><span class="pre">'R'</span></code>、<code class="docutils literal"><span class="pre">'S'</span></code>、<code class="docutils literal"><span class="pre">'T'</span></code> をつなげたものです。空文字列が返されるのはフラグが一つもない場合、または 「info」 が実験的セマンティクスを使っている場合です。</p>
+<dd><p>現在セットされているフラグを特定する文字列を返します。メッセージが標準 Maildir 形式に準拠しているならば、結果はアルファベット順に並べられたゼロまたは1回の <code class="docutils literal"><span class="pre">'D'</span></code>、<code class="docutils literal"><span class="pre">'F'</span></code>、<code class="docutils literal"><span class="pre">'P'</span></code>、<code class="docutils literal"><span class="pre">'R'</span></code>、<code class="docutils literal"><span class="pre">'S'</span></code>、<code class="docutils literal"><span class="pre">'T'</span></code> をつなげたものです。空文字列が返されるのはフラグが一つもない場合、または &quot;info&quot; が実験的セマンティクスを使っている場合です。</p>
 </dd></dl>
 
 <dl class="method">
@@ -711,13 +711,13 @@
 <dl class="method">
 <dt id="mailbox.MaildirMessage.add_flag">
 <code class="descname">add_flag</code><span class="sig-paren">(</span><em>flag</em><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.MaildirMessage.add_flag" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><em>flag</em> で指定されたフラグをセットしますが他のフラグは変えません。一度に二つ以上のフラグをセットすることは、<em>flag</em> に2文字以上の文字列を指定すればできます。現在の 「info」 はフラグの代わりに実験的情報を使っていても上書きされます。</p>
+<dd><p><em>flag</em> で指定されたフラグをセットしますが他のフラグは変えません。一度に二つ以上のフラグをセットすることは、<em>flag</em> に2文字以上の文字列を指定すればできます。現在の &quot;info&quot; はフラグの代わりに実験的情報を使っていても上書きされます。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="mailbox.MaildirMessage.remove_flag">
 <code class="descname">remove_flag</code><span class="sig-paren">(</span><em>flag</em><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.MaildirMessage.remove_flag" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><em>flag</em> で指定されたフラグを下ろしますが他のフラグは変えません。一度に二つ以上のフラグを取り除くことは、<em>flag</em> に2文字以上の文字列を指定すればできます。」info」 がフラグの代わりに実験的情報を使っている場合は現在の 「info」 は書き換えられません。</p>
+<dd><p><em>flag</em> で指定されたフラグを下ろしますが他のフラグは変えません。一度に二つ以上のフラグを取り除くことは、<em>flag</em> に2文字以上の文字列を指定すればできます。&quot;info&quot; がフラグの代わりに実験的情報を使っている場合は現在の &quot;info&quot; は書き換えられません。</p>
 </dd></dl>
 
 <dl class="method">
@@ -735,13 +735,13 @@
 <dl class="method">
 <dt id="mailbox.MaildirMessage.get_info">
 <code class="descname">get_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.MaildirMessage.get_info" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>メッセージの 「info」 を含む文字列を返します。このメソッドは実験的 (即ちフラグのリストでない) 「info」 にアクセスし、また変更するのに役立ちます。</p>
+<dd><p>メッセージの &quot;info&quot; を含む文字列を返します。このメソッドは実験的 (即ちフラグのリストでない) &quot;info&quot; にアクセスし、また変更するのに役立ちます。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="mailbox.MaildirMessage.set_info">
 <code class="descname">set_info</code><span class="sig-paren">(</span><em>info</em><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.MaildirMessage.set_info" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>「info」 に文字列 <em>info</em> をセットします。</p>
+<dd><p>&quot;info&quot; に文字列 <em>info</em> をセットします。</p>
 </dd></dl>
 
 </dd></dl>
@@ -758,7 +758,7 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>「cur」 サブディレクトリ</td>
+<tr class="row-even"><td>&quot;cur&quot; サブディレクトリ</td>
 <td>O フラグ</td>
 </tr>
 <tr class="row-odd"><td>F フラグ</td>
@@ -787,17 +787,17 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>「cur」 サブディレクトリ</td>
-<td>「unseen」 シーケンス</td>
+<tr class="row-even"><td>&quot;cur&quot; サブディレクトリ</td>
+<td>&quot;unseen&quot; シーケンス</td>
 </tr>
-<tr class="row-odd"><td>「cur」 サブディレクトリおよび S フラグ</td>
-<td>「unseen」 シーケンス無し</td>
+<tr class="row-odd"><td>&quot;cur&quot; サブディレクトリおよび S フラグ</td>
+<td>&quot;unseen&quot; シーケンス無し</td>
 </tr>
 <tr class="row-even"><td>F フラグ</td>
-<td>「flagged」 シーケンス</td>
+<td>&quot;flagged&quot; シーケンス</td>
 </tr>
 <tr class="row-odd"><td>R フラグ</td>
-<td>「replied」 シーケンス</td>
+<td>&quot;replied&quot; シーケンス</td>
 </tr>
 </tbody>
 </table>
@@ -813,20 +813,20 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>「cur」 サブディレクトリ</td>
-<td>「unseen」 ラベル</td>
+<tr class="row-even"><td>&quot;cur&quot; サブディレクトリ</td>
+<td>&quot;unseen&quot; ラベル</td>
 </tr>
-<tr class="row-odd"><td>「cur」 サブディレクトリおよび S フラグ</td>
-<td>「unseen」 ラベル無し</td>
+<tr class="row-odd"><td>&quot;cur&quot; サブディレクトリおよび S フラグ</td>
+<td>&quot;unseen&quot; ラベル無し</td>
 </tr>
 <tr class="row-even"><td>P フラグ</td>
-<td>「forwarded」 または 「resent」 ラベル</td>
+<td>&quot;forwarded&quot; または &quot;resent&quot; ラベル</td>
 </tr>
 <tr class="row-odd"><td>R フラグ</td>
-<td>「answered」 ラベル</td>
+<td>&quot;answered&quot; ラベル</td>
 </tr>
 <tr class="row-even"><td>T フラグ</td>
-<td>「deleted」 ラベル</td>
+<td>&quot;deleted&quot; ラベル</td>
 </tr>
 </tbody>
 </table>
@@ -837,7 +837,7 @@
 <dt id="mailbox.mboxMessage">
 <em class="property">class </em><code class="descclassname">mailbox.</code><code class="descname">mboxMessage</code><span class="sig-paren">(</span><em>message=None</em><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.mboxMessage" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>mbox 固有の動作をするメッセージ。引数 <em>message</em> は <a class="reference internal" href="#mailbox.Message" title="mailbox.Message"><code class="xref py py-class docutils literal"><span class="pre">Message</span></code></a> のコンストラクタと同じ意味を持ちます。</p>
-<p>mbox メールボックス中のメッセージは単一ファイルにまとめて格納されています。送り主のエンベロープアドレスおよび配送日時は通常メッセージの開始を示す 「From 」 から始まる行に記録されますが、正確なフォーマットに関しては mbox の実装ごとに大きな違いがあります。メッセージの状態を示すフラグ、たとえば読んだかどうかあるいは重要だとマークを付けられているかどうかといったようなもの、は典型的には <em class="mailheader">Status</em> および <em class="mailheader">X-Status</em> に収められます。</p>
+<p>mbox メールボックス中のメッセージは単一ファイルにまとめて格納されています。送り主のエンベロープアドレスおよび配送日時は通常メッセージの開始を示す &quot;From &quot; から始まる行に記録されますが、正確なフォーマットに関しては mbox の実装ごとに大きな違いがあります。メッセージの状態を示すフラグ、たとえば読んだかどうかあるいは重要だとマークを付けられているかどうかといったようなもの、は典型的には <em class="mailheader">Status</em> および <em class="mailheader">X-Status</em> に収められます。</p>
 <p>規定されている mbox メッセージのフラグは以下の通りです:</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -874,18 +874,18 @@
 </tr>
 </tbody>
 </table>
-<p>「R」 および 「O」 フラグは <em class="mailheader">Status</em> ヘッダに記録され、 「D」、」F」、」A」 フラグは <em class="mailheader">X-Status</em> ヘッダに記録されます。フラグとヘッダは通常記述された順番に出現します。</p>
+<p>&quot;R&quot; および &quot;O&quot; フラグは <em class="mailheader">Status</em> ヘッダに記録され、 &quot;D&quot;、&quot;F&quot;、&quot;A&quot; フラグは <em class="mailheader">X-Status</em> ヘッダに記録されます。フラグとヘッダは通常記述された順番に出現します。</p>
 <p><a class="reference internal" href="#mailbox.mboxMessage" title="mailbox.mboxMessage"><code class="xref py py-class docutils literal"><span class="pre">mboxMessage</span></code></a> インスタンスは以下のメソッドを提供します:</p>
 <dl class="method">
 <dt id="mailbox.mboxMessage.get_from">
 <code class="descname">get_from</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.mboxMessage.get_from" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>mbox メールボックスのメッセージの開始を示す 「From 」 行を表わす文字列を返します。先頭の 「From 」 および末尾の改行は含まれません。</p>
+<dd><p>mbox メールボックスのメッセージの開始を示す &quot;From &quot; 行を表わす文字列を返します。先頭の &quot;From &quot; および末尾の改行は含まれません。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="mailbox.mboxMessage.set_from">
 <code class="descname">set_from</code><span class="sig-paren">(</span><em>from_</em>, <em>time_=None</em><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.mboxMessage.set_from" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>「From 」 行を <em>from_</em> にセットします。 <em>from_</em> は先頭の 「From 」 や末尾の改行を含まない形で指定しなければなりません。利便性のために、 <em>time_</em> を指定して適切に整形して <em>from_</em> に追加させることができます。 <em>time_</em> を指定する場合、それは <a class="reference internal" href="time.html#time.struct_time" title="time.struct_time"><code class="xref py py-class docutils literal"><span class="pre">time.struct_time</span></code></a> インスタンス、 <a class="reference internal" href="time.html#time.strftime" title="time.strftime"><code class="xref py py-meth docutils literal"><span class="pre">time.strftime()</span></code></a> に渡すのに適したタプル、または <code class="docutils literal"><span class="pre">True</span></code> (この場合 <a class="reference internal" href="time.html#time.gmtime" title="time.gmtime"><code class="xref py py-meth docutils literal"><span class="pre">time.gmtime()</span></code></a> を使います) のいずれかでなければなりません。</p>
+<dd><p>&quot;From &quot; 行を <em>from_</em> にセットします。 <em>from_</em> は先頭の &quot;From &quot; や末尾の改行を含まない形で指定しなければなりません。利便性のために、 <em>time_</em> を指定して適切に整形して <em>from_</em> に追加させることができます。 <em>time_</em> を指定する場合、それは <a class="reference internal" href="time.html#time.struct_time" title="time.struct_time"><code class="xref py py-class docutils literal"><span class="pre">time.struct_time</span></code></a> インスタンス、 <a class="reference internal" href="time.html#time.strftime" title="time.strftime"><code class="xref py py-meth docutils literal"><span class="pre">time.strftime()</span></code></a> に渡すのに適したタプル、または <code class="docutils literal"><span class="pre">True</span></code> (この場合 <a class="reference internal" href="time.html#time.gmtime" title="time.gmtime"><code class="xref py py-meth docutils literal"><span class="pre">time.gmtime()</span></code></a> を使います) のいずれかでなければなりません。</p>
 </dd></dl>
 
 <dl class="method">
@@ -914,7 +914,7 @@
 
 </dd></dl>
 
-<p><a class="reference internal" href="#mailbox.mboxMessage" title="mailbox.mboxMessage"><code class="xref py py-class docutils literal"><span class="pre">mboxMessage</span></code></a> インスタンスが <a class="reference internal" href="#mailbox.MaildirMessage" title="mailbox.MaildirMessage"><code class="xref py py-class docutils literal"><span class="pre">MaildirMessage</span></code></a> インスタンスに基づいて生成されるとき、 <a class="reference internal" href="#mailbox.MaildirMessage" title="mailbox.MaildirMessage"><code class="xref py py-class docutils literal"><span class="pre">MaildirMessage</span></code></a> インスタンスの配送日時に基づいて 「From 」 行が作り出され、次の変換が行われます:</p>
+<p><a class="reference internal" href="#mailbox.mboxMessage" title="mailbox.mboxMessage"><code class="xref py py-class docutils literal"><span class="pre">mboxMessage</span></code></a> インスタンスが <a class="reference internal" href="#mailbox.MaildirMessage" title="mailbox.MaildirMessage"><code class="xref py py-class docutils literal"><span class="pre">MaildirMessage</span></code></a> インスタンスに基づいて生成されるとき、 <a class="reference internal" href="#mailbox.MaildirMessage" title="mailbox.MaildirMessage"><code class="xref py py-class docutils literal"><span class="pre">MaildirMessage</span></code></a> インスタンスの配送日時に基づいて &quot;From &quot; 行が作り出され、次の変換が行われます:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="35%" />
@@ -930,7 +930,7 @@
 <td>S フラグ</td>
 </tr>
 <tr class="row-odd"><td>O フラグ</td>
-<td>「cur」 サブディレクトリ</td>
+<td>&quot;cur&quot; サブディレクトリ</td>
 </tr>
 <tr class="row-even"><td>D フラグ</td>
 <td>T フラグ</td>
@@ -956,16 +956,16 @@
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>R フラグおよび O フラグ</td>
-<td>「unseen」 シーケンス無し</td>
+<td>&quot;unseen&quot; シーケンス無し</td>
 </tr>
 <tr class="row-odd"><td>O フラグ</td>
-<td>「unseen」 シーケンス</td>
+<td>&quot;unseen&quot; シーケンス</td>
 </tr>
 <tr class="row-even"><td>F フラグ</td>
-<td>「flagged」 シーケンス</td>
+<td>&quot;flagged&quot; シーケンス</td>
 </tr>
 <tr class="row-odd"><td>A フラグ</td>
-<td>「replied」 シーケンス</td>
+<td>&quot;replied&quot; シーケンス</td>
 </tr>
 </tbody>
 </table>
@@ -982,20 +982,20 @@
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>R フラグおよび O フラグ</td>
-<td>「unseen」 ラベル無し</td>
+<td>&quot;unseen&quot; ラベル無し</td>
 </tr>
 <tr class="row-odd"><td>O フラグ</td>
-<td>「unseen」 ラベル</td>
+<td>&quot;unseen&quot; ラベル</td>
 </tr>
 <tr class="row-even"><td>D フラグ</td>
-<td>「deleted」 ラベル</td>
+<td>&quot;deleted&quot; ラベル</td>
 </tr>
 <tr class="row-odd"><td>A フラグ</td>
-<td>「answered」 ラベル</td>
+<td>&quot;answered&quot; ラベル</td>
 </tr>
 </tbody>
 </table>
-<p><a class="reference internal" href="#mailbox.mboxMessage" title="mailbox.mboxMessage"><code class="xref py py-class docutils literal"><span class="pre">mboxMessage</span></code></a> インスタンスが <a class="reference internal" href="#mailbox.MMDFMessage" title="mailbox.MMDFMessage"><code class="xref py py-class docutils literal"><span class="pre">MMDFMessage</span></code></a> インスタンスに基づいて生成されるとき、」From 」 行はコピーされ全てのフラグは直接対応します:</p>
+<p><a class="reference internal" href="#mailbox.mboxMessage" title="mailbox.mboxMessage"><code class="xref py py-class docutils literal"><span class="pre">mboxMessage</span></code></a> インスタンスが <a class="reference internal" href="#mailbox.MMDFMessage" title="mailbox.MMDFMessage"><code class="xref py py-class docutils literal"><span class="pre">MMDFMessage</span></code></a> インスタンスに基づいて生成されるとき、&quot;From &quot; 行はコピーされ全てのフラグは直接対応します:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="38%" />
@@ -1093,13 +1093,13 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>「unseen」 シーケンス</td>
+<tr class="row-even"><td>&quot;unseen&quot; シーケンス</td>
 <td>S フラグ無し</td>
 </tr>
-<tr class="row-odd"><td>「replied」 シーケンス</td>
+<tr class="row-odd"><td>&quot;replied&quot; シーケンス</td>
 <td>R フラグ</td>
 </tr>
-<tr class="row-even"><td>「flagged」 シーケンス</td>
+<tr class="row-even"><td>&quot;flagged&quot; シーケンス</td>
 <td>F フラグ</td>
 </tr>
 </tbody>
@@ -1116,13 +1116,13 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>「unseen」 シーケンス</td>
+<tr class="row-even"><td>&quot;unseen&quot; シーケンス</td>
 <td>R フラグ無し</td>
 </tr>
-<tr class="row-odd"><td>「replied」 シーケンス</td>
+<tr class="row-odd"><td>&quot;replied&quot; シーケンス</td>
 <td>A フラグ</td>
 </tr>
-<tr class="row-even"><td>「flagged」 シーケンス</td>
+<tr class="row-even"><td>&quot;flagged&quot; シーケンス</td>
 <td>F フラグ</td>
 </tr>
 </tbody>
@@ -1139,11 +1139,11 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>「unseen」 シーケンス</td>
-<td>「unseen」 ラベル</td>
+<tr class="row-even"><td>&quot;unseen&quot; シーケンス</td>
+<td>&quot;unseen&quot; ラベル</td>
 </tr>
-<tr class="row-odd"><td>「replied」 シーケンス</td>
-<td>「answered」 ラベル</td>
+<tr class="row-odd"><td>&quot;replied&quot; シーケンス</td>
+<td>&quot;answered&quot; ラベル</td>
 </tr>
 </tbody>
 </table>
@@ -1247,16 +1247,16 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>「unseen」 ラベル</td>
+<tr class="row-even"><td>&quot;unseen&quot; ラベル</td>
 <td>S フラグ無し</td>
 </tr>
-<tr class="row-odd"><td>「deleted」 ラベル</td>
+<tr class="row-odd"><td>&quot;deleted&quot; ラベル</td>
 <td>T フラグ</td>
 </tr>
-<tr class="row-even"><td>「answered」 ラベル</td>
+<tr class="row-even"><td>&quot;answered&quot; ラベル</td>
 <td>R フラグ</td>
 </tr>
-<tr class="row-odd"><td>「forwarded」 ラベル</td>
+<tr class="row-odd"><td>&quot;forwarded&quot; ラベル</td>
 <td>P フラグ</td>
 </tr>
 </tbody>
@@ -1273,13 +1273,13 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>「unseen」 ラベル</td>
+<tr class="row-even"><td>&quot;unseen&quot; ラベル</td>
 <td>R フラグ無し</td>
 </tr>
-<tr class="row-odd"><td>「deleted」 ラベル</td>
+<tr class="row-odd"><td>&quot;deleted&quot; ラベル</td>
 <td>D フラグ</td>
 </tr>
-<tr class="row-even"><td>「answered」 ラベル</td>
+<tr class="row-even"><td>&quot;answered&quot; ラベル</td>
 <td>A フラグ</td>
 </tr>
 </tbody>
@@ -1296,11 +1296,11 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>「unseen」 ラベル</td>
-<td>「unseen」 シーケンス</td>
+<tr class="row-even"><td>&quot;unseen&quot; ラベル</td>
+<td>&quot;unseen&quot; シーケンス</td>
 </tr>
-<tr class="row-odd"><td>「answered」 ラベル</td>
-<td>「replied」 シーケンス</td>
+<tr class="row-odd"><td>&quot;answered&quot; ラベル</td>
+<td>&quot;replied&quot; シーケンス</td>
 </tr>
 </tbody>
 </table>
@@ -1311,7 +1311,7 @@
 <dt id="mailbox.MMDFMessage">
 <em class="property">class </em><code class="descclassname">mailbox.</code><code class="descname">MMDFMessage</code><span class="sig-paren">(</span><em>message=None</em><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.MMDFMessage" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>MMDF 固有の動作をするメッセージ。引数 <em>message</em> は <a class="reference internal" href="#mailbox.Message" title="mailbox.Message"><code class="xref py py-class docutils literal"><span class="pre">Message</span></code></a> のコンストラクタと同じ意味を持ちます。</p>
-<p>mbox メールボックスのメッセージと同様に、MMDF メッセージは送り主のアドレスと配送日時が最初の 「From 」 で始まる行に記録されています。同様に、メッセージの状態を示すフラグは通常 <em class="mailheader">Status</em> および <em class="mailheader">X-Status</em> ヘッダに収められています。</p>
+<p>mbox メールボックスのメッセージと同様に、MMDF メッセージは送り主のアドレスと配送日時が最初の &quot;From &quot; で始まる行に記録されています。同様に、メッセージの状態を示すフラグは通常 <em class="mailheader">Status</em> および <em class="mailheader">X-Status</em> ヘッダに収められています。</p>
 <p>よく使われる MMDF メッセージのフラグは mbox メッセージのものと同一で以下の通りです:</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -1348,18 +1348,18 @@
 </tr>
 </tbody>
 </table>
-<p>「R」 および 「O」 フラグは <em class="mailheader">Status</em> ヘッダに記録され、 「D」、」F」、」A」 フラグは <em class="mailheader">X-Status</em> ヘッダに記録されます。フラグとヘッダは通常記述された順番に出現します。</p>
+<p>&quot;R&quot; および &quot;O&quot; フラグは <em class="mailheader">Status</em> ヘッダに記録され、 &quot;D&quot;、&quot;F&quot;、&quot;A&quot; フラグは <em class="mailheader">X-Status</em> ヘッダに記録されます。フラグとヘッダは通常記述された順番に出現します。</p>
 <p><a class="reference internal" href="#mailbox.MMDFMessage" title="mailbox.MMDFMessage"><code class="xref py py-class docutils literal"><span class="pre">MMDFMessage</span></code></a> インスタンスは <a class="reference internal" href="#mailbox.mboxMessage" title="mailbox.mboxMessage"><code class="xref py py-class docutils literal"><span class="pre">mboxMessage</span></code></a> インスタンスと同一の以下のメソッドを提供します:</p>
 <dl class="method">
 <dt id="mailbox.MMDFMessage.get_from">
 <code class="descname">get_from</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.MMDFMessage.get_from" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>mbox メールボックスのメッセージの開始を示す 「From 」 行を表わす文字列を返します。先頭の 「From 」 および末尾の改行は含まれません。</p>
+<dd><p>mbox メールボックスのメッセージの開始を示す &quot;From &quot; 行を表わす文字列を返します。先頭の &quot;From &quot; および末尾の改行は含まれません。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="mailbox.MMDFMessage.set_from">
 <code class="descname">set_from</code><span class="sig-paren">(</span><em>from_</em>, <em>time_=None</em><span class="sig-paren">)</span><a class="headerlink" href="#mailbox.MMDFMessage.set_from" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>「From 」 行を <em>from_</em> にセットします。 <em>from_</em> は先頭の 「From 」 や末尾の改行を含まない形で指定しなければなりません。利便性のために、 <em>time_</em> を指定して適切に整形して <em>from_</em> に追加させることができます。 <em>time_</em> を指定する場合、それは <a class="reference internal" href="time.html#time.struct_time" title="time.struct_time"><code class="xref py py-class docutils literal"><span class="pre">time.struct_time</span></code></a> インスタンス、 <a class="reference internal" href="time.html#time.strftime" title="time.strftime"><code class="xref py py-meth docutils literal"><span class="pre">time.strftime()</span></code></a> に渡すのに適したタプル、または <code class="docutils literal"><span class="pre">True</span></code> (この場合 <a class="reference internal" href="time.html#time.gmtime" title="time.gmtime"><code class="xref py py-meth docutils literal"><span class="pre">time.gmtime()</span></code></a> を使います) のいずれかでなければなりません。</p>
+<dd><p>&quot;From &quot; 行を <em>from_</em> にセットします。 <em>from_</em> は先頭の &quot;From &quot; や末尾の改行を含まない形で指定しなければなりません。利便性のために、 <em>time_</em> を指定して適切に整形して <em>from_</em> に追加させることができます。 <em>time_</em> を指定する場合、それは <a class="reference internal" href="time.html#time.struct_time" title="time.struct_time"><code class="xref py py-class docutils literal"><span class="pre">time.struct_time</span></code></a> インスタンス、 <a class="reference internal" href="time.html#time.strftime" title="time.strftime"><code class="xref py py-meth docutils literal"><span class="pre">time.strftime()</span></code></a> に渡すのに適したタプル、または <code class="docutils literal"><span class="pre">True</span></code> (この場合 <a class="reference internal" href="time.html#time.gmtime" title="time.gmtime"><code class="xref py py-meth docutils literal"><span class="pre">time.gmtime()</span></code></a> を使います) のいずれかでなければなりません。</p>
 </dd></dl>
 
 <dl class="method">
@@ -1388,7 +1388,7 @@
 
 </dd></dl>
 
-<p><a class="reference internal" href="#mailbox.MMDFMessage" title="mailbox.MMDFMessage"><code class="xref py py-class docutils literal"><span class="pre">MMDFMessage</span></code></a> インスタンスが <a class="reference internal" href="#mailbox.MaildirMessage" title="mailbox.MaildirMessage"><code class="xref py py-class docutils literal"><span class="pre">MaildirMessage</span></code></a> インスタンスに基づいて生成されるとき、」From」行が <a class="reference internal" href="#mailbox.MaildirMessage" title="mailbox.MaildirMessage"><code class="xref py py-class docutils literal"><span class="pre">MaildirMessage</span></code></a> インスタンスの配信日をもとに生成され、以下の変換が行われます:</p>
+<p><a class="reference internal" href="#mailbox.MMDFMessage" title="mailbox.MMDFMessage"><code class="xref py py-class docutils literal"><span class="pre">MMDFMessage</span></code></a> インスタンスが <a class="reference internal" href="#mailbox.MaildirMessage" title="mailbox.MaildirMessage"><code class="xref py py-class docutils literal"><span class="pre">MaildirMessage</span></code></a> インスタンスに基づいて生成されるとき、&quot;From&quot;行が <a class="reference internal" href="#mailbox.MaildirMessage" title="mailbox.MaildirMessage"><code class="xref py py-class docutils literal"><span class="pre">MaildirMessage</span></code></a> インスタンスの配信日をもとに生成され、以下の変換が行われます:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="35%" />
@@ -1404,7 +1404,7 @@
 <td>S フラグ</td>
 </tr>
 <tr class="row-odd"><td>O フラグ</td>
-<td>「cur」 サブディレクトリ</td>
+<td>&quot;cur&quot; サブディレクトリ</td>
 </tr>
 <tr class="row-even"><td>D フラグ</td>
 <td>T フラグ</td>
@@ -1430,16 +1430,16 @@
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>R フラグおよび O フラグ</td>
-<td>「unseen」 シーケンス無し</td>
+<td>&quot;unseen&quot; シーケンス無し</td>
 </tr>
 <tr class="row-odd"><td>O フラグ</td>
-<td>「unseen」 シーケンス</td>
+<td>&quot;unseen&quot; シーケンス</td>
 </tr>
 <tr class="row-even"><td>F フラグ</td>
-<td>「flagged」 シーケンス</td>
+<td>&quot;flagged&quot; シーケンス</td>
 </tr>
 <tr class="row-odd"><td>A フラグ</td>
-<td>「replied」 シーケンス</td>
+<td>&quot;replied&quot; シーケンス</td>
 </tr>
 </tbody>
 </table>
@@ -1456,20 +1456,20 @@
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>R フラグおよび O フラグ</td>
-<td>「unseen」 ラベル無し</td>
+<td>&quot;unseen&quot; ラベル無し</td>
 </tr>
 <tr class="row-odd"><td>O フラグ</td>
-<td>「unseen」 ラベル</td>
+<td>&quot;unseen&quot; ラベル</td>
 </tr>
 <tr class="row-even"><td>D フラグ</td>
-<td>「deleted」 ラベル</td>
+<td>&quot;deleted&quot; ラベル</td>
 </tr>
 <tr class="row-odd"><td>A フラグ</td>
-<td>「answered」 ラベル</td>
+<td>&quot;answered&quot; ラベル</td>
 </tr>
 </tbody>
 </table>
-<p><a class="reference internal" href="#mailbox.MMDFMessage" title="mailbox.MMDFMessage"><code class="xref py py-class docutils literal"><span class="pre">MMDFMessage</span></code></a> インスタンスが <a class="reference internal" href="#mailbox.mboxMessage" title="mailbox.mboxMessage"><code class="xref py py-class docutils literal"><span class="pre">mboxMessage</span></code></a> インスタンスに基づいて生成されるとき、」From」行がコピーされ、全てのフラグが直接対応します:</p>
+<p><a class="reference internal" href="#mailbox.MMDFMessage" title="mailbox.MMDFMessage"><code class="xref py py-class docutils literal"><span class="pre">MMDFMessage</span></code></a> インスタンスが <a class="reference internal" href="#mailbox.mboxMessage" title="mailbox.mboxMessage"><code class="xref py py-class docutils literal"><span class="pre">mboxMessage</span></code></a> インスタンスに基づいて生成されるとき、&quot;From&quot;行がコピーされ、全てのフラグが直接対応します:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="38%" />
