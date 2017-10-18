@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>7.1. struct — バイト列をパックされたバイナリデータとして解釈する &#8212; Python 3.6.1 ドキュメント</title>
+    <title>7.1. struct — バイト列をパックされたバイナリデータとして解釈する &#8212; Python 3.6.3 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.1',
+        VERSION:     '3.6.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.1 ドキュメント 内を検索"
+          title="Python 3.6.3 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -44,6 +44,7 @@
     });
     </script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
     <script type="text/javascript" src="../_static/version_switch.js"></script>
     
     
@@ -70,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -103,12 +104,12 @@
 <span id="struct-interpret-bytes-as-packed-binary-data"></span><h1>7.1. <a class="reference internal" href="#module-struct" title="struct: Interpret bytes as packed binary data."><code class="xref py py-mod docutils literal"><span class="pre">struct</span></code></a> — バイト列をパックされたバイナリデータとして解釈する<a class="headerlink" href="#module-struct" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/struct.py">Lib/struct.py</a></p>
 <hr class="docutils" id="index-0" />
-<p>このモジュールは、 Python の値と Python <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトとして表される C の構造体データとの間の変換を実現します。このモジュールは特に、ファイルに保存されたり、ネットワーク接続を経由したバイナリデータを扱うときに使われます。このモジュールでは、C 構造体のレイアウトおよび Python の値との間で行いたい変換をコンパクトに表現するために、 <a class="reference internal" href="#struct-format-strings"><span class="std std-ref">書式文字列</span></a> を使います。</p>
+<p>このモジュールは、 Python の値と Python <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトとして表される C の構造体データとの間の変換を実現します。このモジュールは特に、ファイルに保存されたり、ネットワーク接続を経由したバイナリデータを扱うときに使われます。このモジュールでは、C 構造体のレイアウトおよび Python の値との間で行いたい変換をコンパクトに表現するために、 <a class="reference internal" href="#struct-format-strings"><span class="std std-ref">書式文字列</span></a> を使います。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">デフォルトでは、与えられた C の構造体をパックする際に、関連する C データ型を適切にアラインメント(alignment)するために数バイトのパディングを行うことがあります。この挙動が選択されたのは、パックされた構造体のバイト表現を対応する C 構造体のメモリレイアウトに正確に対応させるためです。プラットフォーム独立のデータフォーマットを扱ったり、隠れたパディングを排除したりするには、サイズ及びアラインメントとして <code class="docutils literal"><span class="pre">native</span></code> の代わりに <code class="docutils literal"><span class="pre">standard</span></code> を使うようにします: 詳しくは <a class="reference internal" href="#struct-alignment"><span class="std std-ref">バイトオーダ、サイズ、アラインメント</span></a> を参照して下さい。</p>
 </div>
-<p>いくつかの <a class="reference internal" href="#module-struct" title="struct: Interpret bytes as packed binary data."><code class="xref py py-mod docutils literal"><span class="pre">struct</span></code></a> の関数 (および <a class="reference internal" href="#struct.Struct" title="struct.Struct"><code class="xref py py-class docutils literal"><span class="pre">Struct</span></code></a> のメソッド) は <em>buffer</em> 引数を取ります。 これは <a class="reference internal" href="../c-api/buffer.html#bufferobjects"><span class="std std-ref">バッファプロトコル (buffer Protocol)</span></a> を実装していて読み取り可能または読み書き可能なバッファを提供するオブジェクトのことです。この目的のために使われる最も一般的な型は <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> と <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> ですが、バイトの配列とみなすことができるような他の多くの型がバッファプロトコルを実装しています。そのため、それらは <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトから追加のコピーなしで読み出しや書き込みができます。</p>
+<p>いくつかの <a class="reference internal" href="#module-struct" title="struct: Interpret bytes as packed binary data."><code class="xref py py-mod docutils literal"><span class="pre">struct</span></code></a> の関数 (および <a class="reference internal" href="#struct.Struct" title="struct.Struct"><code class="xref py py-class docutils literal"><span class="pre">Struct</span></code></a> のメソッド) は <em>buffer</em> 引数を取ります。 これは <a class="reference internal" href="../c-api/buffer.html#bufferobjects"><span class="std std-ref">バッファプロトコル (buffer Protocol)</span></a> を実装していて読み取り可能または読み書き可能なバッファを提供するオブジェクトのことです。この目的のために使われる最も一般的な型は <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> と <a class="reference internal" href="stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> ですが、バイトの配列とみなすことができるような他の多くの型がバッファプロトコルを実装しています。そのため、それらは <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトから追加のコピーなしで読み出しや書き込みができます。</p>
 <div class="section" id="functions-and-exceptions">
 <h2>7.1.1. 関数と例外<a class="headerlink" href="#functions-and-exceptions" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>このモジュールは以下の例外と関数を定義しています:</p>
@@ -560,7 +561,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/struct.rst.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/struct.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -589,7 +590,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -618,7 +619,7 @@
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 15, 2017
+    最終更新日時: 10月 18, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

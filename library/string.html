@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>6.1. string — 一般的な文字列操作 &#8212; Python 3.6.1 ドキュメント</title>
+    <title>6.1. string — 一般的な文字列操作 &#8212; Python 3.6.3 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.1',
+        VERSION:     '3.6.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.1 ドキュメント 内を検索"
+          title="Python 3.6.3 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -44,6 +44,7 @@
     });
     </script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
     <script type="text/javascript" src="../_static/version_switch.js"></script>
     
     
@@ -70,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -287,7 +288,7 @@
 <p>一般的な取り決めとして、空の書式指定文字列 (<code class="docutils literal"><span class="pre">&quot;&quot;</span></code>) は、値に対して <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> を呼び出したときと同じ結果を与えます。通常、空でない書式指定文字列はその結果を変更します。</p>
 <p>一般的な書式指定子 (<em>standard format specifier</em>) の書式は以下です:</p>
 <pre>
-<strong id="id1">format_spec    </strong> ::=  [[<a class="reference internal" href="#grammar-token-fill"><code class="xref docutils literal"><span class="pre">fill</span></code></a>]<a class="reference internal" href="#grammar-token-align"><code class="xref docutils literal"><span class="pre">align</span></code></a>][<a class="reference internal" href="functions.html#grammar-token-sign"><code class="xref docutils literal"><span class="pre">sign</span></code></a>][#][0][<a class="reference internal" href="#grammar-token-width"><code class="xref docutils literal"><span class="pre">width</span></code></a>][<a class="reference internal" href="#grammar-token-grouping_option"><code class="xref docutils literal"><span class="pre">grouping_option</span></code></a>][.<a class="reference internal" href="#grammar-token-precision"><code class="xref docutils literal"><span class="pre">precision</span></code></a>][<a class="reference internal" href="#grammar-token-type"><code class="xref docutils literal"><span class="pre">type</span></code></a>]
+<strong id="id1">format_spec    </strong> ::=  [[<a class="reference internal" href="#grammar-token-fill"><code class="xref docutils literal"><span class="pre">fill</span></code></a>]<a class="reference internal" href="#grammar-token-align"><code class="xref docutils literal"><span class="pre">align</span></code></a>][<a class="reference internal" href="#grammar-token-sign"><code class="xref docutils literal"><span class="pre">sign</span></code></a>][#][0][<a class="reference internal" href="#grammar-token-width"><code class="xref docutils literal"><span class="pre">width</span></code></a>][<a class="reference internal" href="#grammar-token-grouping_option"><code class="xref docutils literal"><span class="pre">grouping_option</span></code></a>][.<a class="reference internal" href="#grammar-token-precision"><code class="xref docutils literal"><span class="pre">precision</span></code></a>][<a class="reference internal" href="#grammar-token-type"><code class="xref docutils literal"><span class="pre">type</span></code></a>]
 <strong id="grammar-token-fill">fill           </strong> ::=  &lt;any character&gt;
 <strong id="grammar-token-align">align          </strong> ::=  &quot;&lt;&quot; | &quot;&gt;&quot; | &quot;=&quot; | &quot;^&quot;
 <strong id="grammar-token-sign">sign           </strong> ::=  &quot;+&quot; | &quot;-&quot; | &quot; &quot;
@@ -671,7 +672,18 @@
 <ul>
 <li><p class="first"><em>delimiter</em> – プレースホルダの開始を示すリテラル文字列です。デフォルトの値は <code class="docutils literal"><span class="pre">$</span></code> です。実装系はこの文字列に対して必要に応じて <a class="reference internal" href="re.html#re.escape" title="re.escape"><code class="xref py py-meth docutils literal"><span class="pre">re.escape()</span></code></a> を呼び出すので、正規表現を表すような文字列にしては <em>なりません</em> 。</p>
 </li>
-<li><p class="first"><em>idpattern</em> – 波括弧でくくらない形式のプレースホルダの表記パターンを示す正規表現です (波括弧は自動的に適切な場所に追加されます)。デフォルトの値は <code class="docutils literal"><span class="pre">[_a-z][_a-z0-9]*</span></code> という正規表現です。</p>
+<li><p class="first"><em>idpattern</em> – This is the regular expression describing the pattern for
+non-braced placeholders (the braces will be added automatically as
+appropriate). The default value is the regular expression
+<code class="docutils literal"><span class="pre">(?-i:[_a-zA-Z][_a-zA-Z0-9]*)</span></code>.</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p>Since default <em>flags</em> is <code class="docutils literal"><span class="pre">re.IGNORECASE</span></code>, pattern <code class="docutils literal"><span class="pre">[a-z]</span></code> can match
+with some non-ASCII characters. That’s why we use local <code class="docutils literal"><span class="pre">-i</span></code> flag here.</p>
+<p class="last">While <em>flags</em> is kept to <code class="docutils literal"><span class="pre">re.IGNORECASE</span></code> for backward compatibility,
+you can override it to <code class="docutils literal"><span class="pre">0</span></code> or <code class="docutils literal"><span class="pre">re.IGNORECASE</span> <span class="pre">|</span> <span class="pre">re.ASCII</span></code> when
+subclassing.</p>
+</div>
 </li>
 <li><p class="first"><em>flags</em> – 代入の認識のために使用される正規表現をコンパイルする際に適用される正規表現フラグ。デフォルト値は <code class="docutils literal"><span class="pre">re.IGNORECASE</span></code> です。<code class="docutils literal"><span class="pre">re.VERBOSE</span></code> が常にフラグに追加されるということに注意してください。したがって、カスタムな <em>idpattern</em> は verbose 正規表現の規約に従わなければなりません。</p>
 <div class="versionadded">
@@ -731,7 +743,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/string.rst.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/string.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -760,7 +772,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -789,7 +801,7 @@
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 15, 2017
+    最終更新日時: 10月 18, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>15.1. hashlib — セキュアハッシュおよびメッセージダイジェスト &#8212; Python 3.6.1 ドキュメント</title>
+    <title>15.1. hashlib — セキュアハッシュおよびメッセージダイジェスト &#8212; Python 3.6.3 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.1',
+        VERSION:     '3.6.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.1 ドキュメント 内を検索"
+          title="Python 3.6.3 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -44,6 +44,7 @@
     });
     </script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
     <script type="text/javascript" src="../_static/version_switch.js"></script>
     
     
@@ -70,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -117,7 +118,7 @@
 <p>There is one constructor method named for each type of <em class="dfn">hash</em>.  All return
 a hash object with the same simple interface. For example: use <code class="xref py py-func docutils literal"><span class="pre">sha256()</span></code> to
 create a SHA-256 hash object. You can now feed this object with <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like
-objects</span></a> (normally <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a>) using the <code class="xref py py-meth docutils literal"><span class="pre">update()</span></code> method.
+objects</span></a> (normally <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a>) using the <code class="xref py py-meth docutils literal"><span class="pre">update()</span></code> method.
 At any point you can ask it for the <em class="dfn">digest</em> of the
 concatenation of the data fed to it so far using the <code class="xref py py-meth docutils literal"><span class="pre">digest()</span></code> or
 <code class="xref py py-meth docutils literal"><span class="pre">hexdigest()</span></code> methods.</p>
@@ -552,18 +553,23 @@ to users and later verify them to make sure they weren’t tampered with:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">AUTH_SIZE</span> <span class="o">=</span> <span class="mi">16</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">sign</span><span class="p">(</span><span class="n">cookie</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">h</span> <span class="o">=</span> <span class="n">blake2b</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">cookie</span><span class="p">,</span> <span class="n">digest_size</span><span class="o">=</span><span class="n">AUTH_SIZE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">SECRET_KEY</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">h</span> <span class="o">=</span> <span class="n">blake2b</span><span class="p">(</span><span class="n">digest_size</span><span class="o">=</span><span class="n">AUTH_SIZE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">SECRET_KEY</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">h</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cookie</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;user:vatrogasac&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">verify</span><span class="p">(</span><span class="n">cookie</span><span class="p">,</span> <span class="n">sig</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">good_sig</span> <span class="o">=</span> <span class="n">sign</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">compare_digest</span><span class="p">(</span><span class="n">good_sig</span><span class="p">,</span> <span class="n">sig</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cookie</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;user-alice&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sig</span> <span class="o">=</span> <span class="n">sign</span><span class="p">(</span><span class="n">cookie</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">,</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cookie</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">),</span> <span class="n">sig</span><span class="p">))</span>
-<span class="go">user:vatrogasac,349cf904533767ed2d755279a8df84d0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">compare_digest</span><span class="p">(</span><span class="n">cookie</span><span class="p">,</span> <span class="n">sig</span><span class="p">)</span>
+<span class="go">user-alice,b&#39;43b3c982cf697e0c5ab22172d1ca7421&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">verify</span><span class="p">(</span><span class="n">cookie</span><span class="p">,</span> <span class="n">sig</span><span class="p">)</span>
 <span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">compare_digest</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;user:policajac&#39;</span><span class="p">,</span> <span class="n">sig</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">verify</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;user-bob&#39;</span><span class="p">,</span> <span class="n">sig</span><span class="p">)</span>
 <span class="go">False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">compare_digesty</span><span class="p">(</span><span class="n">cookie</span><span class="p">,</span> <span class="s1">&#39;0102030405060708090a0b0c0d0e0f00&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">verify</span><span class="p">(</span><span class="n">cookie</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;0102030405060708090a0b0c0d0e0f00&#39;</span><span class="p">)</span>
 <span class="go">False</span>
 </pre></div>
 </div>
@@ -796,7 +802,7 @@ Domain Dedication 1.0 Universal:</p>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/hashlib.rst.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/hashlib.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -825,7 +831,7 @@ Domain Dedication 1.0 Universal:</p>
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -854,7 +860,7 @@ Domain Dedication 1.0 Universal:</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 15, 2017
+    最終更新日時: 10月 18, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

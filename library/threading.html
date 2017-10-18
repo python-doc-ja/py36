@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>17.1. threading — スレッドベースの並列処理 &#8212; Python 3.6.1 ドキュメント</title>
+    <title>17.1. threading — スレッドベースの並列処理 &#8212; Python 3.6.3 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.1',
+        VERSION:     '3.6.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.1 ドキュメント 内を検索"
+          title="Python 3.6.3 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -44,6 +44,7 @@
     });
     </script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
     <script type="text/javascript" src="../_static/version_switch.js"></script>
     
     
@@ -70,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -264,7 +265,11 @@
 <dl class="attribute">
 <dt id="threading.Thread.ident">
 <code class="descname">ident</code><a class="headerlink" href="#threading.Thread.ident" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>スレッドの「スレッド識別子」または、スレッドが開始されていない場合 <code class="docutils literal"><span class="pre">None</span></code> です。これは非ゼロの整数です。 <a class="reference internal" href="_thread.html#_thread.get_ident" title="_thread.get_ident"><code class="xref py py-func docutils literal"><span class="pre">_thread.get_ident()</span></code></a> 関数を参照してください。スレッド識別子は、スレッドが終了した後で新たなスレッドが生成された場合に再利用されることがあります。スレッド識別子は、スレッドが終了した後でも利用できます。</p>
+<dd><p>The 『thread identifier』 of this thread or <code class="docutils literal"><span class="pre">None</span></code> if the thread has not
+been started.  This is a nonzero integer.  See the <a class="reference internal" href="#threading.get_ident" title="threading.get_ident"><code class="xref py py-func docutils literal"><span class="pre">get_ident()</span></code></a>
+function.  Thread identifiers may be recycled when a thread exits and
+another thread is created.  The identifier is available even after the
+thread has exited.</p>
 </dd></dl>
 
 <dl class="method">
@@ -306,9 +311,9 @@
 <dt id="threading.Lock">
 <em class="property">class </em><code class="descclassname">threading.</code><code class="descname">Lock</code><a class="headerlink" href="#threading.Lock" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>プリミティブロック (primitive lock) オブジェクトを実装しているクラスです。スレッドが一度ロックを獲得すると、それ以後のロック獲得の試みはロックが解放されるまでブロックします。どのスレッドでもロックを解放できます。</p>
-<div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.3 で変更: </span>ファクトリ関数からクラスに変更されました。</p>
-</div>
+<p>Note that <code class="docutils literal"><span class="pre">Lock</span></code> is actually a factory function which returns an instance
+of the most efficient version of the concrete Lock class that is supported
+by the platform.</p>
 <dl class="method">
 <dt id="threading.Lock.acquire">
 <code class="descname">acquire</code><span class="sig-paren">(</span><em>blocking=True</em>, <em>timeout=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#threading.Lock.acquire" title="この定義へのパーマリンク">¶</a></dt>
@@ -607,7 +612,11 @@ acquire が その間隔の間で完了しなかった場合は false が返り�
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.2 で追加.</span></p>
 </div>
-<p>このクラスは、互いを待つ必要のある固定の数のスレッドで使用するための単純な同期プリミティブを提供します。それぞれのスレッドは <code class="xref py py-meth docutils literal"><span class="pre">Barrier</span> <span class="pre">.wait()</span></code> メソッドを呼ぶことによりバリアを通ろうとしてブロックします。すべてのスレッドがこのメソッドを呼び出した時点で、すべてのスレッドが同時に解放されます。</p>
+<p>This class provides a simple synchronization primitive for use by a fixed number
+of threads that need to wait for each other.  Each of the threads tries to pass
+the barrier by calling the <a class="reference internal" href="#threading.Barrier.wait" title="threading.Barrier.wait"><code class="xref py py-meth docutils literal"><span class="pre">wait()</span></code></a> method and will block until
+all of the threads have made their <a class="reference internal" href="#threading.Barrier.wait" title="threading.Barrier.wait"><code class="xref py py-meth docutils literal"><span class="pre">wait()</span></code></a> calls. At this point,
+the threads are released simultaneously.</p>
 <p>バリアは同じ数のスレッドに対して何度でも再利用することができます。</p>
 <p>例として、クライアントとサーバの間でスレッドを同期させる単純な方法を紹介します:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">Barrier</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -743,7 +752,7 @@ acquire が その間隔の間で完了しなかった場合は false が返り�
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/threading.rst.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/threading.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -772,7 +781,7 @@ acquire が その間隔の間で完了しなかった場合は false が返り�
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -801,7 +810,7 @@ acquire が その間隔の間で完了しなかった場合は false が返り�
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 15, 2017
+    最終更新日時: 10月 18, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

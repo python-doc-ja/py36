@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>共通のオブジェクト構造体 (common object structure) &#8212; Python 3.6.1 ドキュメント</title>
+    <title>共通のオブジェクト構造体 (common object structure) &#8212; Python 3.6.3 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.1',
+        VERSION:     '3.6.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.1 ドキュメント 内を検索"
+          title="Python 3.6.3 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -44,6 +44,7 @@
     });
     </script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
     <script type="text/javascript" src="../_static/version_switch.js"></script>
     
     
@@ -70,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -410,6 +411,66 @@ PyObject_VAR_HEAD マクロは次のように展開されます:</p>
 <code class="xref c c-macro docutils literal"><span class="pre">T_OBJECT</span></code> メンバと <code class="xref c c-macro docutils literal"><span class="pre">T_OBJECT_EX</span></code> メンバだけが削除できます (<em>NULL</em> が代入されます)。</p>
 </dd></dl>
 
+<dl class="type">
+<dt id="c.PyGetSetDef">
+<code class="descname">PyGetSetDef</code><a class="headerlink" href="#c.PyGetSetDef" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Structure to define property-like access for a type. See also description of
+the <a class="reference internal" href="typeobj.html#c.PyTypeObject.tp_getset" title="PyTypeObject.tp_getset"><code class="xref c c-member docutils literal"><span class="pre">PyTypeObject.tp_getset</span></code></a> slot.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="27%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">フィールド</th>
+<th class="head">C の型</th>
+<th class="head">意味</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>name</td>
+<td>char *</td>
+<td>attribute name</td>
+</tr>
+<tr class="row-odd"><td>get</td>
+<td>getter</td>
+<td>C Function to get the attribute</td>
+</tr>
+<tr class="row-even"><td>set</td>
+<td>setter</td>
+<td>optional C function to set or
+delete the attribute, if omitted
+the attribute is readonly</td>
+</tr>
+<tr class="row-odd"><td>doc</td>
+<td>char *</td>
+<td>optional docstring</td>
+</tr>
+<tr class="row-even"><td>closure</td>
+<td>void *</td>
+<td>optional function pointer,
+providing additional data for
+getter and setter</td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal"><span class="pre">get</span></code> function takes one <a class="reference internal" href="#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject*</span></code></a> parameter (the
+instance) and a function pointer (the associated <code class="docutils literal"><span class="pre">closure</span></code>):</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="n">PyObject</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="n">getter</span><span class="p">)(</span><span class="n">PyObject</span> <span class="o">*</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>It should return a new reference on success or <em>NULL</em> with a set exception
+on failure.</p>
+<p><code class="docutils literal"><span class="pre">set</span></code> functions take two <a class="reference internal" href="#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject*</span></code></a> parameters (the instance and
+the value to be set) and a function pointer (the associated <code class="docutils literal"><span class="pre">closure</span></code>):</p>
+<div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="nf">int</span> <span class="p">(</span><span class="o">*</span><span class="n">setter</span><span class="p">)(</span><span class="n">PyObject</span> <span class="o">*</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In case the attribute should be deleted the second parameter is <em>NULL</em>.
+Should return <code class="docutils literal"><span class="pre">0</span></code> on success or <code class="docutils literal"><span class="pre">-1</span></code> with a set exception on failure.</p>
+</dd></dl>
+
 </div>
 
 
@@ -429,7 +490,7 @@ PyObject_VAR_HEAD マクロは次のように展開されます:</p>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/structures.rst.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/c-api/structures.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -458,7 +519,7 @@ PyObject_VAR_HEAD マクロは次のように展開されます:</p>
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -487,7 +548,7 @@ PyObject_VAR_HEAD マクロは次のように展開されます:</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 15, 2017
+    最終更新日時: 10月 18, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

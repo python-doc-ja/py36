@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>4. 組み込み型 &#8212; Python 3.6.1 ドキュメント</title>
+    <title>4. 組み込み型 &#8212; Python 3.6.3 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.1',
+        VERSION:     '3.6.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.1 ドキュメント 内を検索"
+          title="Python 3.6.3 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -44,6 +44,7 @@
     });
     </script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
     <script type="text/javascript" src="../_static/version_switch.js"></script>
     
     
@@ -70,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -106,29 +107,26 @@
 <p>演算には、複数の型でサポートされているものがあります; 特に、ほぼ全てのオブジェクトは、比較でき、真理値を判定でき、 (<a class="reference internal" href="functions.html#repr" title="repr"><code class="xref py py-func docutils literal"><span class="pre">repr()</span></code></a> 関数や、わずかに異なる <a class="reference internal" href="#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> 関数によって) 文字列に変換できます。オブジェクトが <a class="reference internal" href="functions.html#print" title="print"><code class="xref py py-func docutils literal"><span class="pre">print()</span></code></a> 関数で印字されるとき、文字列に変換する関数が暗黙に使われます。</p>
 <div class="section" id="truth-value-testing">
 <span id="truth"></span><h2>4.1. 真理値判定<a class="headerlink" href="#truth-value-testing" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p id="index-1">どのオブジェクトも真理値を判定でき、 <a class="reference internal" href="../reference/compound_stmts.html#if"><code class="xref std std-keyword docutils literal"><span class="pre">if</span></code></a> や <a class="reference internal" href="../reference/compound_stmts.html#while"><code class="xref std std-keyword docutils literal"><span class="pre">while</span></code></a> 条件に、または以下のブール演算の被演算子に使えます。以下の値は偽と見なされます:</p>
+<p id="index-1">Any object can be tested for truth value, for use in an <a class="reference internal" href="../reference/compound_stmts.html#if"><code class="xref std std-keyword docutils literal"><span class="pre">if</span></code></a> or
+<a class="reference internal" href="../reference/compound_stmts.html#while"><code class="xref std std-keyword docutils literal"><span class="pre">while</span></code></a> condition or as operand of the Boolean operations below.</p>
+<p id="index-2">By default, an object is considered true unless its class defines either a
+<a class="reference internal" href="../reference/datamodel.html#object.__bool__" title="object.__bool__"><code class="xref py py-meth docutils literal"><span class="pre">__bool__()</span></code></a> method that returns <code class="docutils literal"><span class="pre">False</span></code> or a <a class="reference internal" href="../reference/datamodel.html#object.__len__" title="object.__len__"><code class="xref py py-meth docutils literal"><span class="pre">__len__()</span></code></a> method that
+returns zero, when called with the object. <a class="footnote-reference" href="#id12" id="id1">[1]</a>  Here are most of the built-in
+objects considered false:</p>
 <blockquote>
 <div></div></blockquote>
-<ul id="index-2">
-<li><p class="first"><code class="docutils literal"><span class="pre">None</span></code></p>
-</li>
-<li id="index-3"><p class="first"><code class="docutils literal"><span class="pre">False</span></code></p>
-</li>
-<li><p class="first">数値型におけるゼロ。例えば <code class="docutils literal"><span class="pre">0</span></code>, <code class="docutils literal"><span class="pre">0.0</span></code>, <code class="docutils literal"><span class="pre">0j</span></code> 。</p>
-</li>
-<li><p class="first">空のシーケンス。例えば <code class="docutils literal"><span class="pre">''</span></code>, <code class="docutils literal"><span class="pre">()</span></code>, <code class="docutils literal"><span class="pre">[]</span></code> 。</p>
-</li>
-<li><p class="first">空のマッピング。例えば <code class="docutils literal"><span class="pre">{}</span></code> 。</p>
-</li>
-<li><p class="first">ユーザ定義クラスのインスタンスで、そのクラスが <a class="reference internal" href="../reference/datamodel.html#object.__bool__" title="object.__bool__"><code class="xref py py-meth docutils literal"><span class="pre">__bool__()</span></code></a> または <a class="reference internal" href="../reference/datamodel.html#object.__len__" title="object.__len__"><code class="xref py py-meth docutils literal"><span class="pre">__len__()</span></code></a> メソッドを定義していれば、それらのメソッドが整数 0 または <a class="reference internal" href="functions.html#bool" title="bool"><code class="xref py py-class docutils literal"><span class="pre">bool</span></code></a> 値 <code class="docutils literal"><span class="pre">False</span></code> を返すとき。 <a class="footnote-reference" href="#id11" id="id1">[1]</a></p>
-</li>
+<ul class="simple" id="index-3">
+<li>constants defined to be false: <code class="docutils literal"><span class="pre">None</span></code> and <code class="docutils literal"><span class="pre">False</span></code>.</li>
+<li>zero of any numeric type: <code class="docutils literal"><span class="pre">0</span></code>, <code class="docutils literal"><span class="pre">0.0</span></code>, <code class="docutils literal"><span class="pre">0j</span></code>, <code class="docutils literal"><span class="pre">Decimal(0)</span></code>,
+<code class="docutils literal"><span class="pre">Fraction(0,</span> <span class="pre">1)</span></code></li>
+<li>empty sequences and collections: <code class="docutils literal"><span class="pre">''</span></code>, <code class="docutils literal"><span class="pre">()</span></code>, <code class="docutils literal"><span class="pre">[]</span></code>, <code class="docutils literal"><span class="pre">{}</span></code>, <code class="docutils literal"><span class="pre">set()</span></code>,
+<code class="docutils literal"><span class="pre">range(0)</span></code></li>
 </ul>
-<p id="index-4">それ以外の全ての値は真と見なされます — 従って、多くの型のオブジェクトは常に真です。</p>
-<p id="index-5">ブール値の結果を返す演算および組み込み関数は、特に注釈のない限り常に偽値として <code class="docutils literal"><span class="pre">0</span></code> または <code class="docutils literal"><span class="pre">False</span></code> を返し、真値として <code class="docutils literal"><span class="pre">1</span></code> または <code class="docutils literal"><span class="pre">True</span></code> を返します。 (重要な例外: ブール演算 <code class="docutils literal"><span class="pre">or</span></code> および <code class="docutils literal"><span class="pre">and</span></code> は常に被演算子のうちの一つを返します。)</p>
+<p id="index-4">ブール値の結果を返す演算および組み込み関数は、特に注釈のない限り常に偽値として <code class="docutils literal"><span class="pre">0</span></code> または <code class="docutils literal"><span class="pre">False</span></code> を返し、真値として <code class="docutils literal"><span class="pre">1</span></code> または <code class="docutils literal"><span class="pre">True</span></code> を返します。 (重要な例外: ブール演算 <code class="docutils literal"><span class="pre">or</span></code> および <code class="docutils literal"><span class="pre">and</span></code> は常に被演算子のうちの一つを返します。)</p>
 </div>
 <div class="section" id="boolean-operations-and-or-not">
 <span id="boolean"></span><h2>4.2. ブール演算 — <a class="reference internal" href="../reference/expressions.html#and"><code class="xref std std-keyword docutils literal"><span class="pre">and</span></code></a>, <a class="reference internal" href="../reference/expressions.html#or"><code class="xref std std-keyword docutils literal"><span class="pre">or</span></code></a>, <a class="reference internal" href="../reference/expressions.html#not"><code class="xref std std-keyword docutils literal"><span class="pre">not</span></code></a><a class="headerlink" href="#boolean-operations-and-or-not" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p id="index-6">以下にブール演算を、優先順位が低い順に示します:</p>
+<p id="index-5">以下にブール演算を、優先順位が低い順に示します:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="25%" />
@@ -156,7 +154,7 @@
 </tr>
 </tbody>
 </table>
-<p id="index-7">注釈:</p>
+<p id="index-6">注釈:</p>
 <ol class="arabic simple">
 <li>この演算子は短絡評価されます。つまり第一引数が偽のときにのみ、第二引数が評価されます。</li>
 <li>この演算子は短絡評価されます。つまり第一引数が真のときにのみ、第二引数が評価されます。</li>
@@ -165,7 +163,7 @@
 </div>
 <div class="section" id="comparisons">
 <span id="stdcomparisons"></span><h2>4.3. 比較<a class="headerlink" href="#comparisons" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p id="index-8">Python には 8 種の比較演算があります。比較演算の優先順位は全て同じです (ブール演算より高い優先順位です)。比較は任意に連鎖できます; 例えば、 <code class="docutils literal"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">y</span> <span class="pre">&lt;=</span> <span class="pre">z</span></code> は <code class="docutils literal"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">y</span> <span class="pre">and</span> <span class="pre">y</span> <span class="pre">&lt;=</span> <span class="pre">z</span></code> とほぼ等価ですが、この <em>y</em> は一度だけしか評価されません (どちらにしても、 <code class="docutils literal"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">y</span></code> が偽となれば <em>z</em> は評価されません)。</p>
+<p id="index-7">Python には 8 種の比較演算があります。比較演算の優先順位は全て同じです (ブール演算より高い優先順位です)。比較は任意に連鎖できます; 例えば、 <code class="docutils literal"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">y</span> <span class="pre">&lt;=</span> <span class="pre">z</span></code> は <code class="docutils literal"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">y</span> <span class="pre">and</span> <span class="pre">y</span> <span class="pre">&lt;=</span> <span class="pre">z</span></code> とほぼ等価ですが、この <em>y</em> は一度だけしか評価されません (どちらにしても、 <code class="docutils literal"><span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">y</span></code> が偽となれば <em>z</em> は評価されません)。</p>
 <p>以下の表に比較演算をまとめます:</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -204,17 +202,17 @@
 </tr>
 </tbody>
 </table>
-<p id="index-9">異なる型のオブジェクトは、異なる数値型を除き、決して等価になりません。さらに、型には、 (例えば関数オブジェクトのように) その型のどの 2 つのオブジェクトも等しくないという、退化した比較の概念しかサポートしていないものもあります。複素数とその他の組み込み数値型を比較するときや、オブジェクト同士が異なる型で比較できないときや、その他順序づけが定義されていないとき、演算子 <code class="docutils literal"><span class="pre">&lt;</span></code> 、 <code class="docutils literal"><span class="pre">&lt;=</span></code> 、 <code class="docutils literal"><span class="pre">&gt;</span></code> 、 <code class="docutils literal"><span class="pre">&gt;=</span></code> は <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> 例外を送出します。</p>
-<p id="index-10">あるクラスの同一でないインスタンスは、通常等価でないとされますが、そのクラスが <a class="reference internal" href="../reference/datamodel.html#object.__eq__" title="object.__eq__"><code class="xref py py-meth docutils literal"><span class="pre">__eq__()</span></code></a> メソッドを定義している場合は除きます。</p>
+<p id="index-8">異なる型のオブジェクトは、異なる数値型を除き、決して等価になりません。さらに、型には、 (例えば関数オブジェクトのように) その型のどの 2 つのオブジェクトも等しくないという、退化した比較の概念しかサポートしていないものもあります。複素数とその他の組み込み数値型を比較するときや、オブジェクト同士が異なる型で比較できないときや、その他順序づけが定義されていないとき、演算子 <code class="docutils literal"><span class="pre">&lt;</span></code> 、 <code class="docutils literal"><span class="pre">&lt;=</span></code> 、 <code class="docutils literal"><span class="pre">&gt;</span></code> 、 <code class="docutils literal"><span class="pre">&gt;=</span></code> は <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> 例外を送出します。</p>
+<p id="index-9">あるクラスの同一でないインスタンスは、通常等価でないとされますが、そのクラスが <a class="reference internal" href="../reference/datamodel.html#object.__eq__" title="object.__eq__"><code class="xref py py-meth docutils literal"><span class="pre">__eq__()</span></code></a> メソッドを定義している場合は除きます。</p>
 <p>クラスのインスタンスは、そのクラスがメソッド <a class="reference internal" href="../reference/datamodel.html#object.__lt__" title="object.__lt__"><code class="xref py py-meth docutils literal"><span class="pre">__lt__()</span></code></a> 、 <a class="reference internal" href="../reference/datamodel.html#object.__le__" title="object.__le__"><code class="xref py py-meth docutils literal"><span class="pre">__le__()</span></code></a> 、 <a class="reference internal" href="../reference/datamodel.html#object.__gt__" title="object.__gt__"><code class="xref py py-meth docutils literal"><span class="pre">__gt__()</span></code></a> 、 <a class="reference internal" href="../reference/datamodel.html#object.__ge__" title="object.__ge__"><code class="xref py py-meth docutils literal"><span class="pre">__ge__()</span></code></a> のうち十分なものを定義していない限り、同じクラスの別のインスタンスや他の型のオブジェクトとは順序付けできません (一般に、比較演算子の通常の意味を求めるなら、 <a class="reference internal" href="../reference/datamodel.html#object.__lt__" title="object.__lt__"><code class="xref py py-meth docutils literal"><span class="pre">__lt__()</span></code></a> と <a class="reference internal" href="../reference/datamodel.html#object.__eq__" title="object.__eq__"><code class="xref py py-meth docutils literal"><span class="pre">__eq__()</span></code></a> だけで十分です)。</p>
 <p><a class="reference internal" href="../reference/expressions.html#is"><code class="xref std std-keyword docutils literal"><span class="pre">is</span></code></a> および <a class="reference internal" href="../reference/expressions.html#is-not"><code class="xref std std-keyword docutils literal"><span class="pre">is</span> <span class="pre">not</span></code></a> 演算子の振る舞いはカスタマイズできません。また、これらはいかなる 2 つのオブジェクトにも適用でき、決して例外を送出しません。</p>
-<p id="index-11">シーケンス型 (以下を参照) でのみ、構文上同じ優先順位を持つさらに 2 つの演算子 <a class="reference internal" href="../reference/expressions.html#in"><code class="xref std std-keyword docutils literal"><span class="pre">in</span></code></a> および <a class="reference internal" href="../reference/expressions.html#not-in"><code class="xref std std-keyword docutils literal"><span class="pre">not</span> <span class="pre">in</span></code></a> がサポートされています。</p>
+<p id="index-10">シーケンス型 (以下を参照) でのみ、構文上同じ優先順位を持つさらに 2 つの演算子 <a class="reference internal" href="../reference/expressions.html#in"><code class="xref std std-keyword docutils literal"><span class="pre">in</span></code></a> および <a class="reference internal" href="../reference/expressions.html#not-in"><code class="xref std std-keyword docutils literal"><span class="pre">not</span> <span class="pre">in</span></code></a> がサポートされています。</p>
 </div>
 <div class="section" id="numeric-types-int-float-complex">
 <span id="typesnumeric"></span><h2>4.4. 数値型 <a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>, <a class="reference internal" href="functions.html#float" title="float"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>, <a class="reference internal" href="functions.html#complex" title="complex"><code class="xref py py-class docutils literal"><span class="pre">complex</span></code></a><a class="headerlink" href="#numeric-types-int-float-complex" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p id="index-12">数値型には 3 種類あります: <em class="dfn">整数</em> 、 <em class="dfn">浮動小数点数</em> 、 <em class="dfn">複素数</em> です。さらに、ブール型は整数のサブタイプです。整数には精度の制限がありません。浮動小数点型はたいていは C の <code class="xref c c-type docutils literal"><span class="pre">double</span></code> を使って実装されています; あなたのプログラムが動作するマシンでの浮動小数点型の精度と内部表現は、 <a class="reference internal" href="sys.html#sys.float_info" title="sys.float_info"><code class="xref py py-data docutils literal"><span class="pre">sys.float_info</span></code></a> から利用できます。複素数は実部と虚部を持ち、それぞれ浮動小数点数です。複素数 <em>z</em> から実部および虚部を取り出すには、 <code class="docutils literal"><span class="pre">z.real</span></code> および <code class="docutils literal"><span class="pre">z.imag</span></code> を使ってください。 (標準ライブラリには、その他の数値型、分数を保持する <a class="reference internal" href="fractions.html#module-fractions" title="fractions: Rational numbers."><code class="xref py py-mod docutils literal"><span class="pre">fractions</span></code></a> や、ユーザ定義の精度の浮動小数点数を保持する <a class="reference internal" href="decimal.html#module-decimal" title="decimal: Implementation of the General Decimal Arithmetic  Specification."><code class="xref py py-mod docutils literal"><span class="pre">decimal</span></code></a> があります。)</p>
-<p id="index-13">数値は、数値リテラルによって、あるいは組み込み関数や演算子の戻り値として生成されます。 (十六進、八進、二進数を含む) 修飾のない整数リテラルは、整数を与えます。小数点または指数表記を含む数値リテラルは浮動小数点数を与えます。数値リテラルに <code class="docutils literal"><span class="pre">'j'</span></code> または <code class="docutils literal"><span class="pre">'J'</span></code> をつけると虚数 (実部がゼロの複素数) を与え、それに整数や浮動小数点数を加えて実部と虚部を持つ複素数を得られます。</p>
-<p id="index-14">Python は型混合の算術演算に完全に対応しています: ある二項算術演算子の被演算子の数値型が互いに異なるとき、より 「制限された」 型の被演算子は他方の型に合わせて広げられます。ここで整数は浮動小数点数より制限されており、浮動小数点数は複素数より制限されています。型混合の数値間での比較も同じ規則に従います。 <a class="footnote-reference" href="#id12" id="id2">[2]</a> コンストラクタ <a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-func docutils literal"><span class="pre">int()</span></code></a> 、 <a class="reference internal" href="functions.html#float" title="float"><code class="xref py py-func docutils literal"><span class="pre">float()</span></code></a> 、 <a class="reference internal" href="functions.html#complex" title="complex"><code class="xref py py-func docutils literal"><span class="pre">complex()</span></code></a> で、特定の型の数を生成できます。</p>
+<p id="index-11">数値型には 3 種類あります: <em class="dfn">整数</em> 、 <em class="dfn">浮動小数点数</em> 、 <em class="dfn">複素数</em> です。さらに、ブール型は整数のサブタイプです。整数には精度の制限がありません。浮動小数点型はたいていは C の <code class="xref c c-type docutils literal"><span class="pre">double</span></code> を使って実装されています; あなたのプログラムが動作するマシンでの浮動小数点型の精度と内部表現は、 <a class="reference internal" href="sys.html#sys.float_info" title="sys.float_info"><code class="xref py py-data docutils literal"><span class="pre">sys.float_info</span></code></a> から利用できます。複素数は実部と虚部を持ち、それぞれ浮動小数点数です。複素数 <em>z</em> から実部および虚部を取り出すには、 <code class="docutils literal"><span class="pre">z.real</span></code> および <code class="docutils literal"><span class="pre">z.imag</span></code> を使ってください。 (標準ライブラリには、その他の数値型、分数を保持する <a class="reference internal" href="fractions.html#module-fractions" title="fractions: Rational numbers."><code class="xref py py-mod docutils literal"><span class="pre">fractions</span></code></a> や、ユーザ定義の精度の浮動小数点数を保持する <a class="reference internal" href="decimal.html#module-decimal" title="decimal: Implementation of the General Decimal Arithmetic  Specification."><code class="xref py py-mod docutils literal"><span class="pre">decimal</span></code></a> があります。)</p>
+<p id="index-12">数値は、数値リテラルによって、あるいは組み込み関数や演算子の戻り値として生成されます。 (十六進、八進、二進数を含む) 修飾のない整数リテラルは、整数を与えます。小数点または指数表記を含む数値リテラルは浮動小数点数を与えます。数値リテラルに <code class="docutils literal"><span class="pre">'j'</span></code> または <code class="docutils literal"><span class="pre">'J'</span></code> をつけると虚数 (実部がゼロの複素数) を与え、それに整数や浮動小数点数を加えて実部と虚部を持つ複素数を得られます。</p>
+<p id="index-13">Python は型混合の算術演算に完全に対応しています: ある二項算術演算子の被演算子の数値型が互いに異なるとき、より 「制限された」 型の被演算子は他方の型に合わせて広げられます。ここで整数は浮動小数点数より制限されており、浮動小数点数は複素数より制限されています。型混合の数値間での比較も同じ規則に従います。 <a class="footnote-reference" href="#id13" id="id2">[2]</a> コンストラクタ <a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-func docutils literal"><span class="pre">int()</span></code></a> 、 <a class="reference internal" href="functions.html#float" title="float"><code class="xref py py-func docutils literal"><span class="pre">float()</span></code></a> 、 <a class="reference internal" href="functions.html#complex" title="complex"><code class="xref py py-func docutils literal"><span class="pre">complex()</span></code></a> で、特定の型の数を生成できます。</p>
 <p>全ての (複素数を除く) 組み込み数値型は以下の演算に対応しています。これらは優先順位が低い順で並んでいます (全ての数値演算は比較演算よりも高い優先順位です):</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -313,20 +311,21 @@
 </tr>
 </tbody>
 </table>
-<p id="index-15">注釈:</p>
+<p id="index-14">注釈:</p>
 <ol class="arabic">
 <li><p class="first">整数の除算とも呼ばれます。結果の型は整数型とは限りませんが、結果の値は整数です。結果は常に負の無限大の方向に丸められます: <code class="docutils literal"><span class="pre">1//2</span></code> は <code class="docutils literal"><span class="pre">0</span></code> 、 <code class="docutils literal"><span class="pre">(-1)//2</span></code> は <code class="docutils literal"><span class="pre">-1</span></code> 、 <code class="docutils literal"><span class="pre">1//(-2)</span></code> は <code class="docutils literal"><span class="pre">-1</span></code> 、そして <code class="docutils literal"><span class="pre">(-1)//(-2)</span></code> は <code class="docutils literal"><span class="pre">0</span></code> です。</p>
 </li>
 <li><p class="first">複素数型には使えません。適用可能な場合には代わりに <a class="reference internal" href="functions.html#abs" title="abs"><code class="xref py py-func docutils literal"><span class="pre">abs()</span></code></a> で浮動小数点型に変換してください。</p>
 </li>
-<li><p id="index-16">浮動小数点数から整数への変換はC言語と同様の方法で丸め、または切り捨てられます; より明確に定義された変換を行う場合は、 <a class="reference internal" href="math.html#math.floor" title="math.floor"><code class="xref py py-func docutils literal"><span class="pre">math.floor()</span></code></a> と <a class="reference internal" href="math.html#math.ceil" title="math.ceil"><code class="xref py py-func docutils literal"><span class="pre">math.ceil()</span></code></a> を参照してください。</p>
+<li><p id="index-15">浮動小数点数から整数への変換はC言語と同様の方法で丸め、または切り捨てられます; より明確に定義された変換を行う場合は、 <a class="reference internal" href="math.html#math.floor" title="math.floor"><code class="xref py py-func docutils literal"><span class="pre">math.floor()</span></code></a> と <a class="reference internal" href="math.html#math.ceil" title="math.ceil"><code class="xref py py-func docutils literal"><span class="pre">math.ceil()</span></code></a> を参照してください。</p>
 </li>
 <li><p class="first">浮動小数点数は、文字列 「nan」 と 「inf」 を、オプションの接頭辞 「+」 または 「-」 と共に、非数 (Not a Number (NaN)) や正、負の無限大として受け付けます。</p>
 </li>
 <li><p class="first">Python は、プログラム言語一般でそうであるように、 <code class="docutils literal"><span class="pre">pow(0,</span> <span class="pre">0)</span></code> および <code class="docutils literal"><span class="pre">0</span> <span class="pre">**</span> <span class="pre">0</span></code> を <code class="docutils literal"><span class="pre">1</span></code> と定義します。</p>
 </li>
 <li><p class="first">受け付けられる数値リテラルは数字 <code class="docutils literal"><span class="pre">0</span></code> から <code class="docutils literal"><span class="pre">9</span></code> または等価な Unicode (<code class="docutils literal"><span class="pre">Nd</span></code> プロパティを持つコードポイント) を含みます。</p>
-<p><code class="docutils literal"><span class="pre">Nd</span></code> プロパティを持つコードポイントの完全なリストは <a class="reference external" href="http://www.unicode.org/Public/8.0.0/ucd/extracted/DerivedNumericType.txt">http://www.unicode.org/Public/8.0.0/ucd/extracted/DerivedNumericType.txt</a> をご覧ください。</p>
+<p>See <a class="reference external" href="http://www.unicode.org/Public/9.0.0/ucd/extracted/DerivedNumericType.txt">http://www.unicode.org/Public/9.0.0/ucd/extracted/DerivedNumericType.txt</a>
+for a complete list of code points with the <code class="docutils literal"><span class="pre">Nd</span></code> property.</p>
 </li>
 </ol>
 <p>全ての <a class="reference internal" href="numbers.html#numbers.Real" title="numbers.Real"><code class="xref py py-class docutils literal"><span class="pre">numbers.Real</span></code></a> 型 (<a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a> 、 <a class="reference internal" href="functions.html#float" title="float"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>) は以下の演算も含みます:</p>
@@ -359,7 +358,7 @@
 <p>その他の数値演算は、 <a class="reference internal" href="math.html#module-math" title="math: Mathematical functions (sin() etc.)."><code class="xref py py-mod docutils literal"><span class="pre">math</span></code></a> や <a class="reference internal" href="cmath.html#module-cmath" title="cmath: Mathematical functions for complex numbers."><code class="xref py py-mod docutils literal"><span class="pre">cmath</span></code></a> モジュールをご覧ください。</p>
 <div class="section" id="bitwise-operations-on-integer-types">
 <span id="bitstring-ops"></span><h3>4.4.1. 整数型におけるビット単位演算<a class="headerlink" href="#bitwise-operations-on-integer-types" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p id="index-17">ビット単位演算は、整数に対してのみ意味があります。負の数は、その 2 の補数の値として扱われます (演算中にオーバフローが起こらないように十分なビット数があるものと仮定します) 。</p>
+<p id="index-16">ビット単位演算は、整数に対してのみ意味があります。負の数は、その 2 の補数の値として扱われます (演算中にオーバフローが起こらないように十分なビット数があるものと仮定します) 。</p>
 <p>二項ビット単位演算の優先順位は全て、数値演算よりも低く、比較よりも高くなっています; 単項演算 <code class="docutils literal"><span class="pre">~</span></code> の優先順位は他の単項数値演算 (<code class="docutils literal"><span class="pre">+</span></code> および <code class="docutils literal"><span class="pre">-</span></code>) と同じです。</p>
 <p>以下の表では、ビット単位演算を優先順位が低い順に並べています:</p>
 <table border="1" class="docutils">
@@ -601,7 +600,7 @@
 </div>
 <div class="section" id="iterator-types">
 <span id="typeiter"></span><h2>4.5. イテレータ型<a class="headerlink" href="#iterator-types" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p id="index-18">Python はコンテナでの反復処理の概念をサポートしています。この概念は 2 つの別々のメソッドを使って実装されています; これらのメソッドを使ってユーザ定義のクラスで反復を行えるようにできます。後に詳しく述べるシーケンスは、必ず反復処理メソッドをサポートしています。</p>
+<p id="index-17">Python はコンテナでの反復処理の概念をサポートしています。この概念は 2 つの別々のメソッドを使って実装されています; これらのメソッドを使ってユーザ定義のクラスで反復を行えるようにできます。後に詳しく述べるシーケンスは、必ず反復処理メソッドをサポートしています。</p>
 <p>コンテナオブジェクトに反復処理をサポートさせるためには、以下のメソッドを定義しなければなりません:</p>
 <dl class="method">
 <dt id="container.__iter__">
@@ -634,10 +633,12 @@
 <p>基本的なシーケンス型は 3 つあります: リスト、タプル、range オブジェクトです。<a class="reference internal" href="#binaryseq"><span class="std std-ref">バイナリデータ</span></a> や <a class="reference internal" href="#textseq"><span class="std std-ref">テキスト文字列</span></a> を処理するように仕立てられたシーケンス型は、セクションを割いて解説します。</p>
 <div class="section" id="common-sequence-operations">
 <span id="typesseq-common"></span><h3>4.6.1. 共通のシーケンス演算<a class="headerlink" href="#common-sequence-operations" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p id="index-19">以下の表にある演算は、ほとんどのミュータブル、イミュータブル両方のシーケンスでサポートされています。カスタムのシーケンス型にこれらの演算を完全に実装するのが簡単になるように、 <a class="reference internal" href="collections.abc.html#collections.abc.Sequence" title="collections.abc.Sequence"><code class="xref py py-class docutils literal"><span class="pre">collections.abc.Sequence</span></code></a> ABC が提供されています。</p>
+<p id="index-18">以下の表にある演算は、ほとんどのミュータブル、イミュータブル両方のシーケンスでサポートされています。カスタムのシーケンス型にこれらの演算を完全に実装するのが簡単になるように、 <a class="reference internal" href="collections.abc.html#collections.abc.Sequence" title="collections.abc.Sequence"><code class="xref py py-class docutils literal"><span class="pre">collections.abc.Sequence</span></code></a> ABC が提供されています。</p>
 <p>以下のテーブルで、シーケンス演算を優先順位が低い順に挙げます。表内で、 <em>s</em> と <em>t</em> は同じ型のシーケンス、 <em>n</em>、 <em>i</em>、 <em>j</em> 、 <em>k</em> は整数、<em>x</em> は <em>s</em> に課された型と値の条件を満たす任意のオブジェクトです。</p>
-<p><code class="docutils literal"><span class="pre">in</span></code> および <code class="docutils literal"><span class="pre">not</span> <span class="pre">in</span></code> 演算の優先順位は比較演算と同じです。<code class="docutils literal"><span class="pre">+</span></code> (結合) および <code class="docutils literal"><span class="pre">*</span></code> (繰り返し)の優先順位は対応する数値演算と同じです。</p>
-<table border="1" class="docutils" id="index-20">
+<p>The <code class="docutils literal"><span class="pre">in</span></code> and <code class="docutils literal"><span class="pre">not</span> <span class="pre">in</span></code> operations have the same priorities as the
+comparison operations. The <code class="docutils literal"><span class="pre">+</span></code> (concatenation) and <code class="docutils literal"><span class="pre">*</span></code> (repetition)
+operations have the same priority as the corresponding numeric operations. <a class="footnote-reference" href="#id14" id="id4">[3]</a></p>
+<table border="1" class="docutils" id="index-19">
 <colgroup>
 <col width="38%" />
 <col width="47%" />
@@ -703,7 +704,7 @@
 <p>同じ型のシーケンスは比較もサポートしています。特に、タプルとリストは対応する要素を比較することで辞書式順序で比較されます。つまり、等しいとされるためには、すべての要素が等しく、両シーケンスの型も長さも等しくなければなりません。(完全な詳細は言語リファレンスの <a class="reference internal" href="../reference/expressions.html#comparisons"><span class="std std-ref">比較</span></a> を参照してください。)</p>
 <p>注釈:</p>
 <ol class="arabic">
-<li><p class="first"><code class="docutils literal"><span class="pre">in</span></code> および <code class="docutils literal"><span class="pre">not</span> <span class="pre">in</span></code> 演算は、一般に単純な包含判定にのみ使われますが、(<a class="reference internal" href="#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>, <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a>, <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> のような) 特殊なシーケンスでは部分シーケンス判定にも使われます:</p>
+<li><p class="first"><code class="docutils literal"><span class="pre">in</span></code> および <code class="docutils literal"><span class="pre">not</span> <span class="pre">in</span></code> 演算は、一般に単純な包含判定にのみ使われますが、(<a class="reference internal" href="#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a>, <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a>, <a class="reference internal" href="#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> のような) 特殊なシーケンスでは部分シーケンス判定にも使われます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;gg&quot;</span> <span class="ow">in</span> <span class="s2">&quot;eggs&quot;</span>
 <span class="go">True</span>
 </pre></div>
@@ -739,7 +740,7 @@
 <li><p class="first">イミュータブルなシーケンスの結合は、常に新しいオブジェクトを返します。これは、結合の繰り返しでシーケンスを構築する実行時間コストがシーケンスの長さの合計の二次式になることを意味します。実行時間コストを線形にするには、代わりに以下のいずれかにしてください:</p>
 <ul class="simple">
 <li><a class="reference internal" href="#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> オブジェクトを結合するには、リストを構築して最後に <a class="reference internal" href="#str.join" title="str.join"><code class="xref py py-meth docutils literal"><span class="pre">str.join()</span></code></a> を使うか、 <a class="reference internal" href="io.html#io.StringIO" title="io.StringIO"><code class="xref py py-class docutils literal"><span class="pre">io.StringIO</span></code></a> インスタンスに書き込んで完成してから値を取得してください</li>
-<li><a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトを結合するなら、同様に <a class="reference internal" href="#bytes.join" title="bytes.join"><code class="xref py py-meth docutils literal"><span class="pre">bytes.join()</span></code></a> や <a class="reference internal" href="io.html#io.BytesIO" title="io.BytesIO"><code class="xref py py-class docutils literal"><span class="pre">io.BytesIO</span></code></a> を使うか、 <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> オブジェクトでインプレースに結合できます。 <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> オブジェクトはミュータブルで、効率のいい割り当て超過機構を備えています</li>
+<li><a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトを結合するなら、同様に <a class="reference internal" href="#bytes.join" title="bytes.join"><code class="xref py py-meth docutils literal"><span class="pre">bytes.join()</span></code></a> や <a class="reference internal" href="io.html#io.BytesIO" title="io.BytesIO"><code class="xref py py-class docutils literal"><span class="pre">io.BytesIO</span></code></a> を使うか、 <a class="reference internal" href="#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> オブジェクトでインプレースに結合できます。 <a class="reference internal" href="#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> オブジェクトはミュータブルで、効率のいい割り当て超過機構を備えています</li>
 <li><a class="reference internal" href="#tuple" title="tuple"><code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></a> オブジェクトを結合するなら、代わりに <a class="reference internal" href="#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> を拡張してください</li>
 <li>その他の型については、関連するクラスのドキュメントを調べてください</li>
 </ul>
@@ -752,15 +753,15 @@
 </div>
 <div class="section" id="immutable-sequence-types">
 <span id="typesseq-immutable"></span><h3>4.6.2. イミュータブルなシーケンス型<a class="headerlink" href="#immutable-sequence-types" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p id="index-21">イミュータブルなシーケンス型が一般に実装している演算のうち、ミュータブルなシーケンス型がサポートしていないのは、組み込みの <a class="reference internal" href="functions.html#hash" title="hash"><code class="xref py py-func docutils literal"><span class="pre">hash()</span></code></a> だけです。</p>
+<p id="index-20">イミュータブルなシーケンス型が一般に実装している演算のうち、ミュータブルなシーケンス型がサポートしていないのは、組み込みの <a class="reference internal" href="functions.html#hash" title="hash"><code class="xref py py-func docutils literal"><span class="pre">hash()</span></code></a> だけです。</p>
 <p>このサポートにより、<a class="reference internal" href="#tuple" title="tuple"><code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></a> インスタンスのようなイミュータブルなシーケンスは、 <a class="reference internal" href="#dict" title="dict"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> のキーとして使え、 <a class="reference internal" href="#set" title="set"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a> や <a class="reference internal" href="#frozenset" title="frozenset"><code class="xref py py-class docutils literal"><span class="pre">frozenset</span></code></a> インスタンスに保存できます。</p>
 <p>ハッシュ不可能な値を含むイミュータブルなシーケンスをハッシュ化しようとすると、 <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> となります。</p>
 </div>
 <div class="section" id="mutable-sequence-types">
 <span id="typesseq-mutable"></span><h3>4.6.3. ミュータブルなシーケンス型<a class="headerlink" href="#mutable-sequence-types" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p id="index-22">以下のテーブルにある演算は、ほとんどのミュータブルなシーケンスでサポートされています。カスタムのシーケンス型にこれらの演算を完全に実装するのが簡単になるように、 <a class="reference internal" href="collections.abc.html#collections.abc.MutableSequence" title="collections.abc.MutableSequence"><code class="xref py py-class docutils literal"><span class="pre">collections.abc.MutableSequence</span></code></a> ABC が提供されています。</p>
-<p>このテーブルで、 <em>s</em> はミュータブルなシーケンス型のインスタンス、 <em>t</em> は任意のイテラブルオブジェクト、 <em>x</em> は <em>s</em> に課された型と値の条件を満たす任意のオブジェクト (例えば、 <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> は値の制限 <code class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">x</span> <span class="pre">&lt;=</span> <span class="pre">255</span></code> に合う整数のみを受け付けます) です。</p>
-<table border="1" class="docutils" id="index-23">
+<p id="index-21">以下のテーブルにある演算は、ほとんどのミュータブルなシーケンスでサポートされています。カスタムのシーケンス型にこれらの演算を完全に実装するのが簡単になるように、 <a class="reference internal" href="collections.abc.html#collections.abc.MutableSequence" title="collections.abc.MutableSequence"><code class="xref py py-class docutils literal"><span class="pre">collections.abc.MutableSequence</span></code></a> ABC が提供されています。</p>
+<p>このテーブルで、 <em>s</em> はミュータブルなシーケンス型のインスタンス、 <em>t</em> は任意のイテラブルオブジェクト、 <em>x</em> は <em>s</em> に課された型と値の条件を満たす任意のオブジェクト (例えば、 <a class="reference internal" href="#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> は値の制限 <code class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">x</span> <span class="pre">&lt;=</span> <span class="pre">255</span></code> に合う整数のみを受け付けます) です。</p>
+<table border="1" class="docutils" id="index-22">
 <colgroup>
 <col width="36%" />
 <col width="39%" />
@@ -852,7 +853,7 @@
 </div>
 <div class="section" id="lists">
 <span id="typesseq-list"></span><h3>4.6.4. リスト型 (list)<a class="headerlink" href="#lists" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p id="index-24">リストはミュータブルなシーケンスで、一般的に同種の項目の集まりを格納するために使われます (厳密な類似の度合いはアプリケーションによって異なる場合があります)。</p>
+<p id="index-23">リストはミュータブルなシーケンスで、一般的に同種の項目の集まりを格納するために使われます (厳密な類似の度合いはアプリケーションによって異なる場合があります)。</p>
 <dl class="class">
 <dt id="list">
 <em class="property">class </em><code class="descname">list</code><span class="sig-paren">(</span><span class="optional">[</span><em>iterable</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#list" title="この定義へのパーマリンク">¶</a></dt>
@@ -868,7 +869,7 @@
 <p>リストは <a class="reference internal" href="#typesseq-common"><span class="std std-ref">共通の</span></a> および <a class="reference internal" href="#typesseq-mutable"><span class="std std-ref">ミュータブルの</span></a> シーケンス演算をすべて実装します。リストは、更に以下のメソッドも提供します:</p>
 <dl class="method">
 <dt id="list.sort">
-<code class="descname">sort</code><span class="sig-paren">(</span><em>*</em>, <em>key=None</em>, <em>reverse=None</em><span class="sig-paren">)</span><a class="headerlink" href="#list.sort" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">sort</code><span class="sig-paren">(</span><em>*</em>, <em>key=None</em>, <em>reverse=False</em><span class="sig-paren">)</span><a class="headerlink" href="#list.sort" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>このメソッドは、項目間の <code class="docutils literal"><span class="pre">&lt;</span></code> 比較のみを用いてリストをインプレースにソートします。例外は抑制されません。比較演算がどこかで失敗したら、ソート演算自体が失敗します (そしてリストは部分的に変更された状態で残されるでしょう)。</p>
 <p><a class="reference internal" href="#list.sort" title="list.sort"><code class="xref py py-meth docutils literal"><span class="pre">sort()</span></code></a> には２つの引数をキーワード引数 (<a class="reference internal" href="../glossary.html#keyword-only-parameter"><span class="std std-ref">keyword-only arguments</span></a>) としてのみ渡せます :</p>
 <p><em>key</em> は一引数をとる関数を指定し、リストのそれぞれの要素から比較キーを取り出すのに使います (例えば、 <code class="docutils literal"><span class="pre">key=str.lower</span></code>)。それぞれの項目に対応するキーは一度計算され、ソート処理全体に使われます。デフォルトの値 <code class="docutils literal"><span class="pre">None</span></code> は、別のキー値を計算せず、リストの値が直接ソートされることを意味します。</p>
@@ -886,7 +887,7 @@
 </div>
 <div class="section" id="tuples">
 <span id="typesseq-tuple"></span><h3>4.6.5. タプル型 (tuple)<a class="headerlink" href="#tuples" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p id="index-25">タプルはイミュータブルなシーケンスで、一般的に異種のデータの集まり (組み込みの <a class="reference internal" href="functions.html#enumerate" title="enumerate"><code class="xref py py-func docutils literal"><span class="pre">enumerate()</span></code></a> で作られた 2-タプルなど) を格納するために使われます。タプルはまた、同種のデータのイミュータブルなシーケンスが必要な場合 (<a class="reference internal" href="#set" title="set"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a> インスタンスや <a class="reference internal" href="#dict" title="dict"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> インスタンスに保存できるようにするためなど) にも使われます。</p>
+<p id="index-24">タプルはイミュータブルなシーケンスで、一般的に異種のデータの集まり (組み込みの <a class="reference internal" href="functions.html#enumerate" title="enumerate"><code class="xref py py-func docutils literal"><span class="pre">enumerate()</span></code></a> で作られた 2-タプルなど) を格納するために使われます。タプルはまた、同種のデータのイミュータブルなシーケンスが必要な場合 (<a class="reference internal" href="#set" title="set"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a> インスタンスや <a class="reference internal" href="#dict" title="dict"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> インスタンスに保存できるようにするためなど) にも使われます。</p>
 <dl class="class">
 <dt id="tuple">
 <em class="property">class </em><code class="descname">tuple</code><span class="sig-paren">(</span><span class="optional">[</span><em>iterable</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#tuple" title="この定義へのパーマリンク">¶</a></dt>
@@ -906,7 +907,7 @@
 </div>
 <div class="section" id="ranges">
 <span id="typesseq-range"></span><h3>4.6.6. range<a class="headerlink" href="#ranges" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p id="index-26"><a class="reference internal" href="#range" title="range"><code class="xref py py-class docutils literal"><span class="pre">range</span></code></a> 型は、数のイミュータブルなシーケンスを表し、一般に <a class="reference internal" href="../reference/compound_stmts.html#for"><code class="xref std std-keyword docutils literal"><span class="pre">for</span></code></a> ループにおいて特定の回数のループに使われます。</p>
+<p id="index-25"><a class="reference internal" href="#range" title="range"><code class="xref py py-class docutils literal"><span class="pre">range</span></code></a> 型は、数のイミュータブルなシーケンスを表し、一般に <a class="reference internal" href="../reference/compound_stmts.html#for"><code class="xref std std-keyword docutils literal"><span class="pre">for</span></code></a> ループにおいて特定の回数のループに使われます。</p>
 <dl class="class">
 <dt id="range">
 <em class="property">class </em><code class="descname">range</code><span class="sig-paren">(</span><em>stop</em><span class="sig-paren">)</span><a class="headerlink" href="#range" title="この定義へのパーマリンク">¶</a></dt>
@@ -993,7 +994,7 @@
 </div>
 </div>
 <div class="section" id="text-sequence-type-str">
-<span id="textseq"></span><span id="index-27"></span><h2>4.7. テキストシーケンス型 — <a class="reference internal" href="#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a><a class="headerlink" href="#text-sequence-type-str" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<span id="textseq"></span><span id="index-26"></span><h2>4.7. テキストシーケンス型 — <a class="reference internal" href="#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a><a class="headerlink" href="#text-sequence-type-str" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Python のテキストデータは <a class="reference internal" href="#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> オブジェクト、すなわち <em class="dfn">文字列</em> として扱われます。文字列は Unicode コードポイントのイミュータブルな <a class="reference internal" href="#typesseq"><span class="std std-ref">シーケンス</span></a> です。文字列リテラルには様々な記述方法があります:</p>
 <ul class="simple">
 <li>シングルクォート: <code class="docutils literal"><span class="pre">'&quot;ダブル&quot;</span> <span class="pre">クォートを埋め込むことができます'</span></code></li>
@@ -1005,19 +1006,19 @@
 <p>エスケープシーケンスを含む文字列や、ほとんどのエスケープシーケンス処理を無効にする <code class="docutils literal"><span class="pre">r</span></code> (「raw」) 接頭辞などの、文字列リテラルの様々な形式は、<a class="reference internal" href="../reference/lexical_analysis.html#strings"><span class="std std-ref">文字列およびバイト列リテラル</span></a> を参照してください。</p>
 <p>文字列は他のオブジェクトに <a class="reference internal" href="#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> コンストラクタを使うことでも生成できます。</p>
 <p>「character」 型が特別に用意されているわけではないので、文字列のインデックス指定を行うと長さ 1 の文字列を作成します。つまり、空でない文字列 <em>s</em> に対し、<code class="docutils literal"><span class="pre">s[0]</span> <span class="pre">==</span> <span class="pre">s[0:1]</span></code> です。</p>
-<p id="index-28">ミュータブルな文字列型もありませんが、ミュータブルな断片から効率よく文字列を構成するのに <a class="reference internal" href="#str.join" title="str.join"><code class="xref py py-meth docutils literal"><span class="pre">str.join()</span></code></a> や <a class="reference internal" href="io.html#io.StringIO" title="io.StringIO"><code class="xref py py-class docutils literal"><span class="pre">io.StringIO</span></code></a> が使えます。</p>
+<p id="index-27">ミュータブルな文字列型もありませんが、ミュータブルな断片から効率よく文字列を構成するのに <a class="reference internal" href="#str.join" title="str.join"><code class="xref py py-meth docutils literal"><span class="pre">str.join()</span></code></a> や <a class="reference internal" href="io.html#io.StringIO" title="io.StringIO"><code class="xref py py-class docutils literal"><span class="pre">io.StringIO</span></code></a> が使えます。</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.3 で変更: </span>Python 2 シリーズとの後方互換性のため、文字列リテラルの <code class="docutils literal"><span class="pre">u</span></code> 接頭辞が改めて許可されました。それは文字列リテラルとしての意味には影響がなく、 <code class="docutils literal"><span class="pre">r</span></code> 接頭辞と結合することはできません。</p>
 </div>
-<span class="target" id="index-29"></span><dl class="class">
+<span class="target" id="index-28"></span><dl class="class">
 <dt id="str">
 <em class="property">class </em><code class="descname">str</code><span class="sig-paren">(</span><em>object=''</em><span class="sig-paren">)</span><a class="headerlink" href="#str" title="この定義へのパーマリンク">¶</a></dt>
 <dt>
 <em class="property">class </em><code class="descname">str</code><span class="sig-paren">(</span><em>object=b''</em>, <em>encoding='utf-8'</em>, <em>errors='strict'</em><span class="sig-paren">)</span></dt>
 <dd><p><em>object</em> の <a class="reference internal" href="#textseq"><span class="std std-ref">文字列</span></a> 版を返します。 <em>object</em> が与えられなかった場合、空文字列が返されます。それ以外の場合 <code class="docutils literal"><span class="pre">str()</span></code> の動作は、 <em>encoding</em> や <em>errors</em> が与えられたかどうかによって次のように変わります。</p>
 <p><em>encoding</em> も <em>errors</em> も与えられない場合、 <code class="docutils literal"><span class="pre">str(object)</span></code> は <a class="reference internal" href="../reference/datamodel.html#object.__str__" title="object.__str__"><code class="xref py py-meth docutils literal"><span class="pre">object.__str__()</span></code></a> の結果を返します。これは 「略式の」 つまり読み易い <em>object</em> の文字列表現です。文字列オブジェクトに対してはその文字列自体を返します。 <em>object</em> が <a class="reference internal" href="../reference/datamodel.html#object.__str__" title="object.__str__"><code class="xref py py-meth docutils literal"><span class="pre">__str__()</span></code></a> メソッドを持たない場合、<a class="reference internal" href="#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> は代わりに <a class="reference internal" href="functions.html#repr" title="repr"><code class="xref py py-meth docutils literal"><span class="pre">repr(object)</span></code></a> の結果を返します。</p>
-<p id="index-30"><em>encoding</em> か <em>errors</em> の少なくとも一方が与えられた場合、 <em>object</em> は <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> (たとえば <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> や <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a>) でなくてはなりません。<em>object</em> が <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> (もしくは <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a>) オブジェクトである場合は、 <code class="docutils literal"><span class="pre">str(bytes,</span> <span class="pre">encoding,</span> <span class="pre">errors)</span></code> は <a class="reference internal" href="#bytes.decode" title="bytes.decode"><code class="xref py py-meth docutils literal"><span class="pre">bytes.decode(encoding,</span> <span class="pre">errors)</span></code></a> と等価です。そうでない場合は、 <a class="reference internal" href="#bytes.decode" title="bytes.decode"><code class="xref py py-meth docutils literal"><span class="pre">bytes.decode()</span></code></a> が呼ばれる前に buffer オブジェクトの下層にある bytes オブジェクトが取得されます。 buffer オブジェクトについて詳しい情報は、 <a class="reference internal" href="#binaryseq"><span class="std std-ref">バイナリシーケンス型 — bytes, bytearray, memoryview</span></a> や <a class="reference internal" href="../c-api/buffer.html#bufferobjects"><span class="std std-ref">バッファプロトコル (buffer Protocol)</span></a> を参照してください。</p>
-<p><em>encoding</em> 引数や <em>errors</em> 引数無しに <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトを <a class="reference internal" href="#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> に渡すと、略式の文字列表現を返す 1 つ目の場合に該当します。(Python のコマンドラインオプション <a class="reference internal" href="../using/cmdline.html#cmdoption-b"><code class="xref std std-option docutils literal"><span class="pre">-b</span></code></a> も参照してください) 例えば:</p>
+<p id="index-29"><em>encoding</em> か <em>errors</em> の少なくとも一方が与えられた場合、 <em>object</em> は <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> (たとえば <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> や <a class="reference internal" href="#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a>) でなくてはなりません。<em>object</em> が <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> (もしくは <a class="reference internal" href="#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a>) オブジェクトである場合は、 <code class="docutils literal"><span class="pre">str(bytes,</span> <span class="pre">encoding,</span> <span class="pre">errors)</span></code> は <a class="reference internal" href="#bytes.decode" title="bytes.decode"><code class="xref py py-meth docutils literal"><span class="pre">bytes.decode(encoding,</span> <span class="pre">errors)</span></code></a> と等価です。そうでない場合は、 <a class="reference internal" href="#bytes.decode" title="bytes.decode"><code class="xref py py-meth docutils literal"><span class="pre">bytes.decode()</span></code></a> が呼ばれる前に buffer オブジェクトの下層にある bytes オブジェクトが取得されます。 buffer オブジェクトについて詳しい情報は、 <a class="reference internal" href="#binaryseq"><span class="std std-ref">バイナリシーケンス型 — bytes, bytearray, memoryview</span></a> や <a class="reference internal" href="../c-api/buffer.html#bufferobjects"><span class="std std-ref">バッファプロトコル (buffer Protocol)</span></a> を参照してください。</p>
+<p><em>encoding</em> 引数や <em>errors</em> 引数無しに <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトを <a class="reference internal" href="#str" title="str"><code class="xref py py-func docutils literal"><span class="pre">str()</span></code></a> に渡すと、略式の文字列表現を返す 1 つ目の場合に該当します。(Python のコマンドラインオプション <a class="reference internal" href="../using/cmdline.html#cmdoption-b"><code class="xref std std-option docutils literal"><span class="pre">-b</span></code></a> も参照してください) 例えば:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;Zoot!&#39;</span><span class="p">)</span>
 <span class="go">&quot;b&#39;Zoot!&#39;&quot;</span>
 </pre></div>
@@ -1026,8 +1027,8 @@
 </dd></dl>
 
 <div class="section" id="string-methods">
-<span id="index-31"></span><span id="id4"></span><h3>4.7.1. 文字列メソッド<a class="headerlink" href="#string-methods" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p id="index-32">文字列は <a class="reference internal" href="#typesseq-common"><span class="std std-ref">共通の</span></a> シーケンス演算全てに加え、以下に述べるメソッドを実装します。</p>
+<span id="index-30"></span><span id="id5"></span><h3>4.7.1. 文字列メソッド<a class="headerlink" href="#string-methods" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p id="index-31">文字列は <a class="reference internal" href="#typesseq-common"><span class="std std-ref">共通の</span></a> シーケンス演算全てに加え、以下に述べるメソッドを実装します。</p>
 <p>文字列は、二形式の文字列書式化をサポートします。一方は柔軟さが高くカスタマイズできます (<a class="reference internal" href="#str.format" title="str.format"><code class="xref py py-meth docutils literal"><span class="pre">str.format()</span></code></a>、 <a class="reference internal" href="string.html#formatstrings"><span class="std std-ref">書式指定文字列の文法</span></a> 、および <a class="reference internal" href="string.html#string-formatting"><span class="std std-ref">カスタムの文字列書式化</span></a> を参照してください)。他方は C 言語の <code class="docutils literal"><span class="pre">printf</span></code> 形式の書式化に基づいてより狭い範囲と型を扱うもので、正しく扱うのは少し難しいですが、扱える場合ではたいていこちらのほうが高速です (<a class="reference internal" href="#old-string-formatting"><span class="std std-ref">printf 形式の文字列書式化</span></a>)。</p>
 <p>標準ライブラリの <a class="reference internal" href="text.html#textservices"><span class="std std-ref">テキスト処理サービス</span></a> 節は、その他テキストに関する様々なユーティリティ (<a class="reference internal" href="re.html#module-re" title="re: Regular expression operations."><code class="xref py py-mod docutils literal"><span class="pre">re</span></code></a> モジュールによる正規表現サポートなど) を提供するいくつかのモジュールをカバーしています。</p>
 <dl class="method">
@@ -1168,7 +1169,7 @@
 <dl class="method">
 <dt id="str.islower">
 <code class="descclassname">str.</code><code class="descname">islower</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#str.islower" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>文字列中の大小文字の区別のある文字 <a class="footnote-reference" href="#id14" id="id5">[4]</a> 全てが小文字で、かつ大小文字の区別のある文字が 1 文字以上あるなら真を、そうでなければ偽を返します。</p>
+<dd><p>文字列中の大小文字の区別のある文字 <a class="footnote-reference" href="#id15" id="id6">[4]</a> 全てが小文字で、かつ大小文字の区別のある文字が 1 文字以上あるなら真を、そうでなければ偽を返します。</p>
 </dd></dl>
 
 <dl class="method">
@@ -1198,13 +1199,16 @@
 <dl class="method">
 <dt id="str.isupper">
 <code class="descclassname">str.</code><code class="descname">isupper</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#str.isupper" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>文字列中の大小文字の区別のある文字 <a class="footnote-reference" href="#id14" id="id6">[4]</a> 全てが大文字で、かつ大小文字の区別のある文字が 1 文字以上あるなら真を、そうでなければ偽を返します。</p>
+<dd><p>文字列中の大小文字の区別のある文字 <a class="footnote-reference" href="#id15" id="id7">[4]</a> 全てが大文字で、かつ大小文字の区別のある文字が 1 文字以上あるなら真を、そうでなければ偽を返します。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="str.join">
 <code class="descclassname">str.</code><code class="descname">join</code><span class="sig-paren">(</span><em>iterable</em><span class="sig-paren">)</span><a class="headerlink" href="#str.join" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><a class="reference internal" href="../glossary.html#term-iterable"><span class="xref std std-term">イテラブル</span></a> <em>iterable</em> 中の文字列を結合した文字列を返します。 <em>iterable</em> に <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトのような非文字列の値が存在するなら、 <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> が送出されます。要素間のセパレータは、このメソッドを提供する文字列です。</p>
+<dd><p>Return a string which is the concatenation of the strings in <em>iterable</em>.
+A <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> will be raised if there are any non-string values in
+<em>iterable</em>, including <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> objects.  The separator between
+elements is the string providing this method.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1216,7 +1220,7 @@
 <dl class="method">
 <dt id="str.lower">
 <code class="descclassname">str.</code><code class="descname">lower</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#str.lower" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>全ての大小文字の区別のある文字 <a class="footnote-reference" href="#id14" id="id7">[4]</a> が小文字に変換された、文字列のコピーを返します。</p>
+<dd><p>全ての大小文字の区別のある文字 <a class="footnote-reference" href="#id15" id="id8">[4]</a> が小文字に変換された、文字列のコピーを返します。</p>
 <p>使われる小文字化のアルゴリズムは Unicode Standard のセクション 3.13 に記述されています。</p>
 </dd></dl>
 
@@ -1320,7 +1324,7 @@
 </div>
 </dd></dl>
 
-<span class="target" id="index-33"></span><dl class="method">
+<span class="target" id="index-32"></span><dl class="method">
 <dt id="str.splitlines">
 <code class="descclassname">str.</code><code class="descname">splitlines</code><span class="sig-paren">(</span><span class="optional">[</span><em>keepends</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#str.splitlines" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>文字列を改行部分で分解し、各行からなるリストを返します。 <em>keepends</em> に真が与えらない限り、返されるリストに改行は含まれません。</p>
@@ -1466,7 +1470,7 @@
 <dl class="method">
 <dt id="str.upper">
 <code class="descclassname">str.</code><code class="descname">upper</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#str.upper" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>全ての大小文字の区別のある文字 <a class="footnote-reference" href="#id14" id="id8">[4]</a> が大文字に変換された、文字列のコピーを返します。なお <code class="docutils literal"><span class="pre">str.upper().isupper()</span></code> は、 <code class="docutils literal"><span class="pre">s</span></code> が大小文字の区別のある文字を含まなかったり、結果の文字の Unicode カテゴリが 「Lu」 ではなく例えば 「Lt」 (Letter, titlecase) などであったら、 <code class="docutils literal"><span class="pre">False</span></code> になりえます。</p>
+<dd><p>全ての大小文字の区別のある文字 <a class="footnote-reference" href="#id15" id="id9">[4]</a> が大文字に変換された、文字列のコピーを返します。なお <code class="docutils literal"><span class="pre">str.upper().isupper()</span></code> は、 <code class="docutils literal"><span class="pre">s</span></code> が大小文字の区別のある文字を含まなかったり、結果の文字の Unicode カテゴリが 「Lu」 ではなく例えば 「Lt」 (Letter, titlecase) などであったら、 <code class="docutils literal"><span class="pre">False</span></code> になりえます。</p>
 <p>使われる大文字化のアルゴリズムは Unicode Standard のセクション 3.13 に記述されています。</p>
 </dd></dl>
 
@@ -1486,12 +1490,12 @@
 </div>
 <div class="section" id="printf-style-string-formatting">
 <span id="old-string-formatting"></span><h3>4.7.2. <code class="docutils literal"><span class="pre">printf</span></code> 形式の文字列書式化<a class="headerlink" href="#printf-style-string-formatting" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<div class="admonition note" id="index-34">
+<div class="admonition note" id="index-33">
 <p class="first admonition-title">注釈</p>
 <p class="last">ここで述べる書式化演算には様々な癖があり、よく間違いの元になっています (タプルや辞書を正しく表示できないなど)。新しい <a class="reference internal" href="../reference/lexical_analysis.html#f-strings"><span class="std std-ref">フォーマット文字列リテラル</span></a> や <a class="reference internal" href="#str.format" title="str.format"><code class="xref py py-meth docutils literal"><span class="pre">str.format()</span></code></a> インタフェースの方が間違いにくく、より強力で、柔軟で、さらに拡張可能です。</p>
 </div>
 <p>文字列オブジェクトには固有の操作: <code class="docutils literal"><span class="pre">%</span></code> 演算子 (モジュロ) があります。この演算子は文字列 <em>書式化</em> または <em>補間</em> 演算子とも呼ばれます。<code class="docutils literal"><span class="pre">format</span> <span class="pre">%</span> <span class="pre">values</span></code> (<em>format</em> は文字列) とすると、<em>format</em> 中の <code class="docutils literal"><span class="pre">%</span></code> 変換指定は <em>values</em> 中のゼロ個またはそれ以上の要素で置換されます。この動作は C 言語における <code class="xref c c-func docutils literal"><span class="pre">sprintf()</span></code> に似ています。</p>
-<p><em>format</em> が単一の引数しか要求しない場合、 <em>values</em> はタプルでない単一のオブジェクトでもかまいません。 <a class="footnote-reference" href="#id15" id="id9">[5]</a> それ以外の場合、 <em>values</em> はフォーマット文字列中で指定された項目と正確に同じ数の要素からなるタプルか、単一のマップオブジェクトでなければなりません。</p>
+<p><em>format</em> が単一の引数しか要求しない場合、 <em>values</em> はタプルでない単一のオブジェクトでもかまいません。 <a class="footnote-reference" href="#id16" id="id10">[5]</a> それ以外の場合、 <em>values</em> はフォーマット文字列中で指定された項目と正確に同じ数の要素からなるタプルか、単一のマップオブジェクトでなければなりません。</p>
 <p>一つの変換指定子は 2 またはそれ以上の文字を含み、その構成要素は以下からなりますが、示した順に出現しなければなりません:</p>
 <ol class="arabic simple">
 <li>指定子の開始を示す文字 <code class="docutils literal"><span class="pre">'%'</span></code> 。</li>
@@ -1637,7 +1641,7 @@
 </li>
 <li><p class="first">精度が <code class="docutils literal"><span class="pre">N</span></code> なら、出力は <code class="docutils literal"><span class="pre">N</span></code> 文字に切り詰められます。</p>
 </li>
-<li><p class="first"><span class="target" id="index-59"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0237"><strong>PEP 237</strong></a> を参照してください。</p>
+<li><p class="first"><span class="target" id="index-58"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0237"><strong>PEP 237</strong></a> を参照してください。</p>
 </li>
 </ol>
 <p>Python 文字列には明示的な長さ情報があるので、 <code class="docutils literal"><span class="pre">%s</span></code> 変換において <code class="docutils literal"><span class="pre">'\0'</span></code> を文字列の末端と仮定したりはしません。</p>
@@ -1647,13 +1651,16 @@
 </div>
 </div>
 <div class="section" id="binary-sequence-types-bytes-bytearray-memoryview">
-<span id="binaryseq"></span><span id="index-36"></span><h2>4.8. バイナリシーケンス型 — <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a>, <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a>, <a class="reference internal" href="#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a><a class="headerlink" href="#binary-sequence-types-bytes-bytearray-memoryview" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p id="index-37">バイナリデータを操作するためのコア組み込み型は <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> および <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> です。これらは、別のバイナリオブジェクトのメモリにコピーを作成すること無くアクセスするための <a class="reference internal" href="../c-api/buffer.html#bufferobjects"><span class="std std-ref">バッファプロトコル</span></a> を利用する <a class="reference internal" href="#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> でサポートされています。</p>
+<span id="binaryseq"></span><span id="index-35"></span><h2>4.8. バイナリシーケンス型 — <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a>, <a class="reference internal" href="#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a>, <a class="reference internal" href="#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a><a class="headerlink" href="#binary-sequence-types-bytes-bytearray-memoryview" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p id="index-36">バイナリデータを操作するためのコア組み込み型は <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> および <a class="reference internal" href="#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> です。これらは、別のバイナリオブジェクトのメモリにコピーを作成すること無くアクセスするための <a class="reference internal" href="../c-api/buffer.html#bufferobjects"><span class="std std-ref">バッファプロトコル</span></a> を利用する <a class="reference internal" href="#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> でサポートされています。</p>
 <p><a class="reference internal" href="array.html#module-array" title="array: Space efficient arrays of uniformly typed numeric values."><code class="xref py py-mod docutils literal"><span class="pre">array</span></code></a> モジュールは、32 ビット整数や IEEE754 倍精度浮動小数点値のような基本データ型の、効率的な保存をサポートしています。</p>
-<div class="section" id="bytes">
-<span id="typebytes"></span><h3>4.8.1. bytes<a class="headerlink" href="#bytes" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p id="index-38">bytes はバイトの不変なシーケンスです。多くのメジャーなプロトコルがASCIIテキストエンコーディングをベースにしているので、 bytes オブジェクトは ASCII 互換のデータに対してのみ動作する幾つかのメソッドを提供していて、文字列オブジェクトと他の多くの点で近いです。</p>
-<p>まず、 bytes リテラルの構文は文字列リテラルとほぼ同じで、 <code class="docutils literal"><span class="pre">b</span></code> というプリフィックスを付けます:</p>
+<div class="section" id="bytes-objects">
+<span id="typebytes"></span><h3>4.8.1. Bytes Objects<a class="headerlink" href="#bytes-objects" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p id="index-37">bytes はバイトの不変なシーケンスです。多くのメジャーなプロトコルがASCIIテキストエンコーディングをベースにしているので、 bytes オブジェクトは ASCII 互換のデータに対してのみ動作する幾つかのメソッドを提供していて、文字列オブジェクトと他の多くの点で近いです。</p>
+<dl class="class">
+<dt id="bytes">
+<em class="property">class </em><code class="descname">bytes</code><span class="sig-paren">(</span><span class="optional">[</span><em>source</em><span class="optional">[</span>, <em>encoding</em><span class="optional">[</span>, <em>errors</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#bytes" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>まず、 bytes リテラルの構文は文字列リテラルとほぼ同じで、 <code class="docutils literal"><span class="pre">b</span></code> というプリフィックスを付けます:</p>
 <ul class="simple">
 <li>シングルクォート: <code class="docutils literal"><span class="pre">b'still</span> <span class="pre">allows</span> <span class="pre">embedded</span> <span class="pre">&quot;double&quot;</span> <span class="pre">quotes'</span></code></li>
 <li>ダブルクォート: <code class="docutils literal"><span class="pre">b&quot;still</span> <span class="pre">allows</span> <span class="pre">embedded</span> <span class="pre">'single'</span> <span class="pre">quotes&quot;</span></code>.</li>
@@ -1672,8 +1679,10 @@
 <p>16 進数で 2 桁の数は正確に 1 バイトに相当するため、16 進整はバイナリデータを表現する形式として広く使われています。 従って、 bytes 型にはその形式でデータを読み取るための追加のクラスメソッドがあります。</p>
 <dl class="classmethod">
 <dt id="bytes.fromhex">
-<em class="property">classmethod </em><code class="descclassname">bytes.</code><code class="descname">fromhex</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#bytes.fromhex" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> クラスメソッドは、与えられた文字列オブジェクトをデコードして、bytearray オブジェクトを返します。文字列は 1 バイトに 16 進数 2 桁を含まなければなりません。ASCII 空白文字は無視されます。</p>
+<em class="property">classmethod </em><code class="descname">fromhex</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#bytes.fromhex" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>This <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> class method returns a bytes object, decoding the
+given string object.  The string must contain two hexadecimal digits per
+byte, with ASCII whitespace being ignored.</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s1">&#39;2Ef0 F1f2  &#39;</span><span class="p">)</span>
 <span class="go">b&#39;.\xf0\xf1\xf2&#39;</span>
 </pre></div>
@@ -1683,7 +1692,7 @@
 <p>bytes オブジェクトをその 16 進表記に変換するための、反対向きの変換関数があります。</p>
 <dl class="method">
 <dt id="bytes.hex">
-<code class="descclassname">bytes.</code><code class="descname">hex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bytes.hex" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">hex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bytes.hex" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>インスタンス内の 1 バイトにつき 2 つの 16 進数を含む、文字列オブジェクトを返します。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xf0\xf1\xf2</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span>
 <span class="go">&#39;f0f1f2&#39;</span>
@@ -1692,6 +1701,8 @@
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
 </div>
+</dd></dl>
+
 </dd></dl>
 
 <p>bytes オブジェクトは (タプルに似た) 整数のシーケンスなので、 bytes オブジェクト <em>b</em> について、 <code class="docutils literal"><span class="pre">b[0]</span></code> は整数になり、 <code class="docutils literal"><span class="pre">b[0:1]</span></code> は長さ 1 の bytes オブジェクトになります。 (この動作は、文字列に対するインデックス指定もスライスも長さ 1 の文字列を返すのと対照的です。)</p>
@@ -1703,7 +1714,13 @@
 </div>
 <div class="section" id="bytearray-objects">
 <span id="typebytearray"></span><h3>4.8.2. bytearray オブジェクト<a class="headerlink" href="#bytearray-objects" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p id="index-39"><a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> オブジェクトは <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトの可変なバージョンです。 bytearray に専用のリテラル構文はないので、コンストラクタを使って作成します:</p>
+<p id="index-38"><a class="reference internal" href="#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> objects are a mutable counterpart to <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a>
+objects.</p>
+<dl class="class">
+<dt id="bytearray">
+<em class="property">class </em><code class="descname">bytearray</code><span class="sig-paren">(</span><span class="optional">[</span><em>source</em><span class="optional">[</span>, <em>encoding</em><span class="optional">[</span>, <em>errors</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#bytearray" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>There is no dedicated literal syntax for bytearray objects, instead
+they are always created by calling the constructor:</p>
 <ul class="simple">
 <li>空のインスタンスを作る: <code class="docutils literal"><span class="pre">bytearray()</span></code></li>
 <li>指定された長さの0で埋められたインスタンスを作る: <code class="docutils literal"><span class="pre">bytearray(10)</span></code></li>
@@ -1715,8 +1732,10 @@
 <p>16 進数で 2 桁の数は正確に 1 バイトに相当するため、16 進整はバイナリデータを表現する形式として広く使われています。 従って、 bytearray 型にはその形式でデータを読み取るための追加のクラスメソッドがあります。</p>
 <dl class="classmethod">
 <dt id="bytearray.fromhex">
-<em class="property">classmethod </em><code class="descclassname">bytearray.</code><code class="descname">fromhex</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#bytearray.fromhex" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> クラスメソッドは、与えられた文字列オブジェクトをデコードして、bytearray オブジェクトを返します。文字列は 1 バイトに 16 進数 2 桁を含まなければなりません。ASCII 空白文字は無視されます。</p>
+<em class="property">classmethod </em><code class="descname">fromhex</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#bytearray.fromhex" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>This <a class="reference internal" href="#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> class method returns bytearray object, decoding
+the given string object.  The string must contain two hexadecimal digits
+per byte, with ASCII whitespace being ignored.</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">bytearray</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="s1">&#39;2Ef0 F1f2  &#39;</span><span class="p">)</span>
 <span class="go">bytearray(b&#39;.\xf0\xf1\xf2&#39;)</span>
 </pre></div>
@@ -1726,7 +1745,7 @@
 <p>bytearray オブジェクトをその 16 進表記に変換するための、反対向きの変換関数があります。</p>
 <dl class="method">
 <dt id="bytearray.hex">
-<code class="descclassname">bytearray.</code><code class="descname">hex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bytearray.hex" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descname">hex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bytearray.hex" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>インスタンス内の 1 バイトにつき 2 つの 16 進数を含む、文字列オブジェクトを返します。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">bytearray</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xf0\xf1\xf2</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">hex</span><span class="p">()</span>
 <span class="go">&#39;f0f1f2&#39;</span>
@@ -1737,13 +1756,15 @@
 </div>
 </dd></dl>
 
+</dd></dl>
+
 <p>bytearray オブジェクトは整数のシーケンス (リストのようなもの) なので、 bytearray オブジェクト <em>b</em> について、 <code class="docutils literal"><span class="pre">b[0]</span></code> は整数になり、 <code class="docutils literal"><span class="pre">b[0:1]</span></code> は長さ 1 の bytearray オブジェクトになります。(これは、文字列においてインデックス指定もスライスも長さ 1 の文字列を返すのと対照的です。)</p>
 <p>bytearray オブジェクトの表記はバイトのリテラル形式 (<code class="docutils literal"><span class="pre">bytearray(b'...')</span></code>) を使用します。これは <code class="docutils literal"><span class="pre">bytearray([46,</span> <span class="pre">46,</span> <span class="pre">46])</span></code> などの形式よりも便利な事が多いためです。
 bytearray オブジェクトはいつでも <code class="docutils literal"><span class="pre">list(b)</span></code> で整数のリストに変換できます。</p>
 </div>
 <div class="section" id="bytes-and-bytearray-operations">
 <span id="bytes-methods"></span><h3>4.8.3. bytes と bytearray の操作<a class="headerlink" href="#bytes-and-bytearray-operations" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p id="index-40">bytes と bytearray は両方共 <a class="reference internal" href="#typesseq-common"><span class="std std-ref">一般のシーケンス操作</span></a> をサポートしています。また、両方とも <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> をサポートしている任意のオブジェクトを対象に操作することもできます。この柔軟性により bytes と bytearray を自由に混ぜてもエラーを起こすことなく扱うことができます。ただし、操作の結果のオブジェクトはその操作の順序に依存することになります。</p>
+<p id="index-39">bytes と bytearray は両方共 <a class="reference internal" href="#typesseq-common"><span class="std std-ref">一般のシーケンス操作</span></a> をサポートしています。また、両方とも <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> をサポートしている任意のオブジェクトを対象に操作することもできます。この柔軟性により bytes と bytearray を自由に混ぜてもエラーを起こすことなく扱うことができます。ただし、操作の結果のオブジェクトはその操作の順序に依存することになります。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p>文字列のメソッドが引数として bytes を受け付けないのと同様、bytes オブジェクトと bytearray オブジェクトのメソッドは引数として文字列を受け付けません。例えば、以下のように書かなければなりません:</p>
@@ -1836,7 +1857,12 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 <code class="descclassname">bytes.</code><code class="descname">join</code><span class="sig-paren">(</span><em>iterable</em><span class="sig-paren">)</span><a class="headerlink" href="#bytes.join" title="この定義へのパーマリンク">¶</a></dt>
 <dt id="bytearray.join">
 <code class="descclassname">bytearray.</code><code class="descname">join</code><span class="sig-paren">(</span><em>iterable</em><span class="sig-paren">)</span><a class="headerlink" href="#bytearray.join" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><a class="reference internal" href="../glossary.html#term-iterable"><span class="xref std std-term">イテラブル</span></a> <em>iterable</em> 中のバイナリデータを結合した bytes または bytearray オブジェクトを返します。 <em>iterable</em> に <a class="reference internal" href="#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> オブジェクトなど <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like objects</span></a> ではない値が含まれている場合、 <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> が送出されます。なお要素間のセパレータは、このメソッドを提供する bytes または bytearray オブジェクトとなります。</p>
+<dd><p>Return a bytes or bytearray object which is the concatenation of the
+binary data sequences in <em>iterable</em>.  A <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> will be raised
+if there are any values in <em>iterable</em> that are not <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like
+objects</span></a>, including <a class="reference internal" href="#str" title="str"><code class="xref py py-class docutils literal"><span class="pre">str</span></code></a> objects.  The
+separator between elements is the contents of the bytes or
+bytearray object providing this method.</p>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -1937,7 +1963,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 <code class="descclassname">bytes.</code><code class="descname">center</code><span class="sig-paren">(</span><em>width</em><span class="optional">[</span>, <em>fillbyte</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#bytes.center" title="この定義へのパーマリンク">¶</a></dt>
 <dt id="bytearray.center">
 <code class="descclassname">bytearray.</code><code class="descname">center</code><span class="sig-paren">(</span><em>width</em><span class="optional">[</span>, <em>fillbyte</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#bytearray.center" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>長さ <em>width</em> の中央寄せされたシーケンスのコピーを返します。パディングには <em>fillbyte</em> で指定された値 (デフォルトでは ASCII スペース) が使われます。 <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトの場合、 <em>width</em> が <code class="docutils literal"><span class="pre">len(s)</span></code> 以下なら元のシーケンスが返されます。</p>
+<dd><p>長さ <em>width</em> の中央寄せされたシーケンスのコピーを返します。パディングには <em>fillbyte</em> で指定された値 (デフォルトでは ASCII スペース) が使われます。 <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトの場合、 <em>width</em> が <code class="docutils literal"><span class="pre">len(s)</span></code> 以下なら元のシーケンスが返されます。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">bytearray のこのメソッドはインプレースでは動作 <em>しません</em> – 一切変化が無い場合でも、常に新しいオブジェクトを生成します。</p>
@@ -1949,7 +1975,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 <code class="descclassname">bytes.</code><code class="descname">ljust</code><span class="sig-paren">(</span><em>width</em><span class="optional">[</span>, <em>fillbyte</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#bytes.ljust" title="この定義へのパーマリンク">¶</a></dt>
 <dt id="bytearray.ljust">
 <code class="descclassname">bytearray.</code><code class="descname">ljust</code><span class="sig-paren">(</span><em>width</em><span class="optional">[</span>, <em>fillbyte</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#bytearray.ljust" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>長さ <em>width</em> の左寄せされたシーケンスのコピーを返します。パディングには <em>fillbyte</em> で指定された値 (デフォルトでは ASCII スペース) が使われます。 <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトの場合、 <em>width</em> が <code class="docutils literal"><span class="pre">len(s)</span></code> 以下なら元のシーケンスが返されます。</p>
+<dd><p>長さ <em>width</em> の左寄せされたシーケンスのコピーを返します。パディングには <em>fillbyte</em> で指定された値 (デフォルトでは ASCII スペース) が使われます。 <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトの場合、 <em>width</em> が <code class="docutils literal"><span class="pre">len(s)</span></code> 以下なら元のシーケンスが返されます。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">bytearray のこのメソッドはインプレースでは動作 <em>しません</em> – 一切変化が無い場合でも、常に新しいオブジェクトを生成します。</p>
@@ -1980,7 +2006,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 <code class="descclassname">bytes.</code><code class="descname">rjust</code><span class="sig-paren">(</span><em>width</em><span class="optional">[</span>, <em>fillbyte</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#bytes.rjust" title="この定義へのパーマリンク">¶</a></dt>
 <dt id="bytearray.rjust">
 <code class="descclassname">bytearray.</code><code class="descname">rjust</code><span class="sig-paren">(</span><em>width</em><span class="optional">[</span>, <em>fillbyte</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#bytearray.rjust" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>長さ <em>width</em> の右寄せされたシーケンスのコピーを返します。パディングには <em>fillbyte</em> で指定された値 (デフォルトでは ASCII スペース) が使われます。 <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトの場合、 <em>width</em> が <code class="docutils literal"><span class="pre">len(s)</span></code> 以下なら元のシーケンスが返されます。</p>
+<dd><p>長さ <em>width</em> の右寄せされたシーケンスのコピーを返します。パディングには <em>fillbyte</em> で指定された値 (デフォルトでは ASCII スペース) が使われます。 <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトの場合、 <em>width</em> が <code class="docutils literal"><span class="pre">len(s)</span></code> 以下なら元のシーケンスが返されます。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">bytearray のこのメソッドはインプレースでは動作 <em>しません</em> – 一切変化が無い場合でも、常に新しいオブジェクトを生成します。</p>
@@ -2210,7 +2236,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 </div>
 </dd></dl>
 
-<span class="target" id="index-41"></span><dl class="method">
+<span class="target" id="index-40"></span><dl class="method">
 <dt id="bytes.splitlines">
 <code class="descclassname">bytes.</code><code class="descname">splitlines</code><span class="sig-paren">(</span><em>keepends=False</em><span class="sig-paren">)</span><a class="headerlink" href="#bytes.splitlines" title="この定義へのパーマリンク">¶</a></dt>
 <dt id="bytearray.splitlines">
@@ -2309,7 +2335,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 <code class="descclassname">bytes.</code><code class="descname">zfill</code><span class="sig-paren">(</span><em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#bytes.zfill" title="この定義へのパーマリンク">¶</a></dt>
 <dt id="bytearray.zfill">
 <code class="descclassname">bytearray.</code><code class="descname">zfill</code><span class="sig-paren">(</span><em>width</em><span class="sig-paren">)</span><a class="headerlink" href="#bytearray.zfill" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>長さが <em>width</em> になるよう ASCII <code class="docutils literal"><span class="pre">b'0'</span></code> で左詰めしたシーケンスのコピーを返します。先頭が符号接頭辞 (<code class="docutils literal"><span class="pre">b'+'</span></code>/<code class="docutils literal"><span class="pre">b'-'</span></code>) だった場合、 <code class="docutils literal"><span class="pre">b'0'</span></code> は符号の前ではなく <em>後</em> に挿入されます。 <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトの場合、 <em>width</em> が <code class="docutils literal"><span class="pre">len(seq)</span></code> 以下であれば元のシーケンスが返ります。</p>
+<dd><p>長さが <em>width</em> になるよう ASCII <code class="docutils literal"><span class="pre">b'0'</span></code> で左詰めしたシーケンスのコピーを返します。先頭が符号接頭辞 (<code class="docutils literal"><span class="pre">b'+'</span></code>/<code class="docutils literal"><span class="pre">b'-'</span></code>) だった場合、 <code class="docutils literal"><span class="pre">b'0'</span></code> は符号の前ではなく <em>後</em> に挿入されます。 <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトの場合、 <em>width</em> が <code class="docutils literal"><span class="pre">len(seq)</span></code> 以下であれば元のシーケンスが返ります。</p>
 <p>例えば:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="sa">b</span><span class="s2">&quot;42&quot;</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="go">b&#39;00042&#39;</span>
@@ -2326,12 +2352,12 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 </div>
 <div class="section" id="printf-style-bytes-formatting">
 <span id="bytes-formatting"></span><h3>4.8.4. <code class="docutils literal"><span class="pre">printf</span></code> 形式での bytes の書式化<a class="headerlink" href="#printf-style-bytes-formatting" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<div class="admonition note" id="index-42">
+<div class="admonition note" id="index-41">
 <p class="first admonition-title">注釈</p>
 <p class="last">ここで述べる書式化演算には様々な癖があり、よく間違いの元になっています (タプルや辞書を正しく表示できないなど)。もし表示する値がタプルや辞書かもしれない場合、それをタプルに包むようにしてください。</p>
 </div>
 <p>bytes オブジェクト (<code class="docutils literal"><span class="pre">bytes</span></code>/<code class="docutils literal"><span class="pre">bytearray</span></code>) には固有の操作: <code class="docutils literal"><span class="pre">%</span></code> 演算子 (モジュロ) があります。この演算子は bytes の <em>書式化</em> または <em>補間</em> 演算子とも呼ばれます。<code class="docutils literal"><span class="pre">format</span> <span class="pre">%</span> <span class="pre">values</span></code> (<em>format</em> は bytes オブジェクト) とすると、<em>format</em> 中の <code class="docutils literal"><span class="pre">%</span></code> 変換指定は <em>values</em> 中のゼロ個またはそれ以上の要素で置換されます。この動作は C 言語における <code class="xref c c-func docutils literal"><span class="pre">sprintf()</span></code> に似ています。</p>
-<p><em>format</em> が単一の引数しか要求しない場合、 <em>values</em> はタプルではない単一のオブジェクトで問題ありません。 <a class="footnote-reference" href="#id15" id="id10">[5]</a> それ以外の場合、 <em>values</em> は書式シーケンス（訳註: 先の例での <em>format</em> ）中で指定された項目と正確に同じ数の要素を含むタプルか、単一のマッピング型のオブジェクト (たとえば辞書) でなければなりません。</p>
+<p><em>format</em> が単一の引数しか要求しない場合、 <em>values</em> はタプルではない単一のオブジェクトで問題ありません。 <a class="footnote-reference" href="#id16" id="id11">[5]</a> それ以外の場合、 <em>values</em> は書式シーケンス（訳註: 先の例での <em>format</em> ）中で指定された項目と正確に同じ数の要素を含むタプルか、単一のマッピング型のオブジェクト (たとえば辞書) でなければなりません。</p>
 <p>一つの変換指定子は 2 またはそれ以上の文字を含み、その構成要素は以下からなりますが、示した順に出現しなければなりません:</p>
 <ol class="arabic simple">
 <li>指定子の開始を示す文字 <code class="docutils literal"><span class="pre">'%'</span></code> 。</li>
@@ -2485,7 +2511,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 </li>
 <li><p class="first"><code class="docutils literal"><span class="pre">b'%r'</span></code> は非推奨ですが、3.x 系では削除されません。</p>
 </li>
-<li><p class="first"><span class="target" id="index-60"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0237"><strong>PEP 237</strong></a> を参照してください。</p>
+<li><p class="first"><span class="target" id="index-59"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0237"><strong>PEP 237</strong></a> を参照してください。</p>
 </li>
 </ol>
 <div class="admonition note">
@@ -2494,7 +2520,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 </div>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
-<p class="last"><span class="target" id="index-44"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0461"><strong>PEP 461</strong></a>.</p>
+<p class="last"><span class="target" id="index-43"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0461"><strong>PEP 461</strong></a>.</p>
 </div>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.5 で追加.</span></p>
@@ -2506,8 +2532,8 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 <dl class="class">
 <dt id="memoryview">
 <em class="property">class </em><code class="descname">memoryview</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#memoryview" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><em>obj</em> を参照する <a class="reference internal" href="#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> を作成します。 <em>obj</em> はバッファプロトコルをサポートしていなければなりません。バッファプロトコルをサポートする組み込みオブジェクトには、 <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> 、 <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> などがあります。</p>
-<p><a class="reference internal" href="#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> は元となるオブジェクト <em>obj</em> が扱うメモリーの最小単位を <em>要素</em> として扱います。多くの単純なオブジェクト、例えば <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> や <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> では、要素は単バイトになりますが、他の <a class="reference internal" href="array.html#array.array" title="array.array"><code class="xref py py-class docutils literal"><span class="pre">array.array</span></code></a> 等の型では、要素はより大きくなりえます。</p>
+<dd><p><em>obj</em> を参照する <a class="reference internal" href="#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> を作成します。 <em>obj</em> はバッファプロトコルをサポートしていなければなりません。バッファプロトコルをサポートする組み込みオブジェクトには、 <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> 、 <a class="reference internal" href="#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> などがあります。</p>
+<p><a class="reference internal" href="#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> は元となるオブジェクト <em>obj</em> が扱うメモリーの最小単位を <em>要素</em> として扱います。多くの単純なオブジェクト、例えば <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> や <a class="reference internal" href="#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> では、要素は単バイトになりますが、他の <a class="reference internal" href="array.html#array.array" title="array.array"><code class="xref py py-class docutils literal"><span class="pre">array.array</span></code></a> 等の型では、要素はより大きくなりえます。</p>
 <p>メモリビューの長さ <code class="docutils literal"><span class="pre">len(view)</span></code> は、 <a class="reference internal" href="#memoryview.tolist" title="memoryview.tolist"><code class="xref py py-class docutils literal"><span class="pre">tolist</span></code></a> で得られるリストの長さとなります。<code class="docutils literal"><span class="pre">view.ndim</span> <span class="pre">=</span> <span class="pre">0</span></code> なら、長さは 1 です。<code class="docutils literal"><span class="pre">view.ndim</span> <span class="pre">=</span> <span class="pre">1</span></code> なら、長さはビューの要素数と等しいです。より高次元では、長さはビューのネストされたリスト表現の長さと等しいです。要素一つあたりのバイト数は <a class="reference internal" href="#memoryview.itemsize" title="memoryview.itemsize"><code class="xref py py-class docutils literal"><span class="pre">itemsize</span></code></a> 属性から取得できます。</p>
 <p><a class="reference internal" href="#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> はスライスおよびインデックス指定で内容を取得できます。一次元のスライスは部分ビューになります:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="nb">memoryview</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;abcefg&#39;</span><span class="p">)</span>
@@ -2577,7 +2603,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 <dl class="method">
 <dt id="memoryview.__eq__">
 <code class="descname">__eq__</code><span class="sig-paren">(</span><em>exporter</em><span class="sig-paren">)</span><a class="headerlink" href="#memoryview.__eq__" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>memoryview と <span class="target" id="index-61"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3118"><strong>PEP 3118</strong></a> エクスポーターは、 shape が同じで、 <a class="reference internal" href="struct.html#module-struct" title="struct: Interpret bytes as packed binary data."><code class="xref py py-mod docutils literal"><span class="pre">struct</span></code></a> のフォーマットで解釈したときの値が同じ場合に同値になります。</p>
+<dd><p>memoryview と <span class="target" id="index-60"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3118"><strong>PEP 3118</strong></a> エクスポーターは、 shape が同じで、 <a class="reference internal" href="struct.html#module-struct" title="struct: Interpret bytes as packed binary data."><code class="xref py py-mod docutils literal"><span class="pre">struct</span></code></a> のフォーマットで解釈したときの値が同じ場合に同値になります。</p>
 <p><a class="reference internal" href="#memoryview.tolist" title="memoryview.tolist"><code class="xref py py-meth docutils literal"><span class="pre">tolist()</span></code></a> がサポートしている <a class="reference internal" href="struct.html#module-struct" title="struct: Interpret bytes as packed binary data."><code class="xref py py-mod docutils literal"><span class="pre">struct</span></code></a> フォーマットの一部では、 <code class="docutils literal"><span class="pre">v.tolist()</span> <span class="pre">==</span> <span class="pre">w.tolist()</span></code> が成り立つときに <code class="docutils literal"><span class="pre">v</span></code> == <code class="docutils literal"><span class="pre">w</span></code> になります:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">array</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
@@ -2619,7 +2645,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 <dl class="method">
 <dt id="memoryview.tobytes">
 <code class="descname">tobytes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#memoryview.tobytes" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>バッファ中のデータをバイト文字列として返します。これはメモリビューに対して <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> コンストラクタを呼び出すのと同等です。</p>
+<dd><p>バッファ中のデータをバイト文字列として返します。これはメモリビューに対して <a class="reference internal" href="#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> コンストラクタを呼び出すのと同等です。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="nb">memoryview</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;abc&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">tobytes</span><span class="p">()</span>
 <span class="go">b&#39;abc&#39;</span>
@@ -2665,7 +2691,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 <dl class="method">
 <dt id="memoryview.release">
 <code class="descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#memoryview.release" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>memoryview オブジェクトによって晒されている、元になるバッファを解放します。多くのオブジェクトはビューに支配されているときに特殊なふるまいをします (例えば、 <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> は大きさの変更を一時的に禁止します)。ですから、release() を呼び出すことは、これらの制約をできるだけ早く取り除く (そしてぶら下がったリソースをすべて解放する) のに便利です。</p>
+<dd><p>memoryview オブジェクトによって晒されている、元になるバッファを解放します。多くのオブジェクトはビューに支配されているときに特殊なふるまいをします (例えば、 <a class="reference internal" href="#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> は大きさの変更を一時的に禁止します)。ですから、release() を呼び出すことは、これらの制約をできるだけ早く取り除く (そしてぶら下がったリソースをすべて解放する) のに便利です。</p>
 <p>このメソッドが呼ばれた後、このビュー上のそれ以上の演算は <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code></a> を送出します (複数回呼ばれえる <a class="reference internal" href="#memoryview.release" title="memoryview.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> 自身は除きます):</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="nb">memoryview</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;abc&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
@@ -2926,7 +2952,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 </div>
 <div class="section" id="set-types-set-frozenset">
 <span id="types-set"></span><h2>4.9. set（集合）型 — <a class="reference internal" href="#set" title="set"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a>, <a class="reference internal" href="#frozenset" title="frozenset"><code class="xref py py-class docutils literal"><span class="pre">frozenset</span></code></a><a class="headerlink" href="#set-types-set-frozenset" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p id="index-46"><em class="dfn">set</em> オブジェクトは、固有の <a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">hashable</span></a> オブジェクトの順序なしコレクションです。通常の用途には、帰属テスト、シーケンスからの重複除去、積集合、和集合、差集合、対称差 (排他的論理和) のような数学的演算の計算が含まれます。(他のコンテナについては組み込みの <a class="reference internal" href="#dict" title="dict"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a>, <a class="reference internal" href="#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a>, <a class="reference internal" href="#tuple" title="tuple"><code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></a> クラスや <a class="reference internal" href="collections.html#module-collections" title="collections: Container datatypes"><code class="xref py py-mod docutils literal"><span class="pre">collections</span></code></a> モジュールを参照してください。)</p>
+<p id="index-45"><em class="dfn">set</em> オブジェクトは、固有の <a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">hashable</span></a> オブジェクトの順序なしコレクションです。通常の用途には、帰属テスト、シーケンスからの重複除去、積集合、和集合、差集合、対称差 (排他的論理和) のような数学的演算の計算が含まれます。(他のコンテナについては組み込みの <a class="reference internal" href="#dict" title="dict"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a>, <a class="reference internal" href="#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a>, <a class="reference internal" href="#tuple" title="tuple"><code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></a> クラスや <a class="reference internal" href="collections.html#module-collections" title="collections: Container datatypes"><code class="xref py py-mod docutils literal"><span class="pre">collections</span></code></a> モジュールを参照してください。)</p>
 <p>集合は、他のコレクションと同様、 <code class="docutils literal"><span class="pre">x</span> <span class="pre">in</span> <span class="pre">set</span></code>, <code class="docutils literal"><span class="pre">len(set)</span></code>, <code class="docutils literal"><span class="pre">for</span> <span class="pre">x</span> <span class="pre">in</span> <span class="pre">set</span></code> をサポートします。コレクションには順序がないので、集合は挿入の順序や要素の位置を記録しません。従って、集合はインデクシング、スライシング、その他のシーケンス的な振舞いをサポートしません。</p>
 <p><a class="reference internal" href="#set" title="set"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a> および <a class="reference internal" href="#frozenset" title="frozenset"><code class="xref py py-class docutils literal"><span class="pre">frozenset</span></code></a> という、2つの組み込みの集合型があります。 <a class="reference internal" href="#set" title="set"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a> はミュータブルで、<code class="xref py py-meth docutils literal"><span class="pre">add()</span></code> や <code class="xref py py-meth docutils literal"><span class="pre">remove()</span></code> のようなメソッドを使って内容を変更できます。ミュータブルなため、ハッシュ値を持たず、また辞書のキーや他の集合の要素として用いることができません。一方、<a class="reference internal" href="#frozenset" title="frozenset"><code class="xref py py-class docutils literal"><span class="pre">frozenset</span></code></a> 型はイミュータブルで、<a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">ハッシュ可能</span></a> です。作成後に内容を改変できないため、辞書のキーや他の集合の要素として用いることができます。</p>
 <p>空でない <a class="reference internal" href="#set" title="set"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a> (<a class="reference internal" href="#frozenset" title="frozenset"><code class="xref py py-class docutils literal"><span class="pre">frozenset</span></code></a> ではない) は、<a class="reference internal" href="#set" title="set"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a> コンストラクタに加え、要素を波括弧中にカンマで区切って列挙することでも生成できます。例: <code class="docutils literal"><span class="pre">{'jack',</span> <span class="pre">'sjoerd'}</span></code>。</p>
@@ -3099,13 +3125,15 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 </dd></dl>
 
 <p>なお、演算子でない版の <a class="reference internal" href="#frozenset.update" title="frozenset.update"><code class="xref py py-meth docutils literal"><span class="pre">update()</span></code></a>, <a class="reference internal" href="#frozenset.intersection_update" title="frozenset.intersection_update"><code class="xref py py-meth docutils literal"><span class="pre">intersection_update()</span></code></a>, <a class="reference internal" href="#frozenset.difference_update" title="frozenset.difference_update"><code class="xref py py-meth docutils literal"><span class="pre">difference_update()</span></code></a>, および <a class="reference internal" href="#frozenset.symmetric_difference_update" title="frozenset.symmetric_difference_update"><code class="xref py py-meth docutils literal"><span class="pre">symmetric_difference_update()</span></code></a> メソッドは、任意のイテラブルを引数として受け付けます。</p>
-<p>また、<a class="reference internal" href="../reference/datamodel.html#object.__contains__" title="object.__contains__"><code class="xref py py-meth docutils literal"><span class="pre">__contains__()</span></code></a>, <a class="reference internal" href="#frozenset.remove" title="frozenset.remove"><code class="xref py py-meth docutils literal"><span class="pre">remove()</span></code></a>, および <a class="reference internal" href="#frozenset.discard" title="frozenset.discard"><code class="xref py py-meth docutils literal"><span class="pre">discard()</span></code></a> メソッドの引数 <em>elem</em> は集合にできます。等価な <a class="reference internal" href="#frozenset" title="frozenset"><code class="xref py py-class docutils literal"><span class="pre">frozenset</span></code></a> の検索をサポートするために、 <em>elem</em> 集合は一時的に検索の間は変化させられ、その後、復元されます。検索の間、 <em>elem</em> 集合は意味のある値を持たなくなるため、読み出したり、変更してはいけません。</p>
+<p>Note, the <em>elem</em> argument to the <a class="reference internal" href="../reference/datamodel.html#object.__contains__" title="object.__contains__"><code class="xref py py-meth docutils literal"><span class="pre">__contains__()</span></code></a>, <a class="reference internal" href="#frozenset.remove" title="frozenset.remove"><code class="xref py py-meth docutils literal"><span class="pre">remove()</span></code></a>, and
+<a class="reference internal" href="#frozenset.discard" title="frozenset.discard"><code class="xref py py-meth docutils literal"><span class="pre">discard()</span></code></a> methods may be a set.  To support searching for an equivalent
+frozenset, a temporary one is created from <em>elem</em>.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="mapping-types-dict">
 <span id="typesmapping"></span><h2>4.10. マッピング型 — <a class="reference internal" href="#dict" title="dict"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a><a class="headerlink" href="#mapping-types-dict" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p id="index-47">マッピング (<a class="reference internal" href="../glossary.html#term-mapping"><span class="xref std std-term">mapping</span></a>) オブジェクトは、ハッシュ可能 (<a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">hashable</span></a>) な値を任意のオブジェクトに対応付けます。マッピングはミュータブルなオブジェクトです。現在、標準マッピング型は辞書 (<em class="dfn">dictionary</em>) だけです。 (他のコンテナについては組み込みの <a class="reference internal" href="#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a>, <a class="reference internal" href="#set" title="set"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a>, および <a class="reference internal" href="#tuple" title="tuple"><code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></a> クラスと、 <a class="reference internal" href="collections.html#module-collections" title="collections: Container datatypes"><code class="xref py py-mod docutils literal"><span class="pre">collections</span></code></a> モジュールを参照してください。)</p>
+<p id="index-46">マッピング (<a class="reference internal" href="../glossary.html#term-mapping"><span class="xref std std-term">mapping</span></a>) オブジェクトは、ハッシュ可能 (<a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">hashable</span></a>) な値を任意のオブジェクトに対応付けます。マッピングはミュータブルなオブジェクトです。現在、標準マッピング型は辞書 (<em class="dfn">dictionary</em>) だけです。 (他のコンテナについては組み込みの <a class="reference internal" href="#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a>, <a class="reference internal" href="#set" title="set"><code class="xref py py-class docutils literal"><span class="pre">set</span></code></a>, および <a class="reference internal" href="#tuple" title="tuple"><code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></a> クラスと、 <a class="reference internal" href="collections.html#module-collections" title="collections: Container datatypes"><code class="xref py py-mod docutils literal"><span class="pre">collections</span></code></a> モジュールを参照してください。)</p>
 <p>辞書のキーは <em>ほぼ</em> 任意の値です。ハッシュ可能 (<a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">hashable</span></a>) でない値、つまり、リストや辞書その他のミュータブルな型 (オブジェクトの同一性ではなく値で比較されるもの) はキーとして使用できません。キーとして使われる数値型は通常の数値比較のルールに従います: もしふたつの数値が (例えば <code class="docutils literal"><span class="pre">1</span></code> と <code class="docutils literal"><span class="pre">1.0</span></code> のように) 等しければ、同じ辞書の項目として互換的に使用できます。 (ただし、コンピュータは浮動小数点数を近似値として保管するので、辞書型のキーとして使用するのはたいてい賢くありません。)</p>
 <p>辞書は <code class="docutils literal"><span class="pre">key:</span> <span class="pre">value</span></code> 対のカンマ区切りのリストを波括弧でくくることで作成できます。例えば: <code class="docutils literal"><span class="pre">{'jack':</span> <span class="pre">4098,</span> <span class="pre">'sjoerd':</span> <span class="pre">4127}</span></code> あるいは <code class="docutils literal"><span class="pre">{4098:</span> <span class="pre">'jack',</span> <span class="pre">4127:</span> <span class="pre">'sjoerd'}</span></code> 。あるいは、 <a class="reference internal" href="#dict" title="dict"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> コンストラクタでも作成できます。</p>
 <dl class="class">
@@ -3140,7 +3168,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 <dt>
 <code class="descname">d[key]</code></dt>
 <dd><p><em>d</em> のキー <em>key</em> の項目を返します。マップに <em>key</em> が存在しなければ、 <a class="reference internal" href="exceptions.html#KeyError" title="KeyError"><code class="xref py py-exc docutils literal"><span class="pre">KeyError</span></code></a> を送出します。</p>
-<p id="index-48">辞書のサブクラスが <a class="reference internal" href="../reference/datamodel.html#object.__missing__" title="object.__missing__"><code class="xref py py-meth docutils literal"><span class="pre">__missing__()</span></code></a> メソッドを定義していて、 <em>key</em> が存在しない場合、 <code class="docutils literal"><span class="pre">d[key]</span></code> 演算はこのメソッドをキー <em>key</em> を引数として呼び出します。 <code class="docutils literal"><span class="pre">d[key]</span></code> 演算は、 <code class="docutils literal"><span class="pre">__missing__(key)</span></code> の呼び出しによって返された値をそのまま返すか、送出されたものをそのまま送出します。他の演算やメソッドは <a class="reference internal" href="../reference/datamodel.html#object.__missing__" title="object.__missing__"><code class="xref py py-meth docutils literal"><span class="pre">__missing__()</span></code></a> を呼び出しません。 <a class="reference internal" href="../reference/datamodel.html#object.__missing__" title="object.__missing__"><code class="xref py py-meth docutils literal"><span class="pre">__missing__()</span></code></a> が定義されていない場合、 <a class="reference internal" href="exceptions.html#KeyError" title="KeyError"><code class="xref py py-exc docutils literal"><span class="pre">KeyError</span></code></a> が送出されます。 <a class="reference internal" href="../reference/datamodel.html#object.__missing__" title="object.__missing__"><code class="xref py py-meth docutils literal"><span class="pre">__missing__()</span></code></a> はメソッドでなければならず、インスタンス変数であってはなりません:</p>
+<p id="index-47">辞書のサブクラスが <a class="reference internal" href="../reference/datamodel.html#object.__missing__" title="object.__missing__"><code class="xref py py-meth docutils literal"><span class="pre">__missing__()</span></code></a> メソッドを定義していて、 <em>key</em> が存在しない場合、 <code class="docutils literal"><span class="pre">d[key]</span></code> 演算はこのメソッドをキー <em>key</em> を引数として呼び出します。 <code class="docutils literal"><span class="pre">d[key]</span></code> 演算は、 <code class="docutils literal"><span class="pre">__missing__(key)</span></code> の呼び出しによって返された値をそのまま返すか、送出されたものをそのまま送出します。他の演算やメソッドは <a class="reference internal" href="../reference/datamodel.html#object.__missing__" title="object.__missing__"><code class="xref py py-meth docutils literal"><span class="pre">__missing__()</span></code></a> を呼び出しません。 <a class="reference internal" href="../reference/datamodel.html#object.__missing__" title="object.__missing__"><code class="xref py py-meth docutils literal"><span class="pre">__missing__()</span></code></a> が定義されていない場合、 <a class="reference internal" href="exceptions.html#KeyError" title="KeyError"><code class="xref py py-exc docutils literal"><span class="pre">KeyError</span></code></a> が送出されます。 <a class="reference internal" href="../reference/datamodel.html#object.__missing__" title="object.__missing__"><code class="xref py py-meth docutils literal"><span class="pre">__missing__()</span></code></a> はメソッドでなければならず、インスタンス変数であってはなりません:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Counter</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">__missing__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="mi">0</span>
@@ -3321,7 +3349,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 </div>
 <div class="section" id="context-manager-types">
 <span id="typecontextmanager"></span><h2>4.11. コンテキストマネージャ型<a class="headerlink" href="#context-manager-types" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p id="index-49">Python の <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文は、コンテキストマネージャによって定義される実行時コンテキストの概念をサポートします。これは、文の本体が実行される前に進入し文の終わりで脱出する実行時コンテキストを、ユーザ定義クラスが定義できるようにする一対のメソッドで実装されます:</p>
+<p id="index-48">Python の <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文は、コンテキストマネージャによって定義される実行時コンテキストの概念をサポートします。これは、文の本体が実行される前に進入し文の終わりで脱出する実行時コンテキストを、ユーザ定義クラスが定義できるようにする一対のメソッドで実装されます:</p>
 <dl class="method">
 <dt id="contextmanager.__enter__">
 <code class="descclassname">contextmanager.</code><code class="descname">__enter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#contextmanager.__enter__" title="この定義へのパーマリンク">¶</a></dt>
@@ -3363,7 +3391,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 </div>
 <div class="section" id="methods">
 <span id="typesmethods"></span><h3>4.12.4. メソッド<a class="headerlink" href="#methods" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p id="index-50">メソッドは属性表記を使って呼び出される関数です。メソッドには二種類あります: (リストの <code class="xref py py-meth docutils literal"><span class="pre">append()</span></code> のような) 組み込みメソッドと、クラスインスタンスのメソッドです。組み込みメソッドは、それをサポートする型と一緒に記述されています。</p>
+<p id="index-49">メソッドは属性表記を使って呼び出される関数です。メソッドには二種類あります: (リストの <code class="xref py py-meth docutils literal"><span class="pre">append()</span></code> のような) 組み込みメソッドと、クラスインスタンスのメソッドです。組み込みメソッドは、それをサポートする型と一緒に記述されています。</p>
 <p>インスタンスを通してメソッド (クラスの名前空間内で定義された関数) にアクセスすると、特殊なオブジェクトが得られます。それは束縛メソッド (<em class="dfn">bound method</em>) オブジェクトで、インスタンスメソッド (<em class="dfn">instance method</em>) とも呼ばれます。呼び出された時、引数リストに <code class="docutils literal"><span class="pre">self</span></code> 引数が追加されます。束縛メソッドには 2 つの特殊読み込み専用属性があります。 <code class="docutils literal"><span class="pre">m.__self__</span></code> はそのメソッドが操作するオブジェクトで、 <code class="docutils literal"><span class="pre">m.__func__</span></code> はそのメソッドを実装している関数です。 <code class="docutils literal"><span class="pre">m(arg-1,</span> <span class="pre">arg-2,</span> <span class="pre">...,</span> <span class="pre">arg-n)</span></code> の呼び出しは、 <code class="docutils literal"><span class="pre">m.__func__(m.__self__,</span> <span class="pre">arg-1,</span> <span class="pre">arg-2,</span> <span class="pre">...,</span> <span class="pre">arg-n)</span></code> の呼び出しと完全に等価です。</p>
 <p>関数オブジェクトと同様に、メソッドオブジェクトは任意の属性の取得をサポートしています。しかし、メソッド属性は実際には下層の関数オブジェクト (<code class="docutils literal"><span class="pre">meth.__func__</span></code>) に記憶されているので、バインドされるメソッドにメソッド属性を設定することは許されていません。メソッドに属性を設定しようとすると <a class="reference internal" href="exceptions.html#AttributeError" title="AttributeError"><code class="xref py py-exc docutils literal"><span class="pre">AttributeError</span></code></a> が送出されます。メソッドの属性を設定するためには、次のようにその下層の関数オブジェクトに明示的に設定する必要があります:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">C</span><span class="p">:</span>
@@ -3383,14 +3411,14 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 <p>詳細は、 <a class="reference internal" href="../reference/datamodel.html#types"><span class="std std-ref">標準型の階層</span></a> を参照してください。</p>
 </div>
 <div class="section" id="code-objects">
-<span id="bltin-code-objects"></span><span id="index-51"></span><h3>4.12.5. コードオブジェクト<a class="headerlink" href="#code-objects" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p id="index-52">コードオブジェクトは、関数本体のような 「擬似コンパイルされた」 Python の実行可能コードを表すために実装系によって使われます。コードオブジェクトはグローバルな実行環境への参照を持たない点で関数オブジェクトとは異なります。コードオブジェクトは組み込み関数 <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> によって返され、また関数オブジェクトの <code class="xref py py-attr docutils literal"><span class="pre">__code__</span></code> 属性として取り出せます。 <a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><code class="xref py py-mod docutils literal"><span class="pre">code</span></code></a> モジュールも参照してください。</p>
-<p id="index-53">コードオブジェクトは、組み込み関数 <a class="reference internal" href="functions.html#exec" title="exec"><code class="xref py py-func docutils literal"><span class="pre">exec()</span></code></a> や <a class="reference internal" href="functions.html#eval" title="eval"><code class="xref py py-func docutils literal"><span class="pre">eval()</span></code></a> に (ソース文字列の代わりに) 渡すことで、実行や評価できます。</p>
+<span id="bltin-code-objects"></span><span id="index-50"></span><h3>4.12.5. コードオブジェクト<a class="headerlink" href="#code-objects" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p id="index-51">コードオブジェクトは、関数本体のような 「擬似コンパイルされた」 Python の実行可能コードを表すために実装系によって使われます。コードオブジェクトはグローバルな実行環境への参照を持たない点で関数オブジェクトとは異なります。コードオブジェクトは組み込み関数 <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> によって返され、また関数オブジェクトの <code class="xref py py-attr docutils literal"><span class="pre">__code__</span></code> 属性として取り出せます。 <a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><code class="xref py py-mod docutils literal"><span class="pre">code</span></code></a> モジュールも参照してください。</p>
+<p id="index-52">コードオブジェクトは、組み込み関数 <a class="reference internal" href="functions.html#exec" title="exec"><code class="xref py py-func docutils literal"><span class="pre">exec()</span></code></a> や <a class="reference internal" href="functions.html#eval" title="eval"><code class="xref py py-func docutils literal"><span class="pre">eval()</span></code></a> に (ソース文字列の代わりに) 渡すことで、実行や評価できます。</p>
 <p>詳細は、 <a class="reference internal" href="../reference/datamodel.html#types"><span class="std std-ref">標準型の階層</span></a> を参照してください。</p>
 </div>
 <div class="section" id="type-objects">
 <span id="bltin-type-objects"></span><h3>4.12.6. 型オブジェクト<a class="headerlink" href="#type-objects" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p id="index-54">型オブジェクトは様々なオブジェクト型を表します。オブジェクトの型は組み込み関数 <a class="reference internal" href="functions.html#type" title="type"><code class="xref py py-func docutils literal"><span class="pre">type()</span></code></a> でアクセスされます。型オブジェクトには特有の操作はありません。標準モジュール <a class="reference internal" href="types.html#module-types" title="types: Names for built-in types."><code class="xref py py-mod docutils literal"><span class="pre">types</span></code></a> には全ての組み込み型名が定義されています。</p>
+<p id="index-53">型オブジェクトは様々なオブジェクト型を表します。オブジェクトの型は組み込み関数 <a class="reference internal" href="functions.html#type" title="type"><code class="xref py py-func docutils literal"><span class="pre">type()</span></code></a> でアクセスされます。型オブジェクトには特有の操作はありません。標準モジュール <a class="reference internal" href="types.html#module-types" title="types: Names for built-in types."><code class="xref py py-mod docutils literal"><span class="pre">types</span></code></a> には全ての組み込み型名が定義されています。</p>
 <p>型はこのように書き表されます: <code class="docutils literal"><span class="pre">&lt;class</span> <span class="pre">'int'&gt;</span></code> 。</p>
 </div>
 <div class="section" id="the-null-object">
@@ -3411,7 +3439,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 <div class="section" id="boolean-values">
 <span id="bltin-boolean-values"></span><h3>4.12.10. ブール値<a class="headerlink" href="#boolean-values" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>ブール値は二つの定数オブジェクト <code class="docutils literal"><span class="pre">False</span></code> および <code class="docutils literal"><span class="pre">True</span></code> です。これらは真理値を表すのに使われます (ただし他の値も偽や真とみなされます)。 数値処理のコンテキスト (例えば算術演算子の引数として使われた場合) では、これらはそれぞれ 0 および 1 と同様に振舞います。任意の値に対して、真理値と解釈できる場合、組み込み関数 <a class="reference internal" href="functions.html#bool" title="bool"><code class="xref py py-func docutils literal"><span class="pre">bool()</span></code></a> は値をブール値に変換するのに使われます (上述の <a class="reference internal" href="#truth"><span class="std std-ref">真理値判定</span></a> の節を参照してください)。</p>
-<p id="index-55">それぞれ <code class="docutils literal"><span class="pre">False</span></code> および <code class="docutils literal"><span class="pre">True</span></code> と書き表されます。</p>
+<p id="index-54">それぞれ <code class="docutils literal"><span class="pre">False</span></code> および <code class="docutils literal"><span class="pre">True</span></code> と書き表されます。</p>
 </div>
 <div class="section" id="internal-objects">
 <span id="typesinternal"></span><h3>4.12.11. 内部オブジェクト<a class="headerlink" href="#internal-objects" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -3477,34 +3505,34 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 </dd></dl>
 
 <p class="rubric">脚注</p>
-<table class="docutils footnote" frame="void" id="id11" rules="none">
+<table class="docutils footnote" frame="void" id="id12" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>これらの特殊なメソッドのさらなる情報は、 Python リファレンスマニュアル (<a class="reference internal" href="../reference/datamodel.html#customization"><span class="std std-ref">基本的なカスタマイズ</span></a>) を参照してください。</td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id12" rules="none">
+<table class="docutils footnote" frame="void" id="id13" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>この結果として、リスト <code class="docutils literal"><span class="pre">[1,</span> <span class="pre">2]</span></code> は <code class="docutils literal"><span class="pre">[1.0,</span> <span class="pre">2.0]</span></code> と等しいと見なされます。タプルの場合も同様です。</td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id13" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label">[3]</td><td>パーザが演算対象の型を識別できるようにするために、このような優先順位でなければならないのです。</td></tr>
-</tbody>
-</table>
 <table class="docutils footnote" frame="void" id="id14" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[4]</td><td><em>(<a class="fn-backref" href="#id5">1</a>, <a class="fn-backref" href="#id6">2</a>, <a class="fn-backref" href="#id7">3</a>, <a class="fn-backref" href="#id8">4</a>)</em> 大小文字の区別のある文字とは、一般カテゴリプロパティが 「Lu」 (Letter, uppercase (大文字))、 「Ll」 (Letter, lowercase (小文字))、 「Lt」 (Letter、titlecase (先頭が大文字)) のいずれかであるものです。</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id4">[3]</a></td><td>パーザが演算対象の型を識別できるようにするために、このような優先順位でなければならないのです。</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id15" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[5]</td><td><em>(<a class="fn-backref" href="#id9">1</a>, <a class="fn-backref" href="#id10">2</a>)</em> 従って、一個のタプルだけをフォーマット出力したい場合には出力したいタプルを唯一の要素とする単一のタプルを <em>values</em> に与えなくてはなりません。</td></tr>
+<tr><td class="label">[4]</td><td><em>(<a class="fn-backref" href="#id6">1</a>, <a class="fn-backref" href="#id7">2</a>, <a class="fn-backref" href="#id8">3</a>, <a class="fn-backref" href="#id9">4</a>)</em> 大小文字の区別のある文字とは、一般カテゴリプロパティが 「Lu」 (Letter, uppercase (大文字))、 「Ll」 (Letter, lowercase (小文字))、 「Lt」 (Letter、titlecase (先頭が大文字)) のいずれかであるものです。</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id16" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[5]</td><td><em>(<a class="fn-backref" href="#id10">1</a>, <a class="fn-backref" href="#id11">2</a>)</em> 従って、一個のタプルだけをフォーマット出力したい場合には出力したいタプルを唯一の要素とする単一のタプルを <em>values</em> に与えなくてはなりません。</td></tr>
 </tbody>
 </table>
 </div>
@@ -3548,7 +3576,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
 </ul>
 </li>
 <li><a class="reference internal" href="#binary-sequence-types-bytes-bytearray-memoryview">4.8. バイナリシーケンス型 — <code class="docutils literal"><span class="pre">bytes</span></code>, <code class="docutils literal"><span class="pre">bytearray</span></code>, <code class="docutils literal"><span class="pre">memoryview</span></code></a><ul>
-<li><a class="reference internal" href="#bytes">4.8.1. bytes</a></li>
+<li><a class="reference internal" href="#bytes-objects">4.8.1. Bytes Objects</a></li>
 <li><a class="reference internal" href="#bytearray-objects">4.8.2. bytearray オブジェクト</a></li>
 <li><a class="reference internal" href="#bytes-and-bytearray-operations">4.8.3. bytes と bytearray の操作</a></li>
 <li><a class="reference internal" href="#printf-style-bytes-formatting">4.8.4. <code class="docutils literal"><span class="pre">printf</span></code> 形式での bytes の書式化</a></li>
@@ -3591,7 +3619,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/stdtypes.rst.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/stdtypes.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -3620,7 +3648,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -3648,7 +3676,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 15, 2017
+    最終更新日時: 10月 18, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

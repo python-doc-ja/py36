@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>デスクリプタ HowTo ガイド &#8212; Python 3.6.1 ドキュメント</title>
+    <title>デスクリプタ HowTo ガイド &#8212; Python 3.6.3 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.1',
+        VERSION:     '3.6.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.1 ドキュメント 内を検索"
+          title="Python 3.6.3 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -44,6 +44,7 @@
     });
     </script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
     <script type="text/javascript" src="../_static/version_switch.js"></script>
     
     
@@ -70,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -211,7 +212,10 @@
 <span class="mi">5</span>
 </pre></div>
 </div>
-<p>このプロトコルは単純ですが、ワクワクする可能性も秘めています。ユースケースの中には、あまりに一般的なので個別の関数の呼び出しにまとめられたものもあります。プロパティ、束縛および非束縛のメソッド、静的メソッド、そしてクラスメソッドは、全てデスクリプタプロトコルに基づいています。</p>
+<p>The protocol is simple and offers exciting possibilities.  Several use cases are
+so common that they have been packaged into individual function calls.
+Properties, bound methods, static methods, and class methods are all
+based on the descriptor protocol.</p>
 </div>
 <div class="section" id="properties">
 <h2><a class="toc-backref" href="#id8">プロパティ</a><a class="headerlink" href="#properties" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -270,10 +274,10 @@
 <p>例えば、スプレッドシートクラスが、<code class="docutils literal"><span class="pre">Cell('b10').value</span></code> でセルの値を取得できるとします。続く改良により、プログラムがアクセスの度にセルの再計算をすることを要求しました。しかしプログラマは、その属性に直接アクセスする既存のクライアントコードに影響を与えたくありません。この解決策は、property データデスクリプタ内に値属性へのアクセスをラップすることです:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Cell</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="o">.</span> <span class="o">.</span> <span class="o">.</span>
-    <span class="k">def</span> <span class="nf">getvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="s2">&quot;Recalculate cell before returning value&quot;</span>
+    <span class="k">def</span> <span class="nf">getvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Recalculate the cell before returning value&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">recalc</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">_value</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
     <span class="n">value</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">getvalue</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -281,13 +285,23 @@
 <div class="section" id="functions-and-methods">
 <h2><a class="toc-backref" href="#id9">関数とメソッド</a><a class="headerlink" href="#functions-and-methods" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Python のオブジェクト指向機能は、関数に基づく環境の上に構築されています。非データデスクリプタを使って、この 2 つはシームレスに組み合わされています。</p>
-<p>クラス辞書は、メソッドを関数として保存します。クラス定義内で、メソッドは、関数を使うのに便利なツール、 <a class="reference internal" href="../reference/compound_stmts.html#def"><code class="xref std std-keyword docutils literal"><span class="pre">def</span></code></a> や <a class="reference internal" href="../reference/expressions.html#lambda"><code class="xref std std-keyword docutils literal"><span class="pre">lambda</span></code></a> を使って書かれます。標準の関数との唯一の違いは、第一引数がオブジェクトインスタンスのために予約されていることです。 Python の慣習では、このインスタンスの参照は <em>self</em> と呼ばれますが、 <em>this</em> その他の好きな変数名で呼び出せます。</p>
-<p>メソッドの呼び出しをサポートするために、関数の <a class="reference internal" href="../reference/datamodel.html#object.__get__" title="object.__get__"><code class="xref py py-meth docutils literal"><span class="pre">__get__()</span></code></a> メソッドは属性アクセス時にメソッドを束縛します。これにより、すべての関数は、それが呼び出されたのがオブジェクトかクラスかによって、束縛か非束縛メソッドを返す非データデスクリプタになります。pure Python では、これはこのようにはたらきます:</p>
+<p>Class dictionaries store methods as functions.  In a class definition, methods
+are written using <a class="reference internal" href="../reference/compound_stmts.html#def"><code class="xref std std-keyword docutils literal"><span class="pre">def</span></code></a> or <a class="reference internal" href="../reference/expressions.html#lambda"><code class="xref std std-keyword docutils literal"><span class="pre">lambda</span></code></a>, the usual tools for
+creating functions.  Methods only differ from regular functions in that the
+first argument is reserved for the object instance.  By Python convention, the
+instance reference is called <em>self</em> but may be called <em>this</em> or any other
+variable name.</p>
+<p>To support method calls, functions include the <a class="reference internal" href="../reference/datamodel.html#object.__get__" title="object.__get__"><code class="xref py py-meth docutils literal"><span class="pre">__get__()</span></code></a> method for
+binding methods during attribute access.  This means that all functions are
+non-data descriptors which return bound methods when they are invoked from an
+object.  In pure python, it works like this:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Function</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="o">.</span> <span class="o">.</span> <span class="o">.</span>
     <span class="k">def</span> <span class="nf">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">objtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="s2">&quot;Simulate func_descr_get() in Objects/funcobject.c&quot;</span>
-        <span class="k">return</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">objtype</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>インタプリタを起動すると、この関数デスクリプタが実際にどうはたらくかを見られます:</p>
@@ -296,17 +310,36 @@
 <span class="gp">... </span>        <span class="k">return</span> <span class="n">x</span>
 <span class="gp">...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">D</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span>  <span class="c1"># Stored internally as a function</span>
-<span class="go">&lt;function f at 0x00C45070&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="n">f</span>              <span class="c1"># Get from a class becomes an unbound method</span>
-<span class="go">&lt;unbound method D.f&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">f</span>              <span class="c1"># Get from an instance becomes a bound method</span>
+
+<span class="go"># Access through the class dictionary does not invoke __get__.</span>
+<span class="go"># It just returns the underlying function object.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span>
+<span class="go">&lt;function D.f at 0x00C45070&gt;</span>
+
+<span class="go"># Dotted access from a class calls __get__() which just returns</span>
+<span class="go"># the underlying function unchanged.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="n">f</span>
+<span class="go">&lt;function D.f at 0x00C45070&gt;</span>
+
+<span class="go"># The function has a __qualname__ attribute to support introspection</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">D</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="vm">__qualname__</span>
+<span class="go">&#39;D.f&#39;</span>
+
+<span class="go"># Dotted access from an instance calls __get__() which returns the</span>
+<span class="go"># function wrapped in a bound method object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">f</span>
 <span class="go">&lt;bound method D.f of &lt;__main__.D object at 0x00B18C90&gt;&gt;</span>
+
+<span class="go"># Internally, the bound method stores the underlying function,</span>
+<span class="go"># the bound instance, and the class of the bound instance.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="vm">__func__</span>
+<span class="go">&lt;function D.f at 0x1012e5ae8&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="vm">__self__</span>
+<span class="go">&lt;__main__.D object at 0x1012e1f98&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="vm">__class__</span>
+<span class="go">&lt;class &#39;method&#39;&gt;</span>
 </pre></div>
 </div>
-<p>この出力は、束縛メソッドと非束縛メソッドは 2 つの異なる型であることを示しています。
-これらは、異なる型として実装することも出来ますが、 <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Objects/classobject.c">Objects/classobject.c</a> における <a class="reference internal" href="../c-api/method.html#c.PyMethod_Type" title="PyMethod_Type"><code class="xref c c-type docutils literal"><span class="pre">PyMethod_Type</span></code></a> の実際の C 実装は 1 つのオブジェクトで、 <code class="xref py py-attr docutils literal"><span class="pre">im_self</span></code> が <em>NULL</em> (C での <code class="docutils literal"><span class="pre">None</span></code> と同等のもの) に設定されているかどうかで決まる 2 つの異なる表現を持ってるのです。</p>
-<p>同様に、メソッドオブジェクトを呼び出すことの効果も、 <code class="xref py py-attr docutils literal"><span class="pre">im_self</span></code> フィールドに依ります。設定されていれば (束縛を意味し)、期待通り (<code class="xref py py-attr docutils literal"><span class="pre">im_func</span></code> フィールドに保存されている) 元の関数が、第一引数をインスタンスとして、呼び出されます。非束縛なら、すべての引数がそのまま元の関数に渡されます。 <code class="xref py py-func docutils literal"><span class="pre">instancemethod_call()</span></code> の実際の C 実装は、型チェックがあるため、もう少しだけ複雑です。</p>
 </div>
 <div class="section" id="static-methods-and-class-methods">
 <h2><a class="toc-backref" href="#id10">静的メソッドとクラスメソッド</a><a class="headerlink" href="#static-methods-and-class-methods" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -447,7 +480,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/descriptor.rst.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/descriptor.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -476,7 +509,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -504,7 +537,7 @@
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 15, 2017
+    最終更新日時: 10月 18, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

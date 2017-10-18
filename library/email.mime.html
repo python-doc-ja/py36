@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>19.1.10. email.mime: メールと MIME オブジェクトを一から作成 &#8212; Python 3.6.1 ドキュメント</title>
+    <title>19.1.10. email.mime: メールと MIME オブジェクトを一から作成 &#8212; Python 3.6.3 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.1',
+        VERSION:     '3.6.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.1 ドキュメント 内を検索"
+          title="Python 3.6.3 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -44,6 +44,7 @@
     });
     </script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
     <script type="text/javascript" src="../_static/version_switch.js"></script>
     
     
@@ -70,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -203,7 +204,15 @@ code.</p>
 <em class="property">class </em><code class="descclassname">email.mime.text.</code><code class="descname">MIMEText</code><span class="sig-paren">(</span><em>_text</em>, <em>_subtype='plain'</em>, <em>_charset=None</em>, <em>*</em>, <em>policy=compat32</em><span class="sig-paren">)</span><a class="headerlink" href="#email.mime.text.MIMEText" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>モジュール: <code class="xref py py-mod docutils literal"><span class="pre">email.mime.text</span></code></p>
 <p><a class="reference internal" href="#email.mime.text.MIMEText" title="email.mime.text.MIMEText"><code class="xref py py-class docutils literal"><span class="pre">MIMEText</span></code></a> クラスは <a class="reference internal" href="#email.mime.nonmultipart.MIMENonMultipart" title="email.mime.nonmultipart.MIMENonMultipart"><code class="xref py py-class docutils literal"><span class="pre">MIMENonMultipart</span></code></a> のサブクラスで、主形式 (maintype) が <em class="mimetype">text</em> の MIME オブジェクトを作成するのに使われます。ペイロードの文字列は <em>_text</em> になります。 <em>_subtype</em> には副形式 (subtype) を指定し、デフォルトは <em class="mimetype">plain</em> です。 <em>_charset</em> はテキストの文字セットで、 <a class="reference internal" href="#email.mime.nonmultipart.MIMENonMultipart" title="email.mime.nonmultipart.MIMENonMultipart"><code class="xref py py-class docutils literal"><span class="pre">MIMENonMultipart</span></code></a> コンストラクタに引数として渡されます。この値は、文字列が <code class="docutils literal"><span class="pre">ascii</span></code> コードポイントのみを含む場合 <code class="docutils literal"><span class="pre">us-ascii</span></code> 、それ以外は <code class="docutils literal"><span class="pre">utf-8</span></code> がデフォルトになっています。 <em>_charset</em> パラメータは、文字列と <a class="reference internal" href="email.charset.html#email.charset.Charset" title="email.charset.Charset"><code class="xref py py-class docutils literal"><span class="pre">Charset</span></code></a> インスタンスの両方を受け付けます。</p>
-<p><code class="docutils literal"><span class="pre">_charset</span></code> 引数に明示的に <code class="docutils literal"><span class="pre">None</span></code> をセットしない限りは、作成される MIMEText オブジェクトは <code class="docutils literal"><span class="pre">charset</span></code> の付いた <em class="mailheader">Content-Type</em> ヘッダと <em class="mailheader">Content-Transfer-Endcoding</em> ヘッダの両方を持ちます。これは後続の <code class="docutils literal"><span class="pre">set_payload</span></code> 呼び出しが、 <code class="docutils literal"><span class="pre">set_payload</span></code> コマンドに charset が渡したとしてもエンコードされたペイロードにはならないことを意味します。 <code class="docutils literal"><span class="pre">Content-Transfer-Encoding</span></code> ヘッダを削除することでこの振る舞いを「リセット」出来ます。これにより <code class="docutils literal"><span class="pre">set_payload</span></code> 呼び出しが新たなペイロードを自動的にエンコード (そして新たな <em class="mailheader">Content-Transfer-Encoding</em> ヘッダを追加) します。</p>
+<p>Unless the <em>_charset</em> argument is explicitly set to <code class="docutils literal"><span class="pre">None</span></code>, the
+MIMEText object created will have both a <em class="mailheader">Content-Type</em> header
+with a <code class="docutils literal"><span class="pre">charset</span></code> parameter, and a <em class="mailheader">Content-Transfer-Encoding</em>
+header.  This means that a subsequent <code class="docutils literal"><span class="pre">set_payload</span></code> call will not result
+in an encoded payload, even if a charset is passed in the <code class="docutils literal"><span class="pre">set_payload</span></code>
+command.  You can 「reset」 this behavior by deleting the
+<code class="docutils literal"><span class="pre">Content-Transfer-Encoding</span></code> header, after which a <code class="docutils literal"><span class="pre">set_payload</span></code> call
+will automatically encode the new payload (and add a new
+<em class="mailheader">Content-Transfer-Encoding</em> header).</p>
 <p>Optional <em>policy</em> argument defaults to <a class="reference internal" href="email.policy.html#email.policy.Compat32" title="email.policy.Compat32"><code class="xref py py-class docutils literal"><span class="pre">compat32</span></code></a>.</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.5 で変更: </span><em>_charset</em> は <a class="reference internal" href="email.charset.html#email.charset.Charset" title="email.charset.Charset"><code class="xref py py-class docutils literal"><span class="pre">Charset</span></code></a> インスタンスも受け取ります。</p>
@@ -232,7 +241,7 @@ code.</p>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/email.mime.rst.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/email.mime.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -261,7 +270,7 @@ code.</p>
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -291,7 +300,7 @@ code.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 15, 2017
+    最終更新日時: 10月 18, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

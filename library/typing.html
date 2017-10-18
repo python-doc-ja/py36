@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>26.1. typing — 型ヒントのサポート &#8212; Python 3.6.1 ドキュメント</title>
+    <title>26.1. typing — 型ヒントのサポート &#8212; Python 3.6.3 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.1',
+        VERSION:     '3.6.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.1 ドキュメント 内を検索"
+          title="Python 3.6.3 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -44,6 +44,7 @@
     });
     </script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
     <script type="text/javascript" src="../_static/version_switch.js"></script>
     
     
@@ -70,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -177,18 +178,25 @@
 </div>
 <p>これらのチェックは静的型検査器のみによって強制されるということに注意してください。実行時に <code class="docutils literal"><span class="pre">Derived</span> <span class="pre">=</span> <span class="pre">NewType('Derived',</span> <span class="pre">Base)</span></code> という文は渡された仮引数をただちに返す <code class="docutils literal"><span class="pre">Derived</span></code> 関数を作ります。つまり <code class="docutils literal"><span class="pre">Derived(some_value)</span></code> という式は新しいクラスを作ることはなく、通常の関数呼び出し以上のオーバーヘッドがないということを意味します。</p>
 <p>より正確に言うと、式 <code class="docutils literal"><span class="pre">some_value</span> <span class="pre">is</span> <span class="pre">Derived(some_value)</span></code> は実行時に常に真を返します。</p>
-<p>これはまた <code class="docutils literal"><span class="pre">Derived</span></code> は実行時には関数で、実際の型ではないため、これのサブタイプを作ることが出来ないことを意味します。同様に、 <code class="docutils literal"><span class="pre">Derived</span></code> 型を基にした <a class="reference internal" href="#typing.NewType" title="typing.NewType"><code class="xref py py-func docutils literal"><span class="pre">NewType()</span></code></a> を作ることはできません:</p>
+<p>This also means that it is not possible to create a subtype of <code class="docutils literal"><span class="pre">Derived</span></code>
+since it is an identity function at runtime, not an actual type:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">NewType</span>
 
 <span class="n">UserId</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s1">&#39;UserId&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
 
 <span class="c1"># Fails at runtime and does not typecheck</span>
 <span class="k">class</span> <span class="nc">AdminUserId</span><span class="p">(</span><span class="n">UserId</span><span class="p">):</span> <span class="k">pass</span>
+</pre></div>
+</div>
+<p>However, it is possible to create a <a class="reference internal" href="#typing.NewType" title="typing.NewType"><code class="xref py py-func docutils literal"><span class="pre">NewType()</span></code></a> based on a 『derived』 <code class="docutils literal"><span class="pre">NewType</span></code>:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">NewType</span>
 
-<span class="c1"># Also does not typecheck</span>
+<span class="n">UserId</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s1">&#39;UserId&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+
 <span class="n">ProUserId</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s1">&#39;ProUserId&#39;</span><span class="p">,</span> <span class="n">UserId</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>and typechecking for <code class="docutils literal"><span class="pre">ProUserId</span></code> will work as expected.</p>
 <p>詳細は <span class="target" id="index-26"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0484"><strong>PEP 484</strong></a> を参照。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
@@ -595,8 +603,8 @@
 <dt id="typing.ByteString">
 <em class="property">class </em><code class="descclassname">typing.</code><code class="descname">ByteString</code><span class="sig-paren">(</span><em>Sequence[int]</em><span class="sig-paren">)</span><a class="headerlink" href="#typing.ByteString" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><a class="reference internal" href="collections.abc.html#collections.abc.ByteString" title="collections.abc.ByteString"><code class="xref py py-class docutils literal"><span class="pre">collections.abc.ByteString</span></code></a> のジェネリック版です。</p>
-<p>この型は <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> と <a class="reference internal" href="functions.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> 、 <a class="reference internal" href="stdtypes.html#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> を表します。</p>
-<p>この型の省略形として、 <a class="reference internal" href="functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> を上に挙げた任意の型の引数にアノテーションをつけることに使えます。</p>
+<p>この型は <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> と <a class="reference internal" href="stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> 、 <a class="reference internal" href="stdtypes.html#memoryview" title="memoryview"><code class="xref py py-class docutils literal"><span class="pre">memoryview</span></code></a> を表します。</p>
+<p>この型の省略形として、 <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> を上に挙げた任意の型の引数にアノテーションをつけることに使えます。</p>
 </dd></dl>
 
 <dl class="class">
@@ -930,15 +938,17 @@
 
 <dl class="function">
 <dt id="typing.no_type_check">
-<code class="descclassname">&#64;</code><code class="descclassname">typing.</code><code class="descname">no_type_check</code><span class="sig-paren">(</span><em>arg</em><span class="sig-paren">)</span><a class="headerlink" href="#typing.no_type_check" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descclassname">&#64;</code><code class="descclassname">typing.</code><code class="descname">no_type_check</code><a class="headerlink" href="#typing.no_type_check" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>アノテーションが型ヒントでないことを示すデコレータです。</p>
-<p>引数はクラスまたは関数でなければなりません。もし引数がクラスなら、そのクラスに定義されているすべてのメソッドについて再帰的に適用します。(ただし、スーパークラスやサブクラスに定義されているメソッドには適用されません。)</p>
+<p>This works as class or function <a class="reference internal" href="../glossary.html#term-decorator"><span class="xref std std-term">decorator</span></a>.  With a class, it
+applies recursively to all methods defined in that class (but not
+to methods defined in its superclasses or subclasses).</p>
 <p>これは関数を適切に変更します。</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="typing.no_type_check_decorator">
-<code class="descclassname">&#64;</code><code class="descclassname">typing.</code><code class="descname">no_type_check_decorator</code><span class="sig-paren">(</span><em>decorator</em><span class="sig-paren">)</span><a class="headerlink" href="#typing.no_type_check_decorator" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descclassname">&#64;</code><code class="descclassname">typing.</code><code class="descname">no_type_check_decorator</code><a class="headerlink" href="#typing.no_type_check_decorator" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>別のデコレータに <a class="reference internal" href="#typing.no_type_check" title="typing.no_type_check"><code class="xref py py-func docutils literal"><span class="pre">no_type_check()</span></code></a> の効果を与えるデコレータです。</p>
 <p>これは何かの関数をラップするデコレータを <a class="reference internal" href="#typing.no_type_check" title="typing.no_type_check"><code class="xref py py-func docutils literal"><span class="pre">no_type_check()</span></code></a> でラップします。</p>
 </dd></dl>
@@ -981,7 +991,7 @@
 </pre></div>
 </div>
 </li>
-<li><p class="first">あるクラスとそのサブクラスが存在するとき、前者は飛ばされます。例えば:</p>
+<li><p class="first">When a class and its subclass are present, the latter is skipped, e.g.:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span> <span class="o">==</span> <span class="nb">object</span>
 </pre></div>
 </div>
@@ -1068,10 +1078,14 @@
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">expensive_mod</span>
 
-<span class="k">def</span> <span class="nf">fun</span><span class="p">():</span>
-    <span class="n">local_var</span><span class="p">:</span> <span class="n">expensive_mod</span><span class="o">.</span><span class="n">some_type</span> <span class="o">=</span> <span class="n">other_fun</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span> <span class="s1">&#39;expensive_mod.SomeType&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">local_var</span><span class="p">:</span> <span class="n">expensive_mod</span><span class="o">.</span><span class="n">AnotherType</span> <span class="o">=</span> <span class="n">other_fun</span><span class="p">()</span>
 </pre></div>
 </div>
+<p>Note that the first type annotation must be enclosed in quotes, making it a
+「forward reference」, to hide the <code class="docutils literal"><span class="pre">expensive_mod</span></code> reference from the
+interpreter runtime.  Type annotations for local variables are not
+evaluated, so the second annotation does not need to be enclosed in quotes.</p>
 </dd></dl>
 
 </div>
@@ -1108,7 +1122,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/typing.rst.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/typing.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -1137,7 +1151,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -1166,7 +1180,7 @@
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 15, 2017
+    最終更新日時: 10月 18, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

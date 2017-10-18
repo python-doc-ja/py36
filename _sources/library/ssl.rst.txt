@@ -193,11 +193,11 @@ instead.
      .. table::
 
        ========================  ============  ============  =============  =========  ===========  ===========
-        *client* / **server**    **SSLv2**     **SSLv3**     **TLS**        **TLSv1**  **TLSv1.1**  **TLSv1.2**
+        *client* / **server**    **SSLv2**     **SSLv3**     **TLS** [3]_   **TLSv1**  **TLSv1.1**  **TLSv1.2**
        ------------------------  ------------  ------------  -------------  ---------  -----------  -----------
         *SSLv2*                    yes           no            no [1]_        no         no         no
         *SSLv3*                    no            yes           no [2]_        no         no         no
-        *TLS* (*SSLv23*)           no [1]_       no [2]_       yes            yes        yes        yes
+        *TLS* (*SSLv23*) [3]_      no [1]_       no [2]_       yes            yes        yes        yes
         *TLSv1*                    no            no            yes            yes        no         no
         *TLSv1.1*                  no            no            yes            no         yes        no
         *TLSv1.2*                  no            no            yes            no         no         yes
@@ -206,6 +206,9 @@ instead.
    .. rubric:: Footnotes
    .. [1] :class:`SSLContext` disables SSLv2 with :data:`OP_NO_SSLv2` by default.
    .. [2] :class:`SSLContext` disables SSLv3 with :data:`OP_NO_SSLv3` by default.
+   .. [3] TLS 1.3 protocol will be available with :data:`PROTOCOL_TLS` in
+      OpenSSL >= 1.1.1. There is no dedicated PROTOCOL constant for just
+      TLS 1.3.
 
    .. note::
 
@@ -215,7 +218,7 @@ instead.
 
    The *ciphers* parameter sets the available ciphers for this SSL object.
    It should be a string in the `OpenSSL cipher list format
-   <https://www.openssl.org/docs/apps/ciphers.html#CIPHER-LIST-FORMAT>`_.
+   <https://wiki.openssl.org/index.php/Manual:Ciphers(1)#CIPHER_LIST_FORMAT>`_.
 
    The parameter ``do_handshake_on_connect`` specifies whether to do the SSL
    handshake automatically after doing a :meth:`socket.connect`, or whether the
@@ -293,6 +296,11 @@ purposes.
      ChaCha20/Poly1305 was added to the default cipher string.
 
      3DES was dropped from the default cipher string.
+
+   .. versionchanged:: 3.6.3
+
+     TLS 1.3 cipher suites TLS_AES_128_GCM_SHA256, TLS_AES_256_GCM_SHA384,
+     and TLS_CHACHA20_POLY1305_SHA256 were added to the default cipher string.
 
 
 Random generation
@@ -374,9 +382,9 @@ Certificate handling
    Verify that *cert* (in decoded format as returned by
    :meth:`SSLSocket.getpeercert`) matches the given *hostname*.  The rules
    applied are those for checking the identity of HTTPS servers as outlined
-   in :rfc:`2818` and :rfc:`6125`.  In addition to HTTPS, this function
-   should be suitable for checking the identity of servers in various
-   SSL-based protocols such as FTPS, IMAPS, POPS and others.
+   in :rfc:`2818`, :rfc:`5280` and :rfc:`6125`.  In addition to HTTPS, this
+   function should be suitable for checking the identity of servers in
+   various SSL-based protocols such as FTPS, IMAPS, POPS and others.
 
    :exc:`CertificateError` is raised on failure. On success, the function
    returns nothing::
@@ -610,13 +618,13 @@ Constants
 .. data:: PROTOCOL_TLS
 
    Selects the highest protocol version that both the client and server support.
-   Despite the name, this option can select "TLS" protocols as well as "SSL".
+   Despite the name, this option can select both "SSL" and "TLS" protocols.
 
    .. versionadded:: 3.6
 
 .. data:: PROTOCOL_TLS_CLIENT
 
-   Auto-negotiate the highest protocol version like :data:`PROTOCOL_SSLv23`,
+   Auto-negotiate the highest protocol version like :data:`PROTOCOL_TLS`,
    but only support client-side :class:`SSLSocket` connections. The protocol
    enables :data:`CERT_REQUIRED` and :attr:`~SSLContext.check_hostname` by
    default.
@@ -625,7 +633,7 @@ Constants
 
 .. data:: PROTOCOL_TLS_SERVER
 
-   Auto-negotiate the highest protocol version like :data:`PROTOCOL_SSLv23`,
+   Auto-negotiate the highest protocol version like :data:`PROTOCOL_TLS`,
    but only support server-side :class:`SSLSocket` connections.
 
    .. versionadded:: 3.6
@@ -760,6 +768,16 @@ Constants
 
    .. versionadded:: 3.4
 
+.. data:: OP_NO_TLSv1_3
+
+   Prevents a TLSv1.3 connection. This option is only applicable in conjunction
+   with :const:`PROTOCOL_TLS`. It prevents the peers from choosing TLSv1.3 as
+   the protocol version. TLS 1.3 is available with OpenSSL 1.1.1 or later.
+   When Python has been compiled against an older version of OpenSSL, the
+   flag defaults to *0*.
+
+   .. versionadded:: 3.6.3
+
 .. data:: OP_CIPHER_SERVER_PREFERENCE
 
    Use the server's cipher ordering preference, rather than the client's.
@@ -820,7 +838,7 @@ Constants
 .. data:: HAS_SNI
 
    Whether the OpenSSL library has built-in support for the *Server Name
-   Indication* extension (as defined in :rfc:`4366`).
+   Indication* extension (as defined in :rfc:`6066`).
 
    .. versionadded:: 3.2
 
@@ -833,6 +851,12 @@ Constants
    which protocols you want to support.
 
    .. versionadded:: 3.3
+
+.. data:: HAS_TLSv1_3
+
+   Whether the OpenSSL library has built-in support for the TLS 1.3 protocol.
+
+   .. versionadded:: 3.6.3
 
 .. data:: CHANNEL_BINDING_TYPES
 
@@ -1421,7 +1445,7 @@ to speed up repeated connections from the same clients.
 
    Set the available ciphers for sockets created with this context.
    It should be a string in the `OpenSSL cipher list format
-   <https://www.openssl.org/docs/apps/ciphers.html#CIPHER-LIST-FORMAT>`_.
+   <https://wiki.openssl.org/index.php/Manual:Ciphers(1)#CIPHER_LIST_FORMAT>`_.
    If no cipher can be selected (because compile-time options or other
    configuration forbids use of all the specified ciphers), an
    :class:`SSLError` will be raised.
@@ -1442,8 +1466,9 @@ to speed up repeated connections from the same clients.
    This method will raise :exc:`NotImplementedError` if :data:`HAS_ALPN` is
    False.
 
-   OpenSSL 1.1.0+ will abort the handshake and raise :exc:`SSLError` when
-   both sides support ALPN but cannot agree on a protocol.
+   OpenSSL 1.1.0 to 1.1.0e will abort the handshake and raise :exc:`SSLError`
+   when both sides support ALPN but cannot agree on a protocol. 1.1.0f+
+   behaves like 1.0.2, :meth:`SSLSocket.selected_alpn_protocol` returns None.
 
    .. versionadded:: 3.5
 
@@ -2107,8 +2132,8 @@ provided.
    When compared to :class:`SSLSocket`, this object lacks the following
    features:
 
-   - Any form of network IO incluging methods such as ``recv()`` and
-     ``send()``.
+   - Any form of network IO; ``recv()`` and ``send()`` read and write only to
+     the underlying :class:`MemoryBIO` buffers.
 
    - There is no *do_handshake_on_connect* machinery. You must always manually
      call :meth:`~SSLSocket.do_handshake` to start the handshake.
@@ -2306,14 +2331,11 @@ successful call of :func:`~ssl.RAND_add`, :func:`~ssl.RAND_bytes` or
    `RFC 1422: Privacy Enhancement for Internet Electronic Mail: Part II: Certificate-Based Key Management <https://www.ietf.org/rfc/rfc1422>`_
        Steve Kent
 
-   `RFC 1750: Randomness Recommendations for Security <https://www.ietf.org/rfc/rfc1750>`_
-       D. Eastlake et. al.
+   `RFC 4086: Randomness Requirements for Security <http://datatracker.ietf.org/doc/rfc4086/>`_
+       Donald E., Jeffrey I. Schiller
 
-   `RFC 3280: Internet X.509 Public Key Infrastructure Certificate and CRL Profile <https://www.ietf.org/rfc/rfc3280>`_
-       Housley et. al.
-
-   `RFC 4366: Transport Layer Security (TLS) Extensions <https://www.ietf.org/rfc/rfc4366>`_
-       Blake-Wilson et. al.
+   `RFC 5280: Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile <http://datatracker.ietf.org/doc/rfc5280/>`_
+       D. Cooper
 
    `RFC 5246: The Transport Layer Security (TLS) Protocol Version 1.2 <https://tools.ietf.org/html/rfc5246>`_
        T. Dierks et. al.
@@ -2323,3 +2345,9 @@ successful call of :func:`~ssl.RAND_add`, :func:`~ssl.RAND_bytes` or
 
    `IANA TLS: Transport Layer Security (TLS) Parameters <https://www.iana.org/assignments/tls-parameters/tls-parameters.xml>`_
        IANA
+
+   `RFC 7525: Recommendations for Secure Use of Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS) <https://tools.ietf.org/html/rfc7525>`_
+       IETF
+
+   `Mozilla's Server Side TLS recommendations <https://wiki.mozilla.org/Security/Server_Side_TLS>`_
+       Mozilla

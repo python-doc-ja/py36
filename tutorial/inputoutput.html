@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>7. 入力と出力 &#8212; Python 3.6.1 ドキュメント</title>
+    <title>7. 入力と出力 &#8212; Python 3.6.3 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.1',
+        VERSION:     '3.6.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.1 ドキュメント 内を検索"
+          title="Python 3.6.3 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -44,6 +44,7 @@
     });
     </script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
     <script type="text/javascript" src="../_static/version_switch.js"></script>
     
     
@@ -70,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -262,6 +263,34 @@
 <p>最初の引数はファイル名の入った文字列です。二つめの引数も文字列で、ファイルをどのように使うかを示す数個の文字が入っています。 <em>mode</em> は、ファイルが読み出し専用なら <code class="docutils literal"><span class="pre">'r'</span></code> 、書き込み専用 (同名の既存のファイルがあれば消去されます) なら <code class="docutils literal"><span class="pre">'w'</span></code> とします。 <code class="docutils literal"><span class="pre">'a'</span></code> はファイルを追記用に開きます。ファイルに書き込まれた内容は自動的にファイルの終端に追加されます。 <code class="docutils literal"><span class="pre">'r+'</span></code> はファイルを読み書き両用に開きます。 <em>mode</em> 引数は省略可能で、省略された場合には <code class="docutils literal"><span class="pre">'r'</span></code> であると仮定します。</p>
 <p>通常、ファイルはテキストモード (<em class="dfn">text mode</em>) で開かれ、特定のエンコーディングでエンコードされたファイルに対して文字列を読み書きします。エンコーディングが指定されなければ、デフォルトはプラットフォーム依存です (<a class="reference internal" href="../library/functions.html#open" title="open"><code class="xref py py-func docutils literal"><span class="pre">open()</span></code></a> を参照してください) 。モードに <code class="docutils literal"><span class="pre">'b'</span></code> をつけるとファイルをバイナリモード (<em class="dfn">binary mode</em>) で開き、 byte オブジェクトを読み書きします。テキストファイル以外のすべてのファイルはバイナリモードを利用するべきです。</p>
 <p>テキストモードの読み取りでは、プラットフォーム固有の行末記号 (Unix では <code class="docutils literal"><span class="pre">\n</span></code> 、Windows では <code class="docutils literal"><span class="pre">\r\n</span></code>) をただの <code class="docutils literal"><span class="pre">\n</span></code> に変換するのがデフォルトの動作です。テキストモードの書き込みでは、 <code class="docutils literal"><span class="pre">\n</span></code> が出てくる箇所をプラットフォーム固有の行末記号に戻すのがデフォルトの動作です。この裏で行われるファイルデータの変換はテキストファイルには上手く働きますが、 <code class="file docutils literal"><span class="pre">JPEG</span></code> ファイルや <code class="file docutils literal"><span class="pre">EXE</span></code> ファイルのようなバイナリデータを破壊する恐れがあります。そのようなファイルを読み書きする場合には注意して、バイナリモードを使うようにしてください。</p>
+<p>It is good practice to use the <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> keyword when dealing
+with file objects.  The advantage is that the file is properly closed
+after its suite finishes, even if an exception is raised at some
+point.  Using <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> is also much shorter than writing
+equivalent <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a>-<a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal"><span class="pre">finally</span></code></a> blocks:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;workfile&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">read_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">closed</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>If you’re not using the <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> keyword, then you should call
+<code class="docutils literal"><span class="pre">f.close()</span></code> to close the file and immediately free up any system
+resources used by it. If you don’t explicitly close a file, Python’s
+garbage collector will eventually destroy the object and close the
+open file for you, but the file may stay open for a while.  Another
+risk is that different Python implementations will do this clean-up at
+different times.</p>
+<p>After a file object is closed, either by a <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> statement
+or by calling <code class="docutils literal"><span class="pre">f.close()</span></code>, attempts to use the file object will
+automatically fail.</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">ValueError</span>: <span class="n">I/O operation on closed file</span>
+</pre></div>
+</div>
 <div class="section" id="methods-of-file-objects">
 <span id="tut-filemethods"></span><h3>7.2.1. ファイルオブジェクトのメソッド<a class="headerlink" href="#methods-of-file-objects" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>この節の以降の例は、 <code class="docutils literal"><span class="pre">f</span></code> というファイルオブジェクトが既に生成されているものと仮定します。</p>
@@ -318,21 +347,6 @@
 </pre></div>
 </div>
 <p>テキストファイル (mode 文字列に <code class="docutils literal"><span class="pre">b</span></code> を付けなかった場合) では、ファイルの先頭からの相対位置に対するシークだけが許可されています (例外として、<code class="docutils literal"><span class="pre">seek(0,</span> <span class="pre">2)</span></code> でファイルの末尾へのシークは可能です)。また、唯一の有効な <em>offset</em> 値は <code class="docutils literal"><span class="pre">f.tell()</span></code> から返された値か、0 のいずれかです。それ以外の <em>offset</em> 値は未定義の振る舞いを引き起こします。</p>
-<p>ファイルが用済みになったら、 <code class="docutils literal"><span class="pre">f.close()</span></code> を呼び出してファイルを閉じ、ファイルを開くために確保されていたシステム資源を解放します。 <code class="docutils literal"><span class="pre">f.close()</span></code> を呼び出した後、そのファイルオブジェクトを使おうとすると自動的に失敗します:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">?</span>
-<span class="gr">ValueError</span>: <span class="n">I/O operation on closed file</span>
-</pre></div>
-</div>
-<p>ファイルオブジェクトを扱うときに <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> キーワードを使うのは良い習慣です。 <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> を使うと、処理中に例外が発生しても必ず最後にファイルを閉じることができます。同じことを <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal"><span class="pre">try</span></code></a>-<a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal"><span class="pre">finally</span></code></a> を使って書くよりずっと簡潔に書けます:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;workfile&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="n">read_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">closed</span>
-<span class="go">True</span>
-</pre></div>
-</div>
 <p>ファイルオブジェクトには、他にも <code class="xref py py-meth docutils literal"><span class="pre">isatty()</span></code> や <code class="xref py py-meth docutils literal"><span class="pre">truncate()</span></code> といった、あまり使われないメソッドがあります。ファイルオブジェクトについての完全なガイドは、ライブラリリファレンスを参照してください。</p>
 </div>
 <div class="section" id="saving-structured-data-with-json">
@@ -344,7 +358,8 @@
 <p class="last">JSON 形式は現代的なアプリケーションでデータをやりとりする際によく使われます。多くのプログラマーが既に JSON に詳しいため、JSON はデータの相互交換をする場合の良い選択肢です。</p>
 </div>
 <p>オブジェクト <code class="docutils literal"><span class="pre">x</span></code> があり、その JSON 形式の文字列表現を見るには、単純な1行のコードを書くだけです:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;simple&#39;</span><span class="p">,</span> <span class="s1">&#39;list&#39;</span><span class="p">])</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">json</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;simple&#39;</span><span class="p">,</span> <span class="s1">&#39;list&#39;</span><span class="p">])</span>
 <span class="go">&#39;[1, &quot;simple&quot;, &quot;list&quot;]&#39;</span>
 </pre></div>
 </div>
@@ -399,7 +414,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/tutorial/inputoutput.rst.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/tutorial/inputoutput.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -428,7 +443,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -456,7 +471,7 @@
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 15, 2017
+    最終更新日時: 10月 18, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Unicode HOWTO &#8212; Python 3.6.1 ドキュメント</title>
+    <title>Unicode HOWTO &#8212; Python 3.6.3 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.1',
+        VERSION:     '3.6.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.1 ドキュメント 内を検索"
+          title="Python 3.6.3 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -44,6 +44,7 @@
     });
     </script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
     <script type="text/javascript" src="../_static/version_switch.js"></script>
     
     
@@ -70,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -121,7 +122,14 @@
 </pre></div>
 </div>
 <p>これらのメッセージはアクセントを含んでいるはず (terminée, paramètre, enregistrés) で、フランス語が読める人にとっては単なる間違いのように見られてしまいます。</p>
-<p>1980 年代には、ほぼ全てのパーソナルコンピューターは 8-bit で、これは 0 から 255 までの範囲の値を保持できることを意味しました。ASCII コードは最大で 127 までだったので、あるマシンでは 128 から 255 までの値にアクセント付きの文字を割り当てていました。しかし、異なるマシンは異なる文字コードを持っていたため、ファイル交換で問題が起きるようになってきました。結局、128 から 255 まで範囲の値のセットで、よく使われるものが色々と現れました。そのうちいくつかは国際標準化機構 (International Standards Organization) によって定義された本物の標準になり、またいくつかはあちこちの会社で開発され、なんとか広まったものが <em>事実上の</em> 慣習となっていきました。</p>
+<p>In the 1980s, almost all personal computers were 8-bit, meaning that bytes could
+hold values ranging from 0 to 255.  ASCII codes only went up to 127, so some
+machines assigned values between 128 and 255 to accented characters.  Different
+machines had different codes, however, which led to problems exchanging files.
+Eventually various commonly used sets of values for the 128–255 range emerged.
+Some were true standards, defined by the International Organization for
+Standardization, and some were <em>de facto</em> conventions that were invented by one
+company or another and managed to catch on.</p>
 <p>255文字というのは十分多い数ではありません。例えば、西ヨーロッパで使われるアクセント付き文字とロシアで使われるキリルアルファベットの両方は 128文字以上あるので、128–255の間におさめることはできません。</p>
 <p>異なる文字コードを使ってファイルを作成することは可能です (持っているロシア語のファイル全てを KOI8 と呼ばれるコーディングシステムで、持っているフランス語のファイル全てを別の Latin1 と呼ばれるコーディングシステムにすることで)、しかし、ロシア語の文章を引用するフランス語の文章を書きたい場合にはどうでしょう? 1989年代にこの問題を解決したいという要望が上って、Unicode 標準化の努力が始まりました。</p>
 <p>Unicord は 8-bit 文字の代わりに 16-bit 文字を使うことに取り掛かりました。16 bit ということは 2^16 = 65,536 の異なった値が使え、多くの様々なアルファベットの様々な文字を表現できるということを意味します; 最初の目標は、Unicode に人間の1つ1つの言語のアルファベットを含めることでした。しかし 16 bit でさえ、その目標を達成するためには不十分であることが判明し、最新の Unicode 規格では 0 から 1,114,111 (16進表記で <code class="docutils literal"><span class="pre">0x10FFFF</span></code> ) までのより広い範囲の文字コードを使っています。</p>
@@ -232,7 +240,7 @@ Unicode character tables.</p>
 <span class="go">&#39;\u0394&#39;</span>
 </pre></div>
 </div>
-<p>加えて、 <a class="reference internal" href="../library/functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> クラスの <a class="reference internal" href="../library/stdtypes.html#bytes.decode" title="bytes.decode"><code class="xref py py-func docutils literal"><span class="pre">decode()</span></code></a> メソッドを使って文字列を作ることもできます。このメソッドは <code class="docutils literal"><span class="pre">UTF-8</span></code> のような値を <em>encoding</em> 引数に取り、オプションで <em>errors</em> 引数を取ります。</p>
+<p>加えて、 <a class="reference internal" href="../library/stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> クラスの <a class="reference internal" href="../library/stdtypes.html#bytes.decode" title="bytes.decode"><code class="xref py py-func docutils literal"><span class="pre">decode()</span></code></a> メソッドを使って文字列を作ることもできます。このメソッドは <code class="docutils literal"><span class="pre">UTF-8</span></code> のような値を <em>encoding</em> 引数に取り、オプションで <em>errors</em> 引数を取ります。</p>
 <p><em>errors</em> 引数は、入力文字列に対しエンコーディングルールに従った変換ができなかったときの対応方法を指定します。この引数に使える値は <code class="docutils literal"><span class="pre">'strict'</span></code> (<a class="reference internal" href="../library/exceptions.html#UnicodeDecodeError" title="UnicodeDecodeError"><code class="xref py py-exc docutils literal"><span class="pre">UnicodeDecodeError</span></code></a> を送出する)、 <code class="docutils literal"><span class="pre">'replace'</span></code> (<code class="docutils literal"><span class="pre">REPLACEMENT</span> <span class="pre">CHARACTER</span></code> である <code class="docutils literal"><span class="pre">U+FFFD</span></code> を使う)、 <code class="docutils literal"><span class="pre">'ignore'</span></code> (結果となる Unicode から単に文字を除く) 、<code class="docutils literal"><span class="pre">'backslashreplace'</span></code> (エスケープシーケンス <code class="docutils literal"><span class="pre">\xNN</span></code> を挿入する) です。次の例はこれらの違いを示しています:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x80</span><span class="s1">abc&#39;</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="s2">&quot;strict&quot;</span><span class="p">)</span>  
 <span class="gt">Traceback (most recent call last):</span>
@@ -258,7 +266,7 @@ Unicode character tables.</p>
 </div>
 <div class="section" id="converting-to-bytes">
 <h3>バイト列への変換<a class="headerlink" href="#converting-to-bytes" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p><a class="reference internal" href="../library/stdtypes.html#bytes.decode" title="bytes.decode"><code class="xref py py-meth docutils literal"><span class="pre">bytes.decode()</span></code></a> とは処理が逆向きのメソッドが <a class="reference internal" href="../library/stdtypes.html#str.encode" title="str.encode"><code class="xref py py-meth docutils literal"><span class="pre">str.encode()</span></code></a> です。このメソッドは、 Unicode 文字列を指定された <em>encoding</em> でエンコードして、 <a class="reference internal" href="../library/functions.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> による表現で返します。</p>
+<p><a class="reference internal" href="../library/stdtypes.html#bytes.decode" title="bytes.decode"><code class="xref py py-meth docutils literal"><span class="pre">bytes.decode()</span></code></a> とは処理が逆向きのメソッドが <a class="reference internal" href="../library/stdtypes.html#str.encode" title="str.encode"><code class="xref py py-meth docutils literal"><span class="pre">str.encode()</span></code></a> です。このメソッドは、 Unicode 文字列を指定された <em>encoding</em> でエンコードして、 <a class="reference internal" href="../library/stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> による表現で返します。</p>
 <p><em>errors</em> 引数は <a class="reference internal" href="../library/stdtypes.html#bytes.decode" title="bytes.decode"><code class="xref py py-meth docutils literal"><span class="pre">decode()</span></code></a> メソッドのパラメータと同じものですが、サポートされているハンドラの数がもう少し多いです。
 <code class="docutils literal"><span class="pre">'strict'</span></code> 、 <code class="docutils literal"><span class="pre">'ignore'</span></code> 、 <code class="docutils literal"><span class="pre">'replace'</span></code> (このメソッドでは、エンコードできなかった文字の代わりに疑問符を挿入する) の他に、 <code class="docutils literal"><span class="pre">'xmlcharrefreplace'</span></code> (XML 文字参照を挿入する) と <code class="docutils literal"><span class="pre">backslashreplace</span></code> (エスケープシーケンス <code class="docutils literal"><span class="pre">\nNNNN</span></code> を挿入する)、 <code class="docutils literal"><span class="pre">namereplace</span></code> (エスケープシーケンス <code class="docutils literal"><span class="pre">\N{...}</span></code> を挿入する) があります。</p>
 <p>次の例では、それぞれの異なる処理結果が示されています:</p>
@@ -541,7 +549,7 @@ representation in Python 3.3.</p>
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/unicode.rst.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/howto/unicode.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -570,7 +578,7 @@ representation in Python 3.3.</p>
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -598,7 +606,7 @@ representation in Python 3.3.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 15, 2017
+    最終更新日時: 10月 18, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

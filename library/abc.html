@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>29.7. abc — 抽象基底クラス &#8212; Python 3.6.1 ドキュメント</title>
+    <title>29.7. abc — 抽象基底クラス &#8212; Python 3.6.3 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.1',
+        VERSION:     '3.6.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.1 ドキュメント 内を検索"
+          title="Python 3.6.3 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -44,6 +44,7 @@
     });
     </script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
     <script type="text/javascript" src="../_static/version_switch.js"></script>
     
     
@@ -70,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -105,7 +106,36 @@
 <hr class="docutils" />
 <p>このモジュールは Python に <span class="target" id="index-4"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3119"><strong>PEP 3119</strong></a> で概要が示された <a class="reference internal" href="../glossary.html#term-abstract-base-class"><span class="xref std std-term">抽象基底クラス</span></a> (ABC) を定義する基盤を提供します。なぜこれが Python に付け加えられたかについてはその PEP を参照してください。 (ABC に基づいた数の型階層を扱った <span class="target" id="index-5"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3141"><strong>PEP 3141</strong></a> と <a class="reference internal" href="numbers.html#module-numbers" title="numbers: Numeric abstract base classes (Complex, Real, Integral, etc.)."><code class="xref py py-mod docutils literal"><span class="pre">numbers</span></code></a> モジュールも参照してください。)</p>
 <p><a class="reference internal" href="collections.abc.html#module-collections.abc" title="collections.abc: Abstract base classes for containers"><code class="xref py py-mod docutils literal"><span class="pre">collections.abc</span></code></a> サブモジュールには ABC から派生した具象クラスがいくつかあります。これらから、もちろんですが、さらに派生させることもできます。また <a class="reference internal" href="collections.html#module-collections" title="collections: Container datatypes"><code class="xref py py-mod docutils literal"><span class="pre">collections</span></code></a> モジュールにはいくつかの ABC もあって、あるクラスやインスタンスが特定のインタフェースを提供しているかどうか、たとえばハッシュ可能かあるいはマッピングか、をテストできます。</p>
-<p>このモジュールは以下のクラスを提供します:</p>
+<p>This module provides the metaclass <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> for defining ABCs and
+a helper class <a class="reference internal" href="#abc.ABC" title="abc.ABC"><code class="xref py py-class docutils literal"><span class="pre">ABC</span></code></a> to alternatively define ABCs through inheritance:</p>
+<dl class="class">
+<dt id="abc.ABC">
+<em class="property">class </em><code class="descclassname">abc.</code><code class="descname">ABC</code><a class="headerlink" href="#abc.ABC" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>A helper class that has <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> as its metaclass.  With this class,
+an abstract base class can be created by simply deriving from <a class="reference internal" href="#abc.ABC" title="abc.ABC"><code class="xref py py-class docutils literal"><span class="pre">ABC</span></code></a>
+avoiding sometimes confusing metaclass usage, for example:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABC</span>
+
+<span class="k">class</span> <span class="nc">MyABC</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Note that the type of <a class="reference internal" href="#abc.ABC" title="abc.ABC"><code class="xref py py-class docutils literal"><span class="pre">ABC</span></code></a> is still <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a>, therefore
+inheriting from <a class="reference internal" href="#abc.ABC" title="abc.ABC"><code class="xref py py-class docutils literal"><span class="pre">ABC</span></code></a> requires the usual precautions regarding
+metaclass usage, as multiple inheritance may lead to metaclass conflicts.
+One may also define an abstract base class by passing the metaclass
+keyword and using <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> directly, for example:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABCMeta</span>
+
+<span class="k">class</span> <span class="nc">MyABC</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
+</div>
+</dd></dl>
+
 <dl class="class">
 <dt id="abc.ABCMeta">
 <em class="property">class </em><code class="descclassname">abc.</code><code class="descname">ABCMeta</code><a class="headerlink" href="#abc.ABCMeta" title="この定義へのパーマリンク">¶</a></dt>
@@ -116,9 +146,9 @@
 <dt id="abc.ABCMeta.register">
 <code class="descname">register</code><span class="sig-paren">(</span><em>subclass</em><span class="sig-paren">)</span><a class="headerlink" href="#abc.ABCMeta.register" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><em>subclass</em> を 「仮想的サブクラス」 としてこの ABC に登録します。たとえば:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABCMeta</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABC</span>
 
-<span class="k">class</span> <span class="nc">MyABC</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">MyABC</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="k">pass</span>
 
 <span class="n">MyABC</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">tuple</span><span class="p">)</span>
@@ -153,7 +183,7 @@
     <span class="k">def</span> <span class="nf">get_iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-<span class="k">class</span> <span class="nc">MyIterable</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">MyIterable</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -178,17 +208,6 @@
 <p>最後に、一番下の行は <code class="docutils literal"><span class="pre">Foo</span></code> を <a class="reference internal" href="stdtypes.html#iterator.__iter__" title="iterator.__iter__"><code class="xref py py-meth docutils literal"><span class="pre">__iter__()</span></code></a> メソッドを定義しないにもかかわらず <code class="docutils literal"><span class="pre">MyIterable</span></code> の仮想的サブクラスにします(<code class="docutils literal"><span class="pre">Foo</span></code> は古い様式の <a class="reference internal" href="../reference/datamodel.html#object.__len__" title="object.__len__"><code class="xref py py-meth docutils literal"><span class="pre">__len__()</span></code></a> と <a class="reference internal" href="../reference/datamodel.html#object.__getitem__" title="object.__getitem__"><code class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></code></a> を用いたイテレータプロトコルを使っています。)。これによって <code class="docutils literal"><span class="pre">Foo</span></code> のメソッドとして <code class="docutils literal"><span class="pre">get_iterator</span></code> が手に入るわけではないことに注意してください。それは別に提供されています。</p>
 </dd></dl>
 
-<dl class="class">
-<dt id="abc.ABC">
-<em class="property">class </em><code class="descclassname">abc.</code><code class="descname">ABC</code><a class="headerlink" href="#abc.ABC" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> をメタクラスとするヘルパークラスです。
-このクラスを使うと、混乱しがちなメタクラスを使わずに、単に <a class="reference internal" href="#abc.ABC" title="abc.ABC"><code class="xref py py-class docutils literal"><span class="pre">ABC</span></code></a> を継承するだけで抽象基底クラスを作成できます。</p>
-<p><a class="reference internal" href="#abc.ABC" title="abc.ABC"><code class="xref py py-class docutils literal"><span class="pre">ABC</span></code></a> の型はやはり <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> であり、そのため <a class="reference internal" href="#abc.ABC" title="abc.ABC"><code class="xref py py-class docutils literal"><span class="pre">ABC</span></code></a> から継承するときは、メタクラスの衝突を引き起こし得る多重継承のような、メタクラスを使う上でのいつもの用心が求められることに注意してください。</p>
-<div class="versionadded">
-<p><span class="versionmodified">バージョン 3.4 で追加.</span></p>
-</div>
-</dd></dl>
-
 <p><a class="reference internal" href="#module-abc" title="abc: Abstract base classes according to PEP 3119."><code class="xref py py-mod docutils literal"><span class="pre">abc</span></code></a> モジュールは以下のデコレータも提供しています:</p>
 <dl class="function">
 <dt id="abc.abstractmethod">
@@ -197,7 +216,7 @@
 <p>このデコレータを使うには、クラスのメタクラスが <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> かそれを継承したものである必要があります。 <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> の派生クラスをメタクラスに持つクラスは、全ての抽象メソッドとプロパティをオーバーロードしない限りインスタンス化することができません。抽象メソッドは通常の 『super』 呼び出し方法で呼ぶことができます。 <a class="reference internal" href="#abc.abstractmethod" title="abc.abstractmethod"><code class="xref py py-func docutils literal"><span class="pre">abstractmethod()</span></code></a> はプロパティやデスクリプタのために抽象メソッドを定義することもできます。</p>
 <p>クラスに動的に抽象メソッドを追加する、あるいはメソッドやクラスが作られた後から抽象的かどうかの状態を変更しようと試みることは、サポートされません。 <a class="reference internal" href="#abc.abstractmethod" title="abc.abstractmethod"><code class="xref py py-func docutils literal"><span class="pre">abstractmethod()</span></code></a> が影響を与えるのは正規の継承により派生したサブクラスのみで、ABC の <code class="xref py py-meth docutils literal"><span class="pre">register()</span></code> メソッドで登録された 「仮想的サブクラス」 は影響されません。</p>
 <p><a class="reference internal" href="#abc.abstractmethod" title="abc.abstractmethod"><code class="xref py py-func docutils literal"><span class="pre">abstractmethod()</span></code></a> が他のメソッドデスクリプタと組み合わされる場合、次の例のように、一番内側のデコレータとして適用しなければなりません:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">my_abstract_method</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
         <span class="o">...</span>
@@ -248,7 +267,7 @@
 <code class="descclassname">&#64;</code><code class="descclassname">abc.</code><code class="descname">abstractclassmethod</code><a class="headerlink" href="#abc.abstractclassmethod" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>組み込みの <a class="reference internal" href="functions.html#classmethod" title="classmethod"><code class="xref py py-func docutils literal"><span class="pre">classmethod()</span></code></a> のサブクラスで、抽象クラスメソッドであることを示します。それ以外は <a class="reference internal" href="#abc.abstractmethod" title="abc.abstractmethod"><code class="xref py py-func docutils literal"><span class="pre">abstractmethod()</span></code></a> と同じです。</p>
 <p>この特殊ケースは <a class="reference internal" href="functions.html#classmethod" title="classmethod"><code class="xref py py-func docutils literal"><span class="pre">classmethod()</span></code></a> デコレータが抽象メソッドに適用された場合に抽象的だと正しく認識されるようになったため撤廃されます:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="nd">@classmethod</span>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">my_abstract_classmethod</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
@@ -268,7 +287,7 @@
 <code class="descclassname">&#64;</code><code class="descclassname">abc.</code><code class="descname">abstractstaticmethod</code><a class="headerlink" href="#abc.abstractstaticmethod" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>組み込みの <a class="reference internal" href="functions.html#staticmethod" title="staticmethod"><code class="xref py py-func docutils literal"><span class="pre">staticmethod()</span></code></a> のサブクラスで、抽象静的メソッドであることを示します。それ以外は <a class="reference internal" href="#abc.abstractmethod" title="abc.abstractmethod"><code class="xref py py-func docutils literal"><span class="pre">abstractmethod()</span></code></a> と同じです。</p>
 <p>この特殊ケースは <a class="reference internal" href="functions.html#staticmethod" title="staticmethod"><code class="xref py py-func docutils literal"><span class="pre">staticmethod()</span></code></a> デコレータが抽象メソッドに適用された場合に抽象的だと正しく認識されるようになったため撤廃されます:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="nd">@staticmethod</span>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">my_abstract_staticmethod</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
@@ -285,11 +304,11 @@
 
 <dl class="function">
 <dt id="abc.abstractproperty">
-<code class="descclassname">&#64;</code><code class="descclassname">abc.</code><code class="descname">abstractproperty</code><span class="sig-paren">(</span><em>fget=None</em>, <em>fset=None</em>, <em>fdel=None</em>, <em>doc=None</em><span class="sig-paren">)</span><a class="headerlink" href="#abc.abstractproperty" title="この定義へのパーマリンク">¶</a></dt>
+<code class="descclassname">&#64;</code><code class="descclassname">abc.</code><code class="descname">abstractproperty</code><a class="headerlink" href="#abc.abstractproperty" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>組み込みの <a class="reference internal" href="functions.html#property" title="property"><code class="xref py py-func docutils literal"><span class="pre">property()</span></code></a> のサブクラスで、抽象プロパティであることを示します。</p>
 <p>この関数を使うにはクラスのメタクラスが <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> であるかまたは派生したものであることが求められます。 <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> から派生したメタクラスを持つクラスは全ての抽象メソッドおよびプロパティをオーバーライドしない限りインスタンス化できません。抽象プロパティは普通の 『super』 呼び出し機構を使って呼び出すことができます。</p>
 <p>この特殊ケースは <a class="reference internal" href="functions.html#property" title="property"><code class="xref py py-func docutils literal"><span class="pre">property()</span></code></a> デコレータが抽象メソッドに適用された場合に抽象的だと正しく認識されるようになったため撤廃されます:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">my_abstract_property</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -297,7 +316,7 @@
 </pre></div>
 </div>
 <p>この例は読み取り専用のプロパティを定義しています。プロパティを構成するメソッドの1つ以上を abstract にすることで、読み書きできる抽象プロパティを定義することができます:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">C</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="o">...</span>
@@ -358,7 +377,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/abc.rst.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/abc.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -387,7 +406,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -416,7 +435,7 @@
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 15, 2017
+    最終更新日時: 10月 18, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

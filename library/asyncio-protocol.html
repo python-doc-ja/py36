@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>18.5.4. トランスポートとプロトコル (コールバックベースの API) &#8212; Python 3.6.1 ドキュメント</title>
+    <title>18.5.4. Transports and protocols (callback based API) &#8212; Python 3.6.3 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.1',
+        VERSION:     '3.6.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.1 ドキュメント 内を検索"
+          title="Python 3.6.3 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -44,6 +44,7 @@
     });
     </script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
     <script type="text/javascript" src="../_static/version_switch.js"></script>
     
     
@@ -70,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -101,7 +102,9 @@
           <div class="body" role="main">
             
   <div class="section" id="transports-and-protocols-callback-based-api">
-<h1>18.5.4. トランスポートとプロトコル (コールバックベースの API)<a class="headerlink" href="#transports-and-protocols-callback-based-api" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<h1>18.5.4. Transports and protocols (callback based API)<a class="headerlink" href="#transports-and-protocols-callback-based-api" title="このヘッドラインへのパーマリンク">¶</a></h1>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/asyncio/transports.py">Lib/asyncio/transports.py</a></p>
+<p><strong>Source code:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/asyncio/protocols.py">Lib/asyncio/protocols.py</a></p>
 <div class="section" id="transports">
 <span id="asyncio-transport"></span><h2>18.5.4.1. トランスポート<a class="headerlink" href="#transports" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>トランスポートは、<a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a> が提供する、さまざまな種類の通信チャンネルを抽象化するクラス群です。通常あなた自身が直接トランスポートのインスタンスを作成することはなく、<a class="reference internal" href="asyncio-eventloop.html#asyncio.AbstractEventLoop" title="asyncio.AbstractEventLoop"><code class="xref py py-class docutils literal"><span class="pre">AbstractEventLoop</span></code></a> のメソッドを呼び出すことでトランスポートとその下層の通信チャンネルのインスタンスが作成され、成功時にコールバックが返ります。</p>
@@ -246,7 +249,15 @@
 <dt id="asyncio.WriteTransport.set_write_buffer_limits">
 <code class="descname">set_write_buffer_limits</code><span class="sig-paren">(</span><em>high=None</em>, <em>low=None</em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.WriteTransport.set_write_buffer_limits" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>書き込みフロー制御の <em>最高</em> および <em>最低</em> 水位点 (<em>high</em>- and <em>low</em>-water limits) を設定します。</p>
-<p>これら 2 個の値はプロトコルの <code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> および <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> メソッドが呼ばれたときの振る舞いを制御します。指定する場合、<em>low</em> は <em>high</em> 以下でなければなりません。<em>high</em> も <em>low</em> も負数は指定できません。</p>
+<p>These two values (measured in number of
+bytes) control when the protocol’s
+<code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> and <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> methods are called.
+If specified, the low-water limit must be less than or equal to the
+high-water limit.  Neither <em>high</em> nor <em>low</em> can be negative.</p>
+<p><code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> is called when the buffer size becomes greater
+than or equal to the <em>high</em> value. If writing has been paused,
+<code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> is called when the buffer size becomes less
+than or equal to the <em>low</em> value.</p>
 <p>デフォルト値は実装固有になります。最高水位点のみ与えられた場合、最低水位点は最高水位点以下の実装固有のデフォルト値になります。最高水位点にゼロが設定されると最低水位点も強制的にゼロになり、バッファが空でなくなるたびに <code class="xref py py-meth docutils literal"><span class="pre">pause_writing()</span></code> が呼び出されるようになります。最低水位点にゼロが設定されるとバッファは空になるとすぐに <code class="xref py py-meth docutils literal"><span class="pre">resume_writing()</span></code> が呼び出されるようになります。どちらかにゼロを設定することは、並列の I/O 処理や計算の機会を減らすことになるため、一般に最善とは言えません。</p>
 <p>水位点の取得には <a class="reference internal" href="#asyncio.WriteTransport.get_write_buffer_limits" title="asyncio.WriteTransport.get_write_buffer_limits"><code class="xref py py-meth docutils literal"><span class="pre">get_write_buffer_limits()</span></code></a> を使用します。</p>
 </dd></dl>
@@ -713,7 +724,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="../contents.html">目次</a></h3>
   <ul>
-<li><a class="reference internal" href="#">18.5.4. トランスポートとプロトコル (コールバックベースの API)</a><ul>
+<li><a class="reference internal" href="#">18.5.4. Transports and protocols (callback based API)</a><ul>
 <li><a class="reference internal" href="#transports">18.5.4.1. トランスポート</a><ul>
 <li><a class="reference internal" href="#basetransport">18.5.4.1.1. BaseTransport</a></li>
 <li><a class="reference internal" href="#readtransport">18.5.4.1.2. ReadTransport</a></li>
@@ -754,7 +765,7 @@
     <ul class="this-page-menu">
       <li><a href="../bugs.html">バグ報告</a></li>
       <li>
-        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio-protocol.rst.rst"
+        <a href="https://github.com/python/cpython/blob/3.6/Doc/library/asyncio-protocol.rst"
             rel="nofollow">ソースの表示
         </a>
       </li>
@@ -783,7 +794,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.1</span>
+          <span class="version_switcher_placeholder">3.6.3</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -813,7 +824,7 @@
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 15, 2017
+    最終更新日時: 10月 18, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
