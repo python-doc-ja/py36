@@ -800,22 +800,15 @@ initialised correctly.
 Failing to do so will result in a <a class="reference internal" href="../library/exceptions.html#DeprecationWarning" title="DeprecationWarning"><code class="xref py py-exc docutils literal"><span class="pre">DeprecationWarning</span></code></a> in Python 3.6,
 and a <a class="reference internal" href="../library/exceptions.html#RuntimeWarning" title="RuntimeWarning"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeWarning</span></code></a> in the future.</p>
 </div>
-<p>When using the default metaclass <a class="reference internal" href="../library/functions.html#type" title="type"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a>, or any metaclass that ultimately
-calls <code class="docutils literal"><span class="pre">type.__new__</span></code>, the following additional customisation steps are
-invoked after creating the class object:</p>
+<p>デフォルトのメタクラス <a class="reference internal" href="../library/functions.html#type" title="type"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a> や最終的には <code class="docutils literal"><span class="pre">type.__new__</span></code> を呼び出すメタクラスを使っているときは、クラスオブジェクトを作成した後に次のカスタム化の手順が起動されます:</p>
 <ul class="simple">
-<li>first, <code class="docutils literal"><span class="pre">type.__new__</span></code> collects all of the descriptors in the class
-namespace that define a <a class="reference internal" href="#object.__set_name__" title="object.__set_name__"><code class="xref py py-meth docutils literal"><span class="pre">__set_name__()</span></code></a> method;</li>
-<li>second, all of these <code class="docutils literal"><span class="pre">__set_name__</span></code> methods are called with the class
-being defined and the assigned name of that particular descriptor; and</li>
-<li>finally, the <a class="reference internal" href="#object.__init_subclass__" title="object.__init_subclass__"><code class="xref py py-meth docutils literal"><span class="pre">__init_subclass__()</span></code></a> hook is called on the
-immediate parent of the new class in its method resolution order.</li>
+<li>最初に、 <code class="docutils literal"><span class="pre">type.__new__</span></code> が <a class="reference internal" href="#object.__set_name__" title="object.__set_name__"><code class="xref py py-meth docutils literal"><span class="pre">__set_name__()</span></code></a> が定義されているクラスの名前空間にある全てのデスクリプタを収集します;</li>
+<li>次に、それら全ての <code class="docutils literal"><span class="pre">__set_name__</span></code> メソッドが、そのメソッドが定義されているクラス、およびそこに属するデスクリプタに割り当てられている名前を引数として呼び出されます;</li>
+<li>最後に、新しいクラスのメソッド解決順序ですぐ上に位置する親クラスで <a class="reference internal" href="#object.__init_subclass__" title="object.__init_subclass__"><code class="xref py py-meth docutils literal"><span class="pre">__init_subclass__()</span></code></a> フックが呼び出されます。</li>
 </ul>
 <p>クラスオブジェクトが作成された後には、クラス定義に含まれているクラスデコレータ (もしあれば) にクラスオブジェクトが渡され、デコレータが返すオブジェクトがここで定義されたクラスとしてローカルの名前空間に束縛されます。</p>
-<p>When a new class is created by <code class="docutils literal"><span class="pre">type.__new__</span></code>, the object provided as the
-namespace parameter is copied to a new ordered mapping and the original
-object is discarded. The new copy is wrapped in a read-only proxy, which
-becomes the <a class="reference internal" href="../library/stdtypes.html#object.__dict__" title="object.__dict__"><code class="xref py py-attr docutils literal"><span class="pre">__dict__</span></code></a> attribute of the class object.</p>
+<p>新しいクラスが <code class="docutils literal"><span class="pre">type.__new__</span></code> で生成されたときは、名前空間引数として与えられたオブジェクトは新しい順序付きのマッピングに複製され、元のオブジェクトは破棄されます。
+新しく複製したものは読み取り専用のプロキシでラップされ、クラスオブジェクトの <a class="reference internal" href="../library/stdtypes.html#object.__dict__" title="object.__dict__"><code class="xref py py-attr docutils literal"><span class="pre">__dict__</span></code></a> 属性になります。</p>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
@@ -826,10 +819,7 @@ becomes the <a class="reference internal" href="../library/stdtypes.html#object.
 </div>
 <div class="section" id="metaclass-example">
 <h4>3.3.3.6. メタクラスの例<a class="headerlink" href="#metaclass-example" title="このヘッドラインへのパーマリンク">¶</a></h4>
-<p>The potential uses for metaclasses are boundless. Some ideas that have been
-explored include enum, logging, interface checking, automatic delegation,
-automatic property creation, proxies, frameworks, and automatic resource
-locking/synchronization.</p>
+<p>メタクラスは限りない潜在的利用価値を持っています。これまで試されてきたアイデアには、列挙型、ログ記録、インタフェースのチェック、 自動デリゲーション、自動プロパティ生成、プロキシ、フレームワーク、そして自動リソースロック／同期といったものがあります。</p>
 <p>ここに、 <a class="reference internal" href="../library/collections.html#collections.OrderedDict" title="collections.OrderedDict"><code class="xref py py-class docutils literal"><span class="pre">collections.OrderedDict</span></code></a> を使い、クラス変数が定義された順序を記憶するメタクラスの例を挙げます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">OrderedClass</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
 
@@ -899,11 +889,9 @@ locking/synchronization.</p>
 オブジェクトの長さを 0 以上の整数で返さなければなりません。
 また、 <a class="reference internal" href="#object.__bool__" title="object.__bool__"><code class="xref py py-meth docutils literal"><span class="pre">__bool__()</span></code></a>  メソッドを定義しておらず、 <a class="reference internal" href="#object.__len__" title="object.__len__"><code class="xref py py-meth docutils literal"><span class="pre">__len__()</span></code></a> メソッドが 0 を返すようなオブジェクトは、ブール演算コンテキストでは偽とみなされます。</p>
 <div class="impl-detail compound">
-<p><strong>CPython 実装の詳細:</strong> In CPython, the length is required to be at most <a class="reference internal" href="../library/sys.html#sys.maxsize" title="sys.maxsize"><code class="xref py py-attr docutils literal"><span class="pre">sys.maxsize</span></code></a>.
-If the length is larger than <code class="xref py py-attr docutils literal"><span class="pre">sys.maxsize</span></code> some features (such as
-<a class="reference internal" href="../library/functions.html#len" title="len"><code class="xref py py-func docutils literal"><span class="pre">len()</span></code></a>) may raise <a class="reference internal" href="../library/exceptions.html#OverflowError" title="OverflowError"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a>.  To prevent raising
-<code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> by truth value testing, an object must define a
-<a class="reference internal" href="#object.__bool__" title="object.__bool__"><code class="xref py py-meth docutils literal"><span class="pre">__bool__()</span></code></a> method.</p>
+<p><strong>CPython 実装の詳細:</strong> CPython では、オブジェクトの長さは最大でも <a class="reference internal" href="../library/sys.html#sys.maxsize" title="sys.maxsize"><code class="xref py py-attr docutils literal"><span class="pre">sys.maxsize</span></code></a> であることが要求されます。
+長さが <code class="xref py py-attr docutils literal"><span class="pre">sys.maxsize</span></code> を越える場合、(<a class="reference internal" href="../library/functions.html#len" title="len"><code class="xref py py-func docutils literal"><span class="pre">len()</span></code></a> のような) いくつかの機能は <a class="reference internal" href="../library/exceptions.html#OverflowError" title="OverflowError"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> を送出するでしょう。
+真偽値としての判定で <code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code> を送出しないようにするには、オブジェクトは meth:<cite>__bool__</cite> メソッドを定義していなければなりません。</p>
 </div>
 </dd></dl>
 
@@ -1051,14 +1039,9 @@ If the length is larger than <code class="xref py py-attr docutils literal"><spa
 <code class="descclassname">object.</code><code class="descname">__rxor__</code><span class="sig-paren">(</span><em>self</em>, <em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#object.__rxor__" title="この定義へのパーマリンク">¶</a></dt>
 <dt id="object.__ror__">
 <code class="descclassname">object.</code><code class="descname">__ror__</code><span class="sig-paren">(</span><em>self</em>, <em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#object.__ror__" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p id="index-90">These methods are called to implement the binary arithmetic operations
-(<code class="docutils literal"><span class="pre">+</span></code>, <code class="docutils literal"><span class="pre">-</span></code>, <code class="docutils literal"><span class="pre">*</span></code>, <code class="docutils literal"><span class="pre">&#64;</span></code>, <code class="docutils literal"><span class="pre">/</span></code>, <code class="docutils literal"><span class="pre">//</span></code>, <code class="docutils literal"><span class="pre">%</span></code>, <a class="reference internal" href="../library/functions.html#divmod" title="divmod"><code class="xref py py-func docutils literal"><span class="pre">divmod()</span></code></a>,
-<a class="reference internal" href="../library/functions.html#pow" title="pow"><code class="xref py py-func docutils literal"><span class="pre">pow()</span></code></a>, <code class="docutils literal"><span class="pre">**</span></code>, <code class="docutils literal"><span class="pre">&lt;&lt;</span></code>, <code class="docutils literal"><span class="pre">&gt;&gt;</span></code>, <code class="docutils literal"><span class="pre">&amp;</span></code>, <code class="docutils literal"><span class="pre">^</span></code>, <code class="docutils literal"><span class="pre">|</span></code>) with reflected
-(swapped) operands.  These functions are only called if the left operand does
-not support the corresponding operation <a class="footnote-reference" href="#id10" id="id5">[3]</a> and the operands are of different
-types. <a class="footnote-reference" href="#id11" id="id6">[4]</a> For instance, to evaluate the expression <code class="docutils literal"><span class="pre">x</span> <span class="pre">-</span> <span class="pre">y</span></code>, where <em>y</em> is
-an instance of a class that has an <a class="reference internal" href="#object.__rsub__" title="object.__rsub__"><code class="xref py py-meth docutils literal"><span class="pre">__rsub__()</span></code></a> method, <code class="docutils literal"><span class="pre">y.__rsub__(x)</span></code>
-is called if <code class="docutils literal"><span class="pre">x.__sub__(y)</span></code> returns <em>NotImplemented</em>.</p>
+<dd><p id="index-90">これらのメソッドを呼んで二項算術演算 (<code class="docutils literal"><span class="pre">+</span></code>, <code class="docutils literal"><span class="pre">-</span></code>, <code class="docutils literal"><span class="pre">*</span></code>, <code class="docutils literal"><span class="pre">&#64;</span></code>, <code class="docutils literal"><span class="pre">/</span></code>, <code class="docutils literal"><span class="pre">//</span></code>, <code class="docutils literal"><span class="pre">%</span></code>, <a class="reference internal" href="../library/functions.html#divmod" title="divmod"><code class="xref py py-func docutils literal"><span class="pre">divmod()</span></code></a>, <a class="reference internal" href="../library/functions.html#pow" title="pow"><code class="xref py py-func docutils literal"><span class="pre">pow()</span></code></a>, <code class="docutils literal"><span class="pre">**</span></code>, <code class="docutils literal"><span class="pre">&lt;&lt;</span></code>, <code class="docutils literal"><span class="pre">&gt;&gt;</span></code>, <code class="docutils literal"><span class="pre">&amp;</span></code>, <code class="docutils literal"><span class="pre">^</span></code>, <code class="docutils literal"><span class="pre">|</span></code>) の、被演算子が反射した (入れ替えられた) ものを実装します。
+これらの関数は、左側の被演算子が対応する演算をサポートしておらず  <a class="footnote-reference" href="#id10" id="id5">[3]</a>  、非演算子が異なる型の場合にのみ呼び出されます。 <a class="footnote-reference" href="#id11" id="id6">[4]</a>
+例えば、 <em>y</em> が <a class="reference internal" href="#object.__rsub__" title="object.__rsub__"><code class="xref py py-meth docutils literal"><span class="pre">__rsub__()</span></code></a> メソッドのあるクラスのインスタンスである場合、 式 <code class="docutils literal"><span class="pre">x</span> <span class="pre">-</span> <span class="pre">y</span></code> を評価すると <code class="docutils literal"><span class="pre">x.__sub__(y)</span></code> が <em>NotImplemented</em> を返すときは <code class="docutils literal"><span class="pre">y.__rsub__(x)</span></code> が呼ばれます。</p>
 <p id="index-91">ただし、三項演算子 <a class="reference internal" href="../library/functions.html#pow" title="pow"><code class="xref py py-func docutils literal"><span class="pre">pow()</span></code></a> が <a class="reference internal" href="#object.__rpow__" title="object.__rpow__"><code class="xref py py-meth docutils literal"><span class="pre">__rpow__()</span></code></a> を呼ぶことはないので注意してください (型強制の規則が非常に難解になるからです)。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
