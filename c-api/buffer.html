@@ -111,7 +111,7 @@
 </ul>
 <p><a class="reference internal" href="../library/stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> や <a class="reference internal" href="../library/stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a> などのシンプルなオブジェクトは、内部のバッファーをバイト列の形式で公開します。
 バイト列以外の形式も利用可能です。例えば、 <a class="reference internal" href="../library/array.html#array.array" title="array.array"><code class="xref py py-class docutils literal"><span class="pre">array.array</span></code></a> が公開する要素はマルチバイト値になることがあります。</p>
-<p>bufferインタフェースの利用者の一例は、ファイルオブジェクトの <a class="reference internal" href="../library/io.html#io.BufferedIOBase.write" title="io.BufferedIOBase.write"><code class="xref py py-meth docutils literal"><span class="pre">write()</span></code></a>  メソッドです: bufferインタフェースを通して一連のバイト列を提供できるどんなオブジェクトでもファイルに書き込むことができます。  <code class="xref py py-meth docutils literal"><span class="pre">write()</span></code> は、その引数として渡されたオブジェクトの内部要素に対する読み取り専用アクセスのみを必要としますが、 <a class="reference internal" href="../library/io.html#io.BufferedIOBase.readinto" title="io.BufferedIOBase.readinto"><code class="xref py py-meth docutils literal"><span class="pre">readinto()</span></code></a> のような他のメソッドでは、その引数の内容に対する書き込みアクセスが必要です。bufferインタフェースにより、オブジェクトは読み書き両方、読み取り専用バッファへのアクセスを許可するかそれとも拒否するか選択することができます。</p>
+<p>bufferインタフェースの利用者の一例は、ファイルオブジェクトの <a class="reference internal" href="../library/io.html#io.BufferedIOBase.write" title="io.BufferedIOBase.write"><code class="xref py py-meth docutils literal"><span class="pre">write()</span></code></a>  メソッドです: bufferインタフェースを通して一連のバイト列を提供できるどんなオブジェクトでもファイルに書き込むことができます。  <code class="xref py py-meth docutils literal"><span class="pre">write()</span></code> は、その引数として渡されたオブジェクトの内部要素に対する読み出し専用アクセスのみを必要としますが、 <a class="reference internal" href="../library/io.html#io.BufferedIOBase.readinto" title="io.BufferedIOBase.readinto"><code class="xref py py-meth docutils literal"><span class="pre">readinto()</span></code></a> のような他のメソッドでは、その引数の内容に対する書き込みアクセスが必要です。bufferインタフェースにより、オブジェクトは読み書き両方、読み出し専用バッファへのアクセスを許可するかそれとも拒否するか選択することができます。</p>
 <p>bufferインタフェースの利用者には、対象となるオブジェクトのバッファを得る二つの方法があります:</p>
 <ul class="simple">
 <li>正しい引数で <a class="reference internal" href="#c.PyObject_GetBuffer" title="PyObject_GetBuffer"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GetBuffer()</span></code></a> を呼び出す;</li>
@@ -151,7 +151,7 @@ Py_ssize_t <code class="descname">len</code><a class="headerlink" href="#c.Py_bu
 <dl class="member">
 <dt id="c.Py_buffer.readonly">
 int <code class="descname">readonly</code><a class="headerlink" href="#c.Py_buffer.readonly" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>バッファが読み取り専用であるか示します。このフィールドは <a class="reference internal" href="#c.PyBUF_WRITABLE" title="PyBUF_WRITABLE"><code class="xref c c-macro docutils literal"><span class="pre">PyBUF_WRITABLE</span></code></a> フラグで制御できます。</p>
+<dd><p>バッファが読み出し専用であるか示します。このフィールドは <a class="reference internal" href="#c.PyBUF_WRITABLE" title="PyBUF_WRITABLE"><code class="xref c c-macro docutils literal"><span class="pre">PyBUF_WRITABLE</span></code></a> フラグで制御できます。</p>
 </dd></dl>
 
 <dl class="member">
@@ -189,7 +189,7 @@ Py_ssize_t *<code class="descname">shape</code><a class="headerlink" href="#c.Py
 <code class="docutils literal"><span class="pre">shape[0]</span> <span class="pre">*</span> <span class="pre">...</span> <span class="pre">*</span> <span class="pre">shape[ndim-1]</span> <span class="pre">*</span> <span class="pre">itemsize</span></code> は <a class="reference internal" href="#c.Py_buffer.len" title="Py_buffer.len"><code class="xref c c-member docutils literal"><span class="pre">len</span></code></a> と等しくなければなりません。</p>
 <p>shape の値は <code class="docutils literal"><span class="pre">shape[n]</span> <span class="pre">&gt;=</span> <span class="pre">0</span></code> に制限されます。 <code class="docutils literal"><span class="pre">shape[n]</span> <span class="pre">==</span> <span class="pre">0</span></code> の場合に特に注意が必要です。
 詳細は <a class="reference internal" href="#complex-arrays">complex arrays</a> を参照してください。</p>
-<p>shepe (形状) 配列は利用者からは読み取り専用です。</p>
+<p>shepe (形状) 配列は利用者からは読み出し専用です。</p>
 </dd></dl>
 
 <dl class="member">
@@ -197,7 +197,7 @@ Py_ssize_t *<code class="descname">shape</code><a class="headerlink" href="#c.Py
 Py_ssize_t *<code class="descname">strides</code><a class="headerlink" href="#c.Py_buffer.strides" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>各次元において新しい値を得るためにスキップするバイト数を示す、長さ <a class="reference internal" href="#c.Py_buffer.ndim" title="Py_buffer.ndim"><code class="xref c c-member docutils literal"><span class="pre">ndim</span></code></a> の <code class="xref c c-type docutils literal"><span class="pre">Py_ssize_t</span></code> の配列。</p>
 <p>ストライド値は、任意の整数を指定できます。規定の配列では、ストライドは通常でいけば有効です。しかし利用者は、<code class="docutils literal"><span class="pre">strides[n]</span> <span class="pre">&lt;=</span> <span class="pre">0</span></code> のケースを処理することができる必要があります。詳細については <a class="reference internal" href="#complex-arrays">complex arrays</a> を参照してください。</p>
-<p>消費者にとって、この strides 配列は読み取り専用です。</p>
+<p>消費者にとって、この strides 配列は読み出し専用です。</p>
 </dd></dl>
 
 <dl class="member">
@@ -209,7 +209,7 @@ suboffset の値が負の数の場合は、ポインタの参照解決は不要 
 <p>全ての suboffset が負数の場合 (つまり参照解決が不要) な場合、このフィールドは NULL でなければなりません (これがデフォルトです)。</p>
 <p>この種の配列表現は Python Imaging Library (PIL) で使われています。
 このような配列で要素にアクセスする方法についてさらに詳しことは <a class="reference internal" href="#complex-arrays">complex arrays</a> を参照してください。</p>
-<p>消費者にとって、suboffsets 配列は読み取り専用です。</p>
+<p>消費者にとって、suboffsets 配列は読み出し専用です。</p>
 </dd></dl>
 
 <dl class="member">
@@ -235,7 +235,7 @@ void *<code class="descname">internal</code><a class="headerlink" href="#c.Py_bu
 <div><dl class="macro">
 <dt id="c.PyBUF_WRITABLE">
 <code class="descname">PyBUF_WRITABLE</code><a class="headerlink" href="#c.PyBUF_WRITABLE" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><a class="reference internal" href="#c.Py_buffer.readonly" title="Py_buffer.readonly"><code class="xref c c-member docutils literal"><span class="pre">readonly</span></code></a> フィールドを制御します。もしこのフラグが設定されている場合、exporter は、書き込み可能なバッファを提供するか、さもなければ失敗を報告しなければなりません。フラグが設定されていない場合、exporterは、読み込み専用と書き込み可能なバッファのどちらを提供しても構いませんが、どちらで提供するかどうかは全ての消費者に対して一貫性がなければなりません。</p>
+<dd><p><a class="reference internal" href="#c.Py_buffer.readonly" title="Py_buffer.readonly"><code class="xref c c-member docutils literal"><span class="pre">readonly</span></code></a> フィールドを制御します。もしこのフラグが設定されている場合、exporter は、書き込み可能なバッファを提供するか、さもなければ失敗を報告しなければなりません。フラグが設定されていない場合、exporterは、読み出し専用と書き込み可能なバッファのどちらを提供しても構いませんが、どちらで提供するかどうかは全ての消費者に対して一貫性がなければなりません。</p>
 </dd></dl>
 
 <dl class="macro">
@@ -630,7 +630,7 @@ int <code class="descname">PyBuffer_FillInfo</code><span class="sig-paren">(</sp
 <dd><p>サイズが <em>len</em> の <em>buf</em> を <em>readonly</em> に従った書き込み可/不可の設定で公開するバッファリクエストを処理します。
 <em>buf</em> は符号無しバイトの列として解釈されます。</p>
 <p><em>flags</em> 引数はリクエストのタイプを示します。
-この関数は、 <em>buf</em> が読み取り専用と指定されていて、 <em>flags</em> に <a class="reference internal" href="#c.PyBUF_WRITABLE" title="PyBUF_WRITABLE"><code class="xref c c-macro docutils literal"><span class="pre">PyBUF_WRITABLE</span></code></a> が設定されていない限り、常にフラグに指定された通りに <em>view</em> を埋めます。</p>
+この関数は、 <em>buf</em> が読み出し専用と指定されていて、 <em>flags</em> に <a class="reference internal" href="#c.PyBUF_WRITABLE" title="PyBUF_WRITABLE"><code class="xref c c-macro docutils literal"><span class="pre">PyBUF_WRITABLE</span></code></a> が設定されていない限り、常にフラグに指定された通りに <em>view</em> を埋めます。</p>
 <p>成功したときは、 <code class="xref c c-member docutils literal"><span class="pre">view-&gt;obj</span></code> に <em>exporter</em> への新しい参照を設定し、 0 を返します。
 失敗したときは、 <code class="xref c c-data docutils literal"><span class="pre">PyExc_BufferError</span></code> を送出し、 <code class="xref c c-member docutils literal"><span class="pre">view-&gt;obj</span></code> に <em>NULL</em> を設定し、 <code class="docutils literal"><span class="pre">-1</span></code> を返します;</p>
 <p>この関数を <a class="reference internal" href="typeobj.html#buffer-structs"><span class="std std-ref">getbufferproc</span></a> の一部として使う場合には、 <em>exporter</em> はエクスポートするオブジェクトに設定しなければならず、さらに <em>flags</em> は変更せずに渡さなければなりません。
@@ -737,7 +737,7 @@ int <code class="descname">PyBuffer_FillInfo</code><span class="sig-paren">(</sp
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 19, 2017
+    最終更新日時: 10月 20, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

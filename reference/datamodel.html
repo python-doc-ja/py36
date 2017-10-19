@@ -271,7 +271,7 @@
 </tr>
 <tr class="row-even"><td><code class="xref py py-attr docutils literal"><span class="pre">__globals__</span></code></td>
 <td>関数のグローバル変数の入った辞書 (への参照) です — この辞書は、関数が定義されているモジュールのグローバルな名前空間を決定します。</td>
-<td>読み込み専用</td>
+<td>読み出し専用</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="../library/stdtypes.html#object.__dict__" title="object.__dict__"><code class="xref py py-attr docutils literal"><span class="pre">__dict__</span></code></a></td>
 <td>任意の関数属性をサポートするための名前空間が収められています。</td>
@@ -279,7 +279,7 @@
 </tr>
 <tr class="row-even"><td><code class="xref py py-attr docutils literal"><span class="pre">__closure__</span></code></td>
 <td><code class="docutils literal"><span class="pre">None</span></code> または関数の個々の自由変数 (引数以外の変数) に対して値を結び付けているセル (cell) 群からなるタプルになります。</td>
-<td>読み込み専用</td>
+<td>読み出し専用</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-attr docutils literal"><span class="pre">__annotations__</span></code></td>
 <td>パラメータの注釈が入った辞書です。辞書のキーはパラメータ名で、返り値の注釈がある場合は、<code class="docutils literal"><span class="pre">'return'</span></code> がそのキーとなります。</td>
@@ -428,7 +428,7 @@ the set of values to be yielded.</p>
 </dd>
 <dt>スライス (slice) オブジェクト</dt>
 <dd><p class="first" id="index-64">スライスオブジェクトは、 <a class="reference internal" href="#object.__getitem__" title="object.__getitem__"><code class="xref py py-meth docutils literal"><span class="pre">__getitem__()</span></code></a> メソッドのためのスライスを表すのに使われます。スライスオブジェクトは組み込みの <a class="reference internal" href="../library/functions.html#slice" title="slice"><code class="xref py py-func docutils literal"><span class="pre">slice()</span></code></a> 関数でも生成されます。</p>
-<p id="index-65">読み込み専用の特殊属性: <code class="xref py py-attr docutils literal"><span class="pre">start</span></code> は下限です; <code class="xref py py-attr docutils literal"><span class="pre">stop</span></code> は上限です; <code class="xref py py-attr docutils literal"><span class="pre">step</span></code> はステップの値です; それぞれ省略された場合は <code class="docutils literal"><span class="pre">None</span></code> となっています。これらの属性は任意の型を持てます。</p>
+<p id="index-65">読み出し専用の特殊属性: <code class="xref py py-attr docutils literal"><span class="pre">start</span></code> は下限です; <code class="xref py py-attr docutils literal"><span class="pre">stop</span></code> は上限です; <code class="xref py py-attr docutils literal"><span class="pre">step</span></code> はステップの値です; それぞれ省略された場合は <code class="docutils literal"><span class="pre">None</span></code> となっています。これらの属性は任意の型を持てます。</p>
 <p>スライスオブジェクトはメソッドを一つサポートします:</p>
 <dl class="last method">
 <dt id="slice.indices">
@@ -808,7 +808,7 @@ and a <a class="reference internal" href="../library/exceptions.html#RuntimeWarn
 </ul>
 <p>クラスオブジェクトが作成された後には、クラス定義に含まれているクラスデコレータ (もしあれば) にクラスオブジェクトが渡され、デコレータが返すオブジェクトがここで定義されたクラスとしてローカルの名前空間に束縛されます。</p>
 <p>新しいクラスが <code class="docutils literal"><span class="pre">type.__new__</span></code> で生成されたときは、名前空間引数として与えられたオブジェクトは新しい順序付きのマッピングに複製され、元のオブジェクトは破棄されます。
-新しく複製したものは読み取り専用のプロキシでラップされ、クラスオブジェクトの <a class="reference internal" href="../library/stdtypes.html#object.__dict__" title="object.__dict__"><code class="xref py py-attr docutils literal"><span class="pre">__dict__</span></code></a> 属性になります。</p>
+新しく複製したものは読み出し専用のプロキシでラップされ、クラスオブジェクトの <a class="reference internal" href="../library/stdtypes.html#object.__dict__" title="object.__dict__"><code class="xref py py-attr docutils literal"><span class="pre">__dict__</span></code></a> 属性になります。</p>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
@@ -1384,20 +1384,15 @@ CPython 3.7 では、 <code class="docutils literal"><span class="pre">__aiter__
 <table class="docutils footnote" frame="void" id="id9" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>The <a class="reference internal" href="#object.__hash__" title="object.__hash__"><code class="xref py py-meth docutils literal"><span class="pre">__hash__()</span></code></a>, <a class="reference internal" href="#object.__iter__" title="object.__iter__"><code class="xref py py-meth docutils literal"><span class="pre">__iter__()</span></code></a>, <a class="reference internal" href="#object.__reversed__" title="object.__reversed__"><code class="xref py py-meth docutils literal"><span class="pre">__reversed__()</span></code></a>, and
-<a class="reference internal" href="#object.__contains__" title="object.__contains__"><code class="xref py py-meth docutils literal"><span class="pre">__contains__()</span></code></a> methods have special handling for this; others
-will still raise a <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>, but may do so by relying on
-the behavior that <code class="docutils literal"><span class="pre">None</span></code> is not callable.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td><a class="reference internal" href="#object.__hash__" title="object.__hash__"><code class="xref py py-meth docutils literal"><span class="pre">__hash__()</span></code></a>, <a class="reference internal" href="#object.__iter__" title="object.__iter__"><code class="xref py py-meth docutils literal"><span class="pre">__iter__()</span></code></a>, <a class="reference internal" href="#object.__reversed__" title="object.__reversed__"><code class="xref py py-meth docutils literal"><span class="pre">__reversed__()</span></code></a>, <a class="reference internal" href="#object.__contains__" title="object.__contains__"><code class="xref py py-meth docutils literal"><span class="pre">__contains__()</span></code></a> メソッドはこのような特別な扱われ方をします;
+他の特殊メソッドも <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> を送出するかもしれませんが、これは <code class="docutils literal"><span class="pre">None</span></code> が呼び出し可能でないという振る舞いに基づいた動作です。</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id10" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5">[3]</a></td><td>&quot;Does not support&quot; here means that the class has no such method, or
-the method returns <code class="docutils literal"><span class="pre">NotImplemented</span></code>.  Do not set the method to
-<code class="docutils literal"><span class="pre">None</span></code> if you want to force fallback to the right operand’s reflected
-method—that will instead have the opposite effect of explicitly
-<em>blocking</em> such fallback.</td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id5">[3]</a></td><td>ここでの &quot;サポートしていない&quot; というのは、クラスがそのメソッドを持っていないか、そのメソッドが <code class="docutils literal"><span class="pre">NotImplemented</span></code> を返すという意味です。
+右の被演算子の対をなすメソッドへ処理を回したい場合には、メソッドに <code class="docutils literal"><span class="pre">None</span></code> を設定してはいけません—こうするとむしろ、処理を回すのを明示的に <em>妨げる</em> という正反対の効果を生みます。</td></tr>
 </tbody>
 </table>
 <table class="docutils footnote" frame="void" id="id11" rules="none">
@@ -1529,7 +1524,7 @@ method—that will instead have the opposite effect of explicitly
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 19, 2017
+    最終更新日時: 10月 20, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

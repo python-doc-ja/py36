@@ -234,7 +234,7 @@ writing operations should be serialized by the user to avoid data corruption.</p
 <p>デフォルトでは、 <a class="reference internal" href="#module-sqlite3" title="sqlite3: A DB-API 2.0 implementation using SQLite 3.x."><code class="xref py py-mod docutils literal"><span class="pre">sqlite3</span></code></a> モジュールは connect の呼び出しの際にモジュールの <a class="reference internal" href="#sqlite3.Connection" title="sqlite3.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a> クラスを使います。しかし、 <a class="reference internal" href="#sqlite3.Connection" title="sqlite3.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a> クラスを継承したクラスを <em>factory</em> パラメータに渡して <a class="reference internal" href="#sqlite3.connect" title="sqlite3.connect"><code class="xref py py-func docutils literal"><span class="pre">connect()</span></code></a> にそのクラスを使わせることもできます。</p>
 <p>詳しくはこのマニュアルの <a class="reference internal" href="#sqlite3-types"><span class="std std-ref">SQLite と Python の型</span></a> 節を参考にしてください。</p>
 <p><a class="reference internal" href="#module-sqlite3" title="sqlite3: A DB-API 2.0 implementation using SQLite 3.x."><code class="xref py py-mod docutils literal"><span class="pre">sqlite3</span></code></a> モジュールは SQL 解析のオーバーヘッドを避けるために内部で文キャッシュを使っています。接続に対してキャッシュされる文の数を自分で指定したいならば、 <em>cached_statements</em> パラメータに設定してください。現在の実装ではデフォルトでキャッシュされる SQL 文の数を 100 にしています。</p>
-<p><em>uri</em> が真の場合、 <em>database</em> は URI として解釈されます。これにより、オプションを指定することができます。例えば、データベースを読み込み専用モードで使用できるように開くには、次のようにします:</p>
+<p><em>uri</em> が真の場合、 <em>database</em> は URI として解釈されます。これにより、オプションを指定することができます。例えば、データベースを読み出し専用モードで使用できるように開くには、次のようにします:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">db</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;file:path/to/database?mode=ro&#39;</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -819,14 +819,14 @@ The default value is 1 which means a single row would be fetched per call.</p>
 <dl class="attribute">
 <dt id="sqlite3.Cursor.description">
 <code class="descname">description</code><a class="headerlink" href="#sqlite3.Cursor.description" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この読み込み専用の属性は、最後のクエリの結果のカラム名を提供します。 Python DB API との互換性を維持するために、各カラムに対して 7つのタプルを返しますが、タプルの後ろ6つの要素は全て <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> です。</p>
+<dd><p>この読み出し専用の属性は、最後のクエリの結果のカラム名を提供します。 Python DB API との互換性を維持するために、各カラムに対して 7つのタプルを返しますが、タプルの後ろ6つの要素は全て <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> です。</p>
 <p>この属性は <code class="docutils literal"><span class="pre">SELECT</span></code> 文にマッチする row が1つもなかった場合でもセットされます。</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="sqlite3.Cursor.connection">
 <code class="descname">connection</code><a class="headerlink" href="#sqlite3.Cursor.connection" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この読み込み専用の属性は、 <a class="reference internal" href="#sqlite3.Cursor" title="sqlite3.Cursor"><code class="xref py py-class docutils literal"><span class="pre">Cursor</span></code></a> オブジェクトが使用する SQLite データベースの <a class="reference internal" href="#sqlite3.Connection" title="sqlite3.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a> を提供します。<a class="reference internal" href="#sqlite3.Connection.cursor" title="sqlite3.Connection.cursor"><code class="xref py py-meth docutils literal"><span class="pre">con.cursor()</span></code></a> を呼び出すことにより作成される <a class="reference internal" href="#sqlite3.Cursor" title="sqlite3.Cursor"><code class="xref py py-class docutils literal"><span class="pre">Cursor</span></code></a> オブジェクトは、 <em>con</em> を参照する <a class="reference internal" href="#sqlite3.Cursor.connection" title="sqlite3.Cursor.connection"><code class="xref py py-attr docutils literal"><span class="pre">connection</span></code></a> 属性を持ちます:</p>
+<dd><p>この読み出し専用の属性は、 <a class="reference internal" href="#sqlite3.Cursor" title="sqlite3.Cursor"><code class="xref py py-class docutils literal"><span class="pre">Cursor</span></code></a> オブジェクトが使用する SQLite データベースの <a class="reference internal" href="#sqlite3.Connection" title="sqlite3.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a> を提供します。<a class="reference internal" href="#sqlite3.Connection.cursor" title="sqlite3.Connection.cursor"><code class="xref py py-meth docutils literal"><span class="pre">con.cursor()</span></code></a> を呼び出すことにより作成される <a class="reference internal" href="#sqlite3.Cursor" title="sqlite3.Cursor"><code class="xref py py-class docutils literal"><span class="pre">Cursor</span></code></a> オブジェクトは、 <em>con</em> を参照する <a class="reference internal" href="#sqlite3.Cursor.connection" title="sqlite3.Cursor.connection"><code class="xref py py-attr docutils literal"><span class="pre">connection</span></code></a> 属性を持ちます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">con</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">&quot;:memory:&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cur</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cur</span><span class="o">.</span><span class="n">connection</span> <span class="o">==</span> <span class="n">con</span>
@@ -1387,7 +1387,7 @@ statements.  This is no longer the case.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 19, 2017
+    最終更新日時: 10月 20, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。

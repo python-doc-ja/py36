@@ -106,11 +106,7 @@
 <p>このモジュールでは、ファイル記述子 (file descriptor) に基づいたファイル制御および I/O 制御を実現します。
 このモジュールは、 Unix のルーチンである <code class="xref c c-func docutils literal"><span class="pre">fcntl()</span></code> および <code class="xref c c-func docutils literal"><span class="pre">ioctl()</span></code> へのインタフェースです。
 これらのシステムコールの完全な説明は、 <em class="manpage">fcntl(2)</em> と <em class="manpage">ioctl(2)</em> のUnix マニュアルページを参照してください。</p>
-<p>All functions in this module take a file descriptor <em>fd</em> as their first
-argument.  This can be an integer file descriptor, such as returned by
-<code class="docutils literal"><span class="pre">sys.stdin.fileno()</span></code>, or an <a class="reference internal" href="io.html#io.IOBase" title="io.IOBase"><code class="xref py py-class docutils literal"><span class="pre">io.IOBase</span></code></a> object, such as <code class="docutils literal"><span class="pre">sys.stdin</span></code>
-itself, which provides a <a class="reference internal" href="io.html#io.IOBase.fileno" title="io.IOBase.fileno"><code class="xref py py-meth docutils literal"><span class="pre">fileno()</span></code></a> that returns a genuine file
-descriptor.</p>
+<p>このモジュール内の全ての関数はファイル記述子 <em>fd</em> を最初の引数に取ります。 この値は <code class="docutils literal"><span class="pre">sys.stdin.fileno()</span></code> が返すような整数のファイル記述子でも、 <code class="docutils literal"><span class="pre">sys.stdin</span></code> 自体のような、純粋にファイル記述子だけを返す <a class="reference internal" href="io.html#io.IOBase.fileno" title="io.IOBase.fileno"><code class="xref py py-meth docutils literal"><span class="pre">fileno()</span></code></a> メソッドを提供している <a class="reference internal" href="io.html#io.IOBase" title="io.IOBase"><code class="xref py py-class docutils literal"><span class="pre">io.IOBase</span></code></a>  オブジェクトでもかまいません。</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.3 で変更: </span>以前は <a class="reference internal" href="exceptions.html#IOError" title="IOError"><code class="xref py py-exc docutils literal"><span class="pre">IOError</span></code></a> を送出していたこのモジュールの操作が、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> を送出するようになりました。</p>
 </div>
@@ -118,22 +114,7 @@ descriptor.</p>
 <dl class="function">
 <dt id="fcntl.fcntl">
 <code class="descclassname">fcntl.</code><code class="descname">fcntl</code><span class="sig-paren">(</span><em>fd</em>, <em>cmd</em>, <em>arg=0</em><span class="sig-paren">)</span><a class="headerlink" href="#fcntl.fcntl" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Perform the operation <em>cmd</em> on file descriptor <em>fd</em> (file objects providing
-a <a class="reference internal" href="io.html#io.IOBase.fileno" title="io.IOBase.fileno"><code class="xref py py-meth docutils literal"><span class="pre">fileno()</span></code></a> method are accepted as well).  The values used
-for <em>cmd</em> are operating system dependent, and are available as constants
-in the <a class="reference internal" href="#module-fcntl" title="fcntl: The fcntl() and ioctl() system calls. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">fcntl</span></code></a> module, using the same names as used in the relevant C
-header files. The argument <em>arg</em> can either be an integer value, or a
-<a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> object. With an integer value, the return value of this
-function is the integer return value of the C <code class="xref c c-func docutils literal"><span class="pre">fcntl()</span></code> call.  When
-the argument is bytes it represents a binary structure, e.g. created by
-<a class="reference internal" href="struct.html#struct.pack" title="struct.pack"><code class="xref py py-func docutils literal"><span class="pre">struct.pack()</span></code></a>. The binary data is copied to a buffer whose address is
-passed to the C <code class="xref c c-func docutils literal"><span class="pre">fcntl()</span></code> call.  The return value after a successful
-call is the contents of the buffer, converted to a <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> object.
-The length of the returned object will be the same as the length of the
-<em>arg</em> argument. This is limited to 1024 bytes. If the information returned
-in the buffer by the operating system is larger than 1024 bytes, this is
-most likely to result in a segmentation violation or a more subtle data
-corruption.</p>
+<dd><p>操作 <em>cmd</em> をファイル記述子 <em>fd</em> (または <a class="reference internal" href="io.html#io.IOBase.fileno" title="io.IOBase.fileno"><code class="xref py py-meth docutils literal"><span class="pre">fileno()</span></code></a> メソッドを提供しているファイルオブジェクト) に対して実行します。 <em>cmd</em> として用いられる値はオペレーティングシステム依存で、 <a class="reference internal" href="#module-fcntl" title="fcntl: The fcntl() and ioctl() system calls. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">fcntl</span></code></a> モジュール内に関連する C ヘッダファイルと同じ名前が使われている定数の形で利用出来ます。引数 <em>arg</em> は整数値か <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトをとります。引数が整数値の場合、この関数の戻り値は C 言語の <code class="xref c c-func docutils literal"><span class="pre">fcntl()</span></code> を呼び出した際の整数の戻り値になります。引数が bytes の場合には、 <a class="reference internal" href="struct.html#struct.pack" title="struct.pack"><code class="xref py py-func docutils literal"><span class="pre">struct.pack()</span></code></a> で作られるようなバイナリの構造体を表します。バイナリデータはバッファにコピーされ、そのアドレスが C 言語の <code class="xref c c-func docutils literal"><span class="pre">fcntl()</span></code> 呼び出しに渡されます。 呼び出しが成功した後に戻される値はバッファの内容で、 <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトに変換されています。 返されるオブジェクトは <em>arg</em> 引数と同じ長さになります。 この値は 1024 バイトに制限されています。 オペレーティングシステムからバッファに返される情報の長さが 1024 バイトよりも大きい場合、大抵はセグメンテーション違反となるか、より不可思議なデータの破損を引き起こします。</p>
 <p><code class="xref c c-func docutils literal"><span class="pre">fcntl()</span></code> が失敗した場合、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> が送出されます。</p>
 </dd></dl>
 
@@ -141,21 +122,13 @@ corruption.</p>
 <dt id="fcntl.ioctl">
 <code class="descclassname">fcntl.</code><code class="descname">ioctl</code><span class="sig-paren">(</span><em>fd</em>, <em>request</em>, <em>arg=0</em>, <em>mutate_flag=True</em><span class="sig-paren">)</span><a class="headerlink" href="#fcntl.ioctl" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>この関数は <a class="reference internal" href="#fcntl.fcntl" title="fcntl.fcntl"><code class="xref py py-func docutils literal"><span class="pre">fcntl()</span></code></a> 関数と同じですが、引数の扱いがより複雑であるところが異なります。</p>
-<p>The <em>request</em> parameter is limited to values that can fit in 32-bits.
-Additional constants of interest for use as the <em>request</em> argument can be
-found in the <a class="reference internal" href="termios.html#module-termios" title="termios: POSIX style tty control. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">termios</span></code></a> module, under the same names as used in
-the relevant C header files.</p>
-<p>The parameter <em>arg</em> can be one of an integer, an object supporting the
-read-only buffer interface (like <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a>) or an object supporting
-the read-write buffer interface (like <a class="reference internal" href="stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal"><span class="pre">bytearray</span></code></a>).</p>
+<p>パラメータ <em>request</em> は32ビットに収まる値に制限されます。 <em>request</em> 引数として使うのに関係のある追加の定数は <a class="reference internal" href="termios.html#module-termios" title="termios: POSIX style tty control. (Unix)"><code class="xref py py-mod docutils literal"><span class="pre">termios</span></code></a> モジュールにあり、関連する C ヘッダファイルで使われているのと同じ名前が付けられています。</p>
+<p>パラメタ <em>arg</em> は、整数、 (<a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> のような) 読み出し専用のバッファインタフェースをサポートするオブジェクト、読み書きバッファインタフェースをサポートするオブジェクトのどれかです。</p>
 <p>最後の型のオブジェクトを除き、動作は <a class="reference internal" href="#fcntl.fcntl" title="fcntl.fcntl"><code class="xref py py-func docutils literal"><span class="pre">fcntl()</span></code></a> 関数と同じです。</p>
 <p>可変なバッファが渡された場合、動作は <em>mutate_flag</em> 引数の値で決定されます。</p>
-<p>If it is false, the buffer’s mutability is ignored and behaviour is as for a
-read-only buffer, except that the 1024 byte limit mentioned above is avoided –
-so long as the buffer you pass is at least as long as what the operating system
-wants to put there, things should work.</p>
+<p>この値が偽の場合、バッファの可変性は無視され、読み出し専用バッファの場合と同じ動作になりますが、上で述べた 1024 バイトの制限は回避されます – 従って、オペレーティングシステムが希望するバッファ長までであれば正しく動作します。</p>
 <p><em>mutate_flag</em> が真 (デフォルト) の場合、バッファは (実際には) 根底にある <a class="reference internal" href="#fcntl.ioctl" title="fcntl.ioctl"><code class="xref py py-func docutils literal"><span class="pre">ioctl()</span></code></a> システムコールに渡され、後者の戻り値が呼び出し側の Python に引き渡され、バッファの新たな内容は  <a class="reference internal" href="#fcntl.ioctl" title="fcntl.ioctl"><code class="xref py py-func docutils literal"><span class="pre">ioctl()</span></code></a> の動作を反映します。この説明はやや単純化されています。というのは、与えられたバッファが 1024 バイト長よりも短い場合、バッファはまず 1024 バイト長の静的なバッファにコピーされてから <a class="reference internal" href="#fcntl.ioctl" title="fcntl.ioctl"><code class="xref py py-func docutils literal"><span class="pre">ioctl()</span></code></a> に渡され、その後引数で与えたバッファに戻しコピーされるからです。</p>
-<p>If the <code class="xref c c-func docutils literal"><span class="pre">ioctl()</span></code> fails, an <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> exception is raised.</p>
+<p><code class="xref c c-func docutils literal"><span class="pre">ioctl()</span></code> が失敗すると、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> 例外が送出されます。</p>
 <p>以下に例を示します:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">array</span><span class="o">,</span> <span class="nn">fcntl</span><span class="o">,</span> <span class="nn">struct</span><span class="o">,</span> <span class="nn">termios</span><span class="o">,</span> <span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">getpgrp</span><span class="p">()</span>
@@ -174,43 +147,27 @@ wants to put there, things should work.</p>
 <dl class="function">
 <dt id="fcntl.flock">
 <code class="descclassname">fcntl.</code><code class="descname">flock</code><span class="sig-paren">(</span><em>fd</em>, <em>operation</em><span class="sig-paren">)</span><a class="headerlink" href="#fcntl.flock" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Perform the lock operation <em>operation</em> on file descriptor <em>fd</em> (file objects providing
-a <a class="reference internal" href="io.html#io.IOBase.fileno" title="io.IOBase.fileno"><code class="xref py py-meth docutils literal"><span class="pre">fileno()</span></code></a> method are accepted as well). See the Unix manual
-<em class="manpage">flock(2)</em> for details.  (On some systems, this function is emulated
-using <code class="xref c c-func docutils literal"><span class="pre">fcntl()</span></code>.)</p>
-<p>If the <code class="xref c c-func docutils literal"><span class="pre">flock()</span></code> fails, an <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> exception is raised.</p>
+<dd><p>ファイル記述子 <em>fd</em> (<a class="reference internal" href="io.html#io.IOBase.fileno" title="io.IOBase.fileno"><code class="xref py py-meth docutils literal"><span class="pre">fileno()</span></code></a> メソッドを提供しているファイルオブジェクトも含む) に対してロック操作 <em>operation</em> を実行します。 詳細は Unix マニュアルの <em class="manpage">flock(2)</em> を参照してください (システムによっては、この関数は <code class="xref c c-func docutils literal"><span class="pre">fcntl()</span></code> を使ってエミュレーションされています)。</p>
+<p><code class="xref c c-func docutils literal"><span class="pre">flock()</span></code> が失敗すると、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> 例外が送出されます。</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="fcntl.lockf">
 <code class="descclassname">fcntl.</code><code class="descname">lockf</code><span class="sig-paren">(</span><em>fd</em>, <em>cmd</em>, <em>len=0</em>, <em>start=0</em>, <em>whence=0</em><span class="sig-paren">)</span><a class="headerlink" href="#fcntl.lockf" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>This is essentially a wrapper around the <a class="reference internal" href="#fcntl.fcntl" title="fcntl.fcntl"><code class="xref py py-func docutils literal"><span class="pre">fcntl()</span></code></a> locking calls.
-<em>fd</em> is the file descriptor of the file to lock or unlock, and <em>cmd</em>
-is one of the following values:</p>
+<dd><p>本質的に <a class="reference internal" href="#fcntl.fcntl" title="fcntl.fcntl"><code class="xref py py-func docutils literal"><span class="pre">fcntl()</span></code></a> によるロッキングの呼び出しをラップしたものです。 <em>fd</em> はロックまたはアンロックするファイルのファイル記述子で、 <em>cmd</em> は以下の値のうちいずれかになります:</p>
 <ul class="simple">
 <li><code class="xref py py-const docutils literal"><span class="pre">LOCK_UN</span></code> – アンロック</li>
 <li><code class="xref py py-const docutils literal"><span class="pre">LOCK_SH</span></code> – 共有ロックを取得</li>
 <li><code class="xref py py-const docutils literal"><span class="pre">LOCK_EX</span></code> – 排他的ロックを取得</li>
 </ul>
-<p>When <em>cmd</em> is <code class="xref py py-const docutils literal"><span class="pre">LOCK_SH</span></code> or <code class="xref py py-const docutils literal"><span class="pre">LOCK_EX</span></code>, it can also be
-bitwise ORed with <code class="xref py py-const docutils literal"><span class="pre">LOCK_NB</span></code> to avoid blocking on lock acquisition.
-If <code class="xref py py-const docutils literal"><span class="pre">LOCK_NB</span></code> is used and the lock cannot be acquired, an
-<a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> will be raised and the exception will have an <em>errno</em>
-attribute set to <code class="xref py py-const docutils literal"><span class="pre">EACCES</span></code> or <code class="xref py py-const docutils literal"><span class="pre">EAGAIN</span></code> (depending on the
-operating system; for portability, check for both values).  On at least some
-systems, <code class="xref py py-const docutils literal"><span class="pre">LOCK_EX</span></code> can only be used if the file descriptor refers to a
-file opened for writing.</p>
-<p><em>len</em> is the number of bytes to lock, <em>start</em> is the byte offset at
-which the lock starts, relative to <em>whence</em>, and <em>whence</em> is as with
-<a class="reference internal" href="io.html#io.IOBase.seek" title="io.IOBase.seek"><code class="xref py py-func docutils literal"><span class="pre">io.IOBase.seek()</span></code></a>, specifically:</p>
+<p><em>cmd</em> が <code class="xref py py-const docutils literal"><span class="pre">LOCK_SH</span></code> または <code class="xref py py-const docutils literal"><span class="pre">LOCK_EX</span></code> の場合、 <code class="xref py py-const docutils literal"><span class="pre">LOCK_NB</span></code> とビット OR にすることでロック取得時にブロックしないようにすることができます。 <code class="xref py py-const docutils literal"><span class="pre">LOCK_NB</span></code> が使われ、ロックが取得できなかった場合、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal"><span class="pre">OSError</span></code></a> が送出され、例外は <em>errno</em> 属性を持ち、その値は <code class="xref py py-const docutils literal"><span class="pre">EACCES</span></code> または <code class="xref py py-const docutils literal"><span class="pre">EAGAIN</span></code> になります (オペレーティングシステムに依存します; 可搬性のため、両方の値をチェックしてください)。少なくともいくつかのシステムでは、ファイル記述子が参照しているファイルが書き込みのために開かれている場合、 <code class="xref py py-const docutils literal"><span class="pre">LOCK_EX</span></code> だけしか使うことができません。</p>
+<p><em>len</em> はロックを行いたいバイト数、 <em>start</em> はロック領域先頭の <em>whence</em> からの相対的なバイトオフセット、 <em>whence</em> は <a class="reference internal" href="io.html#io.IOBase.seek" title="io.IOBase.seek"><code class="xref py py-func docutils literal"><span class="pre">io.IOBase.seek()</span></code></a> と同じで、具体的には:</p>
 <ul class="simple">
 <li><code class="xref py py-const docutils literal"><span class="pre">0</span></code> – ファイル先頭からの相対位置 (<a class="reference internal" href="os.html#os.SEEK_SET" title="os.SEEK_SET"><code class="xref py py-data docutils literal"><span class="pre">os.SEEK_SET</span></code></a>)</li>
 <li><code class="xref py py-const docutils literal"><span class="pre">1</span></code> – 現在のバッファ位置からの相対位置 (<a class="reference internal" href="os.html#os.SEEK_CUR" title="os.SEEK_CUR"><code class="xref py py-data docutils literal"><span class="pre">os.SEEK_CUR</span></code></a>)</li>
 <li><code class="xref py py-const docutils literal"><span class="pre">2</span></code> – ファイルの末尾からの相対位置 (<a class="reference internal" href="os.html#os.SEEK_END" title="os.SEEK_END"><code class="xref py py-data docutils literal"><span class="pre">os.SEEK_END</span></code></a>)</li>
 </ul>
-<p>The default for <em>start</em> is 0, which means to start at the beginning of the file.
-The default for <em>len</em> is 0 which means to lock to the end of the file.  The
-default for <em>whence</em> is also 0.</p>
+<p><em>start</em> の標準の値は 0 で、ファイルの先頭から開始することを意味します。<em>len</em> の標準の値は 0 で、ファイルの終了までロックすることを表します。<em>whence</em> の標準の値も 0 です。</p>
 </dd></dl>
 
 <p>以下に (全ての SVR4 互換システムでの) 例を示します:</p>
@@ -223,10 +180,7 @@ default for <em>whence</em> is also 0.</p>
 <span class="n">rv</span> <span class="o">=</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">fcntl</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">F_SETLKW</span><span class="p">,</span> <span class="n">lockdata</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Note that in the first example the return value variable <em>rv</em> will hold an
-integer value; in the second example it will hold a <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> object.  The
-structure lay-out for the <em>lockdata</em> variable is system dependent — therefore
-using the <a class="reference internal" href="#fcntl.flock" title="fcntl.flock"><code class="xref py py-func docutils literal"><span class="pre">flock()</span></code></a> call may be better.</p>
+<p>最初の例では、戻り値 <em>rv</em> は整数値を保持しています; 二つ目の例では <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトを保持しています。 <em>lockdata</em> 変数の構造体レイアウトはシステム依存です — 従って <a class="reference internal" href="#fcntl.flock" title="fcntl.flock"><code class="xref py py-func docutils literal"><span class="pre">flock()</span></code></a> を呼ぶ方が良いでしょう。</p>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
@@ -311,7 +265,7 @@ using the <a class="reference internal" href="#fcntl.flock" title="fcntl.flock">
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 10月 19, 2017
+    最終更新日時: 10月 20, 2017
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.4 を使って作成されました。
