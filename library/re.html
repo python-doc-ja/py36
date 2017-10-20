@@ -1160,10 +1160,7 @@ triple-quoted string syntax:</p>
 </div>
 <div class="section" id="finding-all-adverbs">
 <h3>6.2.5.6. 全ての副詞を見つける<a class="headerlink" href="#finding-all-adverbs" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p><a class="reference internal" href="#re.findall" title="re.findall"><code class="xref py py-func docutils literal"><span class="pre">findall()</span></code></a> matches <em>all</em> occurrences of a pattern, not just the first
-one as <a class="reference internal" href="#re.search" title="re.search"><code class="xref py py-func docutils literal"><span class="pre">search()</span></code></a> does.  For example, if one was a writer and wanted to
-find all of the adverbs in some text, he or she might use <a class="reference internal" href="#re.findall" title="re.findall"><code class="xref py py-func docutils literal"><span class="pre">findall()</span></code></a> in
-the following manner:</p>
+<p><a class="reference internal" href="#re.findall" title="re.findall"><code class="xref py py-func docutils literal"><span class="pre">findall()</span></code></a> は出現するパターン <em>すべてに</em> マッチします。<a class="reference internal" href="#re.search" title="re.search"><code class="xref py py-func docutils literal"><span class="pre">search()</span></code></a> が最初のものだけにマッチするのとは違います。例えば、なにかの文章のすべての副詞を見つけたいとき、下記のように <a class="reference internal" href="#re.findall" title="re.findall"><code class="xref py py-func docutils literal"><span class="pre">findall()</span></code></a> を使います:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;He was carefully disguised but captured quickly by police.&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\w+ly&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
 <span class="go">[&#39;carefully&#39;, &#39;quickly&#39;]</span>
@@ -1172,10 +1169,7 @@ the following manner:</p>
 </div>
 <div class="section" id="finding-all-adverbs-and-their-positions">
 <h3>6.2.5.7. 全ての副詞と、その位置を見つける<a class="headerlink" href="#finding-all-adverbs-and-their-positions" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>If one wants more information about all matches of a pattern than the matched
-text, <a class="reference internal" href="#re.finditer" title="re.finditer"><code class="xref py py-func docutils literal"><span class="pre">finditer()</span></code></a> is useful as it provides <a class="reference internal" href="#match-objects"><span class="std std-ref">match objects</span></a> instead of strings.  Continuing with the previous example, if
-one was a writer who wanted to find all of the adverbs <em>and their positions</em> in
-some text, he or she would use <a class="reference internal" href="#re.finditer" title="re.finditer"><code class="xref py py-func docutils literal"><span class="pre">finditer()</span></code></a> in the following manner:</p>
+<p>もし、パターンにマッチするものについて、マッチしたテキスト以上の情報を得たいと考えた時、文字列ではなく <a class="reference internal" href="#match-objects"><span class="std std-ref">マッチオブジェクト</span></a> を返す <a class="reference internal" href="#re.finditer" title="re.finditer"><code class="xref py py-func docutils literal"><span class="pre">finditer()</span></code></a> が便利です。以下に例を示すように、なにかの文章のすべての副詞と、<em>その位置を</em> 調べたい時、以下のように <a class="reference internal" href="#re.finditer" title="re.finditer"><code class="xref py py-func docutils literal"><span class="pre">finditer()</span></code></a> を使います:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;He was carefully disguised but captured quickly by police.&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\w+ly&quot;</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%02d</span><span class="s1">-</span><span class="si">%02d</span><span class="s1">: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">start</span><span class="p">(),</span> <span class="n">m</span><span class="o">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
@@ -1186,20 +1180,14 @@ some text, he or she would use <a class="reference internal" href="#re.finditer"
 </div>
 <div class="section" id="raw-string-notation">
 <h3>6.2.5.8. Raw String記法<a class="headerlink" href="#raw-string-notation" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>Raw string notation (<code class="docutils literal"><span class="pre">r&quot;text&quot;</span></code>) keeps regular expressions sane.  Without it,
-every backslash (<code class="docutils literal"><span class="pre">'\'</span></code>) in a regular expression would have to be prefixed with
-another one to escape it.  For example, the two following lines of code are
-functionally identical:</p>
+<p>Raw 文字列記法 (<code class="docutils literal"><span class="pre">r&quot;text&quot;</span></code>) により、バックスラッシュ (<code class="docutils literal"><span class="pre">'\'</span></code>) を個々にバックスラッシュでエスケープすることなしに、正規表現を正常な状態に保つことができます。例えば、以下の 2 つのコードは機能的に等価です:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\W(.)\1\W&quot;</span><span class="p">,</span> <span class="s2">&quot; ff &quot;</span><span class="p">)</span>
 <span class="go">&lt;_sre.SRE_Match object; span=(0, 4), match=&#39; ff &#39;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">W(.)</span><span class="se">\\</span><span class="s2">1</span><span class="se">\\</span><span class="s2">W&quot;</span><span class="p">,</span> <span class="s2">&quot; ff &quot;</span><span class="p">)</span>
 <span class="go">&lt;_sre.SRE_Match object; span=(0, 4), match=&#39; ff &#39;&gt;</span>
 </pre></div>
 </div>
-<p>When one wants to match a literal backslash, it must be escaped in the regular
-expression.  With raw string notation, this means <code class="docutils literal"><span class="pre">r&quot;\\&quot;</span></code>.  Without raw string
-notation, one must use <code class="docutils literal"><span class="pre">&quot;\\\\&quot;</span></code>, making the following lines of code
-functionally identical:</p>
+<p>文字通りのバックスラッシュにマッチさせたいなら、正規表現中ではエスケープする必要があります。Raw 文字列記法では、<code class="docutils literal"><span class="pre">r&quot;\\&quot;</span></code>  になります。Raw 文字列記法を用いない場合、<code class="docutils literal"><span class="pre">&quot;\\\\&quot;</span></code> としなくてはなりません。以下のコードは機能的に等価です:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="go">&lt;_sre.SRE_Match object; span=(0, 1), match=&#39;\\&#39;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)</span>
