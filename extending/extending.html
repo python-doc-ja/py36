@@ -110,7 +110,11 @@
 </div>
 <div class="section" id="a-simple-example">
 <span id="extending-simpleexample"></span><h2>1.1. 簡単な例<a class="headerlink" href="#a-simple-example" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">spam</span></code> (Monty Python ファンの好物ですね) という名の拡張モジュールを作成することにして、C ライブラリ関数 <code class="xref c c-func docutils literal"><span class="pre">system()</span></code> に対する Python インタフェースを作成したいとします。 <a class="footnote-reference" href="#id5" id="id1">[1]</a> この関数は null で終端されたキャラクタ文字列を引数にとり、整数を返します。この関数を以下のようにして Python から呼び出せるようにしたいとします:</p>
+<p>Let’s create an extension module called <code class="docutils literal"><span class="pre">spam</span></code> (the favorite food of Monty
+Python fans…) and let’s say we want to create a Python interface to the C
+library function <code class="xref c c-func docutils literal"><span class="pre">system()</span></code>. <a class="footnote-reference" href="#id5" id="id1">[1]</a> This function takes a null-terminated
+character string as argument and returns an integer.  We want this function to
+be callable from Python as follows:</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">import</span> <span class="n">spam</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">status</span> <span class="o">=</span> <span class="n">spam</span><span class="p">.</span><span class="n">system</span><span class="p">(</span><span class="s">&quot;ls -l&quot;</span><span class="p">)</span>
 </pre></div>
@@ -572,7 +576,11 @@ Py_BuildValue(&quot;((ii)(ii)) (ii)&quot;,
 <span id="refcountsinpython"></span><h3>1.10.1. Python における参照カウント法<a class="headerlink" href="#reference-counting-in-python" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Python には、参照カウントのインクリメントやデクリメントを処理する二つのマクロ、 <code class="docutils literal"><span class="pre">Py_INCREF(x)</span></code> と <code class="docutils literal"><span class="pre">Py_DECREF(x)</span></code> があります。 <a class="reference internal" href="../c-api/refcounting.html#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal"><span class="pre">Py_DECREF()</span></code></a> は、参照カウントがゼロに到達した際に、オブジェクトのメモリ解放も行います。柔軟性を持たせるために、 <code class="xref c c-func docutils literal"><span class="pre">free()</span></code> を直接呼び出しません — その代わりにオブジェクトの型オブジェクト (<em class="dfn">type object</em>) を介します。このために (他の目的もありますが)、全てのオブジェクトには自身の型オブジェクトに対するポインタが入っています。</p>
 <p>さて、まだ重大な疑問が残っています: いつ <code class="docutils literal"><span class="pre">Py_INCREF(x)</span></code> や <code class="docutils literal"><span class="pre">Py_DECREF(x)</span></code> を使えばよいのでしょうか? まず、いくつかの用語説明から始めさせてください。まず、オブジェクトは &quot;占有 (own)&quot; されることはありません; しかし、あるオブジェクトに対する参照の所有 <em class="dfn">own a reference</em> はできます。オブジェクトの参照カウントは、そのオブジェクトが参照の所有を受けている回数と定義されています。参照の所有者は、参照が必要なくなった際に <a class="reference internal" href="../c-api/refcounting.html#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal"><span class="pre">Py_DECREF()</span></code></a> を呼び出す役割を担います。参照の所有権は委譲 (transfer) できます。所有参照 (owned reference) の放棄には、渡す、保存する、 <a class="reference internal" href="../c-api/refcounting.html#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal"><span class="pre">Py_DECREF()</span></code></a> を呼び出す、という三つの方法があります。所有参照を処理し忘れると、メモリリークを引き起こします。</p>
-<p>オブジェクトに対する参照は、借用 (<em class="dfn">borrow</em>) も可能です。 <a class="footnote-reference" href="#id6" id="id2">[2]</a> 参照の借用者は、 <a class="reference internal" href="../c-api/refcounting.html#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal"><span class="pre">Py_DECREF()</span></code></a> を呼んではなりません。借用者は、参照の所有者から借用した期間を超えて参照を保持し続けてはなりません。所有者が参照を放棄した後で借用参照を使うと、解放済みメモリを使用してしまう危険があるので、絶対に避けねばなりません。 <a class="footnote-reference" href="#id7" id="id3">[3]</a></p>
+<p>It is also possible to <em class="dfn">borrow</em> <a class="footnote-reference" href="#id6" id="id2">[2]</a> a reference to an object.  The
+borrower of a reference should not call <a class="reference internal" href="../c-api/refcounting.html#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal"><span class="pre">Py_DECREF()</span></code></a>.  The borrower must
+not hold on to the object longer than the owner from which it was borrowed.
+Using a borrowed reference after the owner has disposed of it risks using freed
+memory and should be avoided completely. <a class="footnote-reference" href="#id7" id="id3">[3]</a></p>
 <p>参照の借用が参照の所有よりも優れている点は、コードがとりうるあらゆる処理経路で参照を廃棄しておくよう注意しなくて済むことです — 別の言い方をすれば、借用参照の場合には、処理の途中で関数を終了してもメモリリークの危険を冒すことがない、ということです。逆に、所有よりも不利な点は、ごくまともに見えるコードが、実際には参照の借用元で放棄されてしまった後にその参照を使うかもしれないような微妙な状況があるということです。</p>
 <p><a class="reference internal" href="../c-api/refcounting.html#c.Py_INCREF" title="Py_INCREF"><code class="xref c c-func docutils literal"><span class="pre">Py_INCREF()</span></code></a> を呼び出すと、借用参照を所有参照に変更できます。この操作は参照の借用元の状態には影響しません — <a class="reference internal" href="../c-api/refcounting.html#c.Py_INCREF" title="Py_INCREF"><code class="xref c c-func docutils literal"><span class="pre">Py_INCREF()</span></code></a> は新たな所有参照を生成し、参照の所有者が担うべき全ての責任を課します (つまり、新たな参照の所有者は、以前の所有者と同様、参照の放棄を適切に行わねばなりません)。</p>
 </div>
@@ -636,7 +644,9 @@ Py_BuildValue(&quot;((ii)(ii)) (ii)&quot;,
 <p>従って、 <em>NULL</em> のテストはオブジェクトの &quot;発生源&quot;、すなわち値が <em>NULL</em> になるかもしれないポインタを受け取ったときだけにしましょう。 <code class="xref c c-func docutils literal"><span class="pre">malloc()</span></code> や、例外を送出する可能性のある関数がその例です。</p>
 <p>マクロ <a class="reference internal" href="../c-api/refcounting.html#c.Py_INCREF" title="Py_INCREF"><code class="xref c c-func docutils literal"><span class="pre">Py_INCREF()</span></code></a> および <a class="reference internal" href="../c-api/refcounting.html#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal"><span class="pre">Py_DECREF()</span></code></a> は <em>NULL</em> ポインタのチェックを行いません — しかし、これらのマクロの変化形である <a class="reference internal" href="../c-api/refcounting.html#c.Py_XINCREF" title="Py_XINCREF"><code class="xref c c-func docutils literal"><span class="pre">Py_XINCREF()</span></code></a> および <a class="reference internal" href="../c-api/refcounting.html#c.Py_XDECREF" title="Py_XDECREF"><code class="xref c c-func docutils literal"><span class="pre">Py_XDECREF()</span></code></a> はチェックを行います。</p>
 <p>特定のオブジェクト型について調べるマクロ (<code class="docutils literal"><span class="pre">Pytype_Check()</span></code>) は <em>NULL</em> ポインタのチェックを行いません — 繰り返しますが、様々な異なる型を想定してオブジェクトの型を調べる際には、こうしたマクロを続けて呼び出す必要があるので、個別に <em>NULL</em> ポインタのチェックをすると冗長なテストになってしまうのです。型を調べるマクロには、 <em>NULL</em> チェックを行う変化形はありません。</p>
-<p>Python から C 関数を呼び出す機構は、 C 関数に渡される引数リスト (例でいうところの <code class="docutils literal"><span class="pre">args</span></code>) が決して <em>NULL</em> にならないよう保証しています — 実際には、常にタプル型になるよう保証しています。 <a class="footnote-reference" href="#id8" id="id4">[4]</a></p>
+<p>The C function calling mechanism guarantees that the argument list passed to C
+functions (<code class="docutils literal"><span class="pre">args</span></code> in the examples) is never <em>NULL</em> — in fact it guarantees
+that it is always a tuple. <a class="footnote-reference" href="#id8" id="id4">[4]</a></p>
 <p><em>NULL</em> ポインタを Python ユーザレベルに &quot;逃がし&quot; てしまうと、深刻なエラーを引き起こします。</p>
 </div>
 </div>
@@ -905,12 +915,12 @@ Py_BuildValue(&quot;((ii)(ii)) (ii)&quot;,
       </ul>
     </div>  
     <div class="footer">
-    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2018, Python Software Foundation.
     <br />
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 12月 28, 2017
+    最終更新日時: 1月 01, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。

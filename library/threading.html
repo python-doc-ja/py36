@@ -481,7 +481,11 @@ by the platform.</p>
 <dl class="class">
 <dt id="threading.Semaphore">
 <em class="property">class </em><code class="descclassname">threading.</code><code class="descname">Semaphore</code><span class="sig-paren">(</span><em>value=1</em><span class="sig-paren">)</span><a class="headerlink" href="#threading.Semaphore" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>このクラスはセマフォ (semaphore) オブジェクトを実装します。セマフォは、 <a class="reference internal" href="#threading.Semaphore.release" title="threading.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> を呼び出した数から <a class="reference internal" href="#threading.Semaphore.acquire" title="threading.Semaphore.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> を呼び出した数を引き、初期値を足した値を表すカウンタを管理します。 <a class="reference internal" href="#threading.Semaphore.acquire" title="threading.Semaphore.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> メソッドは、カウンタの値を負にせずに処理を戻せるまで必要ならば処理をブロックします。 <em>value</em> を指定しない場合、デフォルトの値は 1 になります。</p>
+<dd><p>This class implements semaphore objects.  A semaphore manages a counter
+representing the number of <a class="reference internal" href="#threading.Semaphore.release" title="threading.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> calls minus the number of
+<a class="reference internal" href="#threading.Semaphore.acquire" title="threading.Semaphore.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> calls, plus an initial value.  The <a class="reference internal" href="#threading.Semaphore.acquire" title="threading.Semaphore.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> method
+blocks if necessary until it can return without making the counter negative.
+If not given, <em>value</em> defaults to 1.</p>
 <p>オプションの引数には、内部カウンタの初期値を指定します。デフォルトは <code class="docutils literal"><span class="pre">1</span></code> です。与えられた <em>value</em> が 0 より小さい場合、 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> が送出されます。</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.3 で変更: </span>ファクトリ関数からクラスに変更されました。</p>
@@ -490,7 +494,15 @@ by the platform.</p>
 <dt id="threading.Semaphore.acquire">
 <code class="descname">acquire</code><span class="sig-paren">(</span><em>blocking=True</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#threading.Semaphore.acquire" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>セマフォを獲得します。</p>
-<p>引数なしで呼び出した場合: <a class="reference internal" href="#threading.Semaphore.acquire" title="threading.Semaphore.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> 処理に入ったときに内部カウンタがゼロより大きければ、カウンタを 1 デクリメントして即座に処理を戻します。 <a class="reference internal" href="#threading.Semaphore.acquire" title="threading.Semaphore.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> 処理に入ったときに内部カウンタがゼロの場合、他のスレッドが <a class="reference internal" href="#threading.Semaphore.release" title="threading.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> を呼び出してカウンタをゼロより大きくするまでブロックします。この処理は、適切なインターロック (interlock) を介して行い、複数の <a class="reference internal" href="#threading.Semaphore.acquire" title="threading.Semaphore.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> 呼び出しがブロックされた場合、 <a class="reference internal" href="#threading.Semaphore.release" title="threading.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> が正確に一つのスレッドだけを起こせるようにします。 実装はランダムに一つ選択してもよいので、ブロックされたスレッドが起こされる順番に依存してはなりません。 true を返します (または無期限にブロックします)。</p>
+<p>When invoked without arguments: if the internal counter is larger than
+zero on entry, decrement it by one and return immediately.  If it is zero
+on entry, block, waiting until some other thread has called
+<a class="reference internal" href="#threading.Semaphore.release" title="threading.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> to make it larger than zero.  This is done
+with proper interlocking so that if multiple <a class="reference internal" href="#threading.Semaphore.acquire" title="threading.Semaphore.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> calls are
+blocked, <a class="reference internal" href="#threading.Semaphore.release" title="threading.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> will wake exactly one of them up.
+The implementation may pick one at random, so the order in which
+blocked threads are awakened should not be relied on.  Returns
+true (or blocks indefinitely).</p>
 <p><em>blocking</em> を false にして呼び出すとブロックしません。引数なしで呼び出した場合にブロックするような状況であった場合には直ちに false を返します。それ以外の場合には、引数なしで呼び出したときと同じ処理を行い true を返します。</p>
 <p><code class="docutils literal"><span class="pre">None</span></code> 以外の <em>timeout</em> で起動された場合、最大で <em>timeout</em> 秒ブロックします。
 acquire が その間隔の間で完了しなかった場合は false が返ります。そうでなければ true が返ります。</p>
@@ -805,12 +817,12 @@ the threads are released simultaneously.</p>
       </ul>
     </div>  
     <div class="footer">
-    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2018, Python Software Foundation.
     <br />
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 12月 28, 2017
+    最終更新日時: 1月 01, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。

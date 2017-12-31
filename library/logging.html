@@ -135,7 +135,11 @@
 <dl class="attribute">
 <dt id="logging.Logger.propagate">
 <code class="descclassname">Logger.</code><code class="descname">propagate</code><a class="headerlink" href="#logging.Logger.propagate" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>これが真と評価されると、記録されたイベントがこのロガーに向けられるとそれはこのロガーに所属する全てのハンドラに渡されるとともに、上位 (祖先) ロガーのハンドラにも渡されます。メッセージは、祖先ロガーのハンドラに直接渡されます - 今問題にしている祖先ロガーのレベルもフィルタも、どちらも考慮されません。</p>
+<dd><p>If this evaluates to true, events logged to this logger will be passed to the
+handlers of higher level (ancestor) loggers, in addition to any handlers
+attached to this logger. Messages are passed directly to the ancestor
+loggers' handlers - neither the level nor filters of the ancestor loggers in
+question are considered.</p>
 <p>この値の評価結果が偽になる場合、ロギングメッセージは祖先ロガーのハンドラに渡されません。</p>
 <p>コンストラクタはこの属性を <code class="docutils literal"><span class="pre">True</span></code> に設定します。</p>
 <div class="admonition note">
@@ -147,13 +151,21 @@
 <dl class="method">
 <dt id="logging.Logger.setLevel">
 <code class="descclassname">Logger.</code><code class="descname">setLevel</code><span class="sig-paren">(</span><em>lvl</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.Logger.setLevel" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>このロガーの閾値を <em>lvl</em> に設定します。ログ記録しようとするメッセージで、 <em>lvl</em> よりも深刻でないものは無視されます。ロガーが生成された際、レベルは <code class="xref py py-const docutils literal"><span class="pre">NOTSET</span></code> (これによりすべてのメッセージについて、ロガーがルートロガーであれば処理される、そうでなくてロガーが非ルートロガーの場合には親ロガーに委譲させる) に設定されます。ルートロガーは <code class="xref py py-const docutils literal"><span class="pre">WARNING</span></code> レベルで生成されることに注意してください。</p>
+<dd><p>Sets the threshold for this logger to <em>lvl</em>. Logging messages which are less
+severe than <em>lvl</em> will be ignored. When a logger is created, the level is set to
+<code class="xref py py-const docutils literal"><span class="pre">NOTSET</span></code> (which causes all messages to be processed when the logger is
+the root logger, or delegation to the parent when the logger is a non-root
+logger). Note that the root logger is created with level <code class="xref py py-const docutils literal"><span class="pre">WARNING</span></code>.</p>
 <p>「親ロガーに委譲」という用語の意味は、もしロガーのレベルが NOTEST ならば、祖先ロガーの系列の中を NOTEST 以外のレベルの祖先を見つけるかルートに到達するまで辿っていく、ということです。</p>
 <p>もし NOTEST 以外のレベルの祖先が見つかったなら、その祖先のレベルが探索を開始したロガーの実効レベルとして扱われ、ログイベントがどのように処理されるかを決めるのに使われます。</p>
 <p>ルートに到達した場合、ルートのレベルが NOTEST ならばすべてのメッセージは処理されます。そうでなければルートのレベルが実効レベルとして使われます。</p>
 <p>レベルの一覧については <a class="reference internal" href="#levels"><span class="std std-ref">ロギングレベル</span></a> を参照してください。</p>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.2 で変更: </span><em>lvl</em> パラメータは、 <code class="xref py py-const docutils literal"><span class="pre">INFO</span></code> のような整数定数の代わりに 'INFO' のようなレベルの文字列表現も受け付けるようになりました。ただし、レベルは内部で整数として保存されますし、 <a class="reference internal" href="#logging.Logger.getEffectiveLevel" title="logging.Logger.getEffectiveLevel"><code class="xref py py-meth docutils literal"><span class="pre">getEffectiveLevel()</span></code></a> や <a class="reference internal" href="#logging.Logger.isEnabledFor" title="logging.Logger.isEnabledFor"><code class="xref py py-meth docutils literal"><span class="pre">isEnabledFor()</span></code></a> といったメソッドは、整数を返し、また渡されるものと期待します。</p>
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>The <em>lvl</em> parameter now accepts a string representation of the
+level such as 'INFO' as an alternative to the integer constants
+such as <code class="xref py py-const docutils literal"><span class="pre">INFO</span></code>. Note, however, that levels are internally stored
+as integers, and methods such as e.g. <a class="reference internal" href="#logging.Logger.getEffectiveLevel" title="logging.Logger.getEffectiveLevel"><code class="xref py py-meth docutils literal"><span class="pre">getEffectiveLevel()</span></code></a> and
+<a class="reference internal" href="#logging.Logger.isEnabledFor" title="logging.Logger.isEnabledFor"><code class="xref py py-meth docutils literal"><span class="pre">isEnabledFor()</span></code></a> will return/expect to be passed integers.</p>
 </div>
 </dd></dl>
 
@@ -256,13 +268,13 @@
 <dl class="method">
 <dt id="logging.Logger.addFilter">
 <code class="descclassname">Logger.</code><code class="descname">addFilter</code><span class="sig-paren">(</span><em>filt</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.Logger.addFilter" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>指定されたフィルタ <em>filt</em> をこのロガーに追加します。</p>
+<dd><p>Adds the specified filter <em>filt</em> to this logger.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="logging.Logger.removeFilter">
 <code class="descclassname">Logger.</code><code class="descname">removeFilter</code><span class="sig-paren">(</span><em>filt</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.Logger.removeFilter" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>指定されたフィルタ <em>filt</em> をこのロガーから取り除きます。</p>
+<dd><p>Removes the specified filter <em>filt</em> from this logger.</p>
 </dd></dl>
 
 <dl class="method">
@@ -379,29 +391,33 @@
 <dl class="method">
 <dt id="logging.Handler.setLevel">
 <code class="descclassname">Handler.</code><code class="descname">setLevel</code><span class="sig-paren">(</span><em>lvl</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.Handler.setLevel" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>このハンドラに対する閾値を <em>lvl</em> に設定します。ログ記録しようとするメッセージで、 <em>lvl</em> よりも深刻でないものは無視されます。ハンドラが生成された際、レベルは <code class="xref py py-const docutils literal"><span class="pre">NOTSET</span></code> (すべてのメッセージが処理される) に設定されます。</p>
+<dd><p>Sets the threshold for this handler to <em>lvl</em>. Logging messages which are less
+severe than <em>lvl</em> will be ignored. When a handler is created, the level is set
+to <code class="xref py py-const docutils literal"><span class="pre">NOTSET</span></code> (which causes all messages to be processed).</p>
 <p>レベルの一覧については <a class="reference internal" href="#levels"><span class="std std-ref">ロギングレベル</span></a> を参照してください。</p>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.2 で変更: </span><em>lvl</em> パラメータは、 <code class="xref py py-const docutils literal"><span class="pre">INFO</span></code> のような整数定数の代わりに 'INFO' のようなレベルの文字列表現も受け付けるようになりました。</p>
+<p><span class="versionmodified">バージョン 3.2 で変更: </span>The <em>lvl</em> parameter now accepts a string representation of the
+level such as 'INFO' as an alternative to the integer constants
+such as <code class="xref py py-const docutils literal"><span class="pre">INFO</span></code>.</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="logging.Handler.setFormatter">
 <code class="descclassname">Handler.</code><code class="descname">setFormatter</code><span class="sig-paren">(</span><em>form</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.Handler.setFormatter" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>このハンドラの <a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> を <em>form</em> に設定します。</p>
+<dd><p>Sets the <a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> for this handler to <em>form</em>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="logging.Handler.addFilter">
 <code class="descclassname">Handler.</code><code class="descname">addFilter</code><span class="sig-paren">(</span><em>filt</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.Handler.addFilter" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>指定されたフィルタ <em>filt</em> をこのハンドラに追加します。</p>
+<dd><p>Adds the specified filter <em>filt</em> to this handler.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="logging.Handler.removeFilter">
 <code class="descclassname">Handler.</code><code class="descname">removeFilter</code><span class="sig-paren">(</span><em>filt</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.Handler.removeFilter" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>指定されたフィルタ <em>filt</em> をこのハンドラから除去します。</p>
+<dd><p>Removes the specified filter <em>filt</em> from this handler.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1081,12 +1097,12 @@
       </ul>
     </div>  
     <div class="footer">
-    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2018, Python Software Foundation.
     <br />
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 12月 28, 2017
+    最終更新日時: 1月 01, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。

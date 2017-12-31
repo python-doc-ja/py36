@@ -1811,7 +1811,12 @@ demonstrates a level of control over the synchronization.</p>
 <code class="descclassname">multiprocessing.connection.</code><code class="descname">Client</code><span class="sig-paren">(</span><em>address</em><span class="optional">[</span>, <em>family</em><span class="optional">[</span>, <em>authenticate</em><span class="optional">[</span>, <em>authkey</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocessing.connection.Client" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><em>address</em> で渡したアドレスを使用するリスナーに対してコネクションを確立しようとして <a class="reference internal" href="#multiprocessing.Connection" title="multiprocessing.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a> を返します。</p>
 <p>コネクション種別は <em>family</em> 引数で決定しますが、一般的には <em>address</em> のフォーマットから推測できるので、これは指定されません。 (<a class="reference internal" href="#multiprocessing-address-formats"><span class="std std-ref">アドレスフォーマット</span></a> を参照してください)</p>
-<p><em>authenticate</em> が <code class="docutils literal"><span class="pre">True</span></code> か <em>authkey</em> がバイト文字列の場合、 ダイジェスト認証が使用されます。認証に使用されるキーは <em>authkey</em> 、または <em>authkey</em> が <code class="docutils literal"><span class="pre">None</span></code> の場合は <code class="docutils literal"><span class="pre">current_process().authkey</span></code> のどちらかです。 認証が失敗した場合 <a class="reference internal" href="#multiprocessing.AuthenticationError" title="multiprocessing.AuthenticationError"><code class="xref py py-exc docutils literal"><span class="pre">AuthenticationError</span></code></a> が発生します。 <a class="reference internal" href="#multiprocessing-auth-keys"><span class="std std-ref">認証キー</span></a> を参照してください。</p>
+<p>If <em>authenticate</em> is <code class="docutils literal"><span class="pre">True</span></code> or <em>authkey</em> is a byte string then digest
+authentication is used.  The key used for authentication will be either
+<em>authkey</em> or <code class="docutils literal"><span class="pre">current_process().authkey</span></code> if <em>authkey</em> is <code class="docutils literal"><span class="pre">None</span></code>.
+If authentication fails then
+<a class="reference internal" href="#multiprocessing.AuthenticationError" title="multiprocessing.AuthenticationError"><code class="xref py py-exc docutils literal"><span class="pre">AuthenticationError</span></code></a> is raised.  See
+<a class="reference internal" href="#multiprocessing-auth-keys"><span class="std std-ref">認証キー</span></a>.</p>
 </dd></dl>
 
 <dl class="class">
@@ -1825,9 +1830,16 @@ demonstrates a level of control over the synchronization.</p>
 </div>
 <p><em>family</em> は使用するソケット(名前付きパイプ)の種別です。これは <code class="docutils literal"><span class="pre">'AF_INET'</span></code> (TCP ソケット), <code class="docutils literal"><span class="pre">'AF_UNIX'</span></code> (Unix ドメインソケット) または <code class="docutils literal"><span class="pre">'AF_PIPE'</span></code> (Windows 名前付きパイプ) という文字列のどれか1つになります。これらのうち <code class="docutils literal"><span class="pre">'AF_INET'</span></code> のみが利用可能であることが保証されています。 <em>family</em> が <code class="docutils literal"><span class="pre">None</span></code> の場合 <em>address</em> のフォーマットから推測されたものが使用されます。 <em>address</em> も <code class="docutils literal"><span class="pre">None</span></code> の場合はデフォルトが選択されます。詳細は <a class="reference internal" href="#multiprocessing-address-formats"><span class="std std-ref">アドレスフォーマット</span></a> を参照してください。 <em>family</em> が <code class="docutils literal"><span class="pre">'AF_UNIX'</span></code> で <em>address</em> が <code class="docutils literal"><span class="pre">None</span></code> の場合 <a class="reference internal" href="tempfile.html#tempfile.mkstemp" title="tempfile.mkstemp"><code class="xref py py-func docutils literal"><span class="pre">tempfile.mkstemp()</span></code></a> を使用して作成されたプライベートな一時ディレクトリにソケットが作成されます。</p>
 <p>リスナーオブジェクトがソケットを使用する場合、ソケットに束縛されるときに <em>backlog</em> (デフォルトでは1つ) がソケットの <a class="reference internal" href="socket.html#socket.socket.listen" title="socket.socket.listen"><code class="xref py py-meth docutils literal"><span class="pre">listen()</span></code></a> メソッドに対して渡されます。</p>
-<p><em>authenticate</em> が <code class="docutils literal"><span class="pre">True</span></code> (デフォルトでは <code class="docutils literal"><span class="pre">False</span></code>) か <em>authkey</em> が <code class="docutils literal"><span class="pre">None</span></code> ではない場合、ダイジェスト認証が使用されます。</p>
-<p><em>authkey</em> がバイト文字列の場合、認証キーとして使用されます。そうでない場合は <code class="docutils literal"><span class="pre">None</span></code> でなければいけません。</p>
-<p><em>authkey</em> が <code class="docutils literal"><span class="pre">None</span></code> かつ <em>authenticate</em> が <code class="docutils literal"><span class="pre">True</span></code> の場合 <code class="docutils literal"><span class="pre">current_process().authkey</span></code> が認証キーとして使用されます。 <em>authkey</em> が <code class="docutils literal"><span class="pre">None</span></code> かつ <em>authenticate</em> が <code class="docutils literal"><span class="pre">False</span></code> の場合、認証は行われません。 もし認証が失敗した場合 <a class="reference internal" href="#multiprocessing.AuthenticationError" title="multiprocessing.AuthenticationError"><code class="xref py py-exc docutils literal"><span class="pre">AuthenticationError</span></code></a> が発生します。 詳細については <a class="reference internal" href="#multiprocessing-auth-keys"><span class="std std-ref">認証キー</span></a> を参照してください。</p>
+<p>If <em>authenticate</em> is <code class="docutils literal"><span class="pre">True</span></code> (<code class="docutils literal"><span class="pre">False</span></code> by default) or <em>authkey</em> is not
+<code class="docutils literal"><span class="pre">None</span></code> then digest authentication is used.</p>
+<p>If <em>authkey</em> is a byte string then it will be used as the
+authentication key; otherwise it must be <code class="docutils literal"><span class="pre">None</span></code>.</p>
+<p>If <em>authkey</em> is <code class="docutils literal"><span class="pre">None</span></code> and <em>authenticate</em> is <code class="docutils literal"><span class="pre">True</span></code> then
+<code class="docutils literal"><span class="pre">current_process().authkey</span></code> is used as the authentication key.  If
+<em>authkey</em> is <code class="docutils literal"><span class="pre">None</span></code> and <em>authenticate</em> is <code class="docutils literal"><span class="pre">False</span></code> then no
+authentication is done.  If authentication fails then
+<a class="reference internal" href="#multiprocessing.AuthenticationError" title="multiprocessing.AuthenticationError"><code class="xref py py-exc docutils literal"><span class="pre">AuthenticationError</span></code></a> is raised.
+See <a class="reference internal" href="#multiprocessing-auth-keys"><span class="std std-ref">認証キー</span></a>.</p>
 <dl class="method">
 <dt id="multiprocessing.connection.Listener.accept">
 <code class="descname">accept</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocessing.connection.Listener.accept" title="この定義へのパーマリンク">¶</a></dt>
@@ -2605,12 +2617,12 @@ demonstrates a level of control over the synchronization.</p>
       </ul>
     </div>  
     <div class="footer">
-    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2018, Python Software Foundation.
     <br />
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 12月 28, 2017
+    最終更新日時: 1月 01, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。

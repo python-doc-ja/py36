@@ -473,14 +473,53 @@ the set of values to be yielded.</p>
 <dl class="method">
 <dt id="object.__del__">
 <code class="descclassname">object.</code><code class="descname">__del__</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#object.__del__" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p id="index-69">インスタンスが消滅させられる際に呼び出されます。このメソッドはデストラクタ (destructor)  とも呼ばれます。基底クラスとその派生クラスがともに <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> メソッドを持つ場合、派生クラスの <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> メソッドは基底クラスの <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> メソッドを明示的に呼び出して、インスタンスの基底クラス部分が適切に消滅処理されること保証しなければなりません。 <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> メソッドでインスタンスに対する新たな参照を作ることで、インスタンスの消滅を遅らせることができます (とはいえ、推奨しません！)。このようにすると、新たに作成された参照がその後削除された際にもう一度 <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> メソッドが呼び出されます。インタプリタが終了する際に残っているオブジェクトに対して、 <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> メソッドが呼び出される保証はありません。</p>
+<dd><p id="index-69">Called when the instance is about to be destroyed.  This is also called a
+destructor.  If a base class has a <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> method, the derived class’s
+<a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> method, if any, must explicitly call it to ensure proper
+deletion of the base class part of the instance.  Note that it is possible
+(though not recommended!) for the <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> method to postpone destruction
+of the instance by creating a new reference to it.  It may then be called at a
+later time when this new reference is deleted.  It is not guaranteed that
+<a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> methods are called for objects that still exist when the
+interpreter exits.</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last"><code class="docutils literal"><span class="pre">del</span> <span class="pre">x</span></code> は <code class="docutils literal"><span class="pre">x.__del__()</span></code> を直接呼び出すことはしません —  前者は <code class="docutils literal"><span class="pre">x</span></code> への参照カウント (reference count) を 1 つ減らし、後者は <code class="docutils literal"><span class="pre">x</span></code> への参照カウントが 0 になった際にのみ呼び出されます。よくオブジェクトの参照カウントが 0 になるのを妨げる要因となる状況には、以下のようなものがあります: 複数のオブジェクト間における循環参照 (二重リンクリストや、親と子へのポインタを持つツリーデータ構造); 例外を捕捉した関数におけるスタックフレーム上にあるオブジェクトへの参照 (<code class="docutils literal"><span class="pre">sys.exc_info()[2]</span></code> に記憶されているトレースバックが、スタックフレームを生き延びさせます); または、対話モードでハンドルされなかった例外を送出したスタックフレーム上のオブジェクトへの参照 (<code class="docutils literal"><span class="pre">sys.last_traceback</span></code> に記憶されているトレースバックが、スタックフレームを生き延びさせます); 最初の状況を解決するには、明示的に循環参照を壊すしかありません; 二つ目は、トレースバックオブジェクトが必要なくなった際にその参照を解放することで解決できます。三つ目は、 <code class="docutils literal"><span class="pre">sys.last_traceback</span></code> に <code class="docutils literal"><span class="pre">None</span></code> を格納することで解決できます。ごみである循環参照は、ガベージコレクタが有効 (デフォルト) であるときのみ検知されクリーンアップされます。この話題について詳しい情報は、 <a class="reference internal" href="../library/gc.html#module-gc" title="gc: Interface to the cycle-detecting garbage collector."><code class="xref py py-mod docutils literal"><span class="pre">gc</span></code></a> モジュールのドキュメントを参照してください。</p>
+<p class="last"><code class="docutils literal"><span class="pre">del</span> <span class="pre">x</span></code> doesn’t directly call <code class="docutils literal"><span class="pre">x.__del__()</span></code> — the former decrements
+the reference count for <code class="docutils literal"><span class="pre">x</span></code> by one, and the latter is only called when
+<code class="docutils literal"><span class="pre">x</span></code>’s reference count reaches zero.  Some common situations that may
+prevent the reference count of an object from going to zero include:
+circular references between objects (e.g., a doubly-linked list or a tree
+data structure with parent and child pointers); a reference to the object
+on the stack frame of a function that caught an exception (the traceback
+stored in <code class="docutils literal"><span class="pre">sys.exc_info()[2]</span></code> keeps the stack frame alive); or a
+reference to the object on the stack frame that raised an unhandled
+exception in interactive mode (the traceback stored in
+<code class="docutils literal"><span class="pre">sys.last_traceback</span></code> keeps the stack frame alive).  The first situation
+can only be remedied by explicitly breaking the cycles; the second can be
+resolved by freeing the reference to the traceback object when it is no
+longer useful, and the third can be resolved by storing <code class="docutils literal"><span class="pre">None</span></code> in
+<code class="docutils literal"><span class="pre">sys.last_traceback</span></code>.
+Circular references which are garbage are detected and cleaned up when
+the cyclic garbage collector is enabled (it’s on by default). Refer to the
+documentation for the <a class="reference internal" href="../library/gc.html#module-gc" title="gc: Interface to the cycle-detecting garbage collector."><code class="xref py py-mod docutils literal"><span class="pre">gc</span></code></a> module for more information about this
+topic.</p>
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">警告</p>
-<p class="last"><a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> メソッドの呼び出しが起きるのは不安定な状況下なので、 <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> の実行中に発生した例外は無視され、代わりに <code class="docutils literal"><span class="pre">sys.stderr</span></code> に警告が出力されます。また、 (例えばプログラムの実行終了による) モジュールの削除に伴って <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> が呼び出される際には、 <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> メソッドが参照している他のグローバル変数はすでに削除されていたり、削除中(例えば、import機構のシャットダウン中)かもしれません。この理由から、 <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> メソッドでは外部の不変関係を維持する上で絶対最低限必要なことだけをすべきです。バージョン 1.5 からは、単一のアンダースコアで始まるようなグローバル変数は、他のグローバル変数が削除される前にモジュールから削除されるように Python 側で保証しています; これらのアンダースコア付きグローバル変数は、 <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> が呼び出された際に、import されたモジュールがまだ残っているか確認する上で役に立ちます。</p>
+<p class="last">Due to the precarious circumstances under which <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> methods are
+invoked, exceptions that occur during their execution are ignored, and a warning
+is printed to <code class="docutils literal"><span class="pre">sys.stderr</span></code> instead.  Also, when <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> is invoked in
+response to a module being deleted (e.g., when execution of the program is
+done), other globals referenced by the <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> method may already have
+been deleted or in the process of being torn down (e.g. the import
+machinery shutting down).  For this reason, <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> methods
+should do the absolute
+minimum needed to maintain external invariants.  Starting with version 1.5,
+Python guarantees that globals whose name begins with a single underscore are
+deleted from their module before other globals are deleted; if no other
+references to such globals exist, this may help in assuring that imported
+modules are still available at the time when the <a class="reference internal" href="#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> method is
+called.</p>
 <span class="target" id="index-70"></span></div>
 </dd></dl>
 
@@ -1519,12 +1558,12 @@ CPython 3.7 では、 <code class="docutils literal"><span class="pre">__aiter__
       </ul>
     </div>  
     <div class="footer">
-    &copy; <a href="../copyright.html">Copyright</a> 2001-2017, Python Software Foundation.
+    &copy; <a href="../copyright.html">Copyright</a> 2001-2018, Python Software Foundation.
     <br />
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 12月 28, 2017
+    最終更新日時: 1月 01, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
