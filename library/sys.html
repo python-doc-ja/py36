@@ -982,7 +982,15 @@ can be found in the <a class="reference internal" href="os.html#module-os" title
 <dl class="function">
 <dt id="sys.setprofile">
 <code class="descclassname">sys.</code><code class="descname">setprofile</code><span class="sig-paren">(</span><em>profilefunc</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.setprofile" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p id="index-20">システムのプロファイル関数を登録します。プロファイル関数は、 Python のソースコードプロファイルを行う関数で、 Python で記述することができます。詳細は <a class="reference internal" href="profile.html#profile"><span class="std std-ref">Python プロファイラ</span></a> を参照してください。プロファイル関数はトレース関数(<a class="reference internal" href="#sys.settrace" title="sys.settrace"><code class="xref py py-func docutils literal"><span class="pre">settrace()</span></code></a> 参照)と似ていますが、ソース行が実行されるごとに呼び出されるのではなく、関数の呼出しと復帰時のみ呼び出されます(例外が発生している場合でも、復帰時のイベントは発生します)。プロファイル関数はスレッド毎に設定することができますが、プロファイラはスレッド間のコンテキスト切り替えを検出することはできません。従って、マルチスレッド環境でのプロファイルはあまり意味がありません。 <a class="reference internal" href="#sys.setprofile" title="sys.setprofile"><code class="xref py py-func docutils literal"><span class="pre">setprofile()</span></code></a> は常に <code class="docutils literal"><span class="pre">None</span></code> を返します。</p>
+<dd><p id="index-20">Set the system’s profile function, which allows you to implement a Python source
+code profiler in Python.  See chapter <a class="reference internal" href="profile.html#profile"><span class="std std-ref">Python プロファイラ</span></a> for more information on the
+Python profiler.  The system’s profile function is called similarly to the
+system’s trace function (see <a class="reference internal" href="#sys.settrace" title="sys.settrace"><code class="xref py py-func docutils literal"><span class="pre">settrace()</span></code></a>), but it isn’t called for each
+executed line of code (only on call and return, but the return event is reported
+even when an exception has been set).  The function is thread-specific, but
+there is no way for the profiler to know about context switches between threads,
+so it does not make sense to use this in the presence of multiple threads. Also,
+its return value is not used, so it can simply return <code class="docutils literal"><span class="pre">None</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -1011,7 +1019,10 @@ low at the current recursion depth.</p>
 <dt id="sys.settrace">
 <code class="descclassname">sys.</code><code class="descname">settrace</code><span class="sig-paren">(</span><em>tracefunc</em><span class="sig-paren">)</span><a class="headerlink" href="#sys.settrace" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p id="index-21">システムのトレース関数を登録します。トレース関数は Python のソースデバッガを実装するために使用できます。トレース関数はスレッド毎に設定することができるので、デバッグを行うすべてのスレッドで <a class="reference internal" href="#sys.settrace" title="sys.settrace"><code class="xref py py-func docutils literal"><span class="pre">settrace()</span></code></a> を呼び出し、トレース関数を登録してください。</p>
-<p>Trace関数は 3 個の引数、 <em>frame</em> 、 <em>event</em> 、および <em>arg</em> を受け取る必要があります。 <em>frame</em> は現在のスタックフレームです。 <em>event</em> は文字列で、 <code class="docutils literal"><span class="pre">'call'</span></code> 、 <code class="docutils literal"><span class="pre">'line'</span></code> 、 <code class="docutils literal"><span class="pre">'return'</span></code> 、 <code class="docutils literal"><span class="pre">'exception'</span></code> 、 <code class="docutils literal"><span class="pre">'c_call'</span></code> 、 <code class="docutils literal"><span class="pre">'c_return'</span></code> 、あるいは <code class="docutils literal"><span class="pre">'c_exception'</span></code> のどれかが渡されます。 <em>arg</em> はイベントの種類によって異なります。</p>
+<p>Trace functions should have three arguments: <em>frame</em>, <em>event</em>, and
+<em>arg</em>. <em>frame</em> is the current stack frame.  <em>event</em> is a string: <code class="docutils literal"><span class="pre">'call'</span></code>,
+<code class="docutils literal"><span class="pre">'line'</span></code>, <code class="docutils literal"><span class="pre">'return'</span></code>, <code class="docutils literal"><span class="pre">'exception'</span></code>, <code class="docutils literal"><span class="pre">'c_call'</span></code>, <code class="docutils literal"><span class="pre">'c_return'</span></code>, or
+<code class="docutils literal"><span class="pre">'c_exception'</span></code>. <em>arg</em> depends on the event type.</p>
 <p>trace 関数は (<em>event</em> に <code class="docutils literal"><span class="pre">'call'</span></code> を渡された状態で) 新しいローカルスコープに入るたびに呼ばれます。この場合、そのスコープで利用するローカルの trace 関数への参照か、そのスコープを trace しないのであれば <code class="docutils literal"><span class="pre">None</span></code> を返します。</p>
 <p>ローカル trace 関数は自身への参照 (もしくはそのスコープの以降の trace を行う別の関数) を返すべきです。もしくは、そのスコープの trace を止めるために <code class="docutils literal"><span class="pre">None</span></code> を返します。</p>
 <p><em>event</em> には以下の意味があります。</p>
