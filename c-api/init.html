@@ -129,10 +129,14 @@ int <code class="descname">Py_IsInitialized</code><span class="sig-paren">(</spa
 <dl class="function">
 <dt id="c.Py_FinalizeEx">
 int <code class="descname">Py_FinalizeEx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_FinalizeEx" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> とそれ以後の Python/C API 関数で行った全ての初期化処理を取り消し、最後の <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a>  呼び出し以後に Python インタプリタが生成した全てのサブインタプリタ  (sub-interpreter, 下記の <a class="reference internal" href="#c.Py_NewInterpreter" title="Py_NewInterpreter"><code class="xref c c-func docutils literal"><span class="pre">Py_NewInterpreter()</span></code></a> を参照) を消去します。
-理想的な状況では、この関数によって Python インタプリタが確保したメモリは全て解放されます。
-この関数を (<a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> を呼ばずに) 再度呼び出しても何も行いません。
-通常は返り値は 0 です。終了処理中 (バッファリングされたデータの書き出し) のエラーがあった場合は -1 が返されます。</p>
+<dd><p>Undo all initializations made by <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> and subsequent use of
+Python/C API functions, and destroy all sub-interpreters (see
+<a class="reference internal" href="#c.Py_NewInterpreter" title="Py_NewInterpreter"><code class="xref c c-func docutils literal"><span class="pre">Py_NewInterpreter()</span></code></a> below) that were created and not yet destroyed since
+the last call to <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a>.  Ideally, this frees all memory
+allocated by the Python interpreter.  This is a no-op when called for a second
+time (without calling <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a> again first).  Normally the
+return value is 0.  If there were errors during finalization
+(flushing buffered data), -1 is returned.</p>
 <p>この関数が提供されている理由はいくつかあります。Python の埋め込みを行っているアプリケーションでは、アプリケーションを再起動することなく Python を再起動したいことがあります。また、動的ロード可能イブラリ (あるいは DLL) から Python インタプリタをロードするアプリケーションでは、DLL をアンロードする前に Python が確保したメモリを全て解放したいと考えるかもしれません。アプリケーション内で起きているメモリリークを追跡する際に、開発者は Python が確保したメモリをアプリケーションの終了前に解放させたいと思う場合もあります。</p>
 <p><strong>バグおよび注意事項:</strong> モジュールやモジュール内のオブジェクトはランダムな順番で削除されます。このため、他のオブジェクト(関数オブジェクトも含みます) やモジュールに依存するデストラクタ  (<a class="reference internal" href="../reference/datamodel.html#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal"><span class="pre">__del__()</span></code></a> メソッド) が失敗してしまうことがあります。動的にロードされるようになっている拡張モジュールが Python によってロードされていた場合、アンロードされません。 Python が確保したメモリがわずかながら解放されないかもしれません (メモリリークを発見したら、どうか報告してください)。オブジェクト間の循環参照に捕捉されているメモリは解放されないことがあります。拡張モジュールが確保したメモリは解放されないことがあります。拡張モジュールによっては、初期化ルーチンを 2 度以上呼び出すと正しく動作しないことがあります。こうした状況は、 <a class="reference internal" href="#c.Py_Initialize" title="Py_Initialize"><code class="xref c c-func docutils literal"><span class="pre">Py_Initialize()</span></code></a>  や <a class="reference internal" href="#c.Py_FinalizeEx" title="Py_FinalizeEx"><code class="xref c c-func docutils literal"><span class="pre">Py_FinalizeEx()</span></code></a> を 2 度以上呼び出すと起こり得ます。</p>
 <div class="versionadded">
@@ -912,7 +916,7 @@ defined.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 2月 09, 2018
+    最終更新日時: 2月 10, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。

@@ -577,13 +577,13 @@ new メソッドはメモリ割り当てのために <a class="reference interna
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">initproc</span><span class="p">)</span><span class="n">Noddy_init</span><span class="p">,</span>         <span class="cm">/* tp_init */</span>
 </pre></div>
 </div>
-<p>Python では <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_init" title="PyTypeObject.tp_init"><code class="xref c c-member docutils literal"><span class="pre">tp_init</span></code></a> メンバは <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a> メソッドとして見えています。
-このメソッドは、オブジェクトが作成されたあとに、それを初期化する目的で使われます。
-new メソッドとはちがって、初期化メソッドは必ず呼ばれるとは限りません。
-初期化メソッドはオブジェクトを非 pickle 化するときは呼ばれず、上書きもできます。
-初期化メソッドは、インスタンスの初期値を提供するのに必要な引数を受けとります。
-このメソッドはつねに固定引数とキーワード引数を受けとります。
-初期化メソッドは成功のときは 0 、エラーのときは -1 を返すべきです。</p>
+<p>The <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_init" title="PyTypeObject.tp_init"><code class="xref c c-member docutils literal"><span class="pre">tp_init</span></code></a> slot is exposed in Python as the <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a> method. It
+is used to initialize an object after it’s created. Unlike the new method, we
+can’t guarantee that the initializer is called.  The initializer isn’t called
+when unpickling objects and it can be overridden.  Our initializer accepts
+arguments to provide initial values for our instance. Initializers always accept
+positional and keyword arguments. Initializers should return either 0 on
+success or -1 on error.</p>
 <p>初期化メソッドは複数回呼び出される可能性があります。あなたのオブジェクトの <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a> メソッドは、誰にでも呼び出すことができるからです。このため、新しい値を代入するさいには特別な注意を払う必要があります。たとえば、 <code class="xref py py-attr docutils literal"><span class="pre">first</span></code> メンバには以下のように代入したくなるかもしれません:</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">first</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">Py_XDECREF</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">);</span>
@@ -2066,7 +2066,7 @@ before clearing members. Here is reimplemented deallocator which uses
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 2月 09, 2018
+    最終更新日時: 2月 10, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
