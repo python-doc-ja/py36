@@ -104,16 +104,23 @@
 <span id="gettext-multilingual-internationalization-services"></span><h1>23.1. <a class="reference internal" href="#module-gettext" title="gettext: Multilingual internationalization services."><code class="xref py py-mod docutils literal"><span class="pre">gettext</span></code></a> — 多言語対応に関する国際化サービス<a class="headerlink" href="#module-gettext" title="このヘッドラインへのパーマリンク">¶</a></h1>
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/gettext.py">Lib/gettext.py</a></p>
 <hr class="docutils" />
-<p><a class="reference internal" href="#module-gettext" title="gettext: Multilingual internationalization services."><code class="xref py py-mod docutils literal"><span class="pre">gettext</span></code></a> モジュールは、 Python によるモジュールやアプリケーションの国際化 (I18N, I-nternationalizatio-N) および地域化  (L10N, L-ocalizatio-N) サービスを提供します。このモジュールは GNU <code class="docutils literal"><span class="pre">gettext</span></code> メッセージカタログへの API と、より高水準で Python ファイルに適しているクラスに基づいた API の両方をサポートしてます。以下で述べるインタフェースを使うことで、モジュールやアプリケーションのメッセージをある自然言語で記述しておき、翻訳されたメッセージのカタログを与えて他の異なる自然言語の環境下で動作させることができます。</p>
+<p><a class="reference internal" href="#module-gettext" title="gettext: Multilingual internationalization services."><code class="xref py py-mod docutils literal"><span class="pre">gettext</span></code></a> モジュールは、 Python のモジュールやアプリケーションの国際化 (I18N, I-nternationalizatio-N) および地域化  (L10N, L-ocalizatio-N) サービスを提供します。
+このモジュールは GNU <code class="docutils literal"><span class="pre">gettext</span></code> メッセージカタログの API と、より高水準で Python ファイルに適しているクラスに基づいた API の両方をサポートしてます。
+以下で述べるインタフェースを使うことで、モジュールやアプリケーションのメッセージをある自然言語で記述しておき、後から提供する翻訳されたメッセージのカタログによって様々な自然言語環境で実行できます。</p>
 <p>ここでは Python のモジュールやアプリケーションを地域化するためのいくつかのヒントも提供しています。</p>
 <div class="section" id="gnu-gettext-api">
 <h2>23.1.1. GNU <strong class="program">gettext</strong> API<a class="headerlink" href="#gnu-gettext-api" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p><a class="reference internal" href="#module-gettext" title="gettext: Multilingual internationalization services."><code class="xref py py-mod docutils literal"><span class="pre">gettext</span></code></a> モジュールでは、以下の GNU <strong class="program">gettext</strong> API に非常に良く似た API を提供しています。この API を使う場合、メッセージ翻訳の影響はアプリケーション全体に及ぼすことになります。アプリケーションが単一の言語しか扱わず、各言語に依存する部分をユーザのロケール情報によって選ぶのなら、ほとんどの場合この方法でやりたいことを実現できます。Python モジュールを地域化していたり、アプリケーションの実行中に言語を切り替えたい場合、おそらくクラスに基づいた API を使いたくなるでしょう。</p>
+<p><a class="reference internal" href="#module-gettext" title="gettext: Multilingual internationalization services."><code class="xref py py-mod docutils literal"><span class="pre">gettext</span></code></a> モジュールでは、以下の GNU <strong class="program">gettext</strong> API に非常に良く似た API を提供しています。
+この API を使う場合、アプリケーション全体の翻訳に影響します。
+アプリケーションが単一の言語しか扱わず、ユーザのロケールに従って言語が選ばれるのなら、たいていはこの API が求めているものです。
+Python モジュールを地域化していたり、アプリケーションの実行中に言語を切り替える必要がある場合は、この API ではなくおそらくクラスに基づいた API を使いたくなるでしょう。</p>
 <dl class="function">
 <dt id="gettext.bindtextdomain">
 <code class="descclassname">gettext.</code><code class="descname">bindtextdomain</code><span class="sig-paren">(</span><em>domain</em>, <em>localedir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.bindtextdomain" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><em>domain</em> をロケール辞書 <em>localedir</em> に結び付け (bind) ます。具体的には、 <a class="reference internal" href="#module-gettext" title="gettext: Multilingual internationalization services."><code class="xref py py-mod docutils literal"><span class="pre">gettext</span></code></a> は与えられたドメインに対するバイナリ形式の <code class="file docutils literal"><span class="pre">.mo</span></code> ファイルを、(Unixでは) <code class="file docutils literal"><span class="pre">localedir/language/LC_MESSAGES/domain.mo</span></code> から探します。ここで <em>languages</em> はそれぞれ環境変数 <span class="target" id="index-19"></span><code class="xref std std-envvar docutils literal"><span class="pre">LANGUAGE</span></code> 、 <span class="target" id="index-20"></span><code class="xref std std-envvar docutils literal"><span class="pre">LC_ALL</span></code> 、 <span class="target" id="index-21"></span><code class="xref std std-envvar docutils literal"><span class="pre">LC_MESSAGES</span></code> 、および <span class="target" id="index-22"></span><code class="xref std std-envvar docutils literal"><span class="pre">LANG</span></code> の中から検索されます。</p>
-<p><em>localedir</em> が省略されるか <code class="docutils literal"><span class="pre">None</span></code> の場合、現在 <em>domain</em> に結び付けられている内容が返されます。 <a class="footnote-reference" href="#id3" id="id1">[1]</a></p>
+<dd><p><em>domain</em> をロケールディレクトリ <em>localedir</em> に対応付けます。
+具体的には、 <a class="reference internal" href="#module-gettext" title="gettext: Multilingual internationalization services."><code class="xref py py-mod docutils literal"><span class="pre">gettext</span></code></a> は与えられたドメインに対するバイナリ形式の <code class="file docutils literal"><span class="pre">.mo</span></code> ファイルを探しに、(Unixでは) <code class="file docutils literal"><span class="pre">localedir/language/LC_MESSAGES/domain.mo</span></code> というパスを見に行きます。
+ここで <em>language</em> はそれぞれ環境変数 <span class="target" id="index-19"></span><code class="xref std std-envvar docutils literal"><span class="pre">LANGUAGE</span></code> 、 <span class="target" id="index-20"></span><code class="xref std std-envvar docutils literal"><span class="pre">LC_ALL</span></code> 、 <span class="target" id="index-21"></span><code class="xref std std-envvar docutils literal"><span class="pre">LC_MESSAGES</span></code> 、 <span class="target" id="index-22"></span><code class="xref std std-envvar docutils literal"><span class="pre">LANG</span></code> の中から検索されます。</p>
+<p><em>localedir</em> が省略されるか <code class="docutils literal"><span class="pre">None</span></code> の場合、現在 <em>domain</em> に対応付けられているロケールディレクトリが返されます。 <a class="footnote-reference" href="#id3" id="id1">[1]</a></p>
 </dd></dl>
 
 <dl class="function">
@@ -126,13 +133,15 @@
 <dl class="function">
 <dt id="gettext.textdomain">
 <code class="descclassname">gettext.</code><code class="descname">textdomain</code><span class="sig-paren">(</span><em>domain=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.textdomain" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>現在のグローバルドメインを調べたり変更したりします。 <em>domain</em> が <code class="docutils literal"><span class="pre">None</span></code> の場合、現在のグローバルドメインが返されます。それ以外の場合にはグローバルドメインは <em>domain</em> に設定され、設定されたグローバルドメインを返します。</p>
+<dd><p>現在のグローバルドメインを変更したり調べたりします。
+<em>domain</em> が <code class="docutils literal"><span class="pre">None</span></code> の場合、現在のグローバルドメインが返されます。それ以外の場合には、グローバルドメインに <em>domain</em> を設定し、その設定されたグローバルドメインを返します。</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="gettext.gettext">
 <code class="descclassname">gettext.</code><code class="descname">gettext</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.gettext" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>現在のグローバルドメイン、言語、およびロケール辞書に基づいて、 <em>message</em> の特定地域向けの翻訳を返します。通常、ローカルな名前空間ではこの関数に <code class="xref py py-func docutils literal"><span class="pre">_()</span></code> という別名をつけます (下の例を参照してください)。</p>
+<dd><p>現在のグローバルドメイン、言語、およびロケールディレクトリに基づいて、 <em>message</em> の地域化された訳文を返します。
+通常、この関数はローカルな名前空間にある <code class="xref py py-func docutils literal"><span class="pre">_()</span></code> という別名を持ちます (下の例を参照してください)。</p>
 </dd></dl>
 
 <dl class="function">
@@ -178,11 +187,8 @@ languages have more than two plural forms). If no translation is found, return
 <dl class="function">
 <dt id="gettext.ldngettext">
 <code class="descclassname">gettext.</code><code class="descname">ldngettext</code><span class="sig-paren">(</span><em>domain</em>, <em>singular</em>, <em>plural</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.ldngettext" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Equivalent to the corresponding functions without the <code class="docutils literal"><span class="pre">l</span></code> prefix
-(<a class="reference internal" href="#gettext.gettext" title="gettext.gettext"><code class="xref py py-func docutils literal"><span class="pre">gettext()</span></code></a>, <a class="reference internal" href="#gettext.dgettext" title="gettext.dgettext"><code class="xref py py-func docutils literal"><span class="pre">dgettext()</span></code></a>, <a class="reference internal" href="#gettext.ngettext" title="gettext.ngettext"><code class="xref py py-func docutils literal"><span class="pre">ngettext()</span></code></a> and <a class="reference internal" href="#gettext.dngettext" title="gettext.dngettext"><code class="xref py py-func docutils literal"><span class="pre">dngettext()</span></code></a>),
-but the translation is returned as a byte string encoded in the preferred
-system encoding if no other encoding was explicitly set with
-<a class="reference internal" href="#gettext.bind_textdomain_codeset" title="gettext.bind_textdomain_codeset"><code class="xref py py-func docutils literal"><span class="pre">bind_textdomain_codeset()</span></code></a>.</p>
+<dd><p>それぞれに対応する先頭の <code class="docutils literal"><span class="pre">l</span></code> が無い関数 (<a class="reference internal" href="#gettext.gettext" title="gettext.gettext"><code class="xref py py-func docutils literal"><span class="pre">gettext()</span></code></a>, <a class="reference internal" href="#gettext.dgettext" title="gettext.dgettext"><code class="xref py py-func docutils literal"><span class="pre">dgettext()</span></code></a>, <a class="reference internal" href="#gettext.ngettext" title="gettext.ngettext"><code class="xref py py-func docutils literal"><span class="pre">ngettext()</span></code></a>, <a class="reference internal" href="#gettext.dngettext" title="gettext.dngettext"><code class="xref py py-func docutils literal"><span class="pre">dngettext()</span></code></a>) と同等ですが、翻訳はバイト文字列として返されます。
+エンコーディングが <a class="reference internal" href="#gettext.bind_textdomain_codeset" title="gettext.bind_textdomain_codeset"><code class="xref py py-func docutils literal"><span class="pre">bind_textdomain_codeset()</span></code></a> を使って明示的に設定されていない場合は、バイト文字列は優先システムエンコーディングでエンコードされます。</p>
 <div class="admonition warning">
 <p class="first admonition-title">警告</p>
 <p class="last">These functions should be avoided in Python 3, because they return
@@ -340,8 +346,7 @@ and <a class="reference internal" href="#gettext.NullTranslations.lngettext" tit
 <dl class="method">
 <dt id="gettext.NullTranslations.install">
 <code class="descname">install</code><span class="sig-paren">(</span><em>names=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.NullTranslations.install" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>This method installs <a class="reference internal" href="#gettext.NullTranslations.gettext" title="gettext.NullTranslations.gettext"><code class="xref py py-meth docutils literal"><span class="pre">gettext()</span></code></a> into the built-in namespace,
-binding it to <code class="docutils literal"><span class="pre">_</span></code>.</p>
+<dd><p>このメソッドは <a class="reference internal" href="#gettext.NullTranslations.gettext" title="gettext.NullTranslations.gettext"><code class="xref py py-meth docutils literal"><span class="pre">gettext()</span></code></a> を組み込み名前空間にインストールし、変数 <code class="docutils literal"><span class="pre">_</span></code> に束縛します。</p>
 <p>If the <em>names</em> parameter is given, it must be a sequence containing the
 names of functions you want to install in the builtins namespace in
 addition to <code class="xref py py-func docutils literal"><span class="pre">_()</span></code>.  Supported names are <code class="docutils literal"><span class="pre">'gettext'</span></code>, <code class="docutils literal"><span class="pre">'ngettext'</span></code>,
