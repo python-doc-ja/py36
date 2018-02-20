@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>17.1. threading — スレッドベースの並列処理 &#8212; Python 3.6.3 ドキュメント</title>
+    <title>17.1. threading — スレッドベースの並列処理 &#8212; Python 3.6.4 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.3',
+        VERSION:     '3.6.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.3 ドキュメント 内を検索"
+          title="Python 3.6.4 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -71,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.3</span>
+          <span class="version_switcher_placeholder">3.6.4</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -481,8 +481,8 @@ by the platform.</p>
 <dl class="class">
 <dt id="threading.Semaphore">
 <em class="property">class </em><code class="descclassname">threading.</code><code class="descname">Semaphore</code><span class="sig-paren">(</span><em>value=1</em><span class="sig-paren">)</span><a class="headerlink" href="#threading.Semaphore" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>This class implements semaphore objects.  A semaphore manages a counter
-representing the number of <a class="reference internal" href="#threading.Semaphore.release" title="threading.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> calls minus the number of
+<dd><p>This class implements semaphore objects.  A semaphore manages an atomic
+counter representing the number of <a class="reference internal" href="#threading.Semaphore.release" title="threading.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> calls minus the number of
 <a class="reference internal" href="#threading.Semaphore.acquire" title="threading.Semaphore.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> calls, plus an initial value.  The <a class="reference internal" href="#threading.Semaphore.acquire" title="threading.Semaphore.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> method
 blocks if necessary until it can return without making the counter negative.
 If not given, <em>value</em> defaults to 1.</p>
@@ -494,15 +494,16 @@ If not given, <em>value</em> defaults to 1.</p>
 <dt id="threading.Semaphore.acquire">
 <code class="descname">acquire</code><span class="sig-paren">(</span><em>blocking=True</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#threading.Semaphore.acquire" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>セマフォを獲得します。</p>
-<p>When invoked without arguments: if the internal counter is larger than
-zero on entry, decrement it by one and return immediately.  If it is zero
-on entry, block, waiting until some other thread has called
-<a class="reference internal" href="#threading.Semaphore.release" title="threading.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> to make it larger than zero.  This is done
-with proper interlocking so that if multiple <a class="reference internal" href="#threading.Semaphore.acquire" title="threading.Semaphore.acquire"><code class="xref py py-meth docutils literal"><span class="pre">acquire()</span></code></a> calls are
-blocked, <a class="reference internal" href="#threading.Semaphore.release" title="threading.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a> will wake exactly one of them up.
-The implementation may pick one at random, so the order in which
-blocked threads are awakened should not be relied on.  Returns
-true (or blocks indefinitely).</p>
+<p>When invoked without arguments:</p>
+<ul class="simple">
+<li>If the internal counter is larger than zero on entry, decrement it by
+one and return true immediately.</li>
+<li>If the internal counter is zero on entry, block until awoken by a call to
+<a class="reference internal" href="#threading.Semaphore.release" title="threading.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a>.  Once awoken (and the counter is greater
+than 0), decrement the counter by 1 and return true.  Exactly one
+thread will be awoken by each call to <a class="reference internal" href="#threading.Semaphore.release" title="threading.Semaphore.release"><code class="xref py py-meth docutils literal"><span class="pre">release()</span></code></a>.  The
+order in which threads are awoken should not be relied on.</li>
+</ul>
 <p><em>blocking</em> を false にして呼び出すとブロックしません。引数なしで呼び出した場合にブロックするような状況であった場合には直ちに false を返します。それ以外の場合には、引数なしで呼び出したときと同じ処理を行い true を返します。</p>
 <p><code class="docutils literal"><span class="pre">None</span></code> 以外の <em>timeout</em> で起動された場合、最大で <em>timeout</em> 秒ブロックします。
 acquire が その間隔の間で完了しなかった場合は false が返ります。そうでなければ true が返ります。</p>
@@ -793,7 +794,7 @@ the threads are released simultaneously.</p>
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.3</span>
+          <span class="version_switcher_placeholder">3.6.4</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -822,7 +823,7 @@ the threads are released simultaneously.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 2月 20, 2018
+    最終更新日時: 2月 21, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。

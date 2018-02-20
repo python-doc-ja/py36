@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>What’s New in Python 2.3 &#8212; Python 3.6.3 ドキュメント</title>
+    <title>What’s New in Python 2.3 &#8212; Python 3.6.4 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.3',
+        VERSION:     '3.6.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.3 ドキュメント 内を検索"
+          title="Python 3.6.4 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -71,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.3</span>
+          <span class="version_switcher_placeholder">3.6.4</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -1210,11 +1210,11 @@ default; you had to explicitly enable it when compiling Python by providing the
 pymalloc has had further enhancements and is now enabled by default; you’ll have
 to supply <code class="xref std std-option docutils literal"><span class="pre">--without-pymalloc</span></code> to disable it.</p>
 <p>この変更は Python で書いたコードからは見えませんが、 pymalloc は C 拡張内のバグを露にするかもしれません。C 拡張の著者は pymalloc を有効にしてテストすべきです。というのも、ある種の正しくないコードが実行時にコアダンプしうるからです。</p>
-<p>問題を起こすとりわけ一般的な誤りが一つあります。Python の C API 内には数多くのメモリアロケーション関数がありますが、これは以前は単に C ライブラリの <code class="xref c c-func docutils literal"><span class="pre">malloc()</span></code> と <code class="xref c c-func docutils literal"><span class="pre">free()</span></code> への別名であり、何かの間違いでミスマッチな関数呼び出しをしても、誤りは気付かれないものでした。今回のこのオブジェクトアロケータを有効化すると、これら関数は <code class="xref c c-func docutils literal"><span class="pre">malloc()</span></code> と <code class="xref c c-func docutils literal"><span class="pre">free()</span></code> への別名ではまったくなくて、メモリ解放に誤った関数を呼び出すとコアダンプし得ます。例えば <code class="xref c c-func docutils literal"><span class="pre">PyObject_Malloc()</span></code> を使って獲得したメモリは <code class="xref c c-func docutils literal"><span class="pre">free()</span></code> ではなく <code class="xref c c-func docutils literal"><span class="pre">PyObject_Free()</span></code> を使って解放する必要があります。Python に含まれるいくつかのモジュールがまさにこれに抵触し、修正の必要がありました。間違いなく多くのサードパーティモジュールが同じ問題を抱えているでしょう。</p>
+<p>問題を起こすとりわけ一般的な誤りが一つあります。Python の C API 内には数多くのメモリアロケーション関数がありますが、これは以前は単に C ライブラリの <code class="xref c c-func docutils literal"><span class="pre">malloc()</span></code> と <code class="xref c c-func docutils literal"><span class="pre">free()</span></code> への別名であり、何かの間違いでミスマッチな関数呼び出しをしても、誤りは気付かれないものでした。今回のこのオブジェクトアロケータを有効化すると、これら関数は <code class="xref c c-func docutils literal"><span class="pre">malloc()</span></code> と <code class="xref c c-func docutils literal"><span class="pre">free()</span></code> への別名ではまったくなくて、メモリ解放に誤った関数を呼び出すとコアダンプし得ます。例えば <a class="reference internal" href="../c-api/memory.html#c.PyObject_Malloc" title="PyObject_Malloc"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Malloc()</span></code></a> を使って獲得したメモリは <code class="xref c c-func docutils literal"><span class="pre">free()</span></code> ではなく <a class="reference internal" href="../c-api/memory.html#c.PyObject_Free" title="PyObject_Free"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Free()</span></code></a> を使って解放する必要があります。Python に含まれるいくつかのモジュールがまさにこれに抵触し、修正の必要がありました。間違いなく多くのサードパーティモジュールが同じ問題を抱えているでしょう。</p>
 <p>この変更の一環として、メモリアロケーションのためのこんがらかった複数インターフェイスが統合されて 2 つの API ファミリになりました。一方のファミリで獲得されたメモリは他方の関数で操作されることは許されません。一方のファミリはメモリの塊を獲得するためのもので、もう一方は Python オブジェクトの獲得に特殊化されたものです。</p>
 <ul class="simple">
 <li>何某かの区別のないメモリの塊を獲得・解放するのには「生メモリ」ファミリを使います: <a class="reference internal" href="../c-api/memory.html#c.PyMem_Malloc" title="PyMem_Malloc"><code class="xref c c-func docutils literal"><span class="pre">PyMem_Malloc()</span></code></a>, <a class="reference internal" href="../c-api/memory.html#c.PyMem_Realloc" title="PyMem_Realloc"><code class="xref c c-func docutils literal"><span class="pre">PyMem_Realloc()</span></code></a>, <a class="reference internal" href="../c-api/memory.html#c.PyMem_Free" title="PyMem_Free"><code class="xref c c-func docutils literal"><span class="pre">PyMem_Free()</span></code></a>.</li>
-<li>「オブジェクトメモリ」ファミリは上述の pymalloc 機構へのインターフェイスであり、多数の「小さな」獲得をするための特化がされています: <code class="xref c c-func docutils literal"><span class="pre">PyObject_Malloc()</span></code>, <code class="xref c c-func docutils literal"><span class="pre">PyObject_Realloc()</span></code>, <code class="xref c c-func docutils literal"><span class="pre">PyObject_Free()</span></code>.</li>
+<li>「オブジェクトメモリ」ファミリは上述の pymalloc 機構へのインターフェイスであり、多数の「小さな」獲得をするための特化がされています: <a class="reference internal" href="../c-api/memory.html#c.PyObject_Malloc" title="PyObject_Malloc"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Malloc()</span></code></a>, <a class="reference internal" href="../c-api/memory.html#c.PyObject_Realloc" title="PyObject_Realloc"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Realloc()</span></code></a>, <a class="reference internal" href="../c-api/memory.html#c.PyObject_Free" title="PyObject_Free"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Free()</span></code></a>.</li>
 <li>Python オブジェクトの獲得と解放には「オブジェクト」ファミリ <a class="reference internal" href="../c-api/allocation.html#c.PyObject_New" title="PyObject_New"><code class="xref c c-func docutils literal"><span class="pre">PyObject_New()</span></code></a>, <a class="reference internal" href="../c-api/allocation.html#c.PyObject_NewVar" title="PyObject_NewVar"><code class="xref c c-func docutils literal"><span class="pre">PyObject_NewVar()</span></code></a>, <a class="reference internal" href="../c-api/allocation.html#c.PyObject_Del" title="PyObject_Del"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Del()</span></code></a> を使います。</li>
 </ul>
 <p>Thanks to lots of work by Tim Peters, pymalloc in 2.3 also provides debugging
@@ -1430,7 +1430,7 @@ except <code class="docutils literal"><span class="pre">bsddb</span></code>.</p>
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.3</span>
+          <span class="version_switcher_placeholder">3.6.4</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -1458,7 +1458,7 @@ except <code class="docutils literal"><span class="pre">bsddb</span></code>.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 2月 20, 2018
+    最終更新日時: 2月 21, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。

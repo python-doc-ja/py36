@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>18.5.2. イベントループ &#8212; Python 3.6.3 ドキュメント</title>
+    <title>18.5.2. イベントループ &#8212; Python 3.6.4 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.3',
+        VERSION:     '3.6.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.3 ドキュメント 内を検索"
+          title="Python 3.6.4 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -71,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.3</span>
+          <span class="version_switcher_placeholder">3.6.4</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -206,9 +206,8 @@
 <h2>18.5.2.4. イベントループのポリシーとデフォルトポリシー<a class="headerlink" href="#event-loop-policies-and-the-default-policy" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>イベントループの管理は、カスタムプラットフォームやフレームワークのために最大限の柔軟性を提供するため <em>ポリシー</em> パターンによって抽象化されます。プロセスの実行中、単一のポリシーオブジェクトが、コンテキスト呼び出しベースのプロセスから利用可能なイベントループを管理します。一つのポリシーは一つの <a class="reference internal" href="#asyncio.AbstractEventLoopPolicy" title="asyncio.AbstractEventLoopPolicy"><code class="xref py py-class docutils literal"><span class="pre">AbstractEventLoopPolicy</span></code></a> インターフェースを実装するオブジェクトです。</p>
 <p>For most users of <a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a>, policies never have to be dealt with
-explicitly, since the default global policy is sufficient.</p>
-<p>The default policy defines context as the current thread, and manages an event
-loop per thread that interacts with <a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a>. The module-level functions
+explicitly, since the default global policy is sufficient (see below).</p>
+<p>The module-level functions
 <a class="reference internal" href="#asyncio.get_event_loop" title="asyncio.get_event_loop"><code class="xref py py-func docutils literal"><span class="pre">get_event_loop()</span></code></a> and <a class="reference internal" href="#asyncio.set_event_loop" title="asyncio.set_event_loop"><code class="xref py py-func docutils literal"><span class="pre">set_event_loop()</span></code></a> provide convenient access to
 event loops managed by the default policy.</p>
 </div>
@@ -243,6 +242,11 @@ event loops managed by the default policy.</p>
 
 </dd></dl>
 
+<p>The default policy defines context as the current thread, and manages an event
+loop per thread that interacts with <a class="reference internal" href="asyncio.html#module-asyncio" title="asyncio: Asynchronous I/O, event loop, coroutines and tasks."><code class="xref py py-mod docutils literal"><span class="pre">asyncio</span></code></a>.  If the current thread
+doesn’t already have an event loop associated with it, the default policy’s
+<a class="reference internal" href="#asyncio.AbstractEventLoopPolicy.get_event_loop" title="asyncio.AbstractEventLoopPolicy.get_event_loop"><code class="xref py py-meth docutils literal"><span class="pre">get_event_loop()</span></code></a> method creates one when
+called from the main thread, but raises <a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal"><span class="pre">RuntimeError</span></code></a> otherwise.</p>
 </div>
 <div class="section" id="access-to-the-global-loop-policy">
 <h2>18.5.2.6. グローバルループポリシーへのアクセス<a class="headerlink" href="#access-to-the-global-loop-policy" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -258,6 +262,26 @@ event loops managed by the default policy.</p>
 <dd><p>現在のイベントループポリシーを設定します。<em>policy</em> が <code class="docutils literal"><span class="pre">None</span></code> の場合、デフォルトポリシーが復元されます。</p>
 </dd></dl>
 
+</div>
+<div class="section" id="customizing-the-event-loop-policy">
+<h2>18.5.2.7. Customizing the event loop policy<a class="headerlink" href="#customizing-the-event-loop-policy" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<p>To implement a new event loop policy, it is recommended you subclass the
+concrete default event loop policy <code class="xref py py-class docutils literal"><span class="pre">DefaultEventLoopPolicy</span></code>
+and override the methods for which you want to change behavior, for example:</p>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyEventLoopPolicy</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">DefaultEventLoopPolicy</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">get_event_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the event loop.</span>
+
+<span class="sd">        This may be None or an instance of EventLoop.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">loop</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+        <span class="c1"># Do something with loop ...</span>
+        <span class="k">return</span> <span class="n">loop</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop_policy</span><span class="p">(</span><span class="n">MyEventLoopPolicy</span><span class="p">())</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -280,6 +304,7 @@ event loops managed by the default policy.</p>
 <li><a class="reference internal" href="#event-loop-policies-and-the-default-policy">18.5.2.4. イベントループのポリシーとデフォルトポリシー</a></li>
 <li><a class="reference internal" href="#event-loop-policy-interface">18.5.2.5. イベントループポリシーインターフェース</a></li>
 <li><a class="reference internal" href="#access-to-the-global-loop-policy">18.5.2.6. グローバルループポリシーへのアクセス</a></li>
+<li><a class="reference internal" href="#customizing-the-event-loop-policy">18.5.2.7. Customizing the event loop policy</a></li>
 </ul>
 </li>
 </ul>
@@ -324,7 +349,7 @@ event loops managed by the default policy.</p>
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.3</span>
+          <span class="version_switcher_placeholder">3.6.4</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -354,7 +379,7 @@ event loops managed by the default policy.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 2月 20, 2018
+    最終更新日時: 2月 21, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。

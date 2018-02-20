@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>1. C や C++ による Python の拡張 &#8212; Python 3.6.3 ドキュメント</title>
+    <title>1. C や C++ による Python の拡張 &#8212; Python 3.6.4 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.3',
+        VERSION:     '3.6.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.3 ドキュメント 内を検索"
+          title="Python 3.6.4 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -71,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.3</span>
+          <span class="version_switcher_placeholder">3.6.4</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -112,7 +112,7 @@
 <span id="extending-simpleexample"></span><h2>1.1. 簡単な例<a class="headerlink" href="#a-simple-example" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Let’s create an extension module called <code class="docutils literal"><span class="pre">spam</span></code> (the favorite food of Monty
 Python fans…) and let’s say we want to create a Python interface to the C
-library function <code class="xref c c-func docutils literal"><span class="pre">system()</span></code>. <a class="footnote-reference" href="#id5" id="id1">[1]</a> This function takes a null-terminated
+library function <code class="xref c c-func docutils literal"><span class="pre">system()</span></code> <a class="footnote-reference" href="#id5" id="id1">[1]</a>. This function takes a null-terminated
 character string as argument and returns an integer.  We want this function to
 be callable from Python as follows:</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">import</span> <span class="n">spam</span>
@@ -580,7 +580,7 @@ Py_BuildValue(&quot;((ii)(ii)) (ii)&quot;,
 borrower of a reference should not call <a class="reference internal" href="../c-api/refcounting.html#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal"><span class="pre">Py_DECREF()</span></code></a>.  The borrower must
 not hold on to the object longer than the owner from which it was borrowed.
 Using a borrowed reference after the owner has disposed of it risks using freed
-memory and should be avoided completely. <a class="footnote-reference" href="#id7" id="id3">[3]</a></p>
+memory and should be avoided completely <a class="footnote-reference" href="#id7" id="id3">[3]</a>.</p>
 <p>参照の借用が参照の所有よりも優れている点は、コードがとりうるあらゆる処理経路で参照を廃棄しておくよう注意しなくて済むことです — 別の言い方をすれば、借用参照の場合には、処理の途中で関数を終了してもメモリリークの危険を冒すことがない、ということです。逆に、所有よりも不利な点は、ごくまともに見えるコードが、実際には参照の借用元で放棄されてしまった後にその参照を使うかもしれないような微妙な状況があるということです。</p>
 <p><a class="reference internal" href="../c-api/refcounting.html#c.Py_INCREF" title="Py_INCREF"><code class="xref c c-func docutils literal"><span class="pre">Py_INCREF()</span></code></a> を呼び出すと、借用参照を所有参照に変更できます。この操作は参照の借用元の状態には影響しません — <a class="reference internal" href="../c-api/refcounting.html#c.Py_INCREF" title="Py_INCREF"><code class="xref c c-func docutils literal"><span class="pre">Py_INCREF()</span></code></a> は新たな所有参照を生成し、参照の所有者が担うべき全ての責任を課します (つまり、新たな参照の所有者は、以前の所有者と同様、参照の放棄を適切に行わねばなりません)。</p>
 </div>
@@ -646,7 +646,7 @@ memory and should be avoided completely. <a class="footnote-reference" href="#id
 <p>特定のオブジェクト型について調べるマクロ (<code class="docutils literal"><span class="pre">Pytype_Check()</span></code>) は <em>NULL</em> ポインタのチェックを行いません — 繰り返しますが、様々な異なる型を想定してオブジェクトの型を調べる際には、こうしたマクロを続けて呼び出す必要があるので、個別に <em>NULL</em> ポインタのチェックをすると冗長なテストになってしまうのです。型を調べるマクロには、 <em>NULL</em> チェックを行う変化形はありません。</p>
 <p>The C function calling mechanism guarantees that the argument list passed to C
 functions (<code class="docutils literal"><span class="pre">args</span></code> in the examples) is never <em>NULL</em> — in fact it guarantees
-that it is always a tuple. <a class="footnote-reference" href="#id8" id="id4">[4]</a></p>
+that it is always a tuple <a class="footnote-reference" href="#id8" id="id4">[4]</a>.</p>
 <p><em>NULL</em> ポインタを Python ユーザレベルに &quot;逃がし&quot; てしまうと、深刻なエラーを引き起こします。</p>
 </div>
 </div>
@@ -892,7 +892,7 @@ that it is always a tuple. <a class="footnote-reference" href="#id8" id="id4">[4
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.3</span>
+          <span class="version_switcher_placeholder">3.6.4</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -920,7 +920,7 @@ that it is always a tuple. <a class="footnote-reference" href="#id8" id="id4">[4
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 2月 20, 2018
+    最終更新日時: 2月 21, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。

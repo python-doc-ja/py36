@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>6.2. re — 正規表現操作 &#8212; Python 3.6.3 ドキュメント</title>
+    <title>6.2. re — 正規表現操作 &#8212; Python 3.6.4 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.3',
+        VERSION:     '3.6.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.3 ドキュメント 内を検索"
+          title="Python 3.6.4 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -71,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.3</span>
+          <span class="version_switcher_placeholder">3.6.4</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -239,7 +239,7 @@
 </pre></div>
 </div>
 <p>この例ではハイフンに続く単語を探します:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;(?&lt;=-)\w+&#39;</span><span class="p">,</span> <span class="s1">&#39;spam-egg&#39;</span><span class="p">)</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(?&lt;=-)\w+&#39;</span><span class="p">,</span> <span class="s1">&#39;spam-egg&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="go">&#39;egg&#39;</span>
 </pre></div>
@@ -453,7 +453,8 @@ Corresponds to the inline flag <code class="docutils literal"><span class="pre">
 <dd><p>This flag allows you to write regular expressions that look nicer and are
 more readable by allowing you to visually separate logical sections of the
 pattern and add comments. Whitespace within the pattern is ignored, except
-when in a character class or when preceded by an unescaped backslash.
+when in a character class, or when preceded by an unescaped backslash,
+or within tokens like <code class="docutils literal"><span class="pre">*?</span></code>, <code class="docutils literal"><span class="pre">(?:</span></code> or <code class="docutils literal"><span class="pre">(?P&lt;...&gt;</span></code>.
 When a line contains a <code class="docutils literal"><span class="pre">#</span></code> that is not in a character class and is not
 preceded by an unescaped backslash, all characters from the leftmost such
 <code class="docutils literal"><span class="pre">#</span></code> through the end of the line are ignored.</p>
@@ -494,11 +495,11 @@ preceded by an unescaped backslash, all characters from the leftmost such
 <dt id="re.split">
 <code class="descclassname">re.</code><code class="descname">split</code><span class="sig-paren">(</span><em>pattern</em>, <em>string</em>, <em>maxsplit=0</em>, <em>flags=0</em><span class="sig-paren">)</span><a class="headerlink" href="#re.split" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p><em>string</em> を、<em>pattern</em> があるたびに分割します。キャプチャグループの丸括弧が <em>pattern</em> で使われていれば、パターン内のすべてのグループのテキストも結果のリストの一部として返されます。<em>maxsplit</em> がゼロでなければ、最大 <em>maxsplit</em> 個の分割が発生し、残りはリストの最終要素として返されます。</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;\W+&#39;</span><span class="p">,</span> <span class="s1">&#39;Words, words, words.&#39;</span><span class="p">)</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\W+&#39;</span><span class="p">,</span> <span class="s1">&#39;Words, words, words.&#39;</span><span class="p">)</span>
 <span class="go">[&#39;Words&#39;, &#39;words&#39;, &#39;words&#39;, &#39;&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;(\W+)&#39;</span><span class="p">,</span> <span class="s1">&#39;Words, words, words.&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(\W+)&#39;</span><span class="p">,</span> <span class="s1">&#39;Words, words, words.&#39;</span><span class="p">)</span>
 <span class="go">[&#39;Words&#39;, &#39;, &#39;, &#39;words&#39;, &#39;, &#39;, &#39;words&#39;, &#39;.&#39;, &#39;&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;\W+&#39;</span><span class="p">,</span> <span class="s1">&#39;Words, words, words.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\W+&#39;</span><span class="p">,</span> <span class="s1">&#39;Words, words, words.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="go">[&#39;Words&#39;, &#39;words, words.&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;[a-f]+&#39;</span><span class="p">,</span> <span class="s1">&#39;0a3B9&#39;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
 <span class="go">[&#39;0&#39;, &#39;3&#39;, &#39;9&#39;]</span>
@@ -507,7 +508,7 @@ preceded by an unescaped backslash, all characters from the leftmost such
 <p>If there are capturing groups in the separator and it matches at the start of
 the string, the result will start with an empty string.  The same holds for
 the end of the string:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;(\W+)&#39;</span><span class="p">,</span> <span class="s1">&#39;...words, words...&#39;</span><span class="p">)</span>
+<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(\W+)&#39;</span><span class="p">,</span> <span class="s1">&#39;...words, words...&#39;</span><span class="p">)</span>
 <span class="go">[&#39;&#39;, &#39;...&#39;, &#39;words&#39;, &#39;, &#39;, &#39;words&#39;, &#39;...&#39;, &#39;&#39;]</span>
 </pre></div>
 </div>
@@ -544,8 +545,14 @@ the end of the string:</p>
 strings.  The <em>string</em> is scanned left-to-right, and matches are returned in
 the order found.  If one or more groups are present in the pattern, return a
 list of groups; this will be a list of tuples if the pattern has more than
-one group.  Empty matches are included in the result unless they touch the
-beginning of another match.</p>
+one group.  Empty matches are included in the result.</p>
+<div class="admonition note">
+<p class="first admonition-title">注釈</p>
+<p class="last">Due to the limitation of the current implementation the character
+following an empty match is not included in a next match, so
+<code class="docutils literal"><span class="pre">findall(r'^|\w+',</span> <span class="pre">'two</span> <span class="pre">words')</span></code> returns <code class="docutils literal"><span class="pre">['',</span> <span class="pre">'wo',</span> <span class="pre">'words']</span></code>
+(note missed &quot;t&quot;).  This is changed in Python 3.7.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -554,8 +561,7 @@ beginning of another match.</p>
 <dd><p>Return an <a class="reference internal" href="../glossary.html#term-iterator"><span class="xref std std-term">iterator</span></a> yielding <a class="reference internal" href="#match-objects"><span class="std std-ref">match objects</span></a> over
 all non-overlapping matches for the RE <em>pattern</em> in <em>string</em>.  The <em>string</em>
 is scanned left-to-right, and matches are returned in the order found.  Empty
-matches are included in the result unless they touch the beginning of another
-match.</p>
+matches are included in the result.  See also the note about <a class="reference internal" href="#re.findall" title="re.findall"><code class="xref py py-func docutils literal"><span class="pre">findall()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="function">
@@ -1350,7 +1356,7 @@ triple-quoted string syntax:</p>
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.3</span>
+          <span class="version_switcher_placeholder">3.6.4</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -1379,7 +1385,7 @@ triple-quoted string syntax:</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 2月 20, 2018
+    最終更新日時: 2月 21, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
