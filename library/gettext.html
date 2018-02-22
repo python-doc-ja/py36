@@ -156,10 +156,10 @@ Python モジュールを地域化していたり、アプリケーションの�
 <dd><p><a class="reference internal" href="#gettext.gettext" title="gettext.gettext"><code class="xref py py-func docutils literal"><span class="pre">gettext()</span></code></a> と同様ですが、複数形を考慮しています。
 翻訳が見つかった場合、複数形の選択公式を <em>n</em> に適用し、その結果得られたメッセージを返します (言語によっては二つ以上の複数形があります)。
 翻訳が見つからなかった場合、 <em>n</em> が 1 なら <em>singular</em> を返します; そうでない場合 <em>plural</em> を返します。</p>
-<p>複数形の様式はカタログのヘッダから取得されます。
-様式は自由変数 <em>n</em> を持つ C または Python の式です。
-式はカタログ中の複数形のインデクスを評価します。
-<code class="file docutils literal"><span class="pre">.po</span></code> ファイルで用いられる詳細な文法と、様々な言語における様式については <a class="reference external" href="https://www.gnu.org/software/gettext/manual/gettext.html">GNU gettext ドキュメント</a> を参照してください。</p>
+<p>複数形の選択公式はカタログのヘッダから取得されます。
+選択公式は自由変数 <em>n</em> を持つ C または Python の式です;
+その式の評価結果はカタログにある複数形のインデックスになります。
+<code class="file docutils literal"><span class="pre">.po</span></code> ファイルで用いられる詳細な文法と、様々な言語における選択公式については <a class="reference external" href="https://www.gnu.org/software/gettext/manual/gettext.html">GNU gettext ドキュメント</a> を参照してください。</p>
 </dd></dl>
 
 <dl class="function">
@@ -190,14 +190,10 @@ Python モジュールを地域化していたり、アプリケーションの�
 エンコーディングが <a class="reference internal" href="#gettext.bind_textdomain_codeset" title="gettext.bind_textdomain_codeset"><code class="xref py py-func docutils literal"><span class="pre">bind_textdomain_codeset()</span></code></a> を使って明示的に設定されていない場合は、バイト文字列は優先システムエンコーディングでエンコードされます。</p>
 <div class="admonition warning">
 <p class="first admonition-title">警告</p>
-<p class="last">These functions should be avoided in Python 3, because they return
-encoded bytes.  It’s much better to use alternatives which return
-Unicode strings instead, since most Python applications will want to
-manipulate human readable text as strings instead of bytes.  Further,
-it’s possible that you may get unexpected Unicode-related exceptions
-if there are encoding problems with the translated strings.  It is
-possible that the <code class="docutils literal"><span class="pre">l*()</span></code> functions will be deprecated in future Python
-versions due to their inherent problems and limitations.</p>
+<p class="last">これらの関数はエンコードされたバイト列を返すため Python 3 で使うのは避けるべきです。
+ほとんどの Python アプリケーションでは、人間が読むテキストをバイト列ではなく文字列として扱いたいので、 Unicode 文字列を返す代わりの関数を使う方が良いです。
+さらに言うと、翻訳文字列にエンコーディング上の問題があった場合、 Unicode 関連の予期しない例外を受け取るかもしれません。
+このように <code class="docutils literal"><span class="pre">l*()</span></code> 関数は問題や制約を抱えているので、将来の Python バージョンで非推奨となる可能性があります。</p>
 </div>
 </dd></dl>
 
@@ -700,7 +696,7 @@ François Pinard が開発した <strong class="program">xpot</strong> と呼ば
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 2月 21, 2018
+    最終更新日時: 2月 22, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
