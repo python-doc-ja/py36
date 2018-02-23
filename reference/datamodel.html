@@ -752,8 +752,13 @@ descriptor has been assigned to <em>name</em>.</p>
 </div>
 <div class="section" id="slots">
 <span id="id3"></span><h4>3.3.2.4. __slots__<a class="headerlink" href="#slots" title="このヘッドラインへのパーマリンク">¶</a></h4>
-<p>デフォルトでは、クラスのインスタンスは属性を保存するための辞書を持っています。これは、ほとんどインスタンス変数を持たないオブジェクトでは領域の無駄です。大量のインスタンスを生成するとき、この記憶領域の消費量は深刻になり得ます。</p>
-<p>このデフォルトの設定は、クラス定義中で <em>__slots__</em> を定義することでオーバーライドできます。<em>__slots__</em> 宣言はインスタンス変数のシーケンスを取り、各々のインスタンス上には、各変数の値を記憶するのに必要な量だけの記憶領域を確保します。各々のインスタンスに対して <em>__dict__</em> が生成されることがないので、記憶領域が節約されます。</p>
+<p>By default, instances of classes have a dictionary for attribute storage.  This
+wastes space for objects having very few instance variables.  The space
+consumption can become acute when creating large numbers of instances.</p>
+<p>The default can be overridden by defining <em>__slots__</em> in a class definition.
+The <em>__slots__</em> declaration takes a sequence of instance variables and reserves
+just enough space in each instance to hold a value for each variable.  Space is
+saved because <em>__dict__</em> is not created for each instance.</p>
 <dl class="data">
 <dt id="object.__slots__">
 <code class="descclassname">object.</code><code class="descname">__slots__</code><a class="headerlink" href="#object.__slots__" title="この定義へのパーマリンク">¶</a></dt>
@@ -763,11 +768,15 @@ descriptor has been assigned to <em>name</em>.</p>
 <div class="section" id="notes-on-using-slots">
 <h5>3.3.2.4.1. <em>__slots__</em> を利用する際の注意<a class="headerlink" href="#notes-on-using-slots" title="このヘッドラインへのパーマリンク">¶</a></h5>
 <ul class="simple">
-<li><em>__slots__</em> を持たないクラスから継承する場合、 <em>__dict__</em> 属性は常にアクセス可能なので、サブクラスで <em>__slots__</em> を定義しても意味がありません。</li>
+<li>When inheriting from a class without <em>__slots__</em>, the <em>__dict__</em> attribute of
+that class will always be accessible, so a <em>__slots__</em> definition in the
+subclass is meaningless.</li>
 <li><em>__dict__</em> 変数がない場合、 <em>__slots__</em> に列挙されていない新たな変数をインスタンスに代入することはできません。列挙されていない変数名を使って代入しようとした場合、 <a class="reference internal" href="../library/exceptions.html#AttributeError" title="AttributeError"><code class="xref py py-exc docutils literal"><span class="pre">AttributeError</span></code></a> が送出されます。新たな変数を動的に代入したいのなら、 <em>__slots__</em> を宣言する際に <code class="docutils literal"><span class="pre">'__dict__'</span></code> を変数名のシーケンスに追加してください。</li>
 <li><em>__slots__</em> を定義しているクラスの各インスタンスに <em>__weakref__</em> 変数がない場合、インスタンスに対する弱参照 (weak reference) はサポートされません。弱参照のサポートが必要なら、 <em>__slots__</em> を宣言する際に <code class="docutils literal"><span class="pre">'__weakref__'</span></code> を変数名のシーケンスに追加してください。</li>
 <li><em>__slots__</em> は、クラスのレベルで各変数に対するデスクリプタ (<a class="reference internal" href="#descriptors"><span class="std std-ref">デスクリプタ (descriptor) の実装</span></a> を参照) を使って実装されます。その結果、 <em>__slots__</em> に定義されているインスタンス変数のデフォルト値はクラス属性を使って設定できなくなっています; そうしないと、デスクリプタによる代入をクラス属性が上書きしてしまうからです。</li>
-<li><em>__slots__</em> 宣言が動作するのは、定義が行われたクラスだけに限られています。その結果、サブクラスでは、 <em>__slots__</em> を定義しない限り <em>__dict__</em> を持つことになります。</li>
+<li>The action of a <em>__slots__</em> declaration is limited to the class where it is
+defined.  As a result, subclasses will have a <em>__dict__</em> unless they also define
+<em>__slots__</em> (which must only contain names of any <em>additional</em> slots).</li>
 <li>あるクラスで、基底クラスですでに定義されているスロットを定義した場合、基底クラスのスロットで定義されているインスタンス変数は (デスクリプタを基底クラスから直接取得しない限り) アクセスできなくなります。これにより、プログラムの趣意が不定になってしまいます。将来は、この問題を避けるために何らかのチェックが追加されるかもしれません。</li>
 <li>空でない <em>__slots__</em> は、 <a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a> や <a class="reference internal" href="../library/stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> や <a class="reference internal" href="../library/stdtypes.html#tuple" title="tuple"><code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></a> のような &quot;可変長の&quot; 組み込み型から派生したクラスでは動作しません。</li>
 <li><em>__slots__</em> には、文字列でない反復可能オブジェクトを代入することができます。辞書型も使うことができます; しかし将来、辞書の各キーに相当する値に何らかの特殊な意味が割り当てられるかもしれません。</li>
@@ -1595,7 +1604,7 @@ CPython 3.7 では、 <code class="docutils literal"><span class="pre">__aiter__
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 2月 22, 2018
+    最終更新日時: 2月 23, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
