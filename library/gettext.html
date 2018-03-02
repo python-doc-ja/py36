@@ -105,7 +105,7 @@
 <p><strong>ソースコード:</strong> <a class="reference external" href="https://github.com/python/cpython/tree/3.6/Lib/gettext.py">Lib/gettext.py</a></p>
 <hr class="docutils" />
 <p><a class="reference internal" href="#module-gettext" title="gettext: Multilingual internationalization services."><code class="xref py py-mod docutils literal"><span class="pre">gettext</span></code></a> モジュールは、 Python のモジュールやアプリケーションの国際化 (I18N, I-nternationalizatio-N) および地域化  (L10N, L-ocalizatio-N) サービスを提供します。
-このモジュールは GNU <code class="docutils literal"><span class="pre">gettext</span></code> メッセージカタログの API と、より高水準で Python ファイルに適しているクラスに基づいた API の両方をサポートしてます。
+このモジュールは GNU <code class="docutils literal"><span class="pre">gettext</span></code> メッセージカタログの API と、より高水準で Python ファイルに適しているクラス形式の API の両方をサポートしてます。
 以下で述べるインタフェースを使うことで、モジュールやアプリケーションのメッセージをある自然言語で記述しておき、後から提供する翻訳されたメッセージのカタログによって様々な自然言語環境で実行できます。</p>
 <p>ここでは Python のモジュールやアプリケーションを地域化するためのいくつかのヒントも提供しています。</p>
 <div class="section" id="gnu-gettext-api">
@@ -113,7 +113,7 @@
 <p><a class="reference internal" href="#module-gettext" title="gettext: Multilingual internationalization services."><code class="xref py py-mod docutils literal"><span class="pre">gettext</span></code></a> モジュールでは、以下の GNU <strong class="program">gettext</strong> API に非常に良く似た API を提供しています。
 この API を使う場合、アプリケーション全体の翻訳に影響します。
 アプリケーションが単一の言語しか扱わず、ユーザのロケールに従って言語が選ばれるのなら、たいていはこの API が求めているものです。
-Python モジュールを地域化していたり、アプリケーションの実行中に言語を切り替える必要がある場合は、この API ではなくおそらくクラスに基づいた API を使いたくなるでしょう。</p>
+Python モジュールを地域化していたり、アプリケーションの実行中に言語を切り替える必要がある場合は、この API ではなくおそらくクラス形式の API を使いたくなるでしょう。</p>
 <dl class="function">
 <dt id="gettext.bindtextdomain">
 <code class="descclassname">gettext.</code><code class="descname">bindtextdomain</code><span class="sig-paren">(</span><em>domain</em>, <em>localedir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.bindtextdomain" title="この定義へのパーマリンク">¶</a></dt>
@@ -186,8 +186,7 @@ Python モジュールを地域化していたり、アプリケーションの�
 <dl class="function">
 <dt id="gettext.ldngettext">
 <code class="descclassname">gettext.</code><code class="descname">ldngettext</code><span class="sig-paren">(</span><em>domain</em>, <em>singular</em>, <em>plural</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.ldngettext" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>それぞれに対応する先頭の <code class="docutils literal"><span class="pre">l</span></code> が無い関数 (<a class="reference internal" href="#gettext.gettext" title="gettext.gettext"><code class="xref py py-func docutils literal"><span class="pre">gettext()</span></code></a>, <a class="reference internal" href="#gettext.dgettext" title="gettext.dgettext"><code class="xref py py-func docutils literal"><span class="pre">dgettext()</span></code></a>, <a class="reference internal" href="#gettext.ngettext" title="gettext.ngettext"><code class="xref py py-func docutils literal"><span class="pre">ngettext()</span></code></a>, <a class="reference internal" href="#gettext.dngettext" title="gettext.dngettext"><code class="xref py py-func docutils literal"><span class="pre">dngettext()</span></code></a>) と同等ですが、翻訳はバイト文字列として返されます。
-エンコーディングが <a class="reference internal" href="#gettext.bind_textdomain_codeset" title="gettext.bind_textdomain_codeset"><code class="xref py py-func docutils literal"><span class="pre">bind_textdomain_codeset()</span></code></a> を使って明示的に設定されていない場合は、バイト文字列は優先システムエンコーディングでエンコードされます。</p>
+<dd><p>それぞれに対応する先頭の <code class="docutils literal"><span class="pre">l</span></code> が無い関数 (<a class="reference internal" href="#gettext.gettext" title="gettext.gettext"><code class="xref py py-func docutils literal"><span class="pre">gettext()</span></code></a>, <a class="reference internal" href="#gettext.dgettext" title="gettext.dgettext"><code class="xref py py-func docutils literal"><span class="pre">dgettext()</span></code></a>, <a class="reference internal" href="#gettext.ngettext" title="gettext.ngettext"><code class="xref py py-func docutils literal"><span class="pre">ngettext()</span></code></a>, <a class="reference internal" href="#gettext.dngettext" title="gettext.dngettext"><code class="xref py py-func docutils literal"><span class="pre">dngettext()</span></code></a>) と同じですが、エンコーディングが <a class="reference internal" href="#gettext.bind_textdomain_codeset" title="gettext.bind_textdomain_codeset"><code class="xref py py-func docutils literal"><span class="pre">bind_textdomain_codeset()</span></code></a> を使って明示的に設定されていない場合、翻訳結果は優先システムエンコーディングでエンコードされたバイト文字列として返されます。</p>
 <div class="admonition warning">
 <p class="first admonition-title">警告</p>
 <p class="last">これらの関数はエンコードされたバイト列を返すため Python 3 で使うのは避けるべきです。
@@ -210,13 +209,10 @@ Python モジュールを地域化していたり、アプリケーションの�
 </div>
 <div class="section" id="class-based-api">
 <h2>23.1.2. クラス形式の API<a class="headerlink" href="#class-based-api" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>The class-based API of the <a class="reference internal" href="#module-gettext" title="gettext: Multilingual internationalization services."><code class="xref py py-mod docutils literal"><span class="pre">gettext</span></code></a> module gives you more flexibility and
-greater convenience than the GNU <strong class="program">gettext</strong> API.  It is the recommended
-way of localizing your Python applications and modules.  <code class="xref py py-mod docutils literal"><span class="pre">gettext</span></code> defines
-a &quot;translations&quot; class which implements the parsing of GNU <code class="file docutils literal"><span class="pre">.mo</span></code> format
-files, and has methods for returning strings. Instances of this &quot;translations&quot;
-class can also install themselves in the built-in namespace as the function
-<code class="xref py py-func docutils literal"><span class="pre">_()</span></code>.</p>
+<p><a class="reference internal" href="#module-gettext" title="gettext: Multilingual internationalization services."><code class="xref py py-mod docutils literal"><span class="pre">gettext</span></code></a> モジュールのクラス形式の API は、 GNU <strong class="program">gettext</strong> API よりも高い柔軟性と利便性を持っています。
+Python のアプリケーションやモジュールを地域化するにはこちらを使うことをお勧めします。
+<code class="xref py py-mod docutils literal"><span class="pre">gettext</span></code> には、GNU <code class="file docutils literal"><span class="pre">.mo</span></code> 形式のファイルを構文解析する処理の実装と、文字列を返すメソッドを持つ &quot;翻訳&quot; クラスが定義されています。
+この &quot;翻訳&quot; クラスのインスタンスも、自分自身を組み込み名前空間に関数  <code class="xref py py-func docutils literal"><span class="pre">_()</span></code> として配置できます。</p>
 <dl class="function">
 <dt id="gettext.find">
 <code class="descclassname">gettext.</code><code class="descname">find</code><span class="sig-paren">(</span><em>domain</em>, <em>localedir=None</em>, <em>languages=None</em>, <em>all=False</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.find" title="この定義へのパーマリンク">¶</a></dt>
@@ -258,11 +254,9 @@ class can also install themselves in the built-in namespace as the function
 
 <div class="section" id="the-nulltranslations-class">
 <h3>23.1.2.1. <a class="reference internal" href="#gettext.NullTranslations" title="gettext.NullTranslations"><code class="xref py py-class docutils literal"><span class="pre">NullTranslations</span></code></a> クラス<a class="headerlink" href="#the-nulltranslations-class" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>Translation classes are what actually implement the translation of original
-source file message strings to translated message strings. The base class used
-by all translation classes is <a class="reference internal" href="#gettext.NullTranslations" title="gettext.NullTranslations"><code class="xref py py-class docutils literal"><span class="pre">NullTranslations</span></code></a>; this provides the basic
-interface you can use to write your own specialized translation classes.  Here
-are the methods of <code class="xref py py-class docutils literal"><span class="pre">NullTranslations</span></code>:</p>
+<p>翻訳クラスは、元のソースファイル中のメッセージ文字列から翻訳されたメッセージ文字列への変換処理が実際に実装されているクラスです。
+全ての翻訳クラスで基底クラスとして使われているクラスが <a class="reference internal" href="#gettext.NullTranslations" title="gettext.NullTranslations"><code class="xref py py-class docutils literal"><span class="pre">NullTranslations</span></code></a> です; このクラスは、独自の翻訳クラスを実装するのに使える基本的なインタフェースを提供しています。
+以下に <code class="xref py py-class docutils literal"><span class="pre">NullTranslations</span></code> のメソッドを示します:</p>
 <dl class="class">
 <dt id="gettext.NullTranslations">
 <em class="property">class </em><code class="descclassname">gettext.</code><code class="descname">NullTranslations</code><span class="sig-paren">(</span><em>fp=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.NullTranslations" title="この定義へのパーマリンク">¶</a></dt>
@@ -282,16 +276,17 @@ are the methods of <code class="xref py py-class docutils literal"><span class="
 <dl class="method">
 <dt id="gettext.NullTranslations.gettext">
 <code class="descname">gettext</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.NullTranslations.gettext" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>If a fallback has been set, forward <code class="xref py py-meth docutils literal"><span class="pre">gettext()</span></code> to the fallback.
-Otherwise, return <em>message</em>.  Overridden in derived classes.</p>
+<dd><p>フォールバックが設定されている場合、フォールバックの <code class="xref py py-meth docutils literal"><span class="pre">gettext()</span></code> に処理を移譲します。
+そうでない場合、引数として受け取った <em>message</em> を返します。
+派生クラスで上書きするメソッドです。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="gettext.NullTranslations.ngettext">
 <code class="descname">ngettext</code><span class="sig-paren">(</span><em>singular</em>, <em>plural</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.NullTranslations.ngettext" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>If a fallback has been set, forward <code class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></code> to the fallback.
-Otherwise, return <em>singular</em> if <em>n</em> is 1; return <em>plural</em> otherwise.
-Overridden in derived classes.</p>
+<dd><p>フォールバックが設定されている場合、フォールバックの <code class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></code> に処理を移譲します。
+そうでない場合、 <em>n</em> が 1 なら <em>singular</em> を返します; それ以外なら <em>plural</em> を返します。
+派生クラスで上書きするメソッドです。</p>
 </dd></dl>
 
 <dl class="method">
@@ -302,14 +297,12 @@ Overridden in derived classes.</p>
 <dl class="method">
 <dt id="gettext.NullTranslations.lngettext">
 <code class="descname">lngettext</code><span class="sig-paren">(</span><em>singular</em>, <em>plural</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.NullTranslations.lngettext" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Equivalent to <a class="reference internal" href="#gettext.NullTranslations.gettext" title="gettext.NullTranslations.gettext"><code class="xref py py-meth docutils literal"><span class="pre">gettext()</span></code></a> and <a class="reference internal" href="#gettext.NullTranslations.ngettext" title="gettext.NullTranslations.ngettext"><code class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></code></a>, but the translation
-is returned as a byte string encoded in the preferred system encoding
-if no encoding was explicitly set with <a class="reference internal" href="#gettext.NullTranslations.set_output_charset" title="gettext.NullTranslations.set_output_charset"><code class="xref py py-meth docutils literal"><span class="pre">set_output_charset()</span></code></a>.
-Overridden in derived classes.</p>
+<dd><p><a class="reference internal" href="#gettext.NullTranslations.gettext" title="gettext.NullTranslations.gettext"><code class="xref py py-meth docutils literal"><span class="pre">gettext()</span></code></a> および <a class="reference internal" href="#gettext.NullTranslations.ngettext" title="gettext.NullTranslations.ngettext"><code class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></code></a> と同じですが、エンコーディングが <a class="reference internal" href="#gettext.NullTranslations.set_output_charset" title="gettext.NullTranslations.set_output_charset"><code class="xref py py-meth docutils literal"><span class="pre">set_output_charset()</span></code></a> で明示的に設定されていない場合、翻訳結果は優先システムエンコーディングでエンコードされたバイト文字列として返されます。
+派生クラスで上書きするメソッドです。</p>
 <div class="admonition warning">
 <p class="first admonition-title">警告</p>
-<p class="last">These methods should be avoided in Python 3.  See the warning for the
-<a class="reference internal" href="#gettext.lgettext" title="gettext.lgettext"><code class="xref py py-func docutils literal"><span class="pre">lgettext()</span></code></a> function.</p>
+<p class="last">これらのメソッドは Python 3 で使うのは避けるべきです。
+<a class="reference internal" href="#gettext.lgettext" title="gettext.lgettext"><code class="xref py py-func docutils literal"><span class="pre">lgettext()</span></code></a> 関数に対する警告を参照してください。</p>
 </div>
 </dd></dl>
 
@@ -322,7 +315,7 @@ Overridden in derived classes.</p>
 <dl class="method">
 <dt id="gettext.NullTranslations.charset">
 <code class="descname">charset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gettext.NullTranslations.charset" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Return the encoding of the message catalog file.</p>
+<dd><p>メッセージカタログファイルのエンコーディングを返します。</p>
 </dd></dl>
 
 <dl class="method">
@@ -406,14 +399,11 @@ returned in all other cases.</p>
 <dl class="method">
 <dt id="gettext.GNUTranslations.lngettext">
 <code class="descname">lngettext</code><span class="sig-paren">(</span><em>singular</em>, <em>plural</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.GNUTranslations.lngettext" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Equivalent to <a class="reference internal" href="#gettext.GNUTranslations.gettext" title="gettext.GNUTranslations.gettext"><code class="xref py py-meth docutils literal"><span class="pre">gettext()</span></code></a> and <a class="reference internal" href="#gettext.GNUTranslations.ngettext" title="gettext.GNUTranslations.ngettext"><code class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></code></a>, but the translation
-is returned as a byte string encoded in the preferred system encoding
-if no encoding  was explicitly set with
-<a class="reference internal" href="#gettext.NullTranslations.set_output_charset" title="gettext.NullTranslations.set_output_charset"><code class="xref py py-meth docutils literal"><span class="pre">set_output_charset()</span></code></a>.</p>
+<dd><p><a class="reference internal" href="#gettext.GNUTranslations.gettext" title="gettext.GNUTranslations.gettext"><code class="xref py py-meth docutils literal"><span class="pre">gettext()</span></code></a> および <a class="reference internal" href="#gettext.GNUTranslations.ngettext" title="gettext.GNUTranslations.ngettext"><code class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></code></a> と同じですが、エンコーディングが <a class="reference internal" href="#gettext.NullTranslations.set_output_charset" title="gettext.NullTranslations.set_output_charset"><code class="xref py py-meth docutils literal"><span class="pre">set_output_charset()</span></code></a> で明示的に設定されていない場合、翻訳結果は優先システムエンコーディングでエンコードされたバイト文字列として返されます。</p>
 <div class="admonition warning">
 <p class="first admonition-title">警告</p>
-<p class="last">These methods should be avoided in Python 3.  See the warning for the
-<a class="reference internal" href="#gettext.lgettext" title="gettext.lgettext"><code class="xref py py-func docutils literal"><span class="pre">lgettext()</span></code></a> function.</p>
+<p class="last">これらのメソッドは Python 3 で使うのは避けるべきです。
+<a class="reference internal" href="#gettext.lgettext" title="gettext.lgettext"><code class="xref py py-func docutils literal"><span class="pre">lgettext()</span></code></a> 関数に対する警告を参照してください。</p>
 </div>
 </dd></dl>
 
@@ -474,7 +464,7 @@ François Pinard が開発した <strong class="program">xpot</strong> と呼ば
 <p><a class="reference internal" href="#module-gettext" title="gettext: Multilingual internationalization services."><code class="xref py py-mod docutils literal"><span class="pre">gettext</span></code></a> モジュールをソースコード中でどのように使うかは単一のモジュールを国際化するのか、それともアプリケーション全体を国際化するのかによります。次のふたつのセクションで、それぞれについて説明します。</p>
 <div class="section" id="localizing-your-module">
 <h3>23.1.3.1. モジュールを地域化する<a class="headerlink" href="#localizing-your-module" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>モジュールを地域化する場合、グローバルな変更、例えば組み込み名前空間への変更を行わないように注意しなければなりません。GNU <code class="docutils literal"><span class="pre">gettext</span></code> API ではなく、クラスベースの API を使うべきです。</p>
+<p>モジュールを地域化する場合、グローバルな変更、例えば組み込み名前空間への変更を行わないように注意しなければなりません。GNU <code class="docutils literal"><span class="pre">gettext</span></code> API ではなく、クラス形式の API を使うべきです。</p>
 <p>仮に対象のモジュール名を &quot;spam&quot; とし、モジュールの各言語における翻訳が収められた <code class="file docutils literal"><span class="pre">.mo</span></code> ファイルが <code class="file docutils literal"><span class="pre">/usr/share/locale</span></code> に GNU <strong class="program">gettext</strong> 形式で置かれているとします。この場合、モジュールの最初で以下のようにします:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gettext</span>
 <span class="n">t</span> <span class="o">=</span> <span class="n">gettext</span><span class="o">.</span><span class="n">translation</span><span class="p">(</span><span class="s1">&#39;spam&#39;</span><span class="p">,</span> <span class="s1">&#39;/usr/share/locale&#39;</span><span class="p">)</span>
