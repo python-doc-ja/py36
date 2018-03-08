@@ -141,8 +141,13 @@ Raises the <a class="reference internal" href="#zlib.error" title="zlib.error"><
 <dt id="zlib.compressobj">
 <code class="descclassname">zlib.</code><code class="descname">compressobj</code><span class="sig-paren">(</span><em>level=-1</em>, <em>method=DEFLATED</em>, <em>wbits=15</em>, <em>memLevel=8</em>, <em>strategy=Z_DEFAULT_STRATEGY</em><span class="optional">[</span>, <em>zdict</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#zlib.compressobj" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>一度にメモリ上に置くことができないようなデータストリームを圧縮するための圧縮オブジェクトを返します。</p>
-<p><em>level</em> は圧縮レベルです。<code class="docutils literal"><span class="pre">0</span></code> から <code class="docutils literal"><span class="pre">9</span></code> 、または <code class="docutils literal"><span class="pre">-1</span></code> の整数を取り、<code class="docutils literal"><span class="pre">1</span></code> は最も高速で最小限の圧縮を行い、<code class="docutils literal"><span class="pre">9</span></code> は最も低速で最大限の圧縮を行います。<code class="docutils literal"><span class="pre">0</span></code> は圧縮しません。デフォルトは <code class="docutils literal"><span class="pre">-1</span></code> です (Z_DEFAULT_COMPRESSION)。Z_DEFAULT_COMPRESSION は、速度と圧縮の間のデフォルトの妥協点 (現在、レベル 6 に対応します) を表します。</p>
-<p><em>method</em> は圧縮アルゴリズムです。現在、 <code class="docutils literal"><span class="pre">DEFLATED</span></code> のみサポートされています。</p>
+<p><em>level</em> is the compression level – an integer from <code class="docutils literal"><span class="pre">0</span></code> to <code class="docutils literal"><span class="pre">9</span></code> or <code class="docutils literal"><span class="pre">-1</span></code>.
+A value of <code class="docutils literal"><span class="pre">1</span></code> is fastest and produces the least compression, while a value of
+<code class="docutils literal"><span class="pre">9</span></code> is slowest and produces the most. <code class="docutils literal"><span class="pre">0</span></code> is no compression. The default
+value is <code class="docutils literal"><span class="pre">-1</span></code> (Z_DEFAULT_COMPRESSION). Z_DEFAULT_COMPRESSION represents a default
+compromise between speed and compression (currently equivalent to level 6).</p>
+<p><em>method</em> is the compression algorithm. Currently, the only supported value is
+<code class="docutils literal"><span class="pre">DEFLATED</span></code>.</p>
 <p>The <em>wbits</em> argument controls the size of the history buffer (or the
 &quot;window size&quot;) used when compressing data, and whether a header and
 trailer is included in the output.  It can take several ranges of values:</p>
@@ -159,7 +164,8 @@ window size logarithm, while including a basic <strong class="program">gzip</str
 and trailing checksum in the output.</li>
 </ul>
 <p><em>memLevel</em> 引数は内部圧縮状態用に使用されるメモリ量を制御します。有効な値は <code class="docutils literal"><span class="pre">1</span></code> から <code class="docutils literal"><span class="pre">9</span></code> です。大きい値ほど多くのメモリを消費しますが、より速く、より小さな出力を作成します。</p>
-<p><em>strategy</em> は圧縮アルゴリズムの調整に使用されます。指定可能な値は、<code class="docutils literal"><span class="pre">Z_DEFAULT_STRATEGY</span></code>、<code class="docutils literal"><span class="pre">Z_FILTERED</span></code>、および <code class="docutils literal"><span class="pre">Z_HUFFMAN_ONLY</span></code> です。</p>
+<p><em>strategy</em> is used to tune the compression algorithm. Possible values are
+<code class="docutils literal"><span class="pre">Z_DEFAULT_STRATEGY</span></code>, <code class="docutils literal"><span class="pre">Z_FILTERED</span></code>, and <code class="docutils literal"><span class="pre">Z_HUFFMAN_ONLY</span></code>.</p>
 <p><em>zdict</em> は定義済み圧縮辞書です。これは圧縮されるデータ内で繰り返し現れると予想されるサブシーケンスを含む (<a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> オブジェクトのような) バイト列のシーケンスです。最も一般的と思われるサブシーケンスは辞書の末尾に来なければなりません。</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.3 で変更: </span><em>zdict</em> パラメータとキーワード引数のサポートが追加されました。</p>
@@ -242,7 +248,15 @@ the same meaning as <a class="reference external" href="#decompress-wbits">descr
 <dl class="method">
 <dt id="zlib.Compress.flush">
 <code class="descclassname">Compress.</code><code class="descname">flush</code><span class="sig-paren">(</span><span class="optional">[</span><em>mode</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#zlib.Compress.flush" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>未処理の全入力データが処理され、この未処理部分を圧縮したデータを含むバイト列オブジェクトが返されます。<em>mode</em> は定数 <code class="xref py py-const docutils literal"><span class="pre">Z_SYNC_FLUSH</span></code>、<code class="xref py py-const docutils literal"><span class="pre">Z_FULL_FLUSH</span></code>、または <code class="xref py py-const docutils literal"><span class="pre">Z_FINISH</span></code> のいずれかをとり、デフォルト値は <code class="xref py py-const docutils literal"><span class="pre">Z_FINISH</span></code> です。<code class="xref py py-const docutils literal"><span class="pre">Z_SYNC_FLUSH</span></code> および <code class="xref py py-const docutils literal"><span class="pre">Z_FULL_FLUSH</span></code> はこれ以後にもデータバイト文字列を圧縮できるモードです。一方、<code class="xref py py-const docutils literal"><span class="pre">Z_FINISH</span></code> は圧縮ストリームを閉じ、これ以後のデータの圧縮を停止します。<em>mode</em> に <code class="xref py py-const docutils literal"><span class="pre">Z_FINISH</span></code> を指定して <a class="reference internal" href="#zlib.Compress.flush" title="zlib.Compress.flush"><code class="xref py py-meth docutils literal"><span class="pre">flush()</span></code></a> メソッドを呼び出した後は、<a class="reference internal" href="#zlib.compress" title="zlib.compress"><code class="xref py py-meth docutils literal"><span class="pre">compress()</span></code></a> メソッドを再び呼ぶべきではありません。唯一の現実的な操作はこのオブジェクトを削除することだけです。</p>
+<dd><p>All pending input is processed, and a bytes object containing the remaining compressed
+output is returned.  <em>mode</em> can be selected from the constants
+<code class="xref py py-const docutils literal"><span class="pre">Z_SYNC_FLUSH</span></code>,  <code class="xref py py-const docutils literal"><span class="pre">Z_FULL_FLUSH</span></code>,  or  <code class="xref py py-const docutils literal"><span class="pre">Z_FINISH</span></code>,
+defaulting to <code class="xref py py-const docutils literal"><span class="pre">Z_FINISH</span></code>.  <code class="xref py py-const docutils literal"><span class="pre">Z_SYNC_FLUSH</span></code> and
+<code class="xref py py-const docutils literal"><span class="pre">Z_FULL_FLUSH</span></code> allow compressing further bytestrings of data, while
+<code class="xref py py-const docutils literal"><span class="pre">Z_FINISH</span></code> finishes the compressed stream and  prevents compressing any
+more data.  After calling <a class="reference internal" href="#zlib.Compress.flush" title="zlib.Compress.flush"><code class="xref py py-meth docutils literal"><span class="pre">flush()</span></code></a> with <em>mode</em> set to <code class="xref py py-const docutils literal"><span class="pre">Z_FINISH</span></code>,
+the <a class="reference internal" href="#zlib.compress" title="zlib.compress"><code class="xref py py-meth docutils literal"><span class="pre">compress()</span></code></a> method cannot be called again; the only realistic action is
+to delete the object.</p>
 </dd></dl>
 
 <dl class="method">
@@ -406,7 +420,7 @@ then the whole input is decompressed, and <a class="reference internal" href="#z
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 3月 07, 2018
+    最終更新日時: 3月 08, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
