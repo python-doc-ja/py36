@@ -321,24 +321,21 @@ Python のアプリケーションやモジュールを地域化するにはこ�
 <dl class="method">
 <dt id="gettext.NullTranslations.output_charset">
 <code class="descname">output_charset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gettext.NullTranslations.output_charset" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Return the encoding used to return translated messages in <a class="reference internal" href="#gettext.NullTranslations.lgettext" title="gettext.NullTranslations.lgettext"><code class="xref py py-meth docutils literal"><span class="pre">lgettext()</span></code></a>
-and <a class="reference internal" href="#gettext.NullTranslations.lngettext" title="gettext.NullTranslations.lngettext"><code class="xref py py-meth docutils literal"><span class="pre">lngettext()</span></code></a>.</p>
+<dd><p><a class="reference internal" href="#gettext.NullTranslations.lgettext" title="gettext.NullTranslations.lgettext"><code class="xref py py-meth docutils literal"><span class="pre">lgettext()</span></code></a> と <a class="reference internal" href="#gettext.NullTranslations.lngettext" title="gettext.NullTranslations.lngettext"><code class="xref py py-meth docutils literal"><span class="pre">lngettext()</span></code></a> の返り値となる翻訳メッセージで使われているエンコーディングを返します。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="gettext.NullTranslations.set_output_charset">
 <code class="descname">set_output_charset</code><span class="sig-paren">(</span><em>charset</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.NullTranslations.set_output_charset" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Change the encoding used to return translated messages.</p>
+<dd><p>返り値の翻訳メッセージで使われるエンコーディングを変更します。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="gettext.NullTranslations.install">
 <code class="descname">install</code><span class="sig-paren">(</span><em>names=None</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.NullTranslations.install" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>このメソッドは <a class="reference internal" href="#gettext.NullTranslations.gettext" title="gettext.NullTranslations.gettext"><code class="xref py py-meth docutils literal"><span class="pre">gettext()</span></code></a> を組み込み名前空間にインストールし、変数 <code class="docutils literal"><span class="pre">_</span></code> に束縛します。</p>
-<p>If the <em>names</em> parameter is given, it must be a sequence containing the
-names of functions you want to install in the builtins namespace in
-addition to <code class="xref py py-func docutils literal"><span class="pre">_()</span></code>.  Supported names are <code class="docutils literal"><span class="pre">'gettext'</span></code>, <code class="docutils literal"><span class="pre">'ngettext'</span></code>,
-<code class="docutils literal"><span class="pre">'lgettext'</span></code> and <code class="docutils literal"><span class="pre">'lngettext'</span></code>.</p>
+<p><em>names</em> パラメータを与える場合には、 <code class="xref py py-func docutils literal"><span class="pre">_()</span></code> 以外では組み込み名前空間に配置したい関数名を列挙したシーケンスでなければなりません。
+サポートされている名前は <code class="docutils literal"><span class="pre">'gettext'</span></code> 、 <code class="docutils literal"><span class="pre">'ngettext'</span></code> 、 <code class="docutils literal"><span class="pre">'lgettext'</span></code> 、 <code class="docutils literal"><span class="pre">'lngettext'</span></code> です。</p>
 <p>この方法はアプリケーションで <code class="xref py py-func docutils literal"><span class="pre">_()</span></code> 関数を利用できるようにするための最も便利な方法ですが、唯一の手段でもあるので注意してください。この関数はアプリケーション全体、とりわけ組み込み名前空間に影響するので、地域化されたモジュールで <code class="xref py py-func docutils literal"><span class="pre">_()</span></code> を組み入れることができないのです。その代わりに、以下のコードを使って <code class="xref py py-func docutils literal"><span class="pre">_()</span></code> を使えるようにしなければなりません。:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gettext</span>
 <span class="n">t</span> <span class="o">=</span> <span class="n">gettext</span><span class="o">.</span><span class="n">translation</span><span class="p">(</span><span class="s1">&#39;mymodule&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
@@ -365,21 +362,17 @@ addition to <code class="xref py py-func docutils literal"><span class="pre">_()
 <dl class="method">
 <dt id="gettext.GNUTranslations.gettext">
 <code class="descname">gettext</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.GNUTranslations.gettext" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>Look up the <em>message</em> id in the catalog and return the corresponding message
-string, as a Unicode string.  If there is no entry in the catalog for the
-<em>message</em> id, and a fallback has been set, the look up is forwarded to the
-fallback’s <a class="reference internal" href="#gettext.NullTranslations.gettext" title="gettext.NullTranslations.gettext"><code class="xref py py-meth docutils literal"><span class="pre">gettext()</span></code></a> method.  Otherwise, the
-<em>message</em> id is returned.</p>
+<dd><p>カタログから <em>message</em> id を検索して、対応するメッセージ文字列を Unicode でエンコードして返します。
+<em>message</em> id に対応するエントリがカタログに存在せず、フォールバックが設定されている場合、検索処理をフォールバックの <a class="reference internal" href="#gettext.NullTranslations.gettext" title="gettext.NullTranslations.gettext"><code class="xref py py-meth docutils literal"><span class="pre">gettext()</span></code></a> メソッドに移譲します。
+それ以外の場合は、 <em>message</em> id 自体が返されます。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="gettext.GNUTranslations.ngettext">
 <code class="descname">ngettext</code><span class="sig-paren">(</span><em>singular</em>, <em>plural</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#gettext.GNUTranslations.ngettext" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>メッセージ id に対する複数形を検索します。カタログに対する検索では <em>singular</em> がメッセージ id として用いられ、 <em>n</em> にはどの複数形を用いるかを指定します。返されるメッセージ文字列は Unicode 文字列です。</p>
-<p>If the message id is not found in the catalog, and a fallback is specified,
-the request is forwarded to the fallback’s <a class="reference internal" href="#gettext.NullTranslations.ngettext" title="gettext.NullTranslations.ngettext"><code class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></code></a>
-method.  Otherwise, when <em>n</em> is 1 <em>singular</em> is returned, and <em>plural</em> is
-returned in all other cases.</p>
+<p>メッセージ id がカタログ中に見つからず、フォールバックが指定されている場合は、メッセージ検索要求はフォールバックの <a class="reference internal" href="#gettext.NullTranslations.ngettext" title="gettext.NullTranslations.ngettext"><code class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></code></a> メソッドに移譲されます。
+それ以外の場合、 <em>n</em> が 1 ならば <em>singular</em> が返され、それ以外なら <em>plural</em> が返されます。</p>
 <p>以下に例を示します。:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">))</span>
 <span class="n">cat</span> <span class="o">=</span> <span class="n">GNUTranslations</span><span class="p">(</span><span class="n">somefile</span><span class="p">)</span>
