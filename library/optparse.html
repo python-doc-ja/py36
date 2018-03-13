@@ -181,7 +181,7 @@ Options:
 </div>
 <p class="last">通常、オプションは引数をとることもとらないこともあります。あるオプションは引数をとることがなく、またあるオプションは常に引数をとります。多くの人々が「オプションのオプション引数」機能を欲しています。これは、あるオプションが引数が指定されている場合には引数をとり、そうでない場合には引数をもたないようにするという機能です。この機能は引数解析をあいまいにするため、議論の的となっています: 例えば、もし <code class="docutils literal"><span class="pre">-a</span></code> がオプション引数をとり、 <code class="docutils literal"><span class="pre">-b</span></code> がまったく別のオプションだとしたら、 <code class="docutils literal"><span class="pre">-ab</span></code> をどうやって解析すればいいのでしょうか？こうした曖昧さが存在するため、 <a class="reference internal" href="#module-optparse" title="optparse: Command-line option parsing library. (非推奨)"><code class="xref py py-mod docutils literal"><span class="pre">optparse</span></code></a> は今のところこの機能をサポートしていません。</p>
 </dd>
-<dt>位置引数 (positional argument、固定引数)</dt>
+<dt>位置引数 (positional argument)</dt>
 <dd>他のオプションが解析される、すなわち他のオプションとその引数が解析されて引数リストから除去された後に引数リストに置かれているものです。</dd>
 <dt>必須のオプション (required option)</dt>
 <dd>コマンドラインで与えなければならないオプションです; 「必須のオプション (required option)」という語は、英語では矛盾した言葉です。 <a class="reference internal" href="#module-optparse" title="optparse: Command-line option parsing library. (非推奨)"><code class="xref py py-mod docutils literal"><span class="pre">optparse</span></code></a> では必須オプションの実装を妨げてはいませんが、とりたてて実装上役立つこともしていません。</dd>
@@ -190,12 +190,12 @@ Options:
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">prog</span> <span class="o">-</span><span class="n">v</span> <span class="o">--</span><span class="n">report</span> <span class="n">report</span><span class="o">.</span><span class="n">txt</span> <span class="n">foo</span> <span class="n">bar</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">-v</span></code> と <code class="docutils literal"><span class="pre">--report</span></code> はどちらもオプションです。<code class="docutils literal"><span class="pre">--report</span></code> オプションが引数をとるとすれば、<code class="docutils literal"><span class="pre">report.txt</span></code> はオプションの引数です。<code class="docutils literal"><span class="pre">foo</span></code> と <code class="docutils literal"><span class="pre">bar</span></code> は固定引数になります。</p>
+<p><code class="docutils literal"><span class="pre">-v</span></code> と <code class="docutils literal"><span class="pre">--report</span></code> はどちらもオプションです。<code class="docutils literal"><span class="pre">--report</span></code> オプションが引数をとるとすれば、<code class="docutils literal"><span class="pre">report.txt</span></code> はオプションの引数です。<code class="docutils literal"><span class="pre">foo</span></code> と <code class="docutils literal"><span class="pre">bar</span></code> は位置引数になります。</p>
 </div>
 <div class="section" id="what-are-options-for">
 <span id="optparse-what-options-for"></span><h3>36.1.1.2. オプションとは何か<a class="headerlink" href="#what-are-options-for" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>オプションはプログラムの実行を調整したり、カスタマイズしたりするための補助的な情報を与えるために使います。もっとはっきりいうと、オプションはあくまでもオプション (省略可能)であるということです。本来、プログラムはともかくもオプションなしでうまく実行できてしかるべきです。(Unix やGNU ツールセットのプログラムをランダムにピックアップしてみてください。オプションを全く指定しなくてもちゃんと動くでしょう？例外は <code class="docutils literal"><span class="pre">find</span></code>, <code class="docutils literal"><span class="pre">tar</span></code>, <code class="docutils literal"><span class="pre">dd</span></code> くらいです—これらの例外は、オプション文法が標準的でなく、インタフェースが混乱を招くと酷評されてきた変種のはみ出しものなのです)</p>
-<p>多くの人が自分のプログラムに「必須のオプション」を持たせたいと考えます。しかしよく考えてください。必須なら、それは <em>オプション(省略可能) ではないのです！</em> プログラムを正しく動作させるのに絶対的に必要な情報があるとすれば、そこには固定引数を割り当てるべきなのです。</p>
+<p>多くの人が自分のプログラムに「必須のオプション」を持たせたいと考えます。しかしよく考えてください。必須なら、それは <em>オプション(省略可能) ではないのです！</em> プログラムを正しく動作させるのに絶対的に必要な情報があるとすれば、そこには位置引数を割り当てるべきなのです。</p>
 <p>良くできたコマンドラインインタフェース設計として、ファイルのコピーに使われる <code class="docutils literal"><span class="pre">cp</span></code> ユーティリティのことを考えてみましょう。ファイルのコピーでは、コピー先を指定せずにファイルをコピーするのは無意味な操作ですし、少なくとも一つのコピー元が必要です。従って、<code class="docutils literal"><span class="pre">cp</span></code> は引数無しで実行すると失敗します。とはいえ、<code class="docutils literal"><span class="pre">cp</span></code> はオプションを全く必要としない柔軟で便利なコマンドライン文法を備えています:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="n">SOURCE</span> <span class="n">DEST</span>
 <span class="n">cp</span> <span class="n">SOURCE</span> <span class="o">...</span> <span class="n">DEST</span><span class="o">-</span><span class="n">DIR</span>
@@ -204,8 +204,8 @@ Options:
 <p>まだあります。ほとんどの <code class="docutils literal"><span class="pre">cp</span></code> の実装では、ファイルモードや変更時刻を変えずにコピーする、シンボリックリンクの追跡を行わない、すでにあるファイルを上書きする前にユーザに尋ねる、など、ファイルをコピーする方法をいじるための一連のオプションを実装しています。しかし、こうしたオプションは、一つのファイルを別の場所にコピーする、または複数のファイルを別のディレクトリにコピーするという、<code class="docutils literal"><span class="pre">cp</span></code> の中心的な処理を乱すことはないのです。</p>
 </div>
 <div class="section" id="what-are-positional-arguments-for">
-<span id="optparse-what-positional-arguments-for"></span><h3>36.1.1.3. 固定引数とは何か<a class="headerlink" href="#what-are-positional-arguments-for" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>固定引数とは、プログラムを動作させる上で絶対的に必要な情報となる引数です。</p>
+<span id="optparse-what-positional-arguments-for"></span><h3>36.1.1.3. 位置引数とは何か<a class="headerlink" href="#what-are-positional-arguments-for" title="このヘッドラインへのパーマリンク">¶</a></h3>
+<p>位置引数とは、プログラムを動作させる上で絶対的に必要な情報となる引数です。</p>
 <p>よいユーザインタフェースとは、可能な限り少ない固定引数をもつものです。プログラムを正しく動作させるために 17 個もの別個の情報が必要だとしたら、その <em>方法</em> はさして問題にはなりません —ユーザはプログラムを正しく動作させられないうちに諦め、立ち去ってしまうからです。ユーザインタフェースがコマンドラインでも、設定ファイルでも、GUI やその他の何であっても同じです: 多くの要求をユーザに押し付ければ、ほとんどのユーザはただ音をあげてしまうだけなのです。</p>
 <p>要するに、ユーザが絶対に提供しなければならない情報だけに制限する — そして可能な限りよく練られたデフォルト設定を使うよう試みてください。もちろん、プログラムには適度な柔軟性を持たせたいとも望むはずですが、それこそがオプションの果たす役割です。繰り返しますが、設定ファイルのエントリであろうが、GUI でできた「環境設定」ダイアログ上のウィジェットであろうが、コマンドラインオプションであろうが関係ありません — より多くのオプションを実装すればプログラムはより柔軟性を持ちますが、実装はより難解になるのです。高すぎる柔軟性はユーザを閉口させ、コードの維持をより難しくするのです。</p>
 </div>
@@ -239,7 +239,7 @@ Options:
 <p><code class="xref py py-meth docutils literal"><span class="pre">parse_args()</span></code> は二つの値を返します:</p>
 <ul class="simple">
 <li>全てのオプションに対する値の入ったオブジェクト <code class="docutils literal"><span class="pre">options</span></code> — 例えば、<code class="docutils literal"><span class="pre">--file</span></code> が単一の文字列引数をとる場合、<code class="docutils literal"><span class="pre">options.file</span></code> はユーザが指定したファイル名になります。オプションを指定しなかった場合には <code class="docutils literal"><span class="pre">None</span></code> になります</li>
-<li>オプションの解析後に残った固定引数からなるリスト <code class="docutils literal"><span class="pre">args</span></code></li>
+<li>オプションの解析後に残った位置引数からなるリスト <code class="docutils literal"><span class="pre">args</span></code></li>
 </ul>
 <p>このチュートリアルの節では、最も重要な四つのオプション属性: <a class="reference internal" href="#optparse.Option.action" title="optparse.Option.action"><code class="xref py py-attr docutils literal"><span class="pre">action</span></code></a>, <a class="reference internal" href="#optparse.Option.type" title="optparse.Option.type"><code class="xref py py-attr docutils literal"><span class="pre">type</span></code></a>, <a class="reference internal" href="#optparse.Option.dest" title="optparse.Option.dest"><code class="xref py py-attr docutils literal"><span class="pre">dest</span></code></a> (destination), <a class="reference internal" href="#optparse.Option.help" title="optparse.Option.help"><code class="xref py py-attr docutils literal"><span class="pre">help</span></code></a> についてしか触れません。このうち最も重要なのは <a class="reference internal" href="#optparse.Option.action" title="optparse.Option.action"><code class="xref py py-attr docutils literal"><span class="pre">action</span></code></a> です。</p>
 <div class="section" id="understanding-option-actions">
@@ -371,7 +371,7 @@ Options:
 </pre></div>
 </div>
 <p><a class="reference internal" href="#module-optparse" title="optparse: Command-line option parsing library. (非推奨)"><code class="xref py py-mod docutils literal"><span class="pre">optparse</span></code></a> は <code class="docutils literal"><span class="pre">%prog</span></code> を現在のプログラム名、すなわち <code class="docutils literal"><span class="pre">os.path.basename(sys.argv[0])</span></code> と置き換えます。この文字列は詳細なオプションヘルプの前に展開され出力されます。</p>
-<p>usage の文字列を指定しない場合、 <a class="reference internal" href="#module-optparse" title="optparse: Command-line option parsing library. (非推奨)"><code class="xref py py-mod docutils literal"><span class="pre">optparse</span></code></a> は型どおりとはいえ気の利いたデフォルト値、 <code class="docutils literal"><span class="pre">&quot;Usage:</span> <span class="pre">%prog</span> <span class="pre">[options]&quot;</span></code> を使います。固定引数をとらないスクリプトの場合はこれで十分でしょう。</p>
+<p>usage の文字列を指定しない場合、 <a class="reference internal" href="#module-optparse" title="optparse: Command-line option parsing library. (非推奨)"><code class="xref py py-mod docutils literal"><span class="pre">optparse</span></code></a> は型どおりとはいえ気の利いたデフォルト値、 <code class="docutils literal"><span class="pre">&quot;Usage:</span> <span class="pre">%prog</span> <span class="pre">[options]&quot;</span></code> を使います。位置引数をとらないスクリプトの場合はこれで十分でしょう。</p>
 </li>
 <li><p class="first">全てのオプションにヘルプ文字列を定義します。行の折り返しは気にしなくてかまいません — <a class="reference internal" href="#module-optparse" title="optparse: Command-line option parsing library. (非推奨)"><code class="xref py py-mod docutils literal"><span class="pre">optparse</span></code></a> は行の折り返しに気を配り、見栄えのよいヘルプ出力を生成します。</p>
 </li>
@@ -1402,7 +1402,7 @@ Options:
 <li><a class="reference internal" href="#background">36.1.1. 背景</a><ul>
 <li><a class="reference internal" href="#terminology">36.1.1.1. 用語集</a></li>
 <li><a class="reference internal" href="#what-are-options-for">36.1.1.2. オプションとは何か</a></li>
-<li><a class="reference internal" href="#what-are-positional-arguments-for">36.1.1.3. 固定引数とは何か</a></li>
+<li><a class="reference internal" href="#what-are-positional-arguments-for">36.1.1.3. 位置引数とは何か</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#tutorial">36.1.2. チュートリアル</a><ul>
@@ -1524,7 +1524,7 @@ Options:
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 3月 12, 2018
+    最終更新日時: 3月 14, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
