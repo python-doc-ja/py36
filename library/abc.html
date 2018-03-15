@@ -106,25 +106,18 @@
 <hr class="docutils" />
 <p>このモジュールは Python に <span class="target" id="index-4"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3119"><strong>PEP 3119</strong></a> で概要が示された <a class="reference internal" href="../glossary.html#term-abstract-base-class"><span class="xref std std-term">抽象基底クラス</span></a> (ABC) を定義する基盤を提供します。なぜこれが Python に付け加えられたかについてはその PEP を参照してください。 (ABC に基づいた数の型階層を扱った <span class="target" id="index-5"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3141"><strong>PEP 3141</strong></a> と <a class="reference internal" href="numbers.html#module-numbers" title="numbers: Numeric abstract base classes (Complex, Real, Integral, etc.)."><code class="xref py py-mod docutils literal"><span class="pre">numbers</span></code></a> モジュールも参照してください。)</p>
 <p><a class="reference internal" href="collections.abc.html#module-collections.abc" title="collections.abc: Abstract base classes for containers"><code class="xref py py-mod docutils literal"><span class="pre">collections.abc</span></code></a> サブモジュールには ABC から派生した具象クラスがいくつかあります。これらから、もちろんですが、さらに派生させることもできます。また <a class="reference internal" href="collections.html#module-collections" title="collections: Container datatypes"><code class="xref py py-mod docutils literal"><span class="pre">collections</span></code></a> モジュールにはいくつかの ABC もあって、あるクラスやインスタンスが特定のインタフェースを提供しているかどうか、たとえばハッシュ可能かあるいはマッピングか、をテストできます。</p>
-<p>This module provides the metaclass <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> for defining ABCs and
-a helper class <a class="reference internal" href="#abc.ABC" title="abc.ABC"><code class="xref py py-class docutils literal"><span class="pre">ABC</span></code></a> to alternatively define ABCs through inheritance:</p>
+<p>このモジュールは、 抽象基底クラスを定義するためのメタクラス :class:<a href="#id1"><span class="problematic" id="id2">`</span></a>ABCMeta`と、 継承を利用して抽象基底クラスを代替的に定義するヘルパークラス :class:<a href="#id3"><span class="problematic" id="id4">`</span></a>ABC`を提供します。</p>
 <dl class="class">
 <dt id="abc.ABC">
 <em class="property">class </em><code class="descclassname">abc.</code><code class="descname">ABC</code><a class="headerlink" href="#abc.ABC" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>A helper class that has <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> as its metaclass.  With this class,
-an abstract base class can be created by simply deriving from <a class="reference internal" href="#abc.ABC" title="abc.ABC"><code class="xref py py-class docutils literal"><span class="pre">ABC</span></code></a>
-avoiding sometimes confusing metaclass usage, for example:</p>
+<dd><p><a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> をメタクラスとするヘルパークラスです。このクラスを使うと、混乱しがちなメタクラスを使わずに、単に <a class="reference internal" href="#abc.ABC" title="abc.ABC"><code class="xref py py-class docutils literal"><span class="pre">ABC</span></code></a> を継承するだけで抽象基底クラスを作成できます。例:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABC</span>
 
 <span class="k">class</span> <span class="nc">MyABC</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="k">pass</span>
 </pre></div>
 </div>
-<p>Note that the type of <a class="reference internal" href="#abc.ABC" title="abc.ABC"><code class="xref py py-class docutils literal"><span class="pre">ABC</span></code></a> is still <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a>, therefore
-inheriting from <a class="reference internal" href="#abc.ABC" title="abc.ABC"><code class="xref py py-class docutils literal"><span class="pre">ABC</span></code></a> requires the usual precautions regarding
-metaclass usage, as multiple inheritance may lead to metaclass conflicts.
-One may also define an abstract base class by passing the metaclass
-keyword and using <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> directly, for example:</p>
+<p><a class="reference internal" href="#abc.ABC" title="abc.ABC"><code class="xref py py-class docutils literal"><span class="pre">ABC</span></code></a> の型はやはり <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> であり、そのため <a class="reference internal" href="#abc.ABC" title="abc.ABC"><code class="xref py py-class docutils literal"><span class="pre">ABC</span></code></a> から継承するときは、メタクラスの衝突を引き起こし得る多重継承のような、メタクラスを使う上でのいつもの用心が求められることに注意してください。 metaclass キーワードを渡し、 <a class="reference internal" href="#abc.ABCMeta" title="abc.ABCMeta"><code class="xref py py-class docutils literal"><span class="pre">ABCMeta</span></code></a> を直接利用することで、抽象基底クラスを直接定義することもできます。例:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABCMeta</span>
 
 <span class="k">class</span> <span class="nc">MyABC</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
@@ -439,7 +432,7 @@ any of the normal 'super' call mechanisms.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 3月 15, 2018
+    最終更新日時: 3月 16, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
