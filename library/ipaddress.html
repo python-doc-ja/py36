@@ -147,7 +147,10 @@
 <h2>21.28.2. IP アドレス<a class="headerlink" href="#ip-addresses" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <div class="section" id="address-objects">
 <h3>21.28.2.1. Address オブジェクト<a class="headerlink" href="#address-objects" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p><a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal"><span class="pre">IPv4Address</span></code></a> と <a class="reference internal" href="#ipaddress.IPv6Address" title="ipaddress.IPv6Address"><code class="xref py py-class docutils literal"><span class="pre">IPv6Address</span></code></a> オブジェクトは多くの共通した属性を持っています。両方の IP バージョンを扱うコードを書きやすくするために、IPv6 アドレスでしか意味が無いいくつかの属性も <a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal"><span class="pre">IPv4Address</span></code></a> オブジェクトに実装されています。</p>
+<p>The <a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal"><span class="pre">IPv4Address</span></code></a> and <a class="reference internal" href="#ipaddress.IPv6Address" title="ipaddress.IPv6Address"><code class="xref py py-class docutils literal"><span class="pre">IPv6Address</span></code></a> objects share a lot of common
+attributes.  Some attributes that are only meaningful for IPv6 addresses are
+also implemented by <a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal"><span class="pre">IPv4Address</span></code></a> objects, in order to make it easier to
+write code that handles both IP versions correctly.</p>
 <dl class="class">
 <dt id="ipaddress.IPv4Address">
 <em class="property">class </em><code class="descclassname">ipaddress.</code><code class="descname">IPv4Address</code><span class="sig-paren">(</span><em>address</em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv4Address" title="この定義へのパーマリンク">¶</a></dt>
@@ -433,13 +436,22 @@ resolved hostname itself.</p>
 </div>
 <div class="section" id="network-objects">
 <h3>21.28.3.2. Network オブジェクト<a class="headerlink" href="#network-objects" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>address オブジェクトで実装されていた属性は全て network オブジェクトにも実装されています。 network はそれに追加で幾つかの属性を実装しています。全ての追加属性は <a class="reference internal" href="#ipaddress.IPv4Network" title="ipaddress.IPv4Network"><code class="xref py py-class docutils literal"><span class="pre">IPv4Network</span></code></a> と <a class="reference internal" href="#ipaddress.IPv6Network" title="ipaddress.IPv6Network"><code class="xref py py-class docutils literal"><span class="pre">IPv6Network</span></code></a> で共通なので、重複を避けるために <a class="reference internal" href="#ipaddress.IPv4Network" title="ipaddress.IPv4Network"><code class="xref py py-class docutils literal"><span class="pre">IPv4Network</span></code></a> にだけドキュメントされています。</p>
+<p>All attributes implemented by address objects are implemented by network
+objects as well.  In addition, network objects implement additional attributes.
+All of these are common between <a class="reference internal" href="#ipaddress.IPv4Network" title="ipaddress.IPv4Network"><code class="xref py py-class docutils literal"><span class="pre">IPv4Network</span></code></a> and <a class="reference internal" href="#ipaddress.IPv6Network" title="ipaddress.IPv6Network"><code class="xref py py-class docutils literal"><span class="pre">IPv6Network</span></code></a>,
+so to avoid duplication they are only documented for <a class="reference internal" href="#ipaddress.IPv4Network" title="ipaddress.IPv4Network"><code class="xref py py-class docutils literal"><span class="pre">IPv4Network</span></code></a>.</p>
 <dl class="class">
 <dt id="ipaddress.IPv4Network">
 <em class="property">class </em><code class="descclassname">ipaddress.</code><code class="descname">IPv4Network</code><span class="sig-paren">(</span><em>address</em>, <em>strict=True</em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv4Network" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>IPv4 ネットワーク定義を構築します。<em>address</em> は以下の1つです:</p>
 <ol class="arabic">
-<li><p class="first">IPアドレスと、オプションでスラッシュ (<code class="docutils literal"><span class="pre">/</span></code>) で区切られたマスクを持つ文字列。IPアドレスはネットワークアドレスで、マスクは <em>プリフィックス</em> を意味する1つの数値か、IPv4 アドレスの文字列表現です。マスクがIPv4アドレスのとき、非ゼロのフィールドで始まるときは <em>ネットマスク</em> として、ゼロのフィールドで始まるときは <em>ホストマスク</em> として解釈されます。マスクが省略された場合、<code class="docutils literal"><span class="pre">/32</span></code> が指定されたものとします。</p>
+<li><p class="first">A string consisting of an IP address and an optional mask, separated by
+a slash (<code class="docutils literal"><span class="pre">/</span></code>).  The IP address is the network address, and the mask
+can be either a single number, which means it’s a <em>prefix</em>, or a string
+representation of an IPv4 address.  If it’s the latter, the mask is
+interpreted as a <em>net mask</em> if it starts with a non-zero field, or as
+a <em>host mask</em> if it starts with a zero field.  If no mask is provided,
+it’s considered to be <code class="docutils literal"><span class="pre">/32</span></code>.</p>
 <p>例えば、次の <em>address</em> 指定は全て等しくなります: <code class="docutils literal"><span class="pre">192.168.1.0/24</span></code>, <code class="docutils literal"><span class="pre">192.168.1.0/255.255.255.0</span></code> <code class="docutils literal"><span class="pre">192.168.1.0/0.0.0.255</span></code>.</p>
 </li>
 <li><p class="first">32bit に収まる整数。これは1つのアドレスのネットワークと等しく、ネットワークアドレスが <em>address</em> に、マスクが <code class="docutils literal"><span class="pre">/32</span></code> になります。</p>
@@ -451,7 +463,9 @@ resolved hostname itself.</p>
 </ol>
 <p><em>address</em> が有効な IPv4 アドレスでない場合に <a class="reference internal" href="#ipaddress.AddressValueError" title="ipaddress.AddressValueError"><code class="xref py py-exc docutils literal"><span class="pre">AddressValueError</span></code></a> 例外を発生させます。マスクが IPv4 アドレスに対して有効でない場合に <a class="reference internal" href="#ipaddress.NetmaskValueError" title="ipaddress.NetmaskValueError"><code class="xref py py-exc docutils literal"><span class="pre">NetmaskValueError</span></code></a> 例外を発生させます。</p>
 <p><em>strict</em> が <code class="docutils literal"><span class="pre">True</span></code> の場合、与えられたアドレスのホストビットが立っていたら <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> を発生させます。そうでない場合、ホストビットをマスクして正しいネットワークアドレスを計算します。</p>
-<p>特に明記されない場合、他の network や address を受け取る network のメソッドは、引数の IP バージョンが <code class="docutils literal"><span class="pre">self</span></code> と異なる場合に <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> を発生させます。</p>
+<p>Unless stated otherwise, all network methods accepting other network/address
+objects will raise <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> if the argument’s IP version is
+incompatible to <code class="docutils literal"><span class="pre">self</span></code></p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.5 で変更: </span><em>address</em> コンストラクタ引数に2要素のタプル形式を追加しました</p>
 </div>
@@ -463,7 +477,8 @@ resolved hostname itself.</p>
 <dl class="attribute">
 <dt id="ipaddress.IPv4Network.max_prefixlen">
 <code class="descname">max_prefixlen</code><a class="headerlink" href="#ipaddress.IPv4Network.max_prefixlen" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal"><span class="pre">IPv4Address</span></code></a> の対応する属性のドキュメントを参照。</p>
+<dd><p>Refer to the corresponding attribute documentation in
+<a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal"><span class="pre">IPv4Address</span></code></a></p>
 </dd></dl>
 
 <dl class="attribute">
@@ -1043,7 +1058,9 @@ raised if <em>addresses</em> contains mixed version objects.</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;192.0.2.0&#39;</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">IPv4Network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>理にかなっていません。しかし、それでも <a class="reference internal" href="#module-ipaddress" title="ipaddress: IPv4/IPv6 manipulation library."><code class="xref py py-mod docutils literal"><span class="pre">ipaddress</span></code></a> にそれらをソートしてほしい場合があるかもしれません。その場合は、この関数を <a class="reference internal" href="functions.html#sorted" title="sorted"><code class="xref py py-func docutils literal"><span class="pre">sorted()</span></code></a> の <code class="docutils literal"><span class="pre">key</span></code> 引数に使うことができます。</p>
+<p>doesn’t make sense.  There are some times however, where you may wish to
+have <a class="reference internal" href="#module-ipaddress" title="ipaddress: IPv4/IPv6 manipulation library."><code class="xref py py-mod docutils literal"><span class="pre">ipaddress</span></code></a> sort these anyway.  If you need to do this, you can use
+this function as the <code class="docutils literal"><span class="pre">key</span></code> argument to <a class="reference internal" href="functions.html#sorted" title="sorted"><code class="xref py py-func docutils literal"><span class="pre">sorted()</span></code></a>.</p>
 <p><em>obj</em> はネットワークオブジェクトかアドレスオブジェクトのどちらかです。</p>
 </dd></dl>
 
@@ -1174,7 +1191,7 @@ module defines the following exceptions:</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 3月 20, 2018
+    最終更新日時: 3月 21, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
