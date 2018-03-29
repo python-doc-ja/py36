@@ -128,9 +128,7 @@
 </div>
 <div class="section" id="cancellation">
 <h2>18.5.9.2. 取り消し<a class="headerlink" href="#cancellation" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>Cancellation of tasks is not common in classic programming. In asynchronous
-programming, not only is it something common, but you have to prepare your
-code to handle it.</p>
+<p>古典的なプログラミングでは、タスクのキャンセルは一般的ではありません。非同期プログラミングでは、それは一般的であるどころか、それを処理するためのコードを用意する必要があります。</p>
 <p>Future おびタスクは、それらの <a class="reference internal" href="asyncio-task.html#asyncio.Future.cancel" title="asyncio.Future.cancel"><code class="xref py py-meth docutils literal"><span class="pre">Future.cancel()</span></code></a> メソッドを呼び出すことで、明示的にキャンセルすることができます。<a class="reference internal" href="asyncio-task.html#asyncio.wait_for" title="asyncio.wait_for"><code class="xref py py-func docutils literal"><span class="pre">wait_for()</span></code></a> 関数は、タイムアウト発生時に、待機中のタスクをキャンセルします。タスクを間接的にキャンセルすることができる使用例は、他にも数多くあります。</p>
 <p>Future がキャンセルされた場合、<a class="reference internal" href="asyncio-task.html#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal"><span class="pre">Future</span></code></a> の <a class="reference internal" href="asyncio-task.html#asyncio.Future.set_result" title="asyncio.Future.set_result"><code class="xref py py-meth docutils literal"><span class="pre">set_result()</span></code></a> または <a class="reference internal" href="asyncio-task.html#asyncio.Future.set_exception" title="asyncio.Future.set_exception"><code class="xref py py-meth docutils literal"><span class="pre">set_exception()</span></code></a> メソッドは呼び出さないでください。例外を送出して、失敗してしまいます。例えば、以下のように書いてください。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">fut</span><span class="o">.</span><span class="n">cancelled</span><span class="p">():</span>
@@ -222,10 +220,9 @@ code to handle it.</p>
 </div>
 <div class="section" id="detect-exceptions-never-consumed">
 <h2>18.5.9.7. 未処理の例外の検出<a class="headerlink" href="#detect-exceptions-never-consumed" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>Python usually calls <a class="reference internal" href="sys.html#sys.excepthook" title="sys.excepthook"><code class="xref py py-func docutils literal"><span class="pre">sys.excepthook()</span></code></a> on unhandled exceptions. If
-<a class="reference internal" href="asyncio-task.html#asyncio.Future.set_exception" title="asyncio.Future.set_exception"><code class="xref py py-meth docutils literal"><span class="pre">Future.set_exception()</span></code></a> is called, but the exception is never consumed,
-<a class="reference internal" href="sys.html#sys.excepthook" title="sys.excepthook"><code class="xref py py-func docutils literal"><span class="pre">sys.excepthook()</span></code></a> is not called. Instead, <a class="reference internal" href="#asyncio-logger"><span class="std std-ref">a log is emitted</span></a> when the future is deleted by the garbage collector, with the
-traceback where the exception was raised.</p>
+<p>Python は通常未処理の例外には <a class="reference internal" href="sys.html#sys.excepthook" title="sys.excepthook"><code class="xref py py-func docutils literal"><span class="pre">sys.excepthook()</span></code></a> を呼び出します。
+<a class="reference internal" href="asyncio-task.html#asyncio.Future.set_exception" title="asyncio.Future.set_exception"><code class="xref py py-meth docutils literal"><span class="pre">Future.set_exception()</span></code></a> が呼び出されたものの処理されなかった場合、 <a class="reference internal" href="sys.html#sys.excepthook" title="sys.excepthook"><code class="xref py py-func docutils literal"><span class="pre">sys.excepthook()</span></code></a> が呼び出されません。
+代わりに、フューチャーがガベージコレクションで削除されたとき、例外発生場所のトレースバックとともに <a class="reference internal" href="#asyncio-logger"><span class="std std-ref">ログが記録され</span></a> ます。</p>
 <p>未処理の例外の例:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
 
@@ -490,7 +487,7 @@ task: &lt;Task pending coro=&lt;kill_me() done, defined at test.py:5&gt; wait_fo
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 3月 29, 2018
+    最終更新日時: 3月 30, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
