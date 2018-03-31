@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>3. データモデル &#8212; Python 3.6.4 ドキュメント</title>
+    <title>3. データモデル &#8212; Python 3.6.5 ドキュメント</title>
     <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '3.6.4',
+        VERSION:     '3.6.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/translations.js"></script>
     <script type="text/javascript" src="../_static/sidebar.js"></script>
     <link rel="search" type="application/opensearchdescription+xml"
-          title="Python 3.6.4 ドキュメント 内を検索"
+          title="Python 3.6.5 ドキュメント 内を検索"
           href="../_static/opensearch.xml"/>
     <link rel="author" title="このドキュメントについて" href="../about.html" />
     <link rel="index" title="索引" href="../genindex.html" />
@@ -71,7 +71,7 @@
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.4</span>
+          <span class="version_switcher_placeholder">3.6.5</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -611,7 +611,7 @@ that imported modules are still available at the time when the
 <p>この目的は、慎重に選ばれた入力で辞書挿入の最悪性能 O(n^2) 計算量を悪用することで引き起こされるサービス妨害 (denial-of-service, DoS) に対する保護です。
 詳細は <a class="reference external" href="http://www.ocert.org/advisories/ocert-2011-003.html">http://www.ocert.org/advisories/ocert-2011-003.html</a> を参照してください。</p>
 <p>ハッシュ値の変更は、辞書、集合、その他のマップ型のイテレーション順序に影響します。Python はこの順序付けを保証していません (そして通常 32-bit と 64-bit の間でも異なります)。</p>
-<p class="last"><span class="target" id="index-103"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONHASHSEED"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONHASHSEED</span></code></a> も参照してください。</p>
+<p class="last"><span class="target" id="index-104"></span><a class="reference internal" href="../using/cmdline.html#envvar-PYTHONHASHSEED"><code class="xref std std-envvar docutils literal"><span class="pre">PYTHONHASHSEED</span></code></a> も参照してください。</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.3 で変更: </span>ハッシュのランダム化がデフォルトで有効になりました。</p>
@@ -752,13 +752,10 @@ descriptor has been assigned to <em>name</em>.</p>
 </div>
 <div class="section" id="slots">
 <span id="id3"></span><h4>3.3.2.4. __slots__<a class="headerlink" href="#slots" title="このヘッドラインへのパーマリンク">¶</a></h4>
-<p>By default, instances of classes have a dictionary for attribute storage.  This
-wastes space for objects having very few instance variables.  The space
-consumption can become acute when creating large numbers of instances.</p>
-<p>The default can be overridden by defining <em>__slots__</em> in a class definition.
-The <em>__slots__</em> declaration takes a sequence of instance variables and reserves
-just enough space in each instance to hold a value for each variable.  Space is
-saved because <em>__dict__</em> is not created for each instance.</p>
+<p><em>__slots__</em> allow us to explicitly declare data members (like
+properties) and deny the creation of <em>__dict__</em> and <em>__weakref__</em>
+(unless explicitly declared in <em>__slots__</em> or available in a parent.)</p>
+<p>The space saved over using <em>__dict__</em> can be significant.</p>
 <dl class="data">
 <dt id="object.__slots__">
 <code class="descclassname">object.</code><code class="descname">__slots__</code><a class="headerlink" href="#object.__slots__" title="この定義へのパーマリンク">¶</a></dt>
@@ -768,19 +765,24 @@ saved because <em>__dict__</em> is not created for each instance.</p>
 <div class="section" id="notes-on-using-slots">
 <h5>3.3.2.4.1. <em>__slots__</em> を利用する際の注意<a class="headerlink" href="#notes-on-using-slots" title="このヘッドラインへのパーマリンク">¶</a></h5>
 <ul class="simple">
-<li>When inheriting from a class without <em>__slots__</em>, the <em>__dict__</em> attribute of
-that class will always be accessible, so a <em>__slots__</em> definition in the
-subclass is meaningless.</li>
+<li>When inheriting from a class without <em>__slots__</em>, the <em>__dict__</em> and
+<em>__weakref__</em> attribute of the instances will always be accessible.</li>
 <li><em>__dict__</em> 変数がない場合、 <em>__slots__</em> に列挙されていない新たな変数をインスタンスに代入することはできません。列挙されていない変数名を使って代入しようとした場合、 <a class="reference internal" href="../library/exceptions.html#AttributeError" title="AttributeError"><code class="xref py py-exc docutils literal"><span class="pre">AttributeError</span></code></a> が送出されます。新たな変数を動的に代入したいのなら、 <em>__slots__</em> を宣言する際に <code class="docutils literal"><span class="pre">'__dict__'</span></code> を変数名のシーケンスに追加してください。</li>
 <li><em>__slots__</em> を定義しているクラスの各インスタンスに <em>__weakref__</em> 変数がない場合、インスタンスに対する弱参照 (weak reference) はサポートされません。弱参照のサポートが必要なら、 <em>__slots__</em> を宣言する際に <code class="docutils literal"><span class="pre">'__weakref__'</span></code> を変数名のシーケンスに追加してください。</li>
 <li><em>__slots__</em> は、クラスのレベルで各変数に対するデスクリプタ (<a class="reference internal" href="#descriptors"><span class="std std-ref">デスクリプタ (descriptor) の実装</span></a> を参照) を使って実装されます。その結果、 <em>__slots__</em> に定義されているインスタンス変数のデフォルト値はクラス属性を使って設定できなくなっています; そうしないと、デスクリプタによる代入をクラス属性が上書きしてしまうからです。</li>
-<li>The action of a <em>__slots__</em> declaration is limited to the class where it is
-defined.  As a result, subclasses will have a <em>__dict__</em> unless they also define
-<em>__slots__</em> (which must only contain names of any <em>additional</em> slots).</li>
+<li>The action of a <em>__slots__</em> declaration is not limited to the class
+where it is defined.  <em>__slots__</em> declared in parents are available in
+child classes. However, child subclasses will get a <em>__dict__</em>  and
+<em>__weakref__</em> unless they also define <em>__slots__</em> (which should only
+contain names of any <em>additional</em> slots).</li>
 <li>あるクラスで、基底クラスですでに定義されているスロットを定義した場合、基底クラスのスロットで定義されているインスタンス変数は (デスクリプタを基底クラスから直接取得しない限り) アクセスできなくなります。これにより、プログラムの趣意が不定になってしまいます。将来は、この問題を避けるために何らかのチェックが追加されるかもしれません。</li>
 <li>空でない <em>__slots__</em> は、 <a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a> や <a class="reference internal" href="../library/stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal"><span class="pre">bytes</span></code></a> や <a class="reference internal" href="../library/stdtypes.html#tuple" title="tuple"><code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></a> のような &quot;可変長の&quot; 組み込み型から派生したクラスでは動作しません。</li>
 <li><em>__slots__</em> には、文字列でない反復可能オブジェクトを代入することができます。辞書型も使うことができます; しかし将来、辞書の各キーに相当する値に何らかの特殊な意味が割り当てられるかもしれません。</li>
 <li><em>__class__</em> への代入は、両方のクラスが同じ <em>__slots__</em> を持っているときのみ動作します。</li>
+<li>Multiple inheritance with multiple slotted parent classes can be used,
+but only one parent is allowed to have attributes created by slots
+(the other bases must have empty slot layouts) - violations raise
+<a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>.</li>
 </ul>
 </div>
 </div>
@@ -944,7 +946,7 @@ and a <a class="reference internal" href="../library/exceptions.html#RuntimeWarn
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
-<dt><span class="target" id="index-104"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3119"><strong>PEP 3119</strong></a> - 抽象基底クラスの導入</dt>
+<dt><span class="target" id="index-105"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-3119"><strong>PEP 3119</strong></a> - 抽象基底クラスの導入</dt>
 <dd>抽象基底クラス (<a class="reference internal" href="../library/abc.html#module-abc" title="abc: Abstract base classes according to PEP 3119."><code class="xref py py-mod docutils literal"><span class="pre">abc</span></code></a> モジュールを参照) を言語に追加する文脈においての動機から、 <a class="reference internal" href="#class.__instancecheck__" title="class.__instancecheck__"><code class="xref py py-meth docutils literal"><span class="pre">__instancecheck__()</span></code></a> と <a class="reference internal" href="#class.__subclasscheck__" title="class.__subclasscheck__"><code class="xref py py-meth docutils literal"><span class="pre">__subclasscheck__()</span></code></a> を通して、 <a class="reference internal" href="../library/functions.html#isinstance" title="isinstance"><code class="xref py py-func docutils literal"><span class="pre">isinstance()</span></code></a> と <a class="reference internal" href="../library/functions.html#issubclass" title="issubclass"><code class="xref py py-func docutils literal"><span class="pre">issubclass()</span></code></a> に独自の動作をさせるための仕様の記述があります。</dd>
 </dl>
 </div>
@@ -1182,10 +1184,8 @@ and a <a class="reference internal" href="../library/exceptions.html#RuntimeWarn
 <code class="descclassname">object.</code><code class="descname">__int__</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#object.__int__" title="この定義へのパーマリンク">¶</a></dt>
 <dt id="object.__float__">
 <code class="descclassname">object.</code><code class="descname">__float__</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#object.__float__" title="この定義へのパーマリンク">¶</a></dt>
-<dt id="object.__round__">
-<code class="descclassname">object.</code><code class="descname">__round__</code><span class="sig-paren">(</span><em>self</em><span class="optional">[</span>, <em>n</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#object.__round__" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p id="index-94">Called to implement the built-in functions <a class="reference internal" href="../library/functions.html#complex" title="complex"><code class="xref py py-func docutils literal"><span class="pre">complex()</span></code></a>,
-<a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-func docutils literal"><span class="pre">int()</span></code></a>, <a class="reference internal" href="../library/functions.html#float" title="float"><code class="xref py py-func docutils literal"><span class="pre">float()</span></code></a> and <a class="reference internal" href="../library/functions.html#round" title="round"><code class="xref py py-func docutils literal"><span class="pre">round()</span></code></a>.  Should return a value
+<a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-func docutils literal"><span class="pre">int()</span></code></a> and <a class="reference internal" href="../library/functions.html#float" title="float"><code class="xref py py-func docutils literal"><span class="pre">float()</span></code></a>.  Should return a value
 of the appropriate type.</p>
 </dd></dl>
 
@@ -1202,11 +1202,29 @@ Python が数値オブジェクトを整数オブジェクトに損失なく変�
 </div>
 </dd></dl>
 
+<dl class="method">
+<dt id="object.__round__">
+<code class="descclassname">object.</code><code class="descname">__round__</code><span class="sig-paren">(</span><em>self</em><span class="optional">[</span>, <em>ndigits</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#object.__round__" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="object.__trunc__">
+<code class="descclassname">object.</code><code class="descname">__trunc__</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#object.__trunc__" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="object.__floor__">
+<code class="descclassname">object.</code><code class="descname">__floor__</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#object.__floor__" title="この定義へのパーマリンク">¶</a></dt>
+<dt id="object.__ceil__">
+<code class="descclassname">object.</code><code class="descname">__ceil__</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#object.__ceil__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p id="index-95">Called to implement the built-in function <a class="reference internal" href="../library/functions.html#round" title="round"><code class="xref py py-func docutils literal"><span class="pre">round()</span></code></a> and <a class="reference internal" href="../library/math.html#module-math" title="math: Mathematical functions (sin() etc.)."><code class="xref py py-mod docutils literal"><span class="pre">math</span></code></a>
+functions <a class="reference internal" href="../library/math.html#math.trunc" title="math.trunc"><code class="xref py py-func docutils literal"><span class="pre">trunc()</span></code></a>, <a class="reference internal" href="../library/math.html#math.floor" title="math.floor"><code class="xref py py-func docutils literal"><span class="pre">floor()</span></code></a> and <a class="reference internal" href="../library/math.html#math.ceil" title="math.ceil"><code class="xref py py-func docutils literal"><span class="pre">ceil()</span></code></a>.
+Unless <em>ndigits</em> is passed to <code class="xref py py-meth docutils literal"><span class="pre">__round__()</span></code> all these methods should
+return the value of the object truncated to an <a class="reference internal" href="../library/numbers.html#numbers.Integral" title="numbers.Integral"><code class="xref py py-class docutils literal"><span class="pre">Integral</span></code></a>
+(typically an <a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-class docutils literal"><span class="pre">int</span></code></a>).</p>
+<p>If <a class="reference internal" href="#object.__int__" title="object.__int__"><code class="xref py py-meth docutils literal"><span class="pre">__int__()</span></code></a> is not defined then the built-in function <a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-func docutils literal"><span class="pre">int()</span></code></a>
+falls back to <a class="reference internal" href="#object.__trunc__" title="object.__trunc__"><code class="xref py py-meth docutils literal"><span class="pre">__trunc__()</span></code></a>.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="with-statement-context-managers">
 <span id="context-managers"></span><h3>3.3.8. with文とコンテキストマネージャ<a class="headerlink" href="#with-statement-context-managers" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>コンテキストマネージャ(<em class="dfn">context manager</em>) とは、 <a class="reference internal" href="compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文の実行時にランタイムコンテキストを定義するオブジェクトです。コンテキストマネージャは、コードブロックを実行するために必要な入り口および出口の処理を扱います。コンテキストマネージャは通常、 <a class="reference internal" href="compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文（ <a class="reference internal" href="compound_stmts.html#with"><span class="std std-ref">with 文</span></a> の章を参照）により起動されますが、これらのメソッドを直接呼び出すことで起動することもできます。</p>
-<p id="index-95">コンテキストマネージャの代表的な使い方としては、様々なグローバル情報の保存および更新、リソースのロックとアンロック、ファイルのオープンとクローズなどが挙げられます。</p>
+<p id="index-96">コンテキストマネージャの代表的な使い方としては、様々なグローバル情報の保存および更新、リソースのロックとアンロック、ファイルのオープンとクローズなどが挙げられます。</p>
 <p>コンテキストマネージャについてのさらなる情報については、 <a class="reference internal" href="../library/stdtypes.html#typecontextmanager"><span class="std std-ref">コンテキストマネージャ型</span></a> を参照してください。</p>
 <dl class="method">
 <dt id="object.__enter__">
@@ -1225,7 +1243,7 @@ Python が数値オブジェクトを整数オブジェクトに損失なく変�
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
 <dl class="last docutils">
-<dt><span class="target" id="index-105"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0343"><strong>PEP 343</strong></a> - &quot;with&quot; ステートメント</dt>
+<dt><span class="target" id="index-106"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0343"><strong>PEP 343</strong></a> - &quot;with&quot; ステートメント</dt>
 <dd>Python の <a class="reference internal" href="compound_stmts.html#with"><code class="xref std std-keyword docutils literal"><span class="pre">with</span></code></a> 文の仕様、背景、および例が記載されています。</dd>
 </dl>
 </div>
@@ -1288,7 +1306,7 @@ Python が数値オブジェクトを整数オブジェクトに損失なく変�
 </div>
 </div>
 <div class="section" id="coroutines">
-<span id="index-97"></span><h2>3.4. コルーチン<a class="headerlink" href="#coroutines" title="このヘッドラインへのパーマリンク">¶</a></h2>
+<span id="index-98"></span><h2>3.4. コルーチン<a class="headerlink" href="#coroutines" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <div class="section" id="awaitable-objects">
 <h3>3.4.1. 待機可能オブジェクト (Awaitable Object)<a class="headerlink" href="#awaitable-objects" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p><a class="reference internal" href="../glossary.html#term-awaitable"><span class="xref std std-term">awaitable</span></a> オブジェクトは一般的には <a class="reference internal" href="#object.__await__" title="object.__await__"><code class="xref py py-meth docutils literal"><span class="pre">__await__()</span></code></a> が実装されています。
@@ -1310,7 +1328,7 @@ Python が数値オブジェクトを整数オブジェクトに損失なく変�
 </div>
 <div class="admonition seealso">
 <p class="first admonition-title">参考</p>
-<p class="last">待機可能オブジェクトについてより詳しくは <span class="target" id="index-106"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0492"><strong>PEP 492</strong></a> を参照してください。</p>
+<p class="last">待機可能オブジェクトについてより詳しくは <span class="target" id="index-107"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0492"><strong>PEP 492</strong></a> を参照してください。</p>
 </div>
 </div>
 <div class="section" id="coroutine-objects">
@@ -1578,7 +1596,7 @@ CPython 3.7 では、 <code class="docutils literal"><span class="pre">__aiter__
                  style="vertical-align: middle; margin-top: -1px"/></li>
         <li><a href="https://www.python.org/">Python</a> &#187;</li>
         <li>
-          <span class="version_switcher_placeholder">3.6.4</span>
+          <span class="version_switcher_placeholder">3.6.5</span>
           <a href="../index.html">ドキュメント</a> &#187;
         </li>
 
@@ -1606,7 +1624,7 @@ CPython 3.7 では、 <code class="docutils literal"><span class="pre">__aiter__
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 3月 31, 2018
+    最終更新日時: 4月 01, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。

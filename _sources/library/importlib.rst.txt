@@ -799,7 +799,7 @@ find and load modules.
 .. class:: WindowsRegistryFinder
 
    :term:`Finder` for modules declared in the Windows registry.  This class
-   implements the :class:`importlib.abc.Finder` ABC.
+   implements the :class:`importlib.abc.MetaPathFinder` ABC.
 
    Only class methods are defined by this class to alleviate the need for
    instantiation.
@@ -1077,7 +1077,7 @@ find and load modules.
    Name of the place from which the module is loaded, e.g. "builtin" for
    built-in modules and the filename for modules loaded from source.
    Normally "origin" should be set, but it may be ``None`` (the default)
-   which indicates it is unspecified (e.g. for namespace packages).
+   which indicates it is unspecified.
 
    .. attribute:: submodule_search_locations
 
