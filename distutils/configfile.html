@@ -108,26 +108,27 @@
 <li><code class="file docutils literal"><span class="pre">setup.py</span></code> では簡単に設定できないような、標準でないオプションのデフォルト値を設定できます</li>
 <li>インストール作業者は、 <code class="file docutils literal"><span class="pre">setup.cfg</span></code> に書かれたどんな設定も <code class="file docutils literal"><span class="pre">setup.py</span></code> のコマンドラインオプションで上書きできます</li>
 </ul>
-<p>設定ファイルの基本的な構文は簡単なものです:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">command</span><span class="p">]</span>
-<span class="n">option</span><span class="o">=</span><span class="n">value</span>
-<span class="o">...</span>
+<p>The basic syntax of the configuration file is simple:</p>
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[command]</span>
+<span class="na">option</span><span class="o">=</span><span class="s">value</span>
+<span class="na">...</span>
 </pre></div>
 </div>
 <p>ここで、 <em>command</em> は Distutils コマンドのうちの一つ (例えば <strong class="command">build_py</strong>, <strong class="command">install</strong>) で、 <em>option</em>  はそのコマンドでサポートされているオプションのうちの一つです。各コマンドには任意の数のオプションを設定でき、一つの設定ファイル中には任意の数のコマンドセクションを収められます。空白行は無視されます、 <code class="docutils literal"><span class="pre">'#'</span></code> 文字で開始して行末まで続くコメントも同様に無視されます。長いオプション設定値は、継続行をインデントするだけで複数行にわたって記述できます。</p>
-<p>あるコマンドがサポートしているオプションのリストは、 <code class="xref std std-option docutils literal"><span class="pre">--help</span></code> オプションで調べられます。例えば以下のように。</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span> <span class="n">build_ext</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
-<span class="n">Options</span> <span class="k">for</span> <span class="s1">&#39;build_ext&#39;</span> <span class="n">command</span><span class="p">:</span>
-  <span class="o">--</span><span class="n">build</span><span class="o">-</span><span class="n">lib</span> <span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="p">)</span>     <span class="n">directory</span> <span class="k">for</span> <span class="n">compiled</span> <span class="n">extension</span> <span class="n">modules</span>
-  <span class="o">--</span><span class="n">build</span><span class="o">-</span><span class="n">temp</span> <span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="p">)</span>    <span class="n">directory</span> <span class="k">for</span> <span class="n">temporary</span> <span class="n">files</span> <span class="p">(</span><span class="n">build</span> <span class="n">by</span><span class="o">-</span><span class="n">products</span><span class="p">)</span>
-  <span class="o">--</span><span class="n">inplace</span> <span class="p">(</span><span class="o">-</span><span class="n">i</span><span class="p">)</span>       <span class="n">ignore</span> <span class="n">build</span><span class="o">-</span><span class="n">lib</span> <span class="ow">and</span> <span class="n">put</span> <span class="n">compiled</span> <span class="n">extensions</span> <span class="n">into</span> <span class="n">the</span>
-                       <span class="n">source</span> <span class="n">directory</span> <span class="n">alongside</span> <span class="n">your</span> <span class="n">pure</span> <span class="n">Python</span> <span class="n">modules</span>
-  <span class="o">--</span><span class="n">include</span><span class="o">-</span><span class="n">dirs</span> <span class="p">(</span><span class="o">-</span><span class="n">I</span><span class="p">)</span>  <span class="nb">list</span> <span class="n">of</span> <span class="n">directories</span> <span class="n">to</span> <span class="n">search</span> <span class="k">for</span> <span class="n">header</span> <span class="n">files</span>
-  <span class="o">--</span><span class="n">define</span> <span class="p">(</span><span class="o">-</span><span class="n">D</span><span class="p">)</span>        <span class="n">C</span> <span class="n">preprocessor</span> <span class="n">macros</span> <span class="n">to</span> <span class="n">define</span>
-  <span class="o">--</span><span class="n">undef</span> <span class="p">(</span><span class="o">-</span><span class="n">U</span><span class="p">)</span>         <span class="n">C</span> <span class="n">preprocessor</span> <span class="n">macros</span> <span class="n">to</span> <span class="n">undefine</span>
-  <span class="o">--</span><span class="n">swig</span><span class="o">-</span><span class="n">opts</span>          <span class="nb">list</span> <span class="n">of</span> <span class="n">SWIG</span> <span class="n">command</span> <span class="n">line</span> <span class="n">options</span>
-<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<p>You can find out the list of options supported by a particular command with the
+universal <code class="xref std std-option docutils literal"><span class="pre">--help</span></code> option, e.g.</p>
+<div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="gp">$</span> python setup.py --help build_ext
+<span class="go">[...]</span>
+<span class="go">Options for &#39;build_ext&#39; command:</span>
+<span class="go">  --build-lib (-b)     directory for compiled extension modules</span>
+<span class="go">  --build-temp (-t)    directory for temporary files (build by-products)</span>
+<span class="go">  --inplace (-i)       ignore build-lib and put compiled extensions into the</span>
+<span class="go">                       source directory alongside your pure Python modules</span>
+<span class="go">  --include-dirs (-I)  list of directories to search for header files</span>
+<span class="go">  --define (-D)        C preprocessor macros to define</span>
+<span class="go">  --undef (-U)         C preprocessor macros to undefine</span>
+<span class="go">  --swig-opts          list of SWIG command line options</span>
+<span class="go">[...]</span>
 </pre></div>
 </div>
 <p>Note that an option spelled <code class="xref std std-option docutils literal"><span class="pre">--foo-bar</span></code> on the command-line  is spelled
@@ -137,27 +138,34 @@ have an extension <code class="xref py py-mod docutils literal"><span class="pre
 (<code class="file docutils literal"><span class="pre">ext.so</span></code> on Unix, say) to be put in the same source directory as your
 pure Python modules <code class="xref py py-mod docutils literal"><span class="pre">pkg.mod1</span></code> and <code class="xref py py-mod docutils literal"><span class="pre">pkg.mod2</span></code>.  You can always use the
 <code class="xref std std-option docutils literal"><span class="pre">--inplace</span></code> option on the command-line to ensure this:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build_ext</span> <span class="o">--</span><span class="n">inplace</span>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>python setup.py build_ext --inplace
 </pre></div>
 </div>
 <p>But this requires that you always specify the <strong class="command">build_ext</strong> command
 explicitly, and remember to provide <code class="xref std std-option docutils literal"><span class="pre">--inplace</span></code>. An easier way is to
 &quot;set and forget&quot; this option, by encoding it in <code class="file docutils literal"><span class="pre">setup.cfg</span></code>, the
 configuration file for this distribution:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">build_ext</span><span class="p">]</span>
-<span class="n">inplace</span><span class="o">=</span><span class="mi">1</span>
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[build_ext]</span>
+<span class="na">inplace</span><span class="o">=</span><span class="s">1</span>
 </pre></div>
 </div>
 <p>この設定は、明示的に <strong class="command">build_ext</strong> を指定するかどうかに関わらず、モジュール配布物の全てのビルドに影響します。ソース配布物に <code class="file docutils literal"><span class="pre">setup.cfg</span></code> を含めると、エンドユーザの手で行われるビルドにも影響します — このオプションの例に関しては <code class="file docutils literal"><span class="pre">setup.cfg</span></code> を含めるのはおそらくよくないアイデアでしょう。というのは、拡張モジュールをインプレースでビルドすると常にインストールしたモジュール配布物を壊してしまうからです。とはいえ、ある特定の状況では、モジュールをインストールディレクトリの下に正しく構築できるので、機能としては有用だと考えられます。 (ただ、インストールディレクトリ上でのビルドを想定するような拡張モジュールの配布は、ほとんどの場合よくない考え方です。)</p>
-<p>もう一つ、例があります: コマンドによっては、実行時にほとんど変更されないたくさんのオプションがあります; 例えば、 <strong class="command">bdist_rpm</strong> には、RPM 配布物を作成する際に、&quot;spec&quot;  ファイルを作成するために必要な情報を全て与えなければなりません。この情報には setup スクリプトから与えるものもあり、 (インストールされるファイルのリストのように) Distutils が自動的に生成するものもあります。しかし、こうした情報の中には <strong class="command">bdist_rpm</strong> のオプションとして与えるものがあり、毎回実行するごとにコマンドライン上で指定するのが面倒です。そこで、以下のような内容が Distutils 自体の <code class="file docutils literal"><span class="pre">setup.cfg</span></code> には入っています:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">bdist_rpm</span><span class="p">]</span>
-<span class="n">release</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">packager</span> <span class="o">=</span> <span class="n">Greg</span> <span class="n">Ward</span> <span class="o">&lt;</span><span class="n">gward</span><span class="nd">@python</span><span class="o">.</span><span class="n">net</span><span class="o">&gt;</span>
-<span class="n">doc_files</span> <span class="o">=</span> <span class="n">CHANGES</span><span class="o">.</span><span class="n">txt</span>
-            <span class="n">README</span><span class="o">.</span><span class="n">txt</span>
-            <span class="n">USAGE</span><span class="o">.</span><span class="n">txt</span>
-            <span class="n">doc</span><span class="o">/</span>
-            <span class="n">examples</span><span class="o">/</span>
+<p>Another example: certain commands take a lot of options that don’t change from
+run to run; for example, <strong class="command">bdist_rpm</strong> needs to know everything required
+to generate a &quot;spec&quot; file for creating an RPM distribution.  Some of this
+information comes from the setup script, and some is automatically generated by
+the Distutils (such as the list of files installed).  But some of it has to be
+supplied as options to <strong class="command">bdist_rpm</strong>, which would be very tedious to do
+on the command-line for every run.  Hence, here is a snippet from the Distutils'
+own <code class="file docutils literal"><span class="pre">setup.cfg</span></code>:</p>
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[bdist_rpm]</span>
+<span class="na">release</span> <span class="o">=</span> <span class="s">1</span>
+<span class="na">packager</span> <span class="o">=</span> <span class="s">Greg Ward &lt;gward@python.net&gt;</span>
+<span class="na">doc_files</span> <span class="o">=</span> <span class="s">CHANGES.txt</span>
+<span class="s">            README.txt</span>
+<span class="s">            USAGE.txt</span>
+<span class="s">            doc/</span>
+<span class="s">            examples/</span>
 </pre></div>
 </div>
 <p><code class="docutils literal"><span class="pre">doc_files</span></code> オプションは、単に空白で区切られた文字列で、ここでは可読性のために複数行をまたぐようにしています。</p>

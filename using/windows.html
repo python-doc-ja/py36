@@ -280,14 +280,18 @@ Windows XP サポートが必要な場合は、Python 3.4 をインストール�
 </pre></div>
 </div>
 <p>(ランチャのインストールを省略するとファイルの関連付けも省略されるので、これはランチャインストールを含めたシステムワイドなインストールをした場合のユーザごとインストールに限った場合のお勧めです。)</p>
-<p>上でリストしたオプションは、実行ファイルと同じ場所の <code class="docutils literal"><span class="pre">unattend.xml</span></code> と名付けられたファイルで与えることもできます。このファイルはオプションとその値のリストを指定します。値がアトリビュートとして与えられた場合、それは数値であれば数値に変換されます。エレメントテキストで与える場合は常に文字列のままです。以下は、先の例と同じオプションをセットするファイルの実例です:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>&lt;Options&gt;
-    &lt;Option Name=&quot;InstallAllUsers&quot; Value=&quot;no&quot; /&gt;
-    &lt;Option Name=&quot;Include_launcher&quot; Value=&quot;0&quot; /&gt;
-    &lt;Option Name=&quot;Include_test&quot; Value=&quot;no&quot; /&gt;
-    &lt;Option Name=&quot;SimpleInstall&quot; Value=&quot;yes&quot; /&gt;
-    &lt;Option Name=&quot;SimpleInstallDescription&quot;&gt;Just for me, no test suite&lt;/Option&gt;
-&lt;/Options&gt;
+<p>The options listed above can also be provided in a file named <code class="docutils literal"><span class="pre">unattend.xml</span></code>
+alongside the executable. This file specifies a list of options and values.
+When a value is provided as an attribute, it will be converted to a number if
+possible. Values provided as element text are always left as strings. This
+example file sets the same options and the previous example:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;Options&gt;</span>
+    <span class="nt">&lt;Option</span> <span class="na">Name=</span><span class="s">&quot;InstallAllUsers&quot;</span> <span class="na">Value=</span><span class="s">&quot;no&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;Option</span> <span class="na">Name=</span><span class="s">&quot;Include_launcher&quot;</span> <span class="na">Value=</span><span class="s">&quot;0&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;Option</span> <span class="na">Name=</span><span class="s">&quot;Include_test&quot;</span> <span class="na">Value=</span><span class="s">&quot;no&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;Option</span> <span class="na">Name=</span><span class="s">&quot;SimpleInstall&quot;</span> <span class="na">Value=</span><span class="s">&quot;yes&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;Option</span> <span class="na">Name=</span><span class="s">&quot;SimpleInstallDescription&quot;</span><span class="nt">&gt;</span>Just for me, no test suite<span class="nt">&lt;/Option&gt;</span>
+<span class="nt">&lt;/Options&gt;</span>
 </pre></div>
 </div>
 </div>
@@ -357,10 +361,11 @@ by Swaroop C H, 2003</dd>
 <div class="section" id="excursus-setting-environment-variables">
 <span id="setting-envvars"></span><h3>3.3.1. 補足: 環境変数の設定<a class="headerlink" href="#excursus-setting-environment-variables" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Windows では、環境変数を恒久的にユーザレベルとシステムレベルの両方で設定でき、あるいはコマンドプロンプトから一時的にも設定できます。</p>
-<p>環境変数を一時的にセットするには、コマンドプロンプトを開いて <strong class="command">set</strong> コマンドを使います:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>C:\&gt;set PATH=C:\Program Files\Python 3.6;%PATH%
-C:\&gt;set PYTHONPATH=%PYTHONPATH%;C:\My_python_lib
-C:\&gt;python
+<p>To temporarily set environment variables, open Command Prompt and use the
+<strong class="command">set</strong> command:</p>
+<div class="highlight-doscon"><div class="highlight"><pre><span></span><span class="gp">C:\&gt;</span><span class="k">set</span> <span class="nv">PATH</span><span class="p">=</span>C:\Program Files\Python 3.6;<span class="nv">%PATH%</span>
+<span class="gp">C:\&gt;</span><span class="k">set</span> <span class="nv">PYTHONPATH</span><span class="p">=</span><span class="nv">%PYTHONPATH%</span>;C:\My_python_lib
+<span class="gp">C:\&gt;</span>python
 </pre></div>
 </div>
 <p>これらの変更は、以降に実行される同じコンソール内で実行される任意のコマンドに適用され、また、そのコンソールから開始するすべてのアプリケーションに引き継がれます。</p>
@@ -451,9 +456,9 @@ operable program or batch file.
 <div class="section" id="from-a-script">
 <h4>3.4.1.3. スクリプトから起動する<a class="headerlink" href="#from-a-script" title="このヘッドラインへのパーマリンク">¶</a></h4>
 <p>テスト用の Python スクリプトを作成しましょう。<code class="docutils literal"><span class="pre">hello.py</span></code> という名前で以下の内容のファイルを作成してください</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>#! python
-import sys
-sys.stdout.write(&quot;hello from Python %s\n&quot; % (sys.version,))
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="ch">#! python</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;hello from Python </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="p">,))</span>
 </pre></div>
 </div>
 <p>hello.py が存在するディレクトリで、下記コマンドを実行してください:</p>
@@ -461,7 +466,7 @@ sys.stdout.write(&quot;hello from Python %s\n&quot; % (sys.version,))
 </pre></div>
 </div>
 <p>インストールされている最新の Python 2.x のバージョン番号が表示されるはずです。では、1行目を以下のように変更してみてください:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>#! python3
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="ch">#! python3</span>
 </pre></div>
 </div>
 <p>コマンドを再実行すると、今度は最新の Python 3.x の情報が表示されるはずです。これまでのコマンドラインの例と同様に、より細かいバージョン修飾子を指定することもできます。Python 2.6 がインストールされている場合、最初の行を <code class="docutils literal"><span class="pre">#!</span> <span class="pre">python2.6</span></code> に変更すると、2.6 のバージョン情報が表示されるはずです。</p>
@@ -489,7 +494,7 @@ use.</p>
 <li><code class="docutils literal"><span class="pre">python</span></code></li>
 </ul>
 <p>具体的に、もしスクリプトの1行目が</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>#! /usr/bin/python
+<div class="highlight-sh"><div class="highlight"><pre><span></span><span class="ch">#! /usr/bin/python</span>
 </pre></div>
 </div>
 <p>で始まっていたら、デフォルトの Python の位置が特定され、使用されます。多くの Unix 上で動作する Python スクリプトにはすでにこの行が存在する傾向がありますので、ランチャによりそれらのスクリプトを修正なしで使うことができるはずです。あなたが新しいスクリプトを Windows 上で書いていて、Unix 上でも有用であってほしいと思うなら、シェバン行のうち <code class="docutils literal"><span class="pre">/usr</span></code> で始まるものを使用すべきです。</p>
@@ -499,7 +504,7 @@ use.</p>
 <div class="section" id="arguments-in-shebang-lines">
 <h3>3.4.3. シェバン行の引数<a class="headerlink" href="#arguments-in-shebang-lines" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>シェバン行では Python インタプリタに渡される追加の引数を指定することもできます。たとえば、シェバン行に以下のように書かれているとしましょう:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>#! /usr/bin/python -v
+<div class="highlight-sh"><div class="highlight"><pre><span></span><span class="ch">#! /usr/bin/python -v</span>
 </pre></div>
 </div>
 <p>この場合、Python は <code class="docutils literal"><span class="pre">-v</span></code> オプション付きで起動するでしょう</p>
@@ -531,16 +536,16 @@ use.</p>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">PY_PYTHON=3.1</span></code> と設定することは、INI ファイルに下記が含まれることと等価です:</li>
 </ul>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[defaults]
-python=3.1
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[defaults]</span>
+<span class="na">python</span><span class="o">=</span><span class="s">3.1</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><code class="docutils literal"><span class="pre">PY_PYTHON=3</span></code> と <code class="docutils literal"><span class="pre">PY_PYTHON3=3.1</span></code> を設定することは、INI ファイルに下記が含まれることと等価です:</li>
 </ul>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[defaults]
-python=3
-python3=3.1
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[defaults]</span>
+<span class="na">python</span><span class="o">=</span><span class="s">3</span>
+<span class="na">python3</span><span class="o">=</span><span class="s">3.1</span>
 </pre></div>
 </div>
 </div>

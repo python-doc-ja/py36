@@ -348,26 +348,40 @@ This method allows you to specify <code class="docutils literal"><span class="pr
 <div class="section" id="access-to-internal-objects">
 <span id="logging-config-dict-internalobj"></span><h3>16.7.2.6. 内部オブジェクトへのアクセス<a class="headerlink" href="#access-to-internal-objects" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>外部オブジェクトと同様、環境設定内部のオブジェクトへのアクセスを必要とすることもあります。これは、その各オブジェクトを司る環境設定システムによって暗黙に行われます。例えば、ロガーやハンドラの <code class="docutils literal"><span class="pre">level</span></code> に対する文字列値 <code class="docutils literal"><span class="pre">'DEBUG'</span></code> は、自動的に値 <code class="docutils literal"><span class="pre">logging.DEBUG</span></code> に変換されますし、<code class="docutils literal"><span class="pre">handlers</span></code>, <code class="docutils literal"><span class="pre">filters</span></code> および <code class="docutils literal"><span class="pre">formatter</span></code> の項目は、オブジェクト id を取って、適切な送信先オブジェクトを決定します。</p>
-<p>しかし、ユーザ定義モジュールには、 <a class="reference internal" href="logging.html#module-logging" title="logging: Flexible event logging system for applications."><code class="xref py py-mod docutils literal"><span class="pre">logging</span></code></a> モジュールには分からないような、より一般的な機構が必要です。例えば、 <a class="reference internal" href="logging.handlers.html#logging.handlers.MemoryHandler" title="logging.handlers.MemoryHandler"><code class="xref py py-class docutils literal"><span class="pre">logging.handlers.MemoryHandler</span></code></a> があって、委譲する先の別のハンドラである <code class="docutils literal"><span class="pre">target</span></code> 引数を取るとします。システムはこのクラスをすでに知っていますから、設定中で、与えられた <code class="docutils literal"><span class="pre">target</span></code> は関連するターゲットハンドラのオブジェクト id でさえあればよく、システムはその id からハンドラを決定します。しかし、ユーザが <code class="docutils literal"><span class="pre">my.package.MyHandler</span></code> を定義して、それが <code class="docutils literal"><span class="pre">alternate</span></code> ハンドラを持つなら、設定システムは <code class="docutils literal"><span class="pre">alternate</span></code> がハンドラを参照していることを知りません。これを知らせるのに、一般的な解析システムで、ユーザはこのように指定できます:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">handlers</span><span class="p">:</span>
-  <span class="n">file</span><span class="p">:</span>
+<p>However, a more generic mechanism is needed for user-defined
+objects which are not known to the <a class="reference internal" href="logging.html#module-logging" title="logging: Flexible event logging system for applications."><code class="xref py py-mod docutils literal"><span class="pre">logging</span></code></a> module.  For
+example, consider <a class="reference internal" href="logging.handlers.html#logging.handlers.MemoryHandler" title="logging.handlers.MemoryHandler"><code class="xref py py-class docutils literal"><span class="pre">logging.handlers.MemoryHandler</span></code></a>, which takes
+a <code class="docutils literal"><span class="pre">target</span></code> argument which is another handler to delegate to. Since
+the system already knows about this class, then in the configuration,
+the given <code class="docutils literal"><span class="pre">target</span></code> just needs to be the object id of the relevant
+target handler, and the system will resolve to the handler from the
+id.  If, however, a user defines a <code class="docutils literal"><span class="pre">my.package.MyHandler</span></code> which has
+an <code class="docutils literal"><span class="pre">alternate</span></code> handler, the configuration system would not know that
+the <code class="docutils literal"><span class="pre">alternate</span></code> referred to a handler.  To cater for this, a generic
+resolution system allows the user to specify:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">handlers</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">file</span><span class="p p-Indicator">:</span>
     <span class="c1"># configuration of file handler goes here</span>
 
-  <span class="n">custom</span><span class="p">:</span>
-    <span class="p">():</span> <span class="n">my</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">MyHandler</span>
-    <span class="n">alternate</span><span class="p">:</span> <span class="n">cfg</span><span class="p">:</span><span class="o">//</span><span class="n">handlers</span><span class="o">.</span><span class="n">file</span>
+  <span class="l l-Scalar l-Scalar-Plain">custom</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">()</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">my.package.MyHandler</span>
+    <span class="l l-Scalar l-Scalar-Plain">alternate</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">cfg://handlers.file</span>
 </pre></div>
 </div>
-<p>リテラル文字列 <code class="docutils literal"><span class="pre">'cfg://handlers.file'</span></code> は、<code class="docutils literal"><span class="pre">ext://</span></code> 接頭辞が付いた文字列と同じように分析されますが、インポート名前空間ではなく、環境設定自体が検索されます。この機構は <code class="docutils literal"><span class="pre">str.format</span></code> でできるのと同じようにドットやインデックスのアクセスができます。従って、環境設定において以下のコード片が与えられれば:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">handlers</span><span class="p">:</span>
-  <span class="n">email</span><span class="p">:</span>
-    <span class="n">class</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">SMTPHandler</span>
-    <span class="n">mailhost</span><span class="p">:</span> <span class="n">localhost</span>
-    <span class="n">fromaddr</span><span class="p">:</span> <span class="n">my_app</span><span class="nd">@domain</span><span class="o">.</span><span class="n">tld</span>
-    <span class="n">toaddrs</span><span class="p">:</span>
-      <span class="o">-</span> <span class="n">support_team</span><span class="nd">@domain</span><span class="o">.</span><span class="n">tld</span>
-      <span class="o">-</span> <span class="n">dev_team</span><span class="nd">@domain</span><span class="o">.</span><span class="n">tld</span>
-    <span class="n">subject</span><span class="p">:</span> <span class="n">Houston</span><span class="p">,</span> <span class="n">we</span> <span class="n">have</span> <span class="n">a</span> <span class="n">problem</span><span class="o">.</span>
+<p>The literal string <code class="docutils literal"><span class="pre">'cfg://handlers.file'</span></code> will be resolved in an
+analogous way to strings with the <code class="docutils literal"><span class="pre">ext://</span></code> prefix, but looking
+in the configuration itself rather than the import namespace.  The
+mechanism allows access by dot or by index, in a similar way to
+that provided by <code class="docutils literal"><span class="pre">str.format</span></code>.  Thus, given the following snippet:</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">handlers</span><span class="p p-Indicator">:</span>
+  <span class="l l-Scalar l-Scalar-Plain">email</span><span class="p p-Indicator">:</span>
+    <span class="l l-Scalar l-Scalar-Plain">class</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">logging.handlers.SMTPHandler</span>
+    <span class="l l-Scalar l-Scalar-Plain">mailhost</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">localhost</span>
+    <span class="l l-Scalar l-Scalar-Plain">fromaddr</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">my_app@domain.tld</span>
+    <span class="l l-Scalar l-Scalar-Plain">toaddrs</span><span class="p p-Indicator">:</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">support_team@domain.tld</span>
+      <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">dev_team@domain.tld</span>
+    <span class="l l-Scalar l-Scalar-Plain">subject</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Houston, we have a problem.</span>
 </pre></div>
 </div>
 <p>文字列 <code class="docutils literal"><span class="pre">'cfg://handlers'</span></code> は、キー <code class="docutils literal"><span class="pre">handlers</span></code> をもつ辞書であると分析され、文字列 <code class="docutils literal"><span class="pre">'cfg://handlers.email'</span></code> は、<code class="docutils literal"><span class="pre">handlers</span></code> 辞書内の、<code class="docutils literal"><span class="pre">email</span></code> キーをもつ辞書であると分析されます。文字列 <code class="docutils literal"><span class="pre">'cfg://handlers.email.toaddrs[1]</span></code> は、<code class="docutils literal"><span class="pre">'dev_team&#64;domain.tld'</span></code> と分析され、<code class="docutils literal"><span class="pre">'cfg://handlers.email.toaddrs[0]'</span></code> は値 <code class="docutils literal"><span class="pre">'support_team&#64;domain.tld'</span></code> と分析されます。<code class="docutils literal"><span class="pre">subject</span></code> の値には、<code class="docutils literal"><span class="pre">'cfg://handlers.email.subject'</span></code> または等価な <code class="docutils literal"><span class="pre">'cfg://handlers.email[subject]'</span></code> でアクセスできます。後者が必要なのは、キーがスペースや非アルファベット文字を含むときのみです。インデックス値が十進数字のみで構成されているなら、まず対応する整数値を使ってアクセスが試みられ、必要なら文字列値で代替します。</p>

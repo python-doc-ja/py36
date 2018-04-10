@@ -30,7 +30,7 @@
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="検索" href="../search.html" />
     <link rel="copyright" title="Copyright" href="../copyright.html" />
-    <link rel="next" title="2. Defining New Types" href="newtypes.html" />
+    <link rel="next" title="2. Defining Extension Types: Tutorial" href="newtypes_tutorial.html" />
     <link rel="prev" title="Python インタプリタの拡張と埋め込み" href="index.html" />
     <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
     <link rel="canonical" href="https://docs.python.jp/3/extending/extending.html" /><script type="text/javascript">
@@ -62,7 +62,7 @@
           <a href="../py-modindex.html" title="Pythonモジュール索引"
              >モジュール</a> |</li>
         <li class="right" >
-          <a href="newtypes.html" title="2. Defining New Types"
+          <a href="newtypes_tutorial.html" title="2. Defining Extension Types: Tutorial"
              accesskey="N">次へ</a> |</li>
         <li class="right" >
           <a href="index.html" title="Python インタプリタの拡張と埋め込み"
@@ -115,8 +115,8 @@ Python fans…) and let’s say we want to create a Python interface to the C
 library function <code class="xref c c-func docutils literal"><span class="pre">system()</span></code> <a class="footnote-reference" href="#id5" id="id1">[1]</a>. This function takes a null-terminated
 character string as argument and returns an integer.  We want this function to
 be callable from Python as follows:</p>
-<div class="highlight-c"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;&gt;</span> <span class="n">import</span> <span class="n">spam</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">status</span> <span class="o">=</span> <span class="n">spam</span><span class="p">.</span><span class="n">system</span><span class="p">(</span><span class="s">&quot;ls -l&quot;</span><span class="p">)</span>
+<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">spam</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">status</span> <span class="o">=</span> <span class="n">spam</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;ls -l&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>まずは <code class="file docutils literal"><span class="pre">spammodule.c</span></code> を作成するところから始めます。 (伝統として、 <code class="docutils literal"><span class="pre">spam</span></code> という名前のモジュールを作成する場合、モジュールの実装が入った C ファイルを <code class="file docutils literal"><span class="pre">spammodule.c</span></code> と呼ぶことになっています; <code class="docutils literal"><span class="pre">spammify</span></code> のように長すぎるモジュール名の場合には、単に <code class="file docutils literal"><span class="pre">spammify.c</span></code> にもできます。)</p>
@@ -310,13 +310,19 @@ be callable from Python as follows:</p>
 <div class="section" id="compilation-and-linkage">
 <span id="compilation"></span><h2>1.5. コンパイルとリンク<a class="headerlink" href="#compilation-and-linkage" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>新しい拡張モジュールを使えるようになるまで、まだ二つの作業: コンパイルと、Python システムへのリンク、が残っています。動的読み込み (dynamic loading) を使っているのなら、作業の詳細は自分のシステムが使っている動的読み込みの形式によって変わるかもしれません; 詳しくは、拡張モジュールのビルドに関する章 (<a class="reference internal" href="building.html#building"><span class="std std-ref">C および C++ 拡張のビルド</span></a> 章) や、Windows におけるビルドに関係する追加情報の章 (<a class="reference internal" href="windows.html#building-on-windows"><span class="std std-ref">Windows 上での C および C++ 拡張モジュールのビルド</span></a> 章) を参照してください。</p>
-<p>動的読み込みを使えなかったり、モジュールを常時 Python インタプリタの一部にしておきたい場合には、インタプリタのビルド設定を変更して再ビルドしなければならなくなるでしょう。Unixでは、幸運なことにこの作業はとても単純です: 単に自作のモジュールファイル (例えば <code class="file docutils literal"><span class="pre">spammodule.c</span></code> ) を展開したソース配布物の <code class="file docutils literal"><span class="pre">Modules/</span></code> ディレクトリに置き、 <code class="file docutils literal"><span class="pre">Modules/Setup.local</span></code> に自分のファイルを説明する以下の一行:</p>
-<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">spam</span> <span class="n">spammodule</span><span class="p">.</span><span class="n">o</span>
+<p>If you can’t use dynamic loading, or if you want to make your module a permanent
+part of the Python interpreter, you will have to change the configuration setup
+and rebuild the interpreter.  Luckily, this is very simple on Unix: just place
+your file (<code class="file docutils literal"><span class="pre">spammodule.c</span></code> for example) in the <code class="file docutils literal"><span class="pre">Modules/</span></code> directory
+of an unpacked source distribution, add a line to the file
+<code class="file docutils literal"><span class="pre">Modules/Setup.local</span></code> describing your file:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>spam spammodule.o
 </pre></div>
 </div>
 <p>を追加して、トップレベルのディレクトリで <strong class="program">make</strong> を実行して、インタプリタを再ビルドするだけです。 <code class="file docutils literal"><span class="pre">Modules/</span></code> サブディレクトリでも <strong class="program">make</strong> を実行できますが、前もって '<strong class="program">make</strong> Makefile' を実行して <code class="file docutils literal"><span class="pre">Makefile</span></code> を再ビルドしておかなければならりません。(この作業は <code class="file docutils literal"><span class="pre">Setup</span></code> ファイルを変更するたびに必要です。)</p>
-<p>モジュールが別のライブラリとリンクされている必要がある場合、ライブラリも設定ファイルに列挙できます。例えば以下のようにします:</p>
-<div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">spam</span> <span class="n">spammodule</span><span class="p">.</span><span class="n">o</span> <span class="o">-</span><span class="n">lX11</span>
+<p>If your module requires additional libraries to link with, these can be listed
+on the line in the configuration file as well, for instance:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>spam spammodule.o -lX11
 </pre></div>
 </div>
 </div>
@@ -856,8 +862,8 @@ that it is always a tuple <a class="footnote-reference" href="#id8" id="id4">[4]
   <p class="topless"><a href="index.html"
                         title="前の章へ">Python インタプリタの拡張と埋め込み</a></p>
   <h4>次のトピックへ</h4>
-  <p class="topless"><a href="newtypes.html"
-                        title="次の章へ">2. Defining New Types</a></p>
+  <p class="topless"><a href="newtypes_tutorial.html"
+                        title="次の章へ">2. Defining Extension Types: Tutorial</a></p>
   <div role="note" aria-label="source link">
     <h3>このページ</h3>
     <ul class="this-page-menu">
@@ -883,7 +889,7 @@ that it is always a tuple <a class="footnote-reference" href="#id8" id="id4">[4]
           <a href="../py-modindex.html" title="Pythonモジュール索引"
              >モジュール</a> |</li>
         <li class="right" >
-          <a href="newtypes.html" title="2. Defining New Types"
+          <a href="newtypes_tutorial.html" title="2. Defining Extension Types: Tutorial"
              >次へ</a> |</li>
         <li class="right" >
           <a href="index.html" title="Python インタプリタの拡張と埋め込み"

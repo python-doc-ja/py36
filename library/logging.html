@@ -198,8 +198,10 @@ as integers, and methods such as e.g. <a class="reference internal" href="#loggi
 <p><em>kwargs</em> のうち、 <em>exc_info</em>, <em>stack_info</em>, <em>extra</em> という3つのキーワード引数の中身を調べます。</p>
 <p><em>exc_info</em> は、この値の評価値が false でない場合、例外情報がロギングメッセージに追加されます。もし例外情報をあらわすタプル(<a class="reference internal" href="sys.html#sys.exc_info" title="sys.exc_info"><code class="xref py py-func docutils literal"><span class="pre">sys.exc_info()</span></code></a> 関数によって戻されるフォーマットにおいて)、または、例外情報をあらわすインスタンスが与えられていれば、それが使用されることになります。それ以外の場合には、 <a class="reference internal" href="sys.html#sys.exc_info" title="sys.exc_info"><code class="xref py py-func docutils literal"><span class="pre">sys.exc_info()</span></code></a> を呼び出して例外情報を取得します。</p>
 <p>2つ目の省略可能なキーワード引数は <em>stack_info</em> で、デフォルトは <code class="docutils literal"><span class="pre">False</span></code> です。真の場合、実際のロギング呼び出しを含むスタック情報がロギングメッセージに追加されます。これは <em>exc_info</em> 指定によって表示されるスタック情報と同じものではないことに注意してください: 前者はカレントスレッド内での、一番下からロギング呼び出しまでのスタックフレームですが、後者は例外に呼応して、例外ハンドラが見つかるところまで巻き戻されたスタックフレームの情報です。</p>
-<p><em>exc_info</em> とは独立に <em>stack_info</em> を指定することもできます (例えば、例外が上げられなかった場合でも、コード中のある地点にどのように到着したかを単に示すために)。スタックフレームは、次のようなヘッダー行に続いて表示されます:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">Stack</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+<p>You can specify <em>stack_info</em> independently of <em>exc_info</em>, e.g. to just show
+how you got to a certain point in your code, even when no exceptions were
+raised. The stack frames are printed following a header line which says:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Stack (most recent call last):
 </pre></div>
 </div>
 <p>これは、例外フレームを表示する場合に使用される <code class="docutils literal"><span class="pre">Traceback</span> <span class="pre">(most</span> <span class="pre">recent</span> <span class="pre">call</span> <span class="pre">last):</span></code> を模倣します。</p>
@@ -211,8 +213,8 @@ as integers, and methods such as e.g. <a class="reference internal" href="#loggi
 <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Protocol problem: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;connection reset&#39;</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>出力はこのようになります</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="mi">2006</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">08</span> <span class="mi">22</span><span class="p">:</span><span class="mi">20</span><span class="p">:</span><span class="mi">02</span><span class="p">,</span><span class="mi">165</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">0.1</span> <span class="n">fbloggs</span>  <span class="n">Protocol</span> <span class="n">problem</span><span class="p">:</span> <span class="n">connection</span> <span class="n">reset</span>
+<p>would print something like</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>2006-02-08 22:20:02,165 192.168.0.1 fbloggs  Protocol problem: connection reset
 </pre></div>
 </div>
 <p><em>extra</em> で渡される辞書のキーはロギングシステムで使われているものと衝突しないようにしなければなりません。 (どのキーがロギングシステムで使われているかについての詳細は <a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> のドキュメントを参照してください。)</p>
@@ -763,8 +765,10 @@ such as <code class="xref py py-const docutils literal"><span class="pre">INFO</
 <dd><p>レベル <code class="xref py py-const docutils literal"><span class="pre">DEBUG</span></code> のメッセージをルートロガーで記録します。 <em>msg</em> はメッセージの書式文字列で、 <em>args</em> は <em>msg</em> に文字列書式化演算子を使って取り込むための引数です。 (これは、書式文字列の中でキーワードを使い、引数として単一の辞書を渡すことができる、ということを意味します。)</p>
 <p>キーワード引数 <em>kwargs</em> からは 2 つのキーワードが調べられます。一つ目は <em>exc_info</em> で、この値の評価値が false でない場合、例外情報をログメッセージに追加します。 (<a class="reference internal" href="sys.html#sys.exc_info" title="sys.exc_info"><code class="xref py py-func docutils literal"><span class="pre">sys.exc_info()</span></code></a> の返す形式の) 例外情報を表すタプルが与えられていれば、それをメッセージに使います。それ以外の場合には、 <a class="reference internal" href="sys.html#sys.exc_info" title="sys.exc_info"><code class="xref py py-func docutils literal"><span class="pre">sys.exc_info()</span></code></a> を呼び出して例外情報を取得します。</p>
 <p>2つ目の省略可能なキーワード引数は <em>stack_info</em> で、デフォルトは <code class="docutils literal"><span class="pre">False</span></code> です。真の場合、実際のロギング呼び出しを含むスタック情報がロギングメッセージに追加されます。これは <em>exc_info</em> 指定によって表示されるスタック情報と同じものではないことに注意してください: 前者はカレントスレッド内での、一番下からロギング呼び出しまでのスタックフレームですが、後者は例外に呼応して、例外ハンドラが見つかるところまで巻き戻されたスタックフレームの情報です。</p>
-<p><em>exc_info</em> とは独立に <em>stack_info</em> を指定することもできます (例えば、例外が上げられなかった場合でも、コード中のある地点にどのように到着したかを単に示すために)。スタックフレームは、次のようなヘッダー行に続いて表示されます:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">Stack</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+<p>You can specify <em>stack_info</em> independently of <em>exc_info</em>, e.g. to just show
+how you got to a certain point in your code, even when no exceptions were
+raised. The stack frames are printed following a header line which says:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Stack (most recent call last):
 </pre></div>
 </div>
 <p>これは、例外フレームを表示する場合に使用される <code class="docutils literal"><span class="pre">Traceback</span> <span class="pre">(most</span> <span class="pre">recent</span> <span class="pre">call</span> <span class="pre">last):</span></code> を模倣します。</p>
@@ -775,8 +779,8 @@ such as <code class="xref py py-const docutils literal"><span class="pre">INFO</
 <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Protocol problem: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;connection reset&#39;</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>これは以下のような出力を行います:</p>
-<div class="highlight-python3"><div class="highlight"><pre><span></span><span class="mi">2006</span><span class="o">-</span><span class="mi">02</span><span class="o">-</span><span class="mi">08</span> <span class="mi">22</span><span class="p">:</span><span class="mi">20</span><span class="p">:</span><span class="mi">02</span><span class="p">,</span><span class="mi">165</span> <span class="mf">192.168</span><span class="o">.</span><span class="mf">0.1</span> <span class="n">fbloggs</span>  <span class="n">Protocol</span> <span class="n">problem</span><span class="p">:</span> <span class="n">connection</span> <span class="n">reset</span>
+<p>would print something like:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>2006-02-08 22:20:02,165 192.168.0.1 fbloggs  Protocol problem: connection reset
 </pre></div>
 </div>
 <p><em>extra</em> で渡される辞書のキーはロギングシステムで使われているものと衝突しないようにしなければなりません。 (どのキーがロギングシステムで使われているかについての詳細は <a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> のドキュメントを参照してください。)</p>

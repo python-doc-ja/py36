@@ -229,14 +229,24 @@ or
 <li>ほとんどの Linux ディストリビューションには、システムの標準インストール物として Python が入っているので、 Linux では普通、 <code class="file docutils literal"><em><span class="pre">prefix</span></em></code> や <code class="file docutils literal"><em><span class="pre">exec-prefix</span></em></code> はどちらも <code class="file docutils literal"><span class="pre">/usr</span></code>  になります。 Linux (または Unixライクなシステム) 上で自分で Python  をビルドした場合、デフォルトの <code class="file docutils literal"><em><span class="pre">prefix</span></em></code> および <code class="file docutils literal"><em><span class="pre">exec-prefix</span></em></code> は <code class="file docutils literal"><span class="pre">/usr/local</span></code> になります。</li>
 <li>Windows での Python のデフォルトインストールディレクトリは、 Python 1.6a1、 1.5.2、およびそれ以前のバージョンでは <code class="file docutils literal"><span class="pre">C:\Program</span> <span class="pre">Files\Python</span></code> です。</li>
 </ol>
-<p><code class="file docutils literal"><em><span class="pre">prefix</span></em></code> および <code class="file docutils literal"><em><span class="pre">exec-prefix</span></em></code> は、 Python がインストールされているディレクトリと、実行時にライブラリを探しにいく場所を表します。これらのディレクトリは、Windows では常に同じで、 Unixと Mac OS X でもほぼ常に同じです。自分の Python がどんな <code class="file docutils literal"><em><span class="pre">prefix</span></em></code> や <code class="file docutils literal"><em><span class="pre">exec-prefix</span></em></code> を使っているかは、Python を対話モードで起動して、単純なコマンドをいくつか入力すればわかります。 Windows では、 <span class="menuselection">スタート ‣ (すべての) プログラム ‣  Python X.Y ‣ Python (command line)</span> を選びます。Unix では、シェルプロンプトで単に <code class="docutils literal"><span class="pre">python</span></code> と入力します。インタプリタを起動すると、プロンプトに Python コードを入力できます。例えば、著者の使っている Linux システムで、三つの Python 文を以下のように入力すると、出力から著者のシステムの <code class="file docutils literal"><em><span class="pre">prefix</span></em></code> と <code class="file docutils literal"><em><span class="pre">exec-prefix</span></em></code> を得られます:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>Python 2.4 (#26, Aug  7 2004, 17:19:02)
-Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
-&gt;&gt;&gt; import sys
-&gt;&gt;&gt; sys.prefix
-&#39;/usr&#39;
-&gt;&gt;&gt; sys.exec_prefix
-&#39;/usr&#39;
+<p><code class="file docutils literal"><em><span class="pre">prefix</span></em></code> and <code class="file docutils literal"><em><span class="pre">exec-prefix</span></em></code> stand for the directories that Python
+is installed to, and where it finds its libraries at run-time.  They are always
+the same under Windows, and very often the same under Unix and Mac OS X.  You
+can find out what your Python installation uses for <code class="file docutils literal"><em><span class="pre">prefix</span></em></code> and
+<code class="file docutils literal"><em><span class="pre">exec-prefix</span></em></code> by running Python in interactive mode and typing a few
+simple commands. Under Unix, just type <code class="docutils literal"><span class="pre">python</span></code> at the shell prompt.  Under
+Windows, choose <span class="menuselection">Start ‣ Programs ‣ Python X.Y ‣
+Python (command line)</span>.   Once the interpreter is started, you type Python code
+at the prompt.  For example, on my Linux system, I type the three Python
+statements shown below, and get the output as shown, to find out my
+<code class="file docutils literal"><em><span class="pre">prefix</span></em></code> and <code class="file docutils literal"><em><span class="pre">exec-prefix</span></em></code>:</p>
+<div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="go">Python 2.4 (#26, Aug  7 2004, 17:19:02)</span>
+<span class="go">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span>
+<span class="go">&#39;/usr&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">exec_prefix</span>
+<span class="go">&#39;/usr&#39;</span>
 </pre></div>
 </div>
 <p>このドキュメントではほかにちょっとだけプレースホルダを使います:  <code class="file docutils literal"><em><span class="pre">X.Y</span></em></code> は Python のバージョンを表し、例えば <code class="docutils literal"><span class="pre">3.2</span></code> です; <code class="file docutils literal"><em><span class="pre">abiflags</span></em></code> は <a class="reference internal" href="../library/sys.html#sys.abiflags" title="sys.abiflags"><code class="xref py py-data docutils literal"><span class="pre">sys.abiflags</span></code></a> の値に置き換えられるか、プラットフォームが ABI フラグを定義しない場合、空文字列に置き換えられます; <code class="file docutils literal"><em><span class="pre">distname</span></em></code> はインストールしようとしているモジュール配布物の名前に置き換えられます。ドットとキャピタライズはパス内で重要です; 例えば UNIX では <code class="docutils literal"><span class="pre">python3.2</span></code> が使われる値が、Windows では普通 <code class="docutils literal"><span class="pre">Python32</span></code> を使います。</p>
@@ -502,22 +512,24 @@ Unix では、面倒臭がりの人は単にチルダ (<code class="docutils lit
 </pre></div>
 </div>
 <p><code class="docutils literal"><span class="pre">$PLAT</span></code> は、(必ずしも) 環境変数ではありません — この表記は、Distutils がコマンドラインオプションの解釈と同じやり方で展開します。設定ファイルを解釈する際と同じです。</p>
-<p>言うまでもないことですが、毎回新たなモジュール配布物をインストールする度にインストールスキーム全体の指定を行っていては面倒です。そこで、オプションは Distutils 設定ファイル (<a class="reference internal" href="#inst-config-files"><span class="std std-ref">Distutils 設定ファイル</span></a> 参照) にも指定できます:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[install]
-install-base=$HOME
-install-purelib=python/lib
-install-platlib=python/lib.$PLAT
-install-scripts=python/scripts
-install-data=python/data
+<p>Obviously, specifying the entire installation scheme every time you install a
+new module distribution would be very tedious.  Thus, you can put these options
+into your Distutils config file (see section <a class="reference internal" href="#inst-config-files"><span class="std std-ref">Distutils 設定ファイル</span></a>):</p>
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[install]</span>
+<span class="na">install-base</span><span class="o">=</span><span class="s">$HOME</span>
+<span class="na">install-purelib</span><span class="o">=</span><span class="s">python/lib</span>
+<span class="na">install-platlib</span><span class="o">=</span><span class="s">python/lib.$PLAT</span>
+<span class="na">install-scripts</span><span class="o">=</span><span class="s">python/scripts</span>
+<span class="na">install-data</span><span class="o">=</span><span class="s">python/data</span>
 </pre></div>
 </div>
-<p>また、以下のようにも指定できます、</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[install]
-install-base=$HOME/python
-install-purelib=lib
-install-platlib=lib.$PLAT
-install-scripts=scripts
-install-data=data
+<p>or, equivalently,</p>
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[install]</span>
+<span class="na">install-base</span><span class="o">=</span><span class="s">$HOME/python</span>
+<span class="na">install-purelib</span><span class="o">=</span><span class="s">lib</span>
+<span class="na">install-platlib</span><span class="o">=</span><span class="s">lib.$PLAT</span>
+<span class="na">install-scripts</span><span class="o">=</span><span class="s">scripts</span>
+<span class="na">install-data</span><span class="o">=</span><span class="s">data</span>
 </pre></div>
 </div>
 <p>これら二つは、setup スクリプトを異なるインストールベースディレクトリから実行した場合には同じには <em>ならない</em> ので注意してください。例えば、</p>
@@ -549,9 +561,13 @@ Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;licen
 <p>ローカルでインストールされるパッケージは、 <code class="file docutils literal"><em><span class="pre">…</span></em><span class="pre">/site-packages/</span></code> ディレクトリに入るのが決まりですが、ユーザはどこか任意のディレクトリに Python モジュールをインストールしたいと思うかもしれません。例えば、自分のサイトでは、 web サーバに関連する全てのソフトウェアを <code class="file docutils literal"><span class="pre">/www</span></code> に置くという決まりがあるかもしれません。そこで、アドオンの Python モジュールが <code class="file docutils literal"><span class="pre">/www/python</span></code> 置かれることになると、モジュールを import するためにはディレクトリを <code class="docutils literal"><span class="pre">sys.path</span></code> に追加せねばなりません。ディレクトリを検索パスに追加するには、いくつかの異なる方法が存在します。</p>
 <p>最も手軽な方法は、パス設定ファイルをすでに Python の検索パスに含まれるディレクトリ、通常は <code class="file docutils literal"><span class="pre">.../site-packages/</span></code> ディレクトリに置くというものです。パス設定ファイルは拡張子が <code class="file docutils literal"><span class="pre">.pth</span></code> で、ファイルには <code class="docutils literal"><span class="pre">sys.path</span></code> に追加するパスを一行に一つづつ記述しなければなりません。 (新たなパスは今の <code class="docutils literal"><span class="pre">sys.path</span></code> の後ろに追加されるので、追加されたディレクトリ内にあるモジュールが標準のモジュールセットを上書きすることはありません。つまり、このメカニズムを使って、標準モジュールに対する修正版のインストールはできないということです。)</p>
 <p>パスは絶対パスでも相対パスでもよく、相対パスの場合には <code class="file docutils literal"><span class="pre">.pth</span></code> ファイルのあるパスからの相対になります。詳しくは <a class="reference internal" href="../library/site.html#module-site" title="site: Module responsible for site-specific configuration."><code class="xref py py-mod docutils literal"><span class="pre">site</span></code></a> モジュールを参照してください。</p>
-<p>やや便利さには欠けますが、Python の標準ライブラリ中にある  <code class="file docutils literal"><span class="pre">site.py</span></code> ファイルを編集することでも、 <code class="docutils literal"><span class="pre">sys.path</span></code> を変更できます。 <code class="file docutils literal"><span class="pre">site.py</span></code> は、 <a class="reference internal" href="../using/cmdline.html#id3"><code class="xref std std-option docutils literal"><span class="pre">-S</span></code></a> スイッチを与えて抑制しないかぎり、Python インタプリタが実行される際に自動的に import  されます。ただし、設定するには、単に <code class="file docutils literal"><span class="pre">site.py</span></code> を編集して、例えば以下のような二行を加えます:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>import sys
-sys.path.append(&#39;/www/python/&#39;)
+<p>A slightly less convenient way is to edit the <code class="file docutils literal"><span class="pre">site.py</span></code> file in Python’s
+standard library, and modify <code class="docutils literal"><span class="pre">sys.path</span></code>.  <code class="file docutils literal"><span class="pre">site.py</span></code> is automatically
+imported when the Python interpreter is executed, unless the <a class="reference internal" href="../using/cmdline.html#id3"><code class="xref std std-option docutils literal"><span class="pre">-S</span></code></a> switch
+is supplied to suppress this behaviour.  So you could simply edit
+<code class="file docutils literal"><span class="pre">site.py</span></code> and add two lines to it:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;/www/python/&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>しかしながら、(例えば 2.2 から 2.2.2 にアップグレードするときのように) 同じメジャーバージョンの Python を再インストールすると、 <code class="file docutils literal"><span class="pre">site.py</span></code> は手持ちのバージョンで上書きされてしまいます。ファイルが変更されていることを覚えておき、インストールを行う前にコピーを忘れずとっておかねばなりません。</p>
@@ -634,16 +650,19 @@ sys.path.append(&#39;/www/python/&#39;)
 <div class="section" id="syntax-of-config-files">
 <span id="inst-config-syntax"></span><h3>設定ファイルの構文<a class="headerlink" href="#syntax-of-config-files" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Distutils 設定ファイルは、全て同じ構文をしています。設定ファイルはセクションでグループ分けされています。各 Distutils コマンドごとにセクションがあり、それに加えて全てのコマンドに影響するグローバルオプションを設定するための <code class="docutils literal"><span class="pre">global</span></code> セクションがあります。各セクションには <code class="docutils literal"><span class="pre">option=value</span></code> の形で、一行あたり一つのオプションを指定します。</p>
-<p>例えば、以下は全てのコマンドに対してデフォルトでメッセージを出さないよう強制するための完全な設定ファイルです:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[global]
-verbose=0
+<p>For example, the following is a complete config file that just forces all
+commands to run quietly by default:</p>
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[global]</span>
+<span class="na">verbose</span><span class="o">=</span><span class="s">0</span>
 </pre></div>
 </div>
 <p>この内容のファイルがシステム全体用の設定ファイルとしてインストールされていれば、そのシステムの全てのユーザによる全ての Python モジュール配布物に対する処理に影響します。ファイルが (個人用の設定をサポートしているシステムで) 個人用の設定ファイルとしてインストールされていれば、そのユーザが処理するモジュール配布物にのみ影響します。この内容を特定のモジュール配布物の <code class="file docutils literal"><span class="pre">setup.cfg</span></code> として使えば、その配布物だけに影響します。</p>
-<p>以下のようにして、デフォルトの &quot;ビルドベース&quot; ディレクトリをオーバライドしたり、 <strong class="command">build*</strong> コマンドが常に強制的にリビルドを行うようにもできます:</p>
-<div class="highlight-none"><div class="highlight"><pre><span></span>[build]
-build-base=blib
-force=1
+<p>You could override the default &quot;build base&quot; directory and make the
+<strong class="command">build*</strong> commands always forcibly rebuild all files with the
+following:</p>
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[build]</span>
+<span class="na">build-base</span><span class="o">=</span><span class="s">blib</span>
+<span class="na">force</span><span class="o">=</span><span class="s">1</span>
 </pre></div>
 </div>
 <p>この設定は、コマンドライン引数の</p>

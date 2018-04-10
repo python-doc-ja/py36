@@ -327,13 +327,14 @@ probe process(&quot;python&quot;).mark(&quot;function__return&quot;) {
 </ul>
 </div></blockquote>
 <p>そして、残りの部分はスクリプトが実行していた呼び出し/返却階層を表示しています。</p>
-<p><cite>–enable-shared</cite> を付けてビルドした CPython ではマーカーは共有ライブラリ libpython に含まれていて、プローブを付けるパスはそれを反映する必要があります。
-例えば、上の例のこの行は:</p>
-<div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="go">probe process(&quot;python&quot;).mark(&quot;function__entry&quot;) {</span>
+<p>For a <cite>–enable-shared</cite> build of CPython, the markers are contained within the
+libpython shared library, and the probe’s dotted path needs to reflect this. For
+example, this line from the above example:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>probe process(&quot;python&quot;).mark(&quot;function__entry&quot;) {
 </pre></div>
 </div>
-<p>次のように読み替える必要があります:</p>
-<div class="highlight-shell-session"><div class="highlight"><pre><span></span><span class="go">probe process(&quot;python&quot;).library(&quot;libpython3.6dm.so.1.0&quot;).mark(&quot;function__entry&quot;) {</span>
+<p>should instead read:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>probe process(&quot;python&quot;).library(&quot;libpython3.6dm.so.1.0&quot;).mark(&quot;function__entry&quot;) {
 </pre></div>
 </div>
 <p>(CPython 3.6 のデバッグビルドと仮定しています)</p>
