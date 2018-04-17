@@ -101,12 +101,12 @@
             
   <div class="section" id="extending-distutils">
 <span id="id1"></span><h1>8. Distutilsの拡張<a class="headerlink" href="#extending-distutils" title="このヘッドラインへのパーマリンク">¶</a></h1>
-<p>Distutilsは様々な方法で拡張できます。ほとんどの拡張は存在するコマンドを新しいコマンドで置換する形でおこなわれます。新しいコマンドはたとえば存在するコマンドを置換して、そのコマンドでパッケージをどう処理するかの細部を変更することでプラットフォーム特有のパッケージ形式をサポートするために書かれているかもしれません。</p>
-<p>ほとんどのdistutilsの拡張は存在するコマンドを変更したい <code class="file docutils literal"><span class="pre">setup.py</span></code> スクリプト中で行われます。ほとんどはパッケージにコピーされるファイル拡張子を <code class="file docutils literal"><span class="pre">.py</span></code> の他に、いくつか追加するものです。</p>
+<p>Distutilsは様々な方法で拡張できます。ほとんどの拡張は新規のコマンドという形をとるか、既存のコマンドを置換します。例えば、新しいコマンドはプラットフォーム特有の新しいパッケージ形式をサポートするために書かれているかもしませんし、既存のコマンドを置換するものは既存コマンドでのパッケージ処理の詳細を変更するでしょう。</p>
+<p>ほとんどのdistutilsの拡張は、既存コマンドの動作を修正したい <code class="file docutils literal"><span class="pre">setup.py</span></code> スクリプト中で行われます。その多くは、パッケージ中にコピーすべきファイルとして、 <code class="file docutils literal"><span class="pre">.py</span></code> ファイル以外のいくつかのファイル拡張子を単に追加するものです。</p>
 <p>ほとんどのdistutilsのコマンド実装は <a class="reference internal" href="apiref.html#module-distutils.cmd" title="distutils.cmd: This module provides the abstract base class Command. This class is subclassed by the modules in the distutils.command subpackage."><code class="xref py py-mod docutils literal"><span class="pre">distutils.cmd</span></code></a> の <a class="reference internal" href="apiref.html#distutils.cmd.Command" title="distutils.cmd.Command"><code class="xref py py-class docutils literal"><span class="pre">distutils.cmd.Command</span></code></a> クラスのサブクラスとして実装されています。新しいコマンドは <code class="xref py py-class docutils literal"><span class="pre">Command</span></code> を直接継承し、置換するコマンドでは置換対象のコマンドのサブクラスにすることで <code class="xref py py-class docutils literal"><span class="pre">Command</span></code> を間接的に継承します。コマンドは <code class="xref py py-class docutils literal"><span class="pre">Command</span></code> から派生したものである必要があります。</p>
 <div class="section" id="integrating-new-commands">
 <h2>8.1. 新しいコマンドの統合<a class="headerlink" href="#integrating-new-commands" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>新しいコマンド実装を統合するにはいくつかの方法があります。一番難しいものは新機能をdistutils本体に取り込み、それのサポートを提供するPythonのバージョンが出ることを待つ(そして使う)ことです。これは様々な理由で本当に難しいことです。</p>
+<p>新しいコマンド実装をdistutilsに統合するにはいくつかの方法があります。一番難しい方法は新機能をdistutils本体に取り込むように働きかけ、そのサポートを提供するPythonのバージョンが出ることを待つ(そして要求する)ことです。これは様々な理由で本当に難しいことです。</p>
 <p>もっとも一般的な、そしておそらくほとんどの場合にもっとも妥当な方法は、新しい実装をあなたの <code class="file docutils literal"><span class="pre">setup.py</span></code> スクリプトに取り込み、 <a class="reference internal" href="apiref.html#distutils.core.setup" title="distutils.core.setup"><code class="xref py py-func docutils literal"><span class="pre">distutils.core.setup()</span></code></a> 関数でそれらを使うようにすることです:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distutils.command.build_py</span> <span class="k">import</span> <span class="n">build_py</span> <span class="k">as</span> <span class="n">_build_py</span>
 <span class="kn">from</span> <span class="nn">distutils.core</span> <span class="k">import</span> <span class="n">setup</span>
@@ -226,7 +226,7 @@ file provided with a package.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 4月 17, 2018
+    最終更新日時: 4月 18, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
