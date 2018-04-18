@@ -111,17 +111,13 @@
 <a class="reference internal" href="../c-api/structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject</span></code></a> 構造体自身は参照カウント (<a class="reference internal" href="../glossary.html#term-reference-count"><span class="xref std std-term">reference count</span></a>) と、オブジェクトの &quot;型オブジェクト (type object)&quot; へのポインタのみを持ちます。
 ここには動作が定義されています; 型オブジェクトは、例えば、ある属性があるオブジェクトから検索されたり、メソッドが呼ばれたり、他のオブジェクトによって操作されたりしたときに、どの (C) 関数がインタプリタから呼ばれるのかを決定します。
 これらの C 関数は &quot;タイプメソッド (type method)&quot; と呼ばれます。</p>
-<p>So, if you want to define a new extension type, you need to create a new type
-object.</p>
-<p>This sort of thing can only be explained by example, so here’s a minimal, but
-complete, module that defines a new type named <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> inside a C
-extension module <code class="xref py py-mod docutils literal"><span class="pre">custom</span></code>:</p>
+<p>それなので、新しい拡張の型を定義したいときは、新しい型オブジェクトを作成すればよいわけです。</p>
+<p>この手のことは例を見たほうが早いでしょうから、以下に C 拡張モジュール <code class="xref py py-mod docutils literal"><span class="pre">custom</span></code>: にある <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> という名前の新しい型を定義する、最小限ながら完全なモジュールをあげておきます:</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last">What we’re showing here is the traditional way of defining <em>static</em>
-extension types.  It should be adequate for most uses.  The C API also
-allows defining heap-allocated extension types using the
-<a class="reference internal" href="../c-api/type.html#c.PyType_FromSpec" title="PyType_FromSpec"><code class="xref c c-func docutils literal"><span class="pre">PyType_FromSpec()</span></code></a> function, which isn’t covered in this tutorial.</p>
+<p class="last">ここで紹介している例は、 <em>静的な</em> 拡張の型を定義する伝統的な実装方法です。
+これはほとんどの場面で十分なものなのです。
+C API では、 <a class="reference internal" href="../c-api/type.html#c.PyType_FromSpec" title="PyType_FromSpec"><code class="xref c c-func docutils literal"><span class="pre">PyType_FromSpec()</span></code></a> 関数を使い、ヒープ上に配置された拡張の型も定義できますが、これについてはこのチュートリアルでは扱いません。</p>
 </div>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;Python.h&gt;</span><span class="cp"></span>
 
@@ -164,44 +160,34 @@ allows defining heap-allocated extension types using the
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Now that’s quite a bit to take in at once, but hopefully bits will seem familiar
-from the previous chapter.  This file defines three things:</p>
+<p>一度に把握するにはちょっと量が多いですが、前の章よりはとっつきやすくなっていることと重います。このファイルでは、3つの要素が定義されています:</p>
 <ol class="arabic simple">
-<li>What a <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> <strong>object</strong> contains: this is the <code class="docutils literal"><span class="pre">CustomObject</span></code>
-struct, which is allocated once for each <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> instance.</li>
-<li>How the <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> <strong>type</strong> behaves: this is the <code class="docutils literal"><span class="pre">CustomType</span></code> struct,
-which defines a set of flags and function pointers that the interpreter
-inspects when specific operations are requested.</li>
-<li>How to initialize the <code class="xref py py-mod docutils literal"><span class="pre">custom</span></code> module: this is the <code class="docutils literal"><span class="pre">PyInit_custom</span></code>
-function and the associated <code class="docutils literal"><span class="pre">custommodule</span></code> struct.</li>
+<li><code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> <strong>オブジェクト</strong> が何を含んでいるか: これが <code class="docutils literal"><span class="pre">CustomObject</span></code> 構造体で、 <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> インスタンスごとに1回だけメモリ確保が行われます。</li>
+<li><code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> <strong>型</strong> がどのように振る舞うか: これが <code class="docutils literal"><span class="pre">CustomType</span></code> 構造体で、フラグと関数ポインタの集まりを定義しています。特定の操作が要求されたときに、この関数ポインタをインタプリタが見に行きます。</li>
+<li><code class="xref py py-mod docutils literal"><span class="pre">custom</span></code> モジュールをどう初期化するか: これが <code class="docutils literal"><span class="pre">PyInit_custom</span></code> 関数とそれに関係する <code class="docutils literal"><span class="pre">custommodule</span></code> 構造体です。</li>
 </ol>
-<p>The first bit is:</p>
+<p>まず最初はこれです:</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
     <span class="n">PyObject_HEAD</span>
 <span class="p">}</span> <span class="n">CustomObject</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>This is what a Custom object will contain.  <code class="docutils literal"><span class="pre">PyObject_HEAD</span></code> is mandatory
-at the start of each object struct and defines a field called <code class="docutils literal"><span class="pre">ob_base</span></code>
-of type <a class="reference internal" href="../c-api/structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject</span></code></a>, containing a pointer to a type object and a
-reference count (these can be accessed using the macros <a class="reference internal" href="../c-api/structures.html#c.Py_REFCNT" title="Py_REFCNT"><code class="xref c c-macro docutils literal"><span class="pre">Py_REFCNT</span></code></a>
-and <a class="reference internal" href="../c-api/structures.html#c.Py_TYPE" title="Py_TYPE"><code class="xref c c-macro docutils literal"><span class="pre">Py_TYPE</span></code></a> respectively).  The reason for the macro is to
-abstract away the layout and to enable additional fields in debug builds.</p>
+<p>これが Custom オブジェクトの内容です。
+<code class="docutils literal"><span class="pre">PyObject_HEAD</span></code> はそれぞれのオブジェクト構造体の先頭に必須なもので、 <a class="reference internal" href="../c-api/structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject</span></code></a> 型の <code class="docutils literal"><span class="pre">ob_base</span></code> という名前のフィールドを定義します。 <a class="reference internal" href="../c-api/structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal"><span class="pre">PyObject</span></code></a> 型には (それぞれ <a class="reference internal" href="../c-api/structures.html#c.Py_REFCNT" title="Py_REFCNT"><code class="xref c c-macro docutils literal"><span class="pre">Py_REFCNT</span></code></a> マクロおよび <a class="reference internal" href="../c-api/structures.html#c.Py_TYPE" title="Py_TYPE"><code class="xref c c-macro docutils literal"><span class="pre">Py_TYPE</span></code></a> マクロからアクセスできる) 型オブジェクトへのポインタと参照カウントが格納されています。
+このマクロが用意されている理由は、構造体のレイアウトを抽象化し、デバッグビルドでフィールドを追加できるようにするためです。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last">There is no semicolon above after the <a class="reference internal" href="../c-api/structures.html#c.PyObject_HEAD" title="PyObject_HEAD"><code class="xref c c-macro docutils literal"><span class="pre">PyObject_HEAD</span></code></a> macro.
-Be wary of adding one by accident: some compilers will complain.</p>
+<p class="last">上の例では <a class="reference internal" href="../c-api/structures.html#c.PyObject_HEAD" title="PyObject_HEAD"><code class="xref c c-macro docutils literal"><span class="pre">PyObject_HEAD</span></code></a> マクロの後にセミコロンはありません。
+うっかりセミコロンを追加しないように気を付けてください: これを警告するコンパイラもあります。</p>
 </div>
-<p>Of course, objects generally store additional data besides the standard
-<code class="docutils literal"><span class="pre">PyObject_HEAD</span></code> boilerplate; for example, here is the definition for
-standard Python floats:</p>
+<p>もちろん、一般的にはオブジェクトは標準的な <code class="docutils literal"><span class="pre">PyObject_HEAD</span></code> ボイラープレートの他にもデータを保持しています; 例えば、これは Python 標準の浮動小数点数の定義です:</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
     <span class="n">PyObject_HEAD</span>
     <span class="kt">double</span> <span class="n">ob_fval</span><span class="p">;</span>
 <span class="p">}</span> <span class="n">PyFloatObject</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>The second bit is the definition of the type object.</p>
+<p>2つ目は方オブジェクトの定義です。</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">static</span> <span class="n">PyTypeObject</span> <span class="n">CustomType</span> <span class="o">=</span> <span class="p">{</span>
     <span class="n">PyVarObject_HEAD_INIT</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="p">.</span><span class="n">tp_name</span> <span class="o">=</span> <span class="s">&quot;custom.Custom&quot;</span><span class="p">,</span>
@@ -997,28 +983,18 @@ above.  In this case, we aren’t using a closure, so we just pass <em>NULL</em>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>With these changes, we can assure that the <code class="docutils literal"><span class="pre">first</span></code> and <code class="docutils literal"><span class="pre">last</span></code> members are
-never <em>NULL</em> so we can remove checks for <em>NULL</em> values in almost all cases.
-This means that most of the <a class="reference internal" href="../c-api/refcounting.html#c.Py_XDECREF" title="Py_XDECREF"><code class="xref c c-func docutils literal"><span class="pre">Py_XDECREF()</span></code></a> calls can be converted to
-<a class="reference internal" href="../c-api/refcounting.html#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal"><span class="pre">Py_DECREF()</span></code></a> calls.  The only place we can’t change these calls is in
-the <code class="docutils literal"><span class="pre">tp_dealloc</span></code> implementation, where there is the possibility that the
-initialization of these members failed in <code class="docutils literal"><span class="pre">tp_new</span></code>.</p>
+<p>これらの変更によって、<code class="docutils literal"><span class="pre">first</span></code> メンバと <code class="docutils literal"><span class="pre">last</span></code> メンバが決して <em>NULL</em> にならないと保証できました。これでほとんどすべてのケースから <em>NULL</em> 値のチェックを除けます。これは多くの <a class="reference internal" href="../c-api/refcounting.html#c.Py_XDECREF" title="Py_XDECREF"><code class="xref c c-func docutils literal"><span class="pre">Py_XDECREF()</span></code></a> 呼び出しを <a class="reference internal" href="../c-api/refcounting.html#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal"><span class="pre">Py_DECREF()</span></code></a> 呼び出しに変えられることを意味します。唯一これを変えられないのは <code class="docutils literal"><span class="pre">tp_dealloc</span></code> の実装中で、なぜならそこでは <code class="docutils literal"><span class="pre">tp_new</span></code> でのメンバ初期化が失敗している可能性があるからです。</p>
 <p>さて、先ほどもしたように、このモジュール初期化関数と初期化関数内にあるモジュール名を変更しましょう。そして <code class="file docutils literal"><span class="pre">setup.py</span></code> ファイルに追加の定義をくわえます。</p>
 </div>
 <div class="section" id="supporting-cyclic-garbage-collection">
 <h2>2.4. 循環ガベージコレクションをサポートする<a class="headerlink" href="#supporting-cyclic-garbage-collection" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>Python has a <a class="reference internal" href="../glossary.html#term-garbage-collection"><span class="xref std std-term">cyclic garbage collector (GC)</span></a> that
-can identify unneeded objects even when their reference counts are not zero.
-This can happen when objects are involved in cycles.  For example, consider:</p>
+<p>Python は:term:<a href="#id1"><span class="problematic" id="id2">`</span></a>循環ガベージコレクタ(GC)機能&lt;garbage collection&gt; <a href="#id3"><span class="problematic" id="id4">`</span></a>をもっており、これは不要なオブジェクトを、たとえ参照カウントがゼロでなくても発見することができます。そのような状況はオブジェクトの参照が循環しているときに起こりえます。たとえば以下の例を考えてください:</p>
 <div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">del</span> <span class="n">l</span>
 </pre></div>
 </div>
-<p>In this example, we create a list that contains itself. When we delete it, it
-still has a reference from itself. Its reference count doesn’t drop to zero.
-Fortunately, Python’s cyclic garbage collector will eventually figure out that
-the list is garbage and free it.</p>
+<p>この例では、自分自身をふくむリストを作りました。たとえこのリストを 削除しても、それは自分自身への参照をまだ持ちつづけますから、参照カウントはゼロにはなりません。嬉しいことに Python には循環ガベージコレクタは最終的にはこのリストが不要であることを検出し、解放できます。</p>
 <p>In the second version of the <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> example, we allowed any kind of
 object to be stored in the <code class="xref py py-attr docutils literal"><span class="pre">first</span></code> or <code class="xref py py-attr docutils literal"><span class="pre">last</span></code> attributes <a class="footnote-reference" href="#id8" id="id4">[4]</a>.
 Besides, in the second and third versions, we allowed subclassing
@@ -1320,20 +1296,12 @@ and <code class="docutils literal"><span class="pre">Custom_clear</span></code>:
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">tp_flags</span> <span class="o">=</span> <span class="n">Py_TPFLAGS_DEFAULT</span> <span class="o">|</span> <span class="n">Py_TPFLAGS_BASETYPE</span> <span class="o">|</span> <span class="n">Py_TPFLAGS_HAVE_GC</span><span class="p">,</span>
 </pre></div>
 </div>
-<p>That’s pretty much it.  If we had written custom <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_alloc" title="PyTypeObject.tp_alloc"><code class="xref c c-member docutils literal"><span class="pre">tp_alloc</span></code></a> or
-<a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_free" title="PyTypeObject.tp_free"><code class="xref c c-member docutils literal"><span class="pre">tp_free</span></code></a> handlers, we’d need to modify them for cyclic
-garbage collection.  Most extensions will use the versions automatically provided.</p>
+<p>これで完了です。 <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_alloc" title="PyTypeObject.tp_alloc"><code class="xref c c-member docutils literal"><span class="pre">tp_alloc</span></code></a> スロットまたは <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_free" title="PyTypeObject.tp_free"><code class="xref c c-member docutils literal"><span class="pre">tp_free</span></code></a> ハンドラが書かれていれば、それらを循環ガベージコレクションに使えるよう修正すればよいのです。ほとんどの拡張機能は自動的に提供されるバージョンを使うでしょう。</p>
 </div>
 <div class="section" id="subclassing-other-types">
 <h2>2.5. 他の型のサブクラスを作る<a class="headerlink" href="#subclassing-other-types" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p>It is possible to create new extension types that are derived from existing
-types. It is easiest to inherit from the built in types, since an extension can
-easily use the <a class="reference internal" href="../c-api/type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></code></a> it needs. It can be difficult to share
-these <a class="reference internal" href="../c-api/type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></code></a> structures between extension modules.</p>
-<p>In this example we will create a <code class="xref py py-class docutils literal"><span class="pre">SubList</span></code> type that inherits from the
-built-in <a class="reference internal" href="../library/stdtypes.html#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> type. The new type will be completely compatible with
-regular lists, but will have an additional <code class="xref py py-meth docutils literal"><span class="pre">increment()</span></code> method that
-increases an internal counter:</p>
+<p>既存の型を継承した新しい拡張型を作成することができます。組み込み型から継承するのは特に簡単です。必要な <a class="reference internal" href="../c-api/type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></code></a> を簡単に利用できるからです。それに比べて、 <a class="reference internal" href="../c-api/type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></code></a> 構造体を拡張モジュール間で共有するのは難しいです。</p>
+<p>次の例では、ビルトインの <a class="reference internal" href="../library/stdtypes.html#list" title="list"><code class="xref py py-class docutils literal"><span class="pre">list</span></code></a> 型を継承した <code class="xref py py-class docutils literal"><span class="pre">SubList</span></code> 型を作成しています。新しい型は通常のリスト型と完全に互換性がありますが、追加で内部のカウンタを増やす <code class="xref py py-meth docutils literal"><span class="pre">increment()</span></code> メソッドを持っています:</p>
 <div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sublist</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">sublist</span><span class="o">.</span><span class="n">SubList</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
@@ -1410,8 +1378,7 @@ increases an internal counter:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>As you can see, the source code closely resembles the <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> examples in
-previous sections. We will break down the main differences between them.</p>
+<p>見てわかるように、ソースコードは前の節の <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> の時と非常に似ています。違う部分をそれぞれを見ていきます。</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
     <span class="n">PyListObject</span> <span class="n">list</span><span class="p">;</span>
     <span class="kt">int</span> <span class="n">state</span><span class="p">;</span>
@@ -1463,13 +1430,8 @@ function:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Before calling <a class="reference internal" href="../c-api/type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a>, the type structure must have the
-<a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_base" title="PyTypeObject.tp_base"><code class="xref c c-member docutils literal"><span class="pre">tp_base</span></code></a> slot filled in.  When we are deriving an
-existing type, it is not necessary to fill out the <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_alloc" title="PyTypeObject.tp_alloc"><code class="xref c c-member docutils literal"><span class="pre">tp_alloc</span></code></a>
-slot with <a class="reference internal" href="../c-api/type.html#c.PyType_GenericNew" title="PyType_GenericNew"><code class="xref c c-func docutils literal"><span class="pre">PyType_GenericNew()</span></code></a> – the allocation function from the base
-type will be inherited.</p>
-<p>After that, calling <a class="reference internal" href="../c-api/type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> and adding the type object to the
-module is the same as with the basic <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> examples.</p>
+<p><code class="xref c c-func docutils literal"><span class="pre">PyType_Read()</span></code> を呼ぶ前に、型の構造体の <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_base" title="PyTypeObject.tp_base"><code class="xref c c-member docutils literal"><span class="pre">tp_base</span></code></a> スロットは埋められていなければなりません。既存の型を継承する際には、 <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_alloc" title="PyTypeObject.tp_alloc"><code class="xref c c-member docutils literal"><span class="pre">tp_alloc</span></code></a> スロットを <a class="reference internal" href="../c-api/type.html#c.PyType_GenericNew" title="PyType_GenericNew"><code class="xref c c-func docutils literal"><span class="pre">PyType_GenericNew()</span></code></a> で埋める必要はありません。 – 基底型のアロケーション関数が継承されます。</p>
+<p>この後は、 <a class="reference internal" href="../c-api/type.html#c.PyType_Ready" title="PyType_Ready"><code class="xref c c-func docutils literal"><span class="pre">PyType_Ready()</span></code></a> 関数を呼び、タイプオブジェクトをモジュールへ追加するのは、基本的な <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> の例と同じです。</p>
 <p class="rubric">脚注</p>
 <table class="docutils footnote" frame="void" id="id5" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
