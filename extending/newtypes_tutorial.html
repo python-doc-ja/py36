@@ -200,25 +200,20 @@ C API では、 <a class="reference internal" href="../c-api/type.html#c.PyType_
 </div>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last">We recommend using C99-style designated initializers as above, to
-avoid listing all the <a class="reference internal" href="../c-api/type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></code></a> fields that you don’t care
-about and also to avoid caring about the fields' declaration order.</p>
+<p class="last">上にあるように C99 スタイルの指示付き初期化子を使って、 <a class="reference internal" href="../c-api/type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></code></a> の特に関心の無いフィールドまで全て並べたり、フィールドを宣言する順序に気を使ったりせずに済ませるのをお薦めします。</p>
 </div>
-<p>The actual definition of <a class="reference internal" href="../c-api/type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></code></a> in <code class="file docutils literal"><span class="pre">object.h</span></code> has
-many more <a class="reference internal" href="../c-api/typeobj.html#type-structs"><span class="std std-ref">fields</span></a> than the definition above.  The
-remaining fields will be filled with zeros by the C compiler, and it’s
-common practice to not specify them explicitly unless you need them.</p>
-<p>We’re going to pick it apart, one field at a time:</p>
+<p><code class="file docutils literal"><span class="pre">object.h</span></code> にある実際の <a class="reference internal" href="../c-api/type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal"><span class="pre">PyTypeObject</span></code></a> の定義には上の定義にあるよりももっと多くの <a class="reference internal" href="../c-api/typeobj.html#type-structs"><span class="std std-ref">フィールド</span></a> があります。
+ここに出てきていないフィールドは C コンパイラによってゼロで埋められるので、必要でない限り明示的には値の指定をしないのが一般的な作法になっています。</p>
+<p>一度に1つずつフィールドを取り上げていきましょう:</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">PyVarObject_HEAD_INIT</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This line is mandatory boilerplate to initialize the <code class="docutils literal"><span class="pre">ob_base</span></code>
-field mentioned above.</p>
+<p>この行は、上で触れた <code class="docutils literal"><span class="pre">ob_base</span></code> フィールドの初期化に必須のボイラープレートです。</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">tp_name</span> <span class="o">=</span> <span class="s">&quot;custom.Custom&quot;</span><span class="p">,</span>
 </pre></div>
 </div>
-<p>The name of our type.  This will appear in the default textual representation of
-our objects and in some error messages, for example:</p>
+<p>実装している型の名前です。
+これは、オブジェクトのデフォルトの文字列表現やエラーメッセージに現れます。例えば次の通りです:</p>
 <div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;&quot;</span> <span class="o">+</span> <span class="n">custom</span><span class="o">.</span><span class="n">Custom</span><span class="p">()</span>
 <span class="gt">Traceback (most recent call last):</span>
   File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
