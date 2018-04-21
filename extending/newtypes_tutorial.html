@@ -220,23 +220,20 @@ C API では、 <a class="reference internal" href="../c-api/type.html#c.PyType_
 <span class="gr">TypeError</span>: <span class="n">can only concatenate str (not &quot;custom.Custom&quot;) to str</span>
 </pre></div>
 </div>
-<p>Note that the name is a dotted name that includes both the module name and the
-name of the type within the module. The module in this case is <code class="xref py py-mod docutils literal"><span class="pre">custom</span></code> and
-the type is <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code>, so we set the type name to <code class="xref py py-class docutils literal"><span class="pre">custom.Custom</span></code>.
-Using the real dotted import path is important to make your type compatible
-with the <a class="reference internal" href="../library/pydoc.html#module-pydoc" title="pydoc: Documentation generator and online help system."><code class="xref py py-mod docutils literal"><span class="pre">pydoc</span></code></a> and <a class="reference internal" href="../library/pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code></a> modules.</p>
+<p>型の名前が、モジュール名とモジュールにおける型の名前の両方をドットでつないだ名前になっていることに注意してください。
+この場合は、モジュールは <code class="xref py py-mod docutils literal"><span class="pre">custom</span></code> で型は <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> なので、型の名前を <code class="xref py py-class docutils literal"><span class="pre">custom.Custom</span></code> に設定しました。
+実際のドット付きのインポートパスを使うのは、 <a class="reference internal" href="../library/pydoc.html#module-pydoc" title="pydoc: Documentation generator and online help system."><code class="xref py py-mod docutils literal"><span class="pre">pydoc</span></code></a> モジュールや <a class="reference internal" href="../library/pickle.html#module-pickle" title="pickle: Convert Python objects to streams of bytes and back."><code class="xref py py-mod docutils literal"><span class="pre">pickle</span></code></a> モジュールと互換性を持たせるために重要なのです。</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">tp_basicsize</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">CustomObject</span><span class="p">),</span>
 <span class="p">.</span><span class="n">tp_itemsize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 </pre></div>
 </div>
-<p>This is so that Python knows how much memory to allocate when creating
-new <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> instances.  <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> is
-only used for variable-sized objects and should otherwise be zero.</p>
+<p><a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> は、新しい <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> インスタンスを作るとき Python が割り当てるべきメモリがどのくらいなのかを知るためのものです。
+<a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_itemsize" title="PyTypeObject.tp_itemsize"><code class="xref c c-member docutils literal"><span class="pre">tp_itemsize</span></code></a> は可変サイズのオブジェクトでのみ使うものなので、サイズが可変でないオブジェクトでは 0 にすべきです。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
 <p class="last">あなたのタイプを Python でサブクラス化可能にしたい場合、そのタイプが基底タイプと同じ <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> をもっていると多重継承のときに問題が生じることがあります。そのタイプを Python のサブクラスにしたとき、その <a class="reference internal" href="../library/stdtypes.html#class.__bases__" title="class.__bases__"><code class="xref py py-attr docutils literal"><span class="pre">__bases__</span></code></a> リストにはあなたのタイプが最初にくるようにしなければなりません。さもないとエラーの発生なしにあなたのタイプの <a class="reference internal" href="../reference/datamodel.html#object.__new__" title="object.__new__"><code class="xref py py-meth docutils literal"><span class="pre">__new__()</span></code></a> メソッドを呼び出すことはできなくなります。この問題を回避するには、つねにあなたのタイプの <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_basicsize" title="PyTypeObject.tp_basicsize"><code class="xref c c-member docutils literal"><span class="pre">tp_basicsize</span></code></a> をその基底タイプよりも大きくしておくことです。ほとんどの場合、あなたのタイプは <a class="reference internal" href="../library/functions.html#object" title="object"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a> か、そうでなければ基底タイプにデータ用のメンバを追加したものでしょうから、したがって大きさはつねに増加するためこの条件は満たされています。</p>
 </div>
-<p>We set the class flags to <a class="reference internal" href="../c-api/typeobj.html#Py_TPFLAGS_DEFAULT" title="Py_TPFLAGS_DEFAULT"><code class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_DEFAULT</span></code></a>.</p>
+<p><a class="reference internal" href="../c-api/typeobj.html#Py_TPFLAGS_DEFAULT" title="Py_TPFLAGS_DEFAULT"><code class="xref py py-const docutils literal"><span class="pre">Py_TPFLAGS_DEFAULT</span></code></a> にクラスフラグを設定します。</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">tp_flags</span> <span class="o">=</span> <span class="n">Py_TPFLAGS_DEFAULT</span><span class="p">,</span>
 </pre></div>
 </div>
@@ -245,33 +242,29 @@ only used for variable-sized objects and should otherwise be zero.</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">tp_doc</span> <span class="o">=</span> <span class="s">&quot;Custom objects&quot;</span><span class="p">,</span>
 </pre></div>
 </div>
-<p>To enable object creation, we have to provide a <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal"><span class="pre">tp_new</span></code></a>
-handler.  This is the equivalent of the Python method <a class="reference internal" href="../reference/datamodel.html#object.__new__" title="object.__new__"><code class="xref py py-meth docutils literal"><span class="pre">__new__()</span></code></a>, but
-has to be specified explicitly.  In this case, we can just use the default
-implementation provided by the API function <a class="reference internal" href="../c-api/type.html#c.PyType_GenericNew" title="PyType_GenericNew"><code class="xref c c-func docutils literal"><span class="pre">PyType_GenericNew()</span></code></a>.</p>
+<p>オブジェクトが生成できるように、 <a class="reference internal" href="../c-api/typeobj.html#c.PyTypeObject.tp_new" title="PyTypeObject.tp_new"><code class="xref c c-member docutils literal"><span class="pre">tp_new</span></code></a> ハンドラを提供する必要があります。
+これは Python のメソッド <a class="reference internal" href="../reference/datamodel.html#object.__new__" title="object.__new__"><code class="xref py py-meth docutils literal"><span class="pre">__new__()</span></code></a> と同等のものですが、明示的に与える必要があります。
+今の場合では、 API 関数の <a class="reference internal" href="../c-api/type.html#c.PyType_GenericNew" title="PyType_GenericNew"><code class="xref c c-func docutils literal"><span class="pre">PyType_GenericNew()</span></code></a> として提供されるデフォルトをそのまま使えます。</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">tp_new</span> <span class="o">=</span> <span class="n">PyType_GenericNew</span><span class="p">,</span>
 </pre></div>
 </div>
-<p>Everything else in the file should be familiar, except for some code in
-<code class="xref c c-func docutils literal"><span class="pre">PyInit_custom()</span></code>:</p>
+<p>ファイルの残りの部分はきっと馴染みやすいものだと思いますが、 <code class="xref c c-func docutils literal"><span class="pre">PyInit_custom()</span></code> の一部のコードはそうではないでしょう:</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">PyType_Ready</span><span class="p">(</span><span class="o">&amp;</span><span class="n">CustomType</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>This initializes the <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> type, filling in a number of members
-to the appropriate default values, including <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> that we initially
-set to <em>NULL</em>.</p>
+<p>これは、 <em>NULL</em> に初期化された <code class="xref py py-attr docutils literal"><span class="pre">ob_type</span></code> も含めて、いくつかのメンバーを適切なデフォルト値で埋めて、 <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> 型を初期化します。</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">PyModule_AddObject</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="s">&quot;Custom&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">PyObject</span> <span class="o">*</span><span class="p">)</span> <span class="o">&amp;</span><span class="n">CustomType</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>This adds the type to the module dictionary.  This allows us to create
-<code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> instances by calling the <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> class:</p>
+<p>これは型をモジュールの辞書に追加します。
+こうすることで <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> クラスの呼び出しで <code class="xref py py-class docutils literal"><span class="pre">Custom</span></code> インスタンスが作成できるようになります:</p>
 <div class="highlight-pycon"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">custom</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mycustom</span> <span class="o">=</span> <span class="n">custom</span><span class="o">.</span><span class="n">Custom</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>That’s it!  All that remains is to build it; put the above code in a file called
-<code class="file docutils literal"><span class="pre">custom.c</span></code> and:</p>
+<p>以上です!
+残りの作業はビルドだけです; <code class="file docutils literal"><span class="pre">custom.c</span></code> という名前のファイルにここまでのコードを書き込み、次の内容を持つ setup.py を用意します:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">distutils.core</span> <span class="kn">import</span> <span class="n">setup</span><span class="p">,</span> <span class="n">Extension</span>
 <span class="n">setup</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;custom&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
       <span class="n">ext_modules</span><span class="o">=</span><span class="p">[</span><span class="n">Extension</span><span class="p">(</span><span class="s2">&quot;custom&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;custom.c&quot;</span><span class="p">])])</span>
@@ -1548,7 +1541,7 @@ reference cycles.</td></tr>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 4月 20, 2018
+    最終更新日時: 4月 21, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
