@@ -600,7 +600,8 @@
 <dl class="function">
 <dt id="multiprocessing.Pipe">
 <code class="descclassname">multiprocessing.</code><code class="descname">Pipe</code><span class="sig-paren">(</span><span class="optional">[</span><em>duplex</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocessing.Pipe" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>パイプの両端を表す <a class="reference internal" href="#multiprocessing.Connection" title="multiprocessing.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a> オブジェクトのペア <code class="docutils literal"><span class="pre">(conn1,</span> <span class="pre">conn2)</span></code> を返します。</p>
+<dd><p>Returns a pair <code class="docutils literal"><span class="pre">(conn1,</span> <span class="pre">conn2)</span></code> of <a class="reference internal" href="#multiprocessing.Connection" title="multiprocessing.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a> objects representing
+the ends of a pipe.</p>
 <p><em>duplex</em> が <code class="docutils literal"><span class="pre">True</span></code> (デフォルト) ならパイプは双方向性です。<em>duplex</em> が <code class="docutils literal"><span class="pre">False</span></code> ならパイプは一方向性で、<code class="docutils literal"><span class="pre">conn1</span></code> はメッセージの受信専用、<code class="docutils literal"><span class="pre">conn2</span></code> はメッセージの送信専用になります。</p>
 </dd></dl>
 
@@ -835,7 +836,8 @@
 <div class="section" id="connection-objects">
 <h3>17.2.2.4. Connection オブジェクト<a class="headerlink" href="#connection-objects" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>Connection オブジェクトは pickle でシリアライズ可能なオブジェクトか文字列を送ったり、受け取ったりします。そういったオブジェクトはメッセージ指向の接続ソケットと考えられます。</p>
-<p>Connection オブジェクトは通常は <a class="reference internal" href="#multiprocessing.Pipe" title="multiprocessing.Pipe"><code class="xref py py-func docutils literal"><span class="pre">Pipe()</span></code></a> を使用して作成されます。詳細は <a class="reference internal" href="#multiprocessing-listeners-clients"><span class="std std-ref">リスナーとクライアント</span></a> も参照してください。</p>
+<p>Connection objects are usually created using <a class="reference internal" href="#multiprocessing.Pipe" title="multiprocessing.Pipe"><code class="xref py py-func docutils literal"><span class="pre">Pipe()</span></code></a> – see also
+<a class="reference internal" href="#multiprocessing-listeners-clients"><span class="std std-ref">リスナーとクライアント</span></a>.</p>
 <dl class="class">
 <dt id="multiprocessing.Connection">
 <em class="property">class </em><code class="descclassname">multiprocessing.</code><code class="descname">Connection</code><a class="headerlink" href="#multiprocessing.Connection" title="この定義へのパーマリンク">¶</a></dt>
@@ -1790,7 +1792,9 @@ demonstrates a level of control over the synchronization.</p>
 </div>
 <div class="section" id="module-multiprocessing.connection">
 <span id="listeners-and-clients"></span><span id="multiprocessing-listeners-clients"></span><h3>17.2.2.10. リスナーとクライアント<a class="headerlink" href="#module-multiprocessing.connection" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p>通常、プロセス間でメッセージを渡すにはキューを使用するか <a class="reference internal" href="#multiprocessing.Pipe" title="multiprocessing.Pipe"><code class="xref py py-func docutils literal"><span class="pre">Pipe()</span></code></a> が返す <a class="reference internal" href="#multiprocessing.Connection" title="multiprocessing.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a> オブジェクトを使用します。</p>
+<p>Usually message passing between processes is done using queues or by using
+<a class="reference internal" href="#multiprocessing.Connection" title="multiprocessing.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a> objects returned by
+<a class="reference internal" href="#multiprocessing.Pipe" title="multiprocessing.Pipe"><code class="xref py py-func docutils literal"><span class="pre">Pipe()</span></code></a>.</p>
 <p>しかし <a class="reference internal" href="#module-multiprocessing.connection" title="multiprocessing.connection: API for dealing with sockets."><code class="xref py py-mod docutils literal"><span class="pre">multiprocessing.connection</span></code></a> モジュールにはさらに柔軟な仕組みがあります。 このモジュールは、基本的にはソケットもしくは Windows の名前付きパイプを扱う高レベルのメッセージ指向 API を提供します。また、 <a class="reference internal" href="hmac.html#module-hmac" title="hmac: Keyed-Hashing for Message Authentication (HMAC) implementation"><code class="xref py py-mod docutils literal"><span class="pre">hmac</span></code></a> モジュールを使用した <em>ダイジェスト認証</em> や同時の複数接続のポーリングもサポートします。</p>
 <dl class="function">
 <dt id="multiprocessing.connection.deliver_challenge">
@@ -1809,7 +1813,8 @@ demonstrates a level of control over the synchronization.</p>
 <dl class="function">
 <dt id="multiprocessing.connection.Client">
 <code class="descclassname">multiprocessing.connection.</code><code class="descname">Client</code><span class="sig-paren">(</span><em>address</em><span class="optional">[</span>, <em>family</em><span class="optional">[</span>, <em>authkey</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocessing.connection.Client" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><em>address</em> で渡したアドレスを使用するリスナーに対してコネクションを確立しようとして <a class="reference internal" href="#multiprocessing.Connection" title="multiprocessing.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a> を返します。</p>
+<dd><p>Attempt to set up a connection to the listener which is using address
+<em>address</em>, returning a <a class="reference internal" href="#multiprocessing.Connection" title="multiprocessing.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a>.</p>
 <p>コネクション種別は <em>family</em> 引数で決定しますが、一般的には <em>address</em> のフォーマットから推測できるので、これは指定されません。 (<a class="reference internal" href="#multiprocessing-address-formats"><span class="std std-ref">アドレスフォーマット</span></a> を参照してください)</p>
 <p>If <em>authkey</em> is given and not None, it should be a byte string and will be
 used as the secret key for an HMAC-based authentication challenge. No
@@ -1837,7 +1842,10 @@ See <a class="reference internal" href="#multiprocessing-auth-keys"><span class=
 <dl class="method">
 <dt id="multiprocessing.connection.Listener.accept">
 <code class="descname">accept</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocessing.connection.Listener.accept" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>リスナーオブジェクトの名前付きパイプか束縛されたソケット上でコネクションを受け付けて <a class="reference internal" href="#multiprocessing.Connection" title="multiprocessing.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a> オブジェクトを返します。認証が失敗した場合 <a class="reference internal" href="#multiprocessing.AuthenticationError" title="multiprocessing.AuthenticationError"><code class="xref py py-exc docutils literal"><span class="pre">AuthenticationError</span></code></a> が発生します。</p>
+<dd><p>Accept a connection on the bound socket or named pipe of the listener
+object and return a <a class="reference internal" href="#multiprocessing.Connection" title="multiprocessing.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a> object.  If
+authentication is attempted and fails, then
+<a class="reference internal" href="#multiprocessing.AuthenticationError" title="multiprocessing.AuthenticationError"><code class="xref py py-exc docutils literal"><span class="pre">AuthenticationError</span></code></a> is raised.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1870,7 +1878,7 @@ See <a class="reference internal" href="#multiprocessing-auth-keys"><span class=
 <dd><p><em>object_list</em> 中のオブジェクトが準備ができるまで待機します。準備ができた <em>object_list</em> 中のオブジェクトのリストを返します。<em>timeout</em> が浮動小数点なら、最大でその秒数だけ呼び出しがブロックします。<em>timeout</em> が <code class="docutils literal"><span class="pre">None</span></code> の場合、無制限の期間ブロックします。負のタイムアウトは0と等価です。</p>
 <p>Unix と Windows の両方で、 <em>object_list</em> には以下のオブジェクトを含めることが出来ます</p>
 <ul class="simple">
-<li>読み取り可能な <a class="reference internal" href="#multiprocessing.Connection" title="multiprocessing.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a> オブジェクト;</li>
+<li>a readable <a class="reference internal" href="#multiprocessing.Connection" title="multiprocessing.Connection"><code class="xref py py-class docutils literal"><span class="pre">Connection</span></code></a> object;</li>
 <li>接続された読み取り可能な <a class="reference internal" href="socket.html#socket.socket" title="socket.socket"><code class="xref py py-class docutils literal"><span class="pre">socket.socket</span></code></a> オブジェクト; または</li>
 <li><a class="reference internal" href="#multiprocessing.Process" title="multiprocessing.Process"><code class="xref py py-class docutils literal"><span class="pre">Process</span></code></a> オブジェクトの <a class="reference internal" href="#multiprocessing.Process.sentinel" title="multiprocessing.Process.sentinel"><code class="xref py py-attr docutils literal"><span class="pre">sentinel</span></code></a> 属性。</li>
 </ul>
@@ -1966,7 +1974,11 @@ See <a class="reference internal" href="#multiprocessing-auth-keys"><span class=
 </div>
 <div class="section" id="authentication-keys">
 <span id="multiprocessing-auth-keys"></span><h3>17.2.2.11. 認証キー<a class="headerlink" href="#authentication-keys" title="このヘッドラインへのパーマリンク">¶</a></h3>
-<p><a class="reference internal" href="#multiprocessing.Connection.recv" title="multiprocessing.Connection.recv"><code class="xref py py-meth docutils literal"><span class="pre">Connection.recv</span></code></a> を使用するとき、データは自動的に unpickle されて受信します。信頼できない接続元からのデータを unpickle することはセキュリティリスクがあります。そのため <a class="reference internal" href="#multiprocessing.connection.Listener" title="multiprocessing.connection.Listener"><code class="xref py py-class docutils literal"><span class="pre">Listener</span></code></a> や <a class="reference internal" href="#multiprocessing.connection.Client" title="multiprocessing.connection.Client"><code class="xref py py-func docutils literal"><span class="pre">Client()</span></code></a> はダイジェスト認証を提供するために <a class="reference internal" href="hmac.html#module-hmac" title="hmac: Keyed-Hashing for Message Authentication (HMAC) implementation"><code class="xref py py-mod docutils literal"><span class="pre">hmac</span></code></a> モジュールを使用します。</p>
+<p>When one uses <a class="reference internal" href="#multiprocessing.Connection.recv" title="multiprocessing.Connection.recv"><code class="xref py py-meth docutils literal"><span class="pre">Connection.recv</span></code></a>, the
+data received is automatically
+unpickled.  Unfortunately unpickling data from an untrusted source is a security
+risk.  Therefore <a class="reference internal" href="#multiprocessing.connection.Listener" title="multiprocessing.connection.Listener"><code class="xref py py-class docutils literal"><span class="pre">Listener</span></code></a> and <a class="reference internal" href="#multiprocessing.connection.Client" title="multiprocessing.connection.Client"><code class="xref py py-func docutils literal"><span class="pre">Client()</span></code></a> use the <a class="reference internal" href="hmac.html#module-hmac" title="hmac: Keyed-Hashing for Message Authentication (HMAC) implementation"><code class="xref py py-mod docutils literal"><span class="pre">hmac</span></code></a> module
+to provide digest authentication.</p>
 <p>認証キーはパスワードとして見なされるバイト文字列です。コネクションが確立すると、双方の終点で正しい接続先であることを証明するために 知っているお互いの認証キーを要求します。(双方の終点が同じキーを使用して通信しようとしても、コネクション上でそのキーを送信することは <strong>できません</strong>。)</p>
 <p>認証が要求されているにもかかわらず認証キーが指定されていない場合 <code class="docutils literal"><span class="pre">current_process().authkey</span></code> の返す値が使用されます。 (詳細は <a class="reference internal" href="#multiprocessing.Process" title="multiprocessing.Process"><code class="xref py py-class docutils literal"><span class="pre">Process</span></code></a> を参照してください。) この値はカレントプロセスを作成する <a class="reference internal" href="#multiprocessing.Process" title="multiprocessing.Process"><code class="xref py py-class docutils literal"><span class="pre">Process</span></code></a> オブジェクトによって自動的に継承されます。 これは(デフォルトでは)複数プロセスのプログラムの全プロセスが相互にコネクションを 確立するときに使用される1つの認証キーを共有することを意味します。</p>
 <p>適当な認証キーを <a class="reference internal" href="os.html#os.urandom" title="os.urandom"><code class="xref py py-func docutils literal"><span class="pre">os.urandom()</span></code></a> を使用して生成することもできます。</p>
