@@ -165,7 +165,8 @@
 <strong id="grammar-token-comp_iter">comp_iter    </strong> ::=  <a class="reference internal" href="#grammar-token-comp_for"><code class="xref docutils literal"><span class="pre">comp_for</span></code></a> | <a class="reference internal" href="#grammar-token-comp_if"><code class="xref docutils literal"><span class="pre">comp_if</span></code></a>
 <strong id="grammar-token-comp_if">comp_if      </strong> ::=  &quot;if&quot; <a class="reference internal" href="#grammar-token-expression_nocond"><code class="xref docutils literal"><span class="pre">expression_nocond</span></code></a> [<a class="reference internal" href="#grammar-token-comp_iter"><code class="xref docutils literal"><span class="pre">comp_iter</span></code></a>]
 </pre>
-<p>内包表記はまず単一の式、続いて <a class="reference internal" href="compound_stmts.html#for"><code class="xref std std-keyword docutils literal"><span class="pre">for</span></code></a> 節、さらに続いて 0 個以上の <a class="reference internal" href="compound_stmts.html#for"><code class="xref std std-keyword docutils literal"><span class="pre">for</span></code></a> 節や <a class="reference internal" href="compound_stmts.html#if"><code class="xref std std-keyword docutils literal"><span class="pre">if</span></code></a> 節からなります。この場合、新たなコンテナの各要素は、各々の <a class="reference internal" href="compound_stmts.html#for"><code class="xref std std-keyword docutils literal"><span class="pre">for</span></code></a> や <a class="reference internal" href="compound_stmts.html#if"><code class="xref std std-keyword docutils literal"><span class="pre">if</span></code></a> 節を、左から右にネストしたブロックとみなして実行し、ネストの最内のブロックに到達する度に式を評価することで作成されたものになります。</p>
+<p>内包表記はまず単一の式、続いて少なくとも 1 個の <a class="reference internal" href="compound_stmts.html#for"><code class="xref std std-keyword docutils literal"><span class="pre">for</span></code></a> 節、さらに続いて 0 個以上の <a class="reference internal" href="compound_stmts.html#for"><code class="xref std std-keyword docutils literal"><span class="pre">for</span></code></a> 節あるいは <a class="reference internal" href="compound_stmts.html#if"><code class="xref std std-keyword docutils literal"><span class="pre">if</span></code></a> 節からなります。
+この場合、各々の <a class="reference internal" href="compound_stmts.html#for"><code class="xref std std-keyword docutils literal"><span class="pre">for</span></code></a> や <a class="reference internal" href="compound_stmts.html#if"><code class="xref std std-keyword docutils literal"><span class="pre">if</span></code></a> 節を、左から右へ深くなっていくネストしたブロックとみなし、ネストの最内のブロックに到達するごとに内包表記の先頭にある式を評価した結果が、最終的にできあがるコンテナの各要素になります。</p>
 <p>なお、これらの内包表記は別のスコープで実行されるので、対象のリスト内で代入された名前が外側のスコープに &quot;漏れる&quot; ことはありません。</p>
 <p>Since Python 3.6, in an <a class="reference internal" href="compound_stmts.html#async-def"><code class="xref std std-keyword docutils literal"><span class="pre">async</span> <span class="pre">def</span></code></a> function, an <a class="reference internal" href="compound_stmts.html#async-for"><code class="xref std std-keyword docutils literal"><span class="pre">async</span> <span class="pre">for</span></code></a>
 clause may be used to iterate over a <a class="reference internal" href="../glossary.html#term-asynchronous-iterator"><span class="xref std std-term">asynchronous iterator</span></a>.
@@ -185,7 +186,9 @@ See also <span class="target" id="index-11"></span><a class="pep reference exter
 <pre>
 <strong id="grammar-token-list_display">list_display</strong> ::=  &quot;[&quot; [<a class="reference internal" href="#grammar-token-starred_list"><code class="xref docutils literal"><span class="pre">starred_list</span></code></a> | <a class="reference internal" href="#grammar-token-comprehension"><code class="xref docutils literal"><span class="pre">comprehension</span></code></a>] &quot;]&quot;
 </pre>
-<p>リスト表示は、新しいリストオブジェクトを与えます。リストの内容は、式リストか、リスト内包表記 (list comprehension) で指定されます。カンマで区切られた一連の式が与えられたときは、それらの各要素は左から右へと順に評価され、その順にリスト内に配置されます。内包表記が与えられたときは、内包表記の結果の要素でリストが構成されます。</p>
+<p>リスト表示は、新しいリストオブジェクトを与えます。リストの内容は、式のリストまたはリスト内包表記 (list comprehension) で指定されます。
+カンマで区切られた式のリストが与えられたときは、それらの各要素は左から右へと順に評価され、その順にリスト内に配置されます。
+内包表記が与えられたときは、内包表記の結果の要素でリストが構成されます。</p>
 </div>
 <div class="section" id="set-displays">
 <span id="set"></span><h3>6.2.6. 集合表現<a class="headerlink" href="#set-displays" title="このヘッドラインへのパーマリンク">¶</a></h3>
@@ -193,7 +196,9 @@ See also <span class="target" id="index-11"></span><a class="pep reference exter
 <pre>
 <strong id="grammar-token-set_display">set_display</strong> ::=  &quot;{&quot; (<a class="reference internal" href="#grammar-token-starred_list"><code class="xref docutils literal"><span class="pre">starred_list</span></code></a> | <a class="reference internal" href="#grammar-token-comprehension"><code class="xref docutils literal"><span class="pre">comprehension</span></code></a>) &quot;}&quot;
 </pre>
-<p>集合表示は、一連の式または内包表記によって指定された内容の、ミュータブルな集合オブジェクトを与えます。カンマ区切りの一連の式が与えられたときは、その要素は左から右へ順に評価され、集合オブジェクトに加えられます。内包表記が与えられたときは、内包表記の結果となる要素で集合が構成されます。</p>
+<p>集合表示は、新しいミュータブルな集合オブジェクトを与えます。集合の内容は、式の並びまたは内包表記によって指定されます。
+カンマ区切りの式のリストが与えられたときは、その要素は左から右へ順に評価され、集合オブジェクトに加えられます。
+内包表記が与えられたときは、内包表記の結果の要素で集合が構成されます。</p>
 <p>空集合は <code class="docutils literal"><span class="pre">{}</span></code> で構成できません。このリテラルは空の辞書を構成します。</p>
 </div>
 <div class="section" id="dictionary-displays">
@@ -206,7 +211,8 @@ See also <span class="target" id="index-11"></span><a class="pep reference exter
 <strong id="grammar-token-dict_comprehension">dict_comprehension</strong> ::=  <a class="reference internal" href="#grammar-token-expression"><code class="xref docutils literal"><span class="pre">expression</span></code></a> &quot;:&quot; <a class="reference internal" href="#grammar-token-expression"><code class="xref docutils literal"><span class="pre">expression</span></code></a> <a class="reference internal" href="#grammar-token-comp_for"><code class="xref docutils literal"><span class="pre">comp_for</span></code></a>
 </pre>
 <p>辞書表現は、新たな辞書オブジェクトを表します。</p>
-<p>カンマ区切りの一連のキー/データの対が与えられたときは、その要素は左から右へ評価され、辞書の項目を定義します。すなわち、それぞれのキーオブジェクトが、辞書内で対応するデータを保存するキーとして使われます。これにより、キー/データリストの中で同じキーを複数回指定することができ、そのキーに対する最終的な辞書の値は、最後に与えられたものになります。</p>
+<p>キーとデータからなる対の並びがカンマ区切りで与えられたときは、その要素は左から右へ評価され、辞書のエントリーを定義します。すなわち、それぞれのキーオブジェクトが、辞書内で対応するデータを保存するキーとして使われます。
+これにより、キーとデータのリストの中で同じキーを複数回指定することができ、そのキーに対する最終的な辞書の値は、最後に与えられたものになります。</p>
 <p id="index-15">ダブルアスタリスク <code class="docutils literal"><span class="pre">**</span></code> は <em class="dfn">辞書のアンパック</em> を表します。このとき被演算子は <a class="reference internal" href="../glossary.html#term-mapping"><span class="xref std std-term">mapping</span></a> でなければなりません。それぞれのmappingの要素は、新たな辞書に追加されます。キー/データの対もしくは辞書のアンパックによって先に追加された値は、後から追加された値によって上書きされます。</p>
 <div class="versionadded">
 <p><span class="versionmodified">バージョン 3.5 で追加: </span>Unpacking into dictionary displays, originally proposed by <span class="target" id="index-16"></span><a class="pep reference external" href="https://www.python.org/dev/peps/pep-0448"><strong>PEP 448</strong></a>.</p>
@@ -895,7 +901,8 @@ the unpacking.</p>
 </div>
 <div class="section" id="evaluation-order">
 <span id="evalorder"></span><h2>6.15. 評価順序<a class="headerlink" href="#evaluation-order" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p id="index-85">Python は、式を左から右へと順に評価します。ただし、代入式を評価するときは、代入演算子の右側項が左側項よりも先に評価されます。</p>
+<p id="index-85">Python は、式を左から右へと順に評価します。
+ただし、代入式を評価するときは、右辺が左辺よりも先に評価されます。</p>
 <p>以下に示す実行文の各行での評価順序は、添え字の数字順序と同じになります:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="n">expr1</span><span class="p">,</span> <span class="n">expr2</span><span class="p">,</span> <span class="n">expr3</span><span class="p">,</span> <span class="n">expr4</span>
 <span class="p">(</span><span class="n">expr1</span><span class="p">,</span> <span class="n">expr2</span><span class="p">,</span> <span class="n">expr3</span><span class="p">,</span> <span class="n">expr4</span><span class="p">)</span>
@@ -909,7 +916,7 @@ the unpacking.</p>
 <div class="section" id="operator-precedence">
 <span id="operator-summary"></span><h2>6.16. 演算子の優先順位<a class="headerlink" href="#operator-precedence" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p id="index-86">以下の表は Python における演算子の優先順位を要約したものです。優先順位の最も低い (結合が最も弱い) ものから最も高い (結合が最も強い) ものに並べてあります。同じボックス内の演算子の優先順位は同じです。構文が明示的に示されていないものは二項演算子です。同じボックス内の演算子は、左から右へとグループ化されます (例外として、べき乗は右から左にグループ化されます)。</p>
-<p><a class="reference internal" href="#comparisons"><span class="std std-ref">比較</span></a> で述べられているように、比較、帰属、同一性のテストは全てが同じ優先順位を持っていて、左から右に連鎖する特徴を持っていることに注意してください。</p>
+<p><a class="reference internal" href="#comparisons"><span class="std std-ref">比較</span></a> 節で述べられているように、比較、帰属、同一性のテストは全てが同じ優先順位を持っていて、左から右に連鎖するという特徴を持っていることに注意してください。</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="56%" />
@@ -1155,7 +1162,7 @@ represent the same abstract character &quot;LATIN CAPITAL LETTER C WITH CEDILLA&
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 5月 03, 2018
+    最終更新日時: 5月 04, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
