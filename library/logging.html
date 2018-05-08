@@ -486,7 +486,11 @@ such as <code class="xref py py-const docutils literal"><span class="pre">INFO</
 <dl class="class">
 <dt id="logging.Formatter">
 <em class="property">class </em><code class="descclassname">logging.</code><code class="descname">Formatter</code><span class="sig-paren">(</span><em>fmt=None</em>, <em>datefmt=None</em>, <em>style='%'</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.Formatter" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> クラスの新たなインスタンスを返します。インスタンスは全体としてのメッセージに対する書式文字列と、メッセージの日付/時刻部分のための書式文字列を伴って初期化されます。 <em>fmt</em> が指定されない場合、 <code class="docutils literal"><span class="pre">'%(message)s'</span></code> が使われます。 <em>datefmt</em> が指定されない場合、 ISO8601 日付書式が使われます。</p>
+<dd><p>Returns a new instance of the <a class="reference internal" href="#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> class.  The instance is
+initialized with a format string for the message as a whole, as well as a
+format string for the date/time portion of a message.  If no <em>fmt</em> is
+specified, <code class="docutils literal"><span class="pre">'%(message)s'</span></code> is used.  If no <em>datefmt</em> is specified, the
+ISO8601 date format is used.</p>
 <p><em>style</em> パラメーターは '%',  '{', '$' のうちのいずれかで、書式文字列がどのようにデータとマージされるかを決めます: %-format 、 <a class="reference internal" href="stdtypes.html#str.format" title="str.format"><code class="xref py py-meth docutils literal"><span class="pre">str.format()</span></code></a> 、 <a class="reference internal" href="string.html#string.Template" title="string.Template"><code class="xref py py-class docutils literal"><span class="pre">string.Template</span></code></a> のうちのどれかが使用されます。ログメッセージに使用する { および $ 形式のフォーマットの情報は <a class="reference internal" href="../howto/logging-cookbook.html#formatting-styles"><span class="std std-ref">固有の書式化スタイルをアプリケーション全体で使う</span></a> を参照してください。</p>
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.2 で変更: </span><em>style</em> パラメータが追加されました。</p>
@@ -501,10 +505,26 @@ such as <code class="xref py py-const docutils literal"><span class="pre">INFO</
 <dl class="method">
 <dt id="logging.Formatter.formatTime">
 <code class="descname">formatTime</code><span class="sig-paren">(</span><em>record</em>, <em>datefmt=None</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.Formatter.formatTime" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>このメソッドは、フォーマッタが書式化された時間を利用したい際に、 <a class="reference internal" href="functions.html#format" title="format"><code class="xref py py-meth docutils literal"><span class="pre">format()</span></code></a> から呼び出されます。このメソッドは特定の要求を提供するためにフォーマッタで上書きすることができますが、基本的な振る舞いは以下のようになります: <em>datefmt</em> (文字列) が指定された場合、レコードが生成された時刻を書式化するために <a class="reference internal" href="time.html#time.strftime" title="time.strftime"><code class="xref py py-func docutils literal"><span class="pre">time.strftime()</span></code></a> で使われます。そうでない場合、 ISO8601 書式が使われます。結果の文字列が返されます。</p>
+<dd><p>This method should be called from <a class="reference internal" href="functions.html#format" title="format"><code class="xref py py-meth docutils literal"><span class="pre">format()</span></code></a> by a formatter which
+wants to make use of a formatted time. This method can be overridden in
+formatters to provide for any specific requirement, but the basic behavior
+is as follows: if <em>datefmt</em> (a string) is specified, it is used with
+<a class="reference internal" href="time.html#time.strftime" title="time.strftime"><code class="xref py py-func docutils literal"><span class="pre">time.strftime()</span></code></a> to format the creation time of the
+record. Otherwise, the ISO8601 format is used.  The resulting string is
+returned.</p>
 <p>この関数は、ユーザが設定できる関数を使って、生成時刻をタプルに変換します。デフォルトでは、 <a class="reference internal" href="time.html#time.localtime" title="time.localtime"><code class="xref py py-func docutils literal"><span class="pre">time.localtime()</span></code></a> が使われます。特定のフォーマッタインスタンスに対してこれを変更するには、 <code class="docutils literal"><span class="pre">converter</span></code> 属性を <a class="reference internal" href="time.html#time.localtime" title="time.localtime"><code class="xref py py-func docutils literal"><span class="pre">time.localtime()</span></code></a> や <a class="reference internal" href="time.html#time.gmtime" title="time.gmtime"><code class="xref py py-func docutils literal"><span class="pre">time.gmtime()</span></code></a> と同じ署名をもつ関数に設定してください。すべてのフォーマッタインスタンスに対してこれを変更するには、例えば全てのロギング時刻を GMT で表示するには、 <code class="docutils literal"><span class="pre">Formatter</span></code> クラスの <code class="docutils literal"><span class="pre">converter</span></code> 属性を設定してください。</p>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.3 で変更: </span>以前は、デフォルトの ISO 8601 フォーマットがこの例のようにハードコーディングされていました: <code class="docutils literal"><span class="pre">2010-09-06</span> <span class="pre">22:38:15,292</span></code> ここで、コンマの前の部分は strptime フォーマット文字列 (<code class="docutils literal"><span class="pre">'%Y-%m-%d</span> <span class="pre">%H:%M:%S'</span></code>) によって扱われる部分で、コンマの後の部分はミリ秒値です。strptime にミリ秒のフォーマットプレースホルダーがないので、ミリ秒値は別のフォーマット文字列 <code class="docutils literal"><span class="pre">'%s,%03d'</span></code> を使用して追加されます。そして、これらのフォーマット文字列は両方ともこのメソッドでハードコーディングされていました。変更後は、これらの文字列はクラスレベル属性として定義され、必要ならインスタンスレベルでオーバーライドすることができます。属性の名前は <code class="docutils literal"><span class="pre">default_time_format</span></code> (strptime 書式文字列用) と <code class="docutils literal"><span class="pre">default_msec_format</span></code> (ミリ秒値の追加用) です。</p>
+<p><span class="versionmodified">バージョン 3.3 で変更: </span>Previously, the default ISO 8601 format was hard-coded as in this
+example: <code class="docutils literal"><span class="pre">2010-09-06</span> <span class="pre">22:38:15,292</span></code> where the part before the comma is
+handled by a strptime format string (<code class="docutils literal"><span class="pre">'%Y-%m-%d</span> <span class="pre">%H:%M:%S'</span></code>), and the
+part after the comma is a millisecond value. Because strptime does not
+have a format placeholder for milliseconds, the millisecond value is
+appended using another format string, <code class="docutils literal"><span class="pre">'%s,%03d'</span></code> — and both of these
+format strings have been hardcoded into this method. With the change,
+these strings are defined as class-level attributes which can be
+overridden at the instance level when desired. The names of the
+attributes are <code class="docutils literal"><span class="pre">default_time_format</span></code> (for the strptime format string)
+and <code class="docutils literal"><span class="pre">default_msec_format</span></code> (for appending the millisecond value).</p>
 </div>
 </dd></dl>
 
@@ -1126,7 +1146,7 @@ suitable value.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 5月 07, 2018
+    最終更新日時: 5月 08, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
