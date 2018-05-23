@@ -927,20 +927,27 @@ Py_ssize_t <code class="descname">PyTypeObject.tp_maxalloc</code><a class="heade
 <dl class="member">
 <dt id="c.PyMappingMethods.mp_length">
 lenfunc <code class="descname">PyMappingMethods.mp_length</code><a class="headerlink" href="#c.PyMappingMethods.mp_length" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この関数は <a class="reference internal" href="mapping.html#c.PyMapping_Length" title="PyMapping_Length"><code class="xref c c-func docutils literal"><span class="pre">PyMapping_Length()</span></code></a> や <a class="reference internal" href="object.html#c.PyObject_Size" title="PyObject_Size"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Size()</span></code></a> から利用され、それらと同じシグネチャを持っています。オブジェクトが定義された長さを持たない場合は、このスロットは <em>NULL</em> に設定されることがあります。</p>
+<dd><p>This function is used by <a class="reference internal" href="mapping.html#c.PyMapping_Length" title="PyMapping_Length"><code class="xref c c-func docutils literal"><span class="pre">PyMapping_Length()</span></code></a> and
+<a class="reference internal" href="object.html#c.PyObject_Size" title="PyObject_Size"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Size()</span></code></a>, and has the same signature.  This slot may be set to
+<em>NULL</em> if the object has no defined length.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.PyMappingMethods.mp_subscript">
 binaryfunc <code class="descname">PyMappingMethods.mp_subscript</code><a class="headerlink" href="#c.PyMappingMethods.mp_subscript" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この関数は <a class="reference internal" href="object.html#c.PyObject_GetItem" title="PyObject_GetItem"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GetItem()</span></code></a> から利用され、同じシグネチャを持っています。このスロットは <a class="reference internal" href="mapping.html#c.PyMapping_Check" title="PyMapping_Check"><code class="xref c c-func docutils literal"><span class="pre">PyMapping_Check()</span></code></a> が <code class="docutils literal"><span class="pre">1</span></code> を返すためには必要で、そうでなければ <em>NULL</em> の場合があります。</p>
+<dd><p>This function is used by <a class="reference internal" href="object.html#c.PyObject_GetItem" title="PyObject_GetItem"><code class="xref c c-func docutils literal"><span class="pre">PyObject_GetItem()</span></code></a> and has the same
+signature.  This slot must be filled for the <a class="reference internal" href="mapping.html#c.PyMapping_Check" title="PyMapping_Check"><code class="xref c c-func docutils literal"><span class="pre">PyMapping_Check()</span></code></a>
+function to return <code class="docutils literal"><span class="pre">1</span></code>, it can be <em>NULL</em> otherwise.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.PyMappingMethods.mp_ass_subscript">
 objobjargproc <code class="descname">PyMappingMethods.mp_ass_subscript</code><a class="headerlink" href="#c.PyMappingMethods.mp_ass_subscript" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この関数は <a class="reference internal" href="object.html#c.PyObject_SetItem" title="PyObject_SetItem"><code class="xref c c-func docutils literal"><span class="pre">PyObject_SetItem()</span></code></a> および <a class="reference internal" href="object.html#c.PyObject_DelItem" title="PyObject_DelItem"><code class="xref c c-func docutils literal"><span class="pre">PyObject_DelItem()</span></code></a> から利用されます。
-<a class="reference internal" href="object.html#c.PyObject_SetItem" title="PyObject_SetItem"><code class="xref c c-func docutils literal"><span class="pre">PyObject_SetItem()</span></code></a> と同じシグネチャを持ちますが、 <em>v</em> に <em>NULL</em> を設定して要素の削除もできます。このスロットが <em>NULL</em> の場合は、このオブジェクトはアイテムの代入と削除をサポートしません。</p>
+<dd><p>This function is used by <a class="reference internal" href="object.html#c.PyObject_SetItem" title="PyObject_SetItem"><code class="xref c c-func docutils literal"><span class="pre">PyObject_SetItem()</span></code></a> and
+<a class="reference internal" href="object.html#c.PyObject_DelItem" title="PyObject_DelItem"><code class="xref c c-func docutils literal"><span class="pre">PyObject_DelItem()</span></code></a>.  It has the same signature as
+<a class="reference internal" href="object.html#c.PyObject_SetItem" title="PyObject_SetItem"><code class="xref c c-func docutils literal"><span class="pre">PyObject_SetItem()</span></code></a>, but <em>v</em> can also be set to <em>NULL</em> to delete
+an item.  If this slot is <em>NULL</em>, the object does not support item
+assignment and deletion.</p>
 </dd></dl>
 
 </div>
@@ -955,51 +962,65 @@ objobjargproc <code class="descname">PyMappingMethods.mp_ass_subscript</code><a 
 <dl class="member">
 <dt id="c.PySequenceMethods.sq_length">
 lenfunc <code class="descname">PySequenceMethods.sq_length</code><a class="headerlink" href="#c.PySequenceMethods.sq_length" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_Size" title="PySequence_Size"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Size()</span></code></a> や <a class="reference internal" href="object.html#c.PyObject_Size" title="PyObject_Size"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Size()</span></code></a> から利用され、それらと同じシグネチャを持っています。</p>
+<dd><p>This function is used by <a class="reference internal" href="sequence.html#c.PySequence_Size" title="PySequence_Size"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Size()</span></code></a> and <a class="reference internal" href="object.html#c.PyObject_Size" title="PyObject_Size"><code class="xref c c-func docutils literal"><span class="pre">PyObject_Size()</span></code></a>,
+and has the same signature.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.PySequenceMethods.sq_concat">
 binaryfunc <code class="descname">PySequenceMethods.sq_concat</code><a class="headerlink" href="#c.PySequenceMethods.sq_concat" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_Concat" title="PySequence_Concat"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Concat()</span></code></a> で利用され、同じシグネチャを持っています。また、 <code class="docutils literal"><span class="pre">+</span></code> 演算子でも、 <code class="xref c c-member docutils literal"><span class="pre">nb_add</span></code> スロットによる数値加算を試した後に利用されます。</p>
+<dd><p>This function is used by <a class="reference internal" href="sequence.html#c.PySequence_Concat" title="PySequence_Concat"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Concat()</span></code></a> and has the same
+signature.  It is also used by the <code class="docutils literal"><span class="pre">+</span></code> operator, after trying the numeric
+addition via the <code class="xref c c-member docutils literal"><span class="pre">nb_add</span></code> slot.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.PySequenceMethods.sq_repeat">
 ssizeargfunc <code class="descname">PySequenceMethods.sq_repeat</code><a class="headerlink" href="#c.PySequenceMethods.sq_repeat" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_Repeat" title="PySequence_Repeat"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Repeat()</span></code></a> で利用され、同じシグネチャを持っています。また、 <code class="docutils literal"><span class="pre">*</span></code> 演算でも、 <code class="xref c c-member docutils literal"><span class="pre">nb_multiply</span></code> スロットによる数値乗算を試したあとに利用されます。</p>
+<dd><p>This function is used by <a class="reference internal" href="sequence.html#c.PySequence_Repeat" title="PySequence_Repeat"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Repeat()</span></code></a> and has the same
+signature.  It is also used by the <code class="docutils literal"><span class="pre">*</span></code> operator, after trying numeric
+multiplication via the <code class="xref c c-member docutils literal"><span class="pre">nb_multiply</span></code>
+slot.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.PySequenceMethods.sq_item">
 ssizeargfunc <code class="descname">PySequenceMethods.sq_item</code><a class="headerlink" href="#c.PySequenceMethods.sq_item" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_GetItem" title="PySequence_GetItem"><code class="xref c c-func docutils literal"><span class="pre">PySequence_GetItem()</span></code></a> から利用され、同じシグネチャを持っています。このスロットは <a class="reference internal" href="sequence.html#c.PySequence_Check" title="PySequence_Check"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Check()</span></code></a> が <code class="docutils literal"><span class="pre">1</span></code> を返すためには埋めなければならず、それ以外の場合は <em>NULL</em> の可能性があります。</p>
+<dd><p>This function is used by <a class="reference internal" href="sequence.html#c.PySequence_GetItem" title="PySequence_GetItem"><code class="xref c c-func docutils literal"><span class="pre">PySequence_GetItem()</span></code></a> and has the same
+signature.  This slot must be filled for the <a class="reference internal" href="sequence.html#c.PySequence_Check" title="PySequence_Check"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Check()</span></code></a>
+function to return <code class="docutils literal"><span class="pre">1</span></code>, it can be <em>NULL</em> otherwise.</p>
 <p>負のインデックスは次のように処理されます: <code class="xref py py-attr docutils literal"><span class="pre">sq_length</span></code> スロットが埋められていれば、それを呼び出してシーケンスの長さから正のインデックスを計算し、 <code class="xref py py-attr docutils literal"><span class="pre">sq_item</span></code> に渡します。 <code class="xref py py-attr docutils literal"><span class="pre">sq_length</span></code> が <em>NULL</em> の場合は、インデックスはそのままこの関数に渡されます。</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.PySequenceMethods.sq_ass_item">
 ssizeobjargproc <code class="descname">PySequenceMethods.sq_ass_item</code><a class="headerlink" href="#c.PySequenceMethods.sq_ass_item" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_SetItem" title="PySequence_SetItem"><code class="xref c c-func docutils literal"><span class="pre">PySequence_SetItem()</span></code></a> から利用され、同じシグネチャを持っています。
-オブジェクトが要素の代入と削除をサポートしていない場合は、このスロットは <em>NULL</em> かもしれません。</p>
+<dd><p>This function is used by <a class="reference internal" href="sequence.html#c.PySequence_SetItem" title="PySequence_SetItem"><code class="xref c c-func docutils literal"><span class="pre">PySequence_SetItem()</span></code></a> and has the same
+signature.  This slot may be left to <em>NULL</em> if the object does not support
+item assignment and deletion.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.PySequenceMethods.sq_contains">
 objobjproc <code class="descname">PySequenceMethods.sq_contains</code><a class="headerlink" href="#c.PySequenceMethods.sq_contains" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_Contains" title="PySequence_Contains"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Contains()</span></code></a> から利用され、同じシグネチャを持っています。このスロットは <em>NULL</em> の場合があり、その時 <a class="reference internal" href="sequence.html#c.PySequence_Contains" title="PySequence_Contains"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Contains()</span></code></a> はシンプルにマッチするオブジェクトを見つけるまでシーケンスを巡回します。</p>
+<dd><p>This function may be used by <a class="reference internal" href="sequence.html#c.PySequence_Contains" title="PySequence_Contains"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Contains()</span></code></a> and has the same
+signature.  This slot may be left to <em>NULL</em>, in this case
+<a class="reference internal" href="sequence.html#c.PySequence_Contains" title="PySequence_Contains"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Contains()</span></code></a> simply traverses the sequence until it finds a
+match.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.PySequenceMethods.sq_inplace_concat">
 binaryfunc <code class="descname">PySequenceMethods.sq_inplace_concat</code><a class="headerlink" href="#c.PySequenceMethods.sq_inplace_concat" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_InPlaceConcat" title="PySequence_InPlaceConcat"><code class="xref c c-func docutils literal"><span class="pre">PySequence_InPlaceConcat()</span></code></a> から利用され、同じシグネチャを持っています。この関数は最初のオペランドを修正してそれを返すべきです。</p>
+<dd><p>This function is used by <a class="reference internal" href="sequence.html#c.PySequence_InPlaceConcat" title="PySequence_InPlaceConcat"><code class="xref c c-func docutils literal"><span class="pre">PySequence_InPlaceConcat()</span></code></a> and has the same
+signature.  It should modify its first operand, and return it.</p>
 </dd></dl>
 
 <dl class="member">
 <dt id="c.PySequenceMethods.sq_inplace_repeat">
 ssizeargfunc <code class="descname">PySequenceMethods.sq_inplace_repeat</code><a class="headerlink" href="#c.PySequenceMethods.sq_inplace_repeat" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>この関数は <a class="reference internal" href="sequence.html#c.PySequence_InPlaceRepeat" title="PySequence_InPlaceRepeat"><code class="xref c c-func docutils literal"><span class="pre">PySequence_InPlaceRepeat()</span></code></a> から利用され、同じシグネチャを持っています。この関数は最初のオペランドを修正してそれを返すべきです。</p>
+<dd><p>This function is used by <a class="reference internal" href="sequence.html#c.PySequence_InPlaceRepeat" title="PySequence_InPlaceRepeat"><code class="xref c c-func docutils literal"><span class="pre">PySequence_InPlaceRepeat()</span></code></a> and has the same
+signature.  It should modify its first operand, and return it.</p>
 </dd></dl>
 
 </div>
@@ -1199,7 +1220,7 @@ unaryfunc <code class="descname">PyAsyncMethods.am_anext</code><a class="headerl
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 5月 22, 2018
+    最終更新日時: 5月 23, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。

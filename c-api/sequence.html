@@ -105,7 +105,8 @@
 <dl class="function">
 <dt id="c.PySequence_Check">
 int <code class="descname">PySequence_Check</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PySequence_Check" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>オブジェクトがシーケンス型プロトコルを提供している場合に <code class="docutils literal"><span class="pre">1</span></code> を返し、そうでないときには <code class="docutils literal"><span class="pre">0</span></code> を返します。この関数呼び出しは常に成功します。</p>
+<dd><p>Return <code class="docutils literal"><span class="pre">1</span></code> if the object provides sequence protocol, and <code class="docutils literal"><span class="pre">0</span></code> otherwise.
+This function always succeeds.</p>
 </dd></dl>
 
 <dl class="function">
@@ -211,13 +212,19 @@ Py_ssize_t <code class="descname">PySequence_Index</code><span class="sig-paren"
 <dl class="function">
 <dt id="c.PySequence_Tuple">
 <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PySequence_Tuple</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PySequence_Tuple" title="この定義へのパーマリンク">¶</a></dt>
-<dd><em class="refcount">Return value: New reference.</em><p id="index-1">任意のシーケンス <em>o</em> と同じ内容を持つタプルオブジェクトを返します。失敗したら <em>NULL</em> を返します。<em>o</em> がタプルの場合、新たな参照を返します。それ以外の場合、適切な内容が入ったタプルを構築して返します。Pythonの式 <code class="docutils literal"><span class="pre">tuple(o)</span></code> と同じです。</p>
+<dd><em class="refcount">Return value: New reference.</em><p id="index-1">Return a tuple object with the same contents as the arbitrary sequence <em>o</em> or
+<em>NULL</em> on failure.  If <em>o</em> is a tuple, a new reference will be returned,
+otherwise a tuple will be constructed with the appropriate contents.  This is
+equivalent to the Python expression <code class="docutils literal"><span class="pre">tuple(o)</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.PySequence_Fast">
 <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PySequence_Fast</code><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a><em>&nbsp;*o</em>, const char<em>&nbsp;*m</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PySequence_Fast" title="この定義へのパーマリンク">¶</a></dt>
-<dd><em class="refcount">Return value: New reference.</em><p>シーケンス <em>o</em> がすでにタプルやリストであれば <em>o</em> を返し、そうでなければ <em>o</em> をタプルで返します。返されるタプルのメンバにアクセスするには <a class="reference internal" href="#c.PySequence_Fast_GET_ITEM" title="PySequence_Fast_GET_ITEM"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Fast_GET_ITEM()</span></code></a> を使ってください。失敗すると <em>NULL</em> を返します。オブジェクトがシーケンスでなければ、 <em>m</em> がメッセージテキストになっている <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> を送出します。</p>
+<dd><em class="refcount">Return value: New reference.</em><p>Return the sequence <em>o</em> as a list, unless it is already a tuple or list, in
+which case <em>o</em> is returned.  Use <a class="reference internal" href="#c.PySequence_Fast_GET_ITEM" title="PySequence_Fast_GET_ITEM"><code class="xref c c-func docutils literal"><span class="pre">PySequence_Fast_GET_ITEM()</span></code></a> to access
+the members of the result.  Returns <em>NULL</em> on failure.  If the object is not
+a sequence, raises <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> with <em>m</em> as the message text.</p>
 </dd></dl>
 
 <dl class="function">
@@ -322,7 +329,7 @@ Py_ssize_t <code class="descname">PySequence_Fast_GET_SIZE</code><span class="si
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 5月 22, 2018
+    最終更新日時: 5月 23, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
