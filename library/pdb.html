@@ -230,7 +230,7 @@
 <p>デバッガーに認識されるコマンドは以下に一覧されています。たいていのコマンドは以下のように 1、2 文字に省略できます。例えば <code class="docutils literal"><span class="pre">h(elp)</span></code> は <code class="docutils literal"><span class="pre">h</span></code> か <code class="docutils literal"><span class="pre">help</span></code> がで help コマンドを呼び出すことを意味します (ただし <code class="docutils literal"><span class="pre">he</span></code>, <code class="docutils literal"><span class="pre">hel</span></code>, <code class="docutils literal"><span class="pre">H</span></code>, <code class="docutils literal"><span class="pre">Help</span></code>, <code class="docutils literal"><span class="pre">HELP</span></code> は使用できません)。コマンドの引数はホワイトスペース (スペースかタブ) で区切ってください。コマンド構文として任意の引数は大括弧 (<code class="docutils literal"><span class="pre">[]</span></code>) で括られています (実際に大括弧はタイプしないでください)。いくつかから選択できる引数は縦線 (<code class="docutils literal"><span class="pre">|</span></code>) で分割されて記述されています。</p>
 <p>空行を入力すると入力された直前のコマンドを繰り返します。例外: 直前のコマンドが <a class="reference internal" href="#pdbcommand-list"><code class="xref std std-pdbcmd docutils literal"><span class="pre">list</span></code></a> コマンドならば、次の 11 行がリストされます。</p>
 <p>デバッガが認識しないコマンドは Python 文とみなして、デバッグしているプログラムのコンテキストおいて実行されます。先頭にに感嘆符 (<code class="docutils literal"><span class="pre">!</span></code>) を付けることで Python 文であると明示することもできます。これはデバッグ中のプログラムを調査する強力な方法です。変数を変更したり関数を呼び出したりすることも可能です。このような文で例外が発生した場合には例外名が出力されますが、デバッガの状態は変化しません。</p>
-<p>デバッガーは <a class="reference internal" href="#debugger-aliases"><span class="std std-ref">エイリアス</span></a> をサポートしています。エイリアスはデバッグ中のコンテキストに適用可能な一定レベルのパラメーターを保持することができます。</p>
+<p>デバッガーは <a class="reference internal" href="#debugger-aliases"><span class="std std-ref">エイリアス</span></a> をサポートしています。エイリアスはデバッグ中のコンテキストに適用可能な一定レベルのパラメータを保持することができます。</p>
 <p>複数のコマンドを <code class="docutils literal"><span class="pre">;;</span></code> で区切って一行で入力することができます。(一つだけの <code class="docutils literal"><span class="pre">;</span></code> では使用できません。なぜなら、Python パーサーへ渡される行内の複数のコマンドのための分離記号だからです。) コマンドを分割するために何も知的なことはしていません。たとえ引用文字列の途中であっても、入力は最初の <code class="docutils literal"><span class="pre">;;</span></code> で分割されます。</p>
 <p id="index-2">ファイル <code class="file docutils literal"><span class="pre">.pdbrc</span></code> がユーザーのホームディレクトリかカレントディレクトリにあれば、それが読み込まれ、デバッガーのプロンプトでタイプしたように実行されます。これは特にエイリアスを使用するときに役立ちます。両方にファイルが存在する場合、ホームディレクトリのものが最初に読まれ、次にカレントディレクトリにあるものが読み込まれます。後者により前者の定義は上書きされます。</p>
 <div class="versionchanged">
@@ -449,7 +449,7 @@
 <span class="target" id="debugger-aliases"></span><dl class="pdbcommand">
 <dt id="pdbcommand-alias">
 <code class="descname">alias</code><code class="descclassname"> [name [command]]</code><a class="headerlink" href="#pdbcommand-alias" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><em>name</em> という名前の <em>command</em> を実行するエイリアスを作成します。コマンドは引用符で囲まれていては <em>いけません</em>。入れ替え可能なパラメーターは <code class="docutils literal"><span class="pre">%1</span></code>、<code class="docutils literal"><span class="pre">%2</span></code> などで指し示され、さらに <code class="docutils literal"><span class="pre">%*</span></code> は全パラメーターに置き換えられます。コマンドが与えられなければ、<em>name</em> に対する現在のエイリアスを表示します。引数が与えられなければ、すべてのエイリアスがリストされます。</p>
+<dd><p><em>name</em> という名前の <em>command</em> を実行するエイリアスを作成します。コマンドは引用符で囲まれていては <em>いけません</em>。入れ替え可能なパラメータは <code class="docutils literal"><span class="pre">%1</span></code>、<code class="docutils literal"><span class="pre">%2</span></code> などで指し示され、さらに <code class="docutils literal"><span class="pre">%*</span></code> は全パラメータに置き換えられます。コマンドが与えられなければ、<em>name</em> に対する現在のエイリアスを表示します。引数が与えられなければ、すべてのエイリアスがリストされます。</p>
 <p>エイリアスは入れ子になってもよく、pdb プロンプトで合法的にタイプできるどんなものでも含めることができます。内部 pdb コマンドをエイリアスによって上書きすることが <em>できます</em>。そのとき、このようなコマンドはエイリアスが取り除かれるまで隠されます。エイリアス化はコマンド行の最初の語へ再帰的に適用されます。行の他のすべての語はそのままです。</p>
 <p>例として、二つの便利なエイリアスがあります (特に <code class="file docutils literal"><span class="pre">.pdbrc</span></code> ファイルに置かれたときに):</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="c1"># Print instance variables (usage &quot;pi classInst&quot;)</span>
@@ -583,7 +583,7 @@
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 5月 27, 2018
+    最終更新日時: 5月 28, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
