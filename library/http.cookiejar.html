@@ -146,13 +146,24 @@
 <dt id="http.cookiejar.DefaultCookiePolicy">
 <em class="property">class </em><code class="descclassname">http.cookiejar.</code><code class="descname">DefaultCookiePolicy</code><span class="sig-paren">(</span><em>blocked_domains=None</em>, <em>allowed_domains=None</em>, <em>netscape=True</em>, <em>rfc2965=False</em>, <em>rfc2109_as_netscape=None</em>, <em>hide_cookie2=False</em>, <em>strict_domain=False</em>, <em>strict_rfc2965_unverifiable=True</em>, <em>strict_ns_unverifiable=False</em>, <em>strict_ns_domain=DefaultCookiePolicy.DomainLiberal</em>, <em>strict_ns_set_initial_dollar=False</em>, <em>strict_ns_set_path=False</em><span class="sig-paren">)</span><a class="headerlink" href="#http.cookiejar.DefaultCookiePolicy" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>コンストラクタはキーワード引数しか取りません。 <em>blocked_domains</em> はドメイン名からなるシーケンスで、ここからは決してクッキーを受けとらないし、このドメインにクッキーを返すこともありません。 <em>allowed_domains</em> が <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> でない場合、これはこのドメインのみからクッキーを受けとり、返すという指定になります。これ以外の引数については <a class="reference internal" href="#http.cookiejar.CookiePolicy" title="http.cookiejar.CookiePolicy"><code class="xref py py-class docutils literal"><span class="pre">CookiePolicy</span></code></a> および <a class="reference internal" href="#http.cookiejar.DefaultCookiePolicy" title="http.cookiejar.DefaultCookiePolicy"><code class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></code></a> オブジェクトの説明をごらんください。</p>
-<p><a class="reference internal" href="#http.cookiejar.DefaultCookiePolicy" title="http.cookiejar.DefaultCookiePolicy"><code class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></code></a> は Netscape および RFC 2965 クッキーの標準的な許可 / 拒絶のルールを実装しています。デフォルトでは、RFC 2109 のクッキー (<em class="mailheader">Set-Cookie</em> の version クッキー属性が 1 で受けとられるもの) は RFC 2965 のルールで扱われます。しかし、RFC 2965 処理が無効に設定されているか <a class="reference internal" href="#http.cookiejar.DefaultCookiePolicy.rfc2109_as_netscape" title="http.cookiejar.DefaultCookiePolicy.rfc2109_as_netscape"><code class="xref py py-attr docutils literal"><span class="pre">rfc2109_as_netscape</span></code></a> が <code class="docutils literal"><span class="pre">True</span></code> の場合、RFC 2109 クッキーは <a class="reference internal" href="#http.cookiejar.CookieJar" title="http.cookiejar.CookieJar"><code class="xref py py-class docutils literal"><span class="pre">CookieJar</span></code></a> インスタンスによって <a class="reference internal" href="#http.cookiejar.Cookie" title="http.cookiejar.Cookie"><code class="xref py py-class docutils literal"><span class="pre">Cookie</span></code></a> のインスタンスの <code class="xref py py-attr docutils literal"><span class="pre">version</span></code> 属性を 0 に設定する事で Netscapeクッキーに「ダウングレード」されます。また <a class="reference internal" href="#http.cookiejar.DefaultCookiePolicy" title="http.cookiejar.DefaultCookiePolicy"><code class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></code></a> にはいくつかの細かいポリシー設定をおこなうパラメータが用意されています。</p>
+<p><a class="reference internal" href="#http.cookiejar.DefaultCookiePolicy" title="http.cookiejar.DefaultCookiePolicy"><code class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></code></a> implements the standard accept / reject rules for
+Netscape and RFC 2965 cookies.  By default, RFC 2109 cookies (ie. cookies
+received in a <em class="mailheader">Set-Cookie</em> header with a version cookie-attribute of
+1) are treated according to the RFC 2965 rules.  However, if RFC 2965 handling
+is turned off or <a class="reference internal" href="#http.cookiejar.DefaultCookiePolicy.rfc2109_as_netscape" title="http.cookiejar.DefaultCookiePolicy.rfc2109_as_netscape"><code class="xref py py-attr docutils literal"><span class="pre">rfc2109_as_netscape</span></code></a> is <code class="docutils literal"><span class="pre">True</span></code>, RFC 2109 cookies are
+'downgraded' by the <a class="reference internal" href="#http.cookiejar.CookieJar" title="http.cookiejar.CookieJar"><code class="xref py py-class docutils literal"><span class="pre">CookieJar</span></code></a> instance to Netscape cookies, by
+setting the <code class="xref py py-attr docutils literal"><span class="pre">version</span></code> attribute of the <a class="reference internal" href="#http.cookiejar.Cookie" title="http.cookiejar.Cookie"><code class="xref py py-class docutils literal"><span class="pre">Cookie</span></code></a> instance to 0.
+<a class="reference internal" href="#http.cookiejar.DefaultCookiePolicy" title="http.cookiejar.DefaultCookiePolicy"><code class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></code></a> also provides some parameters to allow some
+fine-tuning of policy.</p>
 </dd></dl>
 
 <dl class="class">
 <dt id="http.cookiejar.Cookie">
 <em class="property">class </em><code class="descclassname">http.cookiejar.</code><code class="descname">Cookie</code><a class="headerlink" href="#http.cookiejar.Cookie" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>このクラスは Netscape クッキー、RFC 2109 のクッキー、および RFC 2965 のクッキーを表現します。 <a class="reference internal" href="#module-http.cookiejar" title="http.cookiejar: Classes for automatic handling of HTTP cookies."><code class="xref py py-mod docutils literal"><span class="pre">http.cookiejar</span></code></a> のユーザが自分で <a class="reference internal" href="#http.cookiejar.Cookie" title="http.cookiejar.Cookie"><code class="xref py py-class docutils literal"><span class="pre">Cookie</span></code></a> インスタンスを作成することは想定されていません。かわりに、必要に応じて <a class="reference internal" href="#http.cookiejar.CookieJar" title="http.cookiejar.CookieJar"><code class="xref py py-class docutils literal"><span class="pre">CookieJar</span></code></a> インスタンスの <code class="xref py py-meth docutils literal"><span class="pre">make_cookies()</span></code> を呼ぶことになっています。</p>
+<dd><p>This class represents Netscape, RFC 2109 and RFC 2965 cookies.  It is not
+expected that users of <a class="reference internal" href="#module-http.cookiejar" title="http.cookiejar: Classes for automatic handling of HTTP cookies."><code class="xref py py-mod docutils literal"><span class="pre">http.cookiejar</span></code></a> construct their own <a class="reference internal" href="#http.cookiejar.Cookie" title="http.cookiejar.Cookie"><code class="xref py py-class docutils literal"><span class="pre">Cookie</span></code></a>
+instances.  Instead, if necessary, call <code class="xref py py-meth docutils literal"><span class="pre">make_cookies()</span></code> on a
+<a class="reference internal" href="#http.cookiejar.CookieJar" title="http.cookiejar.CookieJar"><code class="xref py py-class docutils literal"><span class="pre">CookieJar</span></code></a> instance.</p>
 </dd></dl>
 
 <div class="admonition seealso">
@@ -165,11 +176,11 @@
 <dt><a class="reference external" href="https://curl.haxx.se/rfc/cookie_spec.html">https://curl.haxx.se/rfc/cookie_spec.html</a></dt>
 <dd>元祖 Netscape のクッキープロトコルの仕様です。今でもこれが主流のプロトコルですが、現在のメジャーなブラウザ (と <a class="reference internal" href="#module-http.cookiejar" title="http.cookiejar: Classes for automatic handling of HTTP cookies."><code class="xref py py-mod docutils literal"><span class="pre">http.cookiejar</span></code></a>) が実装している「Netscape クッキープロトコル」は <code class="docutils literal"><span class="pre">cookie_spec.html</span></code> で述べられているものとおおまかにしか似ていません。</dd>
 <dt><span class="target" id="index-2"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2109.html"><strong>RFC 2109</strong></a> - HTTP State Management Mechanism</dt>
-<dd>RFC 2965 によって過去の遺物になりました。 <em class="mailheader">Set-Cookie</em> の version=1 で使います。</dd>
+<dd>Obsoleted by RFC 2965. Uses <em class="mailheader">Set-Cookie</em> with version=1.</dd>
 <dt><span class="target" id="index-3"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2965.html"><strong>RFC 2965</strong></a> - HTTP State Management Mechanism</dt>
 <dd>Netscape プロトコルのバグを修正したものです。 <em class="mailheader">Set-Cookie</em> のかわりに <em class="mailheader">Set-Cookie2</em> を使いますが、普及してはいません。</dd>
 <dt><a class="reference external" href="http://kristol.org/cookie/errata.html">http://kristol.org/cookie/errata.html</a></dt>
-<dd>RFC 2965 に対する未完の正誤表です。</dd>
+<dd>Unfinished errata to RFC 2965.</dd>
 </dl>
 <p class="last"><span class="target" id="index-4"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc2964.html"><strong>RFC 2964</strong></a> - Use of HTTP State Management</p>
 </div>
@@ -310,7 +321,8 @@ example if the file does not exist.</p>
 <dd><p>Mozilla の <code class="docutils literal"><span class="pre">cookies.txt</span></code> ファイル形式 (この形式はまた Lynx と Netscape ブラウザによっても使われています) でディスクにクッキーを読み書きするための <a class="reference internal" href="#http.cookiejar.FileCookieJar" title="http.cookiejar.FileCookieJar"><code class="xref py py-class docutils literal"><span class="pre">FileCookieJar</span></code></a> です。</p>
 <div class="admonition note">
 <p class="first admonition-title">注釈</p>
-<p class="last">このクラスは RFC 2965 クッキーに関する情報を失います。また、より新しいか、標準でない <code class="docutils literal"><span class="pre">port</span></code> などのクッキー属性についての情報も失います。</p>
+<p class="last">This loses information about RFC 2965 cookies, and also about newer or
+non-standard cookie-attributes such as <code class="docutils literal"><span class="pre">port</span></code>.</p>
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">警告</p>
@@ -370,13 +382,14 @@ example if the file does not exist.</p>
 <dl class="attribute">
 <dt id="http.cookiejar.CookiePolicy.rfc2965">
 <code class="descclassname">CookiePolicy.</code><code class="descname">rfc2965</code><a class="headerlink" href="#http.cookiejar.CookiePolicy.rfc2965" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>RFC 2965 プロトコルを実装していることを示します。</p>
+<dd><p>Implement RFC 2965 protocol.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="http.cookiejar.CookiePolicy.hide_cookie2">
 <code class="descclassname">CookiePolicy.</code><code class="descname">hide_cookie2</code><a class="headerlink" href="#http.cookiejar.CookiePolicy.hide_cookie2" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p><em class="mailheader">Cookie2</em> ヘッダをリクエストに含めないようにします (このヘッダが存在する場合、私たちは RFC 2965 クッキーを理解するということをサーバに示すことになります)。</p>
+<dd><p>Don’t add <em class="mailheader">Cookie2</em> header to requests (the presence of this header
+indicates to the server that we understand RFC 2965 cookies).</p>
 </dd></dl>
 
 <p>もっとも有用な方法は、 <a class="reference internal" href="#http.cookiejar.DefaultCookiePolicy" title="http.cookiejar.DefaultCookiePolicy"><code class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></code></a> をサブクラス化した <a class="reference internal" href="#http.cookiejar.CookiePolicy" title="http.cookiejar.CookiePolicy"><code class="xref py py-class docutils literal"><span class="pre">CookiePolicy</span></code></a> クラスを定義して、いくつか (あるいはすべて) のメソッドをオーバーライドすることでしょう。 <a class="reference internal" href="#http.cookiejar.CookiePolicy" title="http.cookiejar.CookiePolicy"><code class="xref py py-class docutils literal"><span class="pre">CookiePolicy</span></code></a> 自体はどのようなクッキーも受け入れて設定を許可する「ポリシー無し」ポリシーとして使うこともできます (これが役に立つことはあまりありませんが)。</p>
@@ -384,7 +397,8 @@ example if the file does not exist.</p>
 <div class="section" id="defaultcookiepolicy-objects">
 <span id="default-cookie-policy-objects"></span><h2>21.24.4. DefaultCookiePolicy オブジェクト<a class="headerlink" href="#defaultcookiepolicy-objects" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>クッキーを受けつけ、またそれを返す際の標準的なルールを実装します。</p>
-<p>RFC 2965 クッキーと Netscape クッキーの両方に対応しています。デフォルトでは、RFC 2965 の処理はオフになっています。</p>
+<p>Both RFC 2965 and Netscape cookies are covered.  RFC 2965 handling is switched
+off by default.</p>
 <p>自分のポリシーを提供するいちばん簡単な方法は、このクラスを継承して、自分用の追加チェックの前にオーバーライドした元のメソッドを呼び出すことです:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">http.cookiejar</span>
 <span class="k">class</span> <span class="nc">MyCookiePolicy</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">cookiejar</span><span class="o">.</span><span class="n">DefaultCookiePolicy</span><span class="p">):</span>
@@ -440,7 +454,12 @@ example if the file does not exist.</p>
 <dl class="attribute">
 <dt id="http.cookiejar.DefaultCookiePolicy.rfc2109_as_netscape">
 <code class="descclassname">DefaultCookiePolicy.</code><code class="descname">rfc2109_as_netscape</code><a class="headerlink" href="#http.cookiejar.DefaultCookiePolicy.rfc2109_as_netscape" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>真の場合、 <a class="reference internal" href="#http.cookiejar.CookieJar" title="http.cookiejar.CookieJar"><code class="xref py py-class docutils literal"><span class="pre">CookieJar</span></code></a> のインスタンスに RFC 2109 クッキー (即ち <em class="mailheader">Set-Cookie</em> ヘッダのクッキー属性 Version の値が 1 のクッキー) を Netscapeクッキーへ、 <a class="reference internal" href="#http.cookiejar.Cookie" title="http.cookiejar.Cookie"><code class="xref py py-class docutils literal"><span class="pre">Cookie</span></code></a> インスタンスの version 属性を 0 に設定する事でダウングレードするように要求します。デフォルトの値は <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> であり、この場合 RFC 2109 クッキーは RFC 2965 処理が無効に設定されている場合に限りダウングレードされます。それ故に RFC 2109 クッキーはデフォルトではダウングレードされます。</p>
+<dd><p>If true, request that the <a class="reference internal" href="#http.cookiejar.CookieJar" title="http.cookiejar.CookieJar"><code class="xref py py-class docutils literal"><span class="pre">CookieJar</span></code></a> instance downgrade RFC 2109 cookies
+(ie. cookies received in a <em class="mailheader">Set-Cookie</em> header with a version
+cookie-attribute of 1) to Netscape cookies by setting the version attribute of
+the <a class="reference internal" href="#http.cookiejar.Cookie" title="http.cookiejar.Cookie"><code class="xref py py-class docutils literal"><span class="pre">Cookie</span></code></a> instance to 0.  The default value is <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a>, in which
+case RFC 2109 cookies are downgraded if and only if RFC 2965 handling is turned
+off.  Therefore, RFC 2109 cookies are downgraded by default.</p>
 </dd></dl>
 
 <p>一般的な厳密性のスイッチ:</p>
@@ -450,18 +469,21 @@ example if the file does not exist.</p>
 <dd><p>サイトに、国別コードとトップレベルドメインだけからなるドメイン名 (<code class="docutils literal"><span class="pre">.co.uk</span></code>, <code class="docutils literal"><span class="pre">.gov.uk</span></code>, <code class="docutils literal"><span class="pre">.co.nz</span></code> など) を設定させないようにします。これは完璧からはほど遠い実装であり、いつもうまくいくとは限りません!</p>
 </dd></dl>
 
-<p>RFC 2965 プロトコルの厳密性に関するスイッチ:</p>
+<p>RFC 2965 protocol strictness switches:</p>
 <dl class="attribute">
 <dt id="http.cookiejar.DefaultCookiePolicy.strict_rfc2965_unverifiable">
 <code class="descclassname">DefaultCookiePolicy.</code><code class="descname">strict_rfc2965_unverifiable</code><a class="headerlink" href="#http.cookiejar.DefaultCookiePolicy.strict_rfc2965_unverifiable" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>検証不可能なトランザクション (通常これはリダイレクトか、別のサイトがホスティングしているイメージの読み込み要求です) に関する RFC 2965 の規則に従います。この値が偽の場合、検証可能性を基準にしてクッキーがブロックされることは <em>決して</em> ありません</p>
+<dd><p>Follow RFC 2965 rules on unverifiable transactions (usually, an unverifiable
+transaction is one resulting from a redirect or a request for an image hosted on
+another site).  If this is false, cookies are <em>never</em> blocked on the basis of
+verifiability</p>
 </dd></dl>
 
 <p>Netscape プロトコルの厳密性に関するスイッチ:</p>
 <dl class="attribute">
 <dt id="http.cookiejar.DefaultCookiePolicy.strict_ns_unverifiable">
 <code class="descclassname">DefaultCookiePolicy.</code><code class="descname">strict_ns_unverifiable</code><a class="headerlink" href="#http.cookiejar.DefaultCookiePolicy.strict_ns_unverifiable" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>検証不可能なトランザクションに関する RFC 2965 の規則を Netscape クッキーに対しても適用します。</p>
+<dd><p>Apply RFC 2965 rules on unverifiable transactions even to Netscape cookies.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -498,7 +520,7 @@ example if the file does not exist.</p>
 <dl class="attribute">
 <dt id="http.cookiejar.DefaultCookiePolicy.DomainRFC2965Match">
 <code class="descclassname">DefaultCookiePolicy.</code><code class="descname">DomainRFC2965Match</code><a class="headerlink" href="#http.cookiejar.DefaultCookiePolicy.DomainRFC2965Match" title="この定義へのパーマリンク">¶</a></dt>
-<dd><p>クッキーを設定するさい、RFC 2965 の完全ドメインマッチングを要求します。</p>
+<dd><p>When setting cookies, require a full RFC 2965 domain-match.</p>
 </dd></dl>
 
 <p>以下の属性は上記のフラグのうちもっともよく使われる組み合わせで、便宜をはかるために提供されています:</p>
@@ -660,7 +682,10 @@ which case <a class="reference internal" href="#http.cookiejar.Cookie.version" t
 <span class="n">r</span> <span class="o">=</span> <span class="n">opener</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;http://example.com/&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>つぎの例は <a class="reference internal" href="#http.cookiejar.DefaultCookiePolicy" title="http.cookiejar.DefaultCookiePolicy"><code class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></code></a> の使用例です。 RFC 2965 クッキーをオンにし、Netscape クッキーを設定したり返したりするドメインに対してより厳密な規則を適用します。そしていくつかのドメインからクッキーを設定あるいは返還するのをブロックしています:</p>
+<p>The next example illustrates the use of <a class="reference internal" href="#http.cookiejar.DefaultCookiePolicy" title="http.cookiejar.DefaultCookiePolicy"><code class="xref py py-class docutils literal"><span class="pre">DefaultCookiePolicy</span></code></a>. Turn on
+RFC 2965 cookies, be more strict about domains when setting and returning
+Netscape cookies, and block some domains from setting cookies or having them
+returned:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib.request</span>
 <span class="kn">from</span> <span class="nn">http.cookiejar</span> <span class="k">import</span> <span class="n">CookieJar</span><span class="p">,</span> <span class="n">DefaultCookiePolicy</span>
 <span class="n">policy</span> <span class="o">=</span> <span class="n">DefaultCookiePolicy</span><span class="p">(</span>
@@ -762,7 +787,7 @@ which case <a class="reference internal" href="#http.cookiejar.Cookie.version" t
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 5月 31, 2018
+    最終更新日時: 6月 01, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。

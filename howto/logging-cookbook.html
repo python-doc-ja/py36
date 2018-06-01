@@ -1386,9 +1386,17 @@ logging_rotatingfile_example.out.5
 </div>
 <div class="section" id="inserting-a-bom-into-messages-sent-to-a-sysloghandler">
 <h2>SysLogHandler に送るメッセージに BOM を挿入する<a class="headerlink" href="#inserting-a-bom-into-messages-sent-to-a-sysloghandler" title="このヘッドラインへのパーマリンク">¶</a></h2>
-<p><a class="reference external" href="https://tools.ietf.org/html/rfc5424">RFC 5424</a> は syslog デーモンに Unicode メッセージを送る時、次の構造を要求しています: オプショナルなピュア ASCII部分、続けて UTF-8 の Byte Order Mark (BOM)、続けて UTF-8 でエンコードされた Unicode. (<a class="reference external" href="https://tools.ietf.org/html/rfc5424#section-6">仕様の該当セクション</a> を参照)</p>
+<p><a class="reference external" href="https://tools.ietf.org/html/rfc5424">RFC 5424</a> requires that a
+Unicode message be sent to a syslog daemon as a set of bytes which have the
+following structure: an optional pure-ASCII component, followed by a UTF-8 Byte
+Order Mark (BOM), followed by Unicode encoded using UTF-8. (See the <a class="reference external" href="https://tools.ietf.org/html/rfc5424#section-6">relevant
+section of the specification</a>.)</p>
 <p>Python 3.1 で <a class="reference internal" href="../library/logging.handlers.html#logging.handlers.SysLogHandler" title="logging.handlers.SysLogHandler"><code class="xref py py-class docutils literal"><span class="pre">SysLogHandler</span></code></a> に、 message に BOM を挿入するコードが追加されました。しかし、そのときの実装が悪くて、 message の先頭に BOM をつけてしまうのでピュアASCII 部分をその前に書くことができませんでした。</p>
-<p>この動作は壊れているので、Python 3.2.4 以降では BOM を挿入するコードが、削除されました。書き直されるのではなく削除されたので、RFC 5424 準拠の、BOM と、オプションのピュア ASCII部分をBOMの前に、任意の Unicode を BOM の後ろに持つ UTF-8 でエンコードされた message を生成したい場合、次の手順に従う必要があります:</p>
+<p>As this behaviour is broken, the incorrect BOM insertion code is being removed
+from Python 3.2.4 and later. However, it is not being replaced, and if you
+want to produce RFC 5424-compliant messages which include a BOM, an optional
+pure-ASCII sequence before it and arbitrary Unicode after it, encoded using
+UTF-8, then you need to do the following:</p>
 <ol class="arabic">
 <li><p class="first"><a class="reference internal" href="../library/logging.handlers.html#logging.handlers.SysLogHandler" title="logging.handlers.SysLogHandler"><code class="xref py py-class docutils literal"><span class="pre">SysLogHandler</span></code></a> のインスタンスに、次のような format 文字列を持った <a class="reference internal" href="../library/logging.html#logging.Formatter" title="logging.Formatter"><code class="xref py py-class docutils literal"><span class="pre">Formatter</span></code></a> インスタンスをアタッチする:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="s1">&#39;ASCII section</span><span class="se">\ufeff</span><span class="s1">Unicode section&#39;</span>
@@ -1401,7 +1409,10 @@ logging_rotatingfile_example.out.5
 <li><p class="first">Unicode セクションを任意のプレースホルダに置き換える。この部分を置換したデータに ASCII 外の文字が含まれていても、それは単に UTF-8 でエンコードされるだけです。</p>
 </li>
 </ol>
-<p>フォーマットされた message は <code class="docutils literal"><span class="pre">SysLogHandler</span></code> によって UTF-8 でエンコードされます。上のルールに従えば、RFC 5424 準拠のメッセージを生成できます。上のルールに従わない場合、logging は何もエラーを起こしませんが、message は RFC 5424 に準拠しない形で送られるので、syslog デーモン側で何かエラーが起こる可能性があります。</p>
+<p>The formatted message <em>will</em> be encoded using UTF-8 encoding by
+<code class="docutils literal"><span class="pre">SysLogHandler</span></code>. If you follow the above rules, you should be able to produce
+RFC 5424-compliant messages. If you don’t, logging may not complain, but your
+messages will not be RFC 5424-compliant, and your syslog daemon may complain.</p>
 </div>
 <div class="section" id="implementing-structured-logging">
 <h2>構造化ログを実装する<a class="headerlink" href="#implementing-structured-logging" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -2150,7 +2161,7 @@ Actually logged at CRITICAL
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 5月 31, 2018
+    最終更新日時: 6月 01, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。

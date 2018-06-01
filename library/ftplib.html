@@ -352,7 +352,16 @@ parameter callable that is called on each line after it is sent.</p>
 <dt id="ftplib.FTP.transfercmd">
 <code class="descclassname">FTP.</code><code class="descname">transfercmd</code><span class="sig-paren">(</span><em>cmd</em>, <em>rest=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ftplib.FTP.transfercmd" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>データ接続中に転送を初期化します。もし転送中なら、<code class="docutils literal"><span class="pre">EPRT</span></code> あるいは <code class="docutils literal"><span class="pre">PORT</span></code> コマンドと、<em>cmd</em> で指定したコマンドを送信し、接続を続けます。サーバがパッシブなら、<code class="docutils literal"><span class="pre">EPSV</span></code> あるいは <code class="docutils literal"><span class="pre">PASV</span></code> コマンドを送信して接続し、転送コマンドを開始します。どちらの場合も、接続のためのソケットを返します。</p>
-<p>省略可能な <em>rest</em> が与えられたら、 <code class="docutils literal"><span class="pre">REST</span></code> コマンドがサーバに送信され、 <em>rest</em> を引数として与えます。 <em>rest</em> は普通、要求したファイルのバイトオフセット値で、最初のバイトをとばして指定したオフセット値からファイルのバイト転送を再開するよう伝えます。しかし、RFC 959では <em>rest</em> が印字可能なASCIIコード33から126の範囲の文字列からなることを要求していることに注意して下さい。したがって、 <a class="reference internal" href="#ftplib.FTP.transfercmd" title="ftplib.FTP.transfercmd"><code class="xref py py-meth docutils literal"><span class="pre">transfercmd()</span></code></a> メソッドは <em>rest</em> を文字列に変換しますが、文字列の内容についてチェックしません。もし <code class="docutils literal"><span class="pre">REST</span></code> コマンドをサーバが認識しないなら、例外 <code class="xref py py-exc docutils literal"><span class="pre">error_re</span> <span class="pre">ply</span></code> が発生します。この例外が発生したら、引数 <em>rest</em> なしに <a class="reference internal" href="#ftplib.FTP.transfercmd" title="ftplib.FTP.transfercmd"><code class="xref py py-meth docutils literal"><span class="pre">transfercmd()</span></code></a> を実行します。</p>
+<p>If optional <em>rest</em> is given, a <code class="docutils literal"><span class="pre">REST</span></code> command is sent to the server, passing
+<em>rest</em> as an argument.  <em>rest</em> is usually a byte offset into the requested file,
+telling the server to restart sending the file’s bytes at the requested offset,
+skipping over the initial bytes.  Note however that RFC 959 requires only that
+<em>rest</em> be a string containing characters in the printable range from ASCII code
+33 to ASCII code 126.  The <a class="reference internal" href="#ftplib.FTP.transfercmd" title="ftplib.FTP.transfercmd"><code class="xref py py-meth docutils literal"><span class="pre">transfercmd()</span></code></a> method, therefore, converts
+<em>rest</em> to a string, but no check is performed on the string’s contents.  If the
+server does not recognize the <code class="docutils literal"><span class="pre">REST</span></code> command, an <a class="reference internal" href="#ftplib.error_reply" title="ftplib.error_reply"><code class="xref py py-exc docutils literal"><span class="pre">error_reply</span></code></a> exception
+will be raised.  If this happens, simply call <a class="reference internal" href="#ftplib.FTP.transfercmd" title="ftplib.FTP.transfercmd"><code class="xref py py-meth docutils literal"><span class="pre">transfercmd()</span></code></a> without a
+<em>rest</em> argument.</p>
 </dd></dl>
 
 <dl class="method">
@@ -581,7 +590,7 @@ without opening fixed ports.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 5月 31, 2018
+    最終更新日時: 6月 01, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。

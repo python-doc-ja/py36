@@ -579,7 +579,13 @@ using the value in <code class="docutils literal"><span class="pre">host</span><
 <code class="descname">emit</code><span class="sig-paren">(</span><em>record</em><span class="sig-paren">)</span><a class="headerlink" href="#logging.handlers.SysLogHandler.emit" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>レコードは書式化された後、 syslog サーバに送信されます。例外情報が存在しても、サーバには <em>送信されません</em> 。</p>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.2.1 で変更: </span>(参照: <a class="reference external" href="https://bugs.python.org/issue12168">bpo-12168</a>) 初期のバージョンでは、 syslog デーモンに送られるメッセージは常に NUL バイトで終端していました。初期のバージョンの syslog デーモンが NUL 終端されたメッセージを期待していたからです - たとえ、それが適切な仕様 (RFC 5424) にはなかったとしても。 syslog デーモンの新しいバージョンは NUL バイトを期待せず、代わりにもしそれがある場合は削除します。さらに、より最近のデーモン (RFC 5424 により忠実なバージョン) は、メッセージの一部として NUL バイトを通します。</p>
+<p><span class="versionmodified">バージョン 3.2.1 で変更: </span>(See: <a class="reference external" href="https://bugs.python.org/issue12168">bpo-12168</a>.) In earlier versions, the message sent to the
+syslog daemons was always terminated with a NUL byte, because early
+versions of these daemons expected a NUL terminated message - even
+though it’s not in the relevant specification (RFC 5424). More recent
+versions of these daemons don’t expect the NUL byte but strip it off
+if it’s there, and even more recent daemons (which adhere more closely
+to RFC 5424) pass the NUL byte on as part of the message.</p>
 <p>このような異なるデーモンの振る舞いすべてに対して syslog メッセージの取り扱いをより容易にするため、 NUL バイトの追加はクラスレベル属性 <code class="docutils literal"><span class="pre">append_nul</span></code> を使用して設定できるようになりました。これはデフォルトで <code class="docutils literal"><span class="pre">True</span></code> (既存の振る舞いを保持) ですが、 <code class="docutils literal"><span class="pre">SysLogHandler</span></code> インスタンスが NUL 終端文字を追加 <em>しない</em> ように <code class="docutils literal"><span class="pre">False</span></code> にセットすることができます。</p>
 </div>
 <div class="versionchanged">
@@ -1083,7 +1089,7 @@ behaviour of flushing the buffer will occur when the handler is closed.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 5月 31, 2018
+    最終更新日時: 6月 01, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
