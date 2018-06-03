@@ -362,9 +362,13 @@ the set of values to be yielded.</p>
 </dd>
 <dt>カスタムクラス型</dt>
 <dd><p class="first">カスタムクラス型は通常、クラス定義 (<a class="reference internal" href="compound_stmts.html#class"><span class="std std-ref">クラス定義</span></a> 参照) で生成されます。クラスは辞書オブジェクトで実装された名前空間を持っています。クラス属性の参照は、この辞書に対する探索 (lookup) に翻訳されます。例えば、 <code class="docutils literal"><span class="pre">C.x</span></code> は <code class="docutils literal"><span class="pre">C.__dict__[&quot;x&quot;]</span></code> に翻訳されます (ただし、属性参照の意味を変えられる幾つかのフックがあります)。属性がこの探索で見つからないとき、その基底クラスで探索が続けられます。基底クラスのこの探索は、C3 メソッド解決順序 (MRO=method resolution order) を利用していて、複数の継承経路が共通の祖先につながる「ダイアモンド」継承構造があっても正しく動作します。 C3 MRO についてのより詳細な情報は、 2.3リリースに付属するドキュメント <a class="reference external" href="https://www.python.org/download/releases/2.3/mro/">https://www.python.org/download/releases/2.3/mro/</a> にあります。</p>
-<p id="index-45">クラス (<code class="xref py py-class docutils literal"><span class="pre">C</span></code> とします) 属性参照がクラスメソッドオブジェクトを返そうとするときには、 そのオブジェクトは <code class="xref py py-attr docutils literal"><span class="pre">__self__</span></code> 属性が <code class="xref py py-class docutils literal"><span class="pre">C</span></code> であるようなインスタンスメソッドオブジェクトに変換されます。
-静的メソッドオブジェクトを返そうとするときには、静的メソッドオブジェクトでラップされたオブジェクトに変換されます。
-<a class="reference internal" href="#descriptors"><span class="std std-ref">デスクリプタ (descriptor) の実装</span></a> 節を参照すると、また別の理由でクラスから取り出した属性と実際に <a class="reference internal" href="../library/stdtypes.html#object.__dict__" title="object.__dict__"><code class="xref py py-attr docutils literal"><span class="pre">__dict__</span></code></a> に保存されているものが異なることがあるのが分かります。</p>
+<p id="index-45">When a class attribute reference (for class <code class="xref py py-class docutils literal"><span class="pre">C</span></code>, say) would yield a
+class method object, it is transformed into an instance method object whose
+<code class="xref py py-attr docutils literal"><span class="pre">__self__</span></code> attributes is <code class="xref py py-class docutils literal"><span class="pre">C</span></code>.  When it would yield a static
+method object, it is transformed into the object wrapped by the static method
+object. See section <a class="reference internal" href="#descriptors"><span class="std std-ref">デスクリプタ (descriptor) の実装</span></a> for another way in which attributes
+retrieved from a class may differ from those actually contained in its
+<a class="reference internal" href="../library/stdtypes.html#object.__dict__" title="object.__dict__"><code class="xref py py-attr docutils literal"><span class="pre">__dict__</span></code></a>.</p>
 <p id="index-46">クラス属性を代入すると、そのクラスの辞書だけが更新され、基底クラスの辞書は更新しません。</p>
 <p id="index-47">クラスオブジェクトを呼び出す (上記を参照) と、クラスインスタンスを生成します (下記を参照)。</p>
 <p class="last" id="index-48">特殊属性: <a class="reference internal" href="../library/stdtypes.html#definition.__name__" title="definition.__name__"><code class="xref py py-attr docutils literal"><span class="pre">__name__</span></code></a> はクラス名です;
@@ -1624,7 +1628,7 @@ CPython 3.7 では、 <code class="docutils literal"><span class="pre">__aiter__
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 6月 02, 2018
+    最終更新日時: 6月 03, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
