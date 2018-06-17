@@ -181,7 +181,14 @@
 <div class="versionchanged">
 <p><span class="versionmodified">バージョン 3.4 で変更: </span>すべての Unix プラットフォームで <em>spawn</em> が、一部のプラットフォームで <em>forkserver</em> が追加されました。Windows では親プロセスの継承可能な全ハンドルが子プロセスに継承されることがなくなりました。</p>
 </div>
-<p>Unix で開始方式に <em>spawn</em> あるいは <em>forkserver</em> を使用した場合は、プログラムのプロセスによって作成されたリンクされていない名前付きセマフォを追跡する <em>セマフォトラッカー</em> プロセスも開始されます。全プロセスが終了したときにセマフォトラッカーは残っているあらゆるセマフォのリンクを解除します。通常そういったことはないのですが、プロセスがシグナルによって kill されたときに &quot;漏れた&quot; セマフォが発生する場合があります。(名前付きセマフォのリンク解除は、システムが個数の上限のみ許可している場合に深刻な問題になるため、それらは再起動されるまで自動的にリンク解除されることはありません。)</p>
+<p>On Unix using the <em>spawn</em> or <em>forkserver</em> start methods will also
+start a <em>semaphore tracker</em> process which tracks the unlinked named
+semaphores created by processes of the program.  When all processes
+have exited the semaphore tracker unlinks any remaining semaphores.
+Usually there should be none, but if a process was killed by a signal
+there may some &quot;leaked&quot; semaphores.  (Unlinking the named semaphores
+is a serious matter since the system allows only a limited number, and
+they will not be automatically unlinked until the next reboot.)</p>
 <p>開始方式はメインモジュールの <code class="docutils literal"><span class="pre">if</span> <span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">'__main__'</span></code> 節内で、関数 <a class="reference internal" href="#multiprocessing.set_start_method" title="multiprocessing.set_start_method"><code class="xref py py-func docutils literal"><span class="pre">set_start_method()</span></code></a> によって指定します。以下に例を示します:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
 
@@ -213,7 +220,10 @@
     <span class="n">p</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>あるコンテキストに関連したオブジェクトは異なるコンテキストのプロセスとは互換性がない場合があることに注意してください。特に、<em>fork</em> コンテキストを使用して作成されたロックは、<em>spawn</em> あるいは <em>forkserver</em> を使用して開始されたプロセスに渡すことはできません。</p>
+<p>Note that objects related to one context may not be compatible with
+processes for a different context.  In particular, locks created using
+the <em>fork</em> context cannot be passed to a processes started using the
+<em>spawn</em> or <em>forkserver</em> start methods.</p>
 <p>特定の開始方式の使用を要求するライブラリは <a class="reference internal" href="#multiprocessing.get_context" title="multiprocessing.get_context"><code class="xref py py-func docutils literal"><span class="pre">get_context()</span></code></a> を使用してライブラリ利用者の選択を阻害しないようにするべきです。</p>
 </div>
 <div class="section" id="exchanging-objects-between-processes">
