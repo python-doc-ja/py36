@@ -105,7 +105,12 @@
 <span id="memoryoverview"></span><h2>概要<a class="headerlink" href="#overview" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>Python におけるメモリ管理には、全ての Python オブジェクトとデータ構造が入ったプライベートヒープ (private heap) が必須です。プライベートヒープの管理は、内部的には <em>Python メモリマネージャ (Python memory manager)</em> が確実に行います。Python メモリマネージャには、共有 (sharing)、セグメント分割 (segmentation)、事前割り当て (preallocation)、キャッシュ化 (caching) といった、様々な動的記憶管理の側面を扱うために、個別のコンポーネントがあります。</p>
 <p>最低水準層では、素のメモリ操作関数 (raw memory allocator) がオペレーティングシステムのメモリ管理機構とやりとりして、プライベートヒープ内にPython 関連の全てのデータを記憶するのに十分な空きがあるかどうか確認します。素のメモリ操作関数の上には、いくつかのオブジェクト固有のメモリ操作関数があります。これらは同じヒープを操作し、各オブジェクト型固有の事情に合ったメモリ管理ポリシを実装しています。例えば、整数オブジェクトは文字列やタプル、辞書とは違ったやり方でヒープ内で管理されます。というのも、整数には値を記憶する上で特別な要件があり、速度/容量のトレードオフが存在するからです。このように、Python メモリマネジャは作業のいくつかをオブジェクト固有のメモリ操作関数に委譲しますが、これらの関数がプライベートヒープからはみ出してメモリ管理を行わないようにしています。</p>
-<p>重要なのは、たとえユーザがいつもヒープ内のメモリブロックを指すようなオブジェクトポインタを操作しているとしても、Python 用ヒープの管理はインタプリタ自体が行うもので、ユーザがそれを制御する余地はないと理解することです。Python オブジェクトや内部使用されるバッファを入れるためのヒープ空間のメモリ確保は、必要に応じて、Python メモリマネージャがこのドキュメント内で列挙しているPython/C API 関数群を介して行います。</p>
+<p>It is important to understand that the management of the Python heap is
+performed by the interpreter itself and that the user has no control over it,
+even if she regularly manipulates object pointers to memory blocks inside that
+heap.  The allocation of heap space for Python objects and other internal
+buffers is performed on demand by the Python memory manager through the Python/C
+API functions listed in this document.</p>
 <p id="index-0">メモリ管理の崩壊を避けるため、拡張モジュールの作者は決して Python  オブジェクトを C ライブラリが公開している関数: <code class="xref c c-func docutils literal"><span class="pre">malloc()</span></code> 、 <code class="xref c c-func docutils literal"><span class="pre">calloc()</span></code> 、 <code class="xref c c-func docutils literal"><span class="pre">realloc()</span></code> および <code class="xref c c-func docutils literal"><span class="pre">free()</span></code> で操作しようとしてはなりません。こうした関数を使うと、C のメモリ操作関数と Python メモリマネージャとの間で関数呼び出しが交錯します。 C のメモリ操作関数とPython メモリマネージャは異なるアルゴリズムで実装されていて、異なるヒープを操作するため、呼び出しの交錯は致命的な結果を招きます。とはいえ、個別の目的のためなら、 C ライブラリのメモリ操作関数を使って安全にメモリを確保したり解放したりできます。例えば、以下がそのような例です:</p>
 <div class="highlight-c"><div class="highlight"><pre><span></span><span class="n">PyObject</span> <span class="o">*</span><span class="n">res</span><span class="p">;</span>
 <span class="kt">char</span> <span class="o">*</span><span class="n">buf</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="n">BUFSIZ</span><span class="p">);</span> <span class="cm">/* for I/O */</span>
@@ -624,7 +629,7 @@ if the GIL is held when functions of <a class="reference internal" href="#c.PYME
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 6月 17, 2018
+    最終更新日時: 6月 19, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
