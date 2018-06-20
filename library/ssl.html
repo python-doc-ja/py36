@@ -1614,7 +1614,15 @@ in the session cache since the context was created:</p>
 <div class="section" id="certificates">
 <span id="ssl-certificates"></span><span id="index-16"></span><h2>18.2.4. 証明書<a class="headerlink" href="#certificates" title="このヘッドラインへのパーマリンク">¶</a></h2>
 <p>証明書を大まかに説明すると、公開鍵/秘密鍵システムの一種です。このシステムでは、各 <em>principal</em> (これはマシン、人、組織などです) は、ユニークな2つの暗号鍵を割り当てられます。1つは公開され、 <em>公開鍵(public key)</em> と呼ばれます。もう一方は秘密にされ、 <em>秘密鍵(private key)</em> と呼ばれます。 2つの鍵は関連しており、片方の鍵で暗号化したメッセージは、もう片方の鍵 <strong>のみ</strong> で復号できます。</p>
-<p>証明書は2つの principal の情報を含んでいます。証明書は <em>subject</em> 名とその公開鍵を含んでいます。また、もう一つの principal である <em>発行者(issuer)</em> からの、 subject が本人であることと、その公開鍵が正しいことの宣言(statement)を含んでいます。発行者からの宣言は、その発行者の秘密鍵で署名されています。発行者の秘密鍵は発行者しか知りませんが、誰もがその発行者の公開鍵を利用して宣言を復号し、証明書内の別の情報と比較することで認証することができます。証明書はまた、その証明書が有効である期限に関する情報も含んでいます。この期限は &quot;notBefore&quot; と &quot;notAfter&quot; と呼ばれる2つのフィールドで表現されています。</p>
+<p>A certificate contains information about two principals.  It contains the name
+of a <em>subject</em>, and the subject’s public key.  It also contains a statement by a
+second principal, the <em>issuer</em>, that the subject is who he claims to be, and
+that this is indeed the subject’s public key.  The issuer’s statement is signed
+with the issuer’s private key, which only the issuer knows.  However, anyone can
+verify the issuer’s statement by finding the issuer’s public key, decrypting the
+statement with it, and comparing it to the other information in the certificate.
+The certificate also contains information about the time period over which it is
+valid.  This is expressed as two fields, called &quot;notBefore&quot; and &quot;notAfter&quot;.</p>
 <p>Python において証明書を利用する場合、クライアントもサーバーも自分を証明するために証明書を利用することができます。ネットワーク接続の相手側に証明書の提示を要求する事ができ、そのクライアントやサーバーが認証を必要とするならその証明書を認証することができます。認証が失敗した場合、接続は例外を発生させます。認証は下位層のOpenSSLフレームワークが自動的に行います。アプリケーションは認証機構について意識する必要はありません。しかし、アプリケーションは認証プロセスのために幾つかの証明書を提供する必要があるかもしれません。</p>
 <p>Python は証明書を格納したファイルを利用します。そのファイルは &quot;PEM&quot; (<span class="target" id="index-39"></span><a class="rfc reference external" href="https://tools.ietf.org/html/rfc1422.html"><strong>RFC 1422</strong></a> 参照) フォーマットという、ヘッダー行とフッター行の間にbase-64エンコードされた形をとっている必要があります。</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="o">-----</span><span class="n">BEGIN</span> <span class="n">CERTIFICATE</span><span class="o">-----</span>
@@ -2199,7 +2207,7 @@ with LibreSSL.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 6月 19, 2018
+    最終更新日時: 6月 20, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
