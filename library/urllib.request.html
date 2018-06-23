@@ -1079,7 +1079,14 @@ implementation will raise an <a class="reference internal" href="exceptions.html
 <dt id="urllib.request.urlretrieve">
 <code class="descclassname">urllib.request.</code><code class="descname">urlretrieve</code><span class="sig-paren">(</span><em>url</em>, <em>filename=None</em>, <em>reporthook=None</em>, <em>data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.request.urlretrieve" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>URL で表されるネットワークオブジェクトをローカルファイルにコピーします。 URL がローカルファイルを示している場合は、ファイル名が与えられない限りオブジェクトはコピーされません。戻り値はタプル <code class="docutils literal"><span class="pre">(filename,</span> <span class="pre">headers)</span></code> になり、 <em>filename</em> はオブジェクトが保存されたローカルファイル名、 <em>headers</em> は (リモートオブジェクトに対しては) <a class="reference internal" href="#urllib.request.urlopen" title="urllib.request.urlopen"><code class="xref py py-func docutils literal"><span class="pre">urlopen()</span></code></a> が返したオブジェクトの <code class="xref py py-meth docutils literal"><span class="pre">info()</span></code> メソッドが返すものすべてになります。例外は <a class="reference internal" href="#urllib.request.urlopen" title="urllib.request.urlopen"><code class="xref py py-func docutils literal"><span class="pre">urlopen()</span></code></a> のものと同じになります。</p>
-<p>2 つめの引数がある場合、オブジェクトのコピー先となるファイルの位置を指定します (もしなければ、ファイルの場所は一時ファイル (tmpfile) の置き場になり、名前は適当につけられます)。 3 つめの引数がある場合、ネットワークとの接続が確立された際に一度呼び出され、以降データのブロックが読み出されるたびに呼び出されるフック関数 (hook function) を指定します。フック関数には 3 つの引数が渡されます; これまで転送されたブロック数のカウント、バイト単位で表されたブロックサイズ、ファイルの総サイズです。3 つ目のファイルの総サイズは、ファイル取得の際の応答時にファイルサイズを返さない古い FTP サーバでは <code class="docutils literal"><span class="pre">-1</span></code> になります。</p>
+<p>The second argument, if present, specifies the file location to copy to (if
+absent, the location will be a tempfile with a generated name). The third
+argument, if present, is a hook function that will be called once on
+establishment of the network connection and once after each block read
+thereafter.  The hook will be passed three arguments; a count of blocks
+transferred so far, a block size in bytes, and the total size of the file.  The
+third argument may be <code class="docutils literal"><span class="pre">-1</span></code> on older FTP servers which do not return a file
+size in response to a retrieval request.</p>
 <p>以下は最も一般的な使用例です:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">urllib.request</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">local_filename</span><span class="p">,</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="s1">&#39;http://python.org/&#39;</span><span class="p">)</span>
@@ -1304,7 +1311,7 @@ implementation will raise an <a class="reference internal" href="exceptions.html
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 6月 22, 2018
+    最終更新日時: 6月 23, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
