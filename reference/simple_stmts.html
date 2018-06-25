@@ -363,8 +363,7 @@ target, then the interpreter evaluates the target except for the last
 <span class="gr">RuntimeError</span>: <span class="n">Something bad happened</span>
 </pre></div>
 </div>
-<p>Exception chaining can be explicitly suppressed by specifying <a class="reference internal" href="../library/constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> in
-the <code class="docutils literal"><span class="pre">from</span></code> clause:</p>
+<p><code class="docutils literal"><span class="pre">from</span></code> 節に <a class="reference internal" href="../library/constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> を指定することで、例外の連鎖を明示的に非表示にできます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span><span class="p">)</span>
 <span class="gp">... </span><span class="k">except</span><span class="p">:</span>
@@ -377,11 +376,10 @@ the <code class="docutils literal"><span class="pre">from</span></code> clause:<
 </div>
 <p>例外に関する追加情報は <a class="reference internal" href="executionmodel.html#exceptions"><span class="std std-ref">例外</span></a> 節にあります。また、例外処理に関する情報は <a class="reference internal" href="compound_stmts.html#try"><span class="std std-ref">try 文</span></a> 節にあります。</p>
 <div class="versionchanged">
-<p><span class="versionmodified">バージョン 3.3 で変更: </span><a class="reference internal" href="../library/constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> is now permitted as <code class="docutils literal"><span class="pre">Y</span></code> in <code class="docutils literal"><span class="pre">raise</span> <span class="pre">X</span> <span class="pre">from</span> <span class="pre">Y</span></code>.</p>
+<p><span class="versionmodified">バージョン 3.3 で変更: </span><a class="reference internal" href="../library/constants.html#None" title="None"><code class="xref py py-const docutils literal"><span class="pre">None</span></code></a> が <code class="docutils literal"><span class="pre">raise</span> <span class="pre">X</span> <span class="pre">from</span> <span class="pre">Y</span></code> の <code class="docutils literal"><span class="pre">Y</span></code> として使えるようになりました。</p>
 </div>
 <div class="versionadded">
-<p><span class="versionmodified">バージョン 3.3 で追加: </span>The <code class="docutils literal"><span class="pre">__suppress_context__</span></code> attribute to suppress automatic display of the
-exception context.</p>
+<p><span class="versionmodified">バージョン 3.3 で追加: </span><code class="docutils literal"><span class="pre">__suppress_context__</span></code> 属性の設定で、例外のコンテキストが自動的に非表示になります。</p>
 </div>
 </div>
 <div class="section" id="the-break-statement">
@@ -501,17 +499,9 @@ exception context.</p>
 <p><a class="reference internal" href="#global"><code class="xref std std-keyword docutils literal"><span class="pre">global</span></code></a> 文で列挙する名前は、同じコードブロック中で、プログラムテキスト上 <a class="reference internal" href="#global"><code class="xref std std-keyword docutils literal"><span class="pre">global</span></code></a> 文より前に使ってはなりません。</p>
 <p><a class="reference internal" href="#global"><code class="xref std std-keyword docutils literal"><span class="pre">global</span></code></a> 文で列挙する名前は、 <a class="reference internal" href="compound_stmts.html#for"><code class="xref std std-keyword docutils literal"><span class="pre">for</span></code></a> ループのループ制御ターゲットや、 <a class="reference internal" href="compound_stmts.html#class"><code class="xref std std-keyword docutils literal"><span class="pre">class</span></code></a> 定義、関数定義、 <a class="reference internal" href="#import"><code class="xref std std-keyword docutils literal"><span class="pre">import</span></code></a> 文、変数アノテーションで仮引数として使ってはなりません。</p>
 <div class="impl-detail compound">
-<p><strong>CPython 実装の詳細:</strong> The current implementation does not enforce some of these restrictions, but
-programs should not abuse this freedom, as future implementations may enforce
-them or silently change the meaning of the program.</p>
+<p><strong>CPython 実装の詳細:</strong> 現在の実装では、これらの制限のうち幾つかについては強制していませんが、プログラムでこの緩和された仕様を乱用すべきではありません。将来の実装では、この制限を強制したり、暗黙のうちにプログラムの意味付けを変更したりする可能性があります。</p>
 </div>
-<p id="index-43"><strong>Programmer’s note:</strong> <a class="reference internal" href="#global"><code class="xref std std-keyword docutils literal"><span class="pre">global</span></code></a> is a directive to the parser.  It
-applies only to code parsed at the same time as the <a class="reference internal" href="#global"><code class="xref std std-keyword docutils literal"><span class="pre">global</span></code></a> statement.
-In particular, a <a class="reference internal" href="#global"><code class="xref std std-keyword docutils literal"><span class="pre">global</span></code></a> statement contained in a string or code
-object supplied to the built-in <a class="reference internal" href="../library/functions.html#exec" title="exec"><code class="xref py py-func docutils literal"><span class="pre">exec()</span></code></a> function does not affect the code
-block <em>containing</em> the function call, and code contained in such a string is
-unaffected by <a class="reference internal" href="#global"><code class="xref std std-keyword docutils literal"><span class="pre">global</span></code></a> statements in the code containing the function
-call.  The same applies to the <a class="reference internal" href="../library/functions.html#eval" title="eval"><code class="xref py py-func docutils literal"><span class="pre">eval()</span></code></a> and <a class="reference internal" href="../library/functions.html#compile" title="compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> functions.</p>
+<p id="index-43"><strong>プログラマのための注意点:</strong> <a class="reference internal" href="#global"><code class="xref std std-keyword docutils literal"><span class="pre">global</span></code></a> はパーザに対する指示句 (directive) です。この指示句は、 <a class="reference internal" href="#global"><code class="xref std std-keyword docutils literal"><span class="pre">global</span></code></a> 文と同時に読み込まれたコードに対してのみ適用されます。特に、組み込みの <a class="reference internal" href="../library/functions.html#exec" title="exec"><code class="xref py py-func docutils literal"><span class="pre">exec()</span></code></a> 関数内に入っている <a class="reference internal" href="#global"><code class="xref std std-keyword docutils literal"><span class="pre">global</span></code></a> 文は、関数の呼び出しを <em>含んでいる</em> コードブロック内に効果を及ぼすことはなく、そのような文字列に含まれているコードは、関数の呼び出しを含むコード内の <a class="reference internal" href="#global"><code class="xref std std-keyword docutils literal"><span class="pre">global</span></code></a> 文に影響を受けません。同様のことが、関数 <a class="reference internal" href="../library/functions.html#eval" title="eval"><code class="xref py py-func docutils literal"><span class="pre">eval()</span></code></a> および <a class="reference internal" href="../library/functions.html#compile" title="compile"><code class="xref py py-func docutils literal"><span class="pre">compile()</span></code></a> にも当てはまります。</p>
 </div>
 <div class="section" id="the-nonlocal-statement">
 <span id="nonlocal"></span><h2>7.13. <a class="reference internal" href="#nonlocal"><code class="xref std std-keyword docutils literal"><span class="pre">nonlocal</span></code></a> 文<a class="headerlink" href="#the-nonlocal-statement" title="このヘッドラインへのパーマリンク">¶</a></h2>
@@ -632,7 +622,7 @@ call.  The same applies to the <a class="reference internal" href="../library/fu
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 6月 24, 2018
+    最終更新日時: 6月 26, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
