@@ -161,9 +161,7 @@ character&quot;.</p>
 <div class="section" id="repeating-things">
 <h3>繰り返し<a class="headerlink" href="#repeating-things" title="このヘッドラインへのパーマリンク">¶</a></h3>
 <p>さまざまな文字集合をマッチさせることは正規表現で最初にできるようになることで、これは文字列に対するメソッドですぐにできることではありません。しかし、正規表現がより力を発揮する場面がこれだけだとすると、正規表現はあまり先進的とはいえません。正規表現の力をもう一つの能力は、正規表現の一部が何度も繰り返されるようものを指定できることです。</p>
-<p>The first metacharacter for repeating things that we’ll look at is <code class="docutils literal"><span class="pre">*</span></code>.  <code class="docutils literal"><span class="pre">*</span></code>
-doesn’t match the literal character <code class="docutils literal"><span class="pre">'*'</span></code>; instead, it specifies that the
-previous character can be matched zero or more times, instead of exactly once.</p>
+<p>最初にとりあげる繰り返しのための最初の特殊文字は <code class="docutils literal"><span class="pre">*</span></code> です。<code class="docutils literal"><span class="pre">*</span></code> は文字リテラル <code class="docutils literal"><span class="pre">*</span></code> とはマッチしません; その代わりに前の文字が厳密に1回ではなく、0回以上繰り返されるパターンを指定します。</p>
 <p>例えば、 <code class="docutils literal"><span class="pre">ca*t</span></code> は <code class="docutils literal"><span class="pre">'ct'</span></code> ( <code class="docutils literal"><span class="pre">'a'</span></code> という文字が 0 個の場合)、 <code class="docutils literal"><span class="pre">'cat'</span></code> (<code class="docutils literal"><span class="pre">'a'</span></code> が1個の場合)、 <code class="docutils literal"><span class="pre">'caaat'</span></code> (<code class="docutils literal"><span class="pre">'a'</span></code> が3個の場合)、などにマッチします。</p>
 <p><code class="docutils literal"><span class="pre">*</span></code> のような繰り返しは <em class="dfn">貪欲 (greedy)</em> です; 正規表現を繰り返したいとき、マッチングエンジンは可能な限り何度も繰り返そうと試みます。パターンの後ろの部分にマッチしない場合、マッチングエンジンは戻ってより少ない繰り返しを再び試みます。</p>
 <p>A step-by-step example will make this more obvious.  Let’s consider the
@@ -784,12 +782,10 @@ subgroups, from 1 up to however many there are.</p>
 </pre></div>
 </div>
 <p>取得する番号9を覚えるよりも、 <code class="docutils literal"><span class="pre">m.group('zonem')</span></code> で取得した方が明らかに簡単にすみます。</p>
-<p>The syntax for backreferences in an expression such as <code class="docutils literal"><span class="pre">(...)\1</span></code> refers to the
-number of the group.  There’s naturally a variant that uses the group name
-instead of the number. This is another Python extension: <code class="docutils literal"><span class="pre">(?P=name)</span></code> indicates
-that the contents of the group called <em>name</em> should again be matched at the
-current point.  The regular expression for finding doubled words,
-<code class="docutils literal"><span class="pre">\b(\w+)\s+\1\b</span></code> can also be written as <code class="docutils literal"><span class="pre">\b(?P&lt;word&gt;\w+)\s+(?P=word)\b</span></code>:</p>
+<p>後方参照のための構文 <code class="docutils literal"><span class="pre">(...)\1</span></code> はグループ番号への参照となっています。
+グループ番号の代わりに、グループ名を利用する変種があるのは当然でしょう。
+これはもう一つの Python 拡張です: <code class="docutils literal"><span class="pre">(?P=name)</span></code> は、 <em>name</em> という名前のグループの内容が、現在の位置で再びマッチすることを示しています。
+同じ単語が2つ連なっているのを見つける正規表現 <code class="docutils literal"><span class="pre">\b(\w+)\s+\1\b</span></code> は <code class="docutils literal"><span class="pre">\b(?P&lt;word&gt;\w+)\s+(?P=word)\b</span></code> のように書くけます:</p>
 <div class="highlight-python3"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\b(?P&lt;word&gt;\w+)\s+(?P=word)\b&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;Paris in the the spring&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
 <span class="go">&#39;the the&#39;</span>
@@ -1186,7 +1182,7 @@ it out from your library.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 6月 29, 2018
+    最終更新日時: 6月 30, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
