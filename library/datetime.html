@@ -286,7 +286,9 @@
 <td><em>t2</em> と <em>t3</em> の和。演算後、<em>t1</em>-<em>t2</em> == <em>t3</em> および <em>t1</em>-<em>t3</em> == <em>t2</em> は真になります。(1)</td>
 </tr>
 <tr class="row-odd"><td><code class="docutils literal"><span class="pre">t1</span> <span class="pre">=</span> <span class="pre">t2</span> <span class="pre">-</span> <span class="pre">t3</span></code></td>
-<td><em>t2</em> と <em>t3</em> の差。演算後、<em>t1</em> == <em>t2</em> - <em>t3</em> および <em>t2</em> == <em>t1</em> + <em>t3</em> は真になります。(1)</td>
+<td>Difference of <em>t2</em> and <em>t3</em>. Afterwards <em>t1</em>
+== <em>t2</em> - <em>t3</em> and <em>t2</em> == <em>t1</em> + <em>t3</em> are
+true. (1)</td>
 </tr>
 <tr class="row-even"><td><code class="docutils literal"><span class="pre">t1</span> <span class="pre">=</span> <span class="pre">t2</span> <span class="pre">*</span> <span class="pre">i</span> <span class="pre">または</span> <span class="pre">t1</span> <span class="pre">=</span> <span class="pre">i</span> <span class="pre">*</span> <span class="pre">t2</span></code></td>
 <td>時間差と整数の積。演算後、<em>t1</em> // i == <em>t2</em> は <code class="docutils literal"><span class="pre">i</span> <span class="pre">!=</span> <span class="pre">0</span></code> であれば真となります。</td>
@@ -492,7 +494,9 @@
 <p>注釈:</p>
 <ol class="arabic simple">
 <li><em>date2</em> は <code class="docutils literal"><span class="pre">timedelta.days</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> の場合進む方向に、 <code class="docutils literal"><span class="pre">timedelta.days</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> の場合戻る方向に移動します。演算後は、 <code class="docutils literal"><span class="pre">date2</span> <span class="pre">-</span> <span class="pre">date1</span> <span class="pre">==</span> <span class="pre">timedelta.days</span></code> となります。 <code class="docutils literal"><span class="pre">timedelta.seconds</span></code> および <code class="docutils literal"><span class="pre">timedelta.microseconds</span></code> は無視されます。 <code class="docutils literal"><span class="pre">date2.year</span></code> が <a class="reference internal" href="#datetime.MINYEAR" title="datetime.MINYEAR"><code class="xref py py-const docutils literal"><span class="pre">MINYEAR</span></code></a> になってしまったり、 <a class="reference internal" href="#datetime.MAXYEAR" title="datetime.MAXYEAR"><code class="xref py py-const docutils literal"><span class="pre">MAXYEAR</span></code></a> より大きくなってしまう場合には <a class="reference internal" href="exceptions.html#OverflowError" title="OverflowError"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> が送出されます。</li>
-<li>この操作は date1 + (-timedelta) と等価ではありません。なぜならば、date1 - timedelta がオーバフローしない場合でも、-timedelta 単体がオーバフローする可能性があるからです。<code class="docutils literal"><span class="pre">timedelta.seconds</span></code> および <code class="docutils literal"><span class="pre">timedelta.microseconds</span></code> は無視されます。</li>
+<li>This isn’t quite equivalent to date1 + (-timedelta), because -timedelta in
+isolation can overflow in cases where date1 - timedelta does not.
+<code class="docutils literal"><span class="pre">timedelta.seconds</span></code> and <code class="docutils literal"><span class="pre">timedelta.microseconds</span></code> are ignored.</li>
 <li>この演算は厳密で、オーバフローしません。timedelta.seconds および timedelta.microseconds は 0 で、演算後には date2 + timedelta == date1 となります。</li>
 <li>別の言い方をすると、 <code class="docutils literal"><span class="pre">date1.toordinal()</span> <span class="pre">&lt;</span> <span class="pre">date2.toordinal()</span></code> であり、かつそのときに限り <code class="docutils literal"><span class="pre">date1</span> <span class="pre">&lt;</span> <span class="pre">date2</span></code> となります。型混合の比較がデフォルトのオブジェクトアドレス比較となってしまうのを抑止するために、 <a class="reference internal" href="#datetime.date" title="datetime.date"><code class="xref py py-class docutils literal"><span class="pre">date</span></code></a> オブジェクトと異なる型のオブジェクトが比較されると <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> が送出されます。しかしながら、被比較演算子のもう一方が <code class="xref py py-meth docutils literal"><span class="pre">timetuple()</span></code> 属性を持つ場合には <code class="docutils literal"><span class="pre">NotImplemented</span></code> が返されます。このフックにより、他種の日付オブジェクトに型混合比較を実装するチャンスを与えています。そうでない場合、 <a class="reference internal" href="#datetime.date" title="datetime.date"><code class="xref py py-class docutils literal"><span class="pre">date</span></code></a> オブジェクトと異なる型のオブジェクトが比較されると、比較演算子が <code class="docutils literal"><span class="pre">==</span></code> または <code class="docutils literal"><span class="pre">!=</span></code> でないかぎり <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> が送出されます。後者の場合、それぞれ <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal"><span class="pre">False</span></code></a> または <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-const docutils literal"><span class="pre">True</span></code></a> を返します。</li>
 </ol>
@@ -856,10 +860,11 @@ time representation.</p>
 datetime2.year が <a class="reference internal" href="#datetime.MINYEAR" title="datetime.MINYEAR"><code class="xref py py-const docutils literal"><span class="pre">MINYEAR</span></code></a> よりも小さいか、 <a class="reference internal" href="#datetime.MAXYEAR" title="datetime.MAXYEAR"><code class="xref py py-const docutils literal"><span class="pre">MAXYEAR</span></code></a> より大きい場合には <a class="reference internal" href="exceptions.html#OverflowError" title="OverflowError"><code class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></code></a> が送出されます。
 入力が aware なオブジェクトの場合でもタイムゾーン修正は全く行われません。</p>
 </li>
-<li><p class="first">datetime2 + timedelta == datetime1 となるような datetime2 を計算します。
-ちなみに、結果は入力の datetime と同じ <a class="reference internal" href="#datetime.datetime.tzinfo" title="datetime.datetime.tzinfo"><code class="xref py py-attr docutils literal"><span class="pre">tzinfo</span></code></a> 属性を持ち、入力が aware でもタイムゾーン修正は全く行われません。
-この操作は date1 + (-timedelta) と等価ではありません。
-なぜならば、 date1 - timedelta がオーバフローしない場合でも、-timedelta 単体がオーバフローする可能性があるからです。</p>
+<li><p class="first">Computes the datetime2 such that datetime2 + timedelta == datetime1. As for
+addition, the result has the same <a class="reference internal" href="#datetime.datetime.tzinfo" title="datetime.datetime.tzinfo"><code class="xref py py-attr docutils literal"><span class="pre">tzinfo</span></code></a> attribute as the input
+datetime, and no time zone adjustments are done even if the input is aware.
+This isn’t quite equivalent to datetime1 + (-timedelta), because -timedelta
+in isolation can overflow in cases where datetime1 - timedelta does not.</p>
 </li>
 <li><p class="first"><a class="reference internal" href="#datetime.datetime" title="datetime.datetime"><code class="xref py py-class docutils literal"><span class="pre">datetime</span></code></a> から <a class="reference internal" href="#datetime.datetime" title="datetime.datetime"><code class="xref py py-class docutils literal"><span class="pre">datetime</span></code></a> の減算は両方の被演算子が naive であるか、両方とも aware である場合にのみ定義されています。片方が aware でもう一方が naive の場合、 <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a> が送出されます。</p>
 <p>両方とも naive か、両方とも aware で同じ <a class="reference internal" href="#datetime.datetime.tzinfo" title="datetime.datetime.tzinfo"><code class="xref py py-attr docutils literal"><span class="pre">tzinfo</span></code></a> 属性を持つ場合、 <a class="reference internal" href="#datetime.datetime.tzinfo" title="datetime.datetime.tzinfo"><code class="xref py py-attr docutils literal"><span class="pre">tzinfo</span></code></a> 属性は無視され、結果は <code class="docutils literal"><span class="pre">datetime2</span> <span class="pre">+</span> <span class="pre">t</span> <span class="pre">==</span> <span class="pre">datetime1</span></code> であるような <a class="reference internal" href="#datetime.timedelta" title="datetime.timedelta"><code class="xref py py-class docutils literal"><span class="pre">timedelta</span></code></a> オブジェクト <em>t</em> となります。
@@ -2229,7 +2234,7 @@ interchangeable.</p>
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 7月 04, 2018
+    最終更新日時: 7月 05, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
