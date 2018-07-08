@@ -1667,7 +1667,15 @@ titlecase).</p>
 </ul>
 <p>bytes リテラルでは (ソースコードのエンコーディングに関係なく) ASCII文字のみが許可されています。 127より大きい値を bytes リテラルに記述する場合は適切なエスケープシーケンスを書く必要があります。</p>
 <p>文字列リテラルと同じく、 bytes リテラルでも <code class="docutils literal"><span class="pre">r</span></code> プリフィックスを用いてエスケープシーケンスの処理を無効にすることができます。 bytes リテラルの様々な形式やサポートされているエスケープシーケンスについては <a class="reference internal" href="../reference/lexical_analysis.html#strings"><span class="std std-ref">文字列およびバイト列リテラル</span></a> を参照してください。</p>
-<p>bytesリテラルと repr 出力は ASCII テキストをベースにしたものですが、 bytes オブジェクトは、各値が <code class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">256</span></code> の範囲に収まるような整数  (この制限に違反しようとすると <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a> が発生します) の不変なシーケンスとして振る舞います。多くのバイナリフォーマットがASCIIテキストを元にした要素を持っていたり何らかのテキスト操作アルゴリズムによって操作されるものの、任意のバイナリデータが一般にテキストになっているわけではないことを強調するためにこのように設計されました (何も考えずにテキスト操作アルゴリズムをASCII非互換なバイナリデータフォーマットに対して行うとデータを破壊することがあります)。</p>
+<p>While bytes literals and representations are based on ASCII text, bytes
+objects actually behave like immutable sequences of integers, with each
+value in the sequence restricted such that <code class="docutils literal"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">x</span> <span class="pre">&lt;</span> <span class="pre">256</span></code> (attempts to
+violate this restriction will trigger <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal"><span class="pre">ValueError</span></code></a>. This is done
+deliberately to emphasise that while many binary formats include ASCII based
+elements and can be usefully manipulated with some text-oriented algorithms,
+this is not generally the case for arbitrary binary data (blindly applying
+text processing algorithms to binary data formats that are not ASCII
+compatible will usually lead to data corruption).</p>
 <p>リテラル以外に、幾つかの方法で bytes オブジェクトを作ることができます:</p>
 <ul class="simple">
 <li>指定された長さの、0で埋められた bytes オブジェクト: <code class="docutils literal"><span class="pre">bytes(10)</span></code></li>
@@ -3663,7 +3671,7 @@ bytearray オブジェクトはいつでも <code class="docutils literal"><span
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 7月 07, 2018
+    最終更新日時: 7月 08, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
