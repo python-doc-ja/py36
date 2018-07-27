@@ -124,40 +124,47 @@ void <code class="descname">PyMarshal_WriteObjectToFile</code><span class="sig-p
 </dd></dl>
 
 <p>以下の関数を使うと、整列化された値を読み戻せます。</p>
-<p>XXX エラー検知はどうなってる? ファイルの末尾を読み出すと、 (それが関連したところでは) 常に負の数値が結果として生じるようであるけれども、エラーがない時に負の値が適切に処理されないことはクリアではない。それを知るための正しい方法は? これらのルーチンを使って非負の値だけ書くべきなのか?</p>
+<p>XXX What about error detection?  It appears that reading past the end of the
+file will always result in a negative numeric value (where that’s relevant),
+but it’s not clear that negative values won’t be handled properly when there’s
+no error.  What’s the right way to tell? Should only non-negative values be
+written using these routines?</p>
 <dl class="function">
 <dt id="c.PyMarshal_ReadLongFromFile">
 long <code class="descname">PyMarshal_ReadLongFromFile</code><span class="sig-paren">(</span>FILE<em>&nbsp;*file</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMarshal_ReadLongFromFile" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>読み出し用に開かれた <code class="xref c c-type docutils literal"><span class="pre">FILE*</span></code> 内のデータストリームから、 C の <code class="xref c c-type docutils literal"><span class="pre">long</span></code> 型データを読み出して返します。この関数は、ネイティブの <code class="xref c c-type docutils literal"><span class="pre">long</span></code> のサイズに関係なく、 32 ビットの値だけを読み出せます。</p>
-<p>エラーの場合例外を送出し <code class="docutils literal"><span class="pre">-1</span></code> を返します。</p>
+<p>On error, raise an exception and return <code class="docutils literal"><span class="pre">-1</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.PyMarshal_ReadShortFromFile">
 int <code class="descname">PyMarshal_ReadShortFromFile</code><span class="sig-paren">(</span>FILE<em>&nbsp;*file</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMarshal_ReadShortFromFile" title="この定義へのパーマリンク">¶</a></dt>
 <dd><p>読み出し用に開かれた <code class="xref c c-type docutils literal"><span class="pre">FILE*</span></code> 内のデータストリームから、 C の <code class="xref c c-type docutils literal"><span class="pre">short</span></code> 型データを読み出して返します。この関数は、ネイティブの <code class="xref c c-type docutils literal"><span class="pre">short</span></code> のサイズに関係なく、 16 ビットの値だけを読み出せます。</p>
-<p>エラーの場合例外を送出し <code class="docutils literal"><span class="pre">-1</span></code> を返します。</p>
+<p>On error, raise an exception and return <code class="docutils literal"><span class="pre">-1</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.PyMarshal_ReadObjectFromFile">
 <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyMarshal_ReadObjectFromFile</code><span class="sig-paren">(</span>FILE<em>&nbsp;*file</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMarshal_ReadObjectFromFile" title="この定義へのパーマリンク">¶</a></dt>
 <dd><em class="refcount">Return value: New reference.</em><p>読み出し用に開かれた <code class="xref c c-type docutils literal"><span class="pre">FILE*</span></code> 内のデータストリームから Python オブジェクトを返します。</p>
-<p>エラーの場合適切な例外 (<a class="reference internal" href="../library/exceptions.html#EOFError" title="EOFError"><code class="xref py py-exc docutils literal"><span class="pre">EOFError</span></code></a> か <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>) を設定し <em>NULL</em> を返します。</p>
+<p>On error, sets the appropriate exception (<a class="reference internal" href="../library/exceptions.html#EOFError" title="EOFError"><code class="xref py py-exc docutils literal"><span class="pre">EOFError</span></code></a> or
+<a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>) and returns <em>NULL</em>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.PyMarshal_ReadLastObjectFromFile">
 <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyMarshal_ReadLastObjectFromFile</code><span class="sig-paren">(</span>FILE<em>&nbsp;*file</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMarshal_ReadLastObjectFromFile" title="この定義へのパーマリンク">¶</a></dt>
 <dd><em class="refcount">Return value: New reference.</em><p>読み出し用に開かれた <code class="xref c c-type docutils literal"><span class="pre">FILE*</span></code> 内のデータストリームから、 Python オブジェクトを読み出して返します。 <a class="reference internal" href="#c.PyMarshal_ReadObjectFromFile" title="PyMarshal_ReadObjectFromFile"><code class="xref c c-func docutils literal"><span class="pre">PyMarshal_ReadObjectFromFile()</span></code></a> と違い、この関数はファイル中に後続のオブジェクトが存在しないと仮定し、ファイルからメモリ上にファイルデータを一気にメモリにロードして、逆整列化機構がファイルから一バイトづつ読み出す代わりにメモリ上のデータを操作できるようにします。対象のファイルから他に何も読み出さないと分かっている場合にのみ、この関数を使ってください。</p>
-<p>エラーの場合適切な例外 (<a class="reference internal" href="../library/exceptions.html#EOFError" title="EOFError"><code class="xref py py-exc docutils literal"><span class="pre">EOFError</span></code></a> か <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>) を設定し <em>NULL</em> を返します。</p>
+<p>On error, sets the appropriate exception (<a class="reference internal" href="../library/exceptions.html#EOFError" title="EOFError"><code class="xref py py-exc docutils literal"><span class="pre">EOFError</span></code></a> or
+<a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>) and returns <em>NULL</em>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="c.PyMarshal_ReadObjectFromString">
 <a class="reference internal" href="structures.html#c.PyObject" title="PyObject">PyObject</a>* <code class="descname">PyMarshal_ReadObjectFromString</code><span class="sig-paren">(</span>const char<em>&nbsp;*data</em>, Py_ssize_t<em>&nbsp;len</em><span class="sig-paren">)</span><a class="headerlink" href="#c.PyMarshal_ReadObjectFromString" title="この定義へのパーマリンク">¶</a></dt>
 <dd><em class="refcount">Return value: New reference.</em><p><em>data</em> が指す <em>len</em> バイトのバイト列バッファ内のデータストリームから Python オブジェクトを返します。</p>
-<p>エラーの場合適切な例外 (<a class="reference internal" href="../library/exceptions.html#EOFError" title="EOFError"><code class="xref py py-exc docutils literal"><span class="pre">EOFError</span></code></a> か <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>) を設定し <em>NULL</em> を返します。</p>
+<p>On error, sets the appropriate exception (<a class="reference internal" href="../library/exceptions.html#EOFError" title="EOFError"><code class="xref py py-exc docutils literal"><span class="pre">EOFError</span></code></a> or
+<a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal"><span class="pre">TypeError</span></code></a>) and returns <em>NULL</em>.</p>
 </dd></dl>
 
 </div>
@@ -237,7 +244,7 @@ int <code class="descname">PyMarshal_ReadShortFromFile</code><span class="sig-pa
     Python Software Foundation は非営利団体です。
     <a href="https://www.python.org/psf/donations/">寄付</a>
     <br />
-    最終更新日時: 7月 26, 2018
+    最終更新日時: 7月 27, 2018
     <a href="../bugs.html">バグを見つけたら</a>?
     <br />
     このドキュメントは <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.5 を使って作成されました。
